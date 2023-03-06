@@ -258,21 +258,21 @@ xx["foo"] = "abc";  // Error
 >"abc" : "abc"
 
 let yy: { readonly [x: number]: string, [x: string]: string };
->yy : { [x: string]: string; readonly [x: number]: string; }
+>yy : { readonly [x: number]: string; [x: string]: string; }
 >x : number
 >x : string
 
 yy[1] = "abc";  // Error
 >yy[1] = "abc" : "abc"
 >yy[1] : string
->yy : { [x: string]: string; readonly [x: number]: string; }
+>yy : { readonly [x: number]: string; [x: string]: string; }
 >1 : 1
 >"abc" : "abc"
 
 yy["foo"] = "abc";
 >yy["foo"] = "abc" : "abc"
 >yy["foo"] : string
->yy : { [x: string]: string; readonly [x: number]: string; }
+>yy : { readonly [x: number]: string; [x: string]: string; }
 >"foo" : "foo"
 >"abc" : "abc"
 

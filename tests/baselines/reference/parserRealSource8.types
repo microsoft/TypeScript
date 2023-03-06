@@ -11,68 +11,68 @@ module TypeScript {
 >AssignScopeContext : AssignScopeContext
 
         constructor (public scopeChain: ScopeChain,
->scopeChain : any
+>scopeChain : ScopeChain
 
                      public typeFlow: TypeFlow,
->typeFlow : any
+>typeFlow : TypeFlow
 
                      public modDeclChain: ModuleDeclaration[]) {
->modDeclChain : any[]
+>modDeclChain : ModuleDeclaration[]
         }
     }
 
     export function pushAssignScope(scope: SymbolScope,
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
->scope : any
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>scope : SymbolScope
 
         context: AssignScopeContext,
 >context : AssignScopeContext
 
         type: Type,
->type : any
+>type : Type
 
         classType: Type,
->classType : any
+>classType : Type
 
         fnc: FuncDecl) {
->fnc : any
+>fnc : FuncDecl
 
         var chain = new ScopeChain(null, context.scopeChain, scope);
 >chain : any
 >new ScopeChain(null, context.scopeChain, scope) : any
 >ScopeChain : any
 >null : null
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
->scope : any
+>scopeChain : ScopeChain
+>scope : SymbolScope
 
         chain.thisType = type;
->chain.thisType = type : any
+>chain.thisType = type : Type
 >chain.thisType : any
 >chain : any
 >thisType : any
->type : any
+>type : Type
 
         chain.classType = classType;
->chain.classType = classType : any
+>chain.classType = classType : Type
 >chain.classType : any
 >chain : any
 >classType : any
->classType : any
+>classType : Type
 
         chain.fnc = fnc;
->chain.fnc = fnc : any
+>chain.fnc = fnc : FuncDecl
 >chain.fnc : any
 >chain : any
 >fnc : any
->fnc : any
+>fnc : FuncDecl
 
         context.scopeChain = chain;
 >context.scopeChain = chain : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >chain : any
     }
 
@@ -82,13 +82,13 @@ module TypeScript {
 
         context.scopeChain = context.scopeChain.previous;
 >context.scopeChain = context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >previous : any
     }
 
@@ -205,42 +205,42 @@ module TypeScript {
 >instanceFilterStop : (s: Symbol) => any
 
     export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
->preAssignModuleScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
 
         var moduleDecl = <ModuleDeclaration>ast;
->moduleDecl : any
-><ModuleDeclaration>ast : any
->ast : any
+>moduleDecl : ModuleDeclaration
+><ModuleDeclaration>ast : ModuleDeclaration
+>ast : AST
 
         var memberScope: SymbolTableScope = null;
->memberScope : any
+>memberScope : SymbolTableScope
 >null : null
 
         var aggScope: SymbolAggregateScope = null;
->aggScope : any
+>aggScope : SymbolAggregateScope
 >null : null
 
         if (moduleDecl.name && moduleDecl.mod) {
 >moduleDecl.name && moduleDecl.mod : any
 >moduleDecl.name : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 >name : any
 >moduleDecl.mod : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 >mod : any
 
             moduleDecl.name.sym = moduleDecl.mod.symbol;
 >moduleDecl.name.sym = moduleDecl.mod.symbol : any
 >moduleDecl.name.sym : any
 >moduleDecl.name : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 >name : any
 >sym : any
 >moduleDecl.mod.symbol : any
 >moduleDecl.mod : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 >mod : any
 >symbol : any
         }
@@ -248,7 +248,7 @@ module TypeScript {
         var mod = moduleDecl.mod;
 >mod : any
 >moduleDecl.mod : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 >mod : any
 
         // We're likely here because of error recovery
@@ -261,7 +261,7 @@ module TypeScript {
 
         memberScope = new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol);
 >memberScope = new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol) : any
->memberScope : any
+>memberScope : SymbolTableScope
 >new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol) : any
 >SymbolTableScope : any
 >mod.members : any
@@ -281,35 +281,35 @@ module TypeScript {
 >symbol : any
 
         mod.memberScope = memberScope;
->mod.memberScope = memberScope : any
+>mod.memberScope = memberScope : SymbolTableScope
 >mod.memberScope : any
 >mod : any
 >memberScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
         context.modDeclChain.push(moduleDecl);
 >context.modDeclChain.push(moduleDecl) : number
->context.modDeclChain.push : (...items: any[]) => number
->context.modDeclChain : any[]
+>context.modDeclChain.push : (...items: ModuleDeclaration[]) => number
+>context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
->modDeclChain : any[]
->push : (...items: any[]) => number
->moduleDecl : any
+>modDeclChain : ModuleDeclaration[]
+>push : (...items: ModuleDeclaration[]) => number
+>moduleDecl : ModuleDeclaration
 
         context.typeFlow.checker.currentModDecl = moduleDecl;
->context.typeFlow.checker.currentModDecl = moduleDecl : any
+>context.typeFlow.checker.currentModDecl = moduleDecl : ModuleDeclaration
 >context.typeFlow.checker.currentModDecl : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >currentModDecl : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 
         aggScope = new SymbolAggregateScope(mod.symbol);
 >aggScope = new SymbolAggregateScope(mod.symbol) : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >new SymbolAggregateScope(mod.symbol) : any
 >SymbolAggregateScope : any
 >mod.symbol : any
@@ -319,36 +319,36 @@ module TypeScript {
         aggScope.addParentScope(memberScope);
 >aggScope.addParentScope(memberScope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
         aggScope.addParentScope(context.scopeChain.scope);
 >aggScope.addParentScope(context.scopeChain.scope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 
         pushAssignScope(aggScope, context, null, null, null);
 >pushAssignScope(aggScope, context, null, null, null) : void
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
->aggScope : any
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>aggScope : SymbolAggregateScope
 >context : AssignScopeContext
 >null : null
 >null : null
 >null : null
 
         mod.containedScope = aggScope;
->mod.containedScope = aggScope : any
+>mod.containedScope = aggScope : SymbolAggregateScope
 >mod.containedScope : any
 >mod : any
 >containedScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 
         if (mod.symbol) {
 >mod.symbol : any
@@ -358,9 +358,9 @@ module TypeScript {
             context.typeFlow.addLocalsFromScope(mod.containedScope, mod.symbol, moduleDecl.vars, mod.members.privateMembers, true);
 >context.typeFlow.addLocalsFromScope(mod.containedScope, mod.symbol, moduleDecl.vars, mod.members.privateMembers, true) : any
 >context.typeFlow.addLocalsFromScope : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >addLocalsFromScope : any
 >mod.containedScope : any
 >mod : any
@@ -369,7 +369,7 @@ module TypeScript {
 >mod : any
 >symbol : any
 >moduleDecl.vars : any
->moduleDecl : any
+>moduleDecl : ModuleDeclaration
 >vars : any
 >mod.members.privateMembers : any
 >mod.members : any
@@ -381,42 +381,42 @@ module TypeScript {
     }
 
     export function preAssignClassScopes(ast: AST, context: AssignScopeContext) {
->preAssignClassScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
 
         var classDecl = <InterfaceDeclaration>ast;
->classDecl : any
-><InterfaceDeclaration>ast : any
->ast : any
+>classDecl : InterfaceDeclaration
+><InterfaceDeclaration>ast : InterfaceDeclaration
+>ast : AST
 
         var memberScope: SymbolTableScope = null;
->memberScope : any
+>memberScope : SymbolTableScope
 >null : null
 
         var aggScope: SymbolAggregateScope = null;
->aggScope : any
+>aggScope : SymbolAggregateScope
 >null : null
 
         if (classDecl.name && classDecl.type) {
 >classDecl.name && classDecl.type : any
 >classDecl.name : any
->classDecl : any
+>classDecl : InterfaceDeclaration
 >name : any
 >classDecl.type : any
->classDecl : any
+>classDecl : InterfaceDeclaration
 >type : any
 
             classDecl.name.sym = classDecl.type.symbol;
 >classDecl.name.sym = classDecl.type.symbol : any
 >classDecl.name.sym : any
 >classDecl.name : any
->classDecl : any
+>classDecl : InterfaceDeclaration
 >name : any
 >sym : any
 >classDecl.type.symbol : any
 >classDecl.type : any
->classDecl : any
+>classDecl : InterfaceDeclaration
 >type : any
 >symbol : any
         }
@@ -424,7 +424,7 @@ module TypeScript {
         var classType = ast.type;
 >classType : any
 >ast.type : any
->ast : any
+>ast : AST
 >type : any
 
         if (classType) {
@@ -437,22 +437,22 @@ module TypeScript {
 >symbol : any
 
             memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType);
->memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType) : any
->memberScope : any
-><SymbolTableScope>context.typeFlow.checker.scopeOf(classType) : any
+>memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType) : SymbolTableScope
+>memberScope : SymbolTableScope
+><SymbolTableScope>context.typeFlow.checker.scopeOf(classType) : SymbolTableScope
 >context.typeFlow.checker.scopeOf(classType) : any
 >context.typeFlow.checker.scopeOf : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >scopeOf : any
 >classType : any
 
             aggScope = new SymbolAggregateScope(classType.symbol);
 >aggScope = new SymbolAggregateScope(classType.symbol) : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >new SymbolAggregateScope(classType.symbol) : any
 >SymbolAggregateScope : any
 >classType.symbol : any
@@ -462,34 +462,34 @@ module TypeScript {
             aggScope.addParentScope(memberScope);
 >aggScope.addParentScope(memberScope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
             aggScope.addParentScope(context.scopeChain.scope);
 >aggScope.addParentScope(context.scopeChain.scope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 
             classType.containedScope = aggScope;
->classType.containedScope = aggScope : any
+>classType.containedScope = aggScope : SymbolAggregateScope
 >classType.containedScope : any
 >classType : any
 >containedScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 
             classType.memberScope = memberScope;
->classType.memberScope = memberScope : any
+>classType.memberScope = memberScope : SymbolTableScope
 >classType.memberScope : any
 >classType : any
 >memberScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
             var instanceType = classType.instanceType;
 >instanceType : any
@@ -498,29 +498,29 @@ module TypeScript {
 >instanceType : any
 
             memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType);
->memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType) : any
->memberScope : any
-><SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType) : any
+>memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType) : SymbolTableScope
+>memberScope : SymbolTableScope
+><SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType) : SymbolTableScope
 >context.typeFlow.checker.scopeOf(instanceType) : any
 >context.typeFlow.checker.scopeOf : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >scopeOf : any
 >instanceType : any
 
             instanceType.memberScope = memberScope;
->instanceType.memberScope = memberScope : any
+>instanceType.memberScope = memberScope : SymbolTableScope
 >instanceType.memberScope : any
 >instanceType : any
 >memberScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
             aggScope = new SymbolAggregateScope(instanceType.symbol);
 >aggScope = new SymbolAggregateScope(instanceType.symbol) : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >new SymbolAggregateScope(instanceType.symbol) : any
 >SymbolAggregateScope : any
 >instanceType.symbol : any
@@ -530,81 +530,81 @@ module TypeScript {
             aggScope.addParentScope(context.scopeChain.scope);
 >aggScope.addParentScope(context.scopeChain.scope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 
             pushAssignScope(aggScope, context, instanceType, classType, null);
 >pushAssignScope(aggScope, context, instanceType, classType, null) : void
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
->aggScope : any
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>aggScope : SymbolAggregateScope
 >context : AssignScopeContext
 >instanceType : any
 >classType : any
 >null : null
 
             instanceType.containedScope = aggScope;
->instanceType.containedScope = aggScope : any
+>instanceType.containedScope = aggScope : SymbolAggregateScope
 >instanceType.containedScope : any
 >instanceType : any
 >containedScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
         }
         else {
             ast.type = context.typeFlow.anyType;
 >ast.type = context.typeFlow.anyType : any
 >ast.type : any
->ast : any
+>ast : AST
 >type : any
 >context.typeFlow.anyType : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >anyType : any
         }
     }
 
     export function preAssignInterfaceScopes(ast: AST, context: AssignScopeContext) {
->preAssignInterfaceScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
 
         var interfaceDecl = <InterfaceDeclaration>ast;
->interfaceDecl : any
-><InterfaceDeclaration>ast : any
->ast : any
+>interfaceDecl : InterfaceDeclaration
+><InterfaceDeclaration>ast : InterfaceDeclaration
+>ast : AST
 
         var memberScope: SymbolTableScope = null;
->memberScope : any
+>memberScope : SymbolTableScope
 >null : null
 
         var aggScope: SymbolAggregateScope = null;
->aggScope : any
+>aggScope : SymbolAggregateScope
 >null : null
 
         if (interfaceDecl.name && interfaceDecl.type) {
 >interfaceDecl.name && interfaceDecl.type : any
 >interfaceDecl.name : any
->interfaceDecl : any
+>interfaceDecl : InterfaceDeclaration
 >name : any
 >interfaceDecl.type : any
->interfaceDecl : any
+>interfaceDecl : InterfaceDeclaration
 >type : any
 
             interfaceDecl.name.sym = interfaceDecl.type.symbol;
 >interfaceDecl.name.sym = interfaceDecl.type.symbol : any
 >interfaceDecl.name.sym : any
 >interfaceDecl.name : any
->interfaceDecl : any
+>interfaceDecl : InterfaceDeclaration
 >name : any
 >sym : any
 >interfaceDecl.type.symbol : any
 >interfaceDecl.type : any
->interfaceDecl : any
+>interfaceDecl : InterfaceDeclaration
 >type : any
 >symbol : any
         }
@@ -612,33 +612,33 @@ module TypeScript {
         var interfaceType = ast.type;
 >interfaceType : any
 >ast.type : any
->ast : any
+>ast : AST
 >type : any
 
         memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType);
->memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType) : any
->memberScope : any
-><SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType) : any
+>memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType) : SymbolTableScope
+>memberScope : SymbolTableScope
+><SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType) : SymbolTableScope
 >context.typeFlow.checker.scopeOf(interfaceType) : any
 >context.typeFlow.checker.scopeOf : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >scopeOf : any
 >interfaceType : any
 
         interfaceType.memberScope = memberScope;
->interfaceType.memberScope = memberScope : any
+>interfaceType.memberScope = memberScope : SymbolTableScope
 >interfaceType.memberScope : any
 >interfaceType : any
 >memberScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
         aggScope = new SymbolAggregateScope(interfaceType.symbol);
 >aggScope = new SymbolAggregateScope(interfaceType.symbol) : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >new SymbolAggregateScope(interfaceType.symbol) : any
 >SymbolAggregateScope : any
 >interfaceType.symbol : any
@@ -648,52 +648,52 @@ module TypeScript {
         aggScope.addParentScope(memberScope);
 >aggScope.addParentScope(memberScope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
->memberScope : any
+>memberScope : SymbolTableScope
 
         aggScope.addParentScope(context.scopeChain.scope);
 >aggScope.addParentScope(context.scopeChain.scope) : any
 >aggScope.addParentScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
 >addParentScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 
         pushAssignScope(aggScope, context, null, null, null);
 >pushAssignScope(aggScope, context, null, null, null) : void
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
->aggScope : any
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>aggScope : SymbolAggregateScope
 >context : AssignScopeContext
 >null : null
 >null : null
 >null : null
 
         interfaceType.containedScope = aggScope;
->interfaceType.containedScope = aggScope : any
+>interfaceType.containedScope = aggScope : SymbolAggregateScope
 >interfaceType.containedScope : any
 >interfaceType : any
 >containedScope : any
->aggScope : any
+>aggScope : SymbolAggregateScope
     }
 
     export function preAssignWithScopes(ast: AST, context: AssignScopeContext) {
->preAssignWithScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
 
         var withStmt = <WithStatement>ast;
->withStmt : any
-><WithStatement>ast : any
->ast : any
+>withStmt : WithStatement
+><WithStatement>ast : WithStatement
+>ast : AST
 
         var withType = withStmt.type;
 >withType : any
 >withStmt.type : any
->withStmt : any
+>withStmt : WithStatement
 >type : any
 
         var members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
@@ -728,14 +728,14 @@ module TypeScript {
 >new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType) : any
 >WithSymbol : any
 >withStmt.minChar : any
->withStmt : any
+>withStmt : WithStatement
 >minChar : any
 >context.typeFlow.checker.locationInfo.unitIndex : any
 >context.typeFlow.checker.locationInfo : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >locationInfo : any
 >unitIndex : any
@@ -771,7 +771,7 @@ module TypeScript {
         withStmt.type = withType;
 >withStmt.type = withType : any
 >withStmt.type : any
->withStmt : any
+>withStmt : WithStatement
 >type : any
 >withType : any
 
@@ -790,9 +790,9 @@ module TypeScript {
 >null : null
 >null : null
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 >withType.symbol : any
 >withType : any
@@ -800,7 +800,7 @@ module TypeScript {
 
         pushAssignScope(withScope, context, null, null, null);
 >pushAssignScope(withScope, context, null, null, null) : void
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
 >withScope : any
 >context : AssignScopeContext
 >null : null
@@ -816,14 +816,14 @@ module TypeScript {
     }
 
     export function preAssignFuncDeclScopes(ast: AST, context: AssignScopeContext) {
->preAssignFuncDeclScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
 
         var funcDecl = <FuncDecl>ast;
->funcDecl : any
-><FuncDecl>ast : any
->ast : any
+>funcDecl : FuncDecl
+><FuncDecl>ast : FuncDecl
+>ast : AST
 
         var container: Symbol = null;
 >container : Symbol
@@ -835,7 +835,7 @@ module TypeScript {
 
         if (funcDecl.type) {
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 
             localContainer = ast.type.symbol;
@@ -843,7 +843,7 @@ module TypeScript {
 >localContainer : Symbol
 >ast.type.symbol : any
 >ast.type : any
->ast : any
+>ast : AST
 >type : any
 >symbol : any
         }
@@ -853,7 +853,7 @@ module TypeScript {
 >hasFlag(funcDecl.fncFlags, FncFlags.Static) : any
 >hasFlag : any
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.Static : any
 >FncFlags : any
@@ -865,9 +865,9 @@ module TypeScript {
 >isStatic : any
 >context.scopeChain.fnc != null : boolean
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 >null : null
 
@@ -879,16 +879,16 @@ module TypeScript {
 >context.scopeChain.fnc.type.memberScope : any
 >context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 >type : any
 >memberScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 
         // if this is not a method, but enclosed by class, use constructor as
@@ -898,9 +898,9 @@ module TypeScript {
         if (context.scopeChain.thisType &&
 >context.scopeChain.thisType &&            (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 
             (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
@@ -908,12 +908,12 @@ module TypeScript {
 >!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 >hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >hasFlag : any
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.ClassMethod : any
 >FncFlags : any
@@ -922,9 +922,9 @@ module TypeScript {
             var instType = context.scopeChain.thisType;
 >instType : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 
             if (!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
@@ -942,7 +942,7 @@ module TypeScript {
 >hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >hasFlag : any
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.ClassMethod : any
 >FncFlags : any
@@ -953,7 +953,7 @@ module TypeScript {
 >!funcDecl.isMethod() : boolean
 >funcDecl.isMethod() : any
 >funcDecl.isMethod : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isMethod : any
 >isStatic : any
 
@@ -982,9 +982,9 @@ module TypeScript {
 >context.scopeChain.previous.scope.container : any
 >context.scopeChain.previous.scope : any
 >context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >previous : any
 >scope : any
 >container : any
@@ -994,9 +994,9 @@ module TypeScript {
 >context.scopeChain.previous.scope.container : any
 >context.scopeChain.previous.scope : any
 >context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >previous : any
 >scope : any
 >container : any
@@ -1009,9 +1009,9 @@ module TypeScript {
 >context.scopeChain.previous.scope.container : any
 >context.scopeChain.previous.scope : any
 >context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >previous : any
 >scope : any
 >container : any
@@ -1023,15 +1023,15 @@ module TypeScript {
 
                     (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor) {
 >(<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor : any
->(<FuncDecl>context.scopeChain.previous.scope.container.declAST) : any
-><FuncDecl>context.scopeChain.previous.scope.container.declAST : any
+>(<FuncDecl>context.scopeChain.previous.scope.container.declAST) : FuncDecl
+><FuncDecl>context.scopeChain.previous.scope.container.declAST : FuncDecl
 >context.scopeChain.previous.scope.container.declAST : any
 >context.scopeChain.previous.scope.container : any
 >context.scopeChain.previous.scope : any
 >context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >previous : any
 >scope : any
 >container : any
@@ -1050,9 +1050,9 @@ module TypeScript {
 >isStatic && context.scopeChain.classType : any
 >isStatic : any
 >context.scopeChain.classType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >classType : any
 
                     parentScope = context.scopeChain.classType.containedScope;
@@ -1060,9 +1060,9 @@ module TypeScript {
 >parentScope : any
 >context.scopeChain.classType.containedScope : any
 >context.scopeChain.classType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >classType : any
 >containedScope : any
                 }
@@ -1086,12 +1086,12 @@ module TypeScript {
         else if (funcDecl.isConstructor && context.scopeChain.thisType) {
 >funcDecl.isConstructor && context.scopeChain.thisType : any
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 
             // sets the container to the class type's symbol (which is shared by the instance type)
@@ -1100,9 +1100,9 @@ module TypeScript {
 >container : Symbol
 >context.scopeChain.thisType.symbol : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 >symbol : any
         }
@@ -1111,7 +1111,7 @@ module TypeScript {
 >funcDecl.type == null || hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment) : any
 >funcDecl.type == null : boolean
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 >null : null
 >hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment) : any
@@ -1119,7 +1119,7 @@ module TypeScript {
 >funcDecl.type.symbol.flags : any
 >funcDecl.type.symbol : any
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 >symbol : any
 >flags : any
@@ -1130,15 +1130,15 @@ module TypeScript {
             if (context.scopeChain.fnc && context.scopeChain.fnc.type) {
 >context.scopeChain.fnc && context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 >context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 >type : any
 
@@ -1148,9 +1148,9 @@ module TypeScript {
 >context.scopeChain.fnc.type.symbol : any
 >context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 >type : any
 >symbol : any
@@ -1161,28 +1161,28 @@ module TypeScript {
 >null : null
 
             var outerFnc: FuncDecl = context.scopeChain.fnc;
->outerFnc : any
+>outerFnc : FuncDecl
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 
             var nameText = funcDecl.name ? funcDecl.name.actualText : null;
 >nameText : any
 >funcDecl.name ? funcDecl.name.actualText : null : any
 >funcDecl.name : any
->funcDecl : any
+>funcDecl : FuncDecl
 >name : any
 >funcDecl.name.actualText : any
 >funcDecl.name : any
->funcDecl : any
+>funcDecl : FuncDecl
 >name : any
 >actualText : any
 >null : null
 
             var fgSym: TypeSymbol = null;
->fgSym : any
+>fgSym : TypeSymbol
 >null : null
 
             if (isStatic) {
@@ -1196,7 +1196,7 @@ module TypeScript {
 >outerFnc.type.members == null : boolean
 >outerFnc.type.members : any
 >outerFnc.type : any
->outerFnc : any
+>outerFnc : FuncDecl
 >type : any
 >members : any
 >null : null
@@ -1211,16 +1211,16 @@ module TypeScript {
 >outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers : any
 >outerFnc.type.members : any
 >outerFnc.type : any
->outerFnc : any
+>outerFnc : FuncDecl
 >type : any
 >members : any
 >(<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers : any
->(<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope) : any
-><SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope : any
+>(<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope) : SymbolScopeBuilder
+><SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope : SymbolScopeBuilder
 >(<TypeSymbol>container).type.memberScope : any
 >(<TypeSymbol>container).type : any
->(<TypeSymbol>container) : any
-><TypeSymbol>container : any
+>(<TypeSymbol>container) : TypeSymbol
+><TypeSymbol>container : TypeSymbol
 >container : Symbol
 >type : any
 >memberScope : any
@@ -1232,25 +1232,25 @@ module TypeScript {
 >context.scopeChain.fnc.type.memberScope : any
 >context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 >type : any
 >memberScope : any
 
                 outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl;
->outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl : any
+>outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl : FuncDecl
 >outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] : any
 >outerFnc.innerStaticFuncs : any
->outerFnc : any
+>outerFnc : FuncDecl
 >innerStaticFuncs : any
 >outerFnc.innerStaticFuncs.length : any
 >outerFnc.innerStaticFuncs : any
->outerFnc : any
+>outerFnc : FuncDecl
 >innerStaticFuncs : any
 >length : any
->funcDecl : any
+>funcDecl : FuncDecl
             }
             else {
 
@@ -1262,7 +1262,7 @@ module TypeScript {
 >!funcDecl.isConstructor &&                    container : Symbol
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 
                     container &&
@@ -1286,8 +1286,8 @@ module TypeScript {
 
                     (<FuncDecl>container.declAST).isConstructor &&
 >(<FuncDecl>container.declAST).isConstructor : any
->(<FuncDecl>container.declAST) : any
-><FuncDecl>container.declAST : any
+>(<FuncDecl>container.declAST) : FuncDecl
+><FuncDecl>container.declAST : FuncDecl
 >container.declAST : any
 >container : Symbol
 >declAST : any
@@ -1297,7 +1297,7 @@ module TypeScript {
 >!funcDecl.isMethod() : boolean
 >funcDecl.isMethod() : any
 >funcDecl.isMethod : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isMethod : any
 
                     funcScope = context.scopeChain.thisType.constructorScope;//locals;
@@ -1305,9 +1305,9 @@ module TypeScript {
 >funcScope : any
 >context.scopeChain.thisType.constructorScope : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 >constructorScope : any
                 }
@@ -1316,9 +1316,9 @@ module TypeScript {
 >funcScope = context.scopeChain.scope : any
 >funcScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
                 }
             }
@@ -1336,7 +1336,7 @@ module TypeScript {
 >!funcDecl.isAccessor() : boolean
 >funcDecl.isAccessor() : any
 >funcDecl.isAccessor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isAccessor : any
 
                 if (isStatic) {
@@ -1344,7 +1344,7 @@ module TypeScript {
 
                     fgSym = funcScope.findLocal(nameText, false, false);
 >fgSym = funcScope.findLocal(nameText, false, false) : any
->fgSym : any
+>fgSym : TypeSymbol
 >funcScope.findLocal(nameText, false, false) : any
 >funcScope.findLocal : any
 >funcScope : any
@@ -1357,7 +1357,7 @@ module TypeScript {
                     // REVIEW: This logic should be symmetric with preCollectClassTypes
                     fgSym = funcScope.findLocal(nameText, false, false);
 >fgSym = funcScope.findLocal(nameText, false, false) : any
->fgSym : any
+>fgSym : TypeSymbol
 >funcScope.findLocal(nameText, false, false) : any
 >funcScope.findLocal : any
 >funcScope : any
@@ -1372,19 +1372,19 @@ module TypeScript {
 >context.typeFlow.checker.createFunctionSignature(funcDecl, container,                                                            funcScope, fgSym, fgSym == null) : any
 >context.typeFlow.checker.createFunctionSignature : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >createFunctionSignature : any
->funcDecl : any
+>funcDecl : FuncDecl
 >container : Symbol
 
                                                             funcScope, fgSym, fgSym == null);
 >funcScope : any
->fgSym : any
+>fgSym : TypeSymbol
 >fgSym == null : boolean
->fgSym : any
+>fgSym : TypeSymbol
 >null : null
 
             // it's a getter or setter for a class property                     
@@ -1395,14 +1395,14 @@ module TypeScript {
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number
 >!funcDecl.accessorSymbol : boolean
 >funcDecl.accessorSymbol : any
->funcDecl : any
+>funcDecl : FuncDecl
 >accessorSymbol : any
 
                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&
 >(funcDecl.fncFlags & FncFlags.ClassMethod) : number
 >funcDecl.fncFlags & FncFlags.ClassMethod : number
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.ClassMethod : any
 >FncFlags : any
@@ -1417,11 +1417,11 @@ module TypeScript {
 >(!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) : boolean
 >!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
 >!fgSym : boolean
->fgSym : any
+>fgSym : TypeSymbol
 >fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
 >fgSym.declAST.nodeType : any
 >fgSym.declAST : any
->fgSym : any
+>fgSym : TypeSymbol
 >declAST : any
 >nodeType : any
 >NodeType.FuncDecl : any
@@ -1429,33 +1429,33 @@ module TypeScript {
 >FuncDecl : any
 >funcDecl.isAccessor() : any
 >funcDecl.isAccessor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isAccessor : any
 
                     (fgSym && fgSym.isAccessor())) 
 >(fgSym && fgSym.isAccessor()) : any
 >fgSym && fgSym.isAccessor() : any
->fgSym : any
+>fgSym : TypeSymbol
 >fgSym.isAccessor() : any
 >fgSym.isAccessor : any
->fgSym : any
+>fgSym : TypeSymbol
 >isAccessor : any
             {
                 funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
 >funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container) : any
 >funcDecl.accessorSymbol : any
->funcDecl : any
+>funcDecl : FuncDecl
 >accessorSymbol : any
 >context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container) : any
 >context.typeFlow.checker.createAccessorSymbol : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >createAccessorSymbol : any
->funcDecl : any
->fgSym : any
+>funcDecl : FuncDecl
+>fgSym : TypeSymbol
 >container.getType() : any
 >container.getType : any
 >container : Symbol
@@ -1464,7 +1464,7 @@ module TypeScript {
 >funcDecl.isMethod() && isStatic : any
 >funcDecl.isMethod() : any
 >funcDecl.isMethod : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isMethod : any
 >isStatic : any
 >true : true
@@ -1477,7 +1477,7 @@ module TypeScript {
 >funcDecl.type.symbol.flags : any
 >funcDecl.type.symbol : any
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 >symbol : any
 >flags : any
@@ -1490,22 +1490,22 @@ module TypeScript {
         if (funcDecl.name && funcDecl.type) {
 >funcDecl.name && funcDecl.type : any
 >funcDecl.name : any
->funcDecl : any
+>funcDecl : FuncDecl
 >name : any
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 
             funcDecl.name.sym = funcDecl.type.symbol;
 >funcDecl.name.sym = funcDecl.type.symbol : any
 >funcDecl.name.sym : any
 >funcDecl.name : any
->funcDecl : any
+>funcDecl : FuncDecl
 >name : any
 >sym : any
 >funcDecl.type.symbol : any
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 >symbol : any
         }
@@ -1515,16 +1515,16 @@ module TypeScript {
         funcDecl.scopeType = funcDecl.type;
 >funcDecl.scopeType = funcDecl.type : any
 >funcDecl.scopeType : any
->funcDecl : any
+>funcDecl : FuncDecl
 >scopeType : any
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 
         // Overloads have no scope, so bail here
         if (funcDecl.isOverload) {
 >funcDecl.isOverload : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isOverload : any
 
             return;
@@ -1594,14 +1594,14 @@ module TypeScript {
         funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
 >funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex : any
 >funcDecl.unitIndex : any
->funcDecl : any
+>funcDecl : FuncDecl
 >unitIndex : any
 >context.typeFlow.checker.locationInfo.unitIndex : any
 >context.typeFlow.checker.locationInfo : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >locationInfo : any
 >unitIndex : any
@@ -1631,21 +1631,21 @@ module TypeScript {
         if (funcDecl.isConstructor && context.scopeChain.thisType) {
 >funcDecl.isConstructor && context.scopeChain.thisType : any
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 
             context.scopeChain.thisType.constructorScope = locals;
 >context.scopeChain.thisType.constructorScope = locals : any
 >context.scopeChain.thisType.constructorScope : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 >constructorScope : any
 >locals : any
@@ -1663,7 +1663,7 @@ module TypeScript {
         funcDecl.symbols = funcTable;
 >funcDecl.symbols = funcTable : any
 >funcDecl.symbols : any
->funcDecl : any
+>funcDecl : FuncDecl
 >symbols : any
 >funcTable : any
 
@@ -1671,25 +1671,25 @@ module TypeScript {
 >!funcDecl.isSpecialFn() : boolean
 >funcDecl.isSpecialFn() : any
 >funcDecl.isSpecialFn : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isSpecialFn : any
 
             var group = funcDecl.type;
 >group : any
 >funcDecl.type : any
->funcDecl : any
+>funcDecl : FuncDecl
 >type : any
 
             var signature = funcDecl.signature;
 >signature : any
 >funcDecl.signature : any
->funcDecl : any
+>funcDecl : FuncDecl
 >signature : any
 
             if (!funcDecl.isConstructor) {
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 
                 group.containedScope = locals;
@@ -1727,12 +1727,12 @@ module TypeScript {
             funcDecl.enclosingFnc = context.scopeChain.fnc;
 >funcDecl.enclosingFnc = context.scopeChain.fnc : any
 >funcDecl.enclosingFnc : any
->funcDecl : any
+>funcDecl : FuncDecl
 >enclosingFnc : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
 
             group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
@@ -1743,23 +1743,23 @@ module TypeScript {
 >isStatic ? context.scopeChain.classType : context.scopeChain.thisType : any
 >isStatic : any
 >context.scopeChain.classType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >classType : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 
             // for mapping when type checking
             var fgSym = <TypeSymbol>ast.type.symbol;
->fgSym : any
-><TypeSymbol>ast.type.symbol : any
+>fgSym : TypeSymbol
+><TypeSymbol>ast.type.symbol : TypeSymbol
 >ast.type.symbol : any
 >ast.type : any
->ast : any
+>ast : AST
 >type : any
 >symbol : any
 
@@ -1770,7 +1770,7 @@ module TypeScript {
 >(funcDecl.fncFlags & FncFlags.Signature) : number
 >funcDecl.fncFlags & FncFlags.Signature : number
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.Signature : any
 >FncFlags : any
@@ -1779,20 +1779,20 @@ module TypeScript {
 >FncFlags : any
 >None : any
 >funcDecl.vars : any
->funcDecl : any
+>funcDecl : FuncDecl
 >vars : any
 
                 context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,
 >context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,                                                    funcTable, false) : any
 >context.typeFlow.addLocalsFromScope : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >addLocalsFromScope : any
 >locals : any
->fgSym : any
+>fgSym : TypeSymbol
 >funcDecl.vars : any
->funcDecl : any
+>funcDecl : FuncDecl
 >vars : any
 
                                                     funcTable, false);
@@ -1802,14 +1802,14 @@ module TypeScript {
                 context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
 >context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,                                                    funcStaticTable, false) : any
 >context.typeFlow.addLocalsFromScope : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >addLocalsFromScope : any
 >statics : any
->fgSym : any
+>fgSym : TypeSymbol
 >funcDecl.statics : any
->funcDecl : any
+>funcDecl : FuncDecl
 >statics : any
 
                                                     funcStaticTable, false);
@@ -1839,7 +1839,7 @@ module TypeScript {
 >i : number
 
                     var paramSym: ParameterSymbol = signature.parameters[i];
->paramSym : any
+>paramSym : ParameterSymbol
 >signature.parameters[i] : any
 >signature.parameters : any
 >signature : any
@@ -1850,9 +1850,9 @@ module TypeScript {
 >context.typeFlow.checker.resolveTypeLink(locals,                                                                paramSym.parameter.typeLink, true) : any
 >context.typeFlow.checker.resolveTypeLink : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >resolveTypeLink : any
 >locals : any
@@ -1860,7 +1860,7 @@ module TypeScript {
                                                                 paramSym.parameter.typeLink, true);
 >paramSym.parameter.typeLink : any
 >paramSym.parameter : any
->paramSym : any
+>paramSym : ParameterSymbol
 >parameter : any
 >typeLink : any
 >true : true
@@ -1870,9 +1870,9 @@ module TypeScript {
 >context.typeFlow.checker.resolveTypeLink(locals, signature.returnType,                                                        funcDecl.isSignature()) : any
 >context.typeFlow.checker.resolveTypeLink : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >resolveTypeLink : any
 >locals : any
@@ -1883,7 +1883,7 @@ module TypeScript {
                                                         funcDecl.isSignature());
 >funcDecl.isSignature() : any
 >funcDecl.isSignature : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isSignature : any
         }
 
@@ -1891,12 +1891,12 @@ module TypeScript {
 >!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 >hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >hasFlag : any
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.ClassMethod : any
 >FncFlags : any
@@ -1908,47 +1908,47 @@ module TypeScript {
 >(funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
 >funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 >hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >hasFlag : any
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.ClassMethod : any
 >FncFlags : any
 >ClassMethod : any
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 >null : null
 
             pushAssignScope(locals, context, thisType, null, funcDecl);
 >pushAssignScope(locals, context, thisType, null, funcDecl) : void
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
 >locals : any
 >context : AssignScopeContext
 >thisType : any
 >null : null
->funcDecl : any
+>funcDecl : FuncDecl
         }
     }
 
     export function preAssignCatchScopes(ast: AST, context: AssignScopeContext) {
->preAssignCatchScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
 
         var catchBlock = <Catch>ast;
->catchBlock : any
-><Catch>ast : any
->ast : any
+>catchBlock : Catch
+><Catch>ast : Catch
+>ast : AST
 
         if (catchBlock.param) {
 >catchBlock.param : any
->catchBlock : any
+>catchBlock : Catch
 >param : any
 
             var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())); // REVIEW: Should we be allocating a public table instead of a private one?
@@ -1971,60 +1971,60 @@ module TypeScript {
 >null : null
 >null : null
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 
                                                    context.scopeChain.scope.container);
 >context.scopeChain.scope.container : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
 >container : any
 
             catchBlock.containedScope = catchLocals;
 >catchBlock.containedScope = catchLocals : any
 >catchBlock.containedScope : any
->catchBlock : any
+>catchBlock : Catch
 >containedScope : any
 >catchLocals : any
 
             pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc);
 >pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc) : void
->pushAssignScope : (scope: any, context: AssignScopeContext, type: any, classType: any, fnc: any) => void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
 >catchLocals : any
 >context : AssignScopeContext
 >context.scopeChain.thisType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >thisType : any
 >context.scopeChain.classType : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >classType : any
 >context.scopeChain.fnc : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >fnc : any
         }
     }
 
     export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
->preAssignScopes : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>preAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>ast : AST
+>parent : AST
+>walker : IAstWalker
 
         var context:AssignScopeContext = walker.state;
 >context : AssignScopeContext
 >walker.state : any
->walker : any
+>walker : IAstWalker
 >state : any
 
         var go = true;
@@ -2032,37 +2032,37 @@ module TypeScript {
 >true : true
 
         if (ast) {
->ast : any
+>ast : AST
 
             if (ast.nodeType == NodeType.List) {
 >ast.nodeType == NodeType.List : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.List : any
 >NodeType : any
 >List : any
 
                 var list = <ASTList>ast;
->list : any
-><ASTList>ast : any
->ast : any
+>list : ASTList
+><ASTList>ast : ASTList
+>ast : AST
 
                 list.enclosingScope = context.scopeChain.scope;
 >list.enclosingScope = context.scopeChain.scope : any
 >list.enclosingScope : any
->list : any
+>list : ASTList
 >enclosingScope : any
 >context.scopeChain.scope : any
->context.scopeChain : any
+>context.scopeChain : ScopeChain
 >context : AssignScopeContext
->scopeChain : any
+>scopeChain : ScopeChain
 >scope : any
             }
             else if (ast.nodeType == NodeType.ModuleDeclaration) {
 >ast.nodeType == NodeType.ModuleDeclaration : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.ModuleDeclaration : any
 >NodeType : any
@@ -2070,14 +2070,14 @@ module TypeScript {
 
                 preAssignModuleScopes(ast, context);
 >preAssignModuleScopes(ast, context) : void
->preAssignModuleScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.ClassDeclaration) {
 >ast.nodeType == NodeType.ClassDeclaration : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.ClassDeclaration : any
 >NodeType : any
@@ -2085,14 +2085,14 @@ module TypeScript {
 
                 preAssignClassScopes(ast, context);
 >preAssignClassScopes(ast, context) : void
->preAssignClassScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.InterfaceDeclaration) {
 >ast.nodeType == NodeType.InterfaceDeclaration : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.InterfaceDeclaration : any
 >NodeType : any
@@ -2100,14 +2100,14 @@ module TypeScript {
 
                 preAssignInterfaceScopes(ast, context);
 >preAssignInterfaceScopes(ast, context) : void
->preAssignInterfaceScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.With) {
 >ast.nodeType == NodeType.With : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.With : any
 >NodeType : any
@@ -2115,14 +2115,14 @@ module TypeScript {
 
                 preAssignWithScopes(ast, context);
 >preAssignWithScopes(ast, context) : void
->preAssignWithScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.FuncDecl) {
 >ast.nodeType == NodeType.FuncDecl : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.FuncDecl : any
 >NodeType : any
@@ -2130,14 +2130,14 @@ module TypeScript {
 
                 preAssignFuncDeclScopes(ast, context);
 >preAssignFuncDeclScopes(ast, context) : void
->preAssignFuncDeclScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.Catch) {
 >ast.nodeType == NodeType.Catch : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.Catch : any
 >NodeType : any
@@ -2145,14 +2145,14 @@ module TypeScript {
 
                 preAssignCatchScopes(ast, context);
 >preAssignCatchScopes(ast, context) : void
->preAssignCatchScopes : (ast: any, context: AssignScopeContext) => void
->ast : any
+>preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.TypeRef) {
 >ast.nodeType == NodeType.TypeRef : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.TypeRef : any
 >NodeType : any
@@ -2168,25 +2168,25 @@ module TypeScript {
 >walker.options.goChildren = go : boolean
 >walker.options.goChildren : any
 >walker.options : any
->walker : any
+>walker : IAstWalker
 >options : any
 >goChildren : any
 >go : boolean
 
         return ast;
->ast : any
+>ast : AST
     }
 
     export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
->postAssignScopes : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>postAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>ast : AST
+>parent : AST
+>walker : IAstWalker
 
         var context:AssignScopeContext = walker.state;
 >context : AssignScopeContext
 >walker.state : any
->walker : any
+>walker : IAstWalker
 >state : any
 
         var go = true;
@@ -2194,21 +2194,21 @@ module TypeScript {
 >true : true
 
         if (ast) {
->ast : any
+>ast : AST
 
             if (ast.nodeType == NodeType.ModuleDeclaration) {
 >ast.nodeType == NodeType.ModuleDeclaration : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.ModuleDeclaration : any
 >NodeType : any
 >ModuleDeclaration : any
 
                 var prevModDecl = <ModuleDeclaration>ast;
->prevModDecl : any
-><ModuleDeclaration>ast : any
->ast : any
+>prevModDecl : ModuleDeclaration
+><ModuleDeclaration>ast : ModuleDeclaration
+>ast : AST
 
                 popAssignScope(context);
 >popAssignScope(context) : void
@@ -2216,40 +2216,40 @@ module TypeScript {
 >context : AssignScopeContext
 
                 context.modDeclChain.pop();
->context.modDeclChain.pop() : any
->context.modDeclChain.pop : () => any
->context.modDeclChain : any[]
+>context.modDeclChain.pop() : ModuleDeclaration
+>context.modDeclChain.pop : () => ModuleDeclaration
+>context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
->modDeclChain : any[]
->pop : () => any
+>modDeclChain : ModuleDeclaration[]
+>pop : () => ModuleDeclaration
 
                 if (context.modDeclChain.length >= 1) {
 >context.modDeclChain.length >= 1 : boolean
 >context.modDeclChain.length : number
->context.modDeclChain : any[]
+>context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
->modDeclChain : any[]
+>modDeclChain : ModuleDeclaration[]
 >length : number
 >1 : 1
 
                     context.typeFlow.checker.currentModDecl = context.modDeclChain[context.modDeclChain.length - 1];
->context.typeFlow.checker.currentModDecl = context.modDeclChain[context.modDeclChain.length - 1] : any
+>context.typeFlow.checker.currentModDecl = context.modDeclChain[context.modDeclChain.length - 1] : ModuleDeclaration
 >context.typeFlow.checker.currentModDecl : any
 >context.typeFlow.checker : any
->context.typeFlow : any
+>context.typeFlow : TypeFlow
 >context : AssignScopeContext
->typeFlow : any
+>typeFlow : TypeFlow
 >checker : any
 >currentModDecl : any
->context.modDeclChain[context.modDeclChain.length - 1] : any
->context.modDeclChain : any[]
+>context.modDeclChain[context.modDeclChain.length - 1] : ModuleDeclaration
+>context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
->modDeclChain : any[]
+>modDeclChain : ModuleDeclaration[]
 >context.modDeclChain.length - 1 : number
 >context.modDeclChain.length : number
->context.modDeclChain : any[]
+>context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
->modDeclChain : any[]
+>modDeclChain : ModuleDeclaration[]
 >length : number
 >1 : 1
                 }
@@ -2257,7 +2257,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.ClassDeclaration) {
 >ast.nodeType == NodeType.ClassDeclaration : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.ClassDeclaration : any
 >NodeType : any
@@ -2271,7 +2271,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.InterfaceDeclaration) {
 >ast.nodeType == NodeType.InterfaceDeclaration : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.InterfaceDeclaration : any
 >NodeType : any
@@ -2285,7 +2285,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.With) {
 >ast.nodeType == NodeType.With : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.With : any
 >NodeType : any
@@ -2299,16 +2299,16 @@ module TypeScript {
             else if (ast.nodeType == NodeType.FuncDecl) {
 >ast.nodeType == NodeType.FuncDecl : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.FuncDecl : any
 >NodeType : any
 >FuncDecl : any
 
                 var funcDecl = <FuncDecl>ast;
->funcDecl : any
-><FuncDecl>ast : any
->ast : any
+>funcDecl : FuncDecl
+><FuncDecl>ast : FuncDecl
+>ast : AST
 
                 if ((!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload) {
 >(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload : boolean
@@ -2316,19 +2316,19 @@ module TypeScript {
 >!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isConstructor : any
 >hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >hasFlag : any
 >funcDecl.fncFlags : any
->funcDecl : any
+>funcDecl : FuncDecl
 >fncFlags : any
 >FncFlags.ClassMethod : any
 >FncFlags : any
 >ClassMethod : any
 >!funcDecl.isOverload : boolean
 >funcDecl.isOverload : any
->funcDecl : any
+>funcDecl : FuncDecl
 >isOverload : any
 
                     popAssignScope(context);
@@ -2340,20 +2340,20 @@ module TypeScript {
             else if (ast.nodeType == NodeType.Catch) {
 >ast.nodeType == NodeType.Catch : boolean
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
 >NodeType.Catch : any
 >NodeType : any
 >Catch : any
 
                 var catchBlock = <Catch>ast;
->catchBlock : any
-><Catch>ast : any
->ast : any
+>catchBlock : Catch
+><Catch>ast : Catch
+>ast : AST
 
                 if (catchBlock.param) {
 >catchBlock.param : any
->catchBlock : any
+>catchBlock : Catch
 >param : any
 
                     popAssignScope(context);
@@ -2373,12 +2373,12 @@ module TypeScript {
 >walker.options.goChildren = go : boolean
 >walker.options.goChildren : any
 >walker.options : any
->walker : any
+>walker : IAstWalker
 >options : any
 >goChildren : any
 >go : boolean
 
         return ast;
->ast : any
+>ast : AST
     }
 }

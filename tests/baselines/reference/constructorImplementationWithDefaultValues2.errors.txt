@@ -26,6 +26,7 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
                               ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:9: This type parameter might need an `extends U` constraint.
             var z = x;
         }
     }

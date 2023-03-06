@@ -22,10 +22,10 @@ verify.completions(
   {
     marker: ['a'],
     exact: [
-      { name: 'B', kindModifiers: 'optional', sortText: completion.SortText.MemberDeclaredBySpreadAssignment, kind: 'property' },
-      { name: 'a', sortText: completion.SortText.MemberDeclaredBySpreadAssignment, kind: 'property' },
+      { name: 'd', sortText: completion.SortText.LocationPriority, kind: 'property' },
       { name: 'c', kindModifiers: 'optional', sortText: completion.SortText.OptionalMember, kind: 'property' },
-      { name: 'd', sortText: completion.SortText.LocationPriority, kind: 'property' }
+      { name: 'a', sortText: completion.SortText.MemberDeclaredBySpreadAssignment, kind: 'property' },
+      { name: 'B', kindModifiers: 'optional', sortText: completion.SortText.MemberDeclaredBySpreadAssignment, kind: 'property' },
     ]
   }
 );

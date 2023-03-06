@@ -22,4 +22,5 @@ export class Game {
 
     private prevConfig: SeedCoords[][];
 >prevConfig : Symbol(Game.prevConfig, Decl(parser0_004152.ts, 1, 98))
+>SeedCoords : Symbol(SeedCoords)
 }

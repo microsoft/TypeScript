@@ -1,0 +1,20 @@
+=== tests/cases/compiler/jsxImportSourceNonPragmaComment.tsx ===
+/* eslint-disable react/react-in-jsx-scope -- Unaware of @jsxImportSource */
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+>css : Symbol(css, Decl(jsxImportSourceNonPragmaComment.tsx, 2, 8))
+
+export default function Component() {
+>Component : Symbol(Component, Decl(jsxImportSourceNonPragmaComment.tsx, 2, 37))
+
+  return (
+    <input
+      css={css`
+>css : Symbol(css, Decl(jsxImportSourceNonPragmaComment.tsx, 6, 10))
+>css : Symbol(css, Decl(jsxImportSourceNonPragmaComment.tsx, 2, 8))
+
+        color: red;
+      `}
+    />
+  );
+}

@@ -20,7 +20,6 @@
   "configurations": [
     {
       "type": "node",
-      "protocol": "inspector",
       "request": "launch",
       "name": "Mocha Tests (currently opened test)",
       "runtimeArgs": ["--nolazy"],
@@ -41,18 +40,17 @@
       "env": {
         "NODE_ENV": "testing"
       },
+      "outFiles": [
+        "${workspaceFolder}/built/**/*.js",
+        "${workspaceFolder}/built/**/*.mjs",
+        "${workspaceFolder}/built/**/*.cjs",
+        "!**/node_modules/**"
+      ],
       "sourceMaps": true,
       "smartStep": true,
-      "preLaunchTask": "gulp: tests",
+      "preLaunchTask": "npm: build:tests",
       "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceRoot}/built/local/run.js"
-      ],
-
-      // NOTE: To use this, you must switch the "type" above to "pwa-node". You may also need to follow the instructions
-      // here: https://github.com/microsoft/vscode-js-debug#nightly-extension to use the js-debug nightly until
-      // this feature is shipping in insiders or to a release:
-      // "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+      "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     },
     {
       // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
@@ -60,11 +58,7 @@
       "request": "attach",
       "name": "Attach to VS Code TS Server via Port",
       "processId": "${command:PickProcess}",
-
-      // NOTE: To use this, you must switch the "type" above to "pwa-node". You may also need to follow the instructions
-      // here: https://github.com/microsoft/vscode-js-debug#nightly-extension to use the js-debug nightly until
-      // this feature is shipping in insiders or to a release:
-      // "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+      "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     }
   ]
 }

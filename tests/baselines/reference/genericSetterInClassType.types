@@ -1,0 +1,67 @@
+=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
+module Generic {
+>Generic : typeof Generic
+
+    class C<T> {
+>C : C<T>
+
+        get y(): T {
+>y : T
+
+            return 1 as never;
+>1 as never : never
+>1 : 1
+        }
+        set y(v) { }
+>y : T
+>v : T
+    }
+
+    var c = new C<number>();
+>c : C<number>
+>new C<number>() : C<number>
+>C : typeof C
+
+    c.y = c.y;
+>c.y = c.y : number
+>c.y : number
+>c : C<number>
+>y : number
+>c.y : number
+>c : C<number>
+>y : number
+
+    class Box<T> {
+>Box : Box<T>
+
+        #value!: T;
+>#value : T
+        
+        get value() {
+>value : T
+
+            return this.#value;
+>this.#value : T
+>this : this
+        }
+    
+        set value(value) {
+>value : T
+>value : T
+
+            this.#value = value;
+>this.#value = value : T
+>this.#value : T
+>this : this
+>value : T
+        }
+    }
+    
+    new Box<number>().value = 3;
+>new Box<number>().value = 3 : 3
+>new Box<number>().value : number
+>new Box<number>() : Box<number>
+>Box : typeof Box
+>value : number
+>3 : 3
+}

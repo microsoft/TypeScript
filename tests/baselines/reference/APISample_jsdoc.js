@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_jsdoc.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_jsdoc.ts]
@@ -35,7 +36,7 @@ function parseCommentsIntoDefinition(this: any,
     }
 
     // jsdocs are separate from comments
-    const jsdocs = symbol.getJsDocTags();
+    const jsdocs = symbol.getJsDocTags(this.checker);
     jsdocs.forEach(doc => {
         // if we have @TJS-... annotations, we have to parse them
         const { name, text } = doc;
@@ -59,7 +60,7 @@ function getAnnotations(this: any, node: ts.Node): Annotations | undefined {
         return undefined;
     }
 
-    const jsDocTags: ts.JSDocTagInfo[] = symbol.getJsDocTags();
+    const jsDocTags: ts.JSDocTagInfo[] = symbol.getJsDocTags(this.checker);
     if (!jsDocTags || !jsDocTags.length) {
         return undefined;
     }
@@ -128,7 +129,7 @@ function getSomeOtherTags(node: ts.Node) {
  *           https://github.com/vega/ts-json-schema-generator
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
 // excerpted from https://github.com/YousefED/typescript-json-schema
 // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
@@ -143,7 +144,7 @@ function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
         definition.description = comments.map(function (comment) { return comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n"); }).join("");
     }
     // jsdocs are separate from comments
-    var jsdocs = symbol.getJsDocTags();
+    var jsdocs = symbol.getJsDocTags(this.checker);
     jsdocs.forEach(function (doc) {
         // if we have @TJS-... annotations, we have to parse them
         var name = doc.name, text = doc.text;
@@ -162,7 +163,7 @@ function getAnnotations(node) {
     if (!symbol) {
         return undefined;
     }
-    var jsDocTags = symbol.getJsDocTags();
+    var jsDocTags = symbol.getJsDocTags(this.checker);
     if (!jsDocTags || !jsDocTags.length) {
         return undefined;
     }

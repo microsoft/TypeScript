@@ -1,0 +1,27 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts ===
+declare const x: number
+>x : Symbol(x, Decl(callWithSpread5.ts, 0, 13))
+
+declare const nnnu: [number, number, number?]
+>nnnu : Symbol(nnnu, Decl(callWithSpread5.ts, 1, 13))
+
+declare const nntnnnt: [number, number] | [number, number, number]
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread5.ts, 2, 13))
+
+declare function fn(a: number, b: number, bb: number, ...c: number[]): number
+>fn : Symbol(fn, Decl(callWithSpread5.ts, 2, 66))
+>a : Symbol(a, Decl(callWithSpread5.ts, 3, 20))
+>b : Symbol(b, Decl(callWithSpread5.ts, 3, 30))
+>bb : Symbol(bb, Decl(callWithSpread5.ts, 3, 41))
+>c : Symbol(c, Decl(callWithSpread5.ts, 3, 53))
+
+fn(...nnnu, x)
+>fn : Symbol(fn, Decl(callWithSpread5.ts, 2, 66))
+>nnnu : Symbol(nnnu, Decl(callWithSpread5.ts, 1, 13))
+>x : Symbol(x, Decl(callWithSpread5.ts, 0, 13))
+
+fn(...nntnnnt, x)
+>fn : Symbol(fn, Decl(callWithSpread5.ts, 2, 66))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread5.ts, 2, 13))
+>x : Symbol(x, Decl(callWithSpread5.ts, 0, 13))
+

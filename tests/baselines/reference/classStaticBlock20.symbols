@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock20.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock20.ts, 0, 0))
+
+    async static {
+        // something
+    }
+
+    public static {
+        // something
+    }
+
+    readonly private static {
+        // something
+    }
+}
+

@@ -85,6 +85,6 @@ type Values<T> = T[keyof T];
 >Values : Values<T>
 
 type ValuesOfObj = Values<typeof obj>;
->ValuesOfObj : ValuesOfObj
+>ValuesOfObj : string | number
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 

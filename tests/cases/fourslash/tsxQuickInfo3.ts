@@ -24,7 +24,7 @@
 
 verify.quickInfos({
     1: "class Opt",
-    2: "(JSX attribute) propx: number",
+    2: "(property) propx: number",
     3: "const obj1: OptionProp",
-    4: "(JSX attribute) propx: true"
+    4: "(property) propx: true"
 });

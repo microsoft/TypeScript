@@ -46,4 +46,4 @@ f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2)["mem
 f(__makeTemplateObject(["abc"], ["abc"]))[0].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
 f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2)["member"].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
 f.thisIsNotATag("abc");
-f.thisIsNotATag("abc" + 1 + "def" + 2 + "ghi");
+f.thisIsNotATag("abc".concat(1, "def").concat(2, "ghi"));

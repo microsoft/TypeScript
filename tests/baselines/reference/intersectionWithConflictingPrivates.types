@@ -138,15 +138,15 @@ class Foo {
 	}
 
   private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
->bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
+>bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
 >node : CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode
 >options : {} | undefined
 
     return Promise.resolve(undefined);
 >Promise.resolve(undefined) : Promise<undefined>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >undefined : undefined
   }
 }

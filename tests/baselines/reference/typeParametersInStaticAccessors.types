@@ -3,11 +3,11 @@ class foo<T> {
 >foo : foo<T>
 
     static get Foo(): () => T { return null; }
->Foo : () => any
+>Foo : () => T
 >null : null
 
     static set Bar(v: { v: T }) { }
->Bar : { v: any; }
->v : { v: any; }
->v : any
+>Bar : { v: T; }
+>v : { v: T; }
+>v : T
 } 

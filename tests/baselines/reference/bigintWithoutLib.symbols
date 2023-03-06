@@ -63,6 +63,7 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
+>BigInt64Array : Symbol(BigInt64Array)
 
 bigIntArray = new BigInt64Array(10);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
@@ -100,6 +101,7 @@ let arrayBufferLike: ArrayBufferView = bigIntArray;
 // Test BigUint64Array
 let bigUintArray: BigUint64Array = new BigUint64Array();
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
+>BigUint64Array : Symbol(BigUint64Array)
 
 bigUintArray = new BigUint64Array(10);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))

@@ -19,9 +19,9 @@ a.forEach(function (v,i,a) {});
 declare module _Core {
   interface Array {
     collect(fn:(e:_element) => _element[]) : any[];
->collect : (fn: (e: any) => _element[]) => any[]
->fn : (e: any) => _element[]
->e : any
+>collect : (fn: (e: _element) => _element[]) => any[]
+>fn : (e: _element) => _element[]
+>e : _element
   }
 }
 

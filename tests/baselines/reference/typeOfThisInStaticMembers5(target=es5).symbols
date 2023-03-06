@@ -1,0 +1,14 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers5.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers5.ts, 0, 0))
+
+    static create = () => new this("yep")
+>create : Symbol(C.create, Decl(typeOfThisInStaticMembers5.ts, 0, 9))
+>this : Symbol(C, Decl(typeOfThisInStaticMembers5.ts, 0, 0))
+
+    constructor (private foo: string) {
+>foo : Symbol(C.foo, Decl(typeOfThisInStaticMembers5.ts, 3, 17))
+
+    }
+}
+

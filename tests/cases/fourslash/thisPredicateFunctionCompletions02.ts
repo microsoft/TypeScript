@@ -32,7 +32,7 @@
 //// }
 
 verify.completions(
-    { marker: ["1", "3", "5"], exact: ["contents", "isSundries", "isSupplies", "isPackedTight", "extraContents"] },
+    { marker: ["1", "3", "5"], exact: ["contents", "extraContents", "isPackedTight", "isSundries", "isSupplies"] },
     { marker: "2", exact: "broken" },
     { marker: "4", exact: "spoiled" },
 );

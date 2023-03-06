@@ -1,0 +1,23 @@
+tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts(7,31): error TS18014: The property '#x' cannot be accessed on type 'Base' within this class because it is shadowed by another private identifier with the same spelling.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts (1 errors) ====
+    class Base {
+        #x() { };
+        constructor() {
+            class Derived {
+                #x() { };
+                testBase(x: Base) {
+                    console.log(x.#x);
+                                  ~~
+!!! error TS18014: The property '#x' cannot be accessed on type 'Base' within this class because it is shadowed by another private identifier with the same spelling.
+!!! related TS18017 tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts:5:13: The shadowing declaration of '#x' is defined here
+!!! related TS18018 tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts:2:5: The declaration of '#x' that you probably intended to use is defined here
+                }
+                testDerived(x: Derived) {
+                    console.log(x.#x);
+                }
+            }
+        }
+    }
+    

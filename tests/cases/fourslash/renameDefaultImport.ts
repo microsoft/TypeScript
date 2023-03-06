@@ -7,7 +7,7 @@
 ////}|]
 
 // @Filename: A.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] from "./B";|]
+////[|import /*2*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] from "./B";|]
 ////let b = new [|B|]();
 ////b.test();
 
@@ -16,10 +16,6 @@ verify.occurrencesAtPositionCount(1);
 
 const [CDef, C, B0Def, B0, B1] = test.ranges();;
 
-const classes = { definition: "class B", ranges: [C] };
-const imports = { definition: "(alias) class B\nimport B", ranges: [B0, B1] };
-verify.referenceGroups(C, [classes, imports]);
-verify.referenceGroups([B0, B1], [imports, classes]);
-
 verify.renameLocations(C, [C, B0, B1]);
 verify.rangesAreRenameLocations([B0, B1]);
+verify.baselineFindAllReferences('1', '2')

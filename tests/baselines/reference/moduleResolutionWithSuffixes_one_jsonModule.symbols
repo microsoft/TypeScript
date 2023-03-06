@@ -1,0 +1,17 @@
+=== /index.ts ===
+import foo from "./foo.json";
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+
+console.log(foo.ios);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>foo.ios : Symbol("ios", Decl(foo.ios.json, 0, 1))
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+>ios : Symbol("ios", Decl(foo.ios.json, 0, 1))
+
+=== /foo.ios.json ===
+{
+	"ios": "platform ios"
+>"ios" : Symbol("ios", Decl(foo.ios.json, 0, 1))
+}

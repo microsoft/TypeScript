@@ -1,0 +1,44 @@
+=== tests/cases/compiler/narrowingRestGenericCall.ts ===
+interface Slugs {
+>Slugs : Symbol(Slugs, Decl(narrowingRestGenericCall.ts, 0, 0))
+
+  foo: string;
+>foo : Symbol(Slugs.foo, Decl(narrowingRestGenericCall.ts, 0, 17))
+
+  bar: string;
+>bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
+}
+
+function call<T extends object>(obj: T, cb: (val: T) => void) {
+>call : Symbol(call, Decl(narrowingRestGenericCall.ts, 3, 1))
+>T : Symbol(T, Decl(narrowingRestGenericCall.ts, 5, 14))
+>obj : Symbol(obj, Decl(narrowingRestGenericCall.ts, 5, 32))
+>T : Symbol(T, Decl(narrowingRestGenericCall.ts, 5, 14))
+>cb : Symbol(cb, Decl(narrowingRestGenericCall.ts, 5, 39))
+>val : Symbol(val, Decl(narrowingRestGenericCall.ts, 5, 45))
+>T : Symbol(T, Decl(narrowingRestGenericCall.ts, 5, 14))
+
+  cb(obj);
+>cb : Symbol(cb, Decl(narrowingRestGenericCall.ts, 5, 39))
+>obj : Symbol(obj, Decl(narrowingRestGenericCall.ts, 5, 32))
+}
+
+declare let obj: Slugs;
+>obj : Symbol(obj, Decl(narrowingRestGenericCall.ts, 9, 11))
+>Slugs : Symbol(Slugs, Decl(narrowingRestGenericCall.ts, 0, 0))
+
+call(obj, ({foo, ...rest}) => {
+>call : Symbol(call, Decl(narrowingRestGenericCall.ts, 3, 1))
+>obj : Symbol(obj, Decl(narrowingRestGenericCall.ts, 9, 11))
+>foo : Symbol(foo, Decl(narrowingRestGenericCall.ts, 10, 12))
+>rest : Symbol(rest, Decl(narrowingRestGenericCall.ts, 10, 16))
+
+  console.log(rest.bar);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>rest.bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
+>rest : Symbol(rest, Decl(narrowingRestGenericCall.ts, 10, 16))
+>bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
+
+});

@@ -1,0 +1,8 @@
+{
+    "scenario": "rootDirectory: Files outside the rootDirectory without outDir",
+    "projectRoot": "tests/cases/projects/rootDirectory",
+    "inputFiles": [
+        "FolderA/FolderB/fileB.ts"
+    ],
+    "rootDir": "FolderA/FolderB/FolderC"
+}

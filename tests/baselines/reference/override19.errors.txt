@@ -1,0 +1,27 @@
+tests/cases/conformance/override/override19.ts(12,13): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'A & { context: Context; }'.
+tests/cases/conformance/override/override19.ts(16,14): error TS4117: This member cannot have an 'override' modifier because it is not declared in the base class 'A & { context: Context; }'. Did you mean 'doSomething'?
+
+
+==== tests/cases/conformance/override/override19.ts (2 errors) ====
+    type Foo = abstract new(...args: any) => any;
+    declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {
+       new (...args: any[]): { context: InstanceType<C> }
+    }
+    class Context {}
+    
+    class A {
+        doSomething() {}
+    }
+    
+    class B extends CreateMixin(Context, A) {
+       override foo() {} // Remove override
+                ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'A & { context: Context; }'.
+    }
+    
+    class C extends CreateMixin(Context, A) {
+        override doSomethang() {} // Suggestion 'doSomething'
+                 ~~~~~~~~~~~
+!!! error TS4117: This member cannot have an 'override' modifier because it is not declared in the base class 'A & { context: Context; }'. Did you mean 'doSomething'?
+    }
+    

@@ -1,22 +1,26 @@
 //// [typeOfThisInStaticMembers2.ts]
 class C {
-    static foo = this; // error
+    static foo = this; // ok
 }
 
 class C2<T> {
-    static foo = this; // error
+    static foo = this; // ok
 }
 
 //// [typeOfThisInStaticMembers2.js]
 var C = /** @class */ (function () {
     function C() {
     }
-    C.foo = this; // error
+    var _a;
+    _a = C;
+    C.foo = _a; // ok
     return C;
 }());
 var C2 = /** @class */ (function () {
     function C2() {
     }
-    C2.foo = this; // error
+    var _b;
+    _b = C2;
+    C2.foo = _b; // ok
     return C2;
 }());

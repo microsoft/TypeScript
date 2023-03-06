@@ -20,7 +20,7 @@ foo(function () {
     }
     return 0;
 });
-foo((1), { "return": 0 });
+foo((1), { return: 0 });
 foo(function (x) { return x; });
 foo(function (x) {
     if (x === void 0) { x = 0; }

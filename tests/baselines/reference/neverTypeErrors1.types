@@ -67,3 +67,40 @@ for (const n in f4()) {}
 >f4() : never
 >f4 : () => never
 
+function f5() {
+>f5 : () => void
+
+    let x: never[] = [];  // Ok
+>x : never[]
+>[] : undefined[]
+}
+
+// Repro from #46032
+
+interface A {
+    foo: "a";
+>foo : "a"
+}
+
+interface B {
+    foo: "b";
+>foo : "b"
+}
+
+type Union = A & B;
+>Union : never
+
+function func(): { value: Union[] } {
+>func : () => {    value: Union[];}
+>value : never[]
+
+    return {
+>{        value: [],    } : { value: undefined[]; }
+
+        value: [],
+>value : undefined[]
+>[] : undefined[]
+
+    };
+}
+

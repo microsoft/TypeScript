@@ -1,0 +1,64 @@
+tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts(2,14): error TS4112: This member cannot have an 'override' modifier because its containing class 'AmbientClass' does not extend another class.
+tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts(6,14): error TS4112: This member cannot have an 'override' modifier because its containing class 'NonAmbientClass' does not extend another class.
+tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts(18,14): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'AmbientBase'.
+tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts(31,18): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'AmbientBase'.
+tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts(44,14): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'NonAmbientBase'.
+
+
+==== tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts (5 errors) ====
+    export declare class AmbientClass {
+        override yadda(): void;
+                 ~~~~~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'AmbientClass' does not extend another class.
+    }
+    
+    export class NonAmbientClass {
+        override yadda(): void {}
+                 ~~~~~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'NonAmbientClass' does not extend another class.
+    }
+    
+    /////
+    
+    export declare class AmbientBase {
+        foo(): void;
+    }
+    
+    export declare class AmbientDerived extends AmbientBase {
+        foo(): void;
+    
+        override bar(): void;
+                 ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'AmbientBase'.
+    }
+    
+    /////
+    
+    declare namespace ambientNamespace {
+        export class AmbientBase {
+            foo(): void;
+        }
+    
+        export class AmbientDerived extends AmbientBase {
+            foo(): void;
+    
+            override bar(): void;
+                     ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'AmbientBase'.
+        }
+    }
+    
+    /////
+    
+    export class NonAmbientBase {
+        foo(): void {}
+    }
+    
+    export class NonAmbientDerived extends NonAmbientBase {
+        foo(): void {}
+    
+        override bar(): void {}
+                 ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'NonAmbientBase'.
+    }
+    

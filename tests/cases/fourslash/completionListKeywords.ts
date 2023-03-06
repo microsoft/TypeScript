@@ -6,9 +6,5 @@
 
 verify.completions({
     marker: "",
-    exact: [
-        completion.globalThisEntry,
-        completion.undefinedVarEntry,
-        ...completion.statementKeywordsWithTypes
-    ]
+    exact: completion.globalsPlus([], { noLib: true }),
 });

@@ -1,0 +1,65 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+class A {
+>A : Symbol(A, Decl(0.js, 0, 0))
+
+    /**
+     * @method
+     * @param {string | number} a
+     * @returns {boolean}
+     */
+    foo (a) {
+>foo : Symbol(A.foo, Decl(0.js, 0, 9))
+>a : Symbol(a, Decl(0.js, 7, 9))
+
+        return typeof a === 'string'
+>a : Symbol(a, Decl(0.js, 7, 9))
+    }
+    bar () {
+>bar : Symbol(A.bar, Decl(0.js, 9, 5))
+
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(0.js, 13, 1))
+>A : Symbol(A, Decl(0.js, 0, 0))
+
+    /**
+     * @override
+     * @method
+     * @param {string | number} a
+     * @returns {boolean}
+     */
+    foo (a) {
+>foo : Symbol(B.foo, Decl(0.js, 15, 19))
+>a : Symbol(a, Decl(0.js, 22, 9))
+
+        return super.foo(a)
+>super.foo : Symbol(A.foo, Decl(0.js, 0, 9))
+>super : Symbol(A, Decl(0.js, 0, 0))
+>foo : Symbol(A.foo, Decl(0.js, 0, 9))
+>a : Symbol(a, Decl(0.js, 22, 9))
+    }
+
+    bar () {
+>bar : Symbol(B.bar, Decl(0.js, 24, 5))
+
+    }
+
+    /** @override */
+    baz () {
+>baz : Symbol(B.baz, Decl(0.js, 28, 5))
+
+    }
+}
+
+
+class C {
+>C : Symbol(C, Decl(0.js, 34, 1))
+
+    /** @override */
+    foo () {
+>foo : Symbol(C.foo, Decl(0.js, 37, 9))
+
+    }
+}

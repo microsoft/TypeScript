@@ -1,0 +1,24 @@
+=== tests/cases/compiler/didYouMeanStringLiteral.ts ===
+type T1 = "string" | "number" | "boolean";
+>T1 : Symbol(T1, Decl(didYouMeanStringLiteral.ts, 0, 0))
+
+type T2 = T1 & ("number" | "boolean"); // "number" | "boolean"
+>T2 : Symbol(T2, Decl(didYouMeanStringLiteral.ts, 0, 42))
+>T1 : Symbol(T1, Decl(didYouMeanStringLiteral.ts, 0, 0))
+
+type T3 = T1 & ("string" | "boolean"); // "string" | "boolean"
+>T3 : Symbol(T3, Decl(didYouMeanStringLiteral.ts, 1, 38))
+>T1 : Symbol(T1, Decl(didYouMeanStringLiteral.ts, 0, 0))
+
+const t1: T1 = "strong";
+>t1 : Symbol(t1, Decl(didYouMeanStringLiteral.ts, 4, 5))
+>T1 : Symbol(T1, Decl(didYouMeanStringLiteral.ts, 0, 0))
+
+const t2: T2 = "strong";
+>t2 : Symbol(t2, Decl(didYouMeanStringLiteral.ts, 5, 5))
+>T2 : Symbol(T2, Decl(didYouMeanStringLiteral.ts, 0, 42))
+
+const t3: T3 = "strong";
+>t3 : Symbol(t3, Decl(didYouMeanStringLiteral.ts, 6, 5))
+>T3 : Symbol(T3, Decl(didYouMeanStringLiteral.ts, 1, 38))
+

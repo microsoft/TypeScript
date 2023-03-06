@@ -1,13 +1,13 @@
 === tests/cases/compiler/spreadBooleanRespectsFreshness.ts ===
 type Foo = FooBase | FooArray;
->Foo : Foo
+>Foo : FooBase | FooArray
 
 type FooBase = string | false;
->FooBase : FooBase
+>FooBase : string | false
 >false : false
 
 type FooArray = FooBase[];
->FooArray : FooArray
+>FooArray : FooBase[]
 
 declare let foo1: Foo;
 >foo1 : Foo

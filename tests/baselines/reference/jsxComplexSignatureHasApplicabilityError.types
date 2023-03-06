@@ -126,7 +126,7 @@ export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<Val
 >React : any
 
 export type HandlerRendererResult = JSX.Element | null | false;
->HandlerRendererResult : HandlerRendererResult
+>HandlerRendererResult : false | JSX.Element | null
 >JSX : any
 >null : null
 >false : false
@@ -141,11 +141,11 @@ export type SelectValueHandler<TValue = OptionValues> = (option: Option<TValue>)
 >option : Option<TValue>
 
 export type ArrowRendererHandler = (props: ArrowRendererProps) => HandlerRendererResult;
->ArrowRendererHandler : ArrowRendererHandler
+>ArrowRendererHandler : (props: ArrowRendererProps) => HandlerRendererResult
 >props : ArrowRendererProps
 
 export type ClearRendererHandler = () => HandlerRendererResult;
->ClearRendererHandler : ClearRendererHandler
+>ClearRendererHandler : () => HandlerRendererResult
 
 export type FilterOptionHandler<TValue = OptionValues> = (option: Option<TValue>, filter: string) => boolean;
 >FilterOptionHandler : FilterOptionHandler<TValue>
@@ -159,7 +159,7 @@ export type FilterOptionsHandler<TValue = OptionValues> = (options: Options<TVal
 >currentValues : Options<TValue>
 
 export type InputRendererHandler = (props: { [key: string]: any }) => HandlerRendererResult;
->InputRendererHandler : InputRendererHandler
+>InputRendererHandler : (props: { [key: string]: any; }) => HandlerRendererResult
 >props : { [key: string]: any; }
 >key : string
 
@@ -168,28 +168,28 @@ export type MenuRendererHandler<TValue = OptionValues> = (props: MenuRendererPro
 >props : MenuRendererProps<TValue>
 
 export type OnCloseHandler = () => void;
->OnCloseHandler : OnCloseHandler
+>OnCloseHandler : () => void
 
 export type OnInputChangeHandler = (inputValue: string) => string;
->OnInputChangeHandler : OnInputChangeHandler
+>OnInputChangeHandler : (inputValue: string) => string
 >inputValue : string
 
 export type OnInputKeyDownHandler = React.KeyboardEventHandler<HTMLDivElement | HTMLInputElement>;
->OnInputKeyDownHandler : OnInputKeyDownHandler
+>OnInputKeyDownHandler : (event: React.KeyboardEvent<HTMLDivElement | HTMLInputElement>) => void
 >React : any
 
 export type OnMenuScrollToBottomHandler = () => void;
->OnMenuScrollToBottomHandler : OnMenuScrollToBottomHandler
+>OnMenuScrollToBottomHandler : () => void
 
 export type OnOpenHandler = () => void;
->OnOpenHandler : OnOpenHandler
+>OnOpenHandler : () => void
 
 export type OnFocusHandler = React.FocusEventHandler<HTMLDivElement | HTMLInputElement>;
->OnFocusHandler : OnFocusHandler
+>OnFocusHandler : (event: React.FocusEvent<HTMLDivElement | HTMLInputElement>) => void
 >React : any
 
 export type OnBlurHandler = React.FocusEventHandler<HTMLDivElement | HTMLInputElement>;
->OnBlurHandler : OnBlurHandler
+>OnBlurHandler : (event: React.FocusEvent<HTMLDivElement | HTMLInputElement>) => void
 >React : any
 
 export type OptionRendererHandler<TValue = OptionValues> = (option: Option<TValue>) => HandlerRendererResult;
@@ -216,7 +216,7 @@ export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Optio
 >valueKey : string
 
 export type IsValidNewOptionHandler = (arg: { label: string }) => boolean;
->IsValidNewOptionHandler : IsValidNewOptionHandler
+>IsValidNewOptionHandler : (arg: {    label: string;}) => boolean
 >arg : { label: string; }
 >label : string
 
@@ -228,11 +228,11 @@ export type NewOptionCreatorHandler<TValue = OptionValues> = (arg: { label: stri
 >valueKey : string
 
 export type PromptTextCreatorHandler = (filterText: string) => string;
->PromptTextCreatorHandler : PromptTextCreatorHandler
+>PromptTextCreatorHandler : (filterText: string) => string
 >filterText : string
 
 export type ShouldKeyDownEventCreateNewOptionHandler = (arg: { keyCode: number }) => boolean;
->ShouldKeyDownEventCreateNewOptionHandler : ShouldKeyDownEventCreateNewOptionHandler
+>ShouldKeyDownEventCreateNewOptionHandler : (arg: {    keyCode: number;}) => boolean
 >arg : { keyCode: number; }
 >keyCode : number
 
@@ -314,7 +314,7 @@ export interface Option<TValue = OptionValues> {
 }
 
 export type OptionValues = string | number | boolean;
->OptionValues : OptionValues
+>OptionValues : string | number | boolean
 
 export interface MenuRendererProps<TValue = OptionValues> {
     /**

@@ -11,7 +11,7 @@ namespace X {
     }
 
     export type C = A | B;
->C : C
+>C : A | B
 }
 
 export = X;

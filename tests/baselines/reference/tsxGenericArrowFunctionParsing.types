@@ -66,4 +66,12 @@ x5.isElement;
 >x5 : JSX.Element
 >isElement : any
 
+// This is a generic function
+var x6 = <T = string,>() => {};
+>x6 : <T = string>() => void
+><T = string,>() => {} : <T = string>() => void
+
+x6();
+>x6() : void
+>x6 : <T = string>() => void
 

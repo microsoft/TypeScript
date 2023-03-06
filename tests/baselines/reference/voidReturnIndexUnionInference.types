@@ -43,9 +43,9 @@ function bad<P extends Props>(props: Readonly<P>) {
     safeInvoke(props.onFoo, "blah");
 >safeInvoke(props.onFoo, "blah") : boolean | undefined
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->props.onFoo : P["onFoo"] | undefined
+>props.onFoo : ((value: string) => boolean) | undefined
 >props : Readonly<P>
->onFoo : P["onFoo"] | undefined
+>onFoo : ((value: string) => boolean) | undefined
 >"blah" : "blah"
 
     // ERROR HERE!!!
@@ -53,9 +53,9 @@ function bad<P extends Props>(props: Readonly<P>) {
     safeInvoke(props.onBar, "blah");
 >safeInvoke(props.onBar, "blah") : void | undefined
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->props.onBar : P["onBar"] | undefined
+>props.onBar : ((value: string) => void) | undefined
 >props : Readonly<P>
->onBar : P["onBar"] | undefined
+>onBar : ((value: string) => void) | undefined
 >"blah" : "blah"
 }
 

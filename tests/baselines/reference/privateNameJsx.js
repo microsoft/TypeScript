@@ -9,14 +9,14 @@ class Test {
 
 
 //// [privateNameJsx.jsx]
-var _prop;
+var _Test_prop;
 var Test = /** @class */ (function () {
     function Test() {
-        _prop.set(this, function () { return <div />; });
+        _Test_prop.set(this, function () { return <div />; });
     }
     Test.prototype.render = function () {
         return <this. />;
     };
     return Test;
 }());
-_prop = new WeakMap();
+_Test_prop = new WeakMap();

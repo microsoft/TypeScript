@@ -203,3 +203,17 @@ var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
 >a : Symbol(a, Decl(objectLiteralErrors.ts, 43, 10), Decl(objectLiteralErrors.ts, 43, 49))
 >n : Symbol(n, Decl(objectLiteralErrors.ts, 43, 56))
 
+// did you mean colon errors
+var h1 = {
+>h1 : Symbol(h1, Decl(objectLiteralErrors.ts, 46, 3))
+
+    x = 1,
+>x : Symbol(x, Decl(objectLiteralErrors.ts, 46, 10))
+
+    y = 2,
+>y : Symbol(y, Decl(objectLiteralErrors.ts, 47, 10))
+
+    #z: 3
+>#z : Symbol(#z, Decl(objectLiteralErrors.ts, 48, 10))
+}
+

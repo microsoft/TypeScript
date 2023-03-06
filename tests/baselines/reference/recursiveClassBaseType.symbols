@@ -1,0 +1,47 @@
+=== tests/cases/compiler/recursiveClassBaseType.ts ===
+// Repro from #44281
+
+declare const p: <T>(fn: () => T) => T;
+>p : Symbol(p, Decl(recursiveClassBaseType.ts, 2, 13))
+>T : Symbol(T, Decl(recursiveClassBaseType.ts, 2, 18))
+>fn : Symbol(fn, Decl(recursiveClassBaseType.ts, 2, 21))
+>T : Symbol(T, Decl(recursiveClassBaseType.ts, 2, 18))
+>T : Symbol(T, Decl(recursiveClassBaseType.ts, 2, 18))
+
+declare const Base: <T>(val: T) => { new(): T };
+>Base : Symbol(Base, Decl(recursiveClassBaseType.ts, 4, 13))
+>T : Symbol(T, Decl(recursiveClassBaseType.ts, 4, 21))
+>val : Symbol(val, Decl(recursiveClassBaseType.ts, 4, 24))
+>T : Symbol(T, Decl(recursiveClassBaseType.ts, 4, 21))
+>T : Symbol(T, Decl(recursiveClassBaseType.ts, 4, 21))
+
+class C extends Base({ x: p<C[]>(() => []) }) { }
+>C : Symbol(C, Decl(recursiveClassBaseType.ts, 4, 48))
+>Base : Symbol(Base, Decl(recursiveClassBaseType.ts, 4, 13))
+>x : Symbol(x, Decl(recursiveClassBaseType.ts, 6, 22))
+>p : Symbol(p, Decl(recursiveClassBaseType.ts, 2, 13))
+>C : Symbol(C, Decl(recursiveClassBaseType.ts, 4, 48))
+
+// Repro from #44359
+
+abstract class Base1 {
+>Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
+
+    abstract root(): Derived1;
+>root : Symbol(Base1.root, Decl(recursiveClassBaseType.ts, 10, 22))
+>Derived1 : Symbol(Derived1, Decl(recursiveClassBaseType.ts, 12, 1))
+}
+
+class Derived1 extends class extends Base1 {
+>Derived1 : Symbol(Derived1, Decl(recursiveClassBaseType.ts, 12, 1))
+>Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
+
+    root() {
+>root : Symbol((Anonymous class).root, Decl(recursiveClassBaseType.ts, 14, 44))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+}
+{ }
+

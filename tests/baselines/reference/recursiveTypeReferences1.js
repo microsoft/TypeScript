@@ -132,10 +132,14 @@ function level(h: HTMLHeadingElement): number {
 
 //// [recursiveTypeReferences1.js]
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var a0 = 1;
 var a1 = [1, [2, 3], [4, [5, [6, 7]]]];
@@ -185,9 +189,9 @@ function parse(node, index) {
     if (index === void 0) { index = []; }
     return html('ul', node.map(function (_a, i) {
         var el = _a[0], children = _a[1];
-        var idx = __spreadArray(__spreadArray([], index), [i + 1]);
+        var idx = __spreadArray(__spreadArray([], index, true), [i + 1], false);
         return html('li', [
-            html('a', { href: "#" + el.id, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
+            html('a', { href: "#".concat(el.id), rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
             children.length > 0 ? parse(children, idx) : frag()
         ]);
     }));
@@ -213,55 +217,55 @@ function level(h) {
 
 
 //// [recursiveTypeReferences1.d.ts]
-declare type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 declare const a0: ValueOrArray<number>;
 declare const a1: ValueOrArray<number>;
-declare type HypertextNode = string | [string, {
+type HypertextNode = string | [string, {
     [key: string]: unknown;
 }, ...HypertextNode[]];
 declare const hypertextNode: HypertextNode;
-declare type Json = string | number | boolean | null | Json[] | {
+type Json = string | number | boolean | null | Json[] | {
     [key: string]: Json;
 };
 declare let data: Json;
 interface Box<T> {
     value: T;
 }
-declare type T1 = Box<T1>;
-declare type T2 = Box<Box<T2>>;
-declare type T3 = Box<Box<Box<T3>>>;
+type T1 = Box<T1>;
+type T2 = Box<Box<T2>>;
+type T3 = Box<Box<Box<T3>>>;
 declare function f1(t1: T1, t2: T2, t3: T3): void;
-declare type Box1 = Box<Box1> | number;
+type Box1 = Box<Box1> | number;
 declare const b10: Box1;
 declare const b11: Box1;
 declare const b12: Box1;
-declare type Box2 = Box<Box2 | number>;
+type Box2 = Box<Box2 | number>;
 declare const b20: Box2;
 declare const b21: Box2;
 declare const b22: Box2;
-declare type RecArray<T> = Array<T | RecArray<T>>;
+type RecArray<T> = Array<T | RecArray<T>>;
 declare function flat<T>(a: RecArray<T>): Array<T>;
 declare function flat1<T>(a: Array<T | Array<T>>): Array<T>;
 declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
-declare type T10 = T10[];
-declare type T11 = readonly T11[];
-declare type T12 = (T12)[];
-declare type T13 = T13[] | string;
-declare type T14 = T14[] & {
+type T10 = T10[];
+type T11 = readonly T11[];
+type T12 = (T12)[];
+type T13 = T13[] | string;
+type T14 = T14[] & {
     x: string;
 };
-declare type T15<X> = X extends string ? T15<X>[] : never;
-declare type ValueOrArray1<T> = T | ValueOrArray1<T>[];
-declare type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+type T15<X> = X extends string ? T15<X>[] : never;
+type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+type ValueOrArray2<T> = T | ValueOrArray2<T>[];
 declare function foo1<T>(a: ValueOrArray1<T>): T;
 declare let ra1: ValueOrArray2<string>;
 declare let x1: string;
-declare type NumberOrArray1<T> = T | ValueOrArray1<T>[];
-declare type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+type NumberOrArray2<T> = T | ValueOrArray2<T>[];
 declare function foo2<T>(a: ValueOrArray1<T>): T;
 declare let ra2: ValueOrArray2<string>;
 declare let x2: string;
-declare type Tree = [HTMLHeadingElement, Tree][];
+type Tree = [HTMLHeadingElement, Tree][];
 declare function parse(node: Tree, index?: number[]): HTMLUListElement;
 declare function cons(hs: HTMLHeadingElement[]): Tree;
 declare function level(h: HTMLHeadingElement): number;

@@ -22,7 +22,7 @@ tc1.method<{ x: V }>(); // error: could not find symbol V
 >tc1.method : <T>() => void
 >tc1 : testClass1
 >method : <T>() => void
->x : any
+>x : V
 
 
 // in constructor type arguments
@@ -30,10 +30,10 @@ class testClass2<T> {
 >testClass2 : testClass2<T>
 }
 var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
->tc2 : testClass2<{ x: any; }>
->new testClass2<{ x: V }>() : testClass2<{ x: any; }>
+>tc2 : testClass2<{ x: V; }>
+>new testClass2<{ x: V }>() : testClass2<{ x: V; }>
 >testClass2 : typeof testClass2
->x : any
+>x : V
 
 
 // in method return type annotation
@@ -42,64 +42,64 @@ class testClass3 {
 
     testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
 >testMethod1 : () => Foo<{    x: V;}>
->x : any
+>x : V
 >null : null
 
     static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
 >testMethod2 : () => Foo<{    x: V;}>
->x : any
+>x : V
 >null : null
 
     set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
->a : Foo<{ x: any; }>
->value : Foo<{ x: any; }>
->x : any
+>a : Foo<{ x: V; }>
+>value : Foo<{ x: V; }>
+>x : V
 
     property: Foo<{ x: V }>; // error: could not find symbol V
->property : Foo<{ x: any; }>
->x : any
+>property : Foo<{ x: V; }>
+>x : V
 }
 
 
 // in function return type annotation
 function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
 >testFunction1 : () => Foo<{    x: V;}>
->x : any
+>x : V
 >null : null
 
 
 // in paramter types
 function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
 >testFunction2 : (p: Foo<{    x: V;}>) => void
->p : Foo<{ x: any; }>
->x : any
+>p : Foo<{ x: V; }>
+>x : V
 
 
 // in var type annotation
 var f: Foo<{ x: V }>; // error: could not find symbol V
->f : Foo<{ x: any; }>
->x : any
+>f : Foo<{ x: V; }>
+>x : V
 
 
 // in constraints
 class testClass4<T extends { x: V }> { } // error: could not find symbol V
 >testClass4 : testClass4<T>
->x : any
+>x : V
 
 interface testClass5<T extends Foo<{ x: V }>> { } // error: could not find symbol V
->x : any
+>x : V
 
 class testClass6<T> {
 >testClass6 : testClass6<T>
 
     method<M extends { x: V }>(): void { } // error: could not find symbol V
->method : <M extends { x: any; }>() => void
->x : any
+>method : <M extends { x: V; }>() => void
+>x : V
 }
 
 interface testInterface1 {
     new <M extends { x: V }>(a: M); // error: could not find symbol V
->x : any
+>x : V
 >a : M
 }
 
@@ -107,36 +107,36 @@ interface testInterface1 {
 // in extends clause
 class testClass7 extends Foo<{ x: V }> { } // error: could not find symbol V
 >testClass7 : testClass7
->Foo : Foo<{ x: any; }>
->x : any
+>Foo : Foo<{ x: V; }>
+>x : V
 
 
 // in implements clause
 class testClass8 implements IFoo<{ x: V }> { } // error: could not find symbol V
 >testClass8 : testClass8
->x : any
+>x : V
 
 
 // in signatures
 interface testInterface2 {
     new (a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
->a : Foo<{ x: any; }>
->x : any
->x : any
+>a : Foo<{ x: V; }>
+>x : V
+>x : V
 
     [x: string]: Foo<{ x: V }>; // error: could not find symbol V
 >x : string
->x : any
+>x : V
 
     method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
 >method : (a: Foo<{    x: V;}>) => Foo<{    x: V;}>
->a : Foo<{ x: any; }>
->x : any
->x : any
+>a : Foo<{ x: V; }>
+>x : V
+>x : V
 
     property: Foo<{ x: V }>; // error: could not find symbol V
->property : Foo<{ x: any; }>
->x : any
+>property : Foo<{ x: V; }>
+>x : V
 }
 
 

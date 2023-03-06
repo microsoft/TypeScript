@@ -23,8 +23,8 @@ var r = a[1];
 >1 : 1
 
 var r2 = a['1'];
->r2 : { length: number; }
->a['1'] : { length: number; }
+>r2 : string
+>a['1'] : string
 >a : A
 >'1' : "1"
 

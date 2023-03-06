@@ -3,18 +3,18 @@ module M {
 >M : typeof M
 
     var x: asdf;
->x : any
+>x : asdf
 
     var y = x + asdf;
 >y : any
 >x + asdf : any
->x : any
+>x : asdf
 >asdf : any
 
     var z = <asdf>x; // should be an error
->z : any
-><asdf>x : any
->x : any
+>z : asdf
+><asdf>x : asdf
+>x : asdf
 
     if (asdf) {
 >asdf : any

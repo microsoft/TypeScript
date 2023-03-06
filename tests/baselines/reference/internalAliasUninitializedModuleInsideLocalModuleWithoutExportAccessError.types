@@ -29,7 +29,7 @@ export module c {
 
 
 export var z: c.b.I;
->z : any
+>z : c.b.I
 >c : any
 >b : any
 

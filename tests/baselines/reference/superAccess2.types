@@ -22,7 +22,7 @@ class Q extends P {
     static yy = super; // error for static initializer accessing super
 >yy : any
 >super : any
->super : any
+>super : typeof P
 > : any
 
     // Super is not allowed in constructor args

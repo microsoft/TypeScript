@@ -11,4 +11,4 @@
 // @Filename: /a.ts
 ////import { /**/ } from "foo";
 
-verify.completions({ marker: "", exact: "Static" });
+verify.completions({ marker: "", exact: ["Static", { name: "type", sortText: completion.SortText.GlobalsOrKeywords }] });

@@ -9,7 +9,8 @@ class C {
 >p2 : Symbol(C.p2, Decl(multipleClassPropertyModifiersErrors.ts, 1, 18))
 
 	static static p3;
->p3 : Symbol(C.p3, Decl(multipleClassPropertyModifiersErrors.ts, 2, 20))
+>static : Symbol(C.static, Decl(multipleClassPropertyModifiersErrors.ts, 2, 20))
+>p3 : Symbol(C.p3, Decl(multipleClassPropertyModifiersErrors.ts, 3, 14))
 
 	public private p4;
 >p4 : Symbol(C.p4, Decl(multipleClassPropertyModifiersErrors.ts, 3, 18))

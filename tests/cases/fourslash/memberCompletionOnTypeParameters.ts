@@ -16,5 +16,5 @@
 verify.completions(
     { marker: "S", exact: undefined },
     { marker: ["T", "V"], exact: [{ name: "x", text: "(property) IFoo.x: number" }, { name: "y", text: "(property) IFoo.y: string" }]},
-    { marker: "U", exact: ["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"] },
+    { marker: "U", unsorted: ["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"] },
 );

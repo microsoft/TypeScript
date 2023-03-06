@@ -83,7 +83,7 @@ interface N {
 }
 
 type IndexableUnion = "foo" | "bar";
->IndexableUnion : IndexableUnion
+>IndexableUnion : "foo" | "bar"
 
 interface O {
     [u: IndexableUnion]: A;
@@ -91,7 +91,7 @@ interface O {
 }
 
 type NonIndexableUnion = boolean | {};
->NonIndexableUnion : NonIndexableUnion
+>NonIndexableUnion : boolean | {}
 
 interface P {
     [u: NonIndexableUnion]: A;
@@ -99,7 +99,7 @@ interface P {
 }
 
 type NonIndexableUnion2 = string | number;
->NonIndexableUnion2 : NonIndexableUnion2
+>NonIndexableUnion2 : string | number
 
 interface Q {
     [u: NonIndexableUnion2]: A;
@@ -107,7 +107,7 @@ interface Q {
 }
 
 type NonIndexableUnion3 = "foo" | 42;
->NonIndexableUnion3 : NonIndexableUnion3
+>NonIndexableUnion3 : "foo" | 42
 
 interface R {
     [u: NonIndexableUnion3]: A;

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod16.ts ===
+declare var decorator: any;
+>decorator : Symbol(decorator, Decl(decoratorOnClassMethod16.ts, 0, 11))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(decoratorOnClassMethod16.ts, 0, 27))
+
+    private prop
+>prop : Symbol(Foo.prop, Decl(decoratorOnClassMethod16.ts, 2, 11))
+
+    @decorator
+>decorator : Symbol(decorator, Decl(decoratorOnClassMethod16.ts, 0, 11))
+
+    foo() {
+>foo : Symbol(Foo.foo, Decl(decoratorOnClassMethod16.ts, 3, 16))
+
+        return 0;
+    }
+}
+

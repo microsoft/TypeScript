@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @type {function(boolean, string, ...*):void}
+ */
+const foo = function (a, b, ...r) { };
+>foo : Symbol(foo, Decl(a.js, 3, 5))
+>a : Symbol(a, Decl(a.js, 3, 22))
+>b : Symbol(b, Decl(a.js, 3, 24))
+>r : Symbol(r, Decl(a.js, 3, 27))
+
+=== tests/cases/conformance/jsdoc/b.ts ===
+foo(false, '');
+>foo : Symbol(foo, Decl(a.js, 3, 5))
+

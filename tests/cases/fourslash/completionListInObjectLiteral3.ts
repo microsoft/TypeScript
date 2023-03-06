@@ -8,4 +8,4 @@
 ////    /**/
 ////}
 
-verify.completions({ marker: "", exact: ["name", "children"] });
+verify.completions({ marker: "", exact: ["children", "name"] });

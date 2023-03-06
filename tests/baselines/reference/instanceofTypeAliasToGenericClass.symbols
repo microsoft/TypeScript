@@ -1,0 +1,46 @@
+=== tests/cases/compiler/instanceofTypeAliasToGenericClass.ts ===
+declare class TableClass<S = any> {
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+>S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))
+
+    _field: S;
+>_field : Symbol(TableClass._field, Decl(instanceofTypeAliasToGenericClass.ts, 0, 35))
+>S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))
+}
+
+export type Table = TableClass;
+>Table : Symbol(Table, Decl(instanceofTypeAliasToGenericClass.ts, 2, 1))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+
+function fn<T extends Table>(o: T) {
+>fn : Symbol(fn, Decl(instanceofTypeAliasToGenericClass.ts, 4, 31))
+>T : Symbol(T, Decl(instanceofTypeAliasToGenericClass.ts, 6, 12))
+>Table : Symbol(Table, Decl(instanceofTypeAliasToGenericClass.ts, 2, 1))
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 6, 29))
+>T : Symbol(T, Decl(instanceofTypeAliasToGenericClass.ts, 6, 12))
+
+    return o instanceof TableClass;
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 6, 29))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+}
+
+function fn2<T extends TableClass>(o: T) {
+>fn2 : Symbol(fn2, Decl(instanceofTypeAliasToGenericClass.ts, 8, 1))
+>T : Symbol(T, Decl(instanceofTypeAliasToGenericClass.ts, 10, 13))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 10, 35))
+>T : Symbol(T, Decl(instanceofTypeAliasToGenericClass.ts, 10, 13))
+
+    return o instanceof TableClass;
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 10, 35))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+}
+
+declare const o: Table;
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 14, 13))
+>Table : Symbol(Table, Decl(instanceofTypeAliasToGenericClass.ts, 2, 1))
+
+o instanceof TableClass;
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 14, 13))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+

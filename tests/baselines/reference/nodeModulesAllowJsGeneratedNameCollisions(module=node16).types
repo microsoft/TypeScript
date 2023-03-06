@@ -1,0 +1,42 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+function require() {}
+>require : () => void
+
+const exports = {};
+>exports : {}
+>{} : {}
+
+class Object {}
+>Object : Object
+
+export const __esModule = false;
+>__esModule : false
+>false : false
+
+export {require, exports, Object};
+>require : () => void
+>exports : {}
+>Object : typeof Object
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+function require() {}
+>require : () => void
+
+const exports = {};
+>exports : {}
+>{} : {}
+
+class Object {}
+>Object : Object
+
+export const __esModule = false;
+>__esModule : false
+>false : false
+
+export {require, exports, Object};
+>require : () => void
+>exports : {}
+>Object : typeof Object
+

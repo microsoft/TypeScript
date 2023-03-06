@@ -17,7 +17,7 @@
 verify.completions({
     marker: "",
     exact: [
-        { name: "commonProperty", text: "(property) commonProperty: string | number" },
         { name: "commonFunction", text: "(method) commonFunction(): number" },
+        { name: "commonProperty", text: "(property) commonProperty: string | number" },
     ],
 });

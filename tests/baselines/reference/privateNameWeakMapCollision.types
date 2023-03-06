@@ -5,6 +5,9 @@ function test() {
     let WeakMap;
 >WeakMap : any
 
+    let WeakSet;
+>WeakSet : any
+
     class C {
 >C : C
 

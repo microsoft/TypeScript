@@ -38,7 +38,7 @@ var __extends = (this && this.__extends) || (function () {
 var FancyError = /** @class */ (function (_super) {
     __extends(FancyError, _super);
     function FancyError(status) {
-        return _super.call(this, "error with status " + status) || this;
+        return _super.call(this, "error with status ".concat(status)) || this;
     }
     return FancyError;
 }(Error));

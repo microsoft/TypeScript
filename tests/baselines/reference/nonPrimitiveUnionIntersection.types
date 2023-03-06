@@ -8,7 +8,7 @@ var b: object | string = ""; // ok
 >"" : ""
 
 var c: object & {} = 123; // error
->c : object & {}
+>c : object
 >123 : 123
 
 a = b; // error
@@ -22,7 +22,7 @@ b = a; // ok
 >a : never
 
 const foo: object & {} = {bar: 'bar'}; // ok
->foo : object & {}
+>foo : object
 >{bar: 'bar'} : { bar: string; }
 >bar : string
 >'bar' : "bar"

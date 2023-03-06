@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts ===
+class X {
+>X : X
+
+    static [index: string]: string;
+>index : string
+
+    static x = 12; // Should error, incompatible with index signature
+>x : number
+>12 : 12
+}
+class Y {
+>Y : Y
+
+    static [index: string]: string;
+>index : string
+
+    static foo() {} // should error, incompatible with index signature
+>foo : () => void
+}
+

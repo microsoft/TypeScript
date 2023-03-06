@@ -1,0 +1,21 @@
+=== tests/cases/conformance/override/override10.ts ===
+abstract class Base {
+>Base : Symbol(Base, Decl(override10.ts, 0, 0))
+
+    abstract foo(): unknown;
+>foo : Symbol(Base.foo, Decl(override10.ts, 0, 21))
+
+    abstract bar(): void;
+>bar : Symbol(Base.bar, Decl(override10.ts, 1, 28))
+}
+
+abstract class Sub extends Base {
+>Sub : Symbol(Sub, Decl(override10.ts, 3, 1))
+>Base : Symbol(Base, Decl(override10.ts, 0, 0))
+
+    abstract override foo(): number;
+>foo : Symbol(Sub.foo, Decl(override10.ts, 5, 33))
+
+    bar() { }
+>bar : Symbol(Sub.bar, Decl(override10.ts, 6, 36))
+}

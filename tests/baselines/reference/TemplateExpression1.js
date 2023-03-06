@@ -2,4 +2,4 @@
 var v = `foo ${ a 
 
 //// [TemplateExpression1.js]
-var v = "foo " + a;
+var v = "foo ".concat(a);

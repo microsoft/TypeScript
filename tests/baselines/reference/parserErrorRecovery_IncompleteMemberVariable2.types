@@ -14,7 +14,7 @@ module Shapes {
 >Point : Point
 
         public con:C "hello";
->con : any
+>con : C
 >"hello" : any
 
         // Constructor

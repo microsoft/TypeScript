@@ -1,6 +1,6 @@
 === tests/cases/compiler/indexSignatureWithTrailingComma.ts ===
 type A = {
->A : A
+>A : { [key: string]: string; }
 
     [key: string,]: string;
 >key : string

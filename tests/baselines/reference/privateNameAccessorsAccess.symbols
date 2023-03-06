@@ -1,0 +1,58 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAccessorsAccess.ts ===
+class A2 {
+>A2 : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+
+    get #prop() { return ""; }
+>#prop : Symbol(A2.#prop, Decl(privateNameAccessorsAccess.ts, 0, 10), Decl(privateNameAccessorsAccess.ts, 1, 30))
+
+    set #prop(param: string) { }
+>#prop : Symbol(A2.#prop, Decl(privateNameAccessorsAccess.ts, 0, 10), Decl(privateNameAccessorsAccess.ts, 1, 30))
+>param : Symbol(param, Decl(privateNameAccessorsAccess.ts, 2, 14))
+
+    constructor() {
+        console.log(this.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#prop : Symbol(A2.#prop, Decl(privateNameAccessorsAccess.ts, 0, 10), Decl(privateNameAccessorsAccess.ts, 1, 30))
+>this : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+
+        let a: A2 = this;
+>a : Symbol(a, Decl(privateNameAccessorsAccess.ts, 6, 11))
+>A2 : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+>this : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+
+        a.#prop;
+>a.#prop : Symbol(A2.#prop, Decl(privateNameAccessorsAccess.ts, 0, 10), Decl(privateNameAccessorsAccess.ts, 1, 30))
+>a : Symbol(a, Decl(privateNameAccessorsAccess.ts, 6, 11))
+
+        function  foo (){
+>foo : Symbol(foo, Decl(privateNameAccessorsAccess.ts, 7, 16))
+
+            a.#prop;
+>a.#prop : Symbol(A2.#prop, Decl(privateNameAccessorsAccess.ts, 0, 10), Decl(privateNameAccessorsAccess.ts, 1, 30))
+>a : Symbol(a, Decl(privateNameAccessorsAccess.ts, 6, 11))
+        }
+    }
+}
+new A2().#prop; // Error
+>A2 : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+
+function  foo (){
+>foo : Symbol(foo, Decl(privateNameAccessorsAccess.ts, 13, 15))
+
+    new A2().#prop; // Error
+>A2 : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+}
+
+class B2 {
+>B2 : Symbol(B2, Decl(privateNameAccessorsAccess.ts, 17, 1))
+
+    m() {
+>m : Symbol(B2.m, Decl(privateNameAccessorsAccess.ts, 19, 10))
+
+        new A2().#prop;
+>A2 : Symbol(A2, Decl(privateNameAccessorsAccess.ts, 0, 0))
+    }
+}
+

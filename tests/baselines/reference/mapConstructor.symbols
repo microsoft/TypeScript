@@ -1,0 +1,20 @@
+=== tests/cases/compiler/mapConstructor.ts ===
+new Map();
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const potentiallyUndefinedIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined;
+>potentiallyUndefinedIterable : Symbol(potentiallyUndefinedIterable, Decl(mapConstructor.ts, 2, 5))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+new Map(potentiallyUndefinedIterable);
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>potentiallyUndefinedIterable : Symbol(potentiallyUndefinedIterable, Decl(mapConstructor.ts, 2, 5))
+
+const potentiallyNullIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | null;
+>potentiallyNullIterable : Symbol(potentiallyNullIterable, Decl(mapConstructor.ts, 5, 5))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+new Map(potentiallyNullIterable);
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>potentiallyNullIterable : Symbol(potentiallyNullIterable, Decl(mapConstructor.ts, 5, 5))
+

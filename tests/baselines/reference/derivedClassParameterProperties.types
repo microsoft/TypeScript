@@ -19,7 +19,7 @@ class Derived extends Base {
 >a : number
 >1 : 1
 
-        super(); // ok
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -36,7 +36,7 @@ class Derived2 extends Base {
 >a : number
 >1 : 1
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -49,7 +49,7 @@ class Derived3 extends Base {
     constructor(public y: string) {
 >y : string
 
-        super(); // ok
+        super();
 >super() : void
 >super : typeof Base
 
@@ -74,7 +74,7 @@ class Derived4 extends Base {
 >b : number
 >2 : 2
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -91,7 +91,7 @@ class Derived5 extends Base {
     constructor(y: string) {
 >y : string
 
-        super(); // ok
+        super();
 >super() : void
 >super : typeof Base
 
@@ -122,7 +122,7 @@ class Derived6 extends Base {
 >b : number
 >2 : 2
 
-        super(); // error: "super" has to be called before "this" accessing
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -156,7 +156,7 @@ class Derived7 extends Base {
 >b : number
 >3 : 3
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -176,7 +176,7 @@ class Derived8 extends Base {
     constructor(y: string) {
 >y : string
 
-        super(); // ok
+        super();
 >super() : void
 >super : typeof Base
 
@@ -229,7 +229,7 @@ class Derived9<T> extends Base2<T> {
 >b : number
 >3 : 3
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base2
     }
@@ -249,7 +249,7 @@ class Derived10<T> extends Base2<T> {
     constructor(y: string) {
 >y : string
 
-        super(); // ok
+        super();
 >super() : void
 >super : typeof Base2
 

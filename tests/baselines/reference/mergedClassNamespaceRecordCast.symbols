@@ -1,0 +1,39 @@
+=== tests/cases/compiler/mergedClassNamespaceRecordCast.ts ===
+class C1 { foo() {} }
+>C1 : Symbol(C1, Decl(mergedClassNamespaceRecordCast.ts, 0, 0))
+>foo : Symbol(C1.foo, Decl(mergedClassNamespaceRecordCast.ts, 0, 10))
+
+new C1() as Record<string, unknown>;
+>C1 : Symbol(C1, Decl(mergedClassNamespaceRecordCast.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+
+class C2 { foo() {} }
+>C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+>foo : Symbol(C2.foo, Decl(mergedClassNamespaceRecordCast.ts, 5, 10))
+
+namespace C2 { export const unrelated = 3; }
+>C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+>unrelated : Symbol(unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
+
+new C2() as Record<string, unknown>;
+>C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+C2.unrelated
+>C2.unrelated : Symbol(C2.unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
+>C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+>unrelated : Symbol(C2.unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
+
+new C2().unrelated
+>C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+
+
+namespace C3 { export const unrelated = 3; }
+>C3 : Symbol(C3, Decl(mergedClassNamespaceRecordCast.ts, 11, 18))
+>unrelated : Symbol(unrelated, Decl(mergedClassNamespaceRecordCast.ts, 14, 27))
+
+C3 as Record<string, unknown>;
+>C3 : Symbol(C3, Decl(mergedClassNamespaceRecordCast.ts, 11, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+

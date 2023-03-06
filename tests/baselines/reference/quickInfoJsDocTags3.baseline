@@ -1,3 +1,32 @@
+=== /tests/cases/fourslash/quickInfoJsDocTags3.ts ===
+// interface Foo {
+//     /**
+//      * comment
+//      * @author Me <me@domain.tld>
+//      * @see x (the parameter)
+//      * @param {number} x - x comment
+//      * @param {number} y - y comment
+//      * @throws {Error} comment
+//      */
+//     method(x: number, y: number): void;
+// }
+// 
+// class Bar implements Foo {
+//     method(): void {
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Bar.method(): void
+// | comment
+// | @author Me <me@domain.tld>
+// | @see x (the parameter)
+// | @param x - x comment
+// | @param y - y comment
+// | @throws {Error} comment
+// | ----------------------------------------------------------------------
+//         throw new Error("Method not implemented.");
+//     }
+// }
+
 [
   {
     "marker": {
@@ -5,7 +34,7 @@
       "position": 290,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -71,23 +100,80 @@
       "tags": [
         {
           "name": "author",
-          "text": "Me <me@domain.tld>"
+          "text": [
+            {
+              "text": "Me <me@domain.tld>",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "see",
-          "text": "x (the parameter)"
+          "text": [
+            {
+              "text": "x",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(the parameter)",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "param",
-          "text": "x - x comment"
+          "text": [
+            {
+              "text": "x",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- x comment",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "param",
-          "text": "y - y comment"
+          "text": [
+            {
+              "text": "y",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- y comment",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "throws",
-          "text": "{Error} comment"
+          "text": [
+            {
+              "text": "{Error}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "comment",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

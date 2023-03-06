@@ -1,0 +1,93 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty8.ts ===
+type Types = 'boolean' | 'unknown' | 'string';
+>Types : Symbol(Types, Decl(accessorsOverrideProperty8.ts, 0, 0))
+
+type Properties<T extends { [key: string]: Types }> = {
+>Properties : Symbol(Properties, Decl(accessorsOverrideProperty8.ts, 0, 46))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 2, 16))
+>key : Symbol(key, Decl(accessorsOverrideProperty8.ts, 2, 29))
+>Types : Symbol(Types, Decl(accessorsOverrideProperty8.ts, 0, 0))
+
+    readonly [key in keyof T]: T[key] extends 'boolean' ? boolean : T[key] extends 'string' ? string : unknown
+>key : Symbol(key, Decl(accessorsOverrideProperty8.ts, 3, 14))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 2, 16))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 2, 16))
+>key : Symbol(key, Decl(accessorsOverrideProperty8.ts, 3, 14))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 2, 16))
+>key : Symbol(key, Decl(accessorsOverrideProperty8.ts, 3, 14))
+}
+
+type AnyCtor<P extends object> = new (...a: any[]) => P
+>AnyCtor : Symbol(AnyCtor, Decl(accessorsOverrideProperty8.ts, 4, 1))
+>P : Symbol(P, Decl(accessorsOverrideProperty8.ts, 6, 13))
+>a : Symbol(a, Decl(accessorsOverrideProperty8.ts, 6, 38))
+>P : Symbol(P, Decl(accessorsOverrideProperty8.ts, 6, 13))
+
+declare function classWithProperties<T extends { [key: string]: Types }, P extends object>(properties: T, klass: AnyCtor<P>): {
+>classWithProperties : Symbol(classWithProperties, Decl(accessorsOverrideProperty8.ts, 6, 55))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 8, 37))
+>key : Symbol(key, Decl(accessorsOverrideProperty8.ts, 8, 50))
+>Types : Symbol(Types, Decl(accessorsOverrideProperty8.ts, 0, 0))
+>P : Symbol(P, Decl(accessorsOverrideProperty8.ts, 8, 72))
+>properties : Symbol(properties, Decl(accessorsOverrideProperty8.ts, 8, 91))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 8, 37))
+>klass : Symbol(klass, Decl(accessorsOverrideProperty8.ts, 8, 105))
+>AnyCtor : Symbol(AnyCtor, Decl(accessorsOverrideProperty8.ts, 4, 1))
+>P : Symbol(P, Decl(accessorsOverrideProperty8.ts, 8, 72))
+
+    new(): P & Properties<T>;
+>P : Symbol(P, Decl(accessorsOverrideProperty8.ts, 8, 72))
+>Properties : Symbol(Properties, Decl(accessorsOverrideProperty8.ts, 0, 46))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 8, 37))
+
+    prototype: P & Properties<T>
+>prototype : Symbol(prototype, Decl(accessorsOverrideProperty8.ts, 9, 29))
+>P : Symbol(P, Decl(accessorsOverrideProperty8.ts, 8, 72))
+>Properties : Symbol(Properties, Decl(accessorsOverrideProperty8.ts, 0, 46))
+>T : Symbol(T, Decl(accessorsOverrideProperty8.ts, 8, 37))
+
+};
+
+const Base = classWithProperties({
+>Base : Symbol(Base, Decl(accessorsOverrideProperty8.ts, 13, 5))
+>classWithProperties : Symbol(classWithProperties, Decl(accessorsOverrideProperty8.ts, 6, 55))
+
+    get x() { return 'boolean' as const },
+>x : Symbol(x, Decl(accessorsOverrideProperty8.ts, 13, 34))
+>const : Symbol(const)
+
+    y: 'string',
+>y : Symbol(y, Decl(accessorsOverrideProperty8.ts, 14, 42))
+
+}, class Base {
+>Base : Symbol(Base, Decl(accessorsOverrideProperty8.ts, 16, 2))
+
+});
+
+class MyClass extends Base {
+>MyClass : Symbol(MyClass, Decl(accessorsOverrideProperty8.ts, 17, 3))
+>Base : Symbol(Base, Decl(accessorsOverrideProperty8.ts, 13, 5))
+
+    get x() {
+>x : Symbol(MyClass.x, Decl(accessorsOverrideProperty8.ts, 19, 28))
+
+        return false;
+    }
+    get y() {
+>y : Symbol(MyClass.y, Decl(accessorsOverrideProperty8.ts, 22, 5))
+
+        return 'hi'
+    }
+}
+
+const mine = new MyClass();
+>mine : Symbol(mine, Decl(accessorsOverrideProperty8.ts, 28, 5))
+>MyClass : Symbol(MyClass, Decl(accessorsOverrideProperty8.ts, 17, 3))
+
+const value = mine.x;
+>value : Symbol(value, Decl(accessorsOverrideProperty8.ts, 29, 5))
+>mine.x : Symbol(MyClass.x, Decl(accessorsOverrideProperty8.ts, 19, 28))
+>mine : Symbol(mine, Decl(accessorsOverrideProperty8.ts, 28, 5))
+>x : Symbol(MyClass.x, Decl(accessorsOverrideProperty8.ts, 19, 28))
+
+

@@ -3,20 +3,21 @@ function log(a) { }
 
 class Vector {
  static foo = () => {
-  // 'this' should not be available in a static initializer.
+  // 'this' should be allowed in a static initializer.
   log(this);
  }
 }
 
 //// [thisInArrowFunctionInStaticInitializer1.js]
-var _this = this;
 function log(a) { }
 var Vector = /** @class */ (function () {
     function Vector() {
     }
+    var _a;
+    _a = Vector;
     Vector.foo = function () {
-        // 'this' should not be available in a static initializer.
-        log(_this);
+        // 'this' should be allowed in a static initializer.
+        log(_a);
     };
     return Vector;
 }());

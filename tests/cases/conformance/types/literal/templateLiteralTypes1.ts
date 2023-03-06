@@ -219,6 +219,7 @@ type BB = AA<-2, -2>;
 // Repro from #40970
 
 type PathKeys<T> =
+    unknown extends T ? never :
     T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
     T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
     never;
@@ -237,3 +238,20 @@ const obj2 = {
 } as const;
 
 let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+
+// Repro from #46480
+
+export type Spacing =
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+
+export type SpacingShorthand =
+    | `${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+
+const test1: SpacingShorthand = "0 0 0";

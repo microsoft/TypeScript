@@ -26,9 +26,13 @@ class MyClass {
 
     db: db.db; //error
 >db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
+>db : Symbol(db)
+>db : Symbol(db.db)
 
     constructor(db: db.db) { // error
 >db : Symbol(db, Decl(service.ts, 8, 16))
+>db : Symbol(db)
+>db : Symbol(db.db)
 
         this.db = db;
 >this.db : Symbol(MyClass.db, Decl(service.ts, 5, 15))

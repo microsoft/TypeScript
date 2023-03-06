@@ -1,0 +1,118 @@
+=== tests/cases/compiler/tailRecursiveConditionalTypes.ts ===
+type Trim<S extends string> =
+>Trim : Symbol(Trim, Decl(tailRecursiveConditionalTypes.ts, 0, 0))
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 0, 10))
+
+    S extends ` ${infer T}` ? Trim<T> :
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 0, 10))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 1, 23))
+>Trim : Symbol(Trim, Decl(tailRecursiveConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 1, 23))
+
+    S extends `${infer T} ` ? Trim<T> :
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 0, 10))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 2, 22))
+>Trim : Symbol(Trim, Decl(tailRecursiveConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 2, 22))
+
+    S;
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 0, 10))
+
+type T10 = Trim<'                                                                                                                                                hello '>;
+>T10 : Symbol(T10, Decl(tailRecursiveConditionalTypes.ts, 3, 6))
+>Trim : Symbol(Trim, Decl(tailRecursiveConditionalTypes.ts, 0, 0))
+
+type T11 = Trim<' hello                                                                                                                                                '>;
+>T11 : Symbol(T11, Decl(tailRecursiveConditionalTypes.ts, 5, 170))
+>Trim : Symbol(Trim, Decl(tailRecursiveConditionalTypes.ts, 0, 0))
+
+type GetChars<S> = GetCharsRec<S, never>;
+>GetChars : Symbol(GetChars, Decl(tailRecursiveConditionalTypes.ts, 6, 170))
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 8, 14))
+>GetCharsRec : Symbol(GetCharsRec, Decl(tailRecursiveConditionalTypes.ts, 8, 41))
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 8, 14))
+
+type GetCharsRec<S, Acc> =
+>GetCharsRec : Symbol(GetCharsRec, Decl(tailRecursiveConditionalTypes.ts, 8, 41))
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 9, 17))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 9, 19))
+
+    S extends `${infer Char}${infer Rest}` ? GetCharsRec<Rest, Char | Acc> : Acc;
+>S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 9, 17))
+>Char : Symbol(Char, Decl(tailRecursiveConditionalTypes.ts, 10, 22))
+>Rest : Symbol(Rest, Decl(tailRecursiveConditionalTypes.ts, 10, 35))
+>GetCharsRec : Symbol(GetCharsRec, Decl(tailRecursiveConditionalTypes.ts, 8, 41))
+>Rest : Symbol(Rest, Decl(tailRecursiveConditionalTypes.ts, 10, 35))
+>Char : Symbol(Char, Decl(tailRecursiveConditionalTypes.ts, 10, 22))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 9, 19))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 9, 19))
+
+type T20 = GetChars<'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'>;
+>T20 : Symbol(T20, Decl(tailRecursiveConditionalTypes.ts, 10, 81))
+>GetChars : Symbol(GetChars, Decl(tailRecursiveConditionalTypes.ts, 6, 170))
+
+type Reverse<T> = any[] extends T ? T : ReverseRec<T, []>;
+>Reverse : Symbol(Reverse, Decl(tailRecursiveConditionalTypes.ts, 12, 86))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 14, 13))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 14, 13))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 14, 13))
+>ReverseRec : Symbol(ReverseRec, Decl(tailRecursiveConditionalTypes.ts, 14, 58))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 14, 13))
+
+type ReverseRec<T, Acc extends unknown[]> =
+>ReverseRec : Symbol(ReverseRec, Decl(tailRecursiveConditionalTypes.ts, 14, 58))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 15, 16))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 15, 18))
+
+    T extends [infer Head, ...infer Tail] ? ReverseRec<Tail, [Head, ...Acc]> : Acc;
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 15, 16))
+>Head : Symbol(Head, Decl(tailRecursiveConditionalTypes.ts, 16, 20))
+>Tail : Symbol(Tail, Decl(tailRecursiveConditionalTypes.ts, 16, 35))
+>ReverseRec : Symbol(ReverseRec, Decl(tailRecursiveConditionalTypes.ts, 14, 58))
+>Tail : Symbol(Tail, Decl(tailRecursiveConditionalTypes.ts, 16, 35))
+>Head : Symbol(Head, Decl(tailRecursiveConditionalTypes.ts, 16, 20))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 15, 18))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 15, 18))
+
+type T30 = Reverse<[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]>;
+>T30 : Symbol(T30, Decl(tailRecursiveConditionalTypes.ts, 16, 83))
+>Reverse : Symbol(Reverse, Decl(tailRecursiveConditionalTypes.ts, 12, 86))
+
+type T31 = Reverse<string[]>;
+>T31 : Symbol(T31, Decl(tailRecursiveConditionalTypes.ts, 18, 171))
+>Reverse : Symbol(Reverse, Decl(tailRecursiveConditionalTypes.ts, 12, 86))
+
+type TupleOf<T, N extends number> = number extends N ? T[] : TupleOfRec<T, N, []>;
+>TupleOf : Symbol(TupleOf, Decl(tailRecursiveConditionalTypes.ts, 19, 29))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 21, 13))
+>N : Symbol(N, Decl(tailRecursiveConditionalTypes.ts, 21, 15))
+>N : Symbol(N, Decl(tailRecursiveConditionalTypes.ts, 21, 15))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 21, 13))
+>TupleOfRec : Symbol(TupleOfRec, Decl(tailRecursiveConditionalTypes.ts, 21, 82))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 21, 13))
+>N : Symbol(N, Decl(tailRecursiveConditionalTypes.ts, 21, 15))
+
+type TupleOfRec<T, N extends number, Acc extends unknown[]> =
+>TupleOfRec : Symbol(TupleOfRec, Decl(tailRecursiveConditionalTypes.ts, 21, 82))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 22, 16))
+>N : Symbol(N, Decl(tailRecursiveConditionalTypes.ts, 22, 18))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 22, 36))
+
+    Acc["length"] extends N ? Acc : TupleOfRec<T, N, [T, ...Acc]>;
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 22, 36))
+>N : Symbol(N, Decl(tailRecursiveConditionalTypes.ts, 22, 18))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 22, 36))
+>TupleOfRec : Symbol(TupleOfRec, Decl(tailRecursiveConditionalTypes.ts, 21, 82))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 22, 16))
+>N : Symbol(N, Decl(tailRecursiveConditionalTypes.ts, 22, 18))
+>T : Symbol(T, Decl(tailRecursiveConditionalTypes.ts, 22, 16))
+>Acc : Symbol(Acc, Decl(tailRecursiveConditionalTypes.ts, 22, 36))
+
+type T40 = TupleOf<any, 200>;
+>T40 : Symbol(T40, Decl(tailRecursiveConditionalTypes.ts, 23, 66))
+>TupleOf : Symbol(TupleOf, Decl(tailRecursiveConditionalTypes.ts, 19, 29))
+
+type T41 = TupleOf<any, number>;
+>T41 : Symbol(T41, Decl(tailRecursiveConditionalTypes.ts, 25, 29))
+>TupleOf : Symbol(TupleOf, Decl(tailRecursiveConditionalTypes.ts, 19, 29))
+

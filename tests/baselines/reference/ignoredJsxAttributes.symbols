@@ -1,0 +1,49 @@
+=== tests/cases/compiler/ignoredJsxAttributes.tsx ===
+/// <reference path="react16.d.ts" />
+
+// Repro from #44797
+
+import * as React from "react";
+>React : Symbol(React, Decl(ignoredJsxAttributes.tsx, 4, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(ignoredJsxAttributes.tsx, 4, 31))
+
+    foo: string;
+>foo : Symbol(Props.foo, Decl(ignoredJsxAttributes.tsx, 6, 17))
+
+    [dataProp: string]: string;
+>dataProp : Symbol(dataProp, Decl(ignoredJsxAttributes.tsx, 8, 5))
+}
+
+declare function Yadda(props: Props): JSX.Element;
+>Yadda : Symbol(Yadda, Decl(ignoredJsxAttributes.tsx, 9, 1))
+>props : Symbol(props, Decl(ignoredJsxAttributes.tsx, 11, 23))
+>Props : Symbol(Props, Decl(ignoredJsxAttributes.tsx, 4, 31))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
+
+let props: Props = {
+>props : Symbol(props, Decl(ignoredJsxAttributes.tsx, 13, 3))
+>Props : Symbol(Props, Decl(ignoredJsxAttributes.tsx, 4, 31))
+
+    foo: "",
+>foo : Symbol(foo, Decl(ignoredJsxAttributes.tsx, 13, 20))
+
+    "data-yadda": 42,  // Error
+>"data-yadda" : Symbol("data-yadda", Decl(ignoredJsxAttributes.tsx, 14, 12))
+
+};
+
+let x1 = <Yadda foo="hello" data-yadda={42}/>;
+>x1 : Symbol(x1, Decl(ignoredJsxAttributes.tsx, 18, 3))
+>Yadda : Symbol(Yadda, Decl(ignoredJsxAttributes.tsx, 9, 1))
+>foo : Symbol(foo, Decl(ignoredJsxAttributes.tsx, 18, 15))
+>data-yadda : Symbol(data-yadda, Decl(ignoredJsxAttributes.tsx, 18, 27))
+
+let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
+>x2 : Symbol(x2, Decl(ignoredJsxAttributes.tsx, 19, 3))
+>Yadda : Symbol(Yadda, Decl(ignoredJsxAttributes.tsx, 9, 1))
+>bar : Symbol(bar, Decl(ignoredJsxAttributes.tsx, 19, 15))
+>data-yadda : Symbol(data-yadda, Decl(ignoredJsxAttributes.tsx, 19, 27))
+

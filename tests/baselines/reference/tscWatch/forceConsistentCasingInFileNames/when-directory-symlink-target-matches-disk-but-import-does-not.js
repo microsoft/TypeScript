@@ -37,14 +37,14 @@ Output::
 [[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -60,25 +60,27 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/XY/a.ts","pollingInterval":250}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+No shapes updated in the builder::
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/xy/a.ts: *new*
+  {}
+/user/username/projects/myproject/link/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -145,14 +147,14 @@ Output::
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -168,25 +170,7 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/XY/a.ts","pollingInterval":250}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 

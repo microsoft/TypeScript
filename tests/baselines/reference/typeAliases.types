@@ -72,7 +72,7 @@ var x7: T7;
 >x7 : C7
 
 type T8 = string | boolean;
->T8 : T8
+>T8 : string | boolean
 
 var x8: string | boolean;
 >x8 : string | boolean
@@ -81,7 +81,7 @@ var x8: T8;
 >x8 : string | boolean
 
 type T9 = () => string;
->T9 : T9
+>T9 : () => string
 
 var x9: () => string;
 >x9 : () => string
@@ -90,7 +90,7 @@ var x9: T9;
 >x9 : () => string
 
 type T10 = { x: number };
->T10 : T10
+>T10 : { x: number; }
 >x : number
 
 var x10: { x: number };
@@ -101,7 +101,7 @@ var x10: T10;
 >x10 : { x: number; }
 
 type T11 = { new(): boolean };
->T11 : T11
+>T11 : new () => boolean
 
 var x11: { new(): boolean };
 >x11 : new () => boolean
@@ -183,7 +183,7 @@ f15(E.x).toLowerCase();
 >toLowerCase : () => string
 
 type StringAndBoolean = [string, boolean]
->StringAndBoolean : StringAndBoolean
+>StringAndBoolean : [string, boolean]
 
 declare function f16(s: StringAndBoolean): string;
 >f16 : (s: StringAndBoolean) => string

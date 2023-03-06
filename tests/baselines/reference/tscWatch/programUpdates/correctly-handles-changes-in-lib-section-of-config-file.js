@@ -28,7 +28,7 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 
 [7m1[0m var x: Promise<string>;
 [7m [0m [91m       ~~~~~~~[0m
@@ -48,21 +48,25 @@ Semantic diagnostics in builder refreshed for::
 /compiler/lib.es5.d.ts
 /src/app.ts
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/compiler/lib.es5.d.ts (used version)
+/src/app.ts (used version)
+
+PolledWatches::
+/src/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/src/tsconfig.json: *new*
+  {}
+/src/app.ts: *new*
+  {}
+/compiler/lib.es5.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/src/node_modules/@types:
-  {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/src: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -88,7 +92,7 @@ Output::
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts","lib.es2015.promise.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
-Program structureReused: Not
+Program structureReused: SafeModules
 Program files::
 /compiler/lib.es5.d.ts
 /compiler/lib.es2015.promise.d.ts
@@ -99,23 +103,27 @@ Semantic diagnostics in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts
 /src/app.ts
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
-/compiler/lib.es2015.promise.d.ts:
-  {"fileName":"/compiler/lib.es2015.promise.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/compiler/lib.es2015.promise.d.ts (used version)
+/src/app.ts (computed .d.ts)
+
+PolledWatches::
+/src/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/src/tsconfig.json:
+  {}
+/src/app.ts:
+  {}
+/compiler/lib.es5.d.ts:
+  {}
+/compiler/lib.es2015.promise.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
 /src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/src/node_modules/@types:
-  {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

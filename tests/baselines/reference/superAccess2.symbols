@@ -19,6 +19,7 @@ class Q extends P {
 
     static yy = super; // error for static initializer accessing super
 >yy : Symbol(Q.yy, Decl(superAccess2.ts, 6, 15))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
 
     // Super is not allowed in constructor args
     constructor(public z = super, zz = super, zzz = () => super) {

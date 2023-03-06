@@ -1,0 +1,14 @@
+=== tests/cases/conformance/types/spread/spreadUnion4.ts ===
+declare const a: { x: () => void }
+>a : Symbol(a, Decl(spreadUnion4.ts, 0, 13))
+>x : Symbol(x, Decl(spreadUnion4.ts, 0, 18))
+
+declare const b: { x?: () => void }
+>b : Symbol(b, Decl(spreadUnion4.ts, 1, 13))
+>x : Symbol(x, Decl(spreadUnion4.ts, 1, 18))
+
+const c = { ...a, ...b };
+>c : Symbol(c, Decl(spreadUnion4.ts, 3, 5))
+>a : Symbol(a, Decl(spreadUnion4.ts, 0, 13))
+>b : Symbol(b, Decl(spreadUnion4.ts, 1, 13))
+

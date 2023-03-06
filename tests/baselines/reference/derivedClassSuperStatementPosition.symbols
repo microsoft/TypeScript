@@ -1,0 +1,221 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts ===
+class DerivedBasic extends Object {
+>DerivedBasic : Symbol(DerivedBasic, Decl(derivedClassSuperStatementPosition.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    prop = 1;
+>prop : Symbol(DerivedBasic.prop, Decl(derivedClassSuperStatementPosition.ts, 0, 35))
+
+    constructor() {
+        super();
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class DerivedAfterParameterDefault extends Object {
+>DerivedAfterParameterDefault : Symbol(DerivedAfterParameterDefault, Decl(derivedClassSuperStatementPosition.ts, 5, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x1: boolean;
+>x1 : Symbol(DerivedAfterParameterDefault.x1, Decl(derivedClassSuperStatementPosition.ts, 7, 51))
+
+    x2: boolean;
+>x2 : Symbol(DerivedAfterParameterDefault.x2, Decl(derivedClassSuperStatementPosition.ts, 8, 16))
+
+    constructor(x = false) {
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 10, 16))
+
+        this.x1 = x;
+>this.x1 : Symbol(DerivedAfterParameterDefault.x1, Decl(derivedClassSuperStatementPosition.ts, 7, 51))
+>this : Symbol(DerivedAfterParameterDefault, Decl(derivedClassSuperStatementPosition.ts, 5, 1))
+>x1 : Symbol(DerivedAfterParameterDefault.x1, Decl(derivedClassSuperStatementPosition.ts, 7, 51))
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 10, 16))
+
+        super(x);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 10, 16))
+
+        this.x2 = x;
+>this.x2 : Symbol(DerivedAfterParameterDefault.x2, Decl(derivedClassSuperStatementPosition.ts, 8, 16))
+>this : Symbol(DerivedAfterParameterDefault, Decl(derivedClassSuperStatementPosition.ts, 5, 1))
+>x2 : Symbol(DerivedAfterParameterDefault.x2, Decl(derivedClassSuperStatementPosition.ts, 8, 16))
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 10, 16))
+    }
+}
+
+class DerivedAfterRestParameter extends Object {
+>DerivedAfterRestParameter : Symbol(DerivedAfterRestParameter, Decl(derivedClassSuperStatementPosition.ts, 15, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x1: boolean[];
+>x1 : Symbol(DerivedAfterRestParameter.x1, Decl(derivedClassSuperStatementPosition.ts, 17, 48))
+
+    x2: boolean[];
+>x2 : Symbol(DerivedAfterRestParameter.x2, Decl(derivedClassSuperStatementPosition.ts, 18, 18))
+
+    constructor(...x: boolean[]) {
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 20, 16))
+
+        this.x1 = x;
+>this.x1 : Symbol(DerivedAfterRestParameter.x1, Decl(derivedClassSuperStatementPosition.ts, 17, 48))
+>this : Symbol(DerivedAfterRestParameter, Decl(derivedClassSuperStatementPosition.ts, 15, 1))
+>x1 : Symbol(DerivedAfterRestParameter.x1, Decl(derivedClassSuperStatementPosition.ts, 17, 48))
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 20, 16))
+
+        super(x);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 20, 16))
+
+        this.x2 = x;
+>this.x2 : Symbol(DerivedAfterRestParameter.x2, Decl(derivedClassSuperStatementPosition.ts, 18, 18))
+>this : Symbol(DerivedAfterRestParameter, Decl(derivedClassSuperStatementPosition.ts, 15, 1))
+>x2 : Symbol(DerivedAfterRestParameter.x2, Decl(derivedClassSuperStatementPosition.ts, 18, 18))
+>x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 20, 16))
+    }
+}
+
+class DerivedComments extends Object {
+>DerivedComments : Symbol(DerivedComments, Decl(derivedClassSuperStatementPosition.ts, 25, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x: any;
+>x : Symbol(DerivedComments.x, Decl(derivedClassSuperStatementPosition.ts, 27, 38))
+
+    constructor() {
+        // c1
+        console.log(); // c2
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        // c3
+        super(); // c4
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+
+        // c5
+        this.x = null; // c6
+>this.x : Symbol(DerivedComments.x, Decl(derivedClassSuperStatementPosition.ts, 27, 38))
+>this : Symbol(DerivedComments, Decl(derivedClassSuperStatementPosition.ts, 25, 1))
+>x : Symbol(DerivedComments.x, Decl(derivedClassSuperStatementPosition.ts, 27, 38))
+
+        // c7
+    }
+}
+
+class DerivedCommentsInvalidThis extends Object {
+>DerivedCommentsInvalidThis : Symbol(DerivedCommentsInvalidThis, Decl(derivedClassSuperStatementPosition.ts, 38, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x: any;
+>x : Symbol(DerivedCommentsInvalidThis.x, Decl(derivedClassSuperStatementPosition.ts, 40, 49))
+
+    constructor() {
+        // c0
+        this;
+>this : Symbol(DerivedCommentsInvalidThis, Decl(derivedClassSuperStatementPosition.ts, 38, 1))
+
+        // c1
+        console.log(); // c2
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        // c3
+        super(); // c4
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+
+        // c5
+        this.x = null; // c6
+>this.x : Symbol(DerivedCommentsInvalidThis.x, Decl(derivedClassSuperStatementPosition.ts, 40, 49))
+>this : Symbol(DerivedCommentsInvalidThis, Decl(derivedClassSuperStatementPosition.ts, 38, 1))
+>x : Symbol(DerivedCommentsInvalidThis.x, Decl(derivedClassSuperStatementPosition.ts, 40, 49))
+
+        // c7
+    }
+}
+
+class DerivedInConditional extends Object {
+>DerivedInConditional : Symbol(DerivedInConditional, Decl(derivedClassSuperStatementPosition.ts, 53, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    prop = 1;
+>prop : Symbol(DerivedInConditional.prop, Decl(derivedClassSuperStatementPosition.ts, 55, 43))
+
+    constructor() {
+        Math.random()
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            ? super(1)
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+
+            : super(0);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class DerivedInIf extends Object {
+>DerivedInIf : Symbol(DerivedInIf, Decl(derivedClassSuperStatementPosition.ts, 62, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    prop = 1;
+>prop : Symbol(DerivedInIf.prop, Decl(derivedClassSuperStatementPosition.ts, 64, 34))
+
+    constructor() {
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            super(1);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+        }
+        else {
+            super(0);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+
+class DerivedInBlockWithProperties extends Object {
+>DerivedInBlockWithProperties : Symbol(DerivedInBlockWithProperties, Decl(derivedClassSuperStatementPosition.ts, 74, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    prop = 1;
+>prop : Symbol(DerivedInBlockWithProperties.prop, Decl(derivedClassSuperStatementPosition.ts, 76, 51))
+
+    constructor(private paramProp = 2) {
+>paramProp : Symbol(DerivedInBlockWithProperties.paramProp, Decl(derivedClassSuperStatementPosition.ts, 78, 16))
+        {
+            super();
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+
+class DerivedInConditionalWithProperties extends Object {
+>DerivedInConditionalWithProperties : Symbol(DerivedInConditionalWithProperties, Decl(derivedClassSuperStatementPosition.ts, 83, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    prop = 1;
+>prop : Symbol(DerivedInConditionalWithProperties.prop, Decl(derivedClassSuperStatementPosition.ts, 85, 57))
+
+    constructor(private paramProp = 2) {
+>paramProp : Symbol(DerivedInConditionalWithProperties.paramProp, Decl(derivedClassSuperStatementPosition.ts, 87, 16))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            super(1);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+
+        } else {
+            super(0);
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+

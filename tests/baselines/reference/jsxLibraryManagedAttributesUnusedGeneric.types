@@ -18,7 +18,7 @@ namespace jsx {
         export interface IntrinsicAttributes {}
         export interface IntrinsicClassAttributes<T> {}
         export type IntrinsicElements = {
->IntrinsicElements : IntrinsicElements
+>IntrinsicElements : { div: {    className: string;}; }
 
             div: { className: string }
 >div : { className: string; }

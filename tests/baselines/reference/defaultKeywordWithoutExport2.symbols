@@ -1,0 +1,5 @@
+=== tests/cases/compiler/defaultKeywordWithoutExport2.ts ===
+default function () {
+> : Symbol((Missing), Decl(defaultKeywordWithoutExport2.ts, 0, 7))
+
+}

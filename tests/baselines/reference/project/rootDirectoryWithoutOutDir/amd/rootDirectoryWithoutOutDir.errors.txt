@@ -1,0 +1,18 @@
+error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/FolderB/FolderC'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/FolderB/FolderC'. 'rootDir' is expected to contain all source files.
+!!! error TS6059:   The file is in the program because:
+!!! error TS6059:     Root file specified for compilation
+==== FolderA/FolderB/FolderC/fileC.ts (0 errors) ====
+    class C {
+    }
+    
+==== FolderA/FolderB/fileB.ts (0 errors) ====
+    /// <reference path='FolderC/fileC.ts'/>
+    class B {
+        public c: C;
+    }
+    

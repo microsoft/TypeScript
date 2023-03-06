@@ -157,4 +157,13 @@ if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 }
 
 
+var asConst1 = /** @type {const} */(1);
+>asConst1 : Symbol(asConst1, Decl(b.js, 70, 3))
 
+var asConst2 = /** @type {const} */({
+>asConst2 : Symbol(asConst2, Decl(b.js, 71, 3))
+
+    x: 1
+>x : Symbol(x, Decl(b.js, 71, 37))
+
+});

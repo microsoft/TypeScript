@@ -10,9 +10,9 @@
 const sortedFunctionMembers = completion.functionMembersWithPrototype.slice().sort((a, b) => a.name.localeCompare(b.name));
 const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
     ...sortedFunctionMembers.map(e =>
-        e.name === "arguments" ? { ...e, kind: "property", kindModifiers: "declare" } :
+        e.name === "arguments" ? { ...e, kind: "property", kindModifiers: "declare", tags: [] } :
         e.name === "prototype" ? { ...e, kindModifiers: undefined } : e),
-    { name: "x", text: "var Foo.x: number" },
+    { name: "x", text: "var Foo.x: number", tags: [] },
 ];
 verify.completions({ marker: "", exact });
 

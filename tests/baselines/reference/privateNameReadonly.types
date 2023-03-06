@@ -1,0 +1,34 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameReadonly.ts ===
+const C = class {
+>C : typeof C
+>class {    #bar() {}    foo() {        this.#bar = console.log("should log this then throw");    }} : typeof C
+
+    #bar() {}
+>#bar : () => void
+
+    foo() {
+>foo : () => void
+
+        this.#bar = console.log("should log this then throw");
+>this.#bar = console.log("should log this then throw") : void
+>this.#bar : () => void
+>this : this
+>console.log("should log this then throw") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"should log this then throw" : "should log this then throw"
+    }
+}
+
+console.log(new C().foo());
+>console.log(new C().foo()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>new C().foo() : void
+>new C().foo : () => void
+>new C() : C
+>C : typeof C
+>foo : () => void
+

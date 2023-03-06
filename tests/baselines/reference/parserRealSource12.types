@@ -9,9 +9,9 @@ module TypeScript {
 
     export interface IAstWalker {
         walk(ast: AST, parent: AST): AST;
->walk : (ast: any, parent: any) => any
->ast : any
->parent : any
+>walk : (ast: AST, parent: AST) => AST
+>ast : AST
+>parent : AST
 
         options: AstWalkOptions;
 >options : AstWalkOptions
@@ -60,15 +60,15 @@ module TypeScript {
 
     export interface IAstWalkCallback {
         (ast: AST, parent: AST, walker: IAstWalker): AST;
->ast : any
->parent : any
+>ast : AST
+>parent : AST
 >walker : IAstWalker
     }
 
     export interface IAstWalkChildren {
         (preAst: AST, parent: AST, walker: IAstWalker): void;
->preAst : any
->parent : any
+>preAst : AST
+>parent : AST
 >walker : IAstWalker
     }
 
@@ -93,29 +93,29 @@ module TypeScript {
         }
 
         public walk(ast: AST, parent: AST): AST {
->walk : (ast: any, parent: any) => any
->ast : any
->parent : any
+>walk : (ast: AST, parent: AST) => AST
+>ast : AST
+>parent : AST
 
             var preAst = this.pre(ast, parent, this);
->preAst : any
->this.pre(ast, parent, this) : any
+>preAst : AST
+>this.pre(ast, parent, this) : AST
 >this.pre : IAstWalkCallback
 >this : this
 >pre : IAstWalkCallback
->ast : any
->parent : any
+>ast : AST
+>parent : AST
 >this : this
 
             if (preAst === undefined) {
 >preAst === undefined : boolean
->preAst : any
+>preAst : AST
 >undefined : undefined
 
                 preAst = ast;
->preAst = ast : any
->preAst : any
->ast : any
+>preAst = ast : AST
+>preAst : AST
+>ast : AST
             }
             if (this.options.goChildren) {
 >this.options.goChildren : boolean
@@ -149,10 +149,10 @@ module TypeScript {
 >this : this
 >childrenWalkers : IAstWalkChildren[]
 >ast.nodeType : any
->ast : any
+>ast : AST
 >nodeType : any
->ast : any
->parent : any
+>ast : AST
+>parent : AST
 >this : this
 
                 this.options.goNextSibling = svGoSib;
@@ -181,31 +181,31 @@ module TypeScript {
 >post : IAstWalkCallback
 
                 var postAst = this.post(preAst, parent, this);
->postAst : any
->this.post(preAst, parent, this) : any
+>postAst : AST
+>this.post(preAst, parent, this) : AST
 >this.post : IAstWalkCallback
 >this : this
 >post : IAstWalkCallback
->preAst : any
->parent : any
+>preAst : AST
+>parent : AST
 >this : this
 
                 if (postAst === undefined) {
 >postAst === undefined : boolean
->postAst : any
+>postAst : AST
 >undefined : undefined
 
                     postAst = preAst;
->postAst = preAst : any
->postAst : any
->preAst : any
+>postAst = preAst : AST
+>postAst : AST
+>preAst : AST
                 }
                 return postAst;
->postAst : any
+>postAst : AST
             }
             else {
                 return preAst;
->preAst : any
+>preAst : AST
             }
         }
     }
@@ -226,16 +226,16 @@ module TypeScript {
         }
 
         public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
->walk : (ast: any, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => any
->ast : any
+>walk : (ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => AST
+>ast : AST
 >pre : IAstWalkCallback
 >post : IAstWalkCallback
 >options : AstWalkOptions
 >state : any
 
             return this.getWalker(pre, post, options, state).walk(ast, null)
->this.getWalker(pre, post, options, state).walk(ast, null) : any
->this.getWalker(pre, post, options, state).walk : (ast: any, parent: any) => any
+>this.getWalker(pre, post, options, state).walk(ast, null) : AST
+>this.getWalker(pre, post, options, state).walk : (ast: AST, parent: AST) => AST
 >this.getWalker(pre, post, options, state) : IAstWalker
 >this.getWalker : (pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => IAstWalker
 >this : this
@@ -244,8 +244,8 @@ module TypeScript {
 >post : IAstWalkCallback
 >options : AstWalkOptions
 >state : any
->walk : (ast: any, parent: any) => any
->ast : any
+>walk : (ast: AST, parent: AST) => AST
+>ast : AST
 >null : null
         }
 
@@ -301,7 +301,7 @@ module TypeScript {
 >initChildrenWalkers : () => void
 
             this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.None] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -309,12 +309,12 @@ module TypeScript {
 >NodeType.None : any
 >NodeType : any
 >None : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Empty] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -322,12 +322,12 @@ module TypeScript {
 >NodeType.Empty : any
 >NodeType : any
 >Empty : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.EmptyExpr] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -335,12 +335,12 @@ module TypeScript {
 >NodeType.EmptyExpr : any
 >NodeType : any
 >EmptyExpr : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.True] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.True] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.True] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.True] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -348,12 +348,12 @@ module TypeScript {
 >NodeType.True : any
 >NodeType : any
 >True : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.False] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.False] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.False] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.False] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -361,12 +361,12 @@ module TypeScript {
 >NodeType.False : any
 >NodeType : any
 >False : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.This] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.This] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.This] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.This] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -374,12 +374,12 @@ module TypeScript {
 >NodeType.This : any
 >NodeType : any
 >This : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Super] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Super] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Super] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Super] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -387,12 +387,12 @@ module TypeScript {
 >NodeType.Super : any
 >NodeType : any
 >Super : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.QString] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.QString] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.QString] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.QString] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -400,12 +400,12 @@ module TypeScript {
 >NodeType.QString : any
 >NodeType : any
 >QString : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Regex] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Regex] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Regex] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Regex] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -413,12 +413,12 @@ module TypeScript {
 >NodeType.Regex : any
 >NodeType : any
 >Regex : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Null] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Null] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Null] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Null] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -426,12 +426,12 @@ module TypeScript {
 >NodeType.Null : any
 >NodeType : any
 >Null : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ArrayLit] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.ArrayLit] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ArrayLit] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ArrayLit] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -439,12 +439,12 @@ module TypeScript {
 >NodeType.ArrayLit : any
 >NodeType : any
 >ArrayLit : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ObjectLit] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.ObjectLit] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ObjectLit] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ObjectLit] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -452,12 +452,12 @@ module TypeScript {
 >NodeType.ObjectLit : any
 >NodeType : any
 >ObjectLit : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Void] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Void] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Void] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Void] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -465,12 +465,12 @@ module TypeScript {
 >NodeType.Void : any
 >NodeType : any
 >Void : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Comma] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Comma] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Comma] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Comma] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -478,12 +478,12 @@ module TypeScript {
 >NodeType.Comma : any
 >NodeType : any
 >Comma : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Pos] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Pos] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Pos] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Pos] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -491,12 +491,12 @@ module TypeScript {
 >NodeType.Pos : any
 >NodeType : any
 >Pos : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Neg] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Neg] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Neg] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Neg] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -504,12 +504,12 @@ module TypeScript {
 >NodeType.Neg : any
 >NodeType : any
 >Neg : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Delete] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Delete] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Delete] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Delete] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -517,12 +517,12 @@ module TypeScript {
 >NodeType.Delete : any
 >NodeType : any
 >Delete : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Await] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Await] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Await] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Await] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -530,12 +530,12 @@ module TypeScript {
 >NodeType.Await : any
 >NodeType : any
 >Await : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.In] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.In] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.In] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.In] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -543,12 +543,12 @@ module TypeScript {
 >NodeType.In : any
 >NodeType : any
 >In : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Dot] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Dot] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Dot] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Dot] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -556,12 +556,12 @@ module TypeScript {
 >NodeType.Dot : any
 >NodeType : any
 >Dot : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.From] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.From] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.From] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.From] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -569,12 +569,12 @@ module TypeScript {
 >NodeType.From : any
 >NodeType : any
 >From : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Is] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Is] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Is] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Is] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -582,12 +582,12 @@ module TypeScript {
 >NodeType.Is : any
 >NodeType : any
 >Is : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.InstOf] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.InstOf] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.InstOf] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.InstOf] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -595,12 +595,12 @@ module TypeScript {
 >NodeType.InstOf : any
 >NodeType : any
 >InstOf : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Typeof] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Typeof] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Typeof] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Typeof] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -608,12 +608,12 @@ module TypeScript {
 >NodeType.Typeof : any
 >NodeType : any
 >Typeof : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.NumberLit] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.NumberLit] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.NumberLit] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.NumberLit] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -621,12 +621,12 @@ module TypeScript {
 >NodeType.NumberLit : any
 >NodeType : any
 >NumberLit : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Name] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Name] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Name] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Name] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -634,12 +634,12 @@ module TypeScript {
 >NodeType.Name : any
 >NodeType : any
 >Name : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.TypeRef] = ChildrenWalkers.walkTypeReferenceChildren;
->this.childrenWalkers[NodeType.TypeRef] = ChildrenWalkers.walkTypeReferenceChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.TypeRef] = ChildrenWalkers.walkTypeReferenceChildren : (preAst: TypeReference, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.TypeRef] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -647,12 +647,12 @@ module TypeScript {
 >NodeType.TypeRef : any
 >NodeType : any
 >TypeRef : any
->ChildrenWalkers.walkTypeReferenceChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkTypeReferenceChildren : (preAst: TypeReference, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkTypeReferenceChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTypeReferenceChildren : (preAst: TypeReference, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Index] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Index] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Index] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Index] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -660,12 +660,12 @@ module TypeScript {
 >NodeType.Index : any
 >NodeType : any
 >Index : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Call] = ChildrenWalkers.walkCallExpressionChildren;
->this.childrenWalkers[NodeType.Call] = ChildrenWalkers.walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Call] = ChildrenWalkers.walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Call] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -673,12 +673,12 @@ module TypeScript {
 >NodeType.Call : any
 >NodeType : any
 >Call : any
->ChildrenWalkers.walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.New] = ChildrenWalkers.walkCallExpressionChildren;
->this.childrenWalkers[NodeType.New] = ChildrenWalkers.walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.New] = ChildrenWalkers.walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.New] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -686,12 +686,12 @@ module TypeScript {
 >NodeType.New : any
 >NodeType : any
 >New : any
->ChildrenWalkers.walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Asg] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Asg] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Asg] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Asg] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -699,12 +699,12 @@ module TypeScript {
 >NodeType.Asg : any
 >NodeType : any
 >Asg : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgAdd] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgAdd] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgAdd] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgAdd] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -712,12 +712,12 @@ module TypeScript {
 >NodeType.AsgAdd : any
 >NodeType : any
 >AsgAdd : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgSub] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgSub] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgSub] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgSub] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -725,12 +725,12 @@ module TypeScript {
 >NodeType.AsgSub : any
 >NodeType : any
 >AsgSub : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgDiv] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgDiv] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgDiv] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgDiv] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -738,12 +738,12 @@ module TypeScript {
 >NodeType.AsgDiv : any
 >NodeType : any
 >AsgDiv : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgMul] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgMul] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgMul] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgMul] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -751,12 +751,12 @@ module TypeScript {
 >NodeType.AsgMul : any
 >NodeType : any
 >AsgMul : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgMod] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgMod] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgMod] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgMod] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -764,12 +764,12 @@ module TypeScript {
 >NodeType.AsgMod : any
 >NodeType : any
 >AsgMod : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgAnd] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgAnd] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgAnd] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgAnd] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -777,12 +777,12 @@ module TypeScript {
 >NodeType.AsgAnd : any
 >NodeType : any
 >AsgAnd : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgXor] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgXor] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgXor] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgXor] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -790,12 +790,12 @@ module TypeScript {
 >NodeType.AsgXor : any
 >NodeType : any
 >AsgXor : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgOr] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgOr] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgOr] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgOr] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -803,12 +803,12 @@ module TypeScript {
 >NodeType.AsgOr : any
 >NodeType : any
 >AsgOr : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgLsh] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgLsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgLsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgLsh] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -816,12 +816,12 @@ module TypeScript {
 >NodeType.AsgLsh : any
 >NodeType : any
 >AsgLsh : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgRsh] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgRsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgRsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgRsh] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -829,12 +829,12 @@ module TypeScript {
 >NodeType.AsgRsh : any
 >NodeType : any
 >AsgRsh : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.AsgRs2] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.AsgRs2] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.AsgRs2] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.AsgRs2] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -842,12 +842,12 @@ module TypeScript {
 >NodeType.AsgRs2 : any
 >NodeType : any
 >AsgRs2 : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ConditionalExpression] = ChildrenWalkers.walkTrinaryExpressionChildren;
->this.childrenWalkers[NodeType.ConditionalExpression] = ChildrenWalkers.walkTrinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ConditionalExpression] = ChildrenWalkers.walkTrinaryExpressionChildren : (preAst: ConditionalExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ConditionalExpression] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -855,12 +855,12 @@ module TypeScript {
 >NodeType.ConditionalExpression : any
 >NodeType : any
 >ConditionalExpression : any
->ChildrenWalkers.walkTrinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkTrinaryExpressionChildren : (preAst: ConditionalExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkTrinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTrinaryExpressionChildren : (preAst: ConditionalExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.LogOr] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.LogOr] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.LogOr] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.LogOr] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -868,12 +868,12 @@ module TypeScript {
 >NodeType.LogOr : any
 >NodeType : any
 >LogOr : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.LogAnd] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.LogAnd] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.LogAnd] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.LogAnd] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -881,12 +881,12 @@ module TypeScript {
 >NodeType.LogAnd : any
 >NodeType : any
 >LogAnd : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Or] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Or] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Or] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Or] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -894,12 +894,12 @@ module TypeScript {
 >NodeType.Or : any
 >NodeType : any
 >Or : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Xor] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Xor] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Xor] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Xor] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -907,12 +907,12 @@ module TypeScript {
 >NodeType.Xor : any
 >NodeType : any
 >Xor : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.And] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.And] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.And] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.And] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -920,12 +920,12 @@ module TypeScript {
 >NodeType.And : any
 >NodeType : any
 >And : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Eq] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Eq] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Eq] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Eq] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -933,12 +933,12 @@ module TypeScript {
 >NodeType.Eq : any
 >NodeType : any
 >Eq : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Ne] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Ne] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Ne] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Ne] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -946,12 +946,12 @@ module TypeScript {
 >NodeType.Ne : any
 >NodeType : any
 >Ne : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Eqv] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Eqv] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Eqv] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Eqv] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -959,12 +959,12 @@ module TypeScript {
 >NodeType.Eqv : any
 >NodeType : any
 >Eqv : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.NEqv] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.NEqv] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.NEqv] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.NEqv] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -972,12 +972,12 @@ module TypeScript {
 >NodeType.NEqv : any
 >NodeType : any
 >NEqv : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Lt] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Lt] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Lt] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Lt] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -985,12 +985,12 @@ module TypeScript {
 >NodeType.Lt : any
 >NodeType : any
 >Lt : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Le] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Le] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Le] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Le] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -998,12 +998,12 @@ module TypeScript {
 >NodeType.Le : any
 >NodeType : any
 >Le : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Gt] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Gt] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Gt] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Gt] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1011,12 +1011,12 @@ module TypeScript {
 >NodeType.Gt : any
 >NodeType : any
 >Gt : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Ge] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Ge] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Ge] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Ge] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1024,12 +1024,12 @@ module TypeScript {
 >NodeType.Ge : any
 >NodeType : any
 >Ge : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Add] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Add] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Add] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Add] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1037,12 +1037,12 @@ module TypeScript {
 >NodeType.Add : any
 >NodeType : any
 >Add : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Sub] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Sub] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Sub] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Sub] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1050,12 +1050,12 @@ module TypeScript {
 >NodeType.Sub : any
 >NodeType : any
 >Sub : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Mul] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Mul] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Mul] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Mul] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1063,12 +1063,12 @@ module TypeScript {
 >NodeType.Mul : any
 >NodeType : any
 >Mul : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Div] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Div] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Div] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Div] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1076,12 +1076,12 @@ module TypeScript {
 >NodeType.Div : any
 >NodeType : any
 >Div : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Mod] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Mod] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Mod] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Mod] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1089,12 +1089,12 @@ module TypeScript {
 >NodeType.Mod : any
 >NodeType : any
 >Mod : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Lsh] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Lsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Lsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Lsh] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1102,12 +1102,12 @@ module TypeScript {
 >NodeType.Lsh : any
 >NodeType : any
 >Lsh : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Rsh] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Rsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Rsh] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Rsh] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1115,12 +1115,12 @@ module TypeScript {
 >NodeType.Rsh : any
 >NodeType : any
 >Rsh : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Rs2] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Rs2] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Rs2] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Rs2] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1128,12 +1128,12 @@ module TypeScript {
 >NodeType.Rs2 : any
 >NodeType : any
 >Rs2 : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Not] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Not] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Not] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Not] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1141,12 +1141,12 @@ module TypeScript {
 >NodeType.Not : any
 >NodeType : any
 >Not : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.LogNot] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.LogNot] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.LogNot] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.LogNot] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1154,12 +1154,12 @@ module TypeScript {
 >NodeType.LogNot : any
 >NodeType : any
 >LogNot : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.IncPre] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.IncPre] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.IncPre] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.IncPre] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1167,12 +1167,12 @@ module TypeScript {
 >NodeType.IncPre : any
 >NodeType : any
 >IncPre : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.DecPre] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.DecPre] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.DecPre] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.DecPre] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1180,12 +1180,12 @@ module TypeScript {
 >NodeType.DecPre : any
 >NodeType : any
 >DecPre : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.IncPost] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.IncPost] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.IncPost] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.IncPost] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1193,12 +1193,12 @@ module TypeScript {
 >NodeType.IncPost : any
 >NodeType : any
 >IncPost : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.DecPost] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.DecPost] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.DecPost] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.DecPost] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1206,12 +1206,12 @@ module TypeScript {
 >NodeType.DecPost : any
 >NodeType : any
 >DecPost : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.TypeAssertion] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.TypeAssertion] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.TypeAssertion] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.TypeAssertion] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1219,12 +1219,12 @@ module TypeScript {
 >NodeType.TypeAssertion : any
 >NodeType : any
 >TypeAssertion : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.FuncDecl] = ChildrenWalkers.walkFuncDeclChildren;
->this.childrenWalkers[NodeType.FuncDecl] = ChildrenWalkers.walkFuncDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.FuncDecl] = ChildrenWalkers.walkFuncDeclChildren : (preAst: FuncDecl, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.FuncDecl] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1232,12 +1232,12 @@ module TypeScript {
 >NodeType.FuncDecl : any
 >NodeType : any
 >FuncDecl : any
->ChildrenWalkers.walkFuncDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkFuncDeclChildren : (preAst: FuncDecl, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkFuncDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkFuncDeclChildren : (preAst: FuncDecl, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Member] = ChildrenWalkers.walkBinaryExpressionChildren;
->this.childrenWalkers[NodeType.Member] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Member] = ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Member] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1245,12 +1245,12 @@ module TypeScript {
 >NodeType.Member : any
 >NodeType : any
 >Member : any
->ChildrenWalkers.walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.VarDecl] = ChildrenWalkers.walkBoundDeclChildren;
->this.childrenWalkers[NodeType.VarDecl] = ChildrenWalkers.walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.VarDecl] = ChildrenWalkers.walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.VarDecl] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1258,12 +1258,12 @@ module TypeScript {
 >NodeType.VarDecl : any
 >NodeType : any
 >VarDecl : any
->ChildrenWalkers.walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ArgDecl] = ChildrenWalkers.walkBoundDeclChildren;
->this.childrenWalkers[NodeType.ArgDecl] = ChildrenWalkers.walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ArgDecl] = ChildrenWalkers.walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ArgDecl] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1271,12 +1271,12 @@ module TypeScript {
 >NodeType.ArgDecl : any
 >NodeType : any
 >ArgDecl : any
->ChildrenWalkers.walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Return] = ChildrenWalkers.walkReturnStatementChildren;
->this.childrenWalkers[NodeType.Return] = ChildrenWalkers.walkReturnStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Return] = ChildrenWalkers.walkReturnStatementChildren : (preAst: ReturnStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Return] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1284,12 +1284,12 @@ module TypeScript {
 >NodeType.Return : any
 >NodeType : any
 >Return : any
->ChildrenWalkers.walkReturnStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkReturnStatementChildren : (preAst: ReturnStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkReturnStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkReturnStatementChildren : (preAst: ReturnStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Break] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Break] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Break] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Break] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1297,12 +1297,12 @@ module TypeScript {
 >NodeType.Break : any
 >NodeType : any
 >Break : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Continue] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1310,12 +1310,12 @@ module TypeScript {
 >NodeType.Continue : any
 >NodeType : any
 >Continue : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren;
->this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Throw] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1323,12 +1323,12 @@ module TypeScript {
 >NodeType.Throw : any
 >NodeType : any
 >Throw : any
->ChildrenWalkers.walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren;
->this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.For] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1336,12 +1336,12 @@ module TypeScript {
 >NodeType.For : any
 >NodeType : any
 >For : any
->ChildrenWalkers.walkForStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkForStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
->this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ForIn] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1349,12 +1349,12 @@ module TypeScript {
 >NodeType.ForIn : any
 >NodeType : any
 >ForIn : any
->ChildrenWalkers.walkForInStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkForInStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren;
->this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren : (preAst: IfStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.If] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1362,12 +1362,12 @@ module TypeScript {
 >NodeType.If : any
 >NodeType : any
 >If : any
->ChildrenWalkers.walkIfStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkIfStatementChildren : (preAst: IfStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkIfStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkIfStatementChildren : (preAst: IfStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.While] = ChildrenWalkers.walkWhileStatementChildren;
->this.childrenWalkers[NodeType.While] = ChildrenWalkers.walkWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.While] = ChildrenWalkers.walkWhileStatementChildren : (preAst: WhileStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.While] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1375,12 +1375,12 @@ module TypeScript {
 >NodeType.While : any
 >NodeType : any
 >While : any
->ChildrenWalkers.walkWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkWhileStatementChildren : (preAst: WhileStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkWhileStatementChildren : (preAst: WhileStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.DoWhile] = ChildrenWalkers.walkDoWhileStatementChildren;
->this.childrenWalkers[NodeType.DoWhile] = ChildrenWalkers.walkDoWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.DoWhile] = ChildrenWalkers.walkDoWhileStatementChildren : (preAst: DoWhileStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.DoWhile] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1388,12 +1388,12 @@ module TypeScript {
 >NodeType.DoWhile : any
 >NodeType : any
 >DoWhile : any
->ChildrenWalkers.walkDoWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkDoWhileStatementChildren : (preAst: DoWhileStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkDoWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkDoWhileStatementChildren : (preAst: DoWhileStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Block] = ChildrenWalkers.walkBlockChildren;
->this.childrenWalkers[NodeType.Block] = ChildrenWalkers.walkBlockChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Block] = ChildrenWalkers.walkBlockChildren : (preAst: Block, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Block] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1401,12 +1401,12 @@ module TypeScript {
 >NodeType.Block : any
 >NodeType : any
 >Block : any
->ChildrenWalkers.walkBlockChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkBlockChildren : (preAst: Block, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkBlockChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBlockChildren : (preAst: Block, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Case] = ChildrenWalkers.walkCaseStatementChildren;
->this.childrenWalkers[NodeType.Case] = ChildrenWalkers.walkCaseStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Case] = ChildrenWalkers.walkCaseStatementChildren : (preAst: CaseStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Case] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1414,12 +1414,12 @@ module TypeScript {
 >NodeType.Case : any
 >NodeType : any
 >Case : any
->ChildrenWalkers.walkCaseStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkCaseStatementChildren : (preAst: CaseStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkCaseStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCaseStatementChildren : (preAst: CaseStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Switch] = ChildrenWalkers.walkSwitchStatementChildren;
->this.childrenWalkers[NodeType.Switch] = ChildrenWalkers.walkSwitchStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Switch] = ChildrenWalkers.walkSwitchStatementChildren : (preAst: SwitchStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Switch] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1427,12 +1427,12 @@ module TypeScript {
 >NodeType.Switch : any
 >NodeType : any
 >Switch : any
->ChildrenWalkers.walkSwitchStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkSwitchStatementChildren : (preAst: SwitchStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkSwitchStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkSwitchStatementChildren : (preAst: SwitchStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Try] = ChildrenWalkers.walkTryChildren;
->this.childrenWalkers[NodeType.Try] = ChildrenWalkers.walkTryChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Try] = ChildrenWalkers.walkTryChildren : (preAst: Try, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Try] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1440,12 +1440,12 @@ module TypeScript {
 >NodeType.Try : any
 >NodeType : any
 >Try : any
->ChildrenWalkers.walkTryChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkTryChildren : (preAst: Try, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkTryChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTryChildren : (preAst: Try, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.TryCatch] = ChildrenWalkers.walkTryCatchChildren;
->this.childrenWalkers[NodeType.TryCatch] = ChildrenWalkers.walkTryCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.TryCatch] = ChildrenWalkers.walkTryCatchChildren : (preAst: TryCatch, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.TryCatch] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1453,12 +1453,12 @@ module TypeScript {
 >NodeType.TryCatch : any
 >NodeType : any
 >TryCatch : any
->ChildrenWalkers.walkTryCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkTryCatchChildren : (preAst: TryCatch, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkTryCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTryCatchChildren : (preAst: TryCatch, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.TryFinally] = ChildrenWalkers.walkTryFinallyChildren;
->this.childrenWalkers[NodeType.TryFinally] = ChildrenWalkers.walkTryFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.TryFinally] = ChildrenWalkers.walkTryFinallyChildren : (preAst: TryFinally, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.TryFinally] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1466,12 +1466,12 @@ module TypeScript {
 >NodeType.TryFinally : any
 >NodeType : any
 >TryFinally : any
->ChildrenWalkers.walkTryFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkTryFinallyChildren : (preAst: TryFinally, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkTryFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTryFinallyChildren : (preAst: TryFinally, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Finally] = ChildrenWalkers.walkFinallyChildren;
->this.childrenWalkers[NodeType.Finally] = ChildrenWalkers.walkFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Finally] = ChildrenWalkers.walkFinallyChildren : (preAst: Finally, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Finally] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1479,12 +1479,12 @@ module TypeScript {
 >NodeType.Finally : any
 >NodeType : any
 >Finally : any
->ChildrenWalkers.walkFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkFinallyChildren : (preAst: Finally, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkFinallyChildren : (preAst: Finally, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Catch] = ChildrenWalkers.walkCatchChildren;
->this.childrenWalkers[NodeType.Catch] = ChildrenWalkers.walkCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Catch] = ChildrenWalkers.walkCatchChildren : (preAst: Catch, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Catch] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1492,12 +1492,12 @@ module TypeScript {
 >NodeType.Catch : any
 >NodeType : any
 >Catch : any
->ChildrenWalkers.walkCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkCatchChildren : (preAst: Catch, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCatchChildren : (preAst: Catch, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.List] = ChildrenWalkers.walkListChildren;
->this.childrenWalkers[NodeType.List] = ChildrenWalkers.walkListChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.List] = ChildrenWalkers.walkListChildren : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.List] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1505,12 +1505,12 @@ module TypeScript {
 >NodeType.List : any
 >NodeType : any
 >List : any
->ChildrenWalkers.walkListChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkListChildren : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkListChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkListChildren : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Script] = ChildrenWalkers.walkScriptChildren;
->this.childrenWalkers[NodeType.Script] = ChildrenWalkers.walkScriptChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Script] = ChildrenWalkers.walkScriptChildren : (preAst: Script, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Script] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1518,12 +1518,12 @@ module TypeScript {
 >NodeType.Script : any
 >NodeType : any
 >Script : any
->ChildrenWalkers.walkScriptChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkScriptChildren : (preAst: Script, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkScriptChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkScriptChildren : (preAst: Script, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ClassDeclaration] = ChildrenWalkers.walkClassDeclChildren;
->this.childrenWalkers[NodeType.ClassDeclaration] = ChildrenWalkers.walkClassDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ClassDeclaration] = ChildrenWalkers.walkClassDeclChildren : (preAst: ClassDeclaration, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ClassDeclaration] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1531,12 +1531,12 @@ module TypeScript {
 >NodeType.ClassDeclaration : any
 >NodeType : any
 >ClassDeclaration : any
->ChildrenWalkers.walkClassDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkClassDeclChildren : (preAst: ClassDeclaration, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkClassDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkClassDeclChildren : (preAst: ClassDeclaration, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.InterfaceDeclaration] = ChildrenWalkers.walkTypeDeclChildren;
->this.childrenWalkers[NodeType.InterfaceDeclaration] = ChildrenWalkers.walkTypeDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.InterfaceDeclaration] = ChildrenWalkers.walkTypeDeclChildren : (preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.InterfaceDeclaration] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1544,12 +1544,12 @@ module TypeScript {
 >NodeType.InterfaceDeclaration : any
 >NodeType : any
 >InterfaceDeclaration : any
->ChildrenWalkers.walkTypeDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkTypeDeclChildren : (preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkTypeDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTypeDeclChildren : (preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ModuleDeclaration] = ChildrenWalkers.walkModuleDeclChildren;
->this.childrenWalkers[NodeType.ModuleDeclaration] = ChildrenWalkers.walkModuleDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ModuleDeclaration] = ChildrenWalkers.walkModuleDeclChildren : (preAst: ModuleDeclaration, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ModuleDeclaration] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1557,12 +1557,12 @@ module TypeScript {
 >NodeType.ModuleDeclaration : any
 >NodeType : any
 >ModuleDeclaration : any
->ChildrenWalkers.walkModuleDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkModuleDeclChildren : (preAst: ModuleDeclaration, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkModuleDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkModuleDeclChildren : (preAst: ModuleDeclaration, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.ImportDeclaration] = ChildrenWalkers.walkImportDeclChildren;
->this.childrenWalkers[NodeType.ImportDeclaration] = ChildrenWalkers.walkImportDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.ImportDeclaration] = ChildrenWalkers.walkImportDeclChildren : (preAst: ImportDeclaration, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.ImportDeclaration] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1570,12 +1570,12 @@ module TypeScript {
 >NodeType.ImportDeclaration : any
 >NodeType : any
 >ImportDeclaration : any
->ChildrenWalkers.walkImportDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkImportDeclChildren : (preAst: ImportDeclaration, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkImportDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkImportDeclChildren : (preAst: ImportDeclaration, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.With] = ChildrenWalkers.walkWithStatementChildren;
->this.childrenWalkers[NodeType.With] = ChildrenWalkers.walkWithStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.With] = ChildrenWalkers.walkWithStatementChildren : (preAst: WithStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.With] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1583,12 +1583,12 @@ module TypeScript {
 >NodeType.With : any
 >NodeType : any
 >With : any
->ChildrenWalkers.walkWithStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkWithStatementChildren : (preAst: WithStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkWithStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkWithStatementChildren : (preAst: WithStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Label] = ChildrenWalkers.walkLabelChildren;
->this.childrenWalkers[NodeType.Label] = ChildrenWalkers.walkLabelChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Label] = ChildrenWalkers.walkLabelChildren : (preAst: Label, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Label] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1596,12 +1596,12 @@ module TypeScript {
 >NodeType.Label : any
 >NodeType : any
 >Label : any
->ChildrenWalkers.walkLabelChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkLabelChildren : (preAst: Label, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkLabelChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkLabelChildren : (preAst: Label, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.LabeledStatement] = ChildrenWalkers.walkLabeledStatementChildren;
->this.childrenWalkers[NodeType.LabeledStatement] = ChildrenWalkers.walkLabeledStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.LabeledStatement] = ChildrenWalkers.walkLabeledStatementChildren : (preAst: LabeledStatement, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.LabeledStatement] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1609,12 +1609,12 @@ module TypeScript {
 >NodeType.LabeledStatement : any
 >NodeType : any
 >LabeledStatement : any
->ChildrenWalkers.walkLabeledStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkLabeledStatementChildren : (preAst: LabeledStatement, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkLabeledStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkLabeledStatementChildren : (preAst: LabeledStatement, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.EBStart] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.EBStart] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.EBStart] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.EBStart] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1622,12 +1622,12 @@ module TypeScript {
 >NodeType.EBStart : any
 >NodeType : any
 >EBStart : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.GotoEB] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.GotoEB] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.GotoEB] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.GotoEB] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1635,12 +1635,12 @@ module TypeScript {
 >NodeType.GotoEB : any
 >NodeType : any
 >GotoEB : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.EndCode] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.EndCode] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.EndCode] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.EndCode] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1648,12 +1648,12 @@ module TypeScript {
 >NodeType.EndCode : any
 >NodeType : any
 >EndCode : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Error] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1661,12 +1661,12 @@ module TypeScript {
 >NodeType.Error : any
 >NodeType : any
 >Error : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Comment] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1674,12 +1674,12 @@ module TypeScript {
 >NodeType.Comment : any
 >NodeType : any
 >Comment : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone;
->this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >this.childrenWalkers[NodeType.Debugger] : IAstWalkChildren
 >this.childrenWalkers : IAstWalkChildren[]
 >this : this
@@ -1687,9 +1687,9 @@ module TypeScript {
 >NodeType.Debugger : any
 >NodeType : any
 >Debugger : any
->ChildrenWalkers.walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>ChildrenWalkers.walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >ChildrenWalkers : typeof ChildrenWalkers
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 
             // Verify the code is up to date with the enum
             for (var e in (<any>NodeType)._map) {
@@ -1744,25 +1744,25 @@ module TypeScript {
 >ChildrenWalkers : typeof ChildrenWalkers
 
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
+>preAst : ASTList
+>parent : AST
 >walker : IAstWalker
 
             // Nothing to do
         }
 
         export function walkListChildren(preAst: ASTList, parent: AST, walker: IAstWalker): void {
->walkListChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkListChildren : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
+>preAst : ASTList
+>parent : AST
 >walker : IAstWalker
 
             var len = preAst.members.length;
 >len : any
 >preAst.members.length : any
 >preAst.members : any
->preAst : any
+>preAst : ASTList
 >members : any
 >length : any
 
@@ -1792,22 +1792,22 @@ module TypeScript {
 >goNextSibling : boolean
 
                         preAst.members[i] = walker.walk(preAst.members[i], preAst);
->preAst.members[i] = walker.walk(preAst.members[i], preAst) : any
+>preAst.members[i] = walker.walk(preAst.members[i], preAst) : AST
 >preAst.members[i] : any
 >preAst.members : any
->preAst : any
+>preAst : ASTList
 >members : any
 >i : number
->walker.walk(preAst.members[i], preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.members[i], preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.members[i] : any
 >preAst.members : any
->preAst : any
+>preAst : ASTList
 >members : any
 >i : number
->preAst : any
+>preAst : ASTList
                     }
                 }
             }
@@ -1829,77 +1829,77 @@ module TypeScript {
 >goNextSibling : boolean
 
                         preAst.members[i] = walker.walk(preAst.members[i], preAst);
->preAst.members[i] = walker.walk(preAst.members[i], preAst) : any
+>preAst.members[i] = walker.walk(preAst.members[i], preAst) : AST
 >preAst.members[i] : any
 >preAst.members : any
->preAst : any
+>preAst : ASTList
 >members : any
 >i : number
->walker.walk(preAst.members[i], preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.members[i], preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.members[i] : any
 >preAst.members : any
->preAst : any
+>preAst : ASTList
 >members : any
 >i : number
->preAst : any
+>preAst : ASTList
                     }
                 }
             }
         }
 
         export function walkUnaryExpressionChildren(preAst: UnaryExpression, parent: AST, walker: IAstWalker): void {
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
+>preAst : UnaryExpression
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.castTerm) {
 >preAst.castTerm : any
->preAst : any
+>preAst : UnaryExpression
 >castTerm : any
 
                 preAst.castTerm = walker.walk(preAst.castTerm, preAst);
->preAst.castTerm = walker.walk(preAst.castTerm, preAst) : any
+>preAst.castTerm = walker.walk(preAst.castTerm, preAst) : AST
 >preAst.castTerm : any
->preAst : any
+>preAst : UnaryExpression
 >castTerm : any
->walker.walk(preAst.castTerm, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.castTerm, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.castTerm : any
->preAst : any
+>preAst : UnaryExpression
 >castTerm : any
->preAst : any
+>preAst : UnaryExpression
             }
             if (preAst.operand) {
 >preAst.operand : any
->preAst : any
+>preAst : UnaryExpression
 >operand : any
 
                 preAst.operand = walker.walk(preAst.operand, preAst);
->preAst.operand = walker.walk(preAst.operand, preAst) : any
+>preAst.operand = walker.walk(preAst.operand, preAst) : AST
 >preAst.operand : any
->preAst : any
+>preAst : UnaryExpression
 >operand : any
->walker.walk(preAst.operand, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand : any
->preAst : any
+>preAst : UnaryExpression
 >operand : any
->preAst : any
+>preAst : UnaryExpression
             }
         }
 
         export function walkBinaryExpressionChildren(preAst: BinaryExpression, parent: AST, walker: IAstWalker): void {
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
+>preAst : BinaryExpression
+>parent : AST
 >walker : IAstWalker
 
             if (walker.options.reverseSiblings) {
@@ -1911,28 +1911,28 @@ module TypeScript {
 
                 if (preAst.operand2) {
 >preAst.operand2 : any
->preAst : any
+>preAst : BinaryExpression
 >operand2 : any
 
                     preAst.operand2 = walker.walk(preAst.operand2, preAst);
->preAst.operand2 = walker.walk(preAst.operand2, preAst) : any
+>preAst.operand2 = walker.walk(preAst.operand2, preAst) : AST
 >preAst.operand2 : any
->preAst : any
+>preAst : BinaryExpression
 >operand2 : any
->walker.walk(preAst.operand2, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand2, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand2 : any
->preAst : any
+>preAst : BinaryExpression
 >operand2 : any
->preAst : any
+>preAst : BinaryExpression
                 }
                 if ((preAst.operand1) && (walker.options.goNextSibling)) {
 >(preAst.operand1) && (walker.options.goNextSibling) : boolean
 >(preAst.operand1) : any
 >preAst.operand1 : any
->preAst : any
+>preAst : BinaryExpression
 >operand1 : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -1942,44 +1942,44 @@ module TypeScript {
 >goNextSibling : boolean
 
                     preAst.operand1 = walker.walk(preAst.operand1, preAst);
->preAst.operand1 = walker.walk(preAst.operand1, preAst) : any
+>preAst.operand1 = walker.walk(preAst.operand1, preAst) : AST
 >preAst.operand1 : any
->preAst : any
+>preAst : BinaryExpression
 >operand1 : any
->walker.walk(preAst.operand1, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand1, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand1 : any
->preAst : any
+>preAst : BinaryExpression
 >operand1 : any
->preAst : any
+>preAst : BinaryExpression
                 }
             } else {
                 if (preAst.operand1) {
 >preAst.operand1 : any
->preAst : any
+>preAst : BinaryExpression
 >operand1 : any
 
                     preAst.operand1 = walker.walk(preAst.operand1, preAst);
->preAst.operand1 = walker.walk(preAst.operand1, preAst) : any
+>preAst.operand1 = walker.walk(preAst.operand1, preAst) : AST
 >preAst.operand1 : any
->preAst : any
+>preAst : BinaryExpression
 >operand1 : any
->walker.walk(preAst.operand1, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand1, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand1 : any
->preAst : any
+>preAst : BinaryExpression
 >operand1 : any
->preAst : any
+>preAst : BinaryExpression
                 }
                 if ((preAst.operand2) && (walker.options.goNextSibling)) {
 >(preAst.operand2) && (walker.options.goNextSibling) : boolean
 >(preAst.operand2) : any
 >preAst.operand2 : any
->preAst : any
+>preAst : BinaryExpression
 >operand2 : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -1989,53 +1989,53 @@ module TypeScript {
 >goNextSibling : boolean
 
                     preAst.operand2 = walker.walk(preAst.operand2, preAst);
->preAst.operand2 = walker.walk(preAst.operand2, preAst) : any
+>preAst.operand2 = walker.walk(preAst.operand2, preAst) : AST
 >preAst.operand2 : any
->preAst : any
+>preAst : BinaryExpression
 >operand2 : any
->walker.walk(preAst.operand2, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand2, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand2 : any
->preAst : any
+>preAst : BinaryExpression
 >operand2 : any
->preAst : any
+>preAst : BinaryExpression
                 }
             }
         }
 
         export function walkTypeReferenceChildren(preAst: TypeReference, parent: AST, walker: IAstWalker): void {
->walkTypeReferenceChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkTypeReferenceChildren : (preAst: TypeReference, parent: AST, walker: IAstWalker) => void
+>preAst : TypeReference
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.term) {
 >preAst.term : any
->preAst : any
+>preAst : TypeReference
 >term : any
 
                 preAst.term = walker.walk(preAst.term, preAst);
->preAst.term = walker.walk(preAst.term, preAst) : any
+>preAst.term = walker.walk(preAst.term, preAst) : AST
 >preAst.term : any
->preAst : any
+>preAst : TypeReference
 >term : any
->walker.walk(preAst.term, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.term, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.term : any
->preAst : any
+>preAst : TypeReference
 >term : any
->preAst : any
+>preAst : TypeReference
             }
         }
 
         export function walkCallExpressionChildren(preAst: CallExpression, parent: AST, walker: IAstWalker): void {
->walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
+>preAst : CallExpression
+>parent : AST
 >walker : IAstWalker
 
             if (!walker.options.reverseSiblings) {
@@ -2047,23 +2047,23 @@ module TypeScript {
 >reverseSiblings : boolean
 
                 preAst.target = walker.walk(preAst.target, preAst);
->preAst.target = walker.walk(preAst.target, preAst) : any
+>preAst.target = walker.walk(preAst.target, preAst) : AST
 >preAst.target : any
->preAst : any
+>preAst : CallExpression
 >target : any
->walker.walk(preAst.target, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.target, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.target : any
->preAst : any
+>preAst : CallExpression
 >target : any
->preAst : any
+>preAst : CallExpression
             }
             if (preAst.arguments && (walker.options.goNextSibling)) {
 >preAst.arguments && (walker.options.goNextSibling) : boolean
 >preAst.arguments : any
->preAst : any
+>preAst : CallExpression
 >arguments : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2073,19 +2073,19 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.arguments = <ASTList> walker.walk(preAst.arguments, preAst);
->preAst.arguments = <ASTList> walker.walk(preAst.arguments, preAst) : any
+>preAst.arguments = <ASTList> walker.walk(preAst.arguments, preAst) : ASTList
 >preAst.arguments : any
->preAst : any
+>preAst : CallExpression
 >arguments : any
-><ASTList> walker.walk(preAst.arguments, preAst) : any
->walker.walk(preAst.arguments, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList> walker.walk(preAst.arguments, preAst) : ASTList
+>walker.walk(preAst.arguments, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.arguments : any
->preAst : any
+>preAst : CallExpression
 >arguments : any
->preAst : any
+>preAst : CallExpression
             }
             if ((walker.options.reverseSiblings) && (walker.options.goNextSibling)) {
 >(walker.options.reverseSiblings) && (walker.options.goNextSibling) : boolean
@@ -2103,50 +2103,50 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.target = walker.walk(preAst.target, preAst);
->preAst.target = walker.walk(preAst.target, preAst) : any
+>preAst.target = walker.walk(preAst.target, preAst) : AST
 >preAst.target : any
->preAst : any
+>preAst : CallExpression
 >target : any
->walker.walk(preAst.target, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.target, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.target : any
->preAst : any
+>preAst : CallExpression
 >target : any
->preAst : any
+>preAst : CallExpression
             }
         }
 
         export function walkTrinaryExpressionChildren(preAst: ConditionalExpression, parent: AST, walker: IAstWalker): void {
->walkTrinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkTrinaryExpressionChildren : (preAst: ConditionalExpression, parent: AST, walker: IAstWalker) => void
+>preAst : ConditionalExpression
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.operand1) {
 >preAst.operand1 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand1 : any
 
                 preAst.operand1 = walker.walk(preAst.operand1, preAst);
->preAst.operand1 = walker.walk(preAst.operand1, preAst) : any
+>preAst.operand1 = walker.walk(preAst.operand1, preAst) : AST
 >preAst.operand1 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand1 : any
->walker.walk(preAst.operand1, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand1, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand1 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand1 : any
->preAst : any
+>preAst : ConditionalExpression
             }
             if (preAst.operand2 && (walker.options.goNextSibling)) {
 >preAst.operand2 && (walker.options.goNextSibling) : boolean
 >preAst.operand2 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand2 : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2156,23 +2156,23 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.operand2 = walker.walk(preAst.operand2, preAst);
->preAst.operand2 = walker.walk(preAst.operand2, preAst) : any
+>preAst.operand2 = walker.walk(preAst.operand2, preAst) : AST
 >preAst.operand2 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand2 : any
->walker.walk(preAst.operand2, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand2, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand2 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand2 : any
->preAst : any
+>preAst : ConditionalExpression
             }
             if (preAst.operand3 && (walker.options.goNextSibling)) {
 >preAst.operand3 && (walker.options.goNextSibling) : boolean
 >preAst.operand3 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand3 : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2182,59 +2182,59 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.operand3 = walker.walk(preAst.operand3, preAst);
->preAst.operand3 = walker.walk(preAst.operand3, preAst) : any
+>preAst.operand3 = walker.walk(preAst.operand3, preAst) : AST
 >preAst.operand3 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand3 : any
->walker.walk(preAst.operand3, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.operand3, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.operand3 : any
->preAst : any
+>preAst : ConditionalExpression
 >operand3 : any
->preAst : any
+>preAst : ConditionalExpression
             }
         }
 
         export function walkFuncDeclChildren(preAst: FuncDecl, parent: AST, walker: IAstWalker): void {
->walkFuncDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkFuncDeclChildren : (preAst: FuncDecl, parent: AST, walker: IAstWalker) => void
+>preAst : FuncDecl
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.name) {
 >preAst.name : any
->preAst : any
+>preAst : FuncDecl
 >name : any
 
                 preAst.name = <Identifier>walker.walk(preAst.name, preAst);
->preAst.name = <Identifier>walker.walk(preAst.name, preAst) : any
+>preAst.name = <Identifier>walker.walk(preAst.name, preAst) : Identifier
 >preAst.name : any
->preAst : any
+>preAst : FuncDecl
 >name : any
-><Identifier>walker.walk(preAst.name, preAst) : any
->walker.walk(preAst.name, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Identifier>walker.walk(preAst.name, preAst) : Identifier
+>walker.walk(preAst.name, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.name : any
->preAst : any
+>preAst : FuncDecl
 >name : any
->preAst : any
+>preAst : FuncDecl
             }
             if (preAst.arguments && (preAst.arguments.members.length > 0) && (walker.options.goNextSibling)) {
 >preAst.arguments && (preAst.arguments.members.length > 0) && (walker.options.goNextSibling) : boolean
 >preAst.arguments && (preAst.arguments.members.length > 0) : boolean
 >preAst.arguments : any
->preAst : any
+>preAst : FuncDecl
 >arguments : any
 >(preAst.arguments.members.length > 0) : boolean
 >preAst.arguments.members.length > 0 : boolean
 >preAst.arguments.members.length : any
 >preAst.arguments.members : any
 >preAst.arguments : any
->preAst : any
+>preAst : FuncDecl
 >arguments : any
 >members : any
 >length : any
@@ -2247,24 +2247,24 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.arguments = <ASTList>walker.walk(preAst.arguments, preAst);
->preAst.arguments = <ASTList>walker.walk(preAst.arguments, preAst) : any
+>preAst.arguments = <ASTList>walker.walk(preAst.arguments, preAst) : ASTList
 >preAst.arguments : any
->preAst : any
+>preAst : FuncDecl
 >arguments : any
-><ASTList>walker.walk(preAst.arguments, preAst) : any
->walker.walk(preAst.arguments, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.arguments, preAst) : ASTList
+>walker.walk(preAst.arguments, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.arguments : any
->preAst : any
+>preAst : FuncDecl
 >arguments : any
->preAst : any
+>preAst : FuncDecl
             }
             if (preAst.returnTypeAnnotation && (walker.options.goNextSibling)) {
 >preAst.returnTypeAnnotation && (walker.options.goNextSibling) : boolean
 >preAst.returnTypeAnnotation : any
->preAst : any
+>preAst : FuncDecl
 >returnTypeAnnotation : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2274,31 +2274,31 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.returnTypeAnnotation = walker.walk(preAst.returnTypeAnnotation, preAst);
->preAst.returnTypeAnnotation = walker.walk(preAst.returnTypeAnnotation, preAst) : any
+>preAst.returnTypeAnnotation = walker.walk(preAst.returnTypeAnnotation, preAst) : AST
 >preAst.returnTypeAnnotation : any
->preAst : any
+>preAst : FuncDecl
 >returnTypeAnnotation : any
->walker.walk(preAst.returnTypeAnnotation, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.returnTypeAnnotation, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.returnTypeAnnotation : any
->preAst : any
+>preAst : FuncDecl
 >returnTypeAnnotation : any
->preAst : any
+>preAst : FuncDecl
             }
             if (preAst.bod && (preAst.bod.members.length > 0) && (walker.options.goNextSibling)) {
 >preAst.bod && (preAst.bod.members.length > 0) && (walker.options.goNextSibling) : boolean
 >preAst.bod && (preAst.bod.members.length > 0) : boolean
 >preAst.bod : any
->preAst : any
+>preAst : FuncDecl
 >bod : any
 >(preAst.bod.members.length > 0) : boolean
 >preAst.bod.members.length > 0 : boolean
 >preAst.bod.members.length : any
 >preAst.bod.members : any
 >preAst.bod : any
->preAst : any
+>preAst : FuncDecl
 >bod : any
 >members : any
 >length : any
@@ -2311,72 +2311,72 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
->preAst.bod = <ASTList>walker.walk(preAst.bod, preAst) : any
+>preAst.bod = <ASTList>walker.walk(preAst.bod, preAst) : ASTList
 >preAst.bod : any
->preAst : any
+>preAst : FuncDecl
 >bod : any
-><ASTList>walker.walk(preAst.bod, preAst) : any
->walker.walk(preAst.bod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.bod, preAst) : ASTList
+>walker.walk(preAst.bod, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.bod : any
->preAst : any
+>preAst : FuncDecl
 >bod : any
->preAst : any
+>preAst : FuncDecl
             }
         }
 
         export function walkBoundDeclChildren(preAst: BoundDecl, parent: AST, walker: IAstWalker): void {
->walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
+>preAst : BoundDecl
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.id) {
 >preAst.id : any
->preAst : any
+>preAst : BoundDecl
 >id : any
 
                 preAst.id = <Identifier>walker.walk(preAst.id, preAst);
->preAst.id = <Identifier>walker.walk(preAst.id, preAst) : any
+>preAst.id = <Identifier>walker.walk(preAst.id, preAst) : Identifier
 >preAst.id : any
->preAst : any
+>preAst : BoundDecl
 >id : any
-><Identifier>walker.walk(preAst.id, preAst) : any
->walker.walk(preAst.id, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Identifier>walker.walk(preAst.id, preAst) : Identifier
+>walker.walk(preAst.id, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.id : any
->preAst : any
+>preAst : BoundDecl
 >id : any
->preAst : any
+>preAst : BoundDecl
             }
             if (preAst.init) {
 >preAst.init : any
->preAst : any
+>preAst : BoundDecl
 >init : any
 
                 preAst.init = walker.walk(preAst.init, preAst);
->preAst.init = walker.walk(preAst.init, preAst) : any
+>preAst.init = walker.walk(preAst.init, preAst) : AST
 >preAst.init : any
->preAst : any
+>preAst : BoundDecl
 >init : any
->walker.walk(preAst.init, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.init, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.init : any
->preAst : any
+>preAst : BoundDecl
 >init : any
->preAst : any
+>preAst : BoundDecl
             }
             if ((preAst.typeExpr) && (walker.options.goNextSibling)) {
 >(preAst.typeExpr) && (walker.options.goNextSibling) : boolean
 >(preAst.typeExpr) : any
 >preAst.typeExpr : any
->preAst : any
+>preAst : BoundDecl
 >typeExpr : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2386,78 +2386,78 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.typeExpr = walker.walk(preAst.typeExpr, preAst);
->preAst.typeExpr = walker.walk(preAst.typeExpr, preAst) : any
+>preAst.typeExpr = walker.walk(preAst.typeExpr, preAst) : AST
 >preAst.typeExpr : any
->preAst : any
+>preAst : BoundDecl
 >typeExpr : any
->walker.walk(preAst.typeExpr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.typeExpr, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.typeExpr : any
->preAst : any
+>preAst : BoundDecl
 >typeExpr : any
->preAst : any
+>preAst : BoundDecl
             }
         }
 
         export function walkReturnStatementChildren(preAst: ReturnStatement, parent: AST, walker: IAstWalker): void {
->walkReturnStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkReturnStatementChildren : (preAst: ReturnStatement, parent: AST, walker: IAstWalker) => void
+>preAst : ReturnStatement
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.returnExpression) {
 >preAst.returnExpression : any
->preAst : any
+>preAst : ReturnStatement
 >returnExpression : any
 
                 preAst.returnExpression = walker.walk(preAst.returnExpression, preAst);
->preAst.returnExpression = walker.walk(preAst.returnExpression, preAst) : any
+>preAst.returnExpression = walker.walk(preAst.returnExpression, preAst) : AST
 >preAst.returnExpression : any
->preAst : any
+>preAst : ReturnStatement
 >returnExpression : any
->walker.walk(preAst.returnExpression, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.returnExpression, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.returnExpression : any
->preAst : any
+>preAst : ReturnStatement
 >returnExpression : any
->preAst : any
+>preAst : ReturnStatement
             }
         }
 
         export function walkForStatementChildren(preAst: ForStatement, parent: AST, walker: IAstWalker): void {
->walkForStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
+>preAst : ForStatement
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.init) {
 >preAst.init : any
->preAst : any
+>preAst : ForStatement
 >init : any
 
                 preAst.init = walker.walk(preAst.init, preAst);
->preAst.init = walker.walk(preAst.init, preAst) : any
+>preAst.init = walker.walk(preAst.init, preAst) : AST
 >preAst.init : any
->preAst : any
+>preAst : ForStatement
 >init : any
->walker.walk(preAst.init, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.init, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.init : any
->preAst : any
+>preAst : ForStatement
 >init : any
->preAst : any
+>preAst : ForStatement
             }
 
             if (preAst.cond && walker.options.goNextSibling) {
 >preAst.cond && walker.options.goNextSibling : boolean
 >preAst.cond : any
->preAst : any
+>preAst : ForStatement
 >cond : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -2466,24 +2466,24 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.cond = walker.walk(preAst.cond, preAst);
->preAst.cond = walker.walk(preAst.cond, preAst) : any
+>preAst.cond = walker.walk(preAst.cond, preAst) : AST
 >preAst.cond : any
->preAst : any
+>preAst : ForStatement
 >cond : any
->walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.cond, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.cond : any
->preAst : any
+>preAst : ForStatement
 >cond : any
->preAst : any
+>preAst : ForStatement
             }
 
             if (preAst.incr && walker.options.goNextSibling) {
 >preAst.incr && walker.options.goNextSibling : boolean
 >preAst.incr : any
->preAst : any
+>preAst : ForStatement
 >incr : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -2492,24 +2492,24 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.incr = walker.walk(preAst.incr, preAst);
->preAst.incr = walker.walk(preAst.incr, preAst) : any
+>preAst.incr = walker.walk(preAst.incr, preAst) : AST
 >preAst.incr : any
->preAst : any
+>preAst : ForStatement
 >incr : any
->walker.walk(preAst.incr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.incr, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.incr : any
->preAst : any
+>preAst : ForStatement
 >incr : any
->preAst : any
+>preAst : ForStatement
             }
 
             if (preAst.body && walker.options.goNextSibling) {
 >preAst.body && walker.options.goNextSibling : boolean
 >preAst.body : any
->preAst : any
+>preAst : ForStatement
 >body : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -2518,40 +2518,40 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : ForStatement
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : ForStatement
 >body : any
->preAst : any
+>preAst : ForStatement
             }
         }
 
         export function walkForInStatementChildren(preAst: ForInStatement, parent: AST, walker: IAstWalker): void {
->walkForInStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
+>preAst : ForInStatement
+>parent : AST
 >walker : IAstWalker
 
             preAst.lval = walker.walk(preAst.lval, preAst);
->preAst.lval = walker.walk(preAst.lval, preAst) : any
+>preAst.lval = walker.walk(preAst.lval, preAst) : AST
 >preAst.lval : any
->preAst : any
+>preAst : ForInStatement
 >lval : any
->walker.walk(preAst.lval, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.lval, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.lval : any
->preAst : any
+>preAst : ForInStatement
 >lval : any
->preAst : any
+>preAst : ForInStatement
 
             if (walker.options.goNextSibling) {
 >walker.options.goNextSibling : boolean
@@ -2561,23 +2561,23 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.obj = walker.walk(preAst.obj, preAst);
->preAst.obj = walker.walk(preAst.obj, preAst) : any
+>preAst.obj = walker.walk(preAst.obj, preAst) : AST
 >preAst.obj : any
->preAst : any
+>preAst : ForInStatement
 >obj : any
->walker.walk(preAst.obj, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.obj, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.obj : any
->preAst : any
+>preAst : ForInStatement
 >obj : any
->preAst : any
+>preAst : ForInStatement
             }
             if (preAst.body && (walker.options.goNextSibling)) {
 >preAst.body && (walker.options.goNextSibling) : boolean
 >preAst.body : any
->preAst : any
+>preAst : ForInStatement
 >body : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2587,45 +2587,45 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : ForInStatement
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : ForInStatement
 >body : any
->preAst : any
+>preAst : ForInStatement
             }
         }
 
         export function walkIfStatementChildren(preAst: IfStatement, parent: AST, walker: IAstWalker): void {
->walkIfStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkIfStatementChildren : (preAst: IfStatement, parent: AST, walker: IAstWalker) => void
+>preAst : IfStatement
+>parent : AST
 >walker : IAstWalker
 
             preAst.cond = walker.walk(preAst.cond, preAst);
->preAst.cond = walker.walk(preAst.cond, preAst) : any
+>preAst.cond = walker.walk(preAst.cond, preAst) : AST
 >preAst.cond : any
->preAst : any
+>preAst : IfStatement
 >cond : any
->walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.cond, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.cond : any
->preAst : any
+>preAst : IfStatement
 >cond : any
->preAst : any
+>preAst : IfStatement
 
             if (preAst.thenBod && (walker.options.goNextSibling)) {
 >preAst.thenBod && (walker.options.goNextSibling) : boolean
 >preAst.thenBod : any
->preAst : any
+>preAst : IfStatement
 >thenBod : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2635,23 +2635,23 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.thenBod = walker.walk(preAst.thenBod, preAst);
->preAst.thenBod = walker.walk(preAst.thenBod, preAst) : any
+>preAst.thenBod = walker.walk(preAst.thenBod, preAst) : AST
 >preAst.thenBod : any
->preAst : any
+>preAst : IfStatement
 >thenBod : any
->walker.walk(preAst.thenBod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.thenBod, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.thenBod : any
->preAst : any
+>preAst : IfStatement
 >thenBod : any
->preAst : any
+>preAst : IfStatement
             }
             if (preAst.elseBod && (walker.options.goNextSibling)) {
 >preAst.elseBod && (walker.options.goNextSibling) : boolean
 >preAst.elseBod : any
->preAst : any
+>preAst : IfStatement
 >elseBod : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2661,45 +2661,45 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.elseBod = walker.walk(preAst.elseBod, preAst);
->preAst.elseBod = walker.walk(preAst.elseBod, preAst) : any
+>preAst.elseBod = walker.walk(preAst.elseBod, preAst) : AST
 >preAst.elseBod : any
->preAst : any
+>preAst : IfStatement
 >elseBod : any
->walker.walk(preAst.elseBod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.elseBod, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.elseBod : any
->preAst : any
+>preAst : IfStatement
 >elseBod : any
->preAst : any
+>preAst : IfStatement
             }
         }
 
         export function walkWhileStatementChildren(preAst: WhileStatement, parent: AST, walker: IAstWalker): void {
->walkWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkWhileStatementChildren : (preAst: WhileStatement, parent: AST, walker: IAstWalker) => void
+>preAst : WhileStatement
+>parent : AST
 >walker : IAstWalker
 
             preAst.cond = walker.walk(preAst.cond, preAst);
->preAst.cond = walker.walk(preAst.cond, preAst) : any
+>preAst.cond = walker.walk(preAst.cond, preAst) : AST
 >preAst.cond : any
->preAst : any
+>preAst : WhileStatement
 >cond : any
->walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.cond, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.cond : any
->preAst : any
+>preAst : WhileStatement
 >cond : any
->preAst : any
+>preAst : WhileStatement
 
             if (preAst.body && (walker.options.goNextSibling)) {
 >preAst.body && (walker.options.goNextSibling) : boolean
 >preAst.body : any
->preAst : any
+>preAst : WhileStatement
 >body : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2709,45 +2709,45 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : WhileStatement
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : WhileStatement
 >body : any
->preAst : any
+>preAst : WhileStatement
             }
         }
 
         export function walkDoWhileStatementChildren(preAst: DoWhileStatement, parent: AST, walker: IAstWalker): void {
->walkDoWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkDoWhileStatementChildren : (preAst: DoWhileStatement, parent: AST, walker: IAstWalker) => void
+>preAst : DoWhileStatement
+>parent : AST
 >walker : IAstWalker
 
             preAst.cond = walker.walk(preAst.cond, preAst);
->preAst.cond = walker.walk(preAst.cond, preAst) : any
+>preAst.cond = walker.walk(preAst.cond, preAst) : AST
 >preAst.cond : any
->preAst : any
+>preAst : DoWhileStatement
 >cond : any
->walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.cond, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.cond : any
->preAst : any
+>preAst : DoWhileStatement
 >cond : any
->preAst : any
+>preAst : DoWhileStatement
 
             if (preAst.body && (walker.options.goNextSibling)) {
 >preAst.body && (walker.options.goNextSibling) : boolean
 >preAst.body : any
->preAst : any
+>preAst : DoWhileStatement
 >body : any
 >(walker.options.goNextSibling) : boolean
 >walker.options.goNextSibling : boolean
@@ -2757,79 +2757,79 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : DoWhileStatement
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : DoWhileStatement
 >body : any
->preAst : any
+>preAst : DoWhileStatement
             }
         }
 
         export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
->walkBlockChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkBlockChildren : (preAst: Block, parent: AST, walker: IAstWalker) => void
+>preAst : Block
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.statements) {
 >preAst.statements : any
->preAst : any
+>preAst : Block
 >statements : any
 
                 preAst.statements = <ASTList>walker.walk(preAst.statements, preAst);
->preAst.statements = <ASTList>walker.walk(preAst.statements, preAst) : any
+>preAst.statements = <ASTList>walker.walk(preAst.statements, preAst) : ASTList
 >preAst.statements : any
->preAst : any
+>preAst : Block
 >statements : any
-><ASTList>walker.walk(preAst.statements, preAst) : any
->walker.walk(preAst.statements, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.statements, preAst) : ASTList
+>walker.walk(preAst.statements, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.statements : any
->preAst : any
+>preAst : Block
 >statements : any
->preAst : any
+>preAst : Block
             }
         }
 
         export function walkCaseStatementChildren(preAst: CaseStatement, parent: AST, walker: IAstWalker): void {
->walkCaseStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkCaseStatementChildren : (preAst: CaseStatement, parent: AST, walker: IAstWalker) => void
+>preAst : CaseStatement
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.expr) {
 >preAst.expr : any
->preAst : any
+>preAst : CaseStatement
 >expr : any
 
                 preAst.expr = walker.walk(preAst.expr, preAst);
->preAst.expr = walker.walk(preAst.expr, preAst) : any
+>preAst.expr = walker.walk(preAst.expr, preAst) : AST
 >preAst.expr : any
->preAst : any
+>preAst : CaseStatement
 >expr : any
->walker.walk(preAst.expr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.expr, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.expr : any
->preAst : any
+>preAst : CaseStatement
 >expr : any
->preAst : any
+>preAst : CaseStatement
             }
 
             if (preAst.body && walker.options.goNextSibling) {
 >preAst.body && walker.options.goNextSibling : boolean
 >preAst.body : any
->preAst : any
+>preAst : CaseStatement
 >body : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -2838,53 +2838,53 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = <ASTList>walker.walk(preAst.body, preAst);
->preAst.body = <ASTList>walker.walk(preAst.body, preAst) : any
+>preAst.body = <ASTList>walker.walk(preAst.body, preAst) : ASTList
 >preAst.body : any
->preAst : any
+>preAst : CaseStatement
 >body : any
-><ASTList>walker.walk(preAst.body, preAst) : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.body, preAst) : ASTList
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : CaseStatement
 >body : any
->preAst : any
+>preAst : CaseStatement
             }
         }
 
         export function walkSwitchStatementChildren(preAst: SwitchStatement, parent: AST, walker: IAstWalker): void {
->walkSwitchStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkSwitchStatementChildren : (preAst: SwitchStatement, parent: AST, walker: IAstWalker) => void
+>preAst : SwitchStatement
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.val) {
 >preAst.val : any
->preAst : any
+>preAst : SwitchStatement
 >val : any
 
                 preAst.val = walker.walk(preAst.val, preAst);
->preAst.val = walker.walk(preAst.val, preAst) : any
+>preAst.val = walker.walk(preAst.val, preAst) : AST
 >preAst.val : any
->preAst : any
+>preAst : SwitchStatement
 >val : any
->walker.walk(preAst.val, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.val, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.val : any
->preAst : any
+>preAst : SwitchStatement
 >val : any
->preAst : any
+>preAst : SwitchStatement
             }
 
             if ((preAst.caseList) && walker.options.goNextSibling) {
 >(preAst.caseList) && walker.options.goNextSibling : boolean
 >(preAst.caseList) : any
 >preAst.caseList : any
->preAst : any
+>preAst : SwitchStatement
 >caseList : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -2893,81 +2893,81 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.caseList = <ASTList>walker.walk(preAst.caseList, preAst);
->preAst.caseList = <ASTList>walker.walk(preAst.caseList, preAst) : any
+>preAst.caseList = <ASTList>walker.walk(preAst.caseList, preAst) : ASTList
 >preAst.caseList : any
->preAst : any
+>preAst : SwitchStatement
 >caseList : any
-><ASTList>walker.walk(preAst.caseList, preAst) : any
->walker.walk(preAst.caseList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.caseList, preAst) : ASTList
+>walker.walk(preAst.caseList, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.caseList : any
->preAst : any
+>preAst : SwitchStatement
 >caseList : any
->preAst : any
+>preAst : SwitchStatement
             }
         }
 
         export function walkTryChildren(preAst: Try, parent: AST, walker: IAstWalker): void {
->walkTryChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkTryChildren : (preAst: Try, parent: AST, walker: IAstWalker) => void
+>preAst : Try
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.body) {
 >preAst.body : any
->preAst : any
+>preAst : Try
 >body : any
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : Try
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : Try
 >body : any
->preAst : any
+>preAst : Try
             }
         }
 
         export function walkTryCatchChildren(preAst: TryCatch, parent: AST, walker: IAstWalker): void {
->walkTryCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkTryCatchChildren : (preAst: TryCatch, parent: AST, walker: IAstWalker) => void
+>preAst : TryCatch
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.tryNode) {
 >preAst.tryNode : any
->preAst : any
+>preAst : TryCatch
 >tryNode : any
 
                 preAst.tryNode = <Try>walker.walk(preAst.tryNode, preAst);
->preAst.tryNode = <Try>walker.walk(preAst.tryNode, preAst) : any
+>preAst.tryNode = <Try>walker.walk(preAst.tryNode, preAst) : Try
 >preAst.tryNode : any
->preAst : any
+>preAst : TryCatch
 >tryNode : any
-><Try>walker.walk(preAst.tryNode, preAst) : any
->walker.walk(preAst.tryNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Try>walker.walk(preAst.tryNode, preAst) : Try
+>walker.walk(preAst.tryNode, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.tryNode : any
->preAst : any
+>preAst : TryCatch
 >tryNode : any
->preAst : any
+>preAst : TryCatch
             }
 
             if ((preAst.catchNode) && walker.options.goNextSibling) {
 >(preAst.catchNode) && walker.options.goNextSibling : boolean
 >(preAst.catchNode) : any
 >preAst.catchNode : any
->preAst : any
+>preAst : TryCatch
 >catchNode : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -2976,52 +2976,52 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst);
->preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst) : any
+>preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst) : Catch
 >preAst.catchNode : any
->preAst : any
+>preAst : TryCatch
 >catchNode : any
-><Catch>walker.walk(preAst.catchNode, preAst) : any
->walker.walk(preAst.catchNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Catch>walker.walk(preAst.catchNode, preAst) : Catch
+>walker.walk(preAst.catchNode, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.catchNode : any
->preAst : any
+>preAst : TryCatch
 >catchNode : any
->preAst : any
+>preAst : TryCatch
             }
         }
 
         export function walkTryFinallyChildren(preAst: TryFinally, parent: AST, walker: IAstWalker): void {
->walkTryFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkTryFinallyChildren : (preAst: TryFinally, parent: AST, walker: IAstWalker) => void
+>preAst : TryFinally
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.tryNode) {
 >preAst.tryNode : any
->preAst : any
+>preAst : TryFinally
 >tryNode : any
 
                 preAst.tryNode = walker.walk(preAst.tryNode, preAst);
->preAst.tryNode = walker.walk(preAst.tryNode, preAst) : any
+>preAst.tryNode = walker.walk(preAst.tryNode, preAst) : AST
 >preAst.tryNode : any
->preAst : any
+>preAst : TryFinally
 >tryNode : any
->walker.walk(preAst.tryNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.tryNode, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.tryNode : any
->preAst : any
+>preAst : TryFinally
 >tryNode : any
->preAst : any
+>preAst : TryFinally
             }
 
             if (preAst.finallyNode && walker.options.goNextSibling) {
 >preAst.finallyNode && walker.options.goNextSibling : boolean
 >preAst.finallyNode : any
->preAst : any
+>preAst : TryFinally
 >finallyNode : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -3030,81 +3030,81 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.finallyNode = <Finally>walker.walk(preAst.finallyNode, preAst);
->preAst.finallyNode = <Finally>walker.walk(preAst.finallyNode, preAst) : any
+>preAst.finallyNode = <Finally>walker.walk(preAst.finallyNode, preAst) : Finally
 >preAst.finallyNode : any
->preAst : any
+>preAst : TryFinally
 >finallyNode : any
-><Finally>walker.walk(preAst.finallyNode, preAst) : any
->walker.walk(preAst.finallyNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Finally>walker.walk(preAst.finallyNode, preAst) : Finally
+>walker.walk(preAst.finallyNode, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.finallyNode : any
->preAst : any
+>preAst : TryFinally
 >finallyNode : any
->preAst : any
+>preAst : TryFinally
             }
         }
 
         export function walkFinallyChildren(preAst: Finally, parent: AST, walker: IAstWalker): void {
->walkFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkFinallyChildren : (preAst: Finally, parent: AST, walker: IAstWalker) => void
+>preAst : Finally
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.body) {
 >preAst.body : any
->preAst : any
+>preAst : Finally
 >body : any
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : Finally
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : Finally
 >body : any
->preAst : any
+>preAst : Finally
             }
         }
 
         export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
->walkCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkCatchChildren : (preAst: Catch, parent: AST, walker: IAstWalker) => void
+>preAst : Catch
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.param) {
 >preAst.param : any
->preAst : any
+>preAst : Catch
 >param : any
 
                 preAst.param = <VarDecl>walker.walk(preAst.param, preAst);
->preAst.param = <VarDecl>walker.walk(preAst.param, preAst) : any
+>preAst.param = <VarDecl>walker.walk(preAst.param, preAst) : VarDecl
 >preAst.param : any
->preAst : any
+>preAst : Catch
 >param : any
-><VarDecl>walker.walk(preAst.param, preAst) : any
->walker.walk(preAst.param, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><VarDecl>walker.walk(preAst.param, preAst) : VarDecl
+>walker.walk(preAst.param, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.param : any
->preAst : any
+>preAst : Catch
 >param : any
->preAst : any
+>preAst : Catch
             }
 
             if ((preAst.body) && walker.options.goNextSibling) {
 >(preAst.body) && walker.options.goNextSibling : boolean
 >(preAst.body) : any
 >preAst.body : any
->preAst : any
+>preAst : Catch
 >body : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -3113,41 +3113,41 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : Catch
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : Catch
 >body : any
->preAst : any
+>preAst : Catch
             }
         }
 
         export function walkRecordChildren(preAst: NamedDeclaration, parent: AST, walker: IAstWalker): void {
->walkRecordChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkRecordChildren : (preAst: NamedDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : NamedDeclaration
+>parent : AST
 >walker : IAstWalker
 
             preAst.name = <Identifier>walker.walk(preAst.name, preAst);
->preAst.name = <Identifier>walker.walk(preAst.name, preAst) : any
+>preAst.name = <Identifier>walker.walk(preAst.name, preAst) : Identifier
 >preAst.name : any
->preAst : any
+>preAst : NamedDeclaration
 >name : any
-><Identifier>walker.walk(preAst.name, preAst) : any
->walker.walk(preAst.name, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Identifier>walker.walk(preAst.name, preAst) : Identifier
+>walker.walk(preAst.name, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.name : any
->preAst : any
+>preAst : NamedDeclaration
 >name : any
->preAst : any
+>preAst : NamedDeclaration
 
             if (walker.options.goNextSibling && preAst.members) {
 >walker.options.goNextSibling && preAst.members : any
@@ -3157,52 +3157,52 @@ module TypeScript {
 >options : AstWalkOptions
 >goNextSibling : boolean
 >preAst.members : any
->preAst : any
+>preAst : NamedDeclaration
 >members : any
 
                 preAst.members = <ASTList>walker.walk(preAst.members, preAst);
->preAst.members = <ASTList>walker.walk(preAst.members, preAst) : any
+>preAst.members = <ASTList>walker.walk(preAst.members, preAst) : ASTList
 >preAst.members : any
->preAst : any
+>preAst : NamedDeclaration
 >members : any
-><ASTList>walker.walk(preAst.members, preAst) : any
->walker.walk(preAst.members, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.members, preAst) : ASTList
+>walker.walk(preAst.members, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.members : any
->preAst : any
+>preAst : NamedDeclaration
 >members : any
->preAst : any
+>preAst : NamedDeclaration
             }
 
         }
 
         export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
->walkNamedTypeChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkNamedTypeChildren : (preAst: TypeDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : TypeDeclaration
+>parent : AST
 >walker : IAstWalker
 
             walkRecordChildren(preAst, parent, walker);
 >walkRecordChildren(preAst, parent, walker) : void
->walkRecordChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkRecordChildren : (preAst: NamedDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : TypeDeclaration
+>parent : AST
 >walker : IAstWalker
         }
 
         export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
->walkClassDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkClassDeclChildren : (preAst: ClassDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : ClassDeclaration
+>parent : AST
 >walker : IAstWalker
 
             walkNamedTypeChildren(preAst, parent, walker);
 >walkNamedTypeChildren(preAst, parent, walker) : void
->walkNamedTypeChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkNamedTypeChildren : (preAst: TypeDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : ClassDeclaration
+>parent : AST
 >walker : IAstWalker
 
             if (walker.options.goNextSibling && preAst.extendsList) {
@@ -3213,23 +3213,23 @@ module TypeScript {
 >options : AstWalkOptions
 >goNextSibling : boolean
 >preAst.extendsList : any
->preAst : any
+>preAst : ClassDeclaration
 >extendsList : any
 
                 preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
->preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst) : any
+>preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst) : ASTList
 >preAst.extendsList : any
->preAst : any
+>preAst : ClassDeclaration
 >extendsList : any
-><ASTList>walker.walk(preAst.extendsList, preAst) : any
->walker.walk(preAst.extendsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.extendsList, preAst) : ASTList
+>walker.walk(preAst.extendsList, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.extendsList : any
->preAst : any
+>preAst : ClassDeclaration
 >extendsList : any
->preAst : any
+>preAst : ClassDeclaration
             }
 
             if (walker.options.goNextSibling && preAst.implementsList) {
@@ -3240,65 +3240,65 @@ module TypeScript {
 >options : AstWalkOptions
 >goNextSibling : boolean
 >preAst.implementsList : any
->preAst : any
+>preAst : ClassDeclaration
 >implementsList : any
 
                 preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
->preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst) : any
+>preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst) : ASTList
 >preAst.implementsList : any
->preAst : any
+>preAst : ClassDeclaration
 >implementsList : any
-><ASTList>walker.walk(preAst.implementsList, preAst) : any
->walker.walk(preAst.implementsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.implementsList, preAst) : ASTList
+>walker.walk(preAst.implementsList, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.implementsList : any
->preAst : any
+>preAst : ClassDeclaration
 >implementsList : any
->preAst : any
+>preAst : ClassDeclaration
             }
         }
 
         export function walkScriptChildren(preAst: Script, parent: AST, walker: IAstWalker): void {
->walkScriptChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkScriptChildren : (preAst: Script, parent: AST, walker: IAstWalker) => void
+>preAst : Script
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.bod) {
 >preAst.bod : any
->preAst : any
+>preAst : Script
 >bod : any
 
                 preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
->preAst.bod = <ASTList>walker.walk(preAst.bod, preAst) : any
+>preAst.bod = <ASTList>walker.walk(preAst.bod, preAst) : ASTList
 >preAst.bod : any
->preAst : any
+>preAst : Script
 >bod : any
-><ASTList>walker.walk(preAst.bod, preAst) : any
->walker.walk(preAst.bod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.bod, preAst) : ASTList
+>walker.walk(preAst.bod, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.bod : any
->preAst : any
+>preAst : Script
 >bod : any
->preAst : any
+>preAst : Script
             }
         }
 
         export function walkTypeDeclChildren(preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker): void {
->walkTypeDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkTypeDeclChildren : (preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : InterfaceDeclaration
+>parent : AST
 >walker : IAstWalker
 
             walkNamedTypeChildren(preAst, parent, walker);
 >walkNamedTypeChildren(preAst, parent, walker) : void
->walkNamedTypeChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkNamedTypeChildren : (preAst: TypeDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : InterfaceDeclaration
+>parent : AST
 >walker : IAstWalker
 
             // walked arguments as part of members
@@ -3310,23 +3310,23 @@ module TypeScript {
 >options : AstWalkOptions
 >goNextSibling : boolean
 >preAst.extendsList : any
->preAst : any
+>preAst : InterfaceDeclaration
 >extendsList : any
 
                 preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
->preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst) : any
+>preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst) : ASTList
 >preAst.extendsList : any
->preAst : any
+>preAst : InterfaceDeclaration
 >extendsList : any
-><ASTList>walker.walk(preAst.extendsList, preAst) : any
->walker.walk(preAst.extendsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.extendsList, preAst) : ASTList
+>walker.walk(preAst.extendsList, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.extendsList : any
->preAst : any
+>preAst : InterfaceDeclaration
 >extendsList : any
->preAst : any
+>preAst : InterfaceDeclaration
             }
 
             if (walker.options.goNextSibling && preAst.implementsList) {
@@ -3337,117 +3337,117 @@ module TypeScript {
 >options : AstWalkOptions
 >goNextSibling : boolean
 >preAst.implementsList : any
->preAst : any
+>preAst : InterfaceDeclaration
 >implementsList : any
 
                 preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
->preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst) : any
+>preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst) : ASTList
 >preAst.implementsList : any
->preAst : any
+>preAst : InterfaceDeclaration
 >implementsList : any
-><ASTList>walker.walk(preAst.implementsList, preAst) : any
->walker.walk(preAst.implementsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.implementsList, preAst) : ASTList
+>walker.walk(preAst.implementsList, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.implementsList : any
->preAst : any
+>preAst : InterfaceDeclaration
 >implementsList : any
->preAst : any
+>preAst : InterfaceDeclaration
             }
         }
 
         export function walkModuleDeclChildren(preAst: ModuleDeclaration, parent: AST, walker: IAstWalker): void {
->walkModuleDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkModuleDeclChildren : (preAst: ModuleDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : ModuleDeclaration
+>parent : AST
 >walker : IAstWalker
 
             walkRecordChildren(preAst, parent, walker);
 >walkRecordChildren(preAst, parent, walker) : void
->walkRecordChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkRecordChildren : (preAst: NamedDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : ModuleDeclaration
+>parent : AST
 >walker : IAstWalker
         }
 
         export function walkImportDeclChildren(preAst: ImportDeclaration, parent: AST, walker: IAstWalker): void {
->walkImportDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkImportDeclChildren : (preAst: ImportDeclaration, parent: AST, walker: IAstWalker) => void
+>preAst : ImportDeclaration
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.id) {
 >preAst.id : any
->preAst : any
+>preAst : ImportDeclaration
 >id : any
 
                 preAst.id = <Identifier>walker.walk(preAst.id, preAst);
->preAst.id = <Identifier>walker.walk(preAst.id, preAst) : any
+>preAst.id = <Identifier>walker.walk(preAst.id, preAst) : Identifier
 >preAst.id : any
->preAst : any
+>preAst : ImportDeclaration
 >id : any
-><Identifier>walker.walk(preAst.id, preAst) : any
->walker.walk(preAst.id, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><Identifier>walker.walk(preAst.id, preAst) : Identifier
+>walker.walk(preAst.id, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.id : any
->preAst : any
+>preAst : ImportDeclaration
 >id : any
->preAst : any
+>preAst : ImportDeclaration
             }
             if (preAst.alias) {
 >preAst.alias : any
->preAst : any
+>preAst : ImportDeclaration
 >alias : any
 
                 preAst.alias = walker.walk(preAst.alias, preAst);
->preAst.alias = walker.walk(preAst.alias, preAst) : any
+>preAst.alias = walker.walk(preAst.alias, preAst) : AST
 >preAst.alias : any
->preAst : any
+>preAst : ImportDeclaration
 >alias : any
->walker.walk(preAst.alias, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.alias, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.alias : any
->preAst : any
+>preAst : ImportDeclaration
 >alias : any
->preAst : any
+>preAst : ImportDeclaration
             }
         }
 
         export function walkWithStatementChildren(preAst: WithStatement, parent: AST, walker: IAstWalker): void {
->walkWithStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkWithStatementChildren : (preAst: WithStatement, parent: AST, walker: IAstWalker) => void
+>preAst : WithStatement
+>parent : AST
 >walker : IAstWalker
 
             if (preAst.expr) {
 >preAst.expr : any
->preAst : any
+>preAst : WithStatement
 >expr : any
 
                 preAst.expr = walker.walk(preAst.expr, preAst);
->preAst.expr = walker.walk(preAst.expr, preAst) : any
+>preAst.expr = walker.walk(preAst.expr, preAst) : AST
 >preAst.expr : any
->preAst : any
+>preAst : WithStatement
 >expr : any
->walker.walk(preAst.expr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.expr, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.expr : any
->preAst : any
+>preAst : WithStatement
 >expr : any
->preAst : any
+>preAst : WithStatement
             }
 
             if (preAst.body && walker.options.goNextSibling) {
 >preAst.body && walker.options.goNextSibling : boolean
 >preAst.body : any
->preAst : any
+>preAst : WithStatement
 >body : any
 >walker.options.goNextSibling : boolean
 >walker.options : AstWalkOptions
@@ -3456,50 +3456,50 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.body = walker.walk(preAst.body, preAst);
->preAst.body = walker.walk(preAst.body, preAst) : any
+>preAst.body = walker.walk(preAst.body, preAst) : AST
 >preAst.body : any
->preAst : any
+>preAst : WithStatement
 >body : any
->walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.body, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.body : any
->preAst : any
+>preAst : WithStatement
 >body : any
->preAst : any
+>preAst : WithStatement
             }
         }
 
         export function walkLabelChildren(preAst: Label, parent: AST, walker: IAstWalker): void {
->walkLabelChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkLabelChildren : (preAst: Label, parent: AST, walker: IAstWalker) => void
+>preAst : Label
+>parent : AST
 >walker : IAstWalker
 
             //TODO: Walk "id"?
         }
 
         export function walkLabeledStatementChildren(preAst: LabeledStatement, parent: AST, walker: IAstWalker): void {
->walkLabeledStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
->preAst : any
->parent : any
+>walkLabeledStatementChildren : (preAst: LabeledStatement, parent: AST, walker: IAstWalker) => void
+>preAst : LabeledStatement
+>parent : AST
 >walker : IAstWalker
 
             preAst.labels = <ASTList>walker.walk(preAst.labels, preAst);
->preAst.labels = <ASTList>walker.walk(preAst.labels, preAst) : any
+>preAst.labels = <ASTList>walker.walk(preAst.labels, preAst) : ASTList
 >preAst.labels : any
->preAst : any
+>preAst : LabeledStatement
 >labels : any
-><ASTList>walker.walk(preAst.labels, preAst) : any
->walker.walk(preAst.labels, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+><ASTList>walker.walk(preAst.labels, preAst) : ASTList
+>walker.walk(preAst.labels, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.labels : any
->preAst : any
+>preAst : LabeledStatement
 >labels : any
->preAst : any
+>preAst : LabeledStatement
 
             if (walker.options.goNextSibling) {
 >walker.options.goNextSibling : boolean
@@ -3509,18 +3509,18 @@ module TypeScript {
 >goNextSibling : boolean
 
                 preAst.stmt = walker.walk(preAst.stmt, preAst);
->preAst.stmt = walker.walk(preAst.stmt, preAst) : any
+>preAst.stmt = walker.walk(preAst.stmt, preAst) : AST
 >preAst.stmt : any
->preAst : any
+>preAst : LabeledStatement
 >stmt : any
->walker.walk(preAst.stmt, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk(preAst.stmt, preAst) : AST
+>walker.walk : (ast: AST, parent: AST) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >preAst.stmt : any
->preAst : any
+>preAst : LabeledStatement
 >stmt : any
->preAst : any
+>preAst : LabeledStatement
             }
         }
     }

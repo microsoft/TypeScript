@@ -6,5 +6,6 @@ class C<T> {
     static s(p: T) { return p; }
 >s : Symbol(C.s, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 12))
 >p : Symbol(p, Decl(staticMethodsReferencingClassTypeParameters.ts, 1, 13))
+>T : Symbol(T)
 >p : Symbol(p, Decl(staticMethodsReferencingClassTypeParameters.ts, 1, 13))
 }

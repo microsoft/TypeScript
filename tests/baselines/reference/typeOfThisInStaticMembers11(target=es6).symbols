@@ -1,0 +1,154 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts ===
+declare const foo: any;
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers11.ts, 0, 13))
+
+@foo
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers11.ts, 0, 13))
+
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
+
+    static a = 1;
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
+
+    static b = this.a + 1;
+>b : Symbol(C.b, Decl(typeOfThisInStaticMembers11.ts, 4, 17))
+>this.a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
+>this : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
+}
+
+@foo
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers11.ts, 0, 13))
+
+class D extends C {
+>D : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>C : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
+
+    static c = 2;
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+
+    static d = this.c + 1;
+>d : Symbol(D.d, Decl(typeOfThisInStaticMembers11.ts, 10, 17))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+
+    static e = super.a + this.c + 1;
+>e : Symbol(D.e, Decl(typeOfThisInStaticMembers11.ts, 11, 26))
+>super.a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
+>super : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+
+    static f = () => this.c + 1;
+>f : Symbol(D.f, Decl(typeOfThisInStaticMembers11.ts, 12, 36))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+
+    static ff = function () { this.c + 1 }
+>ff : Symbol(D.ff, Decl(typeOfThisInStaticMembers11.ts, 13, 32))
+
+    static foo () {
+>foo : Symbol(D.foo, Decl(typeOfThisInStaticMembers11.ts, 14, 42))
+
+        return this.c + 1;
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+    }
+    static get fa () {
+>fa : Symbol(D.fa, Decl(typeOfThisInStaticMembers11.ts, 17, 5), Decl(typeOfThisInStaticMembers11.ts, 20, 5))
+
+        return this.c + 1;
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+    }
+    static set fa (v: number) {
+>fa : Symbol(D.fa, Decl(typeOfThisInStaticMembers11.ts, 17, 5), Decl(typeOfThisInStaticMembers11.ts, 20, 5))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 21, 19))
+
+        this.c = v + 1;
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 21, 19))
+    }
+}
+
+class CC {
+>CC : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+
+    static a = 1;
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+
+    static b = this.a + 1;
+>b : Symbol(CC.b, Decl(typeOfThisInStaticMembers11.ts, 27, 17))
+>this.a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+>this : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+}
+
+class DD extends CC {
+>DD : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>CC : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+
+    static c = 2;
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static d = this.c + 1;
+>d : Symbol(DD.d, Decl(typeOfThisInStaticMembers11.ts, 32, 17))
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static e = super.a + this.c + 1;
+>e : Symbol(DD.e, Decl(typeOfThisInStaticMembers11.ts, 33, 26))
+>super.a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+>super : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static f = () => this.c + 1;
+>f : Symbol(DD.f, Decl(typeOfThisInStaticMembers11.ts, 34, 36))
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static ff = function () { this.c + 1 }
+>ff : Symbol(DD.ff, Decl(typeOfThisInStaticMembers11.ts, 35, 32))
+
+    static foo () {
+>foo : Symbol(DD.foo, Decl(typeOfThisInStaticMembers11.ts, 36, 42))
+
+        return this.c + 1;
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+    }
+    static get fa () {
+>fa : Symbol(DD.fa, Decl(typeOfThisInStaticMembers11.ts, 39, 5), Decl(typeOfThisInStaticMembers11.ts, 42, 5))
+
+        return this.c + 1;
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+    }
+    static set fa (v: number) {
+>fa : Symbol(DD.fa, Decl(typeOfThisInStaticMembers11.ts, 39, 5), Decl(typeOfThisInStaticMembers11.ts, 42, 5))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 43, 19))
+
+        this.c = v + 1;
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 43, 19))
+    }
+}
+

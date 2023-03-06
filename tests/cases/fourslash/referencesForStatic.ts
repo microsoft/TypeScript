@@ -6,28 +6,28 @@
 ////var n = 43;
 ////
 ////class foo {
-////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}n|] = '';|]
+////    /*1*/static /*2*/n = '';
 ////
 ////    public bar() {
-////        foo.[|{| "isWriteAccess": true |}n|] = "'";
-////        if(foo.[|n|]) {
-////            var x = foo.[|n|];
+////        foo./*3*/n = "'";
+////        if(foo./*4*/n) {
+////            var x = foo./*5*/n;
 ////        }
 ////    }
 ////}
 ////
 ////class foo2 {
-////    private x = foo.[|n|];
+////    private x = foo./*6*/n;
 ////    constructor() {
-////        foo.[|{| "isWriteAccess": true |}n|] = x;
+////        foo./*7*/n = x;
 ////    }
 ////
 ////    function b(n) {
-////        n = foo.[|n|];
+////        n = foo./*8*/n;
 ////    }
 ////}
 
 // @Filename: referencesOnStatic_2.ts
-////var q = foo.[|n|];
+////var q = foo./*9*/n;
 
-verify.singleReferenceGroup("(property) foo.n: string", "n");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8', '9');

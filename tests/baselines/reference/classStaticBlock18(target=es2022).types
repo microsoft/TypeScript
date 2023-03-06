@@ -1,0 +1,28 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock18.ts ===
+function foo () {
+>foo : () => typeof (Anonymous class)
+
+  return class {
+>class {    static foo = 1;    static {      const c = class {        static bar = 2;        static {          // do        }      }    }  } : typeof (Anonymous class)
+
+    static foo = 1;
+>foo : number
+>1 : 1
+
+    static {
+      const c = class {
+>c : typeof c
+>class {        static bar = 2;        static {          // do        }      } : typeof c
+
+        static bar = 2;
+>bar : number
+>2 : 2
+
+        static {
+          // do
+        }
+      }
+    }
+  }
+}
+

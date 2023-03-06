@@ -1,0 +1,53 @@
+=== tests/cases/compiler/tailRecursiveConditionalTypes.ts ===
+type Trim<S extends string> =
+>Trim : Trim<S>
+
+    S extends ` ${infer T}` ? Trim<T> :
+    S extends `${infer T} ` ? Trim<T> :
+    S;
+
+type T10 = Trim<'                                                                                                                                                hello '>;
+>T10 : "hello"
+
+type T11 = Trim<' hello                                                                                                                                                '>;
+>T11 : "hello"
+
+type GetChars<S> = GetCharsRec<S, never>;
+>GetChars : GetChars<S>
+
+type GetCharsRec<S, Acc> =
+>GetCharsRec : GetCharsRec<S, Acc>
+
+    S extends `${infer Char}${infer Rest}` ? GetCharsRec<Rest, Char | Acc> : Acc;
+
+type T20 = GetChars<'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'>;
+>T20 : "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+type Reverse<T> = any[] extends T ? T : ReverseRec<T, []>;
+>Reverse : Reverse<T>
+
+type ReverseRec<T, Acc extends unknown[]> =
+>ReverseRec : ReverseRec<T, Acc>
+
+    T extends [infer Head, ...infer Tail] ? ReverseRec<Tail, [Head, ...Acc]> : Acc;
+
+type T30 = Reverse<[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]>;
+>T30 : [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+
+type T31 = Reverse<string[]>;
+>T31 : string[]
+
+type TupleOf<T, N extends number> = number extends N ? T[] : TupleOfRec<T, N, []>;
+>TupleOf : TupleOf<T, N>
+
+type TupleOfRec<T, N extends number, Acc extends unknown[]> =
+>TupleOfRec : TupleOfRec<T, N, Acc>
+
+    Acc["length"] extends N ? Acc : TupleOfRec<T, N, [T, ...Acc]>;
+
+type T40 = TupleOf<any, 200>;
+>T40 : [any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any]
+
+type T41 = TupleOf<any, number>;
+>T41 : any[]
+

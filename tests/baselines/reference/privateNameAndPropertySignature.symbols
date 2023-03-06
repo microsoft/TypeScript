@@ -2,33 +2,45 @@
 type A = {
 >A : Symbol(A, Decl(privateNameAndPropertySignature.ts, 0, 0))
 
-    #foo: string
+    #foo: string;
 >#foo : Symbol(#foo, Decl(privateNameAndPropertySignature.ts, 0, 10))
+
+    #bar(): string;
+>#bar : Symbol(#bar, Decl(privateNameAndPropertySignature.ts, 1, 17))
 }
 
 interface B {
->B : Symbol(B, Decl(privateNameAndPropertySignature.ts, 2, 1))
+>B : Symbol(B, Decl(privateNameAndPropertySignature.ts, 3, 1))
 
     #foo: string;
->#foo : Symbol(B.#foo, Decl(privateNameAndPropertySignature.ts, 4, 13))
+>#foo : Symbol(B.#foo, Decl(privateNameAndPropertySignature.ts, 5, 13))
+
+    #bar(): string;
+>#bar : Symbol(B.#bar, Decl(privateNameAndPropertySignature.ts, 6, 17))
 }
 
 declare const x: {
->x : Symbol(x, Decl(privateNameAndPropertySignature.ts, 8, 13))
+>x : Symbol(x, Decl(privateNameAndPropertySignature.ts, 10, 13))
 
     #foo: number;
->#foo : Symbol(#foo, Decl(privateNameAndPropertySignature.ts, 8, 18))
+>#foo : Symbol(#foo, Decl(privateNameAndPropertySignature.ts, 10, 18))
 
     bar: {
->bar : Symbol(bar, Decl(privateNameAndPropertySignature.ts, 9, 17))
+>bar : Symbol(bar, Decl(privateNameAndPropertySignature.ts, 11, 17))
 
         #baz: string;
->#baz : Symbol(#baz, Decl(privateNameAndPropertySignature.ts, 10, 10))
+>#baz : Symbol(#baz, Decl(privateNameAndPropertySignature.ts, 12, 10))
+
+        #taz(): string;
+>#taz : Symbol(#taz, Decl(privateNameAndPropertySignature.ts, 13, 21))
     }
+    #baz(): string;
+>#baz : Symbol(#baz, Decl(privateNameAndPropertySignature.ts, 15, 5))
+
 };
 
 declare const y: [{ qux: { #quux: 3 } }];
->y : Symbol(y, Decl(privateNameAndPropertySignature.ts, 15, 13))
->qux : Symbol(qux, Decl(privateNameAndPropertySignature.ts, 15, 19))
->#quux : Symbol(#quux, Decl(privateNameAndPropertySignature.ts, 15, 26))
+>y : Symbol(y, Decl(privateNameAndPropertySignature.ts, 19, 13))
+>qux : Symbol(qux, Decl(privateNameAndPropertySignature.ts, 19, 19))
+>#quux : Symbol(#quux, Decl(privateNameAndPropertySignature.ts, 19, 26))
 

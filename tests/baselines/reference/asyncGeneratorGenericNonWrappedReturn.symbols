@@ -1,0 +1,17 @@
+=== tests/cases/conformance/generators/asyncGeneratorGenericNonWrappedReturn.ts ===
+// #48966
+
+export async function* test<T>(a: T): AsyncGenerator<T, T, T> {
+>test : Symbol(test, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 0, 0))
+>T : Symbol(T, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 28))
+>a : Symbol(a, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 31))
+>T : Symbol(T, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 28))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 28))
+>T : Symbol(T, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 28))
+>T : Symbol(T, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 28))
+
+  return a // `T` should be allowed here even though the generator's `returnType` is `Awaited<T>`
+>a : Symbol(a, Decl(asyncGeneratorGenericNonWrappedReturn.ts, 2, 31))
+}
+

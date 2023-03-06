@@ -1,5 +1,6 @@
 // @strict: true
 // @target: esnext
+// @useDefineForClassFields: false
 
 class A { private x: unknown; y?: string; }
 class B { private x: unknown; y?: string; }

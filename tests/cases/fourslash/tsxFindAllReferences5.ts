@@ -15,14 +15,11 @@
 ////     propString: string
 ////     optional?: boolean
 //// }
-//// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
-//// let opt = [|<[|{| "contextRangeIndex": 2 |}Opt|] />|];
-//// let opt1 = [|<[|{| "contextRangeIndex": 4 |}Opt|] propx={100} propString />|];
-//// let opt2 = [|<[|{| "contextRangeIndex": 6 |}Opt|] propx={100} optional/>|];
-//// let opt3 = [|<[|{| "contextRangeIndex": 8 |}Opt|] wrong />|];
-//// let opt4 = [|<[|{| "contextRangeIndex": 10 |}Opt|] propx={100} propString="hi" />|];
+//// /*1*/declare function /*2*/Opt(attributes: OptionPropBag): JSX.Element;
+//// let opt = /*3*/</*4*/Opt />;
+//// let opt1 = /*5*/</*6*/Opt propx={100} propString />;
+//// let opt2 = /*7*/</*8*/Opt propx={100} optional/>;
+//// let opt3 = /*9*/</*10*/Opt wrong />;
+//// let opt4 = /*11*/</*12*/Opt propx={100} propString="hi" />;
 
-verify.singleReferenceGroup(
-    "function Opt(attributes: OptionPropBag): JSX.Element",
-    "Opt"
-);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12');

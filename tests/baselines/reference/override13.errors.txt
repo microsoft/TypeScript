@@ -1,0 +1,41 @@
+tests/cases/conformance/override/override13.ts(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
+tests/cases/conformance/override/override13.ts(13,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
+tests/cases/conformance/override/override13.ts(19,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
+tests/cases/conformance/override/override13.ts(25,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
+
+
+==== tests/cases/conformance/override/override13.ts (4 errors) ====
+    class Foo {
+        property = 1
+        static staticProperty = 2
+    }
+    
+    class SubFoo extends Foo {
+        property = 42;
+        ~~~~~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
+        staticProperty = 42;
+    }
+    
+    class StaticSubFoo extends Foo {
+        static property = 42;
+        static staticProperty = 42;
+               ~~~~~~~~~~~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
+    }
+    
+    class Intermediate extends Foo {}
+    
+    class Derived extends Intermediate {
+        property = 42;
+        ~~~~~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
+        staticProperty = 42;
+    }
+    
+    class StaticDerived extends Intermediate {
+        static property = 42;
+        static staticProperty = 42;
+               ~~~~~~~~~~~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
+    }

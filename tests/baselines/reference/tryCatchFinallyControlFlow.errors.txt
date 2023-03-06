@@ -2,10 +2,11 @@ tests/cases/compiler/tryCatchFinallyControlFlow.ts(105,5): error TS7027: Unreach
 tests/cases/compiler/tryCatchFinallyControlFlow.ts(118,9): error TS7027: Unreachable code detected.
 tests/cases/compiler/tryCatchFinallyControlFlow.ts(218,13): error TS7027: Unreachable code detected.
 tests/cases/compiler/tryCatchFinallyControlFlow.ts(220,9): error TS7027: Unreachable code detected.
+tests/cases/compiler/tryCatchFinallyControlFlow.ts(255,9): error TS2448: Block-scoped variable 'x' used before its declaration.
 tests/cases/compiler/tryCatchFinallyControlFlow.ts(255,9): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/tryCatchFinallyControlFlow.ts (5 errors) ====
+==== tests/cases/compiler/tryCatchFinallyControlFlow.ts (6 errors) ====
     // Repro from #34797
     
     function f1() {
@@ -270,6 +271,9 @@ tests/cases/compiler/tryCatchFinallyControlFlow.ts(255,9): error TS7027: Unreach
                 return null;
             }
             x;  // Unreachable
+            ~
+!!! error TS2448: Block-scoped variable 'x' used before its declaration.
+!!! related TS2728 tests/cases/compiler/tryCatchFinallyControlFlow.ts:248:11: 'x' is declared here.
             ~~
 !!! error TS7027: Unreachable code detected.
         })();

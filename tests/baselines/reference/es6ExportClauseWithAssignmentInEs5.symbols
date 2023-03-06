@@ -20,7 +20,7 @@ buzz += 3;
 var bizz = 8;
 >bizz : Symbol(bizz, Decl(server.ts, 9, 3))
 
-bizz++; // compiles to exports.bizz = bizz += 1
+bizz++; // compiles to exports.bizz = (bizz++, bizz)
 >bizz : Symbol(bizz, Decl(server.ts, 9, 3))
 
 bizz--; // similarly

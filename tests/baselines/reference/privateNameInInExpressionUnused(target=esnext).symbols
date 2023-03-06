@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateNameInInExpressionUnused.ts, 0, 0))
+
+    #unused: undefined; // expect unused error
+>#unused : Symbol(Foo.#unused, Decl(privateNameInInExpressionUnused.ts, 0, 11))
+
+    #brand: undefined; // expect no error
+>#brand : Symbol(Foo.#brand, Decl(privateNameInInExpressionUnused.ts, 1, 23))
+
+    isFoo(v: any): v is Foo {
+>isFoo : Symbol(Foo.isFoo, Decl(privateNameInInExpressionUnused.ts, 2, 22))
+>v : Symbol(v, Decl(privateNameInInExpressionUnused.ts, 4, 10))
+>v : Symbol(v, Decl(privateNameInInExpressionUnused.ts, 4, 10))
+>Foo : Symbol(Foo, Decl(privateNameInInExpressionUnused.ts, 0, 0))
+
+        // This should count as using/reading '#brand'
+        return #brand in v;
+>#brand : Symbol(Foo.#brand, Decl(privateNameInInExpressionUnused.ts, 1, 23))
+>v : Symbol(v, Decl(privateNameInInExpressionUnused.ts, 4, 10))
+    }
+}
+

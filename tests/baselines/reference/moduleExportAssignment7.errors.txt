@@ -1,0 +1,92 @@
+tests/cases/conformance/salsa/index.ts(2,24): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'Thing'.
+tests/cases/conformance/salsa/index.ts(3,24): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'AnotherThing'.
+tests/cases/conformance/salsa/index.ts(4,24): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'foo'.
+tests/cases/conformance/salsa/index.ts(5,24): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'qux'.
+tests/cases/conformance/salsa/index.ts(6,24): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'baz'.
+tests/cases/conformance/salsa/index.ts(8,24): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'literal'.
+tests/cases/conformance/salsa/index.ts(19,31): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'buz'.
+tests/cases/conformance/salsa/main.js(20,35): error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'buz'.
+
+
+==== tests/cases/conformance/salsa/mod.js (0 errors) ====
+    class Thing  { x = 1 }
+    class AnotherThing { y = 2  }
+    function foo() { return 3 }
+    function bar() { return 4 }
+    /** @typedef {() => number} buz */
+    module.exports = {
+        Thing,
+        AnotherThing,
+        foo,
+        qux: bar,
+        baz() { return 5 },
+        literal: "",
+    }
+==== tests/cases/conformance/salsa/main.js (1 errors) ====
+    /**
+     * @param {import("./mod").Thing} a
+     * @param {import("./mod").AnotherThing} b
+     * @param {import("./mod").foo} c
+     * @param {import("./mod").qux} d
+     * @param {import("./mod").baz} e
+     * @param {import("./mod").buz} f
+     * @param {import("./mod").literal} g
+     */
+    function jstypes(a, b, c, d, e, f, g) {
+        return a.x + b.y + c() + d() + e() + f() + g.length
+    }
+    
+    /**
+     * @param {typeof import("./mod").Thing} a
+     * @param {typeof import("./mod").AnotherThing} b
+     * @param {typeof import("./mod").foo} c
+     * @param {typeof import("./mod").qux} d
+     * @param {typeof import("./mod").baz} e
+     * @param {typeof import("./mod").buz} f
+                                      ~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'buz'.
+     * @param {typeof import("./mod").literal} g
+     */
+    function jsvalues(a, b, c, d, e, f, g) {
+        return a.length + b.length + c() + d() + e() + f() + g.length
+    }
+    
+==== tests/cases/conformance/salsa/index.ts (7 errors) ====
+    function types(
+        a: import('./mod').Thing,
+                           ~~~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'Thing'.
+        b: import('./mod').AnotherThing,
+                           ~~~~~~~~~~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'AnotherThing'.
+        c: import('./mod').foo,
+                           ~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'foo'.
+        d: import('./mod').qux,
+                           ~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'qux'.
+        e: import('./mod').baz,
+                           ~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'baz'.
+        f: import('./mod').buz,
+        g: import('./mod').literal,
+                           ~~~~~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'literal'.
+    ) {
+        return a.x + b.y + c() + d() + e() + f() + g.length
+    }
+    
+    function values(
+        a: typeof import('./mod').Thing,
+        b: typeof import('./mod').AnotherThing,
+        c: typeof import('./mod').foo,
+        d: typeof import('./mod').qux,
+        e: typeof import('./mod').baz,
+        f: typeof import('./mod').buz,
+                                  ~~~
+!!! error TS2694: Namespace '"tests/cases/conformance/salsa/mod".export=' has no exported member 'buz'.
+        g: typeof import('./mod').literal,
+    ) {
+        return a.length + b.length + c() + d() + e() + f() + g.length
+    }
+    

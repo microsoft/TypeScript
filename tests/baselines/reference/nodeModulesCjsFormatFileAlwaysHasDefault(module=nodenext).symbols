@@ -1,0 +1,13 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+export const a = 1;
+>a : Symbol(a, Decl(index.ts, 1, 12))
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import mod from "./subfolder/index.js";
+>mod : Symbol(mod, Decl(index.ts, 1, 6))
+
+mod;
+>mod : Symbol(mod, Decl(index.ts, 1, 6))
+

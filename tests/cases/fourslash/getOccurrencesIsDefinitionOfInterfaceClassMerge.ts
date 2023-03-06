@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts' />
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Numbers|] {
+/////*1*/interface /*2*/Numbers {
 ////    p: number;
-////}|]
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Numbers|] {
+////}
+/////*3*/interface /*4*/Numbers {
 ////    m: number;
-////}|]
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}Numbers|] {
+////}
+/////*5*/class /*6*/Numbers {
 ////    f(n: number) {
 ////        return this.p + this.m + n;
 ////    }
-////}|]
-////let i: [|Numbers|] = new [|Numbers|]();
+////}
+////let i: /*7*/Numbers = new /*8*/Numbers();
 ////let x = i.f(i.p + i.m);
 
-verify.singleReferenceGroup("class Numbers\ninterface Numbers", "Numbers");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8');

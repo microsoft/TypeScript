@@ -12,10 +12,13 @@ module TypeScript {
 
         public script: Script = null;
 >script : Symbol(TypeCollectionContext.script, Decl(parserRealSource6.ts, 6, 40))
+>Script : Symbol(Script)
 
         constructor (public scopeChain: ScopeChain, public checker: TypeChecker) {
 >scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>ScopeChain : Symbol(ScopeChain)
 >checker : Symbol(TypeCollectionContext.checker, Decl(parserRealSource6.ts, 9, 51))
+>TypeChecker : Symbol(TypeChecker)
         }
     }
 
@@ -24,20 +27,25 @@ module TypeScript {
 
         public type: Type = null;
 >type : Symbol(MemberScopeContext.type, Decl(parserRealSource6.ts, 13, 37))
+>Type : Symbol(Type)
 
         public ast: AST = null;
 >ast : Symbol(MemberScopeContext.ast, Decl(parserRealSource6.ts, 14, 33))
+>AST : Symbol(AST)
 
         public scope: SymbolScope;
 >scope : Symbol(MemberScopeContext.scope, Decl(parserRealSource6.ts, 15, 31))
+>SymbolScope : Symbol(SymbolScope)
 
         public options = new AstWalkOptions();
 >options : Symbol(MemberScopeContext.options, Decl(parserRealSource6.ts, 16, 34))
 
         constructor (public flow: TypeFlow, public pos: number, public matchFlag: ASTFlags) {
 >flow : Symbol(MemberScopeContext.flow, Decl(parserRealSource6.ts, 19, 21))
+>TypeFlow : Symbol(TypeFlow)
 >pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
 >matchFlag : Symbol(MemberScopeContext.matchFlag, Decl(parserRealSource6.ts, 19, 63))
+>ASTFlags : Symbol(ASTFlags)
         }
     }
 
@@ -46,24 +54,30 @@ module TypeScript {
 
         public scopeGetter: () => SymbolScope = null;
 >scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>SymbolScope : Symbol(SymbolScope)
 
         public objectLiteralScopeGetter: () => SymbolScope = null;
 >objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
+>SymbolScope : Symbol(SymbolScope)
 
         public scopeStartAST: AST = null;
 >scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>AST : Symbol(AST)
 
         public skipNextFuncDeclForClass = false;
 >skipNextFuncDeclForClass : Symbol(EnclosingScopeContext.skipNextFuncDeclForClass, Decl(parserRealSource6.ts, 27, 41))
 
         public deepestModuleDecl: ModuleDeclaration = null;
 >deepestModuleDecl : Symbol(EnclosingScopeContext.deepestModuleDecl, Decl(parserRealSource6.ts, 28, 48))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 
         public enclosingClassDecl: TypeDeclaration = null;
 >enclosingClassDecl : Symbol(EnclosingScopeContext.enclosingClassDecl, Decl(parserRealSource6.ts, 29, 59))
+>TypeDeclaration : Symbol(TypeDeclaration)
 
         public enclosingObjectLit: UnaryExpression = null;
 >enclosingObjectLit : Symbol(EnclosingScopeContext.enclosingObjectLit, Decl(parserRealSource6.ts, 30, 58))
+>UnaryExpression : Symbol(UnaryExpression)
 
         public publicsOnly = true;
 >publicsOnly : Symbol(EnclosingScopeContext.publicsOnly, Decl(parserRealSource6.ts, 31, 58))
@@ -73,15 +87,19 @@ module TypeScript {
 
         private scriptFragment: Script;
 >scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+>Script : Symbol(Script)
 
         constructor (public logger: ILogger,
 >logger : Symbol(EnclosingScopeContext.logger, Decl(parserRealSource6.ts, 36, 21))
+>ILogger : Symbol(ILogger)
 
                     public script: Script,
 >script : Symbol(EnclosingScopeContext.script, Decl(parserRealSource6.ts, 36, 44))
+>Script : Symbol(Script)
 
                     public text: ISourceText,
 >text : Symbol(EnclosingScopeContext.text, Decl(parserRealSource6.ts, 37, 42))
+>ISourceText : Symbol(ISourceText)
 
                     public pos: number,
 >pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
@@ -92,6 +110,7 @@ module TypeScript {
 
         public getScope(): SymbolScope {
 >getScope : Symbol(EnclosingScopeContext.getScope, Decl(parserRealSource6.ts, 41, 9))
+>SymbolScope : Symbol(SymbolScope)
 
             return this.scopeGetter();
 >this.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
@@ -101,6 +120,7 @@ module TypeScript {
 
         public getObjectLiteralScope(): SymbolScope {
 >getObjectLiteralScope : Symbol(EnclosingScopeContext.getObjectLiteralScope, Decl(parserRealSource6.ts, 45, 9))
+>SymbolScope : Symbol(SymbolScope)
 
             return this.objectLiteralScopeGetter();
 >this.objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
@@ -128,6 +148,7 @@ module TypeScript {
 
         public getScriptFragmentStartAST(): AST {
 >getScriptFragmentStartAST : Symbol(EnclosingScopeContext.getScriptFragmentStartAST, Decl(parserRealSource6.ts, 57, 9))
+>AST : Symbol(AST)
 
             return this.scopeStartAST;
 >this.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
@@ -146,6 +167,7 @@ module TypeScript {
 
         public getScriptFragment(): Script {
 >getScriptFragment : Symbol(EnclosingScopeContext.getScriptFragment, Decl(parserRealSource6.ts, 65, 9))
+>Script : Symbol(Script)
 
             if (this.scriptFragment == null) {
 >this.scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
@@ -199,8 +221,11 @@ module TypeScript {
     export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
 >preFindMemberScope : Symbol(preFindMemberScope, Decl(parserRealSource6.ts, 76, 5))
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource6.ts, 78, 48))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource6.ts, 78, 61))
+>IAstWalker : Symbol(IAstWalker)
 
         var memScope: MemberScopeContext = walker.state;
 >memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
@@ -263,15 +288,19 @@ module TypeScript {
 
         valueMembers: ScopedMembers,
 >valueMembers : Symbol(valueMembers, Decl(parserRealSource6.ts, 91, 62))
+>ScopedMembers : Symbol(ScopedMembers)
 
         ambientValueMembers: ScopedMembers,
 >ambientValueMembers : Symbol(ambientValueMembers, Decl(parserRealSource6.ts, 92, 36))
+>ScopedMembers : Symbol(ScopedMembers)
 
         enclosedTypes: ScopedMembers,
 >enclosedTypes : Symbol(enclosedTypes, Decl(parserRealSource6.ts, 93, 43))
+>ScopedMembers : Symbol(ScopedMembers)
 
         ambientEnclosedTypes: ScopedMembers,
 >ambientEnclosedTypes : Symbol(ambientEnclosedTypes, Decl(parserRealSource6.ts, 94, 37))
+>ScopedMembers : Symbol(ScopedMembers)
 
         context: TypeCollectionContext,
 >context : Symbol(context, Decl(parserRealSource6.ts, 95, 44))
@@ -279,12 +308,15 @@ module TypeScript {
 
         thisType: Type,
 >thisType : Symbol(thisType, Decl(parserRealSource6.ts, 96, 39))
+>Type : Symbol(Type)
 
         classType: Type,
 >classType : Symbol(classType, Decl(parserRealSource6.ts, 97, 23))
+>Type : Symbol(Type)
 
         moduleDecl: ModuleDeclaration) {
 >moduleDecl : Symbol(moduleDecl, Decl(parserRealSource6.ts, 98, 24))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 
         var builder = new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container);
 >builder : Symbol(builder, Decl(parserRealSource6.ts, 100, 11))
@@ -296,6 +328,7 @@ module TypeScript {
 
         var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
 >chain : Symbol(chain, Decl(parserRealSource6.ts, 101, 11))
+>ScopeChain : Symbol(ScopeChain)
 >container : Symbol(container, Decl(parserRealSource6.ts, 91, 44))
 >context.scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
 >context : Symbol(context, Decl(parserRealSource6.ts, 95, 44))
@@ -338,8 +371,11 @@ module TypeScript {
     export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
 >preFindEnclosingScope : Symbol(preFindEnclosingScope, Decl(parserRealSource6.ts, 110, 5))
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource6.ts, 112, 51))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource6.ts, 112, 64))
+>IAstWalker : Symbol(IAstWalker)
 
         var context: EnclosingScopeContext = walker.state;
 >context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
@@ -387,6 +423,7 @@ module TypeScript {
                 case NodeType.Script:
                     var script = <Script>ast;
 >script : Symbol(script, Decl(parserRealSource6.ts, 126, 23))
+>Script : Symbol(Script)
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
 
                     context.scopeGetter = function () {
@@ -429,6 +466,7 @@ module TypeScript {
 >context.enclosingClassDecl : Symbol(EnclosingScopeContext.enclosingClassDecl, Decl(parserRealSource6.ts, 29, 59))
 >context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
 >enclosingClassDecl : Symbol(EnclosingScopeContext.enclosingClassDecl, Decl(parserRealSource6.ts, 29, 59))
+>TypeDeclaration : Symbol(TypeDeclaration)
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
 
                     break;
@@ -436,6 +474,7 @@ module TypeScript {
                 case NodeType.ObjectLit:
                     var objectLit = <UnaryExpression>ast;
 >objectLit : Symbol(objectLit, Decl(parserRealSource6.ts, 142, 23))
+>UnaryExpression : Symbol(UnaryExpression)
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
 
                     // Only consider target-typed object literals
@@ -472,6 +511,7 @@ module TypeScript {
 >context.deepestModuleDecl : Symbol(EnclosingScopeContext.deepestModuleDecl, Decl(parserRealSource6.ts, 28, 48))
 >context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
 >deepestModuleDecl : Symbol(EnclosingScopeContext.deepestModuleDecl, Decl(parserRealSource6.ts, 28, 48))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
 
                     context.scopeGetter = function () {
@@ -514,6 +554,7 @@ module TypeScript {
                 case NodeType.FuncDecl: {
                     var funcDecl = <FuncDecl>ast;
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+>FuncDecl : Symbol(FuncDecl)
 >ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
 
                     if (context.skipNextFuncDeclForClass) {
@@ -589,8 +630,11 @@ module TypeScript {
     export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
 >findEnclosingScopeAt : Symbol(findEnclosingScopeAt, Decl(parserRealSource6.ts, 204, 5))
 >logger : Symbol(logger, Decl(parserRealSource6.ts, 211, 41))
+>ILogger : Symbol(ILogger)
 >script : Symbol(script, Decl(parserRealSource6.ts, 211, 57))
+>Script : Symbol(Script)
 >text : Symbol(text, Decl(parserRealSource6.ts, 211, 73))
+>ISourceText : Symbol(ISourceText)
 >pos : Symbol(pos, Decl(parserRealSource6.ts, 211, 92))
 >isMemberCompletion : Symbol(isMemberCompletion, Decl(parserRealSource6.ts, 211, 105))
 >EnclosingScopeContext : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))

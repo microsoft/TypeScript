@@ -16,7 +16,7 @@
 ////const { /*3*/ } = new Foo();
 ////const { /*4*/ } = Foo;
 
-verify.completions({ marker: "1", exact: ["xxx1", "xxx2", "xxx3", "foo"] });
-verify.completions({ marker: "2", exact: ["prototype", "xxx4", "xxx5", "xxx6"] });
-verify.completions({ marker: "3", exact: ["xxx3", "foo"] });
-verify.completions({ marker: "4", exact: ["prototype", "xxx6"] });
+verify.completions({ marker: "1", unsorted: ["xxx1", "xxx2", "xxx3", "foo"] });
+verify.completions({ marker: "2", unsorted: ["prototype", "xxx4", "xxx5", "xxx6"] });
+verify.completions({ marker: "3", unsorted: ["xxx3", "foo"] });
+verify.completions({ marker: "4", unsorted: ["prototype", "xxx6"] });

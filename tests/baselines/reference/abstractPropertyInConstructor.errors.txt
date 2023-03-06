@@ -4,9 +4,14 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
 tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2729: Property 'prop' is used before its initialization.
 tests/cases/compiler/abstractPropertyInConstructor.ts(39,22): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(78,15): error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(78,18): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(79,12): error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(79,15): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(79,22): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
 
 
-==== tests/cases/compiler/abstractPropertyInConstructor.ts (6 errors) ====
+==== tests/cases/compiler/abstractPropertyInConstructor.ts (11 errors) ====
     abstract class AbstractClass {
         constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
@@ -88,6 +93,38 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(39,22): error TS2715: Abst
             a.cb("hi");
             a.method(12);
             a.method2();
+        }
+    }
+    
+    abstract class C1 {
+        abstract x: string;
+        abstract y: string;
+    
+        constructor() {
+            let self = this;                // ok
+            let { x, y: y1 } = this;        // error
+                  ~
+!!! error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
+                     ~
+!!! error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
+            ({ x, y: y1, "y": y1 } = this); // error
+               ~
+!!! error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
+                  ~
+!!! error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
+                         ~~~
+!!! error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
+        }
+    }
+    
+    class C2 {
+        x: string;
+        y: string;
+    
+        constructor() {
+            let self = this;                // ok
+            let { x, y: y1 } = this;        // ok
+            ({ x, y: y1, "y": y1 } = this); // ok
         }
     }
     

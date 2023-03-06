@@ -15,7 +15,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpotifyAgeGroupEnum = void 0;
 var AgeGroups;
 (function (AgeGroups) {
@@ -42,12 +42,12 @@ declare enum AgeGroups {
 }
 export declare const SpotifyAgeGroupEnum: {
     [x: number]: string;
-    "0-17": typeof AgeGroups["0-17"];
-    "18-22": typeof AgeGroups["18-22"];
-    "23-27": typeof AgeGroups["23-27"];
-    "28-34": typeof AgeGroups["28-34"];
-    "35-44": typeof AgeGroups["35-44"];
-    "45-59": typeof AgeGroups["45-59"];
-    "60-150": typeof AgeGroups["60-150"];
+    "0-17": (typeof AgeGroups)["0-17"];
+    "18-22": (typeof AgeGroups)["18-22"];
+    "23-27": (typeof AgeGroups)["23-27"];
+    "28-34": (typeof AgeGroups)["28-34"];
+    "35-44": (typeof AgeGroups)["35-44"];
+    "45-59": (typeof AgeGroups)["45-59"];
+    "60-150": (typeof AgeGroups)["60-150"];
 };
 export {};

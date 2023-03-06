@@ -27,9 +27,9 @@ import "unaliasedModule2";
 ///<amd-dependency path='unaliasedModule4'/>
 define(["require", "exports", "aliasedModule5", "aliasedModule6", "aliasedModule1", "aliasedModule2", "aliasedModule3", "aliasedModule4", "unaliasedModule3", "unaliasedModule4", "unaliasedModule1", "unaliasedModule2"], function (require, exports, n1, n2, r1, aliasedModule2_1, aliasedModule3_1, ns) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     r1;
     aliasedModule2_1.p1;
-    aliasedModule3_1["default"];
+    aliasedModule3_1.default;
     ns;
 });

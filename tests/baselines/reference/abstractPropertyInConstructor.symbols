@@ -224,3 +224,63 @@ class User {
     }
 }
 
+abstract class C1 {
+>C1 : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+
+    abstract x: string;
+>x : Symbol(C1.x, Decl(abstractPropertyInConstructor.ts, 71, 19))
+
+    abstract y: string;
+>y : Symbol(C1.y, Decl(abstractPropertyInConstructor.ts, 72, 23))
+
+    constructor() {
+        let self = this;                // ok
+>self : Symbol(self, Decl(abstractPropertyInConstructor.ts, 76, 11))
+>this : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+
+        let { x, y: y1 } = this;        // error
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 77, 13))
+>y : Symbol(C1.y, Decl(abstractPropertyInConstructor.ts, 72, 23))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 77, 16))
+>this : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+
+        ({ x, y: y1, "y": y1 } = this); // error
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 78, 10))
+>y : Symbol(y, Decl(abstractPropertyInConstructor.ts, 78, 13), Decl(abstractPropertyInConstructor.ts, 78, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 77, 16))
+>"y" : Symbol(y, Decl(abstractPropertyInConstructor.ts, 78, 13), Decl(abstractPropertyInConstructor.ts, 78, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 77, 16))
+>this : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+
+    x: string;
+>x : Symbol(C2.x, Decl(abstractPropertyInConstructor.ts, 82, 10))
+
+    y: string;
+>y : Symbol(C2.y, Decl(abstractPropertyInConstructor.ts, 83, 14))
+
+    constructor() {
+        let self = this;                // ok
+>self : Symbol(self, Decl(abstractPropertyInConstructor.ts, 87, 11))
+>this : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+
+        let { x, y: y1 } = this;        // ok
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 88, 13))
+>y : Symbol(C2.y, Decl(abstractPropertyInConstructor.ts, 83, 14))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 88, 16))
+>this : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+
+        ({ x, y: y1, "y": y1 } = this); // ok
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 89, 10))
+>y : Symbol(y, Decl(abstractPropertyInConstructor.ts, 89, 13), Decl(abstractPropertyInConstructor.ts, 89, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 88, 16))
+>"y" : Symbol(y, Decl(abstractPropertyInConstructor.ts, 89, 13), Decl(abstractPropertyInConstructor.ts, 89, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 88, 16))
+>this : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+    }
+}
+

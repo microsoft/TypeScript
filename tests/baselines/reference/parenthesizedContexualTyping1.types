@@ -240,7 +240,7 @@ var lambda2: (x: number) => number = (x => x);
 >x : number
 
 type ObjType = { x: (p: number) => string; y: (p: string) => number };
->ObjType : ObjType
+>ObjType : { x: (p: number) => string; y: (p: string) => number; }
 >x : (p: number) => string
 >p : number
 >y : (p: string) => number

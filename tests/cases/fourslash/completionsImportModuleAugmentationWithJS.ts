@@ -26,7 +26,7 @@
 verify.applyCodeActionFromCompletion("", {
   name: "Abcde",
   source: "/test",
-  description: `Import 'Abcde' from module "./test"`,
+  description: `Add import from "./test"`,
   newFileContent: `import { Abcde } from "./test";
 
 export {};

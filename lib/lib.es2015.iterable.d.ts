@@ -25,7 +25,7 @@ interface SymbolConstructor {
      * A method that returns the default iterator for an object. Called by the semantics of the
      * for-of statement.
      */
-    readonly iterator: symbol;
+    readonly iterator: unique symbol;
 }
 
 interface IteratorYieldResult<TYield> {
@@ -157,13 +157,14 @@ interface ReadonlyMap<K, V> {
 }
 
 interface MapConstructor {
-    new <K, V>(iterable: Iterable<readonly [K, V]>): Map<K, V>;
+    new(): Map<any, any>;
+    new <K, V>(iterable?: Iterable<readonly [K, V]> | null): Map<K, V>;
 }
 
 interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object, V>(iterable: Iterable<readonly [K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {
@@ -223,7 +224,7 @@ interface PromiseConstructor {
      * @param values An iterable of Promises.
      * @returns A new Promise.
      */
-    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
@@ -231,15 +232,7 @@ interface PromiseConstructor {
      * @param values An iterable of Promises.
      * @returns A new Promise.
      */
-    race<T>(values: Iterable<T>): Promise<T extends PromiseLike<infer U> ? U : T>;
-
-    /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
-     * or rejected.
-     * @param values An iterable of Promises.
-     * @returns A new Promise.
-     */
-    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
+    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>;
 }
 
 interface String {

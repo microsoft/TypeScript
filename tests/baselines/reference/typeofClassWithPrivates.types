@@ -12,7 +12,7 @@ class C<T> {
 >x : T
 
     static y: T;
->y : any
+>y : T
 }
 
 var c: C<string>;

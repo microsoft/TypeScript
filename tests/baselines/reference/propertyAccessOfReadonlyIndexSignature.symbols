@@ -11,5 +11,7 @@ declare var a: Test;
 >Test : Symbol(Test, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 0))
 
 a.foo = 'baz';
+>a.foo : Symbol(Test.__index, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
 >a : Symbol(a, Decl(propertyAccessOfReadonlyIndexSignature.ts, 4, 11))
+>foo : Symbol(Test.__index, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
 

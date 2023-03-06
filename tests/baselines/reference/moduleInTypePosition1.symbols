@@ -6,6 +6,7 @@ import WinJS = require('./moduleInTypePosition1_0');
 var x = (w1: WinJS) => { };
 >x : Symbol(x, Decl(moduleInTypePosition1_1.ts, 2, 3))
 >w1 : Symbol(w1, Decl(moduleInTypePosition1_1.ts, 2, 9))
+>WinJS : Symbol(WinJS)
 
 === tests/cases/compiler/moduleInTypePosition1_0.ts ===
 export class Promise {

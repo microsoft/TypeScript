@@ -112,11 +112,11 @@ function move2(direction: "up" | "down") {
 }
 
 function check<T>(x: T | undefined) {
->check : <T>(x: T | undefined) => T
+>check : <T>(x: T | undefined) => NonNullable<T>
 >x : T | undefined
 
     return x || error("Undefined value");
->x || error("Undefined value") : T
+>x || error("Undefined value") : NonNullable<T>
 >x : T | undefined
 >error("Undefined value") : never
 >error : (message: string) => never

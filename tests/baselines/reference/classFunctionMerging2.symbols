@@ -1,0 +1,39 @@
+=== tests/cases/compiler/classFunctionMerging2.ts ===
+declare abstract class A {
+>A : Symbol(A, Decl(classFunctionMerging2.ts, 0, 0))
+
+    constructor(p: number);
+>p : Symbol(p, Decl(classFunctionMerging2.ts, 1, 16))
+
+    a: number;
+>a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
+}
+
+declare function B(p: string): B;
+>B : Symbol(B, Decl(classFunctionMerging2.ts, 3, 1), Decl(classFunctionMerging2.ts, 5, 33))
+>p : Symbol(p, Decl(classFunctionMerging2.ts, 5, 19))
+>B : Symbol(B, Decl(classFunctionMerging2.ts, 3, 1), Decl(classFunctionMerging2.ts, 5, 33))
+
+declare class B extends A {
+>B : Symbol(B, Decl(classFunctionMerging2.ts, 3, 1), Decl(classFunctionMerging2.ts, 5, 33))
+>A : Symbol(A, Decl(classFunctionMerging2.ts, 0, 0))
+
+    constructor(p: string);
+>p : Symbol(p, Decl(classFunctionMerging2.ts, 7, 16))
+
+    b: number;
+>b : Symbol(B.b, Decl(classFunctionMerging2.ts, 7, 27))
+}
+
+let b = new B("Hey")
+>b : Symbol(b, Decl(classFunctionMerging2.ts, 11, 3))
+>B : Symbol(B, Decl(classFunctionMerging2.ts, 3, 1), Decl(classFunctionMerging2.ts, 5, 33))
+
+console.log(b.a)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>b.a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
+>b : Symbol(b, Decl(classFunctionMerging2.ts, 11, 3))
+>a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
+

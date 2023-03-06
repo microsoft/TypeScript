@@ -30,7 +30,7 @@ choice(Math.PI);
 >PI : number
 
 function sq(n?: number): number {
->sq : (n?: number | undefined) => number
+>sq : (n?: number) => number
 >n : number | undefined
 
   const r = n !== undefined && n*n || 0;

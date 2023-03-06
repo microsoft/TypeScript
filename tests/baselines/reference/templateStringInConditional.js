@@ -2,4 +2,4 @@
 var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;
 
 //// [templateStringInConditional.js]
-var x = "abc" + " " + "def" ? "abc" + " " + "def" : "abc" + " " + "def";
+var x = "abc".concat(" ", "def") ? "abc".concat(" ", "def") : "abc".concat(" ", "def");

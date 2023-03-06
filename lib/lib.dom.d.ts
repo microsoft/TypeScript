@@ -19,28 +19,21 @@ and limitations under the License.
 
 
 /////////////////////////////
-/// DOM APIs
+/// Window APIs
 /////////////////////////////
-
-interface Account {
-    displayName: string;
-    id: string;
-    imageURL?: string;
-    name?: string;
-    rpDisplayName: string;
-}
 
 interface AddEventListenerOptions extends EventListenerOptions {
     once?: boolean;
     passive?: boolean;
+    signal?: AbortSignal;
 }
 
 interface AesCbcParams extends Algorithm {
-    iv: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    iv: BufferSource;
 }
 
 interface AesCtrParams extends Algorithm {
-    counter: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    counter: BufferSource;
     length: number;
 }
 
@@ -49,8 +42,8 @@ interface AesDerivedKeyParams extends Algorithm {
 }
 
 interface AesGcmParams extends Algorithm {
-    additionalData?: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
-    iv: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    additionalData?: BufferSource;
+    iv: BufferSource;
     tagLength?: number;
 }
 
@@ -80,15 +73,8 @@ interface AnimationEventInit extends EventInit {
 }
 
 interface AnimationPlaybackEventInit extends EventInit {
-    currentTime?: number | null;
-    timelineTime?: number | null;
-}
-
-interface AssertionOptions {
-    allowList?: ScopedCredentialDescriptor[];
-    extensions?: WebAuthnExtensions;
-    rpId?: string;
-    timeoutSeconds?: number;
+    currentTime?: CSSNumberish | null;
+    timelineTime?: CSSNumberish | null;
 }
 
 interface AssignedNodesOptions {
@@ -110,9 +96,12 @@ interface AudioBufferSourceOptions {
     playbackRate?: number;
 }
 
-interface AudioContextInfo {
-    currentTime?: number;
-    sampleRate?: number;
+interface AudioConfiguration {
+    bitrate?: number;
+    channels?: string;
+    contentType: string;
+    samplerate?: number;
+    spatialRendering?: boolean;
 }
 
 interface AudioContextOptions {
@@ -126,14 +115,6 @@ interface AudioNodeOptions {
     channelInterpretation?: ChannelInterpretation;
 }
 
-interface AudioParamDescriptor {
-    automationRate?: AutomationRate;
-    defaultValue?: number;
-    maxValue?: number;
-    minValue?: number;
-    name: string;
-}
-
 interface AudioProcessingEventInit extends EventInit {
     inputBuffer: AudioBuffer;
     outputBuffer: AudioBuffer;
@@ -142,7 +123,7 @@ interface AudioProcessingEventInit extends EventInit {
 
 interface AudioTimestamp {
     contextTime?: number;
-    performanceTime?: number;
+    performanceTime?: DOMHighResTimeStamp;
 }
 
 interface AudioWorkletNodeOptions extends AudioNodeOptions {
@@ -155,15 +136,14 @@ interface AudioWorkletNodeOptions extends AudioNodeOptions {
 
 interface AuthenticationExtensionsClientInputs {
     appid?: string;
-    appidExclude?: string;
     credProps?: boolean;
-    uvm?: boolean;
+    hmacCreateSecret?: boolean;
 }
 
 interface AuthenticationExtensionsClientOutputs {
     appid?: boolean;
     credProps?: CredentialPropertiesOutput;
-    uvm?: UvmEntries;
+    hmacCreateSecret?: boolean;
 }
 
 interface AuthenticatorSelectionCriteria {
@@ -181,13 +161,20 @@ interface BiquadFilterOptions extends AudioNodeOptions {
     type?: BiquadFilterType;
 }
 
+interface BlobEventInit {
+    data: Blob;
+    timecode?: DOMHighResTimeStamp;
+}
+
 interface BlobPropertyBag {
     endings?: EndingType;
     type?: string;
 }
 
-interface ByteLengthChunk {
-    byteLength?: number;
+interface CSSStyleSheetInit {
+    baseURL?: string;
+    disabled?: boolean;
+    media?: MediaList | string;
 }
 
 interface CacheQueryOptions {
@@ -198,7 +185,9 @@ interface CacheQueryOptions {
 
 interface CanvasRenderingContext2DSettings {
     alpha?: boolean;
+    colorSpace?: PredefinedColorSpace;
     desynchronized?: boolean;
+    willReadFrequently?: boolean;
 }
 
 interface ChannelMergerOptions extends AudioNodeOptions {
@@ -209,15 +198,6 @@ interface ChannelSplitterOptions extends AudioNodeOptions {
     numberOfOutputs?: number;
 }
 
-interface ClientData {
-    challenge: string;
-    extensions?: WebAuthnExtensions;
-    hashAlg: string | Algorithm;
-    origin: string;
-    rpId: string;
-    tokenBinding?: string;
-}
-
 interface ClientQueryOptions {
     includeUncontrolled?: boolean;
     type?: ClientTypes;
@@ -225,6 +205,10 @@ interface ClientQueryOptions {
 
 interface ClipboardEventInit extends EventInit {
     clipboardData?: DataTransfer | null;
+}
+
+interface ClipboardItemOptions {
+    presentationStyle?: PresentationStyle;
 }
 
 interface CloseEventInit extends EventInit {
@@ -238,11 +222,12 @@ interface CompositionEventInit extends UIEventInit {
 }
 
 interface ComputedEffectTiming extends EffectTiming {
-    activeDuration?: number;
+    activeDuration?: CSSNumberish;
     currentIteration?: number | null;
-    endTime?: number;
-    localTime?: number | null;
+    endTime?: CSSNumberish;
+    localTime?: CSSNumberish | null;
     progress?: number | null;
+    startTime?: CSSNumberish;
 }
 
 interface ComputedKeyframe {
@@ -251,10 +236,6 @@ interface ComputedKeyframe {
     easing: string;
     offset: number | null;
     [property: string]: string | number | null | undefined;
-}
-
-interface ConfirmSiteSpecificExceptionsInformation extends ExceptionInformation {
-    arrayOfDomainStrings?: string[];
 }
 
 interface ConstantSourceOptions {
@@ -281,11 +262,6 @@ interface ConstrainULongRange extends ULongRange {
     ideal?: number;
 }
 
-interface ConstrainVideoFacingModeParameters {
-    exact?: VideoFacingModeEnum | VideoFacingModeEnum[];
-    ideal?: VideoFacingModeEnum | VideoFacingModeEnum[];
-}
-
 interface ConvolverOptions extends AudioNodeOptions {
     buffer?: AudioBuffer | null;
     disableNormalization?: boolean;
@@ -304,6 +280,11 @@ interface CredentialRequestOptions {
     mediation?: CredentialMediationRequirement;
     publicKey?: PublicKeyCredentialRequestOptions;
     signal?: AbortSignal;
+}
+
+interface CryptoKeyPair {
+    privateKey: CryptoKey;
+    publicKey: CryptoKey;
 }
 
 interface CustomEventInit<T = any> extends EventInit {
@@ -365,10 +346,6 @@ interface DelayOptions extends AudioNodeOptions {
     maxDelayTime?: number;
 }
 
-interface DeviceLightEventInit extends EventInit {
-    value?: number;
-}
-
 interface DeviceMotionEventAccelerationInit {
     x?: number | null;
     y?: number | null;
@@ -395,13 +372,13 @@ interface DeviceOrientationEventInit extends EventInit {
     gamma?: number | null;
 }
 
-interface DevicePermissionDescriptor extends PermissionDescriptor {
-    deviceId?: string;
-    name: "camera" | "microphone" | "speaker";
+interface DisplayMediaStreamOptions {
+    audio?: boolean | MediaTrackConstraints;
+    video?: boolean | MediaTrackConstraints;
 }
 
 interface DocumentTimelineOptions {
-    originTime?: number;
+    originTime?: DOMHighResTimeStamp;
 }
 
 interface DoubleRange {
@@ -450,6 +427,7 @@ interface EffectTiming {
     fill?: FillMode;
     iterationStart?: number;
     iterations?: number;
+    playbackRate?: number;
 }
 
 interface ElementCreationOptions {
@@ -499,35 +477,51 @@ interface EventSourceInit {
     withCredentials?: boolean;
 }
 
-interface ExceptionInformation {
-    domain?: string | null;
-}
-
 interface FilePropertyBag extends BlobPropertyBag {
     lastModified?: number;
+}
+
+interface FileSystemFlags {
+    create?: boolean;
+    exclusive?: boolean;
+}
+
+interface FileSystemGetDirectoryOptions {
+    create?: boolean;
+}
+
+interface FileSystemGetFileOptions {
+    create?: boolean;
+}
+
+interface FileSystemRemoveOptions {
+    recursive?: boolean;
 }
 
 interface FocusEventInit extends UIEventInit {
     relatedTarget?: EventTarget | null;
 }
 
-interface FocusNavigationEventInit extends EventInit {
-    navigationReason?: string | null;
-    originHeight?: number;
-    originLeft?: number;
-    originTop?: number;
-    originWidth?: number;
-}
-
-interface FocusNavigationOrigin {
-    originHeight?: number;
-    originLeft?: number;
-    originTop?: number;
-    originWidth?: number;
-}
-
 interface FocusOptions {
     preventScroll?: boolean;
+}
+
+interface FontFaceDescriptors {
+    display?: string;
+    featureSettings?: string;
+    stretch?: string;
+    style?: string;
+    unicodeRange?: string;
+    variant?: string;
+    weight?: string;
+}
+
+interface FontFaceSetLoadEventInit extends EventInit {
+    fontfaces?: FontFace[];
+}
+
+interface FormDataEventInit extends EventInit {
+    formData: FormData;
 }
 
 interface FullscreenOptions {
@@ -540,6 +534,10 @@ interface GainOptions extends AudioNodeOptions {
 
 interface GamepadEventInit extends EventInit {
     gamepad: Gamepad;
+}
+
+interface GetAnimationsOptions {
+    subtree?: boolean;
 }
 
 interface GetNotificationOptions {
@@ -557,8 +555,8 @@ interface HashChangeEventInit extends EventInit {
 
 interface HkdfParams extends Algorithm {
     hash: HashAlgorithmIdentifier;
-    info: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
-    salt: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    info: BufferSource;
+    salt: BufferSource;
 }
 
 interface HmacImportParams extends Algorithm {
@@ -576,6 +574,11 @@ interface HmacKeyGenParams extends Algorithm {
     length?: number;
 }
 
+interface IDBDatabaseInfo {
+    name?: string;
+    version?: number;
+}
+
 interface IDBIndexParameters {
     multiEntry?: boolean;
     unique?: boolean;
@@ -586,6 +589,10 @@ interface IDBObjectStoreParameters {
     keyPath?: string | string[] | null;
 }
 
+interface IDBTransactionOptions {
+    durability?: IDBTransactionDurability;
+}
+
 interface IDBVersionChangeEventInit extends EventInit {
     newVersion?: number | null;
     oldVersion?: number;
@@ -594,6 +601,10 @@ interface IDBVersionChangeEventInit extends EventInit {
 interface IIRFilterOptions extends AudioNodeOptions {
     feedback: number[];
     feedforward: number[];
+}
+
+interface IdleRequestOptions {
+    timeout?: number;
 }
 
 interface ImageBitmapOptions {
@@ -609,9 +620,8 @@ interface ImageBitmapRenderingContextSettings {
     alpha?: boolean;
 }
 
-interface ImageEncodeOptions {
-    quality?: number;
-    type?: string;
+interface ImageDataSettings {
+    colorSpace?: PredefinedColorSpace;
 }
 
 interface ImportMeta {
@@ -620,8 +630,10 @@ interface ImportMeta {
 
 interface InputEventInit extends UIEventInit {
     data?: string | null;
+    dataTransfer?: DataTransfer | null;
     inputType?: string;
     isComposing?: boolean;
+    targetRanges?: StaticRange[];
 }
 
 interface IntersectionObserverEntryInit {
@@ -631,7 +643,7 @@ interface IntersectionObserverEntryInit {
     isIntersecting: boolean;
     rootBounds: DOMRectInit | null;
     target: Element;
-    time: number;
+    time: DOMHighResTimeStamp;
 }
 
 interface IntersectionObserverInit {
@@ -691,15 +703,67 @@ interface KeyframeAnimationOptions extends KeyframeEffectOptions {
 interface KeyframeEffectOptions extends EffectTiming {
     composite?: CompositeOperation;
     iterationComposite?: IterationCompositeOperation;
+    pseudoElement?: string | null;
+}
+
+interface LockInfo {
+    clientId?: string;
+    mode?: LockMode;
+    name?: string;
+}
+
+interface LockManagerSnapshot {
+    held?: LockInfo[];
+    pending?: LockInfo[];
+}
+
+interface LockOptions {
+    ifAvailable?: boolean;
+    mode?: LockMode;
+    signal?: AbortSignal;
+    steal?: boolean;
+}
+
+interface MediaCapabilitiesDecodingInfo extends MediaCapabilitiesInfo {
+    configuration?: MediaDecodingConfiguration;
+}
+
+interface MediaCapabilitiesEncodingInfo extends MediaCapabilitiesInfo {
+    configuration?: MediaEncodingConfiguration;
+}
+
+interface MediaCapabilitiesInfo {
+    powerEfficient: boolean;
+    smooth: boolean;
+    supported: boolean;
+}
+
+interface MediaConfiguration {
+    audio?: AudioConfiguration;
+    video?: VideoConfiguration;
+}
+
+interface MediaDecodingConfiguration extends MediaConfiguration {
+    type: MediaDecodingType;
 }
 
 interface MediaElementAudioSourceOptions {
     mediaElement: HTMLMediaElement;
 }
 
+interface MediaEncodingConfiguration extends MediaConfiguration {
+    type: MediaEncodingType;
+}
+
 interface MediaEncryptedEventInit extends EventInit {
     initData?: ArrayBuffer | null;
     initDataType?: string;
+}
+
+interface MediaImage {
+    sizes?: string;
+    src: string;
+    type?: string;
 }
 
 interface MediaKeyMessageEventInit extends EventInit {
@@ -719,12 +783,40 @@ interface MediaKeySystemConfiguration {
 
 interface MediaKeySystemMediaCapability {
     contentType?: string;
+    encryptionScheme?: string | null;
     robustness?: string;
+}
+
+interface MediaMetadataInit {
+    album?: string;
+    artist?: string;
+    artwork?: MediaImage[];
+    title?: string;
+}
+
+interface MediaPositionState {
+    duration?: number;
+    playbackRate?: number;
+    position?: number;
 }
 
 interface MediaQueryListEventInit extends EventInit {
     matches?: boolean;
     media?: string;
+}
+
+interface MediaRecorderOptions {
+    audioBitsPerSecond?: number;
+    bitsPerSecond?: number;
+    mimeType?: string;
+    videoBitsPerSecond?: number;
+}
+
+interface MediaSessionActionDetails {
+    action: MediaSessionAction;
+    fastSeek?: boolean;
+    seekOffset?: number;
+    seekTime?: number;
 }
 
 interface MediaStreamAudioSourceOptions {
@@ -734,19 +826,8 @@ interface MediaStreamAudioSourceOptions {
 interface MediaStreamConstraints {
     audio?: boolean | MediaTrackConstraints;
     peerIdentity?: string;
+    preferCurrentTab?: boolean;
     video?: boolean | MediaTrackConstraints;
-}
-
-interface MediaStreamErrorEventInit extends EventInit {
-    error?: MediaStreamError | null;
-}
-
-interface MediaStreamEventInit extends EventInit {
-    stream?: MediaStream;
-}
-
-interface MediaStreamTrackAudioSourceOptions {
-    mediaStreamTrack: MediaStreamTrack;
 }
 
 interface MediaStreamTrackEventInit extends EventInit {
@@ -757,13 +838,16 @@ interface MediaTrackCapabilities {
     aspectRatio?: DoubleRange;
     autoGainControl?: boolean[];
     channelCount?: ULongRange;
+    cursor?: string[];
     deviceId?: string;
+    displaySurface?: string;
     echoCancellation?: boolean[];
     facingMode?: string[];
     frameRate?: DoubleRange;
     groupId?: string;
     height?: ULongRange;
     latency?: DoubleRange;
+    logicalSurface?: boolean;
     noiseSuppression?: boolean[];
     resizeMode?: string[];
     sampleRate?: ULongRange;
@@ -783,9 +867,9 @@ interface MediaTrackConstraintSet {
     height?: ConstrainULong;
     latency?: ConstrainDouble;
     noiseSuppression?: ConstrainBoolean;
-    resizeMode?: ConstrainDOMString;
     sampleRate?: ConstrainULong;
     sampleSize?: ConstrainULong;
+    suppressLocalAudioPlayback?: ConstrainBoolean;
     width?: ConstrainULong;
 }
 
@@ -796,16 +880,14 @@ interface MediaTrackConstraints extends MediaTrackConstraintSet {
 interface MediaTrackSettings {
     aspectRatio?: number;
     autoGainControl?: boolean;
-    channelCount?: number;
     deviceId?: string;
     echoCancellation?: boolean;
     facingMode?: string;
     frameRate?: number;
     groupId?: string;
     height?: number;
-    latency?: number;
     noiseSuppression?: boolean;
-    resizeMode?: string;
+    restrictOwnAudio?: boolean;
     sampleRate?: number;
     sampleSize?: number;
     width?: number;
@@ -814,18 +896,16 @@ interface MediaTrackSettings {
 interface MediaTrackSupportedConstraints {
     aspectRatio?: boolean;
     autoGainControl?: boolean;
-    channelCount?: boolean;
     deviceId?: boolean;
     echoCancellation?: boolean;
     facingMode?: boolean;
     frameRate?: boolean;
     groupId?: boolean;
     height?: boolean;
-    latency?: boolean;
     noiseSuppression?: boolean;
-    resizeMode?: boolean;
     sampleRate?: boolean;
     sampleSize?: boolean;
+    suppressLocalAudioPlayback?: boolean;
     width?: boolean;
 }
 
@@ -835,11 +915,6 @@ interface MessageEventInit<T = any> extends EventInit {
     origin?: string;
     ports?: MessagePort[];
     source?: MessageEventSource | null;
-}
-
-interface MidiPermissionDescriptor extends PermissionDescriptor {
-    name: "midi";
-    sysex?: boolean;
 }
 
 interface MouseEventInit extends EventModifierInit {
@@ -859,33 +934,19 @@ interface MultiCacheQueryOptions extends CacheQueryOptions {
 }
 
 interface MutationObserverInit {
-    /**
-     * Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted.
-     */
+    /** Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted. */
     attributeFilter?: string[];
-    /**
-     * Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded.
-     */
+    /** Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded. */
     attributeOldValue?: boolean;
-    /**
-     * Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified.
-     */
+    /** Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified. */
     attributes?: boolean;
-    /**
-     * Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified.
-     */
+    /** Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified. */
     characterData?: boolean;
-    /**
-     * Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded.
-     */
+    /** Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded. */
     characterDataOldValue?: boolean;
-    /**
-     * Set to true if mutations to target's children are to be observed.
-     */
+    /** Set to true if mutations to target's children are to be observed. */
     childList?: boolean;
-    /**
-     * Set to true if mutations to not just target, but also target's descendants are to be observed.
-     */
+    /** Set to true if mutations to not just target, but also target's descendants are to be observed. */
     subtree?: boolean;
 }
 
@@ -913,7 +974,7 @@ interface NotificationOptions {
     requireInteraction?: boolean;
     silent?: boolean;
     tag?: string;
-    timestamp?: number;
+    timestamp?: EpochTimeStamp;
     vibrate?: VibratePattern;
 }
 
@@ -936,6 +997,7 @@ interface OptionalEffectTiming {
     fill?: FillMode;
     iterationStart?: number;
     iterations?: number;
+    playbackRate?: number;
 }
 
 interface OscillatorOptions extends AudioNodeOptions {
@@ -968,14 +1030,12 @@ interface PannerOptions extends AudioNodeOptions {
 
 interface PaymentCurrencyAmount {
     currency: string;
-    currencySystem?: string;
     value: string;
 }
 
 interface PaymentDetailsBase {
     displayItems?: PaymentItem[];
     modifiers?: PaymentDetailsModifier[];
-    shippingOptions?: PaymentShippingOption[];
 }
 
 interface PaymentDetailsInit extends PaymentDetailsBase {
@@ -986,12 +1046,12 @@ interface PaymentDetailsInit extends PaymentDetailsBase {
 interface PaymentDetailsModifier {
     additionalDisplayItems?: PaymentItem[];
     data?: any;
-    supportedMethods: string | string[];
+    supportedMethods: string;
     total?: PaymentItem;
 }
 
 interface PaymentDetailsUpdate extends PaymentDetailsBase {
-    error?: string;
+    paymentMethodErrors?: any;
     total?: PaymentItem;
 }
 
@@ -1001,33 +1061,40 @@ interface PaymentItem {
     pending?: boolean;
 }
 
-interface PaymentMethodData {
-    data?: any;
-    supportedMethods: string | string[];
+interface PaymentMethodChangeEventInit extends PaymentRequestUpdateEventInit {
+    methodDetails?: any;
+    methodName?: string;
 }
 
-interface PaymentOptions {
-    requestPayerEmail?: boolean;
-    requestPayerName?: boolean;
-    requestPayerPhone?: boolean;
-    requestShipping?: boolean;
-    shippingType?: string;
+interface PaymentMethodData {
+    data?: any;
+    supportedMethods: string;
 }
 
 interface PaymentRequestUpdateEventInit extends EventInit {
 }
 
-interface PaymentShippingOption {
-    amount: PaymentCurrencyAmount;
-    id: string;
-    label: string;
-    selected?: boolean;
+interface PaymentValidationErrors {
+    error?: string;
+    paymentMethod?: any;
 }
 
 interface Pbkdf2Params extends Algorithm {
     hash: HashAlgorithmIdentifier;
     iterations: number;
-    salt: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    salt: BufferSource;
+}
+
+interface PerformanceMarkOptions {
+    detail?: any;
+    startTime?: DOMHighResTimeStamp;
+}
+
+interface PerformanceMeasureOptions {
+    detail?: any;
+    duration?: DOMHighResTimeStamp;
+    end?: string | DOMHighResTimeStamp;
+    start?: string | DOMHighResTimeStamp;
 }
 
 interface PerformanceObserverInit {
@@ -1047,6 +1114,10 @@ interface PeriodicWaveOptions extends PeriodicWaveConstraints {
 
 interface PermissionDescriptor {
     name: PermissionName;
+}
+
+interface PictureInPictureEventInit extends EventInit {
+    pictureInPictureWindow: PictureInPictureWindow;
 }
 
 interface PointerEventInit extends MouseEventInit {
@@ -1072,10 +1143,6 @@ interface PositionOptions {
     enableHighAccuracy?: boolean;
     maximumAge?: number;
     timeout?: number;
-}
-
-interface PostMessageOptions {
-    transfer?: any[];
 }
 
 interface ProgressEventInit extends EventInit {
@@ -1141,14 +1208,9 @@ interface PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     id: BufferSource;
 }
 
-interface PushPermissionDescriptor extends PermissionDescriptor {
-    name: "push";
-    userVisibleOnly?: boolean;
-}
-
 interface PushSubscriptionJSON {
     endpoint?: string;
-    expirationTime?: number | null;
+    expirationTime?: EpochTimeStamp | null;
     keys?: Record<string, string>;
 }
 
@@ -1165,7 +1227,7 @@ interface QueuingStrategy<T = any> {
 interface QueuingStrategyInit {
     /**
      * Creates a new ByteLengthQueuingStrategy with the provided high water mark.
-     * 
+     *
      * Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
      */
     highWaterMark: number;
@@ -1184,12 +1246,11 @@ interface RTCConfiguration {
     iceCandidatePoolSize?: number;
     iceServers?: RTCIceServer[];
     iceTransportPolicy?: RTCIceTransportPolicy;
-    peerIdentity?: string;
     rtcpMuxPolicy?: RTCRtcpMuxPolicy;
 }
 
 interface RTCDTMFToneChangeEventInit extends EventInit {
-    tone: string;
+    tone?: string;
 }
 
 interface RTCDataChannelEventInit extends EventInit {
@@ -1202,7 +1263,6 @@ interface RTCDataChannelInit {
     maxRetransmits?: number;
     negotiated?: boolean;
     ordered?: boolean;
-    priority?: RTCPriorityType;
     protocol?: string;
 }
 
@@ -1211,9 +1271,20 @@ interface RTCDtlsFingerprint {
     value?: string;
 }
 
-interface RTCDtlsParameters {
-    fingerprints?: RTCDtlsFingerprint[];
-    role?: RTCDtlsRole;
+interface RTCEncodedAudioFrameMetadata {
+    contributingSources?: number[];
+    synchronizationSource?: number;
+}
+
+interface RTCEncodedVideoFrameMetadata {
+    contributingSources?: number[];
+    dependencies?: number[];
+    frameId?: number;
+    height?: number;
+    spatialIndex?: number;
+    synchronizationSource?: number;
+    temporalIndex?: number;
+    width?: number;
 }
 
 interface RTCErrorEventInit extends EventInit {
@@ -1229,31 +1300,6 @@ interface RTCErrorInit {
     sentAlert?: number;
 }
 
-interface RTCIceCandidateAttributes extends RTCStats {
-    addressSourceUrl?: string;
-    candidateType?: RTCStatsIceCandidateType;
-    ipAddress?: string;
-    portNumber?: number;
-    priority?: number;
-    transport?: string;
-}
-
-interface RTCIceCandidateComplete {
-}
-
-interface RTCIceCandidateDictionary {
-    foundation?: string;
-    ip?: string;
-    msMTurnSessionId?: string;
-    port?: number;
-    priority?: number;
-    protocol?: RTCIceProtocol;
-    relatedAddress?: string;
-    relatedPort?: number;
-    tcpType?: RTCIceTcpCandidateType;
-    type?: RTCIceCandidateType;
-}
-
 interface RTCIceCandidateInit {
     candidate?: string;
     sdpMLineIndex?: number | null;
@@ -1261,101 +1307,77 @@ interface RTCIceCandidateInit {
     usernameFragment?: string | null;
 }
 
-interface RTCIceCandidatePair {
-    local?: RTCIceCandidate;
-    remote?: RTCIceCandidate;
-}
-
 interface RTCIceCandidatePairStats extends RTCStats {
     availableIncomingBitrate?: number;
     availableOutgoingBitrate?: number;
-    bytesDiscardedOnSend?: number;
     bytesReceived?: number;
     bytesSent?: number;
-    circuitBreakerTriggerCount?: number;
-    consentExpiredTimestamp?: number;
-    consentRequestsSent?: number;
     currentRoundTripTime?: number;
-    currentRtt?: number;
-    firstRequestTimestamp?: number;
-    lastPacketReceivedTimestamp?: number;
-    lastPacketSentTimestamp?: number;
-    lastRequestTimestamp?: number;
-    lastResponseTimestamp?: number;
-    localCandidateId?: string;
+    lastPacketReceivedTimestamp?: DOMHighResTimeStamp;
+    lastPacketSentTimestamp?: DOMHighResTimeStamp;
+    localCandidateId: string;
     nominated?: boolean;
-    packetsDiscardedOnSend?: number;
-    packetsReceived?: number;
-    packetsSent?: number;
-    priority?: number;
-    remoteCandidateId?: string;
+    remoteCandidateId: string;
     requestsReceived?: number;
     requestsSent?: number;
     responsesReceived?: number;
     responsesSent?: number;
-    retransmissionsReceived?: number;
-    retransmissionsSent?: number;
-    state?: RTCStatsIceCandidatePairState;
+    state: RTCStatsIceCandidatePairState;
     totalRoundTripTime?: number;
-    totalRtt?: number;
-    transportId?: string;
-}
-
-interface RTCIceGatherOptions {
-    gatherPolicy?: RTCIceGatherPolicy;
-    iceservers?: RTCIceServer[];
-}
-
-interface RTCIceParameters {
-    password?: string;
-    usernameFragment?: string;
+    transportId: string;
 }
 
 interface RTCIceServer {
-    credential?: string | RTCOAuthCredential;
-    credentialType?: RTCIceCredentialType;
+    credential?: string;
     urls: string | string[];
     username?: string;
 }
 
-interface RTCIdentityProviderOptions {
-    peerIdentity?: string;
-    protocol?: string;
-    usernameHint?: string;
-}
-
-interface RTCInboundRTPStreamStats extends RTCRTPStreamStats {
-    bytesReceived?: number;
-    fractionLost?: number;
-    jitter?: number;
-    packetsLost?: number;
-    packetsReceived?: number;
-}
-
-interface RTCMediaStreamTrackStats extends RTCStats {
+interface RTCInboundRtpStreamStats extends RTCReceivedRtpStreamStats {
     audioLevel?: number;
-    echoReturnLoss?: number;
-    echoReturnLossEnhancement?: number;
+    bytesReceived?: number;
+    concealedSamples?: number;
+    concealmentEvents?: number;
+    decoderImplementation?: string;
+    estimatedPlayoutTimestamp?: DOMHighResTimeStamp;
+    fecPacketsDiscarded?: number;
+    fecPacketsReceived?: number;
+    firCount?: number;
     frameHeight?: number;
     frameWidth?: number;
-    framesCorrupted?: number;
     framesDecoded?: number;
     framesDropped?: number;
     framesPerSecond?: number;
     framesReceived?: number;
-    framesSent?: number;
-    remoteSource?: boolean;
-    ssrcIds?: string[];
-    trackIdentifier?: string;
+    headerBytesReceived?: number;
+    insertedSamplesForDeceleration?: number;
+    jitterBufferDelay?: number;
+    jitterBufferEmittedCount?: number;
+    keyFramesDecoded?: number;
+    kind: string;
+    lastPacketReceivedTimestamp?: DOMHighResTimeStamp;
+    nackCount?: number;
+    packetsDiscarded?: number;
+    pliCount?: number;
+    qpSum?: number;
+    remoteId?: string;
+    removedSamplesForAcceleration?: number;
+    silentConcealedSamples?: number;
+    totalAudioEnergy?: number;
+    totalDecodeTime?: number;
+    totalInterFrameDelay?: number;
+    totalProcessingDelay?: number;
+    totalSamplesDuration?: number;
+    totalSamplesReceived?: number;
+    totalSquaredInterFrameDelay?: number;
 }
 
-interface RTCOAuthCredential {
-    accessToken: string;
-    macKey: string;
+interface RTCLocalSessionDescriptionInit {
+    sdp?: string;
+    type?: RTCSdpType;
 }
 
 interface RTCOfferAnswerOptions {
-    voiceActivityDetection?: boolean;
 }
 
 interface RTCOfferOptions extends RTCOfferAnswerOptions {
@@ -1364,17 +1386,36 @@ interface RTCOfferOptions extends RTCOfferAnswerOptions {
     offerToReceiveVideo?: boolean;
 }
 
-interface RTCOutboundRTPStreamStats extends RTCRTPStreamStats {
-    bytesSent?: number;
-    packetsSent?: number;
-    roundTripTime?: number;
+interface RTCOutboundRtpStreamStats extends RTCSentRtpStreamStats {
+    firCount?: number;
+    frameHeight?: number;
+    frameWidth?: number;
+    framesEncoded?: number;
+    framesPerSecond?: number;
+    framesSent?: number;
+    headerBytesSent?: number;
+    hugeFramesSent?: number;
+    keyFramesEncoded?: number;
+    mediaSourceId?: string;
+    nackCount?: number;
+    pliCount?: number;
+    qpSum?: number;
+    qualityLimitationResolutionChanges?: number;
+    remoteId?: string;
+    retransmittedBytesSent?: number;
+    retransmittedPacketsSent?: number;
+    rid?: string;
     targetBitrate?: number;
+    totalEncodeTime?: number;
+    totalEncodedBytesTarget?: number;
+    totalPacketSendDelay?: number;
 }
 
 interface RTCPeerConnectionIceErrorEventInit extends EventInit {
+    address?: string | null;
     errorCode: number;
-    hostCandidate?: string;
-    statusText?: string;
+    errorText?: string;
+    port?: number | null;
     url?: string;
 }
 
@@ -1383,23 +1424,10 @@ interface RTCPeerConnectionIceEventInit extends EventInit {
     url?: string | null;
 }
 
-interface RTCRTPStreamStats extends RTCStats {
-    associateStatsId?: string;
-    codecId?: string;
-    firCount?: number;
-    isRemote?: boolean;
-    mediaTrackId?: string;
-    mediaType?: string;
-    nackCount?: number;
-    pliCount?: number;
-    sliCount?: number;
-    ssrc?: string;
-    transportId?: string;
-}
-
-interface RTCRtcpFeedback {
-    parameter?: string;
-    type?: string;
+interface RTCReceivedRtpStreamStats extends RTCRtpStreamStats {
+    jitter?: number;
+    packetsLost?: number;
+    packetsReceived?: number;
 }
 
 interface RTCRtcpParameters {
@@ -1435,32 +1463,16 @@ interface RTCRtpContributingSource {
     audioLevel?: number;
     rtpTimestamp: number;
     source: number;
-    timestamp: number;
-}
-
-interface RTCRtpDecodingParameters extends RTCRtpCodingParameters {
+    timestamp: DOMHighResTimeStamp;
 }
 
 interface RTCRtpEncodingParameters extends RTCRtpCodingParameters {
     active?: boolean;
-    codecPayloadType?: number;
-    dtx?: RTCDtxStatus;
     maxBitrate?: number;
     maxFramerate?: number;
-    ptime?: number;
+    networkPriority?: RTCPriorityType;
+    priority?: RTCPriorityType;
     scaleResolutionDownBy?: number;
-}
-
-interface RTCRtpFecParameters {
-    mechanism?: string;
-    ssrc?: number;
-}
-
-interface RTCRtpHeaderExtension {
-    kind?: string;
-    preferredEncrypt?: boolean;
-    preferredId?: number;
-    uri?: string;
 }
 
 interface RTCRtpHeaderExtensionCapability {
@@ -1480,22 +1492,22 @@ interface RTCRtpParameters {
 }
 
 interface RTCRtpReceiveParameters extends RTCRtpParameters {
-    encodings: RTCRtpDecodingParameters[];
-}
-
-interface RTCRtpRtxParameters {
-    ssrc?: number;
 }
 
 interface RTCRtpSendParameters extends RTCRtpParameters {
     degradationPreference?: RTCDegradationPreference;
     encodings: RTCRtpEncodingParameters[];
-    priority?: RTCPriorityType;
     transactionId: string;
 }
 
+interface RTCRtpStreamStats extends RTCStats {
+    codecId?: string;
+    kind: string;
+    ssrc: number;
+    transportId?: string;
+}
+
 interface RTCRtpSynchronizationSource extends RTCRtpContributingSource {
-    voiceActivityFlag?: boolean;
 }
 
 interface RTCRtpTransceiverInit {
@@ -1504,48 +1516,20 @@ interface RTCRtpTransceiverInit {
     streams?: MediaStream[];
 }
 
-interface RTCRtpUnhandled {
-    muxId?: string;
-    payloadType?: number;
-    ssrc?: number;
+interface RTCSentRtpStreamStats extends RTCRtpStreamStats {
+    bytesSent?: number;
+    packetsSent?: number;
 }
 
 interface RTCSessionDescriptionInit {
     sdp?: string;
-    type?: RTCSdpType;
-}
-
-interface RTCSrtpKeyParam {
-    keyMethod?: string;
-    keySalt?: string;
-    lifetime?: string;
-    mkiLength?: number;
-    mkiValue?: number;
-}
-
-interface RTCSrtpSdesParameters {
-    cryptoSuite?: string;
-    keyParams?: RTCSrtpKeyParam[];
-    sessionParams?: string[];
-    tag?: number;
-}
-
-interface RTCSsrcRange {
-    max?: number;
-    min?: number;
+    type: RTCSdpType;
 }
 
 interface RTCStats {
-    id?: string;
-    timestamp?: number;
-    type?: RTCStatsType;
-}
-
-interface RTCStatsEventInit extends EventInit {
-    report: RTCStatsReport;
-}
-
-interface RTCStatsReport {
+    id: string;
+    timestamp: DOMHighResTimeStamp;
+    type: RTCStatsType;
 }
 
 interface RTCTrackEventInit extends EventInit {
@@ -1559,26 +1543,29 @@ interface RTCTransportStats extends RTCStats {
     bytesReceived?: number;
     bytesSent?: number;
     dtlsCipher?: string;
-    dtlsState?: RTCDtlsTransportState;
-    iceRole?: RTCIceRole;
+    dtlsState: RTCDtlsTransportState;
     localCertificateId?: string;
-    packetsReceived?: number;
-    packetsSent?: number;
     remoteCertificateId?: string;
-    rtcpTransportStatsId?: string;
-    selectedCandidatePairChanges?: number;
     selectedCandidatePairId?: string;
     srtpCipher?: string;
-    tlsGroup?: string;
     tlsVersion?: string;
 }
 
-interface ReadableStreamDefaultReadDoneResult {
-    done: true;
-    value?: undefined;
+interface ReadableStreamGetReaderOptions {
+    /**
+     * Creates a ReadableStreamBYOBReader and locks the stream to the new reader.
+     *
+     * This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
+     */
+    mode?: ReadableStreamReaderMode;
 }
 
-interface ReadableStreamDefaultReadValueResult<T> {
+interface ReadableStreamReadDoneResult<T> {
+    done: true;
+    value?: T;
+}
+
+interface ReadableStreamReadValueResult<T> {
     done: false;
     value: T;
 }
@@ -1587,7 +1574,7 @@ interface ReadableWritablePair<R = any, W = any> {
     readable: ReadableStream<R>;
     /**
      * Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other { writable, readable } pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
-     * 
+     *
      * Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
      */
     writable: WritableStream<W>;
@@ -1600,58 +1587,32 @@ interface RegistrationOptions {
 }
 
 interface RequestInit {
-    /**
-     * A BodyInit object or null to set request's body.
-     */
+    /** A BodyInit object or null to set request's body. */
     body?: BodyInit | null;
-    /**
-     * A string indicating how the request will interact with the browser's cache to set request's cache.
-     */
+    /** A string indicating how the request will interact with the browser's cache to set request's cache. */
     cache?: RequestCache;
-    /**
-     * A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials.
-     */
+    /** A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials. */
     credentials?: RequestCredentials;
-    /**
-     * A Headers object, an object literal, or an array of two-item arrays to set request's headers.
-     */
+    /** A Headers object, an object literal, or an array of two-item arrays to set request's headers. */
     headers?: HeadersInit;
-    /**
-     * A cryptographic hash of the resource to be fetched by request. Sets request's integrity.
-     */
+    /** A cryptographic hash of the resource to be fetched by request. Sets request's integrity. */
     integrity?: string;
-    /**
-     * A boolean to set request's keepalive.
-     */
+    /** A boolean to set request's keepalive. */
     keepalive?: boolean;
-    /**
-     * A string to set request's method.
-     */
+    /** A string to set request's method. */
     method?: string;
-    /**
-     * A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode.
-     */
+    /** A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode. */
     mode?: RequestMode;
-    /**
-     * A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect.
-     */
+    /** A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect. */
     redirect?: RequestRedirect;
-    /**
-     * A string whose value is a same-origin URL, "about:client", or the empty string, to set request's referrer.
-     */
+    /** A string whose value is a same-origin URL, "about:client", or the empty string, to set request's referrer. */
     referrer?: string;
-    /**
-     * A referrer policy to set request's referrerPolicy.
-     */
+    /** A referrer policy to set request's referrerPolicy. */
     referrerPolicy?: ReferrerPolicy;
-    /**
-     * An AbortSignal to set request's signal.
-     */
+    /** An AbortSignal to set request's signal. */
     signal?: AbortSignal | null;
-    /**
-     * Can only be null. Used to disassociate request from any Window.
-     */
-    window?: any;
+    /** Can only be null. Used to disassociate request from any Window. */
+    window?: null;
 }
 
 interface ResizeObserverOptions {
@@ -1687,7 +1648,7 @@ interface RsaKeyGenParams extends Algorithm {
 }
 
 interface RsaOaepParams extends Algorithm {
-    label?: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    label?: BufferSource;
 }
 
 interface RsaOtherPrimesInfo {
@@ -1707,24 +1668,6 @@ interface SVGBoundingBoxOptions {
     stroke?: boolean;
 }
 
-interface ScopedCredentialDescriptor {
-    id: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null;
-    transports?: Transport[];
-    type: ScopedCredentialType;
-}
-
-interface ScopedCredentialOptions {
-    excludeList?: ScopedCredentialDescriptor[];
-    extensions?: WebAuthnExtensions;
-    rpId?: string;
-    timeoutSeconds?: number;
-}
-
-interface ScopedCredentialParameters {
-    algorithm: string | Algorithm;
-    type: ScopedCredentialType;
-}
-
 interface ScrollIntoViewOptions extends ScrollOptions {
     block?: ScrollLogicalPosition;
     inline?: ScrollLogicalPosition;
@@ -1742,43 +1685,29 @@ interface ScrollToOptions extends ScrollOptions {
 interface SecurityPolicyViolationEventInit extends EventInit {
     blockedURI?: string;
     columnNumber?: number;
-    documentURI?: string;
-    effectiveDirective?: string;
+    disposition: SecurityPolicyViolationEventDisposition;
+    documentURI: string;
+    effectiveDirective: string;
     lineNumber?: number;
-    originalPolicy?: string;
+    originalPolicy: string;
     referrer?: string;
+    sample?: string;
     sourceFile?: string;
-    statusCode?: number;
-    violatedDirective?: string;
-}
-
-interface ServiceWorkerMessageEventInit extends EventInit {
-    data?: any;
-    lastEventId?: string;
-    origin?: string;
-    ports?: MessagePort[] | null;
-    source?: ServiceWorker | MessagePort | null;
+    statusCode: number;
+    violatedDirective: string;
 }
 
 interface ShadowRootInit {
     delegatesFocus?: boolean;
     mode: ShadowRootMode;
+    slotAssignment?: SlotAssignmentMode;
 }
 
 interface ShareData {
+    files?: File[];
     text?: string;
     title?: string;
     url?: string;
-}
-
-interface SpeechRecognitionErrorEventInit extends EventInit {
-    error: SpeechRecognitionErrorCode;
-    message?: string;
-}
-
-interface SpeechRecognitionEventInit extends EventInit {
-    resultIndex?: number;
-    results: SpeechRecognitionResultList;
 }
 
 interface SpeechSynthesisErrorEventInit extends SpeechSynthesisEventInit {
@@ -1817,38 +1746,36 @@ interface StorageEventInit extends EventInit {
     url?: string;
 }
 
-interface StoreExceptionsInformation extends ExceptionInformation {
-    detailURI?: string | null;
-    explanationString?: string | null;
-    siteName?: string | null;
-}
-
-interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformation {
-    arrayOfDomainStrings?: string[];
-}
-
 interface StreamPipeOptions {
     preventAbort?: boolean;
     preventCancel?: boolean;
     /**
      * Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
-     * 
+     *
      * Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
-     * 
+     *
      * Errors and closures of the source and destination streams propagate as follows:
-     * 
+     *
      * An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination.
-     * 
+     *
      * An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source.
-     * 
+     *
      * When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error.
-     * 
+     *
      * If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source.
-     * 
+     *
      * The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
      */
     preventClose?: boolean;
     signal?: AbortSignal;
+}
+
+interface StructuredSerializeOptions {
+    transfer?: Transferable[];
+}
+
+interface SubmitEventInit extends EventInit {
+    submitter?: HTMLElement | null;
 }
 
 interface TextDecodeOptions {
@@ -1910,11 +1837,28 @@ interface TransitionEventInit extends EventInit {
 interface UIEventInit extends EventInit {
     detail?: number;
     view?: Window | null;
+    /** @deprecated */
+    which?: number;
 }
 
 interface ULongRange {
     max?: number;
     min?: number;
+}
+
+interface UnderlyingByteSource {
+    autoAllocateChunkSize?: number;
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: (controller: ReadableByteStreamController) => void | PromiseLike<void>;
+    start?: (controller: ReadableByteStreamController) => any;
+    type: "bytes";
+}
+
+interface UnderlyingDefaultSource<R = any> {
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: (controller: ReadableStreamDefaultController<R>) => void | PromiseLike<void>;
+    start?: (controller: ReadableStreamDefaultController<R>) => any;
+    type?: undefined;
 }
 
 interface UnderlyingSink<W = any> {
@@ -1926,35 +1870,61 @@ interface UnderlyingSink<W = any> {
 }
 
 interface UnderlyingSource<R = any> {
+    autoAllocateChunkSize?: number;
     cancel?: UnderlyingSourceCancelCallback;
     pull?: UnderlyingSourcePullCallback<R>;
     start?: UnderlyingSourceStartCallback<R>;
-    type?: undefined;
+    type?: ReadableStreamType;
 }
 
-interface VRDisplayEventInit extends EventInit {
-    display: VRDisplay;
-    reason?: VRDisplayEventReason;
+interface ValidityStateFlags {
+    badInput?: boolean;
+    customError?: boolean;
+    patternMismatch?: boolean;
+    rangeOverflow?: boolean;
+    rangeUnderflow?: boolean;
+    stepMismatch?: boolean;
+    tooLong?: boolean;
+    tooShort?: boolean;
+    typeMismatch?: boolean;
+    valueMissing?: boolean;
 }
 
-interface VRLayer {
-    leftBounds?: number[] | Float32Array | null;
-    rightBounds?: number[] | Float32Array | null;
-    source?: HTMLCanvasElement | null;
+interface VideoColorSpaceInit {
+    fullRange?: boolean | null;
+    matrix?: VideoMatrixCoefficients | null;
+    primaries?: VideoColorPrimaries | null;
+    transfer?: VideoTransferCharacteristics | null;
 }
 
-interface VRStageParameters {
-    sittingToStandingTransform?: Float32Array;
-    sizeX?: number;
-    sizeY?: number;
+interface VideoConfiguration {
+    bitrate: number;
+    colorGamut?: ColorGamut;
+    contentType: string;
+    framerate: number;
+    hdrMetadataType?: HdrMetadataType;
+    height: number;
+    scalabilityMode?: string;
+    transferFunction?: TransferFunction;
+    width: number;
+}
+
+interface VideoFrameCallbackMetadata {
+    captureTime?: DOMHighResTimeStamp;
+    expectedDisplayTime: DOMHighResTimeStamp;
+    height: number;
+    mediaTime: number;
+    presentationTime: DOMHighResTimeStamp;
+    presentedFrames: number;
+    processingDuration?: number;
+    receiveTime?: DOMHighResTimeStamp;
+    rtpTimestamp?: number;
+    width: number;
 }
 
 interface WaveShaperOptions extends AudioNodeOptions {
     curve?: number[] | Float32Array;
     oversample?: OverSampleType;
-}
-
-interface WebAuthnExtensions {
 }
 
 interface WebGLContextAttributes {
@@ -1980,6 +1950,10 @@ interface WheelEventInit extends MouseEventInit {
     deltaZ?: number;
 }
 
+interface WindowPostMessageOptions extends StructuredSerializeOptions {
+    targetOrigin?: string;
+}
+
 interface WorkerOptions {
     credentials?: RequestCredentials;
     name?: string;
@@ -1990,9 +1964,26 @@ interface WorkletOptions {
     credentials?: RequestCredentials;
 }
 
-interface EventListener {
-    (evt: Event): void;
-}
+type NodeFilter = ((node: Node) => number) | { acceptNode(node: Node): number; };
+
+declare var NodeFilter: {
+    readonly FILTER_ACCEPT: number;
+    readonly FILTER_REJECT: number;
+    readonly FILTER_SKIP: number;
+    readonly SHOW_ALL: number;
+    readonly SHOW_ATTRIBUTE: number;
+    readonly SHOW_CDATA_SECTION: number;
+    readonly SHOW_COMMENT: number;
+    readonly SHOW_DOCUMENT: number;
+    readonly SHOW_DOCUMENT_FRAGMENT: number;
+    readonly SHOW_DOCUMENT_TYPE: number;
+    readonly SHOW_ELEMENT: number;
+    readonly SHOW_ENTITY: number;
+    readonly SHOW_ENTITY_REFERENCE: number;
+    readonly SHOW_NOTATION: number;
+    readonly SHOW_PROCESSING_INSTRUCTION: number;
+    readonly SHOW_TEXT: number;
+};
 
 type XPathNSResolver = ((prefix: string | null) => string | null) | { lookupNamespaceURI(prefix: string | null): string | null; };
 
@@ -2004,16 +1995,55 @@ interface ANGLE_instanced_arrays {
     readonly VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: GLenum;
 }
 
+interface ARIAMixin {
+    ariaAtomic: string | null;
+    ariaAutoComplete: string | null;
+    ariaBusy: string | null;
+    ariaChecked: string | null;
+    ariaColCount: string | null;
+    ariaColIndex: string | null;
+    ariaColIndexText: string | null;
+    ariaColSpan: string | null;
+    ariaCurrent: string | null;
+    ariaDisabled: string | null;
+    ariaExpanded: string | null;
+    ariaHasPopup: string | null;
+    ariaHidden: string | null;
+    ariaInvalid: string | null;
+    ariaKeyShortcuts: string | null;
+    ariaLabel: string | null;
+    ariaLevel: string | null;
+    ariaLive: string | null;
+    ariaModal: string | null;
+    ariaMultiLine: string | null;
+    ariaMultiSelectable: string | null;
+    ariaOrientation: string | null;
+    ariaPlaceholder: string | null;
+    ariaPosInSet: string | null;
+    ariaPressed: string | null;
+    ariaReadOnly: string | null;
+    ariaRequired: string | null;
+    ariaRoleDescription: string | null;
+    ariaRowCount: string | null;
+    ariaRowIndex: string | null;
+    ariaRowIndexText: string | null;
+    ariaRowSpan: string | null;
+    ariaSelected: string | null;
+    ariaSetSize: string | null;
+    ariaSort: string | null;
+    ariaValueMax: string | null;
+    ariaValueMin: string | null;
+    ariaValueNow: string | null;
+    ariaValueText: string | null;
+    role: string | null;
+}
+
 /** A controller object that allows you to abort one or more DOM requests as and when desired. */
 interface AbortController {
-    /**
-     * Returns the AbortSignal object associated with this object.
-     */
+    /** Returns the AbortSignal object associated with this object. */
     readonly signal: AbortSignal;
-    /**
-     * Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted.
-     */
-    abort(): void;
+    /** Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted. */
+    abort(reason?: any): void;
 }
 
 declare var AbortController: {
@@ -2027,11 +2057,11 @@ interface AbortSignalEventMap {
 
 /** A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object. */
 interface AbortSignal extends EventTarget {
-    /**
-     * Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise.
-     */
+    /** Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise. */
     readonly aborted: boolean;
     onabort: ((this: AbortSignal, ev: Event) => any) | null;
+    readonly reason: any;
+    throwIfAborted(): void;
     addEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -2041,28 +2071,20 @@ interface AbortSignal extends EventTarget {
 declare var AbortSignal: {
     prototype: AbortSignal;
     new(): AbortSignal;
+    abort(reason?: any): AbortSignal;
+    timeout(milliseconds: number): AbortSignal;
 };
 
 interface AbstractRange {
-    /**
-     * Returns true if range is collapsed, and false otherwise.
-     */
+    /** Returns true if range is collapsed, and false otherwise. */
     readonly collapsed: boolean;
-    /**
-     * Returns range's end node.
-     */
+    /** Returns range's end node. */
     readonly endContainer: Node;
-    /**
-     * Returns range's end offset.
-     */
+    /** Returns range's end offset. */
     readonly endOffset: number;
-    /**
-     * Returns range's start node.
-     */
+    /** Returns range's start node. */
     readonly startContainer: Node;
-    /**
-     * Returns range's start offset.
-     */
+    /** Returns range's start offset. */
     readonly startOffset: number;
 }
 
@@ -2081,14 +2103,6 @@ interface AbstractWorker {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: AbstractWorker, ev: AbstractWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-interface AesCfbParams extends Algorithm {
-    iv: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
-}
-
-interface AesCmacParams extends Algorithm {
-    length: number;
 }
 
 /** A node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations. */
@@ -2111,30 +2125,35 @@ declare var AnalyserNode: {
 
 interface Animatable {
     animate(keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeAnimationOptions): Animation;
-    getAnimations(): Animation[];
+    getAnimations(options?: GetAnimationsOptions): Animation[];
 }
 
 interface AnimationEventMap {
     "cancel": AnimationPlaybackEvent;
     "finish": AnimationPlaybackEvent;
+    "remove": Event;
 }
 
 interface Animation extends EventTarget {
-    currentTime: number | null;
+    currentTime: CSSNumberish | null;
     effect: AnimationEffect | null;
     readonly finished: Promise<Animation>;
     id: string;
     oncancel: ((this: Animation, ev: AnimationPlaybackEvent) => any) | null;
     onfinish: ((this: Animation, ev: AnimationPlaybackEvent) => any) | null;
+    onremove: ((this: Animation, ev: Event) => any) | null;
     readonly pending: boolean;
     readonly playState: AnimationPlayState;
     playbackRate: number;
     readonly ready: Promise<Animation>;
-    startTime: number | null;
+    readonly replaceState: AnimationReplaceState;
+    startTime: CSSNumberish | null;
     timeline: AnimationTimeline | null;
     cancel(): void;
+    commitStyles(): void;
     finish(): void;
     pause(): void;
+    persist(): void;
     play(): void;
     reverse(): void;
     updatePlaybackRate(playbackRate: number): void;
@@ -2178,8 +2197,8 @@ interface AnimationFrameProvider {
 }
 
 interface AnimationPlaybackEvent extends Event {
-    readonly currentTime: number | null;
-    readonly timelineTime: number | null;
+    readonly currentTime: CSSNumberish | null;
+    readonly timelineTime: CSSNumberish | null;
 }
 
 declare var AnimationPlaybackEvent: {
@@ -2188,71 +2207,12 @@ declare var AnimationPlaybackEvent: {
 };
 
 interface AnimationTimeline {
-    readonly currentTime: number | null;
+    readonly currentTime: CSSNumberish | null;
 }
 
 declare var AnimationTimeline: {
     prototype: AnimationTimeline;
     new(): AnimationTimeline;
-};
-
-interface ApplicationCacheEventMap {
-    "cached": Event;
-    "checking": Event;
-    "downloading": Event;
-    "error": Event;
-    "noupdate": Event;
-    "obsolete": Event;
-    "progress": ProgressEvent<ApplicationCache>;
-    "updateready": Event;
-}
-
-interface ApplicationCache extends EventTarget {
-    /** @deprecated */
-    oncached: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    onchecking: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    ondownloading: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    onerror: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    onnoupdate: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    onobsolete: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    onprogress: ((this: ApplicationCache, ev: ProgressEvent<ApplicationCache>) => any) | null;
-    /** @deprecated */
-    onupdateready: ((this: ApplicationCache, ev: Event) => any) | null;
-    /** @deprecated */
-    readonly status: number;
-    /** @deprecated */
-    abort(): void;
-    /** @deprecated */
-    swapCache(): void;
-    /** @deprecated */
-    update(): void;
-    readonly CHECKING: number;
-    readonly DOWNLOADING: number;
-    readonly IDLE: number;
-    readonly OBSOLETE: number;
-    readonly UNCACHED: number;
-    readonly UPDATEREADY: number;
-    addEventListener<K extends keyof ApplicationCacheEventMap>(type: K, listener: (this: ApplicationCache, ev: ApplicationCacheEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof ApplicationCacheEventMap>(type: K, listener: (this: ApplicationCache, ev: ApplicationCacheEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var ApplicationCache: {
-    prototype: ApplicationCache;
-    new(): ApplicationCache;
-    readonly CHECKING: number;
-    readonly DOWNLOADING: number;
-    readonly IDLE: number;
-    readonly OBSOLETE: number;
-    readonly UNCACHED: number;
-    readonly UPDATEREADY: number;
 };
 
 /** A DOM element's attribute as an object. In most DOM methods, you will probably directly retrieve the attribute as a string (e.g., Element.getAttribute(), but certain functions (e.g., Element.getAttributeNode()) or means of iterating give Attr types. */
@@ -2263,6 +2223,7 @@ interface Attr extends Node {
     readonly ownerDocument: Document;
     readonly ownerElement: Element | null;
     readonly prefix: string | null;
+    /** @deprecated */
     readonly specified: boolean;
     value: string;
 }
@@ -2316,7 +2277,6 @@ interface AudioContext extends BaseAudioContext {
     createMediaElementSource(mediaElement: HTMLMediaElement): MediaElementAudioSourceNode;
     createMediaStreamDestination(): MediaStreamAudioDestinationNode;
     createMediaStreamSource(mediaStream: MediaStream): MediaStreamAudioSourceNode;
-    createMediaStreamTrackSource(mediaStreamTrack: MediaStreamTrack): MediaStreamTrackAudioSourceNode;
     getOutputTimestamp(): AudioTimestamp;
     resume(): Promise<void>;
     suspend(): Promise<void>;
@@ -2417,15 +2377,20 @@ declare var AudioParamMap: {
     new(): AudioParamMap;
 };
 
-/** The Web Audio API events that occur when a ScriptProcessorNode input buffer is ready to be processed.
+/**
+ * The Web Audio API events that occur when a ScriptProcessorNode input buffer is ready to be processed.
  * @deprecated As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and is soon to be replaced by AudioWorklet.
  */
 interface AudioProcessingEvent extends Event {
+    /** @deprecated */
     readonly inputBuffer: AudioBuffer;
+    /** @deprecated */
     readonly outputBuffer: AudioBuffer;
+    /** @deprecated */
     readonly playbackTime: number;
 }
 
+/** @deprecated */
 declare var AudioProcessingEvent: {
     prototype: AudioProcessingEvent;
     new(type: string, eventInitDict: AudioProcessingEventInit): AudioProcessingEvent;
@@ -2450,6 +2415,7 @@ declare var AudioScheduledSourceNode: {
     new(): AudioScheduledSourceNode;
 };
 
+/** Available only in secure contexts. */
 interface AudioWorklet extends Worklet {
 }
 
@@ -2462,6 +2428,7 @@ interface AudioWorkletNodeEventMap {
     "processorerror": Event;
 }
 
+/** Available only in secure contexts. */
 interface AudioWorkletNode extends AudioNode {
     onprocessorerror: ((this: AudioWorkletNode, ev: Event) => any) | null;
     readonly parameters: AudioParamMap;
@@ -2477,6 +2444,7 @@ declare var AudioWorkletNode: {
     new(context: BaseAudioContext, name: string, options?: AudioWorkletNodeOptions): AudioWorkletNode;
 };
 
+/** Available only in secure contexts. */
 interface AuthenticatorAssertionResponse extends AuthenticatorResponse {
     readonly authenticatorData: ArrayBuffer;
     readonly signature: ArrayBuffer;
@@ -2488,8 +2456,13 @@ declare var AuthenticatorAssertionResponse: {
     new(): AuthenticatorAssertionResponse;
 };
 
+/** Available only in secure contexts. */
 interface AuthenticatorAttestationResponse extends AuthenticatorResponse {
     readonly attestationObject: ArrayBuffer;
+    getAuthenticatorData(): ArrayBuffer;
+    getPublicKey(): ArrayBuffer | null;
+    getPublicKeyAlgorithm(): COSEAlgorithmIdentifier;
+    getTransports(): string[];
 }
 
 declare var AuthenticatorAttestationResponse: {
@@ -2497,6 +2470,7 @@ declare var AuthenticatorAttestationResponse: {
     new(): AuthenticatorAttestationResponse;
 };
 
+/** Available only in secure contexts. */
 interface AuthenticatorResponse {
     readonly clientDataJSON: ArrayBuffer;
 }
@@ -2520,6 +2494,7 @@ interface BaseAudioContextEventMap {
 }
 
 interface BaseAudioContext extends EventTarget {
+    /** Available only in secure contexts. */
     readonly audioWorklet: AudioWorklet;
     readonly currentTime: number;
     readonly destination: AudioDestinationNode;
@@ -2542,6 +2517,7 @@ interface BaseAudioContext extends EventTarget {
     createOscillator(): OscillatorNode;
     createPanner(): PannerNode;
     createPeriodicWave(real: number[] | Float32Array, imag: number[] | Float32Array, constraints?: PeriodicWaveConstraints): PeriodicWave;
+    /** @deprecated */
     createScriptProcessor(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): ScriptProcessorNode;
     createStereoPanner(): StereoPannerNode;
     createWaveShaper(): WaveShaperNode;
@@ -2567,28 +2543,6 @@ declare var BeforeUnloadEvent: {
     new(): BeforeUnloadEvent;
 };
 
-interface BhxBrowser {
-    readonly lastError: DOMException;
-    checkMatchesGlobExpression(pattern: string, value: string): boolean;
-    checkMatchesUriExpression(pattern: string, value: string): boolean;
-    clearLastError(): void;
-    currentWindowId(): number;
-    fireExtensionApiTelemetry(functionName: string, isSucceeded: boolean, isSupported: boolean, errorString: string): void;
-    genericFunction(functionId: number, destination: any, parameters?: string, callbackId?: number): void;
-    genericSynchronousFunction(functionId: number, parameters?: string): string;
-    getExtensionId(): string;
-    getThisAddress(): any;
-    registerGenericFunctionCallbackHandler(callbackHandler: Function): void;
-    registerGenericListenerHandler(eventHandler: Function): void;
-    setLastError(parameters: string): void;
-    webPlatformGenericFunction(destination: any, parameters?: string, callbackId?: number): void;
-}
-
-declare var BhxBrowser: {
-    prototype: BhxBrowser;
-    new(): BhxBrowser;
-};
-
 /** A simple low-order filter, and is created using the AudioContext.createBiquadFilter() method. It is an AudioNode that can represent different kinds of filters, tone control devices, and graphic equalizers. */
 interface BiquadFilterNode extends AudioNode {
     readonly Q: AudioParam;
@@ -2610,13 +2564,23 @@ interface Blob {
     readonly type: string;
     arrayBuffer(): Promise<ArrayBuffer>;
     slice(start?: number, end?: number, contentType?: string): Blob;
-    stream(): ReadableStream;
+    stream(): ReadableStream<Uint8Array>;
     text(): Promise<string>;
 }
 
 declare var Blob: {
     prototype: Blob;
     new(blobParts?: BlobPart[], options?: BlobPropertyBag): Blob;
+};
+
+interface BlobEvent extends Event {
+    readonly data: Blob;
+    readonly timecode: DOMHighResTimeStamp;
+}
+
+declare var BlobEvent: {
+    prototype: BlobEvent;
+    new(type: string, eventInitDict: BlobEventInit): BlobEvent;
 };
 
 interface Body {
@@ -2635,19 +2599,13 @@ interface BroadcastChannelEventMap {
 }
 
 interface BroadcastChannel extends EventTarget {
-    /**
-     * Returns the channel name (as passed to the constructor).
-     */
+    /** Returns the channel name (as passed to the constructor). */
     readonly name: string;
     onmessage: ((this: BroadcastChannel, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: BroadcastChannel, ev: MessageEvent) => any) | null;
-    /**
-     * Closes the BroadcastChannel object, opening it up to garbage collection.
-     */
+    /** Closes the BroadcastChannel object, opening it up to garbage collection. */
     close(): void;
-    /**
-     * Sends the given message to other BroadcastChannel objects set up for this channel. Messages can be structured objects, e.g. nested objects and arrays.
-     */
+    /** Sends the given message to other BroadcastChannel objects set up for this channel. Messages can be structured objects, e.g. nested objects and arrays. */
     postMessage(message: any): void;
     addEventListener<K extends keyof BroadcastChannelEventMap>(type: K, listener: (this: BroadcastChannel, ev: BroadcastChannelEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -2680,14 +2638,54 @@ declare var CDATASection: {
     new(): CDATASection;
 };
 
+interface CSSAnimation extends Animation {
+    readonly animationName: string;
+    addEventListener<K extends keyof AnimationEventMap>(type: K, listener: (this: CSSAnimation, ev: AnimationEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AnimationEventMap>(type: K, listener: (this: CSSAnimation, ev: AnimationEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var CSSAnimation: {
+    prototype: CSSAnimation;
+    new(): CSSAnimation;
+};
+
 /** A single condition CSS at-rule, which consists of a condition and a statement block. It is a child of CSSGroupingRule. */
 interface CSSConditionRule extends CSSGroupingRule {
-    conditionText: string;
+    readonly conditionText: string;
 }
 
 declare var CSSConditionRule: {
     prototype: CSSConditionRule;
     new(): CSSConditionRule;
+};
+
+interface CSSContainerRule extends CSSConditionRule {
+}
+
+declare var CSSContainerRule: {
+    prototype: CSSContainerRule;
+    new(): CSSContainerRule;
+};
+
+interface CSSCounterStyleRule extends CSSRule {
+    additiveSymbols: string;
+    fallback: string;
+    name: string;
+    negative: string;
+    pad: string;
+    prefix: string;
+    range: string;
+    speakAs: string;
+    suffix: string;
+    symbols: string;
+    system: string;
+}
+
+declare var CSSCounterStyleRule: {
+    prototype: CSSCounterStyleRule;
+    new(): CSSCounterStyleRule;
 };
 
 interface CSSFontFaceRule extends CSSRule {
@@ -2697,6 +2695,18 @@ interface CSSFontFaceRule extends CSSRule {
 declare var CSSFontFaceRule: {
     prototype: CSSFontFaceRule;
     new(): CSSFontFaceRule;
+};
+
+interface CSSFontPaletteValuesRule extends CSSRule {
+    readonly basePalette: string;
+    readonly fontFamily: string;
+    readonly name: string;
+    readonly overrideColors: string;
+}
+
+declare var CSSFontPaletteValuesRule: {
+    prototype: CSSFontPaletteValuesRule;
+    new(): CSSFontPaletteValuesRule;
 };
 
 /** Any CSS at-rule that contains other rules nested within it. */
@@ -2713,6 +2723,7 @@ declare var CSSGroupingRule: {
 
 interface CSSImportRule extends CSSRule {
     readonly href: string;
+    readonly layerName: string | null;
     readonly media: MediaList;
     readonly styleSheet: CSSStyleSheet;
 }
@@ -2745,6 +2756,24 @@ interface CSSKeyframesRule extends CSSRule {
 declare var CSSKeyframesRule: {
     prototype: CSSKeyframesRule;
     new(): CSSKeyframesRule;
+};
+
+interface CSSLayerBlockRule extends CSSGroupingRule {
+    readonly name: string;
+}
+
+declare var CSSLayerBlockRule: {
+    prototype: CSSLayerBlockRule;
+    new(): CSSLayerBlockRule;
+};
+
+interface CSSLayerStatementRule extends CSSRule {
+    readonly nameList: ReadonlyArray<string>;
+}
+
+declare var CSSLayerStatementRule: {
+    prototype: CSSLayerStatementRule;
+    new(): CSSLayerStatementRule;
 };
 
 /** A single CSS @media rule. It implements the CSSConditionRule interface, and therefore the CSSGroupingRule and the CSSRule interface with a type value of 4 (CSSRule.MEDIA_RULE). */
@@ -2784,6 +2813,7 @@ interface CSSRule {
     cssText: string;
     readonly parentRule: CSSRule | null;
     readonly parentStyleSheet: CSSStyleSheet | null;
+    /** @deprecated */
     readonly type: number;
     readonly CHARSET_RULE: number;
     readonly FONT_FACE_RULE: number;
@@ -2826,6 +2856,7 @@ declare var CSSRuleList: {
 
 /** An object that is a CSS declaration block, and exposes style information and various style-related methods and properties. */
 interface CSSStyleDeclaration {
+    accentColor: string;
     alignContent: string;
     alignItems: string;
     alignSelf: string;
@@ -2840,9 +2871,13 @@ interface CSSStyleDeclaration {
     animationName: string;
     animationPlayState: string;
     animationTimingFunction: string;
+    appearance: string;
+    aspectRatio: string;
+    backdropFilter: string;
     backfaceVisibility: string;
     background: string;
     backgroundAttachment: string;
+    backgroundBlendMode: string;
     backgroundClip: string;
     backgroundColor: string;
     backgroundImage: string;
@@ -2855,6 +2890,8 @@ interface CSSStyleDeclaration {
     baselineShift: string;
     blockSize: string;
     border: string;
+    borderBlock: string;
+    borderBlockColor: string;
     borderBlockEnd: string;
     borderBlockEndColor: string;
     borderBlockEndStyle: string;
@@ -2863,6 +2900,8 @@ interface CSSStyleDeclaration {
     borderBlockStartColor: string;
     borderBlockStartStyle: string;
     borderBlockStartWidth: string;
+    borderBlockStyle: string;
+    borderBlockWidth: string;
     borderBottom: string;
     borderBottomColor: string;
     borderBottomLeftRadius: string;
@@ -2871,12 +2910,16 @@ interface CSSStyleDeclaration {
     borderBottomWidth: string;
     borderCollapse: string;
     borderColor: string;
+    borderEndEndRadius: string;
+    borderEndStartRadius: string;
     borderImage: string;
     borderImageOutset: string;
     borderImageRepeat: string;
     borderImageSlice: string;
     borderImageSource: string;
     borderImageWidth: string;
+    borderInline: string;
+    borderInlineColor: string;
     borderInlineEnd: string;
     borderInlineEndColor: string;
     borderInlineEndStyle: string;
@@ -2885,6 +2928,8 @@ interface CSSStyleDeclaration {
     borderInlineStartColor: string;
     borderInlineStartStyle: string;
     borderInlineStartWidth: string;
+    borderInlineStyle: string;
+    borderInlineWidth: string;
     borderLeft: string;
     borderLeftColor: string;
     borderLeftStyle: string;
@@ -2895,6 +2940,8 @@ interface CSSStyleDeclaration {
     borderRightStyle: string;
     borderRightWidth: string;
     borderSpacing: string;
+    borderStartEndRadius: string;
+    borderStartStartRadius: string;
     borderStyle: string;
     borderTop: string;
     borderTopColor: string;
@@ -2912,12 +2959,14 @@ interface CSSStyleDeclaration {
     captionSide: string;
     caretColor: string;
     clear: string;
+    /** @deprecated */
     clip: string;
     clipPath: string;
     clipRule: string;
     color: string;
     colorInterpolation: string;
     colorInterpolationFilters: string;
+    colorScheme: string;
     columnCount: string;
     columnFill: string;
     columnGap: string;
@@ -2928,9 +2977,14 @@ interface CSSStyleDeclaration {
     columnSpan: string;
     columnWidth: string;
     columns: string;
+    contain: string;
+    container: string;
+    containerName: string;
+    containerType: string;
     content: string;
     counterIncrement: string;
     counterReset: string;
+    counterSet: string;
     cssFloat: string;
     cssText: string;
     cursor: string;
@@ -2956,20 +3010,23 @@ interface CSSStyleDeclaration {
     fontFamily: string;
     fontFeatureSettings: string;
     fontKerning: string;
+    fontOpticalSizing: string;
+    fontPalette: string;
     fontSize: string;
     fontSizeAdjust: string;
     fontStretch: string;
     fontStyle: string;
     fontSynthesis: string;
     fontVariant: string;
+    fontVariantAlternates: string;
     fontVariantCaps: string;
     fontVariantEastAsian: string;
     fontVariantLigatures: string;
     fontVariantNumeric: string;
     fontVariantPosition: string;
+    fontVariationSettings: string;
     fontWeight: string;
     gap: string;
-    glyphOrientationVertical: string;
     grid: string;
     gridArea: string;
     gridAutoColumns: string;
@@ -2977,11 +3034,14 @@ interface CSSStyleDeclaration {
     gridAutoRows: string;
     gridColumn: string;
     gridColumnEnd: string;
+    /** @deprecated This is a legacy alias of `columnGap`. */
     gridColumnGap: string;
     gridColumnStart: string;
+    /** @deprecated This is a legacy alias of `gap`. */
     gridGap: string;
     gridRow: string;
     gridRowEnd: string;
+    /** @deprecated This is a legacy alias of `rowGap`. */
     gridRowGap: string;
     gridRowStart: string;
     gridTemplate: string;
@@ -2989,10 +3049,20 @@ interface CSSStyleDeclaration {
     gridTemplateColumns: string;
     gridTemplateRows: string;
     height: string;
+    hyphenateCharacter: string;
     hyphens: string;
+    /** @deprecated */
     imageOrientation: string;
     imageRendering: string;
     inlineSize: string;
+    inset: string;
+    insetBlock: string;
+    insetBlockEnd: string;
+    insetBlockStart: string;
+    insetInline: string;
+    insetInlineEnd: string;
+    insetInlineStart: string;
+    isolation: string;
     justifyContent: string;
     justifyItems: string;
     justifySelf: string;
@@ -3007,9 +3077,11 @@ interface CSSStyleDeclaration {
     listStylePosition: string;
     listStyleType: string;
     margin: string;
+    marginBlock: string;
     marginBlockEnd: string;
     marginBlockStart: string;
     marginBottom: string;
+    marginInline: string;
     marginInlineEnd: string;
     marginInlineStart: string;
     marginLeft: string;
@@ -3020,8 +3092,11 @@ interface CSSStyleDeclaration {
     markerMid: string;
     markerStart: string;
     mask: string;
+    maskClip: string;
     maskComposite: string;
     maskImage: string;
+    maskMode: string;
+    maskOrigin: string;
     maskPosition: string;
     maskRepeat: string;
     maskSize: string;
@@ -3034,8 +3109,13 @@ interface CSSStyleDeclaration {
     minHeight: string;
     minInlineSize: string;
     minWidth: string;
+    mixBlendMode: string;
     objectFit: string;
     objectPosition: string;
+    offset: string;
+    offsetDistance: string;
+    offsetPath: string;
+    offsetRotate: string;
     opacity: string;
     order: string;
     orphans: string;
@@ -3046,6 +3126,7 @@ interface CSSStyleDeclaration {
     outlineWidth: string;
     overflow: string;
     overflowAnchor: string;
+    overflowClipMargin: string;
     overflowWrap: string;
     overflowX: string;
     overflowY: string;
@@ -3055,9 +3136,11 @@ interface CSSStyleDeclaration {
     overscrollBehaviorX: string;
     overscrollBehaviorY: string;
     padding: string;
+    paddingBlock: string;
     paddingBlockEnd: string;
     paddingBlockStart: string;
     paddingBottom: string;
+    paddingInline: string;
     paddingInlineEnd: string;
     paddingInlineStart: string;
     paddingLeft: string;
@@ -3075,15 +3158,44 @@ interface CSSStyleDeclaration {
     placeSelf: string;
     pointerEvents: string;
     position: string;
+    printColorAdjust: string;
     quotes: string;
     resize: string;
     right: string;
     rotate: string;
     rowGap: string;
-    rubyAlign: string;
     rubyPosition: string;
     scale: string;
     scrollBehavior: string;
+    scrollMargin: string;
+    scrollMarginBlock: string;
+    scrollMarginBlockEnd: string;
+    scrollMarginBlockStart: string;
+    scrollMarginBottom: string;
+    scrollMarginInline: string;
+    scrollMarginInlineEnd: string;
+    scrollMarginInlineStart: string;
+    scrollMarginLeft: string;
+    scrollMarginRight: string;
+    scrollMarginTop: string;
+    scrollPadding: string;
+    scrollPaddingBlock: string;
+    scrollPaddingBlockEnd: string;
+    scrollPaddingBlockStart: string;
+    scrollPaddingBottom: string;
+    scrollPaddingInline: string;
+    scrollPaddingInlineEnd: string;
+    scrollPaddingInlineStart: string;
+    scrollPaddingLeft: string;
+    scrollPaddingRight: string;
+    scrollPaddingTop: string;
+    scrollSnapAlign: string;
+    scrollSnapStop: string;
+    scrollSnapType: string;
+    scrollbarGutter: string;
+    shapeImageThreshold: string;
+    shapeMargin: string;
+    shapeOutside: string;
     shapeRendering: string;
     stopColor: string;
     stopOpacity: string;
@@ -3104,18 +3216,20 @@ interface CSSStyleDeclaration {
     textDecoration: string;
     textDecorationColor: string;
     textDecorationLine: string;
+    textDecorationSkipInk: string;
     textDecorationStyle: string;
+    textDecorationThickness: string;
     textEmphasis: string;
     textEmphasisColor: string;
     textEmphasisPosition: string;
     textEmphasisStyle: string;
     textIndent: string;
-    textJustify: string;
     textOrientation: string;
     textOverflow: string;
     textRendering: string;
     textShadow: string;
     textTransform: string;
+    textUnderlineOffset: string;
     textUnderlinePosition: string;
     top: string;
     touchAction: string;
@@ -3133,145 +3247,139 @@ interface CSSStyleDeclaration {
     userSelect: string;
     verticalAlign: string;
     visibility: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `alignContent`. */
     webkitAlignContent: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `alignItems`. */
     webkitAlignItems: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `alignSelf`. */
     webkitAlignSelf: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animation`. */
     webkitAnimation: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationDelay`. */
     webkitAnimationDelay: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationDirection`. */
     webkitAnimationDirection: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationDuration`. */
     webkitAnimationDuration: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationFillMode`. */
     webkitAnimationFillMode: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationIterationCount`. */
     webkitAnimationIterationCount: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationName`. */
     webkitAnimationName: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationPlayState`. */
     webkitAnimationPlayState: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationTimingFunction`. */
     webkitAnimationTimingFunction: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `appearance`. */
     webkitAppearance: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backfaceVisibility`. */
     webkitBackfaceVisibility: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backgroundClip`. */
     webkitBackgroundClip: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backgroundOrigin`. */
     webkitBackgroundOrigin: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backgroundSize`. */
     webkitBackgroundSize: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderBottomLeftRadius`. */
     webkitBorderBottomLeftRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderBottomRightRadius`. */
     webkitBorderBottomRightRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderRadius`. */
     webkitBorderRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderTopLeftRadius`. */
     webkitBorderTopLeftRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderTopRightRadius`. */
     webkitBorderTopRightRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxAlign`. */
     webkitBoxAlign: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxFlex`. */
     webkitBoxFlex: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxOrdinalGroup`. */
     webkitBoxOrdinalGroup: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxOrient`. */
     webkitBoxOrient: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxPack`. */
     webkitBoxPack: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxShadow`. */
     webkitBoxShadow: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxSizing`. */
     webkitBoxSizing: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `filter`. */
     webkitFilter: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flex`. */
     webkitFlex: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexBasis`. */
     webkitFlexBasis: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexDirection`. */
     webkitFlexDirection: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexFlow`. */
     webkitFlexFlow: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexGrow`. */
     webkitFlexGrow: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexShrink`. */
     webkitFlexShrink: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexWrap`. */
     webkitFlexWrap: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `justifyContent`. */
     webkitJustifyContent: string;
     webkitLineClamp: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `mask`. */
     webkitMask: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorder`. */
     webkitMaskBoxImage: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderOutset`. */
     webkitMaskBoxImageOutset: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderRepeat`. */
     webkitMaskBoxImageRepeat: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderSlice`. */
     webkitMaskBoxImageSlice: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderSource`. */
     webkitMaskBoxImageSource: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderWidth`. */
     webkitMaskBoxImageWidth: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskClip`. */
     webkitMaskClip: string;
-    /** @deprecated */
     webkitMaskComposite: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskImage`. */
     webkitMaskImage: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskOrigin`. */
     webkitMaskOrigin: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskPosition`. */
     webkitMaskPosition: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskRepeat`. */
     webkitMaskRepeat: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskSize`. */
     webkitMaskSize: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `order`. */
     webkitOrder: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `perspective`. */
     webkitPerspective: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `perspectiveOrigin`. */
     webkitPerspectiveOrigin: string;
-    webkitTapHighlightColor: string;
-    /** @deprecated */
     webkitTextFillColor: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `textSizeAdjust`. */
     webkitTextSizeAdjust: string;
-    /** @deprecated */
     webkitTextStroke: string;
-    /** @deprecated */
     webkitTextStrokeColor: string;
-    /** @deprecated */
     webkitTextStrokeWidth: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transform`. */
     webkitTransform: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transformOrigin`. */
     webkitTransformOrigin: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transformStyle`. */
     webkitTransformStyle: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transition`. */
     webkitTransition: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionDelay`. */
     webkitTransitionDelay: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionDuration`. */
     webkitTransitionDuration: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionProperty`. */
     webkitTransitionProperty: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionTimingFunction`. */
     webkitTransitionTimingFunction: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `userSelect`. */
     webkitUserSelect: string;
     whiteSpace: string;
     widows: string;
@@ -3279,11 +3387,10 @@ interface CSSStyleDeclaration {
     willChange: string;
     wordBreak: string;
     wordSpacing: string;
+    /** @deprecated */
     wordWrap: string;
     writingMode: string;
     zIndex: string;
-    /** @deprecated */
-    zoom: string;
     getPropertyPriority(property: string): string;
     getPropertyValue(property: string): string;
     item(index: number): string;
@@ -3312,16 +3419,21 @@ declare var CSSStyleRule: {
 interface CSSStyleSheet extends StyleSheet {
     readonly cssRules: CSSRuleList;
     readonly ownerRule: CSSRule | null;
+    /** @deprecated */
     readonly rules: CSSRuleList;
+    /** @deprecated */
     addRule(selector?: string, style?: string, index?: number): number;
     deleteRule(index: number): void;
     insertRule(rule: string, index?: number): number;
+    /** @deprecated */
     removeRule(index?: number): void;
+    replace(text: string): Promise<CSSStyleSheet>;
+    replaceSync(text: string): void;
 }
 
 declare var CSSStyleSheet: {
     prototype: CSSStyleSheet;
-    new(): CSSStyleSheet;
+    new(options?: CSSStyleSheetInit): CSSStyleSheet;
 };
 
 /** An object representing a single CSS @supports at-rule. It implements the CSSConditionRule interface, and therefore the CSSRule and CSSGroupingRule interfaces with a type value of 12 (CSSRule.SUPPORTS_RULE). */
@@ -3333,15 +3445,31 @@ declare var CSSSupportsRule: {
     new(): CSSSupportsRule;
 };
 
-/** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. */
+interface CSSTransition extends Animation {
+    readonly transitionProperty: string;
+    addEventListener<K extends keyof AnimationEventMap>(type: K, listener: (this: CSSTransition, ev: AnimationEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AnimationEventMap>(type: K, listener: (this: CSSTransition, ev: AnimationEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var CSSTransition: {
+    prototype: CSSTransition;
+    new(): CSSTransition;
+};
+
+/**
+ * Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+ * Available only in secure contexts.
+ */
 interface Cache {
-    add(request: RequestInfo): Promise<void>;
+    add(request: RequestInfo | URL): Promise<void>;
     addAll(requests: RequestInfo[]): Promise<void>;
-    delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
-    keys(request?: RequestInfo, options?: CacheQueryOptions): Promise<ReadonlyArray<Request>>;
-    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response | undefined>;
-    matchAll(request?: RequestInfo, options?: CacheQueryOptions): Promise<ReadonlyArray<Response>>;
-    put(request: RequestInfo, response: Response): Promise<void>;
+    delete(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<boolean>;
+    keys(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Request>>;
+    match(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<Response | undefined>;
+    matchAll(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Response>>;
+    put(request: RequestInfo | URL, response: Response): Promise<void>;
 }
 
 declare var Cache: {
@@ -3349,12 +3477,15 @@ declare var Cache: {
     new(): Cache;
 };
 
-/** The storage for Cache objects. */
+/**
+ * The storage for Cache objects.
+ * Available only in secure contexts.
+ */
 interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
     keys(): Promise<string[]>;
-    match(request: RequestInfo, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
+    match(request: RequestInfo | URL, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
     open(cacheName: string): Promise<Cache>;
 }
 
@@ -3363,9 +3494,23 @@ declare var CacheStorage: {
     new(): CacheStorage;
 };
 
+interface CanvasCaptureMediaStreamTrack extends MediaStreamTrack {
+    readonly canvas: HTMLCanvasElement;
+    requestFrame(): void;
+    addEventListener<K extends keyof MediaStreamTrackEventMap>(type: K, listener: (this: CanvasCaptureMediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MediaStreamTrackEventMap>(type: K, listener: (this: CanvasCaptureMediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var CanvasCaptureMediaStreamTrack: {
+    prototype: CanvasCaptureMediaStreamTrack;
+    new(): CanvasCaptureMediaStreamTrack;
+};
+
 interface CanvasCompositing {
     globalAlpha: number;
-    globalCompositeOperation: string;
+    globalCompositeOperation: GlobalCompositeOperation;
 }
 
 interface CanvasDrawImage {
@@ -3391,6 +3536,7 @@ interface CanvasDrawPath {
 interface CanvasFillStrokeStyles {
     fillStyle: string | CanvasGradient | CanvasPattern;
     strokeStyle: string | CanvasGradient | CanvasPattern;
+    createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
     createPattern(image: CanvasImageSource, repetition: string | null): CanvasPattern | null;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
@@ -3404,7 +3550,7 @@ interface CanvasFilters {
 interface CanvasGradient {
     /**
      * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset at one end of the gradient, 1.0 is the offset at the other end.
-     * 
+     *
      * Throws an "IndexSizeError" DOMException if the offset is out of range. Throws a "SyntaxError" DOMException if the color cannot be parsed.
      */
     addColorStop(offset: number, color: string): void;
@@ -3416,9 +3562,9 @@ declare var CanvasGradient: {
 };
 
 interface CanvasImageData {
-    createImageData(sw: number, sh: number): ImageData;
+    createImageData(sw: number, sh: number, settings?: ImageDataSettings): ImageData;
     createImageData(imagedata: ImageData): ImageData;
-    getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
+    getImageData(sx: number, sy: number, sw: number, sh: number, settings?: ImageDataSettings): ImageData;
     putImageData(imagedata: ImageData, dx: number, dy: number): void;
     putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX: number, dirtyY: number, dirtyWidth: number, dirtyHeight: number): void;
 }
@@ -3429,15 +3575,16 @@ interface CanvasImageSmoothing {
 }
 
 interface CanvasPath {
-    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void;
     arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
     bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
     closePath(): void;
-    ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+    ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void;
     lineTo(x: number, y: number): void;
     moveTo(x: number, y: number): void;
     quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
     rect(x: number, y: number, w: number, h: number): void;
+    roundRect(x: number, y: number, w: number, h: number, radii?: number | DOMPointInit | (number | DOMPointInit)[]): void;
 }
 
 interface CanvasPathDrawingStyles {
@@ -3452,9 +3599,7 @@ interface CanvasPathDrawingStyles {
 
 /** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. */
 interface CanvasPattern {
-    /**
-     * Sets the transformation matrix that will be used when rendering the pattern during a fill or stroke painting operation.
-     */
+    /** Sets the transformation matrix that will be used when rendering the pattern during a fill or stroke painting operation. */
     setTransform(transform?: DOMMatrix2DInit): void;
 }
 
@@ -3472,6 +3617,7 @@ interface CanvasRect {
 /** The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element. It is used for drawing shapes, text, images, and other objects. */
 interface CanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform, CanvasUserInterface {
     readonly canvas: HTMLCanvasElement;
+    getContextAttributes(): CanvasRenderingContext2DSettings;
 }
 
 declare var CanvasRenderingContext2D: {
@@ -3500,6 +3646,7 @@ interface CanvasText {
 interface CanvasTextDrawingStyles {
     direction: CanvasDirection;
     font: string;
+    fontKerning: CanvasFontKerning;
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;
 }
@@ -3518,20 +3665,7 @@ interface CanvasTransform {
 interface CanvasUserInterface {
     drawFocusIfNeeded(element: Element): void;
     drawFocusIfNeeded(path: Path2D, element: Element): void;
-    scrollPathIntoView(): void;
-    scrollPathIntoView(path: Path2D): void;
 }
-
-interface CaretPosition {
-    readonly offset: number;
-    readonly offsetNode: Node;
-    getClientRect(): DOMRect | null;
-}
-
-declare var CaretPosition: {
-    prototype: CaretPosition;
-    new(): CaretPosition;
-};
 
 /** The ChannelMergerNode interface, often used in conjunction with its opposite, ChannelSplitterNode, reunites different mono inputs into a single output. Each input is used to fill a channel of the output. This is useful for accessing each channels separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. */
 interface ChannelMergerNode extends AudioNode {
@@ -3571,55 +3705,35 @@ declare var CharacterData: {
 interface ChildNode extends Node {
     /**
      * Inserts nodes just after node, while replacing strings in nodes with equivalent Text nodes.
-     * 
+     *
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     after(...nodes: (Node | string)[]): void;
     /**
      * Inserts nodes just before node, while replacing strings in nodes with equivalent Text nodes.
-     * 
+     *
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     before(...nodes: (Node | string)[]): void;
-    /**
-     * Removes node.
-     */
+    /** Removes node. */
     remove(): void;
     /**
      * Replaces node with nodes, while replacing strings in nodes with equivalent Text nodes.
-     * 
+     *
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     replaceWith(...nodes: (Node | string)[]): void;
 }
 
-interface ClientRect {
-    bottom: number;
-    readonly height: number;
-    left: number;
-    right: number;
-    top: number;
-    readonly width: number;
+/** @deprecated */
+interface ClientRect extends DOMRect {
 }
 
-declare var ClientRect: {
-    prototype: ClientRect;
-    new(): ClientRect;
-};
-
-interface ClientRectList {
-    readonly length: number;
-    item(index: number): ClientRect;
-    [index: number]: ClientRect;
-}
-
-declare var ClientRectList: {
-    prototype: ClientRectList;
-    new(): ClientRectList;
-};
-
+/** Available only in secure contexts. */
 interface Clipboard extends EventTarget {
+    read(): Promise<ClipboardItems>;
     readText(): Promise<string>;
+    write(data: ClipboardItems): Promise<void>;
     writeText(data: string): Promise<void>;
 }
 
@@ -3638,19 +3752,24 @@ declare var ClipboardEvent: {
     new(type: string, eventInitDict?: ClipboardEventInit): ClipboardEvent;
 };
 
+/** Available only in secure contexts. */
+interface ClipboardItem {
+    readonly types: ReadonlyArray<string>;
+    getType(type: string): Promise<Blob>;
+}
+
+declare var ClipboardItem: {
+    prototype: ClipboardItem;
+    new(items: Record<string, string | Blob | PromiseLike<string | Blob>>, options?: ClipboardItemOptions): ClipboardItem;
+};
+
 /** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. */
 interface CloseEvent extends Event {
-    /**
-     * Returns the WebSocket connection close code provided by the server.
-     */
+    /** Returns the WebSocket connection close code provided by the server. */
     readonly code: number;
-    /**
-     * Returns the WebSocket connection close reason provided by the server.
-     */
+    /** Returns the WebSocket connection close reason provided by the server. */
     readonly reason: string;
-    /**
-     * Returns true if the connection closed cleanly; false otherwise.
-     */
+    /** Returns true if the connection closed cleanly; false otherwise. */
     readonly wasClean: boolean;
 }
 
@@ -3671,21 +3790,14 @@ declare var Comment: {
 /** The DOM CompositionEvent represents events that occur due to the user indirectly entering text. */
 interface CompositionEvent extends UIEvent {
     readonly data: string;
+    /** @deprecated */
+    initCompositionEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, viewArg?: WindowProxy | null, dataArg?: string): void;
 }
 
 declare var CompositionEvent: {
     prototype: CompositionEvent;
     new(type: string, eventInitDict?: CompositionEventInit): CompositionEvent;
 };
-
-interface ConcatParams extends Algorithm {
-    algorithmId: Uint8Array;
-    hash?: string | Algorithm;
-    partyUInfo: Uint8Array;
-    partyVInfo: Uint8Array;
-    privateInfo?: Uint8Array;
-    publicInfo?: Uint8Array;
-}
 
 interface ConstantSourceNode extends AudioScheduledSourceNode {
     readonly offset: AudioParam;
@@ -3722,6 +3834,7 @@ declare var CountQueuingStrategy: {
     new(init: QueuingStrategyInit): CountQueuingStrategy;
 };
 
+/** Available only in secure contexts. */
 interface Credential {
     readonly id: string;
     readonly type: string;
@@ -3732,6 +3845,7 @@ declare var Credential: {
     new(): Credential;
 };
 
+/** Available only in secure contexts. */
 interface CredentialsContainer {
     create(options?: CredentialCreationOptions): Promise<Credential | null>;
     get(options?: CredentialRequestOptions): Promise<Credential | null>;
@@ -3746,8 +3860,11 @@ declare var CredentialsContainer: {
 
 /** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. */
 interface Crypto {
+    /** Available only in secure contexts. */
     readonly subtle: SubtleCrypto;
-    getRandomValues<T extends Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | null>(array: T): T;
+    getRandomValues<T extends ArrayBufferView | null>(array: T): T;
+    /** Available only in secure contexts. */
+    randomUUID(): string;
 }
 
 declare var Crypto: {
@@ -3755,7 +3872,10 @@ declare var Crypto: {
     new(): Crypto;
 };
 
-/** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. */
+/**
+ * The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
+ * Available only in secure contexts.
+ */
 interface CryptoKey {
     readonly algorithm: KeyAlgorithm;
     readonly extractable: boolean;
@@ -3768,22 +3888,11 @@ declare var CryptoKey: {
     new(): CryptoKey;
 };
 
-/** The CryptoKeyPair dictionary of the Web Crypto API represents a key pair for an asymmetric cryptography algorithm, also known as a public-key algorithm. */
-interface CryptoKeyPair {
-    privateKey: CryptoKey;
-    publicKey: CryptoKey;
-}
-
-declare var CryptoKeyPair: {
-    prototype: CryptoKeyPair;
-    new(): CryptoKeyPair;
-};
-
 interface CustomElementRegistry {
     define(name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions): void;
-    get(name: string): any;
+    get(name: string): CustomElementConstructor | undefined;
     upgrade(root: Node): void;
-    whenDefined(name: string): Promise<void>;
+    whenDefined(name: string): Promise<CustomElementConstructor>;
 }
 
 declare var CustomElementRegistry: {
@@ -3792,31 +3901,20 @@ declare var CustomElementRegistry: {
 };
 
 interface CustomEvent<T = any> extends Event {
-    /**
-     * Returns any custom data event was created with. Typically used for synthetic events.
-     */
+    /** Returns any custom data event was created with. Typically used for synthetic events. */
     readonly detail: T;
-    initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: T): void;
+    /** @deprecated */
+    initCustomEvent(type: string, bubbles?: boolean, cancelable?: boolean, detail?: T): void;
 }
 
 declare var CustomEvent: {
     prototype: CustomEvent;
-    new<T>(typeArg: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
-};
-
-/** An error object that contains an error name. */
-interface DOMError {
-    readonly name: string;
-    toString(): string;
-}
-
-declare var DOMError: {
-    prototype: DOMError;
-    new(): DOMError;
+    new<T>(type: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
 };
 
 /** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. */
-interface DOMException {
+interface DOMException extends Error {
+    /** @deprecated */
     readonly code: number;
     readonly message: string;
     readonly name: string;
@@ -3890,10 +3988,6 @@ declare var DOMImplementation: {
     prototype: DOMImplementation;
     new(): DOMImplementation;
 };
-
-interface DOML2DeprecatedColorProperty {
-    color: string;
-}
 
 interface DOMMatrix extends DOMMatrixReadOnly {
     a: number;
@@ -4005,11 +4099,11 @@ declare var DOMMatrixReadOnly: {
 interface DOMParser {
     /**
      * Parses string using either the HTML or XML parser, according to type, and returns the resulting Document. type can be "text/html" (which will invoke the HTML parser), or any of "text/xml", "application/xml", "application/xhtml+xml", or "image/svg+xml" (which will invoke the XML parser).
-     * 
+     *
      * For the XML parser, if string cannot be parsed, then the returned Document will contain elements describing the resulting error.
-     * 
+     *
      * Note that script elements are not evaluated during parsing, and the resulting document's encoding will always be UTF-8.
-     * 
+     *
      * Values other than the above for type will cause a TypeError exception to be thrown.
      */
     parseFromString(string: string, type: DOMParserSupportedType): Document;
@@ -4112,28 +4206,13 @@ declare var DOMRectReadOnly: {
     fromRect(other?: DOMRectInit): DOMRectReadOnly;
 };
 
-interface DOMSettableTokenList extends DOMTokenList {
-    value: string;
-}
-
-declare var DOMSettableTokenList: {
-    prototype: DOMSettableTokenList;
-    new(): DOMSettableTokenList;
-};
-
 /** A type returned by some APIs which contains a list of DOMString (strings). */
 interface DOMStringList {
-    /**
-     * Returns the number of strings in strings.
-     */
+    /** Returns the number of strings in strings. */
     readonly length: number;
-    /**
-     * Returns true if strings contains string, and false otherwise.
-     */
+    /** Returns true if strings contains string, and false otherwise. */
     contains(string: string): boolean;
-    /**
-     * Returns the string with index index from strings.
-     */
+    /** Returns the string with index index from strings. */
     item(index: number): string | null;
     [index: number]: string;
 }
@@ -4155,64 +4234,58 @@ declare var DOMStringMap: {
 
 /** A set of space-separated tokens. Such a set is returned by Element.classList, HTMLLinkElement.relList, HTMLAnchorElement.relList, HTMLAreaElement.relList, HTMLIframeElement.sandbox, or HTMLOutputElement.htmlFor. It is indexed beginning with 0 as with JavaScript Array objects. DOMTokenList is always case-sensitive. */
 interface DOMTokenList {
-    /**
-     * Returns the number of tokens.
-     */
+    /** Returns the number of tokens. */
     readonly length: number;
     /**
      * Returns the associated set as string.
-     * 
+     *
      * Can be set, to change the associated attribute.
      */
     value: string;
     toString(): string;
     /**
      * Adds all arguments passed, except those already present.
-     * 
+     *
      * Throws a "SyntaxError" DOMException if one of the arguments is the empty string.
-     * 
+     *
      * Throws an "InvalidCharacterError" DOMException if one of the arguments contains any ASCII whitespace.
      */
     add(...tokens: string[]): void;
-    /**
-     * Returns true if token is present, and false otherwise.
-     */
+    /** Returns true if token is present, and false otherwise. */
     contains(token: string): boolean;
-    /**
-     * Returns the token with index index.
-     */
+    /** Returns the token with index index. */
     item(index: number): string | null;
     /**
      * Removes arguments passed, if they are present.
-     * 
+     *
      * Throws a "SyntaxError" DOMException if one of the arguments is the empty string.
-     * 
+     *
      * Throws an "InvalidCharacterError" DOMException if one of the arguments contains any ASCII whitespace.
      */
     remove(...tokens: string[]): void;
     /**
      * Replaces token with newToken.
-     * 
+     *
      * Returns true if token was replaced with newToken, and false otherwise.
-     * 
+     *
      * Throws a "SyntaxError" DOMException if one of the arguments is the empty string.
-     * 
+     *
      * Throws an "InvalidCharacterError" DOMException if one of the arguments contains any ASCII whitespace.
      */
-    replace(oldToken: string, newToken: string): void;
+    replace(token: string, newToken: string): boolean;
     /**
      * Returns true if token is in the associated attribute's supported tokens. Returns false otherwise.
-     * 
+     *
      * Throws a TypeError if the associated attribute has no supported tokens defined.
      */
     supports(token: string): boolean;
     /**
      * If force is not given, "toggles" token, removing it if it's present and adding it if it's not present. If force is true, adds token (same as add()). If force is false, removes token (same as remove()).
-     * 
+     *
      * Returns true if token is now present, and false otherwise.
-     * 
+     *
      * Throws a "SyntaxError" DOMException if token is empty.
-     * 
+     *
      * Throws an "InvalidCharacterError" DOMException if token contains any spaces.
      */
     toggle(token: string, force?: boolean): boolean;
@@ -4225,64 +4298,37 @@ declare var DOMTokenList: {
     new(): DOMTokenList;
 };
 
-interface DataCue extends TextTrackCue {
-    data: ArrayBuffer;
-    addEventListener<K extends keyof TextTrackCueEventMap>(type: K, listener: (this: DataCue, ev: TextTrackCueEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof TextTrackCueEventMap>(type: K, listener: (this: DataCue, ev: TextTrackCueEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var DataCue: {
-    prototype: DataCue;
-    new(): DataCue;
-};
-
 /** Used to hold the data that is being dragged during a drag and drop operation. It may hold one or more data items, each of one or more data types. For more information about drag and drop, see HTML Drag and Drop API. */
 interface DataTransfer {
     /**
      * Returns the kind of operation that is currently selected. If the kind of operation isn't one of those that is allowed by the effectAllowed attribute, then the operation will fail.
-     * 
+     *
      * Can be set, to change the selected operation.
-     * 
+     *
      * The possible values are "none", "copy", "link", and "move".
      */
     dropEffect: "none" | "copy" | "link" | "move";
     /**
      * Returns the kinds of operations that are to be allowed.
-     * 
+     *
      * Can be set (during the dragstart event), to change the allowed operations.
-     * 
+     *
      * The possible values are "none", "copy", "copyLink", "copyMove", "link", "linkMove", "move", "all", and "uninitialized",
      */
     effectAllowed: "none" | "copy" | "copyLink" | "copyMove" | "link" | "linkMove" | "move" | "all" | "uninitialized";
-    /**
-     * Returns a FileList of the files being dragged, if any.
-     */
+    /** Returns a FileList of the files being dragged, if any. */
     readonly files: FileList;
-    /**
-     * Returns a DataTransferItemList object, with the drag data.
-     */
+    /** Returns a DataTransferItemList object, with the drag data. */
     readonly items: DataTransferItemList;
-    /**
-     * Returns a frozen array listing the formats that were set in the dragstart event. In addition, if any files are being dragged, then one of the types will be the string "Files".
-     */
+    /** Returns a frozen array listing the formats that were set in the dragstart event. In addition, if any files are being dragged, then one of the types will be the string "Files". */
     readonly types: ReadonlyArray<string>;
-    /**
-     * Removes the data of the specified formats. Removes all data if the argument is omitted.
-     */
+    /** Removes the data of the specified formats. Removes all data if the argument is omitted. */
     clearData(format?: string): void;
-    /**
-     * Returns the specified data. If there is no such data, returns the empty string.
-     */
+    /** Returns the specified data. If there is no such data, returns the empty string. */
     getData(format: string): string;
-    /**
-     * Adds the specified data.
-     */
+    /** Adds the specified data. */
     setData(format: string, data: string): void;
-    /**
-     * Uses the given element to update the drag feedback, replacing any previously specified feedback.
-     */
+    /** Uses the given element to update the drag feedback, replacing any previously specified feedback. */
     setDragImage(image: Element, x: number, y: number): void;
 }
 
@@ -4293,23 +4339,15 @@ declare var DataTransfer: {
 
 /** One drag data item. During a drag operation, each drag event has a dataTransfer property which contains a list of drag data items. Each item in the list is a DataTransferItem object. */
 interface DataTransferItem {
-    /**
-     * Returns the drag data item kind, one of: "string", "file".
-     */
+    /** Returns the drag data item kind, one of: "string", "file". */
     readonly kind: string;
-    /**
-     * Returns the drag data item type string.
-     */
+    /** Returns the drag data item type string. */
     readonly type: string;
-    /**
-     * Returns a File object, if the drag data item kind is File.
-     */
+    /** Returns a File object, if the drag data item kind is File. */
     getAsFile(): File | null;
-    /**
-     * Invokes the callback with the string data as the argument, if the drag data item kind is text.
-     */
+    /** Invokes the callback with the string data as the argument, if the drag data item kind is text. */
     getAsString(callback: FunctionStringCallback | null): void;
-    webkitGetAsEntry(): any;
+    webkitGetAsEntry(): FileSystemEntry | null;
 }
 
 declare var DataTransferItem: {
@@ -4319,43 +4357,21 @@ declare var DataTransferItem: {
 
 /** A list of DataTransferItem objects representing items being dragged. During a drag operation, each DragEvent has a dataTransfer property and that property is a DataTransferItemList. */
 interface DataTransferItemList {
-    /**
-     * Returns the number of items in the drag data store.
-     */
+    /** Returns the number of items in the drag data store. */
     readonly length: number;
-    /**
-     * Adds a new entry for the given data to the drag data store. If the data is plain text then a type string has to be provided also.
-     */
+    /** Adds a new entry for the given data to the drag data store. If the data is plain text then a type string has to be provided also. */
     add(data: string, type: string): DataTransferItem | null;
     add(data: File): DataTransferItem | null;
-    /**
-     * Removes all the entries in the drag data store.
-     */
+    /** Removes all the entries in the drag data store. */
     clear(): void;
-    item(index: number): DataTransferItem;
-    /**
-     * Removes the indexth entry in the drag data store.
-     */
+    /** Removes the indexth entry in the drag data store. */
     remove(index: number): void;
-    [name: number]: DataTransferItem;
+    [index: number]: DataTransferItem;
 }
 
 declare var DataTransferItemList: {
     prototype: DataTransferItemList;
     new(): DataTransferItemList;
-};
-
-interface DeferredPermissionRequest {
-    readonly id: number;
-    readonly type: MSWebViewPermissionType;
-    readonly uri: string;
-    allow(): void;
-    deny(): void;
-}
-
-declare var DeferredPermissionRequest: {
-    prototype: DeferredPermissionRequest;
-    new(): DeferredPermissionRequest;
 };
 
 /** A delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output. */
@@ -4368,29 +4384,10 @@ declare var DelayNode: {
     new(context: BaseAudioContext, options?: DelayOptions): DelayNode;
 };
 
-/** Provides information about the amount of acceleration the device is experiencing along all three axes. */
-interface DeviceAcceleration {
-    readonly x: number | null;
-    readonly y: number | null;
-    readonly z: number | null;
-}
-
-declare var DeviceAcceleration: {
-    prototype: DeviceAcceleration;
-    new(): DeviceAcceleration;
-};
-
-/** The DeviceLightEvent provides web developers with information from photo sensors or similiar detectors about ambient light levels near the device. For example this may be useful to adjust the screen's brightness based on the current ambient light level in order to save energy or provide better readability. */
-interface DeviceLightEvent extends Event {
-    readonly value: number;
-}
-
-declare var DeviceLightEvent: {
-    prototype: DeviceLightEvent;
-    new(typeArg: string, eventInitDict?: DeviceLightEventInit): DeviceLightEvent;
-};
-
-/** The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation. */
+/**
+ * The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation.
+ * Available only in secure contexts.
+ */
 interface DeviceMotionEvent extends Event {
     readonly acceleration: DeviceMotionEventAcceleration | null;
     readonly accelerationIncludingGravity: DeviceMotionEventAcceleration | null;
@@ -4401,22 +4398,26 @@ interface DeviceMotionEvent extends Event {
 declare var DeviceMotionEvent: {
     prototype: DeviceMotionEvent;
     new(type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
-    requestPermission(): Promise<PermissionState>;
 };
 
+/** Available only in secure contexts. */
 interface DeviceMotionEventAcceleration {
     readonly x: number | null;
     readonly y: number | null;
     readonly z: number | null;
 }
 
+/** Available only in secure contexts. */
 interface DeviceMotionEventRotationRate {
     readonly alpha: number | null;
     readonly beta: number | null;
     readonly gamma: number | null;
 }
 
-/** The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page. */
+/**
+ * The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page.
+ * Available only in secure contexts.
+ */
 interface DeviceOrientationEvent extends Event {
     readonly absolute: boolean;
     readonly alpha: number | null;
@@ -4427,41 +4428,10 @@ interface DeviceOrientationEvent extends Event {
 declare var DeviceOrientationEvent: {
     prototype: DeviceOrientationEvent;
     new(type: string, eventInitDict?: DeviceOrientationEventInit): DeviceOrientationEvent;
-    requestPermission(): Promise<PermissionState>;
 };
 
-/** Provides information about the rate at which the device is rotating around all three axes. */
-interface DeviceRotationRate {
-    readonly alpha: number | null;
-    readonly beta: number | null;
-    readonly gamma: number | null;
-}
-
-declare var DeviceRotationRate: {
-    prototype: DeviceRotationRate;
-    new(): DeviceRotationRate;
-};
-
-interface DhImportKeyParams extends Algorithm {
-    generator: Uint8Array;
-    prime: Uint8Array;
-}
-
-interface DhKeyAlgorithm extends KeyAlgorithm {
-    generator: Uint8Array;
-    prime: Uint8Array;
-}
-
-interface DhKeyDeriveParams extends Algorithm {
-    public: CryptoKey;
-}
-
-interface DhKeyGenParams extends Algorithm {
-    generator: Uint8Array;
-    prime: Uint8Array;
-}
-
-interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
+interface DocumentEventMap extends DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
+    "DOMContentLoaded": Event;
     "fullscreenchange": Event;
     "fullscreenerror": Event;
     "pointerlockchange": Event;
@@ -4471,148 +4441,115 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndEleme
 }
 
 /** Any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree. */
-interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShadowRoot, GlobalEventHandlers, NonElementParentNode, ParentNode, XPathEvaluatorBase {
-    /**
-     * Sets or gets the URL for the current document.
-     */
+interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShadowRoot, FontFaceSource, GlobalEventHandlers, NonElementParentNode, ParentNode, XPathEvaluatorBase {
+    /** Sets or gets the URL for the current document. */
     readonly URL: string;
     /**
      * Sets or gets the color of all active links in the document.
+     * @deprecated
      */
-    /** @deprecated */
     alinkColor: string;
     /**
      * Returns a reference to the collection of elements contained by the object.
+     * @deprecated
      */
-    /** @deprecated */
     readonly all: HTMLAllCollection;
     /**
      * Retrieves a collection of all a objects that have a name and/or id property. Objects in this collection are in HTML source order.
+     * @deprecated
      */
-    /** @deprecated */
     readonly anchors: HTMLCollectionOf<HTMLAnchorElement>;
     /**
      * Retrieves a collection of all applet objects in the document.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly applets: HTMLCollectionOf<HTMLAppletElement>;
+    readonly applets: HTMLCollection;
     /**
      * Deprecated. Sets or retrieves a value that indicates the background color behind the object.
+     * @deprecated
      */
-    /** @deprecated */
     bgColor: string;
-    /**
-     * Specifies the beginning and end of the document body.
-     */
+    /** Specifies the beginning and end of the document body. */
     body: HTMLElement;
-    /**
-     * Returns document's encoding.
-     */
+    /** Returns document's encoding. */
     readonly characterSet: string;
     /**
      * Gets or sets the character set used to encode the object.
+     * @deprecated This is a legacy alias of `characterSet`.
      */
     readonly charset: string;
-    /**
-     * Gets a value that indicates whether standards-compliant mode is switched on for the object.
-     */
+    /** Gets a value that indicates whether standards-compliant mode is switched on for the object. */
     readonly compatMode: string;
-    /**
-     * Returns document's content type.
-     */
+    /** Returns document's content type. */
     readonly contentType: string;
     /**
      * Returns the HTTP cookies that apply to the Document. If there are no cookies or cookies can't be applied to this resource, the empty string will be returned.
-     * 
+     *
      * Can be set, to add a new cookie to the element's set of HTTP cookies.
-     * 
+     *
      * If the contents are sandboxed into a unique origin (e.g. in an iframe with the sandbox attribute), a "SecurityError" DOMException will be thrown on getting and setting.
      */
     cookie: string;
     /**
      * Returns the script element, or the SVG script element, that is currently executing, as long as the element represents a classic script. In the case of reentrant script execution, returns the one that most recently started executing amongst those that have not yet finished executing.
-     * 
+     *
      * Returns null if the Document is not currently executing a script or SVG script element (e.g., because the running script is an event handler, or a timeout), or if the currently executing script or SVG script element represents a module script.
      */
     readonly currentScript: HTMLOrSVGScriptElement | null;
+    /** Returns the Window object of the active document. */
     readonly defaultView: (WindowProxy & typeof globalThis) | null;
-    /**
-     * Sets or gets a value that indicates whether the document can be edited.
-     */
+    /** Sets or gets a value that indicates whether the document can be edited. */
     designMode: string;
-    /**
-     * Sets or retrieves a value that indicates the reading order of the object.
-     */
+    /** Sets or retrieves a value that indicates the reading order of the object. */
     dir: string;
-    /**
-     * Gets an object representing the document type declaration associated with the current document.
-     */
+    /** Gets an object representing the document type declaration associated with the current document. */
     readonly doctype: DocumentType | null;
-    /**
-     * Gets a reference to the root node of the document.
-     */
+    /** Gets a reference to the root node of the document. */
     readonly documentElement: HTMLElement;
-    /**
-     * Returns document's URL.
-     */
+    /** Returns document's URL. */
     readonly documentURI: string;
     /**
      * Sets or gets the security domain of the document.
+     * @deprecated
      */
     domain: string;
-    /**
-     * Retrieves a collection of all embed objects in the document.
-     */
+    /** Retrieves a collection of all embed objects in the document. */
     readonly embeds: HTMLCollectionOf<HTMLEmbedElement>;
     /**
      * Sets or gets the foreground (text) color of the document.
+     * @deprecated
      */
-    /** @deprecated */
     fgColor: string;
-    /**
-     * Retrieves a collection, in source order, of all form objects in the document.
-     */
+    /** Retrieves a collection, in source order, of all form objects in the document. */
     readonly forms: HTMLCollectionOf<HTMLFormElement>;
     /** @deprecated */
     readonly fullscreen: boolean;
-    /**
-     * Returns true if document has the ability to display elements fullscreen and fullscreen is supported, or false otherwise.
-     */
+    /** Returns true if document has the ability to display elements fullscreen and fullscreen is supported, or false otherwise. */
     readonly fullscreenEnabled: boolean;
-    /**
-     * Returns the head element.
-     */
+    /** Returns the head element. */
     readonly head: HTMLHeadElement;
     readonly hidden: boolean;
-    /**
-     * Retrieves a collection, in source order, of img objects in the document.
-     */
+    /** Retrieves a collection, in source order, of img objects in the document. */
     readonly images: HTMLCollectionOf<HTMLImageElement>;
-    /**
-     * Gets the implementation object of the current document.
-     */
+    /** Gets the implementation object of the current document. */
     readonly implementation: DOMImplementation;
     /**
      * Returns the character encoding used to create the webpage that is loaded into the document object.
+     * @deprecated This is a legacy alias of `characterSet`.
      */
     readonly inputEncoding: string;
-    /**
-     * Gets the date that the page was last modified, if the page supplies one.
-     */
+    /** Gets the date that the page was last modified, if the page supplies one. */
     readonly lastModified: string;
     /**
      * Sets or gets the color of the document links.
+     * @deprecated
      */
-    /** @deprecated */
     linkColor: string;
-    /**
-     * Retrieves a collection of all a objects that specify the href property and all area objects in the document.
-     */
+    /** Retrieves a collection of all a objects that specify the href property and all area objects in the document. */
     readonly links: HTMLCollectionOf<HTMLAnchorElement | HTMLAreaElement>;
-    /**
-     * Contains information about the current URL.
-     */
-    location: Location;
+    /** Contains information about the current URL. */
+    get location(): Location;
+    set location(href: string | Location);
     onfullscreenchange: ((this: Document, ev: Event) => any) | null;
     onfullscreenerror: ((this: Document, ev: Event) => any) | null;
     onpointerlockchange: ((this: Document, ev: Event) => any) | null;
@@ -4624,50 +4561,40 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     onreadystatechange: ((this: Document, ev: Event) => any) | null;
     onvisibilitychange: ((this: Document, ev: Event) => any) | null;
     readonly ownerDocument: null;
-    /**
-     * Return an HTMLCollection of the embed elements in the Document.
-     */
+    readonly pictureInPictureEnabled: boolean;
+    /** Return an HTMLCollection of the embed elements in the Document. */
     readonly plugins: HTMLCollectionOf<HTMLEmbedElement>;
-    /**
-     * Retrieves a value that indicates the current state of the object.
-     */
+    /** Retrieves a value that indicates the current state of the object. */
     readonly readyState: DocumentReadyState;
-    /**
-     * Gets the URL of the location that referred the user to the current page.
-     */
+    /** Gets the URL of the location that referred the user to the current page. */
     readonly referrer: string;
-    /**
-     * Retrieves a collection of all script objects in the document.
-     */
+    /** @deprecated */
+    readonly rootElement: SVGSVGElement | null;
+    /** Retrieves a collection of all script objects in the document. */
     readonly scripts: HTMLCollectionOf<HTMLScriptElement>;
     readonly scrollingElement: Element | null;
     readonly timeline: DocumentTimeline;
-    /**
-     * Contains the title of the document.
-     */
+    /** Contains the title of the document. */
     title: string;
-    readonly visibilityState: VisibilityState;
+    readonly visibilityState: DocumentVisibilityState;
     /**
      * Sets or gets the color of the links that the user has visited.
+     * @deprecated
      */
-    /** @deprecated */
     vlinkColor: string;
     /**
      * Moves node from another document and returns it.
-     * 
+     *
      * If node is a document, throws a "NotSupportedError" DOMException or, if node is a shadow root, throws a "HierarchyRequestError" DOMException.
      */
-    adoptNode<T extends Node>(source: T): T;
+    adoptNode<T extends Node>(node: T): T;
     /** @deprecated */
     captureEvents(): void;
-    caretPositionFromPoint(x: number, y: number): CaretPosition | null;
     /** @deprecated */
-    caretRangeFromPoint(x: number, y: number): Range;
+    caretRangeFromPoint(x: number, y: number): Range | null;
     /** @deprecated */
     clear(): void;
-    /**
-     * Closes an output stream and forces the sent data to display.
-     */
+    /** Closes an output stream and forces the sent data to display. */
     close(): void;
     /**
      * Creates an attribute object with a specified name.
@@ -4675,18 +4602,14 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      */
     createAttribute(localName: string): Attr;
     createAttributeNS(namespace: string | null, qualifiedName: string): Attr;
-    /**
-     * Returns a CDATASection node whose data is data.
-     */
+    /** Returns a CDATASection node whose data is data. */
     createCDATASection(data: string): CDATASection;
     /**
      * Creates a comment object with the specified data.
      * @param data Sets the comment object's data.
      */
     createComment(data: string): Comment;
-    /**
-     * Creates a new document.
-     */
+    /** Creates a new document. */
     createDocumentFragment(): DocumentFragment;
     /**
      * Creates an instance of the element for the specified tag.
@@ -4698,17 +4621,17 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createElement(tagName: string, options?: ElementCreationOptions): HTMLElement;
     /**
      * Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
-     * 
+     *
      * If localName does not match the Name production an "InvalidCharacterError" DOMException will be thrown.
-     * 
+     *
      * If one of the following conditions is true a "NamespaceError" DOMException will be thrown:
-     * 
+     *
      * localName does not match the QName production.
      * Namespace prefix is not null and namespace is the empty string.
      * Namespace prefix is "xml" and namespace is not the XML namespace.
      * qualifiedName or namespace prefix is "xmlns" and namespace is not the XMLNS namespace.
      * namespace is the XMLNS namespace and neither qualifiedName nor namespace prefix is "xmlns".
-     * 
+     *
      * When supplied, options's is can be used to create a customized built-in element.
      */
     createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement;
@@ -4720,11 +4643,11 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "AnimationPlaybackEvent"): AnimationPlaybackEvent;
     createEvent(eventInterface: "AudioProcessingEvent"): AudioProcessingEvent;
     createEvent(eventInterface: "BeforeUnloadEvent"): BeforeUnloadEvent;
+    createEvent(eventInterface: "BlobEvent"): BlobEvent;
     createEvent(eventInterface: "ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface: "CloseEvent"): CloseEvent;
     createEvent(eventInterface: "CompositionEvent"): CompositionEvent;
     createEvent(eventInterface: "CustomEvent"): CustomEvent;
-    createEvent(eventInterface: "DeviceLightEvent"): DeviceLightEvent;
     createEvent(eventInterface: "DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface: "DeviceOrientationEvent"): DeviceOrientationEvent;
     createEvent(eventInterface: "DragEvent"): DragEvent;
@@ -4732,22 +4655,16 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "Event"): Event;
     createEvent(eventInterface: "Events"): Event;
     createEvent(eventInterface: "FocusEvent"): FocusEvent;
-    createEvent(eventInterface: "FocusNavigationEvent"): FocusNavigationEvent;
+    createEvent(eventInterface: "FontFaceSetLoadEvent"): FontFaceSetLoadEvent;
+    createEvent(eventInterface: "FormDataEvent"): FormDataEvent;
     createEvent(eventInterface: "GamepadEvent"): GamepadEvent;
     createEvent(eventInterface: "HashChangeEvent"): HashChangeEvent;
     createEvent(eventInterface: "IDBVersionChangeEvent"): IDBVersionChangeEvent;
     createEvent(eventInterface: "InputEvent"): InputEvent;
     createEvent(eventInterface: "KeyboardEvent"): KeyboardEvent;
-    createEvent(eventInterface: "ListeningStateChangedEvent"): ListeningStateChangedEvent;
-    createEvent(eventInterface: "MSGestureEvent"): MSGestureEvent;
-    createEvent(eventInterface: "MSMediaKeyMessageEvent"): MSMediaKeyMessageEvent;
-    createEvent(eventInterface: "MSMediaKeyNeededEvent"): MSMediaKeyNeededEvent;
-    createEvent(eventInterface: "MSPointerEvent"): MSPointerEvent;
     createEvent(eventInterface: "MediaEncryptedEvent"): MediaEncryptedEvent;
     createEvent(eventInterface: "MediaKeyMessageEvent"): MediaKeyMessageEvent;
     createEvent(eventInterface: "MediaQueryListEvent"): MediaQueryListEvent;
-    createEvent(eventInterface: "MediaStreamErrorEvent"): MediaStreamErrorEvent;
-    createEvent(eventInterface: "MediaStreamEvent"): MediaStreamEvent;
     createEvent(eventInterface: "MediaStreamTrackEvent"): MediaStreamTrackEvent;
     createEvent(eventInterface: "MessageEvent"): MessageEvent;
     createEvent(eventInterface: "MouseEvent"): MouseEvent;
@@ -4755,43 +4672,30 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "MutationEvent"): MutationEvent;
     createEvent(eventInterface: "MutationEvents"): MutationEvent;
     createEvent(eventInterface: "OfflineAudioCompletionEvent"): OfflineAudioCompletionEvent;
-    createEvent(eventInterface: "OverflowEvent"): OverflowEvent;
     createEvent(eventInterface: "PageTransitionEvent"): PageTransitionEvent;
+    createEvent(eventInterface: "PaymentMethodChangeEvent"): PaymentMethodChangeEvent;
     createEvent(eventInterface: "PaymentRequestUpdateEvent"): PaymentRequestUpdateEvent;
-    createEvent(eventInterface: "PermissionRequestedEvent"): PermissionRequestedEvent;
+    createEvent(eventInterface: "PictureInPictureEvent"): PictureInPictureEvent;
     createEvent(eventInterface: "PointerEvent"): PointerEvent;
     createEvent(eventInterface: "PopStateEvent"): PopStateEvent;
     createEvent(eventInterface: "ProgressEvent"): ProgressEvent;
     createEvent(eventInterface: "PromiseRejectionEvent"): PromiseRejectionEvent;
     createEvent(eventInterface: "RTCDTMFToneChangeEvent"): RTCDTMFToneChangeEvent;
     createEvent(eventInterface: "RTCDataChannelEvent"): RTCDataChannelEvent;
-    createEvent(eventInterface: "RTCDtlsTransportStateChangedEvent"): RTCDtlsTransportStateChangedEvent;
     createEvent(eventInterface: "RTCErrorEvent"): RTCErrorEvent;
-    createEvent(eventInterface: "RTCIceCandidatePairChangedEvent"): RTCIceCandidatePairChangedEvent;
-    createEvent(eventInterface: "RTCIceGathererEvent"): RTCIceGathererEvent;
-    createEvent(eventInterface: "RTCIceTransportStateChangedEvent"): RTCIceTransportStateChangedEvent;
     createEvent(eventInterface: "RTCPeerConnectionIceErrorEvent"): RTCPeerConnectionIceErrorEvent;
     createEvent(eventInterface: "RTCPeerConnectionIceEvent"): RTCPeerConnectionIceEvent;
-    createEvent(eventInterface: "RTCSsrcConflictEvent"): RTCSsrcConflictEvent;
-    createEvent(eventInterface: "RTCStatsEvent"): RTCStatsEvent;
     createEvent(eventInterface: "RTCTrackEvent"): RTCTrackEvent;
-    createEvent(eventInterface: "SVGZoomEvent"): SVGZoomEvent;
-    createEvent(eventInterface: "SVGZoomEvents"): SVGZoomEvent;
     createEvent(eventInterface: "SecurityPolicyViolationEvent"): SecurityPolicyViolationEvent;
-    createEvent(eventInterface: "ServiceWorkerMessageEvent"): ServiceWorkerMessageEvent;
-    createEvent(eventInterface: "SpeechRecognitionErrorEvent"): SpeechRecognitionErrorEvent;
-    createEvent(eventInterface: "SpeechRecognitionEvent"): SpeechRecognitionEvent;
     createEvent(eventInterface: "SpeechSynthesisErrorEvent"): SpeechSynthesisErrorEvent;
     createEvent(eventInterface: "SpeechSynthesisEvent"): SpeechSynthesisEvent;
     createEvent(eventInterface: "StorageEvent"): StorageEvent;
-    createEvent(eventInterface: "TextEvent"): TextEvent;
+    createEvent(eventInterface: "SubmitEvent"): SubmitEvent;
     createEvent(eventInterface: "TouchEvent"): TouchEvent;
     createEvent(eventInterface: "TrackEvent"): TrackEvent;
     createEvent(eventInterface: "TransitionEvent"): TransitionEvent;
     createEvent(eventInterface: "UIEvent"): UIEvent;
     createEvent(eventInterface: "UIEvents"): UIEvent;
-    createEvent(eventInterface: "VRDisplayEvent"): VRDisplayEvent;
-    createEvent(eventInterface: "VRDisplayEvent "): VRDisplayEvent ;
     createEvent(eventInterface: "WebGLContextEvent"): WebGLContextEvent;
     createEvent(eventInterface: "WheelEvent"): WheelEvent;
     createEvent(eventInterface: string): Event;
@@ -4800,16 +4704,11 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      * @param root The root element or node to start traversing on.
      * @param whatToShow The type of nodes or elements to appear in the node list
      * @param filter A custom NodeFilter function to use. For more information, see filter. Use null for no filter.
-     * @param entityReferenceExpansion A flag that specifies whether entity reference nodes are expanded.
      */
     createNodeIterator(root: Node, whatToShow?: number, filter?: NodeFilter | null): NodeIterator;
-    /**
-     * Returns a ProcessingInstruction node whose target is target and data is data. If target does not match the Name production an "InvalidCharacterError" DOMException will be thrown. If data contains "?>" an "InvalidCharacterError" DOMException will be thrown.
-     */
+    /** Returns a ProcessingInstruction node whose target is target and data is data. If target does not match the Name production an "InvalidCharacterError" DOMException will be thrown. If data contains "?>" an "InvalidCharacterError" DOMException will be thrown. */
     createProcessingInstruction(target: string, data: string): ProcessingInstruction;
-    /**
-     *  Returns an empty range object that has both of its boundary points positioned at the beginning of the document.
-     */
+    /**  Returns an empty range object that has both of its boundary points positioned at the beginning of the document. */
     createRange(): Range;
     /**
      * Creates a text string from the specified value.
@@ -4821,39 +4720,26 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      * @param root The root element or node to start traversing on.
      * @param whatToShow The type of nodes or elements to appear in the node list. For more information, see whatToShow.
      * @param filter A custom NodeFilter function to use.
-     * @param entityReferenceExpansion A flag that specifies whether entity reference nodes are expanded.
      */
     createTreeWalker(root: Node, whatToShow?: number, filter?: NodeFilter | null): TreeWalker;
-    /** @deprecated */
-    createTreeWalker(root: Node, whatToShow: number, filter: NodeFilter | null, entityReferenceExpansion?: boolean): TreeWalker;
-    /**
-     * Returns the element for the specified x coordinate and the specified y coordinate.
-     * @param x The x-offset
-     * @param y The y-offset
-     */
-    elementFromPoint(x: number, y: number): Element | null;
-    elementsFromPoint(x: number, y: number): Element[];
     /**
      * Executes a command on the current document, current selection, or the given range.
      * @param commandId String that specifies the command to execute. This command can be any of the command identifiers that can be executed in script.
      * @param showUI Display the user interface, defaults to false.
      * @param value Value to assign.
+     * @deprecated
      */
     execCommand(commandId: string, showUI?: boolean, value?: string): boolean;
-    /**
-     * Stops document's fullscreen element from being displayed fullscreen and resolves promise when done.
-     */
+    /** Stops document's fullscreen element from being displayed fullscreen and resolves promise when done. */
     exitFullscreen(): Promise<void>;
+    exitPictureInPicture(): Promise<void>;
     exitPointerLock(): void;
-    getAnimations(): Animation[];
     /**
      * Returns a reference to the first object with the specified value of the ID attribute.
      * @param elementId String that specifies the ID value.
      */
     getElementById(elementId: string): HTMLElement | null;
-    /**
-     * Returns a HTMLCollection of the elements in the object on which the method was invoked (a document or an element) that have all the classes given by classNames. The classNames argument is interpreted as a space-separated list of classes.
-     */
+    /** Returns a HTMLCollection of the elements in the object on which the method was invoked (a document or an element) that have all the classes given by classNames. The classNames argument is interpreted as a space-separated list of classes. */
     getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     /**
      * Gets a collection of objects based on the value of the NAME or ID attribute.
@@ -4869,30 +4755,27 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
     /**
      * If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
-     * 
+     *
      * If only namespace is "*" returns a HTMLCollection of all descendant elements whose local name is localName.
-     * 
+     *
      * If only localName is "*" returns a HTMLCollection of all descendant elements whose namespace is namespace.
-     * 
+     *
      * Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
      */
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
-    /**
-     * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
-     */
+    getElementsByTagNameNS(namespace: string | null, localName: string): HTMLCollectionOf<Element>;
+    /** Returns an object representing the current selection of the document that is loaded into the object displaying a webpage. */
     getSelection(): Selection | null;
-    /**
-     * Gets a value indicating whether the object currently has focus.
-     */
+    /** Gets a value indicating whether the object currently has focus. */
     hasFocus(): boolean;
+    hasStorageAccess(): Promise<boolean>;
     /**
      * Returns a copy of node. If deep is true, the copy also includes the node's descendants.
-     * 
+     *
      * If node is a document or a shadow root, throws a "NotSupportedError" DOMException.
      */
-    importNode<T extends Node>(importedNode: T, deep: boolean): T;
+    importNode<T extends Node>(node: T, deep?: boolean): T;
     /**
      * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
      * @param url Specifies a MIME type for the document.
@@ -4900,34 +4783,41 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      * @param features Contains a list of items separated by commas. Each item consists of an option and a value, separated by an equals sign (for example, "fullscreen=yes, toolbar=yes"). The following values are supported.
      * @param replace Specifies whether the existing entry for the document is replaced in the history list.
      */
-    open(url?: string, name?: string, features?: string, replace?: boolean): Document;
+    open(unused1?: string, unused2?: string): Document;
+    open(url: string | URL, name: string, features: string): WindowProxy | null;
     /**
      * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
      * @param commandId Specifies a command identifier.
+     * @deprecated
      */
     queryCommandEnabled(commandId: string): boolean;
     /**
      * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
      * @param commandId String that specifies a command identifier.
+     * @deprecated
      */
     queryCommandIndeterm(commandId: string): boolean;
     /**
      * Returns a Boolean value that indicates the current state of the command.
      * @param commandId String that specifies a command identifier.
+     * @deprecated
      */
     queryCommandState(commandId: string): boolean;
     /**
      * Returns a Boolean value that indicates whether the current command is supported on the current range.
      * @param commandId Specifies a command identifier.
+     * @deprecated
      */
     queryCommandSupported(commandId: string): boolean;
     /**
      * Returns the current value of the document, range, or current selection for the given command.
      * @param commandId String that specifies a command identifier.
+     * @deprecated
      */
     queryCommandValue(commandId: string): string;
     /** @deprecated */
     releaseEvents(): void;
+    requestStorageAccess(): Promise<void>;
     /**
      * Writes one or more HTML expressions to a document in the specified window.
      * @param content Specifies the text and HTML tags to write.
@@ -4965,88 +4855,6 @@ interface DocumentAndElementEventHandlers {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-interface DocumentEvent {
-    createEvent(eventInterface: "AnimationEvent"): AnimationEvent;
-    createEvent(eventInterface: "AnimationPlaybackEvent"): AnimationPlaybackEvent;
-    createEvent(eventInterface: "AudioProcessingEvent"): AudioProcessingEvent;
-    createEvent(eventInterface: "BeforeUnloadEvent"): BeforeUnloadEvent;
-    createEvent(eventInterface: "ClipboardEvent"): ClipboardEvent;
-    createEvent(eventInterface: "CloseEvent"): CloseEvent;
-    createEvent(eventInterface: "CompositionEvent"): CompositionEvent;
-    createEvent(eventInterface: "CustomEvent"): CustomEvent;
-    createEvent(eventInterface: "DeviceLightEvent"): DeviceLightEvent;
-    createEvent(eventInterface: "DeviceMotionEvent"): DeviceMotionEvent;
-    createEvent(eventInterface: "DeviceOrientationEvent"): DeviceOrientationEvent;
-    createEvent(eventInterface: "DragEvent"): DragEvent;
-    createEvent(eventInterface: "ErrorEvent"): ErrorEvent;
-    createEvent(eventInterface: "Event"): Event;
-    createEvent(eventInterface: "Events"): Event;
-    createEvent(eventInterface: "FocusEvent"): FocusEvent;
-    createEvent(eventInterface: "FocusNavigationEvent"): FocusNavigationEvent;
-    createEvent(eventInterface: "GamepadEvent"): GamepadEvent;
-    createEvent(eventInterface: "HashChangeEvent"): HashChangeEvent;
-    createEvent(eventInterface: "IDBVersionChangeEvent"): IDBVersionChangeEvent;
-    createEvent(eventInterface: "InputEvent"): InputEvent;
-    createEvent(eventInterface: "KeyboardEvent"): KeyboardEvent;
-    createEvent(eventInterface: "ListeningStateChangedEvent"): ListeningStateChangedEvent;
-    createEvent(eventInterface: "MSGestureEvent"): MSGestureEvent;
-    createEvent(eventInterface: "MSMediaKeyMessageEvent"): MSMediaKeyMessageEvent;
-    createEvent(eventInterface: "MSMediaKeyNeededEvent"): MSMediaKeyNeededEvent;
-    createEvent(eventInterface: "MSPointerEvent"): MSPointerEvent;
-    createEvent(eventInterface: "MediaEncryptedEvent"): MediaEncryptedEvent;
-    createEvent(eventInterface: "MediaKeyMessageEvent"): MediaKeyMessageEvent;
-    createEvent(eventInterface: "MediaQueryListEvent"): MediaQueryListEvent;
-    createEvent(eventInterface: "MediaStreamErrorEvent"): MediaStreamErrorEvent;
-    createEvent(eventInterface: "MediaStreamEvent"): MediaStreamEvent;
-    createEvent(eventInterface: "MediaStreamTrackEvent"): MediaStreamTrackEvent;
-    createEvent(eventInterface: "MessageEvent"): MessageEvent;
-    createEvent(eventInterface: "MouseEvent"): MouseEvent;
-    createEvent(eventInterface: "MouseEvents"): MouseEvent;
-    createEvent(eventInterface: "MutationEvent"): MutationEvent;
-    createEvent(eventInterface: "MutationEvents"): MutationEvent;
-    createEvent(eventInterface: "OfflineAudioCompletionEvent"): OfflineAudioCompletionEvent;
-    createEvent(eventInterface: "OverflowEvent"): OverflowEvent;
-    createEvent(eventInterface: "PageTransitionEvent"): PageTransitionEvent;
-    createEvent(eventInterface: "PaymentRequestUpdateEvent"): PaymentRequestUpdateEvent;
-    createEvent(eventInterface: "PermissionRequestedEvent"): PermissionRequestedEvent;
-    createEvent(eventInterface: "PointerEvent"): PointerEvent;
-    createEvent(eventInterface: "PopStateEvent"): PopStateEvent;
-    createEvent(eventInterface: "ProgressEvent"): ProgressEvent;
-    createEvent(eventInterface: "PromiseRejectionEvent"): PromiseRejectionEvent;
-    createEvent(eventInterface: "RTCDTMFToneChangeEvent"): RTCDTMFToneChangeEvent;
-    createEvent(eventInterface: "RTCDataChannelEvent"): RTCDataChannelEvent;
-    createEvent(eventInterface: "RTCDtlsTransportStateChangedEvent"): RTCDtlsTransportStateChangedEvent;
-    createEvent(eventInterface: "RTCErrorEvent"): RTCErrorEvent;
-    createEvent(eventInterface: "RTCIceCandidatePairChangedEvent"): RTCIceCandidatePairChangedEvent;
-    createEvent(eventInterface: "RTCIceGathererEvent"): RTCIceGathererEvent;
-    createEvent(eventInterface: "RTCIceTransportStateChangedEvent"): RTCIceTransportStateChangedEvent;
-    createEvent(eventInterface: "RTCPeerConnectionIceErrorEvent"): RTCPeerConnectionIceErrorEvent;
-    createEvent(eventInterface: "RTCPeerConnectionIceEvent"): RTCPeerConnectionIceEvent;
-    createEvent(eventInterface: "RTCSsrcConflictEvent"): RTCSsrcConflictEvent;
-    createEvent(eventInterface: "RTCStatsEvent"): RTCStatsEvent;
-    createEvent(eventInterface: "RTCTrackEvent"): RTCTrackEvent;
-    createEvent(eventInterface: "SVGZoomEvent"): SVGZoomEvent;
-    createEvent(eventInterface: "SVGZoomEvents"): SVGZoomEvent;
-    createEvent(eventInterface: "SecurityPolicyViolationEvent"): SecurityPolicyViolationEvent;
-    createEvent(eventInterface: "ServiceWorkerMessageEvent"): ServiceWorkerMessageEvent;
-    createEvent(eventInterface: "SpeechRecognitionErrorEvent"): SpeechRecognitionErrorEvent;
-    createEvent(eventInterface: "SpeechRecognitionEvent"): SpeechRecognitionEvent;
-    createEvent(eventInterface: "SpeechSynthesisErrorEvent"): SpeechSynthesisErrorEvent;
-    createEvent(eventInterface: "SpeechSynthesisEvent"): SpeechSynthesisEvent;
-    createEvent(eventInterface: "StorageEvent"): StorageEvent;
-    createEvent(eventInterface: "TextEvent"): TextEvent;
-    createEvent(eventInterface: "TouchEvent"): TouchEvent;
-    createEvent(eventInterface: "TrackEvent"): TrackEvent;
-    createEvent(eventInterface: "TransitionEvent"): TransitionEvent;
-    createEvent(eventInterface: "UIEvent"): UIEvent;
-    createEvent(eventInterface: "UIEvents"): UIEvent;
-    createEvent(eventInterface: "VRDisplayEvent"): VRDisplayEvent;
-    createEvent(eventInterface: "VRDisplayEvent "): VRDisplayEvent ;
-    createEvent(eventInterface: "WebGLContextEvent"): WebGLContextEvent;
-    createEvent(eventInterface: "WheelEvent"): WheelEvent;
-    createEvent(eventInterface: string): Event;
-}
-
 /** A minimal document object that has no parent. It is used as a lightweight version of Document that stores a segment of a document structure comprised of nodes just like a standard document. The key difference is that because the document fragment isn't part of the active document tree structure, changes made to the fragment don't affect the document, cause reflow, or incur any performance impact that can occur when changes are made. */
 interface DocumentFragment extends Node, NonElementParentNode, ParentNode {
     readonly ownerDocument: Document;
@@ -5059,22 +4867,29 @@ declare var DocumentFragment: {
 };
 
 interface DocumentOrShadowRoot {
+    /**
+     * Returns the deepest element in the document through which or to which key events are being routed. This is, roughly speaking, the focused element in the document.
+     *
+     * For the purposes of this API, when a child browsing context is focused, its container is focused in the parent browsing context. For example, if the user moves the focus to a text control in an iframe, the iframe is the element returned by the activeElement API in the iframe's node document.
+     *
+     * Similarly, when the focused element is in a different node tree than documentOrShadowRoot, the element returned will be the host that's located in the same node tree as documentOrShadowRoot if documentOrShadowRoot is a shadow-including inclusive ancestor of the focused element, and null if not.
+     */
     readonly activeElement: Element | null;
-    /**
-     * Returns document's fullscreen element.
-     */
+    adoptedStyleSheets: CSSStyleSheet[];
+    /** Returns document's fullscreen element. */
     readonly fullscreenElement: Element | null;
+    readonly pictureInPictureElement: Element | null;
     readonly pointerLockElement: Element | null;
-    /**
-     * Retrieves a collection of styleSheet objects representing the style sheets that correspond to each instance of a link or style object in the document.
-     */
+    /** Retrieves a collection of styleSheet objects representing the style sheets that correspond to each instance of a link or style object in the document. */
     readonly styleSheets: StyleSheetList;
-    caretPositionFromPoint(x: number, y: number): CaretPosition | null;
-    /** @deprecated */
-    caretRangeFromPoint(x: number, y: number): Range;
+    /**
+     * Returns the element for the specified x coordinate and the specified y coordinate.
+     * @param x The x-offset
+     * @param y The y-offset
+     */
     elementFromPoint(x: number, y: number): Element | null;
     elementsFromPoint(x: number, y: number): Element[];
-    getSelection(): Selection | null;
+    getAnimations(): Animation[];
 }
 
 interface DocumentTimeline extends AnimationTimeline {
@@ -5100,9 +4915,7 @@ declare var DocumentType: {
 
 /** A DOM event that represents a drag and drop interaction. The user initiates a drag by placing a pointer device (such as a mouse) on the touch surface and then dragging the pointer to a new location (such as another DOM element). Applications are free to interpret a drag and drop interaction in an application-specific way. */
 interface DragEvent extends MouseEvent {
-    /**
-     * Returns the DataTransfer object for the event.
-     */
+    /** Returns the DataTransfer object for the event. */
     readonly dataTransfer: DataTransfer | null;
 }
 
@@ -5131,6 +4944,19 @@ interface EXT_blend_minmax {
     readonly MIN_EXT: GLenum;
 }
 
+interface EXT_color_buffer_float {
+}
+
+interface EXT_color_buffer_half_float {
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: GLenum;
+    readonly RGB16F_EXT: GLenum;
+    readonly RGBA16F_EXT: GLenum;
+    readonly UNSIGNED_NORMALIZED_EXT: GLenum;
+}
+
+interface EXT_float_blend {
+}
+
 /** The EXT_frag_depth extension is part of the WebGL API and enables to set a depth value of a fragment from within the fragment shader. */
 interface EXT_frag_depth {
 }
@@ -5145,10 +4971,35 @@ interface EXT_sRGB {
 interface EXT_shader_texture_lod {
 }
 
+interface EXT_texture_compression_bptc {
+    readonly COMPRESSED_RGBA_BPTC_UNORM_EXT: GLenum;
+    readonly COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT: GLenum;
+    readonly COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT: GLenum;
+    readonly COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT: GLenum;
+}
+
+interface EXT_texture_compression_rgtc {
+    readonly COMPRESSED_RED_GREEN_RGTC2_EXT: GLenum;
+    readonly COMPRESSED_RED_RGTC1_EXT: GLenum;
+    readonly COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT: GLenum;
+    readonly COMPRESSED_SIGNED_RED_RGTC1_EXT: GLenum;
+}
+
 /** The EXT_texture_filter_anisotropic extension is part of the WebGL API and exposes two constants for anisotropic filtering (AF). */
 interface EXT_texture_filter_anisotropic {
     readonly MAX_TEXTURE_MAX_ANISOTROPY_EXT: GLenum;
     readonly TEXTURE_MAX_ANISOTROPY_EXT: GLenum;
+}
+
+interface EXT_texture_norm16 {
+    readonly R16_EXT: GLenum;
+    readonly R16_SNORM_EXT: GLenum;
+    readonly RG16_EXT: GLenum;
+    readonly RG16_SNORM_EXT: GLenum;
+    readonly RGB16_EXT: GLenum;
+    readonly RGB16_SNORM_EXT: GLenum;
+    readonly RGBA16_EXT: GLenum;
+    readonly RGBA16_SNORM_EXT: GLenum;
 }
 
 interface ElementEventMap {
@@ -5157,126 +5008,84 @@ interface ElementEventMap {
 }
 
 /** Element is the most general base class from which all objects in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element. */
-interface Element extends Node, Animatable, ChildNode, InnerHTML, NonDocumentTypeChildNode, ParentNode, Slottable {
+interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, NonDocumentTypeChildNode, ParentNode, Slottable {
     readonly attributes: NamedNodeMap;
-    /**
-     * Allows for manipulation of element's class content attribute as a set of whitespace-separated tokens through a DOMTokenList object.
-     */
+    /** Allows for manipulation of element's class content attribute as a set of whitespace-separated tokens through a DOMTokenList object. */
     readonly classList: DOMTokenList;
-    /**
-     * Returns the value of element's class content attribute. Can be set to change it.
-     */
+    /** Returns the value of element's class content attribute. Can be set to change it. */
     className: string;
     readonly clientHeight: number;
     readonly clientLeft: number;
     readonly clientTop: number;
     readonly clientWidth: number;
-    /**
-     * Returns the value of element's id content attribute. Can be set to change it.
-     */
+    /** Returns the value of element's id content attribute. Can be set to change it. */
     id: string;
-    /**
-     * Returns the local name.
-     */
+    /** Returns the local name. */
     readonly localName: string;
-    /**
-     * Returns the namespace.
-     */
+    /** Returns the namespace. */
     readonly namespaceURI: string | null;
     onfullscreenchange: ((this: Element, ev: Event) => any) | null;
     onfullscreenerror: ((this: Element, ev: Event) => any) | null;
     outerHTML: string;
     readonly ownerDocument: Document;
-    /**
-     * Returns the namespace prefix.
-     */
+    readonly part: DOMTokenList;
+    /** Returns the namespace prefix. */
     readonly prefix: string | null;
     readonly scrollHeight: number;
     scrollLeft: number;
     scrollTop: number;
     readonly scrollWidth: number;
-    /**
-     * Returns element's shadow root, if any, and if shadow root's mode is "open", and null otherwise.
-     */
+    /** Returns element's shadow root, if any, and if shadow root's mode is "open", and null otherwise. */
     readonly shadowRoot: ShadowRoot | null;
-    /**
-     * Returns the value of element's slot content attribute. Can be set to change it.
-     */
+    /** Returns the value of element's slot content attribute. Can be set to change it. */
     slot: string;
-    /**
-     * Returns the HTML-uppercased qualified name.
-     */
+    /** Returns the HTML-uppercased qualified name. */
     readonly tagName: string;
-    /**
-     * Creates a shadow root for element and returns it.
-     */
+    /** Creates a shadow root for element and returns it. */
     attachShadow(init: ShadowRootInit): ShadowRoot;
-    /**
-     * Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise.
-     */
+    /** Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise. */
     closest<K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] | null;
     closest<K extends keyof SVGElementTagNameMap>(selector: K): SVGElementTagNameMap[K] | null;
-    closest<E extends Element = Element>(selector: string): E | null;
-    /**
-     * Returns element's first attribute whose qualified name is qualifiedName, and null if there is no such attribute otherwise.
-     */
+    closest<E extends Element = Element>(selectors: string): E | null;
+    /** Returns element's first attribute whose qualified name is qualifiedName, and null if there is no such attribute otherwise. */
     getAttribute(qualifiedName: string): string | null;
-    /**
-     * Returns element's attribute whose namespace is namespace and local name is localName, and null if there is no such attribute otherwise.
-     */
+    /** Returns element's attribute whose namespace is namespace and local name is localName, and null if there is no such attribute otherwise. */
     getAttributeNS(namespace: string | null, localName: string): string | null;
-    /**
-     * Returns the qualified names of all element's attributes. Can contain duplicates.
-     */
+    /** Returns the qualified names of all element's attributes. Can contain duplicates. */
     getAttributeNames(): string[];
     getAttributeNode(qualifiedName: string): Attr | null;
     getAttributeNodeNS(namespace: string | null, localName: string): Attr | null;
     getBoundingClientRect(): DOMRect;
     getClientRects(): DOMRectList;
-    /**
-     * Returns a HTMLCollection of the elements in the object on which the method was invoked (a document or an element) that have all the classes given by classNames. The classNames argument is interpreted as a space-separated list of classes.
-     */
+    /** Returns a HTMLCollection of the elements in the object on which the method was invoked (a document or an element) that have all the classes given by classNames. The classNames argument is interpreted as a space-separated list of classes. */
     getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     getElementsByTagName<K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>;
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
-    /**
-     * Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise.
-     */
+    getElementsByTagNameNS(namespace: string | null, localName: string): HTMLCollectionOf<Element>;
+    /** Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise. */
     hasAttribute(qualifiedName: string): boolean;
-    /**
-     * Returns true if element has an attribute whose namespace is namespace and local name is localName.
-     */
+    /** Returns true if element has an attribute whose namespace is namespace and local name is localName. */
     hasAttributeNS(namespace: string | null, localName: string): boolean;
-    /**
-     * Returns true if element has attributes, and false otherwise.
-     */
+    /** Returns true if element has attributes, and false otherwise. */
     hasAttributes(): boolean;
     hasPointerCapture(pointerId: number): boolean;
-    insertAdjacentElement(position: InsertPosition, insertedElement: Element): Element | null;
-    insertAdjacentHTML(where: InsertPosition, html: string): void;
-    insertAdjacentText(where: InsertPosition, text: string): void;
-    /**
-     * Returns true if matching selectors against element's root yields element, and false otherwise.
-     */
+    insertAdjacentElement(where: InsertPosition, element: Element): Element | null;
+    insertAdjacentHTML(position: InsertPosition, text: string): void;
+    insertAdjacentText(where: InsertPosition, data: string): void;
+    /** Returns true if matching selectors against element's root yields element, and false otherwise. */
     matches(selectors: string): boolean;
-    msGetRegionContent(): any;
     releasePointerCapture(pointerId: number): void;
-    /**
-     * Removes element's first attribute whose qualified name is qualifiedName.
-     */
+    /** Removes element's first attribute whose qualified name is qualifiedName. */
     removeAttribute(qualifiedName: string): void;
-    /**
-     * Removes element's attribute whose namespace is namespace and local name is localName.
-     */
+    /** Removes element's attribute whose namespace is namespace and local name is localName. */
     removeAttributeNS(namespace: string | null, localName: string): void;
     removeAttributeNode(attr: Attr): Attr;
     /**
      * Displays element fullscreen and resolves promise when done.
-     * 
+     *
      * When supplied, options's navigationUI member indicates whether showing navigation UI while in fullscreen is preferred or not. If set to "show", navigation simplicity is preferred over screen space, and if set to "hide", more screen space is preferred. User agents are always free to honor user preference over the application's. The default value "auto" indicates no application preference.
      */
     requestFullscreen(options?: FullscreenOptions): Promise<void>;
@@ -5288,23 +5097,20 @@ interface Element extends Node, Animatable, ChildNode, InnerHTML, NonDocumentTyp
     scrollIntoView(arg?: boolean | ScrollIntoViewOptions): void;
     scrollTo(options?: ScrollToOptions): void;
     scrollTo(x: number, y: number): void;
-    /**
-     * Sets the value of element's first attribute whose qualified name is qualifiedName to value.
-     */
+    /** Sets the value of element's first attribute whose qualified name is qualifiedName to value. */
     setAttribute(qualifiedName: string, value: string): void;
-    /**
-     * Sets the value of element's attribute whose namespace is namespace and local name is localName to value.
-     */
+    /** Sets the value of element's attribute whose namespace is namespace and local name is localName to value. */
     setAttributeNS(namespace: string | null, qualifiedName: string, value: string): void;
     setAttributeNode(attr: Attr): Attr | null;
     setAttributeNodeNS(attr: Attr): Attr | null;
     setPointerCapture(pointerId: number): void;
     /**
      * If force is not given, "toggles" qualifiedName, removing it if it is present and adding it if it is not present. If force is true, adds qualifiedName. If force is false, removes qualifiedName.
-     * 
+     *
      * Returns true if qualifiedName is now present, and false otherwise.
      */
     toggleAttribute(qualifiedName: string, force?: boolean): boolean;
+    /** @deprecated This is a legacy alias of `matches`. */
     webkitMatchesSelector(selectors: string): boolean;
     addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Element, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -5328,6 +5134,38 @@ interface ElementContentEditable {
     readonly isContentEditable: boolean;
 }
 
+interface ElementInternals extends ARIAMixin {
+    /** Returns the form owner of internals's target element. */
+    readonly form: HTMLFormElement | null;
+    /** Returns a NodeList of all the label elements that internals's target element is associated with. */
+    readonly labels: NodeList;
+    /** Returns the ShadowRoot for internals's target element, if the target element is a shadow host, or null otherwise. */
+    readonly shadowRoot: ShadowRoot | null;
+    /** Returns the error message that would be shown to the user if internals's target element was to be checked for validity. */
+    readonly validationMessage: string;
+    /** Returns the ValidityState object for internals's target element. */
+    readonly validity: ValidityState;
+    /** Returns true if internals's target element will be validated when the form is submitted; false otherwise. */
+    readonly willValidate: boolean;
+    /** Returns true if internals's target element has no validity problems; false otherwise. Fires an invalid event at the element in the latter case. */
+    checkValidity(): boolean;
+    /** Returns true if internals's target element has no validity problems; otherwise, returns false, fires an invalid event at the element, and (if the event isn't canceled) reports the problem to the user. */
+    reportValidity(): boolean;
+    /**
+     * Sets both the state and submission value of internals's target element to value.
+     *
+     * If value is null, the element won't participate in form submission.
+     */
+    setFormValue(value: File | string | FormData | null, state?: File | string | FormData | null): void;
+    /** Marks internals's target element as suffering from the constraints indicated by the flags argument, and sets the element's validation message to message. If anchor is specified, the user agent might use it to indicate problems with the constraints of internals's target element when the form owner is validated interactively or reportValidity() is called. */
+    setValidity(flags?: ValidityStateFlags, message?: string, anchor?: HTMLElement): void;
+}
+
+declare var ElementInternals: {
+    prototype: ElementInternals;
+    new(): ElementInternals;
+};
+
 /** Events providing information related to errors in scripts or in files. */
 interface ErrorEvent extends Event {
     readonly colno: number;
@@ -5344,66 +5182,41 @@ declare var ErrorEvent: {
 
 /** An event which takes place in the DOM. */
 interface Event {
-    /**
-     * Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise.
-     */
+    /** Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise. */
     readonly bubbles: boolean;
+    /** @deprecated */
     cancelBubble: boolean;
-    /**
-     * Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method.
-     */
+    /** Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method. */
     readonly cancelable: boolean;
-    /**
-     * Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise.
-     */
+    /** Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise. */
     readonly composed: boolean;
-    /**
-     * Returns the object whose event listener's callback is currently being invoked.
-     */
+    /** Returns the object whose event listener's callback is currently being invoked. */
     readonly currentTarget: EventTarget | null;
-    /**
-     * Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise.
-     */
+    /** Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise. */
     readonly defaultPrevented: boolean;
-    /**
-     * Returns the event's phase, which is one of NONE, CAPTURING_PHASE, AT_TARGET, and BUBBLING_PHASE.
-     */
+    /** Returns the event's phase, which is one of NONE, CAPTURING_PHASE, AT_TARGET, and BUBBLING_PHASE. */
     readonly eventPhase: number;
-    /**
-     * Returns true if event was dispatched by the user agent, and false otherwise.
-     */
+    /** Returns true if event was dispatched by the user agent, and false otherwise. */
     readonly isTrusted: boolean;
+    /** @deprecated */
     returnValue: boolean;
     /** @deprecated */
     readonly srcElement: EventTarget | null;
-    /**
-     * Returns the object to which event is dispatched (its target).
-     */
+    /** Returns the object to which event is dispatched (its target). */
     readonly target: EventTarget | null;
-    /**
-     * Returns the event's timestamp as the number of milliseconds measured relative to the time origin.
-     */
-    readonly timeStamp: number;
-    /**
-     * Returns the type of event, e.g. "click", "hashchange", or "submit".
-     */
+    /** Returns the event's timestamp as the number of milliseconds measured relative to the time origin. */
+    readonly timeStamp: DOMHighResTimeStamp;
+    /** Returns the type of event, e.g. "click", "hashchange", or "submit". */
     readonly type: string;
-    /**
-     * Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
-     */
+    /** Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget. */
     composedPath(): EventTarget[];
+    /** @deprecated */
     initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void;
-    /**
-     * If invoked when the cancelable attribute value is true, and while executing a listener for the event with passive set to false, signals to the operation that caused event to be dispatched that it needs to be canceled.
-     */
+    /** If invoked when the cancelable attribute value is true, and while executing a listener for the event with passive set to false, signals to the operation that caused event to be dispatched that it needs to be canceled. */
     preventDefault(): void;
-    /**
-     * Invoking this method prevents event from reaching any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any other objects.
-     */
+    /** Invoking this method prevents event from reaching any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any other objects. */
     stopImmediatePropagation(): void;
-    /**
-     * When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object.
-     */
+    /** When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object. */
     stopPropagation(): void;
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
@@ -5420,8 +5233,21 @@ declare var Event: {
     readonly NONE: number;
 };
 
+interface EventCounts {
+    forEach(callbackfn: (value: number, key: string, parent: EventCounts) => void, thisArg?: any): void;
+}
+
+declare var EventCounts: {
+    prototype: EventCounts;
+    new(): EventCounts;
+};
+
+interface EventListener {
+    (evt: Event): void;
+}
+
 interface EventListenerObject {
-    handleEvent(evt: Event): void;
+    handleEvent(object: Event): void;
 }
 
 interface EventSourceEventMap {
@@ -5434,34 +5260,28 @@ interface EventSource extends EventTarget {
     onerror: ((this: EventSource, ev: Event) => any) | null;
     onmessage: ((this: EventSource, ev: MessageEvent) => any) | null;
     onopen: ((this: EventSource, ev: Event) => any) | null;
-    /**
-     * Returns the state of this EventSource object's connection. It can have the values described below.
-     */
+    /** Returns the state of this EventSource object's connection. It can have the values described below. */
     readonly readyState: number;
-    /**
-     * Returns the URL providing the event stream.
-     */
+    /** Returns the URL providing the event stream. */
     readonly url: string;
-    /**
-     * Returns true if the credentials mode for connection requests to the URL providing the event stream is set to "include", and false otherwise.
-     */
+    /** Returns true if the credentials mode for connection requests to the URL providing the event stream is set to "include", and false otherwise. */
     readonly withCredentials: boolean;
-    /**
-     * Aborts any instances of the fetch algorithm started for this EventSource object, and sets the readyState attribute to CLOSED.
-     */
+    /** Aborts any instances of the fetch algorithm started for this EventSource object, and sets the readyState attribute to CLOSED. */
     close(): void;
     readonly CLOSED: number;
     readonly CONNECTING: number;
     readonly OPEN: number;
     addEventListener<K extends keyof EventSourceEventMap>(type: K, listener: (this: EventSource, ev: EventSourceEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: (this: EventSource, event: MessageEvent) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof EventSourceEventMap>(type: K, listener: (this: EventSource, ev: EventSourceEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: (this: EventSource, event: MessageEvent) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventSource: {
     prototype: EventSource;
-    new(url: string, eventSourceInitDict?: EventSourceInit): EventSource;
+    new(url: string | URL, eventSourceInitDict?: EventSourceInit): EventSource;
     readonly CLOSED: number;
     readonly CONNECTING: number;
     readonly OPEN: number;
@@ -5471,25 +5291,23 @@ declare var EventSource: {
 interface EventTarget {
     /**
      * Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-     * 
+     *
      * The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-     * 
+     *
      * When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-     * 
+     *
      * When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-     * 
+     *
      * When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-     * 
+     *
+     * If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+     *
      * The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
      */
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions): void;
-    /**
-     * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
-     */
+    addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
+    /** Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise. */
     dispatchEvent(event: Event): boolean;
-    /**
-     * Removes the event listener in target's event listener list with the same type, callback, and options.
-     */
+    /** Removes the event listener in target's event listener list with the same type, callback, and options. */
     removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
 }
 
@@ -5498,23 +5316,7 @@ declare var EventTarget: {
     new(): EventTarget;
 };
 
-interface ExtensionScriptApis {
-    extensionIdToShortId(extensionId: string): number;
-    fireExtensionApiTelemetry(functionName: string, isSucceeded: boolean, isSupported: boolean, errorString: string): void;
-    genericFunction(routerAddress: any, parameters?: string, callbackId?: number): void;
-    genericSynchronousFunction(functionId: number, parameters?: string): string;
-    genericWebRuntimeCallout(to: any, from: any, payload: string): void;
-    getExtensionId(): string;
-    registerGenericFunctionCallbackHandler(callbackHandler: Function): void;
-    registerGenericPersistentCallbackHandler(callbackHandler: Function): void;
-    registerWebRuntimeCallbackHandler(handler: Function): any;
-}
-
-declare var ExtensionScriptApis: {
-    prototype: ExtensionScriptApis;
-    new(): ExtensionScriptApis;
-};
-
+/** @deprecated */
 interface External {
     /** @deprecated */
     AddSearchProvider(): void;
@@ -5522,6 +5324,7 @@ interface External {
     IsSearchProviderInstalled(): void;
 }
 
+/** @deprecated */
 declare var External: {
     prototype: External;
     new(): External;
@@ -5531,6 +5334,7 @@ declare var External: {
 interface File extends Blob {
     readonly lastModified: number;
     readonly name: string;
+    readonly webkitRelativePath: string;
 }
 
 declare var File: {
@@ -5592,6 +5396,96 @@ declare var FileReader: {
     readonly LOADING: number;
 };
 
+interface FileSystem {
+    readonly name: string;
+    readonly root: FileSystemDirectoryEntry;
+}
+
+declare var FileSystem: {
+    prototype: FileSystem;
+    new(): FileSystem;
+};
+
+interface FileSystemDirectoryEntry extends FileSystemEntry {
+    createReader(): FileSystemDirectoryReader;
+    getDirectory(path?: string | null, options?: FileSystemFlags, successCallback?: FileSystemEntryCallback, errorCallback?: ErrorCallback): void;
+    getFile(path?: string | null, options?: FileSystemFlags, successCallback?: FileSystemEntryCallback, errorCallback?: ErrorCallback): void;
+}
+
+declare var FileSystemDirectoryEntry: {
+    prototype: FileSystemDirectoryEntry;
+    new(): FileSystemDirectoryEntry;
+};
+
+/** Available only in secure contexts. */
+interface FileSystemDirectoryHandle extends FileSystemHandle {
+    readonly kind: "directory";
+    getDirectoryHandle(name: string, options?: FileSystemGetDirectoryOptions): Promise<FileSystemDirectoryHandle>;
+    getFileHandle(name: string, options?: FileSystemGetFileOptions): Promise<FileSystemFileHandle>;
+    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>;
+    resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>;
+}
+
+declare var FileSystemDirectoryHandle: {
+    prototype: FileSystemDirectoryHandle;
+    new(): FileSystemDirectoryHandle;
+};
+
+interface FileSystemDirectoryReader {
+    readEntries(successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback): void;
+}
+
+declare var FileSystemDirectoryReader: {
+    prototype: FileSystemDirectoryReader;
+    new(): FileSystemDirectoryReader;
+};
+
+interface FileSystemEntry {
+    readonly filesystem: FileSystem;
+    readonly fullPath: string;
+    readonly isDirectory: boolean;
+    readonly isFile: boolean;
+    readonly name: string;
+    getParent(successCallback?: FileSystemEntryCallback, errorCallback?: ErrorCallback): void;
+}
+
+declare var FileSystemEntry: {
+    prototype: FileSystemEntry;
+    new(): FileSystemEntry;
+};
+
+interface FileSystemFileEntry extends FileSystemEntry {
+    file(successCallback: FileCallback, errorCallback?: ErrorCallback): void;
+}
+
+declare var FileSystemFileEntry: {
+    prototype: FileSystemFileEntry;
+    new(): FileSystemFileEntry;
+};
+
+/** Available only in secure contexts. */
+interface FileSystemFileHandle extends FileSystemHandle {
+    readonly kind: "file";
+    getFile(): Promise<File>;
+}
+
+declare var FileSystemFileHandle: {
+    prototype: FileSystemFileHandle;
+    new(): FileSystemFileHandle;
+};
+
+/** Available only in secure contexts. */
+interface FileSystemHandle {
+    readonly kind: FileSystemHandleKind;
+    readonly name: string;
+    isSameEntry(other: FileSystemHandle): Promise<boolean>;
+}
+
+declare var FileSystemHandle: {
+    prototype: FileSystemHandle;
+    new(): FileSystemHandle;
+};
+
 /** Focus-related events like focus, blur, focusin, or focusout. */
 interface FocusEvent extends UIEvent {
     readonly relatedTarget: EventTarget | null;
@@ -5602,19 +5496,67 @@ declare var FocusEvent: {
     new(type: string, eventInitDict?: FocusEventInit): FocusEvent;
 };
 
-interface FocusNavigationEvent extends Event {
-    readonly navigationReason: NavigationReason;
-    readonly originHeight: number;
-    readonly originLeft: number;
-    readonly originTop: number;
-    readonly originWidth: number;
-    requestFocus(): void;
+interface FontFace {
+    ascentOverride: string;
+    descentOverride: string;
+    display: string;
+    family: string;
+    featureSettings: string;
+    lineGapOverride: string;
+    readonly loaded: Promise<FontFace>;
+    readonly status: FontFaceLoadStatus;
+    stretch: string;
+    style: string;
+    unicodeRange: string;
+    variant: string;
+    variationSettings: string;
+    weight: string;
+    load(): Promise<FontFace>;
 }
 
-declare var FocusNavigationEvent: {
-    prototype: FocusNavigationEvent;
-    new(type: string, eventInitDict?: FocusNavigationEventInit): FocusNavigationEvent;
+declare var FontFace: {
+    prototype: FontFace;
+    new(family: string, source: string | BinaryData, descriptors?: FontFaceDescriptors): FontFace;
 };
+
+interface FontFaceSetEventMap {
+    "loading": Event;
+    "loadingdone": Event;
+    "loadingerror": Event;
+}
+
+interface FontFaceSet extends EventTarget {
+    onloading: ((this: FontFaceSet, ev: Event) => any) | null;
+    onloadingdone: ((this: FontFaceSet, ev: Event) => any) | null;
+    onloadingerror: ((this: FontFaceSet, ev: Event) => any) | null;
+    readonly ready: Promise<FontFaceSet>;
+    readonly status: FontFaceSetLoadStatus;
+    check(font: string, text?: string): boolean;
+    load(font: string, text?: string): Promise<FontFace[]>;
+    forEach(callbackfn: (value: FontFace, key: FontFace, parent: FontFaceSet) => void, thisArg?: any): void;
+    addEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var FontFaceSet: {
+    prototype: FontFaceSet;
+    new(initialFaces: FontFace[]): FontFaceSet;
+};
+
+interface FontFaceSetLoadEvent extends Event {
+    readonly fontfaces: ReadonlyArray<FontFace>;
+}
+
+declare var FontFaceSetLoadEvent: {
+    prototype: FontFaceSetLoadEvent;
+    new(type: string, eventInitDict?: FontFaceSetLoadEventInit): FontFaceSetLoadEvent;
+};
+
+interface FontFaceSource {
+    readonly fonts: FontFaceSet;
+}
 
 /** Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". */
 interface FormData {
@@ -5632,6 +5574,16 @@ declare var FormData: {
     new(form?: HTMLFormElement): FormData;
 };
 
+interface FormDataEvent extends Event {
+    /** Returns a FormData object representing names and values of elements associated to the target form. Operations on the FormData object will affect form data to be submitted. */
+    readonly formData: FormData;
+}
+
+declare var FormDataEvent: {
+    prototype: FormDataEvent;
+    new(type: string, eventInitDict: FormDataEventInit): FormDataEvent;
+};
+
 /** A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels. */
 interface GainNode extends AudioNode {
     readonly gain: AudioParam;
@@ -5642,18 +5594,19 @@ declare var GainNode: {
     new(context: BaseAudioContext, options?: GainOptions): GainNode;
 };
 
-/** This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id. */
+/**
+ * This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id.
+ * Available only in secure contexts.
+ */
 interface Gamepad {
     readonly axes: ReadonlyArray<number>;
     readonly buttons: ReadonlyArray<GamepadButton>;
     readonly connected: boolean;
-    readonly hand: GamepadHand;
     readonly hapticActuators: ReadonlyArray<GamepadHapticActuator>;
     readonly id: string;
     readonly index: number;
     readonly mapping: GamepadMappingType;
-    readonly pose: GamepadPose | null;
-    readonly timestamp: number;
+    readonly timestamp: DOMHighResTimeStamp;
 }
 
 declare var Gamepad: {
@@ -5661,7 +5614,10 @@ declare var Gamepad: {
     new(): Gamepad;
 };
 
-/** An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device. */
+/**
+ * An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
+ * Available only in secure contexts.
+ */
 interface GamepadButton {
     readonly pressed: boolean;
     readonly touched: boolean;
@@ -5673,7 +5629,10 @@ declare var GamepadButton: {
     new(): GamepadButton;
 };
 
-/** This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to. */
+/**
+ * This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to.
+ * Available only in secure contexts.
+ */
 interface GamepadEvent extends Event {
     readonly gamepad: Gamepad;
 }
@@ -5686,29 +5645,11 @@ declare var GamepadEvent: {
 /** This Gamepad API interface represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware. */
 interface GamepadHapticActuator {
     readonly type: GamepadHapticActuatorType;
-    pulse(value: number, duration: number): Promise<boolean>;
 }
 
 declare var GamepadHapticActuator: {
     prototype: GamepadHapticActuator;
     new(): GamepadHapticActuator;
-};
-
-/** This Gamepad API interface represents the pose of a WebVR controller at a given timestamp (which includes orientation, position, velocity, and acceleration information.) */
-interface GamepadPose {
-    readonly angularAcceleration: Float32Array | null;
-    readonly angularVelocity: Float32Array | null;
-    readonly hasOrientation: boolean;
-    readonly hasPosition: boolean;
-    readonly linearAcceleration: Float32Array | null;
-    readonly linearVelocity: Float32Array | null;
-    readonly orientation: Float32Array | null;
-    readonly position: Float32Array | null;
-}
-
-declare var GamepadPose: {
-    prototype: GamepadPose;
-    new(): GamepadPose;
 };
 
 interface GenericTransformStream {
@@ -5719,8 +5660,8 @@ interface GenericTransformStream {
 /** An object able to programmatically obtain the position of the device. It gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the user's location. */
 interface Geolocation {
     clearWatch(watchId: number): void;
-    getCurrentPosition(successCallback: PositionCallback, errorCallback?: PositionErrorCallback, options?: PositionOptions): void;
-    watchPosition(successCallback: PositionCallback, errorCallback?: PositionErrorCallback, options?: PositionOptions): number;
+    getCurrentPosition(successCallback: PositionCallback, errorCallback?: PositionErrorCallback | null, options?: PositionOptions): void;
+    watchPosition(successCallback: PositionCallback, errorCallback?: PositionErrorCallback | null, options?: PositionOptions): number;
 }
 
 declare var Geolocation: {
@@ -5728,6 +5669,7 @@ declare var Geolocation: {
     new(): Geolocation;
 };
 
+/** Available only in secure contexts. */
 interface GeolocationCoordinates {
     readonly accuracy: number;
     readonly altitude: number | null;
@@ -5743,9 +5685,10 @@ declare var GeolocationCoordinates: {
     new(): GeolocationCoordinates;
 };
 
+/** Available only in secure contexts. */
 interface GeolocationPosition {
     readonly coords: GeolocationCoordinates;
-    readonly timestamp: number;
+    readonly timestamp: EpochTimeStamp;
 }
 
 declare var GeolocationPosition: {
@@ -5793,7 +5736,6 @@ interface GlobalEventHandlersEventMap {
     "drag": DragEvent;
     "dragend": DragEvent;
     "dragenter": DragEvent;
-    "dragexit": Event;
     "dragleave": DragEvent;
     "dragover": DragEvent;
     "dragstart": DragEvent;
@@ -5805,6 +5747,7 @@ interface GlobalEventHandlersEventMap {
     "focus": FocusEvent;
     "focusin": FocusEvent;
     "focusout": FocusEvent;
+    "formdata": FormDataEvent;
     "gotpointercapture": PointerEvent;
     "input": Event;
     "invalid": Event;
@@ -5845,8 +5788,9 @@ interface GlobalEventHandlersEventMap {
     "select": Event;
     "selectionchange": Event;
     "selectstart": Event;
+    "slotchange": Event;
     "stalled": Event;
-    "submit": Event;
+    "submit": SubmitEvent;
     "suspend": Event;
     "timeupdate": Event;
     "toggle": Event;
@@ -5860,6 +5804,10 @@ interface GlobalEventHandlersEventMap {
     "transitionstart": TransitionEvent;
     "volumechange": Event;
     "waiting": Event;
+    "webkitanimationend": Event;
+    "webkitanimationiteration": Event;
+    "webkitanimationstart": Event;
+    "webkittransitionend": Event;
     "wheel": WheelEvent;
 }
 
@@ -5874,6 +5822,7 @@ interface GlobalEventHandlers {
     onanimationiteration: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
     onanimationstart: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
     onauxclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
+    onbeforeinput: ((this: GlobalEventHandlers, ev: InputEvent) => any) | null;
     /**
      * Fires when the object loses the input focus.
      * @param ev The focus event.
@@ -5923,7 +5872,6 @@ interface GlobalEventHandlers {
      * @param ev The drag event.
      */
     ondragenter: ((this: GlobalEventHandlers, ev: DragEvent) => any) | null;
-    ondragexit: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /**
      * Fires on the target object when the user moves the mouse out of a valid drop target during a drag operation.
      * @param ev The drag event.
@@ -5965,6 +5913,7 @@ interface GlobalEventHandlers {
      * @param ev The event.
      */
     onfocus: ((this: GlobalEventHandlers, ev: FocusEvent) => any) | null;
+    onformdata: ((this: GlobalEventHandlers, ev: FormDataEvent) => any) | null;
     ongotpointercapture: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null;
     oninput: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     oninvalid: ((this: GlobalEventHandlers, ev: Event) => any) | null;
@@ -5976,6 +5925,7 @@ interface GlobalEventHandlers {
     /**
      * Fires when the user presses an alphanumeric key.
      * @param ev The event.
+     * @deprecated
      */
     onkeypress: ((this: GlobalEventHandlers, ev: KeyboardEvent) => any) | null;
     /**
@@ -6093,12 +6043,13 @@ interface GlobalEventHandlers {
     onselect: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onselectionchange: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onselectstart: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    onslotchange: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /**
      * Occurs when the download has stopped.
      * @param ev The event.
      */
     onstalled: ((this: GlobalEventHandlers, ev: Event) => any) | null;
-    onsubmit: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    onsubmit: ((this: GlobalEventHandlers, ev: SubmitEvent) => any) | null;
     /**
      * Occurs if the load operation has been intentionally halted.
      * @param ev The event.
@@ -6110,10 +6061,10 @@ interface GlobalEventHandlers {
      */
     ontimeupdate: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     ontoggle: ((this: GlobalEventHandlers, ev: Event) => any) | null;
-    ontouchcancel?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
-    ontouchend?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
-    ontouchmove?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
-    ontouchstart?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
+    ontouchcancel?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
+    ontouchend?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
+    ontouchmove?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
+    ontouchstart?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
     ontransitioncancel: ((this: GlobalEventHandlers, ev: TransitionEvent) => any) | null;
     ontransitionend: ((this: GlobalEventHandlers, ev: TransitionEvent) => any) | null;
     ontransitionrun: ((this: GlobalEventHandlers, ev: TransitionEvent) => any) | null;
@@ -6128,6 +6079,14 @@ interface GlobalEventHandlers {
      * @param ev The event.
      */
     onwaiting: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    /** @deprecated This is a legacy alias of `onanimationend`. */
+    onwebkitanimationend: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    /** @deprecated This is a legacy alias of `onanimationiteration`. */
+    onwebkitanimationiteration: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    /** @deprecated This is a legacy alias of `onanimationstart`. */
+    onwebkitanimationstart: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    /** @deprecated This is a legacy alias of `ontransitionend`. */
+    onwebkittransitionend: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onwheel: ((this: GlobalEventHandlers, ev: WheelEvent) => any) | null;
     addEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: GlobalEventHandlers, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6136,19 +6095,15 @@ interface GlobalEventHandlers {
 }
 
 interface HTMLAllCollection {
-    /**
-     * Returns the number of elements in the collection.
-     */
+    /** Returns the number of elements in the collection. */
     readonly length: number;
-    /**
-     * Returns the item with index index from the collection (determined by tree order).
-     */
+    /** Returns the item with index index from the collection (determined by tree order). */
     item(nameOrIndex?: string): HTMLCollection | Element | null;
     /**
      * Returns the item with ID or name name from the collection.
-     * 
+     *
      * If there are multiple matching items, then an HTMLCollection object containing all those elements is returned.
-     * 
+     *
      * Only button, form, iframe, input, map, meta, object, select, and textarea elements can have a name for the purpose of this method; their name is given by the value of their name attribute.
      */
     namedItem(name: string): HTMLCollection | Element | null;
@@ -6164,48 +6119,40 @@ declare var HTMLAllCollection: {
 interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     /**
      * Sets or retrieves the character set used to encode the object.
+     * @deprecated
      */
-    /** @deprecated */
     charset: string;
     /**
      * Sets or retrieves the coordinates of the object.
+     * @deprecated
      */
-    /** @deprecated */
     coords: string;
     download: string;
-    /**
-     * Sets or retrieves the language code of the object.
-     */
+    /** Sets or retrieves the language code of the object. */
     hreflang: string;
     /**
      * Sets or retrieves the shape of the object.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
     ping: string;
     referrerPolicy: string;
-    /**
-     * Sets or retrieves the relationship between the object and the destination of the link.
-     */
+    /** Sets or retrieves the relationship between the object and the destination of the link. */
     rel: string;
     readonly relList: DOMTokenList;
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
+     * @deprecated
      */
-    /** @deprecated */
     rev: string;
     /**
      * Sets or retrieves the shape of the object.
+     * @deprecated
      */
-    /** @deprecated */
     shape: string;
-    /**
-     * Sets or retrieves the window or frame at which to target content.
-     */
+    /** Sets or retrieves the window or frame at which to target content. */
     target: string;
-    /**
-     * Retrieves or sets the text of the object as a string.
-     */
+    /** Retrieves or sets the text of the object as a string. */
     text: string;
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAnchorElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6219,83 +6166,25 @@ declare var HTMLAnchorElement: {
     new(): HTMLAnchorElement;
 };
 
-interface HTMLAppletElement extends HTMLElement {
-    /** @deprecated */
-    align: string;
-    /**
-     * Sets or retrieves a text alternative to the graphic.
-     */
-    /** @deprecated */
-    alt: string;
-    /**
-     * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
-     */
-    /** @deprecated */
-    archive: string;
-    /** @deprecated */
-    code: string;
-    /**
-     * Sets or retrieves the URL of the component.
-     */
-    /** @deprecated */
-    codeBase: string;
-    readonly form: HTMLFormElement | null;
-    /**
-     * Sets or retrieves the height of the object.
-     */
-    /** @deprecated */
-    height: string;
-    /** @deprecated */
-    hspace: number;
-    /**
-     * Sets or retrieves the shape of the object.
-     */
-    /** @deprecated */
-    name: string;
-    /** @deprecated */
-    object: string;
-    /** @deprecated */
-    vspace: number;
-    /** @deprecated */
-    width: string;
-    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAppletElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAppletElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var HTMLAppletElement: {
-    prototype: HTMLAppletElement;
-    new(): HTMLAppletElement;
-};
-
 /** Provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <area> elements. */
 interface HTMLAreaElement extends HTMLElement, HTMLHyperlinkElementUtils {
-    /**
-     * Sets or retrieves a text alternative to the graphic.
-     */
+    /** Sets or retrieves a text alternative to the graphic. */
     alt: string;
-    /**
-     * Sets or retrieves the coordinates of the object.
-     */
+    /** Sets or retrieves the coordinates of the object. */
     coords: string;
     download: string;
     /**
      * Sets or gets whether clicks in this region cause action.
+     * @deprecated
      */
-    /** @deprecated */
     noHref: boolean;
     ping: string;
     referrerPolicy: string;
     rel: string;
     readonly relList: DOMTokenList;
-    /**
-     * Sets or retrieves the shape of the object.
-     */
+    /** Sets or retrieves the shape of the object. */
     shape: string;
-    /**
-     * Sets or retrieves the window or frame at which to target content.
-     */
+    /** Sets or retrieves the window or frame at which to target content. */
     target: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAreaElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6325,8 +6214,8 @@ declare var HTMLAudioElement: {
 interface HTMLBRElement extends HTMLElement {
     /**
      * Sets or retrieves the side on which floating objects are not to be positioned when any IHTMLBlockElement is inserted into the document.
+     * @deprecated
      */
-    /** @deprecated */
     clear: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBRElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6341,13 +6230,9 @@ declare var HTMLBRElement: {
 
 /** Contains the base URI for a document. This object inherits all of the properties and methods as described in the HTMLElement interface. */
 interface HTMLBaseElement extends HTMLElement {
-    /**
-     * Gets or sets the baseline URL on which relative links are based.
-     */
+    /** Gets or sets the baseline URL on which relative links are based. */
     href: string;
-    /**
-     * Sets or retrieves the window or frame at which to target content.
-     */
+    /** Sets or retrieves the window or frame at which to target content. */
     target: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBaseElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6360,31 +6245,7 @@ declare var HTMLBaseElement: {
     new(): HTMLBaseElement;
 };
 
-/** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <basefont> elements. */
-interface HTMLBaseFontElement extends HTMLElement, DOML2DeprecatedColorProperty {
-    /**
-     * Sets or retrieves the current typeface family.
-     */
-    /** @deprecated */
-    face: string;
-    /**
-     * Sets or retrieves the font size of the object.
-     */
-    /** @deprecated */
-    size: number;
-    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBaseFontElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBaseFontElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var HTMLBaseFontElement: {
-    prototype: HTMLBaseFontElement;
-    new(): HTMLBaseFontElement;
-};
-
 interface HTMLBodyElementEventMap extends HTMLElementEventMap, WindowEventHandlersEventMap {
-    "orientationchange": Event;
 }
 
 /** Provides special properties (beyond those inherited from the regular HTMLElement interface) for manipulating <body> elements. */
@@ -6397,8 +6258,6 @@ interface HTMLBodyElement extends HTMLElement, WindowEventHandlers {
     bgColor: string;
     /** @deprecated */
     link: string;
-    /** @deprecated */
-    onorientationchange: ((this: HTMLBodyElement, ev: Event) => any) | null;
     /** @deprecated */
     text: string;
     /** @deprecated */
@@ -6417,58 +6276,32 @@ declare var HTMLBodyElement: {
 /** Provides properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <button> elements. */
 interface HTMLButtonElement extends HTMLElement {
     disabled: boolean;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
-    /**
-     * Overrides the action attribute (where the data on a form is sent) on the parent form element.
-     */
+    /** Overrides the action attribute (where the data on a form is sent) on the parent form element. */
     formAction: string;
-    /**
-     * Used to override the encoding (formEnctype attribute) specified on the form element.
-     */
+    /** Used to override the encoding (formEnctype attribute) specified on the form element. */
     formEnctype: string;
-    /**
-     * Overrides the submit method attribute previously specified on a form element.
-     */
+    /** Overrides the submit method attribute previously specified on a form element. */
     formMethod: string;
-    /**
-     * Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option.
-     */
+    /** Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option. */
     formNoValidate: boolean;
-    /**
-     * Overrides the target attribute on a form element.
-     */
+    /** Overrides the target attribute on a form element. */
     formTarget: string;
     readonly labels: NodeListOf<HTMLLabelElement>;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
-    /**
-     * Gets the classification and default behavior of the button.
-     */
+    /** Gets the classification and default behavior of the button. */
     type: string;
-    /**
-     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
-     */
+    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
     readonly validationMessage: string;
-    /**
-     * Returns a  ValidityState object that represents the validity states of an element.
-     */
+    /** Returns a  ValidityState object that represents the validity states of an element. */
     readonly validity: ValidityState;
-    /**
-     * Sets or retrieves the default or selected value of the control.
-     */
+    /** Sets or retrieves the default or selected value of the control. */
     value: string;
-    /**
-     * Returns whether an element will successfully validate based on forms validation rules and constraints.
-     */
+    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
     readonly willValidate: boolean;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     reportValidity(): boolean;
     /**
@@ -6489,14 +6322,11 @@ declare var HTMLButtonElement: {
 
 /** Provides properties and methods for manipulating the layout and presentation of <canvas> elements. The HTMLCanvasElement interface also inherits the properties and methods of the HTMLElement interface. */
 interface HTMLCanvasElement extends HTMLElement {
-    /**
-     * Gets or sets the height of a canvas element on a document.
-     */
+    /** Gets or sets the height of a canvas element on a document. */
     height: number;
-    /**
-     * Gets or sets the width of a canvas element on a document.
-     */
+    /** Gets or sets the width of a canvas element on a document. */
     width: number;
+    captureStream(frameRequestRate?: number): MediaStream;
     /**
      * Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas.
      * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
@@ -6526,21 +6356,15 @@ declare var HTMLCanvasElement: {
 
 /** A generic collection (array-like object similar to arguments) of elements (in document order) and offers methods and properties for selecting from the list. */
 interface HTMLCollectionBase {
-    /**
-     * Sets or retrieves the number of objects in a collection.
-     */
+    /** Sets or retrieves the number of objects in a collection. */
     readonly length: number;
-    /**
-     * Retrieves an object from various collections.
-     */
+    /** Retrieves an object from various collections. */
     item(index: number): Element | null;
     [index: number]: Element;
 }
 
 interface HTMLCollection extends HTMLCollectionBase {
-    /**
-     * Retrieves a select object or an object from an options collection.
-     */
+    /** Retrieves a select object or an object from an options collection. */
     namedItem(name: string): Element | null;
 }
 
@@ -6586,6 +6410,7 @@ declare var HTMLDataElement: {
 
 /** Provides special properties (beyond the HTMLElement object interface it also has available to it by inheritance) to manipulate <datalist> elements and their content. */
 interface HTMLDataListElement extends HTMLElement {
+    /** Returns an HTMLCollection of the option elements of the datalist element. */
     readonly options: HTMLCollectionOf<HTMLOptionElement>;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDataListElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6614,7 +6439,13 @@ declare var HTMLDetailsElement: {
 interface HTMLDialogElement extends HTMLElement {
     open: boolean;
     returnValue: string;
+    /**
+     * Closes the dialog element.
+     *
+     * The argument, if provided, provides a return value.
+     */
     close(returnValue?: string): void;
+    /** Displays the dialog element. */
     show(): void;
     showModal(): void;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6628,6 +6459,7 @@ declare var HTMLDialogElement: {
     new(): HTMLDialogElement;
 };
 
+/** @deprecated */
 interface HTMLDirectoryElement extends HTMLElement {
     /** @deprecated */
     compact: boolean;
@@ -6637,6 +6469,7 @@ interface HTMLDirectoryElement extends HTMLElement {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLDirectoryElement: {
     prototype: HTMLDirectoryElement;
     new(): HTMLDirectoryElement;
@@ -6646,8 +6479,8 @@ declare var HTMLDirectoryElement: {
 interface HTMLDivElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDivElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6660,7 +6493,7 @@ declare var HTMLDivElement: {
     new(): HTMLDivElement;
 };
 
-/** The HTMLDocument property of Window objects is an alias that browsers expose for the Document interface object. */
+/** @deprecated use Document */
 interface HTMLDocument extends Document {
     addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: HTMLDocument, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6668,22 +6501,24 @@ interface HTMLDocument extends Document {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLDocument: {
     prototype: HTMLDocument;
     new(): HTMLDocument;
 };
 
-interface HTMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
+interface HTMLElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
 }
 
 /** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. */
-interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
+interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
     accessKey: string;
     readonly accessKeyLabel: string;
     autocapitalize: string;
     dir: string;
     draggable: boolean;
     hidden: boolean;
+    inert: boolean;
     innerText: string;
     lang: string;
     readonly offsetHeight: number;
@@ -6691,9 +6526,11 @@ interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementC
     readonly offsetParent: Element | null;
     readonly offsetTop: number;
     readonly offsetWidth: number;
+    outerText: string;
     spellcheck: boolean;
     title: string;
     translate: boolean;
+    attachInternals(): ElementInternals;
     click(): void;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6710,23 +6547,17 @@ declare var HTMLElement: {
 interface HTMLEmbedElement extends HTMLElement {
     /** @deprecated */
     align: string;
-    /**
-     * Sets or retrieves the height of the object.
-     */
+    /** Sets or retrieves the height of the object. */
     height: string;
     /**
      * Sets or retrieves the name of the object.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
-    /**
-     * Sets or retrieves a URL to be loaded by the object.
-     */
+    /** Sets or retrieves a URL to be loaded by the object. */
     src: string;
     type: string;
-    /**
-     * Sets or retrieves the width of the object.
-     */
+    /** Sets or retrieves the width of the object. */
     width: string;
     getSVGDocument(): Document | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLEmbedElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6743,28 +6574,20 @@ declare var HTMLEmbedElement: {
 /** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <fieldset> elements. */
 interface HTMLFieldSetElement extends HTMLElement {
     disabled: boolean;
+    /** Returns an HTMLCollection of the form controls in the element. */
     readonly elements: HTMLCollection;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
     name: string;
+    /** Returns the string "fieldset". */
     readonly type: string;
-    /**
-     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
-     */
+    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
     readonly validationMessage: string;
-    /**
-     * Returns a  ValidityState object that represents the validity states of an element.
-     */
+    /** Returns a  ValidityState object that represents the validity states of an element. */
     readonly validity: ValidityState;
-    /**
-     * Returns whether an element will successfully validate based on forms validation rules and constraints.
-     */
+    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
     readonly willValidate: boolean;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     reportValidity(): boolean;
     /**
@@ -6783,14 +6606,17 @@ declare var HTMLFieldSetElement: {
     new(): HTMLFieldSetElement;
 };
 
-/** Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text. */
+/**
+ * Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text.
+ * @deprecated
+ */
 interface HTMLFontElement extends HTMLElement {
     /** @deprecated */
     color: string;
     /**
      * Sets or retrieves the current typeface family.
+     * @deprecated
      */
-    /** @deprecated */
     face: string;
     /** @deprecated */
     size: string;
@@ -6800,6 +6626,7 @@ interface HTMLFontElement extends HTMLElement {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLFontElement: {
     prototype: HTMLFontElement;
     new(): HTMLFontElement;
@@ -6809,7 +6636,7 @@ declare var HTMLFontElement: {
 interface HTMLFormControlsCollection extends HTMLCollectionBase {
     /**
      * Returns the item with ID or name name from the collection.
-     * 
+     *
      * If there are multiple matching items, then a RadioNodeList object containing all those elements is returned.
      */
     namedItem(name: string): RadioNodeList | Element | null;
@@ -6822,62 +6649,35 @@ declare var HTMLFormControlsCollection: {
 
 /** A <form> element in the DOM; it allows access to and in some cases modification of aspects of the form, as well as access to its component elements. */
 interface HTMLFormElement extends HTMLElement {
-    /**
-     * Sets or retrieves a list of character encodings for input data that must be accepted by the server processing the form.
-     */
+    /** Sets or retrieves a list of character encodings for input data that must be accepted by the server processing the form. */
     acceptCharset: string;
-    /**
-     * Sets or retrieves the URL to which the form content is sent for processing.
-     */
+    /** Sets or retrieves the URL to which the form content is sent for processing. */
     action: string;
-    /**
-     * Specifies whether autocomplete is applied to an editable text field.
-     */
+    /** Specifies whether autocomplete is applied to an editable text field. */
     autocomplete: string;
-    /**
-     * Retrieves a collection, in source order, of all controls in a given form.
-     */
+    /** Retrieves a collection, in source order, of all controls in a given form. */
     readonly elements: HTMLFormControlsCollection;
-    /**
-     * Sets or retrieves the MIME encoding for the form.
-     */
+    /** Sets or retrieves the MIME encoding for the form. */
     encoding: string;
-    /**
-     * Sets or retrieves the encoding type for the form.
-     */
+    /** Sets or retrieves the encoding type for the form. */
     enctype: string;
-    /**
-     * Sets or retrieves the number of objects in a collection.
-     */
+    /** Sets or retrieves the number of objects in a collection. */
     readonly length: number;
-    /**
-     * Sets or retrieves how to send the form data to the server.
-     */
+    /** Sets or retrieves how to send the form data to the server. */
     method: string;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
-    /**
-     * Designates a form that is not validated when submitted.
-     */
+    /** Designates a form that is not validated when submitted. */
     noValidate: boolean;
-    /**
-     * Sets or retrieves the window or frame at which to target content.
-     */
+    /** Sets or retrieves the window or frame at which to target content. */
     target: string;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     reportValidity(): boolean;
-    /**
-     * Fires when the user resets a form.
-     */
+    requestSubmit(submitter?: HTMLElement | null): void;
+    /** Fires when the user resets a form. */
     reset(): void;
-    /**
-     * Fires when a FORM is about to be submitted.
-     */
+    /** Fires when a FORM is about to be submitted. */
     submit(): void;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFormElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6892,56 +6692,57 @@ declare var HTMLFormElement: {
     new(): HTMLFormElement;
 };
 
+/** @deprecated */
 interface HTMLFrameElement extends HTMLElement {
     /**
      * Retrieves the document object of the page or frame.
+     * @deprecated
      */
-    /** @deprecated */
     readonly contentDocument: Document | null;
     /**
      * Retrieves the object of the specified.
+     * @deprecated
      */
-    /** @deprecated */
     readonly contentWindow: WindowProxy | null;
     /**
      * Sets or retrieves whether to display a border for the frame.
+     * @deprecated
      */
-    /** @deprecated */
     frameBorder: string;
     /**
      * Sets or retrieves a URI to a long description of the object.
+     * @deprecated
      */
-    /** @deprecated */
     longDesc: string;
     /**
      * Sets or retrieves the top and bottom margin heights before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginHeight: string;
     /**
      * Sets or retrieves the left and right margin widths before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginWidth: string;
     /**
      * Sets or retrieves the frame name.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
     /**
      * Sets or retrieves whether the user can resize the frame.
+     * @deprecated
      */
-    /** @deprecated */
     noResize: boolean;
     /**
      * Sets or retrieves whether the frame can be scrolled.
+     * @deprecated
      */
-    /** @deprecated */
     scrolling: string;
     /**
      * Sets or retrieves a URL to be loaded by the object.
+     * @deprecated
      */
-    /** @deprecated */
     src: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFrameElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6949,6 +6750,7 @@ interface HTMLFrameElement extends HTMLElement {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLFrameElement: {
     prototype: HTMLFrameElement;
     new(): HTMLFrameElement;
@@ -6957,17 +6759,20 @@ declare var HTMLFrameElement: {
 interface HTMLFrameSetElementEventMap extends HTMLElementEventMap, WindowEventHandlersEventMap {
 }
 
-/** Provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements. */
+/**
+ * Provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements.
+ * @deprecated
+ */
 interface HTMLFrameSetElement extends HTMLElement, WindowEventHandlers {
     /**
      * Sets or retrieves the frame widths of the object.
+     * @deprecated
      */
-    /** @deprecated */
     cols: string;
     /**
      * Sets or retrieves the frame heights of the object.
+     * @deprecated
      */
-    /** @deprecated */
     rows: string;
     addEventListener<K extends keyof HTMLFrameSetElementEventMap>(type: K, listener: (this: HTMLFrameSetElement, ev: HTMLFrameSetElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6975,6 +6780,7 @@ interface HTMLFrameSetElement extends HTMLElement, WindowEventHandlers {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLFrameSetElement: {
     prototype: HTMLFrameSetElement;
     new(): HTMLFrameSetElement;
@@ -6984,22 +6790,22 @@ declare var HTMLFrameSetElement: {
 interface HTMLHRElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     color: string;
     /**
      * Sets or retrieves whether the horizontal rule is drawn with 3-D shading.
+     * @deprecated
      */
-    /** @deprecated */
     noShade: boolean;
     /** @deprecated */
     size: string;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHRElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7029,8 +6835,8 @@ declare var HTMLHeadElement: {
 interface HTMLHeadingElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHeadingElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7047,8 +6853,8 @@ declare var HTMLHeadingElement: {
 interface HTMLHtmlElement extends HTMLElement {
     /**
      * Sets or retrieves the DTD version that governs the current document.
+     * @deprecated
      */
-    /** @deprecated */
     version: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHtmlElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7062,17 +6868,68 @@ declare var HTMLHtmlElement: {
 };
 
 interface HTMLHyperlinkElementUtils {
+    /**
+     * Returns the hyperlink's URL's fragment (includes leading "#" if non-empty).
+     *
+     * Can be set, to change the URL's fragment (ignores leading "#").
+     */
     hash: string;
+    /**
+     * Returns the hyperlink's URL's host and port (if different from the default port for the scheme).
+     *
+     * Can be set, to change the URL's host and port.
+     */
     host: string;
+    /**
+     * Returns the hyperlink's URL's host.
+     *
+     * Can be set, to change the URL's host.
+     */
     hostname: string;
+    /**
+     * Returns the hyperlink's URL.
+     *
+     * Can be set, to change the URL.
+     */
     href: string;
     toString(): string;
+    /** Returns the hyperlink's URL's origin. */
     readonly origin: string;
+    /**
+     * Returns the hyperlink's URL's password.
+     *
+     * Can be set, to change the URL's password.
+     */
     password: string;
+    /**
+     * Returns the hyperlink's URL's path.
+     *
+     * Can be set, to change the URL's path.
+     */
     pathname: string;
+    /**
+     * Returns the hyperlink's URL's port.
+     *
+     * Can be set, to change the URL's port.
+     */
     port: string;
+    /**
+     * Returns the hyperlink's URL's scheme.
+     *
+     * Can be set, to change the URL's scheme.
+     */
     protocol: string;
+    /**
+     * Returns the hyperlink's URL's query (includes leading "?" if non-empty).
+     *
+     * Can be set, to change the URL's query (ignores leading "?").
+     */
     search: string;
+    /**
+     * Returns the hyperlink's URL's username.
+     *
+     * Can be set, to change the URL's username.
+     */
     username: string;
 }
 
@@ -7080,66 +6937,51 @@ interface HTMLHyperlinkElementUtils {
 interface HTMLIFrameElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     allow: string;
     allowFullscreen: boolean;
-    allowPaymentRequest: boolean;
-    /**
-     * Retrieves the document object of the page or frame.
-     */
+    /** Retrieves the document object of the page or frame. */
     readonly contentDocument: Document | null;
-    /**
-     * Retrieves the object of the specified.
-     */
+    /** Retrieves the object of the specified. */
     readonly contentWindow: WindowProxy | null;
     /**
      * Sets or retrieves whether to display a border for the frame.
+     * @deprecated
      */
-    /** @deprecated */
     frameBorder: string;
-    /**
-     * Sets or retrieves the height of the object.
-     */
+    /** Sets or retrieves the height of the object. */
     height: string;
     /**
      * Sets or retrieves a URI to a long description of the object.
+     * @deprecated
      */
-    /** @deprecated */
     longDesc: string;
     /**
      * Sets or retrieves the top and bottom margin heights before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginHeight: string;
     /**
      * Sets or retrieves the left and right margin widths before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginWidth: string;
-    /**
-     * Sets or retrieves the frame name.
-     */
+    /** Sets or retrieves the frame name. */
     name: string;
     referrerPolicy: ReferrerPolicy;
     readonly sandbox: DOMTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
+     * @deprecated
      */
-    /** @deprecated */
     scrolling: string;
-    /**
-     * Sets or retrieves a URL to be loaded by the object.
-     */
+    /** Sets or retrieves a URL to be loaded by the object. */
     src: string;
-    /**
-     * Sets or retrives the content of the page that is to contain.
-     */
+    /** Sets or retrives the content of the page that is to contain. */
     srcdoc: string;
-    /**
-     * Sets or retrieves the width of the object.
-     */
+    /** Sets or retrieves the width of the object. */
     width: string;
     getSVGDocument(): Document | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLIFrameElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7157,78 +6999,61 @@ declare var HTMLIFrameElement: {
 interface HTMLImageElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
-    /**
-     * Sets or retrieves a text alternative to the graphic.
-     */
+    /** Sets or retrieves a text alternative to the graphic. */
     alt: string;
     /**
      * Specifies the properties of a border drawn around an object.
+     * @deprecated
      */
-    /** @deprecated */
     border: string;
-    /**
-     * Retrieves whether the object is fully loaded.
-     */
+    /** Retrieves whether the object is fully loaded. */
     readonly complete: boolean;
     crossOrigin: string | null;
     readonly currentSrc: string;
     decoding: "async" | "sync" | "auto";
-    /**
-     * Sets or retrieves the height of the object.
-     */
+    /** Sets or retrieves the height of the object. */
     height: number;
     /**
      * Sets or retrieves the width of the border to draw around the object.
+     * @deprecated
      */
-    /** @deprecated */
     hspace: number;
-    /**
-     * Sets or retrieves whether the image is a server-side image map.
-     */
+    /** Sets or retrieves whether the image is a server-side image map. */
     isMap: boolean;
-    loading: string;
+    /** Sets or retrieves the policy for loading image elements that are outside the viewport. */
+    loading: "eager" | "lazy";
     /**
      * Sets or retrieves a Uniform Resource Identifier (URI) to a long description of the object.
+     * @deprecated
      */
-    /** @deprecated */
     longDesc: string;
     /** @deprecated */
     lowsrc: string;
     /**
      * Sets or retrieves the name of the object.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
-    /**
-     * The original height of the image resource before sizing.
-     */
+    /** The original height of the image resource before sizing. */
     readonly naturalHeight: number;
-    /**
-     * The original width of the image resource before sizing.
-     */
+    /** The original width of the image resource before sizing. */
     readonly naturalWidth: number;
     referrerPolicy: string;
     sizes: string;
-    /**
-     * The address or URL of the a media resource that is to be considered.
-     */
+    /** The address or URL of the a media resource that is to be considered. */
     src: string;
     srcset: string;
-    /**
-     * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
-     */
+    /** Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map. */
     useMap: string;
     /**
      * Sets or retrieves the vertical margin for the object.
+     * @deprecated
      */
-    /** @deprecated */
     vspace: number;
-    /**
-     * Sets or retrieves the width of the object.
-     */
+    /** Sets or retrieves the width of the object. */
     width: number;
     readonly x: number;
     readonly y: number;
@@ -7246,172 +7071,102 @@ declare var HTMLImageElement: {
 
 /** Provides special properties and methods for manipulating the options, layout, and presentation of <input> elements. */
 interface HTMLInputElement extends HTMLElement {
-    /**
-     * Sets or retrieves a comma-separated list of content types.
-     */
+    /** Sets or retrieves a comma-separated list of content types. */
     accept: string;
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
-    /**
-     * Sets or retrieves a text alternative to the graphic.
-     */
+    /** Sets or retrieves a text alternative to the graphic. */
     alt: string;
-    /**
-     * Specifies whether autocomplete is applied to an editable text field.
-     */
+    /** Specifies whether autocomplete is applied to an editable text field. */
     autocomplete: string;
-    /**
-     * Sets or retrieves the state of the check box or radio button.
-     */
+    capture: string;
+    /** Sets or retrieves the state of the check box or radio button. */
     checked: boolean;
-    /**
-     * Sets or retrieves the state of the check box or radio button.
-     */
+    /** Sets or retrieves the state of the check box or radio button. */
     defaultChecked: boolean;
-    /**
-     * Sets or retrieves the initial contents of the object.
-     */
+    /** Sets or retrieves the initial contents of the object. */
     defaultValue: string;
     dirName: string;
     disabled: boolean;
-    /**
-     * Returns a FileList object on a file type input object.
-     */
+    /** Returns a FileList object on a file type input object. */
     files: FileList | null;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
-    /**
-     * Overrides the action attribute (where the data on a form is sent) on the parent form element.
-     */
+    /** Overrides the action attribute (where the data on a form is sent) on the parent form element. */
     formAction: string;
-    /**
-     * Used to override the encoding (formEnctype attribute) specified on the form element.
-     */
+    /** Used to override the encoding (formEnctype attribute) specified on the form element. */
     formEnctype: string;
-    /**
-     * Overrides the submit method attribute previously specified on a form element.
-     */
+    /** Overrides the submit method attribute previously specified on a form element. */
     formMethod: string;
-    /**
-     * Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option.
-     */
+    /** Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option. */
     formNoValidate: boolean;
-    /**
-     * Overrides the target attribute on a form element.
-     */
+    /** Overrides the target attribute on a form element. */
     formTarget: string;
-    /**
-     * Sets or retrieves the height of the object.
-     */
+    /** Sets or retrieves the height of the object. */
     height: number;
+    /** When set, overrides the rendering of checkbox controls so that the current value is not visible. */
     indeterminate: boolean;
     readonly labels: NodeListOf<HTMLLabelElement> | null;
-    /**
-     * Specifies the ID of a pre-defined datalist of options for an input element.
-     */
+    /** Specifies the ID of a pre-defined datalist of options for an input element. */
     readonly list: HTMLElement | null;
-    /**
-     * Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field.
-     */
+    /** Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field. */
     max: string;
-    /**
-     * Sets or retrieves the maximum number of characters that the user can enter in a text control.
-     */
+    /** Sets or retrieves the maximum number of characters that the user can enter in a text control. */
     maxLength: number;
-    /**
-     * Defines the minimum acceptable value for an input element with type="number". When used with the max and step attributes, lets you control the range and increment (such as even numbers only) that the user can enter into an input field.
-     */
+    /** Defines the minimum acceptable value for an input element with type="number". When used with the max and step attributes, lets you control the range and increment (such as even numbers only) that the user can enter into an input field. */
     min: string;
     minLength: number;
-    /**
-     * Sets or retrieves the Boolean value indicating whether multiple items can be selected from a list.
-     */
+    /** Sets or retrieves the Boolean value indicating whether multiple items can be selected from a list. */
     multiple: boolean;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
-    /**
-     * Gets or sets a string containing a regular expression that the user's input must match.
-     */
+    /** Gets or sets a string containing a regular expression that the user's input must match. */
     pattern: string;
-    /**
-     * Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field.
-     */
+    /** Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field. */
     placeholder: string;
     readOnly: boolean;
-    /**
-     * When present, marks an element that can't be submitted without a value.
-     */
+    /** When present, marks an element that can't be submitted without a value. */
     required: boolean;
     selectionDirection: "forward" | "backward" | "none" | null;
-    /**
-     * Gets or sets the end position or offset of a text selection.
-     */
+    /** Gets or sets the end position or offset of a text selection. */
     selectionEnd: number | null;
-    /**
-     * Gets or sets the starting position or offset of a text selection.
-     */
+    /** Gets or sets the starting position or offset of a text selection. */
     selectionStart: number | null;
     size: number;
-    /**
-     * The address or URL of the a media resource that is to be considered.
-     */
+    /** The address or URL of the a media resource that is to be considered. */
     src: string;
-    /**
-     * Defines an increment or jump between values that you want to allow the user to enter. When used with the max and min attributes, lets you control the range and increment (for example, allow only even numbers) that the user can enter into an input field.
-     */
+    /** Defines an increment or jump between values that you want to allow the user to enter. When used with the max and min attributes, lets you control the range and increment (for example, allow only even numbers) that the user can enter into an input field. */
     step: string;
-    /**
-     * Returns the content type of the object.
-     */
+    /** Returns the content type of the object. */
     type: string;
     /**
      * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+     * @deprecated
      */
-    /** @deprecated */
     useMap: string;
-    /**
-     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
-     */
+    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
     readonly validationMessage: string;
-    /**
-     * Returns a  ValidityState object that represents the validity states of an element.
-     */
+    /** Returns a  ValidityState object that represents the validity states of an element. */
     readonly validity: ValidityState;
-    /**
-     * Returns the value of the data at the cursor's current position.
-     */
+    /** Returns the value of the data at the cursor's current position. */
     value: string;
-    /**
-     * Returns a Date object representing the form control's value, if applicable; otherwise, returns null. Can be set, to change the value. Throws an "InvalidStateError" DOMException if the control isn't date- or time-based.
-     */
+    /** Returns a Date object representing the form control's value, if applicable; otherwise, returns null. Can be set, to change the value. Throws an "InvalidStateError" DOMException if the control isn't date- or time-based. */
     valueAsDate: Date | null;
-    /**
-     * Returns the input field value as a number.
-     */
+    /** Returns the input field value as a number. */
     valueAsNumber: number;
-    /**
-     * Sets or retrieves the width of the object.
-     */
+    readonly webkitEntries: ReadonlyArray<FileSystemEntry>;
+    webkitdirectory: boolean;
+    /** Sets or retrieves the width of the object. */
     width: number;
-    /**
-     * Returns whether an element will successfully validate based on forms validation rules and constraints.
-     */
+    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
     readonly willValidate: boolean;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     reportValidity(): boolean;
-    /**
-     * Makes the selection equal to the current object.
-     */
+    /** Makes the selection equal to the current object. */
     select(): void;
     /**
      * Sets a custom error message that is displayed when a form is submitted.
@@ -7427,6 +7182,7 @@ interface HTMLInputElement extends HTMLElement {
      * @param direction The direction in which the selection is performed.
      */
     setSelectionRange(start: number | null, end: number | null, direction?: "forward" | "backward" | "none"): void;
+    showPicker(): void;
     /**
      * Decrements a range input control's value by the value given by the Step attribute. If the optional parameter is used, it will decrement the input control's step value multiplied by the parameter's value.
      * @param n Value to decrement the value by.
@@ -7452,9 +7208,7 @@ declare var HTMLInputElement: {
 interface HTMLLIElement extends HTMLElement {
     /** @deprecated */
     type: string;
-    /**
-     * Sets or retrieves the value of a list item.
-     */
+    /** Sets or retrieves the value of a list item. */
     value: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLIElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7469,14 +7223,11 @@ declare var HTMLLIElement: {
 
 /** Gives access to properties specific to <label> elements. It inherits methods and properties from the base HTMLElement interface. */
 interface HTMLLabelElement extends HTMLElement {
+    /** Returns the form control that is associated with this element. */
     readonly control: HTMLElement | null;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
-    /**
-     * Sets or retrieves the object to which the given label object is assigned.
-     */
+    /** Sets or retrieves the object to which the given label object is assigned. */
     htmlFor: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLabelElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7493,9 +7244,7 @@ declare var HTMLLabelElement: {
 interface HTMLLegendElement extends HTMLElement {
     /** @deprecated */
     align: string;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLegendElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7513,46 +7262,36 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
     as: string;
     /**
      * Sets or retrieves the character set used to encode the object.
+     * @deprecated
      */
-    /** @deprecated */
     charset: string;
     crossOrigin: string | null;
     disabled: boolean;
-    /**
-     * Sets or retrieves a destination URL or an anchor point.
-     */
+    /** Sets or retrieves a destination URL or an anchor point. */
     href: string;
-    /**
-     * Sets or retrieves the language code of the object.
-     */
+    /** Sets or retrieves the language code of the object. */
     hreflang: string;
     imageSizes: string;
     imageSrcset: string;
     integrity: string;
-    /**
-     * Sets or retrieves the media type.
-     */
+    /** Sets or retrieves the media type. */
     media: string;
     referrerPolicy: string;
-    /**
-     * Sets or retrieves the relationship between the object and the destination of the link.
-     */
+    /** Sets or retrieves the relationship between the object and the destination of the link. */
     rel: string;
     readonly relList: DOMTokenList;
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
+     * @deprecated
      */
-    /** @deprecated */
     rev: string;
     readonly sizes: DOMTokenList;
     /**
      * Sets or retrieves the window or frame at which to target content.
+     * @deprecated
      */
-    /** @deprecated */
     target: string;
-    /**
-     * Sets or retrieves the MIME type of the object.
-     */
+    /** Sets or retrieves the MIME type of the object. */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLinkElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7567,13 +7306,9 @@ declare var HTMLLinkElement: {
 
 /** Provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of map elements. */
 interface HTMLMapElement extends HTMLElement {
-    /**
-     * Retrieves a collection of the area objects defined for the given map object.
-     */
+    /** Retrieves a collection of the area objects defined for the given map object. */
     readonly areas: HTMLCollection;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMapElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7586,13 +7321,10 @@ declare var HTMLMapElement: {
     new(): HTMLMapElement;
 };
 
-interface HTMLMarqueeElementEventMap extends HTMLElementEventMap {
-    "bounce": Event;
-    "finish": Event;
-    "start": Event;
-}
-
-/** Provides methods to manipulate <marquee> elements. */
+/**
+ * Provides methods to manipulate <marquee> elements.
+ * @deprecated
+ */
 interface HTMLMarqueeElement extends HTMLElement {
     /** @deprecated */
     behavior: string;
@@ -7607,12 +7339,6 @@ interface HTMLMarqueeElement extends HTMLElement {
     /** @deprecated */
     loop: number;
     /** @deprecated */
-    onbounce: ((this: HTMLMarqueeElement, ev: Event) => any) | null;
-    /** @deprecated */
-    onfinish: ((this: HTMLMarqueeElement, ev: Event) => any) | null;
-    /** @deprecated */
-    onstart: ((this: HTMLMarqueeElement, ev: Event) => any) | null;
-    /** @deprecated */
     scrollAmount: number;
     /** @deprecated */
     scrollDelay: number;
@@ -7626,12 +7352,13 @@ interface HTMLMarqueeElement extends HTMLElement {
     start(): void;
     /** @deprecated */
     stop(): void;
-    addEventListener<K extends keyof HTMLMarqueeElementEventMap>(type: K, listener: (this: HTMLMarqueeElement, ev: HTMLMarqueeElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMarqueeElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof HTMLMarqueeElementEventMap>(type: K, listener: (this: HTMLMarqueeElement, ev: HTMLMarqueeElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMarqueeElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLMarqueeElement: {
     prototype: HTMLMarqueeElement;
     new(): HTMLMarqueeElement;
@@ -7644,112 +7371,69 @@ interface HTMLMediaElementEventMap extends HTMLElementEventMap {
 
 /** Adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video. */
 interface HTMLMediaElement extends HTMLElement {
-    /**
-     * Gets or sets a value that indicates whether to start playing the media automatically.
-     */
+    /** Gets or sets a value that indicates whether to start playing the media automatically. */
     autoplay: boolean;
-    /**
-     * Gets a collection of buffered time ranges.
-     */
+    /** Gets a collection of buffered time ranges. */
     readonly buffered: TimeRanges;
-    /**
-     * Gets or sets a flag that indicates whether the client provides a set of controls for the media (in case the developer does not include controls for the player).
-     */
+    /** Gets or sets a flag that indicates whether the client provides a set of controls for the media (in case the developer does not include controls for the player). */
     controls: boolean;
     crossOrigin: string | null;
-    /**
-     * Gets the address or URL of the current media resource that is selected by IHTMLMediaElement.
-     */
+    /** Gets the address or URL of the current media resource that is selected by IHTMLMediaElement. */
     readonly currentSrc: string;
-    /**
-     * Gets or sets the current playback position, in seconds.
-     */
+    /** Gets or sets the current playback position, in seconds. */
     currentTime: number;
     defaultMuted: boolean;
-    /**
-     * Gets or sets the default playback rate when the user is not using fast forward or reverse for a video or audio resource.
-     */
+    /** Gets or sets the default playback rate when the user is not using fast forward or reverse for a video or audio resource. */
     defaultPlaybackRate: number;
-    /**
-     * Returns the duration in seconds of the current media resource. A NaN value is returned if duration is not available, or Infinity if the media resource is streaming.
-     */
+    disableRemotePlayback: boolean;
+    /** Returns the duration in seconds of the current media resource. A NaN value is returned if duration is not available, or Infinity if the media resource is streaming. */
     readonly duration: number;
-    /**
-     * Gets information about whether the playback has ended or not.
-     */
+    /** Gets information about whether the playback has ended or not. */
     readonly ended: boolean;
-    /**
-     * Returns an object representing the current error state of the audio or video element.
-     */
+    /** Returns an object representing the current error state of the audio or video element. */
     readonly error: MediaError | null;
-    /**
-     * Gets or sets a flag to specify whether playback should restart after it completes.
-     */
+    /** Gets or sets a flag to specify whether playback should restart after it completes. */
     loop: boolean;
+    /** Available only in secure contexts. */
     readonly mediaKeys: MediaKeys | null;
-    /**
-     * Gets or sets a flag that indicates whether the audio (either audio or the audio track on video media) is muted.
-     */
+    /** Gets or sets a flag that indicates whether the audio (either audio or the audio track on video media) is muted. */
     muted: boolean;
-    /**
-     * Gets the current network activity for the element.
-     */
+    /** Gets the current network activity for the element. */
     readonly networkState: number;
     onencrypted: ((this: HTMLMediaElement, ev: MediaEncryptedEvent) => any) | null;
     onwaitingforkey: ((this: HTMLMediaElement, ev: Event) => any) | null;
-    /**
-     * Gets a flag that specifies whether playback is paused.
-     */
+    /** Gets a flag that specifies whether playback is paused. */
     readonly paused: boolean;
-    /**
-     * Gets or sets the current rate of speed for the media resource to play. This speed is expressed as a multiple of the normal speed of the media resource.
-     */
+    /** Gets or sets the current rate of speed for the media resource to play. This speed is expressed as a multiple of the normal speed of the media resource. */
     playbackRate: number;
-    /**
-     * Gets TimeRanges for the current media resource that has been played.
-     */
+    /** Gets TimeRanges for the current media resource that has been played. */
     readonly played: TimeRanges;
-    /**
-     * Gets or sets the current playback position, in seconds.
-     */
-    preload: string;
+    /** Gets or sets a value indicating what data should be preloaded, if any. */
+    preload: "none" | "metadata" | "auto" | "";
+    preservesPitch: boolean;
     readonly readyState: number;
-    /**
-     * Returns a TimeRanges object that represents the ranges of the current media resource that can be seeked.
-     */
+    readonly remote: RemotePlayback;
+    /** Returns a TimeRanges object that represents the ranges of the current media resource that can be seeked. */
     readonly seekable: TimeRanges;
-    /**
-     * Gets a flag that indicates whether the client is currently moving to a new playback position in the media resource.
-     */
+    /** Gets a flag that indicates whether the client is currently moving to a new playback position in the media resource. */
     readonly seeking: boolean;
-    /**
-     * The address or URL of the a media resource that is to be considered.
-     */
+    /** The address or URL of the a media resource that is to be considered. */
     src: string;
     srcObject: MediaProvider | null;
     readonly textTracks: TextTrackList;
-    /**
-     * Gets or sets the volume level for audio portions of the media element.
-     */
+    /** Gets or sets the volume level for audio portions of the media element. */
     volume: number;
     addTextTrack(kind: TextTrackKind, label?: string, language?: string): TextTrack;
-    /**
-     * Returns a string that specifies whether the client can play a given media resource type.
-     */
+    /** Returns a string that specifies whether the client can play a given media resource type. */
     canPlayType(type: string): CanPlayTypeResult;
     fastSeek(time: number): void;
-    /**
-     * Resets the audio or video object and loads a new media resource.
-     */
+    /** Resets the audio or video object and loads a new media resource. */
     load(): void;
-    /**
-     * Pauses the current playback and sets paused to TRUE. This can be used to test whether the media is playing or paused. You can also use the pause or play events to tell whether the media is playing or not.
-     */
+    /** Pauses the current playback and sets paused to TRUE. This can be used to test whether the media is playing or paused. You can also use the pause or play events to tell whether the media is playing or not. */
     pause(): void;
-    /**
-     * Loads and starts playback of a media resource.
-     */
+    /** Loads and starts playback of a media resource. */
     play(): Promise<void>;
+    /** Available only in secure contexts. */
     setMediaKeys(mediaKeys: MediaKeys | null): Promise<void>;
     readonly HAVE_CURRENT_DATA: number;
     readonly HAVE_ENOUGH_DATA: number;
@@ -7796,22 +7480,17 @@ declare var HTMLMenuElement: {
 
 /** Contains descriptive metadata about a document. It inherits all of the properties and methods described in the HTMLElement interface. */
 interface HTMLMetaElement extends HTMLElement {
-    /**
-     * Gets or sets meta-information to associate with httpEquiv or name.
-     */
+    /** Gets or sets meta-information to associate with httpEquiv or name. */
     content: string;
-    /**
-     * Gets or sets information used to bind the value of a content attribute of a meta element to an HTTP response header.
-     */
+    /** Gets or sets information used to bind the value of a content attribute of a meta element to an HTTP response header. */
     httpEquiv: string;
-    /**
-     * Sets or retrieves the value specified in the content attribute of the meta object.
-     */
+    media: string;
+    /** Sets or retrieves the value specified in the content attribute of the meta object. */
     name: string;
     /**
      * Sets or retrieves a scheme to be used in interpreting the value of a property specified for the object.
+     * @deprecated
      */
-    /** @deprecated */
     scheme: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMetaElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7846,13 +7525,9 @@ declare var HTMLMeterElement: {
 
 /** Provides special properties (beyond the regular methods and properties available through the HTMLElement interface they also have available to them by inheritance) for manipulating modification elements, that is <del> and <ins>. */
 interface HTMLModElement extends HTMLElement {
-    /**
-     * Sets or retrieves reference information about the object.
-     */
+    /** Sets or retrieves reference information about the object. */
     cite: string;
-    /**
-     * Sets or retrieves the date and time of a modification to the object.
-     */
+    /** Sets or retrieves the date and time of a modification to the object. */
     dateTime: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLModElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7870,9 +7545,7 @@ interface HTMLOListElement extends HTMLElement {
     /** @deprecated */
     compact: boolean;
     reversed: boolean;
-    /**
-     * The starting number.
-     */
+    /** The starting number. */
     start: number;
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOListElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7892,85 +7565,61 @@ interface HTMLObjectElement extends HTMLElement {
     align: string;
     /**
      * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
+     * @deprecated
      */
-    /** @deprecated */
     archive: string;
     /** @deprecated */
     border: string;
     /**
      * Sets or retrieves the URL of the file containing the compiled Java class.
+     * @deprecated
      */
-    /** @deprecated */
     code: string;
     /**
      * Sets or retrieves the URL of the component.
+     * @deprecated
      */
-    /** @deprecated */
     codeBase: string;
     /**
      * Sets or retrieves the Internet media type for the code associated with the object.
+     * @deprecated
      */
-    /** @deprecated */
     codeType: string;
-    /**
-     * Retrieves the document object of the page or frame.
-     */
+    /** Retrieves the document object of the page or frame. */
     readonly contentDocument: Document | null;
     readonly contentWindow: WindowProxy | null;
-    /**
-     * Sets or retrieves the URL that references the data of the object.
-     */
+    /** Sets or retrieves the URL that references the data of the object. */
     data: string;
     /** @deprecated */
     declare: boolean;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
-    /**
-     * Sets or retrieves the height of the object.
-     */
+    /** Sets or retrieves the height of the object. */
     height: string;
     /** @deprecated */
     hspace: number;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
     /**
      * Sets or retrieves a message to be displayed while an object is loading.
+     * @deprecated
      */
-    /** @deprecated */
     standby: string;
-    /**
-     * Sets or retrieves the MIME type of the object.
-     */
+    /** Sets or retrieves the MIME type of the object. */
     type: string;
-    /**
-     * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
-     */
+    /** Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map. */
     useMap: string;
-    /**
-     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
-     */
+    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
     readonly validationMessage: string;
-    /**
-     * Returns a  ValidityState object that represents the validity states of an element.
-     */
+    /** Returns a  ValidityState object that represents the validity states of an element. */
     readonly validity: ValidityState;
     /** @deprecated */
     vspace: number;
-    /**
-     * Sets or retrieves the width of the object.
-     */
+    /** Sets or retrieves the width of the object. */
     width: string;
-    /**
-     * Returns whether an element will successfully validate based on forms validation rules and constraints.
-     */
+    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
     readonly willValidate: boolean;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     getSVGDocument(): Document | null;
     reportValidity(): boolean;
@@ -7993,13 +7642,7 @@ declare var HTMLObjectElement: {
 /** Provides special properties and methods (beyond the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <optgroup> elements. */
 interface HTMLOptGroupElement extends HTMLElement {
     disabled: boolean;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
-    readonly form: HTMLFormElement | null;
-    /**
-     * Sets or retrieves a value that you can use to implement your own label functionality for the object.
-     */
+    /** Sets or retrieves a value that you can use to implement your own label functionality for the object. */
     label: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOptGroupElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8014,34 +7657,20 @@ declare var HTMLOptGroupElement: {
 
 /** <option> elements and inherits all classes and methods of the HTMLElement interface. */
 interface HTMLOptionElement extends HTMLElement {
-    /**
-     * Sets or retrieves the status of an option.
-     */
+    /** Sets or retrieves the status of an option. */
     defaultSelected: boolean;
     disabled: boolean;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
-    /**
-     * Sets or retrieves the ordinal position of an option in a list box.
-     */
+    /** Sets or retrieves the ordinal position of an option in a list box. */
     readonly index: number;
-    /**
-     * Sets or retrieves a value that you can use to implement your own label functionality for the object.
-     */
+    /** Sets or retrieves a value that you can use to implement your own label functionality for the object. */
     label: string;
-    /**
-     * Sets or retrieves whether the option in the list box is the default item.
-     */
+    /** Sets or retrieves whether the option in the list box is the default item. */
     selected: boolean;
-    /**
-     * Sets or retrieves the text string specified by the option tag.
-     */
+    /** Sets or retrieves the text string specified by the option tag. */
     text: string;
-    /**
-     * Sets or retrieves the value which is returned to the server when the form control is submitted.
-     */
+    /** Sets or retrieves the value which is returned to the server when the form control is submitted. */
     value: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOptionElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8058,31 +7687,29 @@ declare var HTMLOptionElement: {
 interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
     /**
      * Returns the number of elements in the collection.
-     * 
+     *
      * When set to a smaller number, truncates the number of option elements in the corresponding container.
-     * 
+     *
      * When set to a greater number, adds new blank option elements to that container.
      */
     length: number;
     /**
      * Returns the index of the first selected item, if any, or −1 if there is no selected item.
-     * 
+     *
      * Can be set, to change the selection.
      */
     selectedIndex: number;
     /**
      * Inserts element before the node given by before.
-     * 
+     *
      * The before argument can be a number, in which case element is inserted before the item with that number, or an element from the collection, in which case element is inserted before that element.
-     * 
+     *
      * If before is omitted, null, or a number out of range, then element will be added at the end of the list.
-     * 
+     *
      * This method will throw a "HierarchyRequestError" DOMException if element is an ancestor of the element into which it is to be inserted.
      */
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number | null): void;
-    /**
-     * Removes the item with index index from the collection.
-     */
+    /** Removes the item with index index from the collection. */
     remove(index: number): void;
 }
 
@@ -8107,9 +7734,15 @@ interface HTMLOutputElement extends HTMLElement {
     readonly htmlFor: DOMTokenList;
     readonly labels: NodeListOf<HTMLLabelElement>;
     name: string;
+    /** Returns the string "output". */
     readonly type: string;
     readonly validationMessage: string;
     readonly validity: ValidityState;
+    /**
+     * Returns the element's current value.
+     *
+     * Can be set, to change the value.
+     */
     value: string;
     readonly willValidate: boolean;
     checkValidity(): boolean;
@@ -8130,8 +7763,8 @@ declare var HTMLOutputElement: {
 interface HTMLParagraphElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParagraphElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8144,25 +7777,30 @@ declare var HTMLParagraphElement: {
     new(): HTMLParagraphElement;
 };
 
-/** Provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <param> elements, representing a pair of a key and a value that acts as a parameter for an <object> element. */
+/**
+ * Provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <param> elements, representing a pair of a key and a value that acts as a parameter for an <object> element.
+ * @deprecated
+ */
 interface HTMLParamElement extends HTMLElement {
     /**
      * Sets or retrieves the name of an input parameter for an element.
+     * @deprecated
      */
     name: string;
     /**
      * Sets or retrieves the content type of the resource designated by the value attribute.
+     * @deprecated
      */
-    /** @deprecated */
     type: string;
     /**
      * Sets or retrieves the value of an input parameter for an element.
+     * @deprecated
      */
     value: string;
     /**
      * Sets or retrieves the data type of the value attribute.
+     * @deprecated
      */
-    /** @deprecated */
     valueType: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParamElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8170,6 +7808,7 @@ interface HTMLParamElement extends HTMLElement {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var HTMLParamElement: {
     prototype: HTMLParamElement;
     new(): HTMLParamElement;
@@ -8192,8 +7831,8 @@ declare var HTMLPictureElement: {
 interface HTMLPreElement extends HTMLElement {
     /**
      * Sets or gets a value that you can use to implement your own width functionality for the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLPreElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8209,17 +7848,11 @@ declare var HTMLPreElement: {
 /** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <progress> elements. */
 interface HTMLProgressElement extends HTMLElement {
     readonly labels: NodeListOf<HTMLLabelElement>;
-    /**
-     * Defines the maximum, or "done" value for a progress element.
-     */
+    /** Defines the maximum, or "done" value for a progress element. */
     max: number;
-    /**
-     * Returns the quotient of value/max when the value attribute is set (determinate progress bar), or -1 when the value attribute is missing (indeterminate progress bar).
-     */
+    /** Returns the quotient of value/max when the value attribute is set (determinate progress bar), or -1 when the value attribute is missing (indeterminate progress bar). */
     readonly position: number;
-    /**
-     * Sets or gets the current value of a progress element. The value must be a non-negative number between 0 and the max value.
-     */
+    /** Sets or gets the current value of a progress element. The value must be a non-negative number between 0 and the max value. */
     value: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLProgressElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8234,9 +7867,7 @@ declare var HTMLProgressElement: {
 
 /** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating quoting elements, like <blockquote> and <q>, but not the <cite> element. */
 interface HTMLQuoteElement extends HTMLElement {
-    /**
-     * Sets or retrieves reference information about the object.
-     */
+    /** Sets or retrieves reference information about the object. */
     cite: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLQuoteElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8254,38 +7885,30 @@ interface HTMLScriptElement extends HTMLElement {
     async: boolean;
     /**
      * Sets or retrieves the character set used to encode the object.
+     * @deprecated
      */
-    /** @deprecated */
     charset: string;
     crossOrigin: string | null;
-    /**
-     * Sets or retrieves the status of the script.
-     */
+    /** Sets or retrieves the status of the script. */
     defer: boolean;
     /**
      * Sets or retrieves the event for which the script is written.
+     * @deprecated
      */
-    /** @deprecated */
     event: string;
     /**
      * Sets or retrieves the object that is bound to the event script.
+     * @deprecated
      */
-    /** @deprecated */
     htmlFor: string;
     integrity: string;
     noModule: boolean;
     referrerPolicy: string;
-    /**
-     * Retrieves the URL to an external file that contains the source code or data.
-     */
+    /** Retrieves the URL to an external file that contains the source code or data. */
     src: string;
-    /**
-     * Retrieves or sets the text of the object as a string.
-     */
+    /** Retrieves or sets the text of the object as a string. */
     text: string;
-    /**
-     * Sets or retrieves the MIME type for the associated scripting engine.
-     */
+    /** Sets or retrieves the MIME type for the associated scripting engine. */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLScriptElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8296,62 +7919,40 @@ interface HTMLScriptElement extends HTMLElement {
 declare var HTMLScriptElement: {
     prototype: HTMLScriptElement;
     new(): HTMLScriptElement;
+    supports(type: string): boolean;
 };
 
 /** A <select> HTML Element. These elements also share all of the properties and methods of other HTML elements via the HTMLElement interface. */
 interface HTMLSelectElement extends HTMLElement {
     autocomplete: string;
     disabled: boolean;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
     readonly labels: NodeListOf<HTMLLabelElement>;
-    /**
-     * Sets or retrieves the number of objects in a collection.
-     */
+    /** Sets or retrieves the number of objects in a collection. */
     length: number;
-    /**
-     * Sets or retrieves the Boolean value indicating whether multiple items can be selected from a list.
-     */
+    /** Sets or retrieves the Boolean value indicating whether multiple items can be selected from a list. */
     multiple: boolean;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
+    /** Returns an HTMLOptionsCollection of the list of options. */
     readonly options: HTMLOptionsCollection;
-    /**
-     * When present, marks an element that can't be submitted without a value.
-     */
+    /** When present, marks an element that can't be submitted without a value. */
     required: boolean;
-    /**
-     * Sets or retrieves the index of the selected option in a select object.
-     */
+    /** Sets or retrieves the index of the selected option in a select object. */
     selectedIndex: number;
     readonly selectedOptions: HTMLCollectionOf<HTMLOptionElement>;
-    /**
-     * Sets or retrieves the number of rows in the list box.
-     */
+    /** Sets or retrieves the number of rows in the list box. */
     size: number;
-    /**
-     * Retrieves the type of select control based on the value of the MULTIPLE attribute.
-     */
+    /** Retrieves the type of select control based on the value of the MULTIPLE attribute. */
     readonly type: string;
-    /**
-     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
-     */
+    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
     readonly validationMessage: string;
-    /**
-     * Returns a  ValidityState object that represents the validity states of an element.
-     */
+    /** Returns a  ValidityState object that represents the validity states of an element. */
     readonly validity: ValidityState;
-    /**
-     * Sets or retrieves the value which is returned to the server when the form control is submitted.
-     */
+    /** Sets or retrieves the value which is returned to the server when the form control is submitted. */
     value: string;
-    /**
-     * Returns whether an element will successfully validate based on forms validation rules and constraints.
-     */
+    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
     readonly willValidate: boolean;
     /**
      * Adds an element to the areas, controlRange, or options collection.
@@ -8359,16 +7960,14 @@ interface HTMLSelectElement extends HTMLElement {
      * @param before Variant of type Object that specifies an element to insert before, or null to append the object to the collection.
      */
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number | null): void;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     /**
      * Retrieves a select object or an object from an options collection.
      * @param name Variant of type Number or String that specifies the object or collection to retrieve. If this parameter is an integer, it is the zero-based index of the object. If this parameter is a string, all objects with matching name or id properties are retrieved, and a collection is returned if more than one match is made.
      * @param index Variant of type Number that specifies the zero-based index of the object to retrieve when a collection is returned.
      */
-    item(index: number): Element | null;
+    item(index: number): HTMLOptionElement | null;
     /**
      * Retrieves a select object or an object from an options collection.
      * @param namedItem A String that specifies the name or id property of the object to retrieve. A collection is returned if more than one match is made.
@@ -8400,6 +7999,7 @@ declare var HTMLSelectElement: {
 
 interface HTMLSlotElement extends HTMLElement {
     name: string;
+    assign(...nodes: (Element | Text)[]): void;
     assignedElements(options?: AssignedNodesOptions): Element[];
     assignedNodes(options?: AssignedNodesOptions): Node[];
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSlotElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -8415,20 +8015,16 @@ declare var HTMLSlotElement: {
 
 /** Provides special properties (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating <source> elements. */
 interface HTMLSourceElement extends HTMLElement {
-    /**
-     * Gets or sets the intended media type of the media source.
-     */
+    height: number;
+    /** Gets or sets the intended media type of the media source. */
     media: string;
     sizes: string;
-    /**
-     * The address or URL of the a media resource that is to be considered.
-     */
+    /** The address or URL of the a media resource that is to be considered. */
     src: string;
     srcset: string;
-    /**
-     * Gets or sets the MIME type of a media resource.
-     */
+    /** Gets or sets the MIME type of a media resource. */
     type: string;
+    width: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSourceElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSourceElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -8455,14 +8051,14 @@ declare var HTMLSpanElement: {
 
 /** A <style> element. It inherits properties and methods from its parent, HTMLElement, and from LinkStyle. */
 interface HTMLStyleElement extends HTMLElement, LinkStyle {
-    /**
-     * Sets or retrieves the media type.
-     */
+    /** Enables or disables the style sheet. */
+    disabled: boolean;
+    /** Sets or retrieves the media type. */
     media: string;
     /**
      * Retrieves the CSS language in which the style sheet is written.
+     * @deprecated
      */
-    /** @deprecated */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLStyleElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8479,8 +8075,8 @@ declare var HTMLStyleElement: {
 interface HTMLTableCaptionElement extends HTMLElement {
     /**
      * Sets or retrieves the alignment of the caption or legend.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCaptionElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8495,62 +8091,50 @@ declare var HTMLTableCaptionElement: {
 
 /** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of table cells, either header or data cells, in an HTML document. */
 interface HTMLTableCellElement extends HTMLElement {
-    /**
-     * Sets or retrieves abbreviated text for the object.
-     */
+    /** Sets or retrieves abbreviated text for the object. */
     abbr: string;
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /**
      * Sets or retrieves a comma-delimited list of conceptual categories associated with the object.
+     * @deprecated
      */
-    /** @deprecated */
     axis: string;
     /** @deprecated */
     bgColor: string;
-    /**
-     * Retrieves the position of the object in the cells collection of a row.
-     */
+    /** Retrieves the position of the object in the cells collection of a row. */
     readonly cellIndex: number;
     /** @deprecated */
     ch: string;
     /** @deprecated */
     chOff: string;
-    /**
-     * Sets or retrieves the number columns in the table that the object should span.
-     */
+    /** Sets or retrieves the number columns in the table that the object should span. */
     colSpan: number;
-    /**
-     * Sets or retrieves a list of header cells that provide information for the object.
-     */
+    /** Sets or retrieves a list of header cells that provide information for the object. */
     headers: string;
     /**
      * Sets or retrieves the height of the object.
+     * @deprecated
      */
-    /** @deprecated */
     height: string;
     /**
      * Sets or retrieves whether the browser automatically performs wordwrap.
+     * @deprecated
      */
-    /** @deprecated */
     noWrap: boolean;
-    /**
-     * Sets or retrieves how many rows in a table the cell should span.
-     */
+    /** Sets or retrieves how many rows in a table the cell should span. */
     rowSpan: number;
-    /**
-     * Sets or retrieves the group of cells in a table to which the object's information applies.
-     */
+    /** Sets or retrieves the group of cells in a table to which the object's information applies. */
     scope: string;
     /** @deprecated */
     vAlign: string;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8567,23 +8151,21 @@ declare var HTMLTableCellElement: {
 interface HTMLTableColElement extends HTMLElement {
     /**
      * Sets or retrieves the alignment of the object relative to the display or table.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     ch: string;
     /** @deprecated */
     chOff: string;
-    /**
-     * Sets or retrieves the number of columns in the group.
-     */
+    /** Sets or retrieves the number of columns in the group. */
     span: number;
     /** @deprecated */
     vAlign: string;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableColElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8596,6 +8178,7 @@ declare var HTMLTableColElement: {
     new(): HTMLTableColElement;
 };
 
+/** @deprecated prefer HTMLTableCellElement */
 interface HTMLTableDataCellElement extends HTMLTableCellElement {
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableDataCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8603,107 +8186,78 @@ interface HTMLTableDataCellElement extends HTMLTableCellElement {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var HTMLTableDataCellElement: {
-    prototype: HTMLTableDataCellElement;
-    new(): HTMLTableDataCellElement;
-};
-
 /** Provides special properties and methods (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating the layout and presentation of tables in an HTML document. */
 interface HTMLTableElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     bgColor: string;
     /**
      * Sets or retrieves the width of the border to draw around the object.
+     * @deprecated
      */
-    /** @deprecated */
     border: string;
-    /**
-     * Retrieves the caption object of a table.
-     */
+    /** Retrieves the caption object of a table. */
     caption: HTMLTableCaptionElement | null;
     /**
      * Sets or retrieves the amount of space between the border of the cell and the content of the cell.
+     * @deprecated
      */
-    /** @deprecated */
     cellPadding: string;
     /**
      * Sets or retrieves the amount of space between cells in a table.
+     * @deprecated
      */
-    /** @deprecated */
     cellSpacing: string;
     /**
      * Sets or retrieves the way the border frame around the table is displayed.
+     * @deprecated
      */
-    /** @deprecated */
     frame: string;
-    /**
-     * Sets or retrieves the number of horizontal rows contained in the object.
-     */
+    /** Sets or retrieves the number of horizontal rows contained in the object. */
     readonly rows: HTMLCollectionOf<HTMLTableRowElement>;
     /**
      * Sets or retrieves which dividing lines (inner borders) are displayed.
+     * @deprecated
      */
-    /** @deprecated */
     rules: string;
     /**
      * Sets or retrieves a description and/or structure of the object.
+     * @deprecated
      */
-    /** @deprecated */
     summary: string;
-    /**
-     * Retrieves a collection of all tBody objects in the table. Objects in this collection are in source order.
-     */
+    /** Retrieves a collection of all tBody objects in the table. Objects in this collection are in source order. */
     readonly tBodies: HTMLCollectionOf<HTMLTableSectionElement>;
-    /**
-     * Retrieves the tFoot object of the table.
-     */
+    /** Retrieves the tFoot object of the table. */
     tFoot: HTMLTableSectionElement | null;
-    /**
-     * Retrieves the tHead object of the table.
-     */
+    /** Retrieves the tHead object of the table. */
     tHead: HTMLTableSectionElement | null;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
-    /**
-     * Creates an empty caption element in the table.
-     */
+    /** Creates an empty caption element in the table. */
     createCaption(): HTMLTableCaptionElement;
-    /**
-     * Creates an empty tBody element in the table.
-     */
+    /** Creates an empty tBody element in the table. */
     createTBody(): HTMLTableSectionElement;
-    /**
-     * Creates an empty tFoot element in the table.
-     */
+    /** Creates an empty tFoot element in the table. */
     createTFoot(): HTMLTableSectionElement;
-    /**
-     * Returns the tHead element object if successful, or null otherwise.
-     */
+    /** Returns the tHead element object if successful, or null otherwise. */
     createTHead(): HTMLTableSectionElement;
-    /**
-     * Deletes the caption element and its contents from the table.
-     */
+    /** Deletes the caption element and its contents from the table. */
     deleteCaption(): void;
     /**
      * Removes the specified row (tr) from the element and from the rows collection.
      * @param index Number that specifies the zero-based position in the rows collection of the row to remove.
      */
     deleteRow(index: number): void;
-    /**
-     * Deletes the tFoot element and its contents from the table.
-     */
+    /** Deletes the tFoot element and its contents from the table. */
     deleteTFoot(): void;
-    /**
-     * Deletes the tHead element and its contents from the table.
-     */
+    /** Deletes the tHead element and its contents from the table. */
     deleteTHead(): void;
     /**
      * Creates a new row (tr) in the table, and adds the row to the rows collection.
@@ -8721,6 +8275,7 @@ declare var HTMLTableElement: {
     new(): HTMLTableElement;
 };
 
+/** @deprecated prefer HTMLTableCellElement */
 interface HTMLTableHeaderCellElement extends HTMLTableCellElement {
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableHeaderCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8728,35 +8283,24 @@ interface HTMLTableHeaderCellElement extends HTMLTableCellElement {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var HTMLTableHeaderCellElement: {
-    prototype: HTMLTableHeaderCellElement;
-    new(): HTMLTableHeaderCellElement;
-};
-
 /** Provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of rows in an HTML table. */
 interface HTMLTableRowElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     bgColor: string;
-    /**
-     * Retrieves a collection of all cells in the table row.
-     */
-    readonly cells: HTMLCollectionOf<HTMLTableDataCellElement | HTMLTableHeaderCellElement>;
+    /** Retrieves a collection of all cells in the table row. */
+    readonly cells: HTMLCollectionOf<HTMLTableCellElement>;
     /** @deprecated */
     ch: string;
     /** @deprecated */
     chOff: string;
-    /**
-     * Retrieves the position of the object in the rows collection for the table.
-     */
+    /** Retrieves the position of the object in the rows collection for the table. */
     readonly rowIndex: number;
-    /**
-     * Retrieves the position of the object in the collection.
-     */
+    /** Retrieves the position of the object in the collection. */
     readonly sectionRowIndex: number;
     /** @deprecated */
     vAlign: string;
@@ -8769,7 +8313,7 @@ interface HTMLTableRowElement extends HTMLElement {
      * Creates a new cell in the table row, and adds the cell to the cells collection.
      * @param index Number that specifies where to insert the cell in the tr. The default value is -1, which appends the new cell to the end of the cells collection.
      */
-    insertCell(index?: number): HTMLTableDataCellElement;
+    insertCell(index?: number): HTMLTableCellElement;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableRowElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableRowElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -8785,16 +8329,14 @@ declare var HTMLTableRowElement: {
 interface HTMLTableSectionElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     ch: string;
     /** @deprecated */
     chOff: string;
-    /**
-     * Sets or retrieves the number of horizontal rows contained in the object.
-     */
+    /** Sets or retrieves the number of horizontal rows contained in the object. */
     readonly rows: HTMLCollectionOf<HTMLTableRowElement>;
     /** @deprecated */
     vAlign: string;
@@ -8821,6 +8363,7 @@ declare var HTMLTableSectionElement: {
 
 /** Enables access to the contents of an HTML <template> element. */
 interface HTMLTemplateElement extends HTMLElement {
+    /** Returns the template contents (a DocumentFragment). */
     readonly content: DocumentFragment;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTemplateElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8836,88 +8379,50 @@ declare var HTMLTemplateElement: {
 /** Provides special properties and methods for manipulating the layout and presentation of <textarea> elements. */
 interface HTMLTextAreaElement extends HTMLElement {
     autocomplete: string;
-    /**
-     * Sets or retrieves the width of the object.
-     */
+    /** Sets or retrieves the width of the object. */
     cols: number;
-    /**
-     * Sets or retrieves the initial contents of the object.
-     */
+    /** Sets or retrieves the initial contents of the object. */
     defaultValue: string;
     dirName: string;
     disabled: boolean;
-    /**
-     * Retrieves a reference to the form that the object is embedded in.
-     */
+    /** Retrieves a reference to the form that the object is embedded in. */
     readonly form: HTMLFormElement | null;
     readonly labels: NodeListOf<HTMLLabelElement>;
-    /**
-     * Sets or retrieves the maximum number of characters that the user can enter in a text control.
-     */
+    /** Sets or retrieves the maximum number of characters that the user can enter in a text control. */
     maxLength: number;
     minLength: number;
-    /**
-     * Sets or retrieves the name of the object.
-     */
+    /** Sets or retrieves the name of the object. */
     name: string;
-    /**
-     * Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field.
-     */
+    /** Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field. */
     placeholder: string;
-    /**
-     * Sets or retrieves the value indicated whether the content of the object is read-only.
-     */
+    /** Sets or retrieves the value indicated whether the content of the object is read-only. */
     readOnly: boolean;
-    /**
-     * When present, marks an element that can't be submitted without a value.
-     */
+    /** When present, marks an element that can't be submitted without a value. */
     required: boolean;
-    /**
-     * Sets or retrieves the number of horizontal rows contained in the object.
-     */
+    /** Sets or retrieves the number of horizontal rows contained in the object. */
     rows: number;
     selectionDirection: "forward" | "backward" | "none";
-    /**
-     * Gets or sets the end position or offset of a text selection.
-     */
+    /** Gets or sets the end position or offset of a text selection. */
     selectionEnd: number;
-    /**
-     * Gets or sets the starting position or offset of a text selection.
-     */
+    /** Gets or sets the starting position or offset of a text selection. */
     selectionStart: number;
     readonly textLength: number;
-    /**
-     * Retrieves the type of control.
-     */
+    /** Retrieves the type of control. */
     readonly type: string;
-    /**
-     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
-     */
+    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
     readonly validationMessage: string;
-    /**
-     * Returns a  ValidityState object that represents the validity states of an element.
-     */
+    /** Returns a  ValidityState object that represents the validity states of an element. */
     readonly validity: ValidityState;
-    /**
-     * Retrieves or sets the text in the entry field of the textArea element.
-     */
+    /** Retrieves or sets the text in the entry field of the textArea element. */
     value: string;
-    /**
-     * Returns whether an element will successfully validate based on forms validation rules and constraints.
-     */
+    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
     readonly willValidate: boolean;
-    /**
-     * Sets or retrieves how to handle wordwrapping in the object.
-     */
+    /** Sets or retrieves how to handle wordwrapping in the object. */
     wrap: string;
-    /**
-     * Returns whether a form will validate when it is submitted, without having to submit it.
-     */
+    /** Returns whether a form will validate when it is submitted, without having to submit it. */
     checkValidity(): boolean;
     reportValidity(): boolean;
-    /**
-     * Highlights the input area of a form element.
-     */
+    /** Highlights the input area of a form element. */
     select(): void;
     /**
      * Sets a custom error message that is displayed when a form is submitted.
@@ -8960,9 +8465,7 @@ declare var HTMLTimeElement: {
 
 /** Contains the title for a document. This element inherits all of the properties and methods of the HTMLElement interface. */
 interface HTMLTitleElement extends HTMLElement {
-    /**
-     * Retrieves or sets the text of the object as a string.
-     */
+    /** Retrieves or sets the text of the object as a string. */
     text: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTitleElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8983,6 +8486,7 @@ interface HTMLTrackElement extends HTMLElement {
     readonly readyState: number;
     src: string;
     srclang: string;
+    /** Returns the TextTrack object corresponding to the text track of the track element. */
     readonly track: TextTrack;
     readonly ERROR: number;
     readonly LOADED: number;
@@ -9033,36 +8537,35 @@ declare var HTMLUnknownElement: {
     new(): HTMLUnknownElement;
 };
 
+interface HTMLVideoElementEventMap extends HTMLMediaElementEventMap {
+    "enterpictureinpicture": Event;
+    "leavepictureinpicture": Event;
+}
+
 /** Provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement. */
 interface HTMLVideoElement extends HTMLMediaElement {
-    /**
-     * Gets or sets the height of the video element.
-     */
+    disablePictureInPicture: boolean;
+    /** Gets or sets the height of the video element. */
     height: number;
-    /**
-     * Gets or sets the playsinline of the video element. for example, On iPhone, video elements will now be allowed to play inline, and will not automatically enter fullscreen mode when playback begins.
-     */
+    onenterpictureinpicture: ((this: HTMLVideoElement, ev: Event) => any) | null;
+    onleavepictureinpicture: ((this: HTMLVideoElement, ev: Event) => any) | null;
+    /** Gets or sets the playsinline of the video element. for example, On iPhone, video elements will now be allowed to play inline, and will not automatically enter fullscreen mode when playback begins. */
     playsInline: boolean;
-    /**
-     * Gets or sets a URL of an image to display, for example, like a movie poster. This can be a still frame from the video, or another image if no video data is available.
-     */
+    /** Gets or sets a URL of an image to display, for example, like a movie poster. This can be a still frame from the video, or another image if no video data is available. */
     poster: string;
-    /**
-     * Gets the intrinsic height of a video in CSS pixels, or zero if the dimensions are not known.
-     */
+    /** Gets the intrinsic height of a video in CSS pixels, or zero if the dimensions are not known. */
     readonly videoHeight: number;
-    /**
-     * Gets the intrinsic width of a video in CSS pixels, or zero if the dimensions are not known.
-     */
+    /** Gets the intrinsic width of a video in CSS pixels, or zero if the dimensions are not known. */
     readonly videoWidth: number;
-    /**
-     * Gets or sets the width of the video element.
-     */
+    /** Gets or sets the width of the video element. */
     width: number;
+    cancelVideoFrameCallback(handle: number): void;
     getVideoPlaybackQuality(): VideoPlaybackQuality;
-    addEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLMediaElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    requestPictureInPicture(): Promise<PictureInPictureWindow>;
+    requestVideoFrameCallback(callback: VideoFrameRequestCallback): number;
+    addEventListener<K extends keyof HTMLVideoElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLVideoElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLMediaElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener<K extends keyof HTMLVideoElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLVideoElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
@@ -9073,13 +8576,9 @@ declare var HTMLVideoElement: {
 
 /** Events that fire when the fragment identifier of the URL has changed. */
 interface HashChangeEvent extends Event {
-    /**
-     * Returns the URL of the session history entry that is now current.
-     */
+    /** Returns the URL of the session history entry that is now current. */
     readonly newURL: string;
-    /**
-     * Returns the URL of the session history entry that was previously current.
-     */
+    /** Returns the URL of the session history entry that was previously current. */
     readonly oldURL: string;
 }
 
@@ -9111,8 +8610,8 @@ interface History {
     back(): void;
     forward(): void;
     go(delta?: number): void;
-    pushState(data: any, title: string, url?: string | null): void;
-    replaceState(data: any, title: string, url?: string | null): void;
+    pushState(data: any, unused: string, url?: string | URL | null): void;
+    replaceState(data: any, unused: string, url?: string | URL | null): void;
 }
 
 declare var History: {
@@ -9120,50 +8619,34 @@ declare var History: {
     new(): History;
 };
 
-interface IDBArrayKey extends Array<IDBValidKey> {
-}
-
 /** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. */
 interface IDBCursor {
-    /**
-     * Returns the direction ("next", "nextunique", "prev" or "prevunique") of the cursor.
-     */
+    /** Returns the direction ("next", "nextunique", "prev" or "prevunique") of the cursor. */
     readonly direction: IDBCursorDirection;
-    /**
-     * Returns the key of the cursor. Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
-     */
+    /** Returns the key of the cursor. Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished. */
     readonly key: IDBValidKey;
-    /**
-     * Returns the effective key of the cursor. Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
-     */
+    /** Returns the effective key of the cursor. Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished. */
     readonly primaryKey: IDBValidKey;
-    /**
-     * Returns the IDBObjectStore or IDBIndex the cursor was opened from.
-     */
+    readonly request: IDBRequest;
+    /** Returns the IDBObjectStore or IDBIndex the cursor was opened from. */
     readonly source: IDBObjectStore | IDBIndex;
-    /**
-     * Advances the cursor through the next count records in range.
-     */
+    /** Advances the cursor through the next count records in range. */
     advance(count: number): void;
-    /**
-     * Advances the cursor to the next record in range.
-     */
+    /** Advances the cursor to the next record in range. */
     continue(key?: IDBValidKey): void;
-    /**
-     * Advances the cursor to the next record in range matching or after key and primaryKey. Throws an "InvalidAccessError" DOMException if the source is not an index.
-     */
+    /** Advances the cursor to the next record in range matching or after key and primaryKey. Throws an "InvalidAccessError" DOMException if the source is not an index. */
     continuePrimaryKey(key: IDBValidKey, primaryKey: IDBValidKey): void;
     /**
      * Delete the record pointed at by the cursor with a new value.
-     * 
+     *
      * If successful, request's result will be undefined.
      */
     delete(): IDBRequest<undefined>;
     /**
      * Updated the record pointed at by the cursor with a new value.
-     * 
+     *
      * Throws a "DataError" DOMException if the effective object store uses in-line keys and the key would have changed.
-     * 
+     *
      * If successful, request's result will be the record's key.
      */
     update(value: any): IDBRequest<IDBValidKey>;
@@ -9176,9 +8659,7 @@ declare var IDBCursor: {
 
 /** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property. */
 interface IDBCursorWithValue extends IDBCursor {
-    /**
-     * Returns the cursor's current value.
-     */
+    /** Returns the cursor's current value. */
     readonly value: any;
 }
 
@@ -9196,42 +8677,32 @@ interface IDBDatabaseEventMap {
 
 /** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. */
 interface IDBDatabase extends EventTarget {
-    /**
-     * Returns the name of the database.
-     */
+    /** Returns the name of the database. */
     readonly name: string;
-    /**
-     * Returns a list of the names of object stores in the database.
-     */
+    /** Returns a list of the names of object stores in the database. */
     readonly objectStoreNames: DOMStringList;
     onabort: ((this: IDBDatabase, ev: Event) => any) | null;
     onclose: ((this: IDBDatabase, ev: Event) => any) | null;
     onerror: ((this: IDBDatabase, ev: Event) => any) | null;
     onversionchange: ((this: IDBDatabase, ev: IDBVersionChangeEvent) => any) | null;
-    /**
-     * Returns the version of the database.
-     */
+    /** Returns the version of the database. */
     readonly version: number;
-    /**
-     * Closes the connection once all running transactions have finished.
-     */
+    /** Closes the connection once all running transactions have finished. */
     close(): void;
     /**
      * Creates a new object store with the given name and options and returns a new IDBObjectStore.
-     * 
+     *
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createObjectStore(name: string, options?: IDBObjectStoreParameters): IDBObjectStore;
     /**
      * Deletes the object store with the given name.
-     * 
+     *
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     deleteObjectStore(name: string): void;
-    /**
-     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
-     */
-    transaction(storeNames: string | string[], mode?: IDBTransactionMode): IDBTransaction;
+    /** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. */
+    transaction(storeNames: string | string[], mode?: IDBTransactionMode, options?: IDBTransactionOptions): IDBTransaction;
     addEventListener<K extends keyof IDBDatabaseEventMap>(type: K, listener: (this: IDBDatabase, ev: IDBDatabaseEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof IDBDatabaseEventMap>(type: K, listener: (this: IDBDatabase, ev: IDBDatabaseEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -9247,17 +8718,14 @@ declare var IDBDatabase: {
 interface IDBFactory {
     /**
      * Compares two values as keys. Returns -1 if key1 precedes key2, 1 if key2 precedes key1, and 0 if the keys are equal.
-     * 
+     *
      * Throws a "DataError" DOMException if either input is not a valid key.
      */
     cmp(first: any, second: any): number;
-    /**
-     * Attempts to delete the named database. If the database already exists and there are open connections that don't close in response to a versionchange event, the request will be blocked until all they close. If the request is successful request's result will be null.
-     */
+    databases(): Promise<IDBDatabaseInfo[]>;
+    /** Attempts to delete the named database. If the database already exists and there are open connections that don't close in response to a versionchange event, the request will be blocked until all they close. If the request is successful request's result will be null. */
     deleteDatabase(name: string): IDBOpenDBRequest;
-    /**
-     * Attempts to open a connection to the named database with the current version, or 1 if it does not already exist. If the request is successful request's result will be the connection.
-     */
+    /** Attempts to open a connection to the named database with the current version, or 1 if it does not already exist. If the request is successful request's result will be the connection. */
     open(name: string, version?: number): IDBOpenDBRequest;
 }
 
@@ -9270,54 +8738,50 @@ declare var IDBFactory: {
 interface IDBIndex {
     readonly keyPath: string | string[];
     readonly multiEntry: boolean;
-    /**
-     * Returns the name of the index.
-     */
+    /** Returns the name of the index. */
     name: string;
-    /**
-     * Returns the IDBObjectStore the index belongs to.
-     */
+    /** Returns the IDBObjectStore the index belongs to. */
     readonly objectStore: IDBObjectStore;
     readonly unique: boolean;
     /**
      * Retrieves the number of records matching the given key or key range in query.
-     * 
+     *
      * If successful, request's result will be the count.
      */
-    count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
+    count(query?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Retrieves the value of the first record matching the given key or key range in query.
-     * 
+     *
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
-    get(key: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
+    get(query: IDBValidKey | IDBKeyRange): IDBRequest<any>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
-     * 
+     *
      * If successful, request's result will be an Array of the values.
      */
     getAll(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
-     * 
+     *
      * If successful, request's result will be an Array of the keys.
      */
     getAllKeys(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the given key or key range in query.
-     * 
+     *
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
-    getKey(key: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
+    getKey(query: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     /**
      * Opens a cursor over the records matching query, ordered by direction. If query is null, all records in index are matched.
-     * 
+     *
      * If successful, request's result will be an IDBCursorWithValue, or null if there were no matching records.
      */
     openCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in index are matched.
-     * 
+     *
      * If successful, request's result will be an IDBCursor, or null if there were no matching records.
      */
     openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
@@ -9330,155 +8794,127 @@ declare var IDBIndex: {
 
 /** A key range can be a single value or a range with upper and lower bounds or endpoints. If the key range has both upper and lower bounds, then it is bounded; if it has no bounds, it is unbounded. A bounded key range can either be open (the endpoints are excluded) or closed (the endpoints are included). To retrieve all keys within a certain range, you can use the following code constructs: */
 interface IDBKeyRange {
-    /**
-     * Returns lower bound, or undefined if none.
-     */
+    /** Returns lower bound, or undefined if none. */
     readonly lower: any;
-    /**
-     * Returns true if the lower open flag is set, and false otherwise.
-     */
+    /** Returns true if the lower open flag is set, and false otherwise. */
     readonly lowerOpen: boolean;
-    /**
-     * Returns upper bound, or undefined if none.
-     */
+    /** Returns upper bound, or undefined if none. */
     readonly upper: any;
-    /**
-     * Returns true if the upper open flag is set, and false otherwise.
-     */
+    /** Returns true if the upper open flag is set, and false otherwise. */
     readonly upperOpen: boolean;
-    /**
-     * Returns true if key is included in the range, and false otherwise.
-     */
+    /** Returns true if key is included in the range, and false otherwise. */
     includes(key: any): boolean;
 }
 
 declare var IDBKeyRange: {
     prototype: IDBKeyRange;
     new(): IDBKeyRange;
-    /**
-     * Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range.
-     */
+    /** Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range. */
     bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
-    /**
-     * Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range.
-     */
+    /** Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range. */
     lowerBound(lower: any, open?: boolean): IDBKeyRange;
-    /**
-     * Returns a new IDBKeyRange spanning only key.
-     */
+    /** Returns a new IDBKeyRange spanning only key. */
     only(value: any): IDBKeyRange;
-    /**
-     * Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range.
-     */
+    /** Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range. */
     upperBound(upper: any, open?: boolean): IDBKeyRange;
 };
 
 /** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) */
 interface IDBObjectStore {
-    /**
-     * Returns true if the store has a key generator, and false otherwise.
-     */
+    /** Returns true if the store has a key generator, and false otherwise. */
     readonly autoIncrement: boolean;
-    /**
-     * Returns a list of the names of indexes in the store.
-     */
+    /** Returns a list of the names of indexes in the store. */
     readonly indexNames: DOMStringList;
-    /**
-     * Returns the key path of the store, or null if none.
-     */
+    /** Returns the key path of the store, or null if none. */
     readonly keyPath: string | string[];
-    /**
-     * Returns the name of the store.
-     */
+    /** Returns the name of the store. */
     name: string;
-    /**
-     * Returns the associated transaction.
-     */
+    /** Returns the associated transaction. */
     readonly transaction: IDBTransaction;
     /**
      * Adds or updates a record in store with the given value and key.
-     * 
+     *
      * If the store uses in-line keys and key is specified a "DataError" DOMException will be thrown.
-     * 
+     *
      * If put() is used, any existing record with the key will be replaced. If add() is used, and if a record with the key already exists the request will fail, with request's error set to a "ConstraintError" DOMException.
-     * 
+     *
      * If successful, request's result will be the record's key.
      */
     add(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
     /**
      * Deletes all records in store.
-     * 
+     *
      * If successful, request's result will be undefined.
      */
     clear(): IDBRequest<undefined>;
     /**
      * Retrieves the number of records matching the given key or key range in query.
-     * 
+     *
      * If successful, request's result will be the count.
      */
-    count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
+    count(query?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-     * 
+     *
      * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createIndex(name: string, keyPath: string | string[], options?: IDBIndexParameters): IDBIndex;
     /**
      * Deletes records in store with the given key or in the given key range in query.
-     * 
+     *
      * If successful, request's result will be undefined.
      */
-    delete(key: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
+    delete(query: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
     /**
      * Deletes the index in store with the given name.
-     * 
+     *
      * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     deleteIndex(name: string): void;
     /**
      * Retrieves the value of the first record matching the given key or key range in query.
-     * 
+     *
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
-    get(query: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
+    get(query: IDBValidKey | IDBKeyRange): IDBRequest<any>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
-     * 
+     *
      * If successful, request's result will be an Array of the values.
      */
     getAll(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
-     * 
+     *
      * If successful, request's result will be an Array of the keys.
      */
     getAllKeys(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the given key or key range in query.
-     * 
+     *
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
     getKey(query: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     index(name: string): IDBIndex;
     /**
      * Opens a cursor over the records matching query, ordered by direction. If query is null, all records in store are matched.
-     * 
+     *
      * If successful, request's result will be an IDBCursorWithValue pointing at the first matching record, or null if there were no matching records.
      */
     openCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in store are matched.
-     * 
+     *
      * If successful, request's result will be an IDBCursor pointing at the first matching record, or null if there were no matching records.
      */
     openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
     /**
      * Adds or updates a record in store with the given value and key.
-     * 
+     *
      * If the store uses in-line keys and key is specified a "DataError" DOMException will be thrown.
-     * 
+     *
      * If put() is used, any existing record with the key will be replaced. If add() is used, and if a record with the key already exists the request will fail, with request's error set to a "ConstraintError" DOMException.
-     * 
+     *
      * If successful, request's result will be the record's key.
      */
     put(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
@@ -9490,13 +8926,13 @@ declare var IDBObjectStore: {
 };
 
 interface IDBOpenDBRequestEventMap extends IDBRequestEventMap {
-    "blocked": Event;
+    "blocked": IDBVersionChangeEvent;
     "upgradeneeded": IDBVersionChangeEvent;
 }
 
 /** Also inherits methods from its parents IDBRequest and EventTarget. */
 interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {
-    onblocked: ((this: IDBOpenDBRequest, ev: Event) => any) | null;
+    onblocked: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     onupgradeneeded: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     addEventListener<K extends keyof IDBOpenDBRequestEventMap>(type: K, listener: (this: IDBOpenDBRequest, ev: IDBOpenDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -9516,27 +8952,17 @@ interface IDBRequestEventMap {
 
 /** The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance. */
 interface IDBRequest<T = any> extends EventTarget {
-    /**
-     * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws a "InvalidStateError" DOMException if the request is still pending.
-     */
+    /** When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws a "InvalidStateError" DOMException if the request is still pending. */
     readonly error: DOMException | null;
     onerror: ((this: IDBRequest<T>, ev: Event) => any) | null;
     onsuccess: ((this: IDBRequest<T>, ev: Event) => any) | null;
-    /**
-     * Returns "pending" until a request is complete, then returns "done".
-     */
+    /** Returns "pending" until a request is complete, then returns "done". */
     readonly readyState: IDBRequestReadyState;
-    /**
-     * When a request is completed, returns the result, or undefined if the request failed. Throws a "InvalidStateError" DOMException if the request is still pending.
-     */
+    /** When a request is completed, returns the result, or undefined if the request failed. Throws a "InvalidStateError" DOMException if the request is still pending. */
     readonly result: T;
-    /**
-     * Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open request.
-     */
+    /** Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open request. */
     readonly source: IDBObjectStore | IDBIndex | IDBCursor;
-    /**
-     * Returns the IDBTransaction the request was made within. If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise.
-     */
+    /** Returns the IDBTransaction the request was made within. If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise. */
     readonly transaction: IDBTransaction | null;
     addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest<T>, ev: IDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -9556,32 +8982,22 @@ interface IDBTransactionEventMap {
 }
 
 interface IDBTransaction extends EventTarget {
-    /**
-     * Returns the transaction's connection.
-     */
+    /** Returns the transaction's connection. */
     readonly db: IDBDatabase;
-    /**
-     * If the transaction was aborted, returns the error (a DOMException) providing the reason.
-     */
-    readonly error: DOMException;
-    /**
-     * Returns the mode the transaction was created with ("readonly" or "readwrite"), or "versionchange" for an upgrade transaction.
-     */
+    readonly durability: IDBTransactionDurability;
+    /** If the transaction was aborted, returns the error (a DOMException) providing the reason. */
+    readonly error: DOMException | null;
+    /** Returns the mode the transaction was created with ("readonly" or "readwrite"), or "versionchange" for an upgrade transaction. */
     readonly mode: IDBTransactionMode;
-    /**
-     * Returns a list of the names of object stores in the transaction's scope. For an upgrade transaction this is all object stores in the database.
-     */
+    /** Returns a list of the names of object stores in the transaction's scope. For an upgrade transaction this is all object stores in the database. */
     readonly objectStoreNames: DOMStringList;
     onabort: ((this: IDBTransaction, ev: Event) => any) | null;
     oncomplete: ((this: IDBTransaction, ev: Event) => any) | null;
     onerror: ((this: IDBTransaction, ev: Event) => any) | null;
-    /**
-     * Aborts the transaction. All pending requests will fail with a "AbortError" DOMException and all changes made to the database will be reverted.
-     */
+    /** Aborts the transaction. All pending requests will fail with a "AbortError" DOMException and all changes made to the database will be reverted. */
     abort(): void;
-    /**
-     * Returns an IDBObjectStore in the transaction's scope.
-     */
+    commit(): void;
+    /** Returns an IDBObjectStore in the transaction's scope. */
     objectStore(name: string): IDBObjectStore;
     addEventListener<K extends keyof IDBTransactionEventMap>(type: K, listener: (this: IDBTransaction, ev: IDBTransactionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -9615,18 +9031,22 @@ declare var IIRFilterNode: {
     new(context: BaseAudioContext, options: IIRFilterOptions): IIRFilterNode;
 };
 
+interface IdleDeadline {
+    readonly didTimeout: boolean;
+    timeRemaining(): DOMHighResTimeStamp;
+}
+
+declare var IdleDeadline: {
+    prototype: IdleDeadline;
+    new(): IdleDeadline;
+};
+
 interface ImageBitmap {
-    /**
-     * Returns the intrinsic height of the image, in CSS pixels.
-     */
+    /** Returns the intrinsic height of the image, in CSS pixels. */
     readonly height: number;
-    /**
-     * Returns the intrinsic width of the image, in CSS pixels.
-     */
+    /** Returns the intrinsic width of the image, in CSS pixels. */
     readonly width: number;
-    /**
-     * Releases imageBitmap's underlying bitmap data.
-     */
+    /** Releases imageBitmap's underlying bitmap data. */
     close(): void;
 }
 
@@ -9636,13 +9056,9 @@ declare var ImageBitmap: {
 };
 
 interface ImageBitmapRenderingContext {
-    /**
-     * Returns the canvas element that the context is bound to.
-     */
+    /** Returns the canvas element that the context is bound to. */
     readonly canvas: HTMLCanvasElement | OffscreenCanvas;
-    /**
-     * Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound.
-     */
+    /** Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound. */
     transferFromImageBitmap(bitmap: ImageBitmap | null): void;
 }
 
@@ -9653,32 +9069,27 @@ declare var ImageBitmapRenderingContext: {
 
 /** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). */
 interface ImageData {
-    /**
-     * Returns the one-dimensional array containing the data in RGBA order, as integers in the range 0 to 255.
-     */
+    readonly colorSpace: PredefinedColorSpace;
+    /** Returns the one-dimensional array containing the data in RGBA order, as integers in the range 0 to 255. */
     readonly data: Uint8ClampedArray;
-    /**
-     * Returns the actual dimensions of the data in the ImageData object, in pixels.
-     */
+    /** Returns the actual dimensions of the data in the ImageData object, in pixels. */
     readonly height: number;
-    /**
-     * Returns the actual dimensions of the data in the ImageData object, in pixels.
-     */
+    /** Returns the actual dimensions of the data in the ImageData object, in pixels. */
     readonly width: number;
 }
 
 declare var ImageData: {
     prototype: ImageData;
-    new(sw: number, sh: number): ImageData;
-    new(data: Uint8ClampedArray, sw: number, sh?: number): ImageData;
+    new(sw: number, sh: number, settings?: ImageDataSettings): ImageData;
+    new(data: Uint8ClampedArray, sw: number, sh?: number, settings?: ImageDataSettings): ImageData;
 };
 
 interface InnerHTML {
     innerHTML: string;
 }
 
+/** Available only in secure contexts. */
 interface InputDeviceInfo extends MediaDeviceInfo {
-    getCapabilities(): MediaTrackCapabilities;
 }
 
 declare var InputDeviceInfo: {
@@ -9688,8 +9099,10 @@ declare var InputDeviceInfo: {
 
 interface InputEvent extends UIEvent {
     readonly data: string | null;
+    readonly dataTransfer: DataTransfer | null;
     readonly inputType: string;
     readonly isComposing: boolean;
+    getTargetRanges(): StaticRange[];
 }
 
 declare var InputEvent: {
@@ -9721,7 +9134,7 @@ interface IntersectionObserverEntry {
     readonly isIntersecting: boolean;
     readonly rootBounds: DOMRectReadOnly | null;
     readonly target: Element;
-    readonly time: number;
+    readonly time: DOMHighResTimeStamp;
 }
 
 declare var IntersectionObserverEntry: {
@@ -9729,11 +9142,13 @@ declare var IntersectionObserverEntry: {
     new(intersectionObserverEntryInit: IntersectionObserverEntryInit): IntersectionObserverEntry;
 };
 
+interface KHR_parallel_shader_compile {
+    readonly COMPLETION_STATUS_KHR: GLenum;
+}
+
 /** KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. */
 interface KeyboardEvent extends UIEvent {
     readonly altKey: boolean;
-    /** @deprecated */
-    char: string;
     /** @deprecated */
     readonly charCode: number;
     readonly code: string;
@@ -9747,6 +9162,8 @@ interface KeyboardEvent extends UIEvent {
     readonly repeat: boolean;
     readonly shiftKey: boolean;
     getModifierState(keyArg: string): boolean;
+    /** @deprecated */
+    initKeyboardEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, viewArg?: Window | null, keyArg?: string, locationArg?: number, ctrlKey?: boolean, altKey?: boolean, shiftKey?: boolean, metaKey?: boolean): void;
     readonly DOM_KEY_LOCATION_LEFT: number;
     readonly DOM_KEY_LOCATION_NUMPAD: number;
     readonly DOM_KEY_LOCATION_RIGHT: number;
@@ -9765,6 +9182,7 @@ declare var KeyboardEvent: {
 interface KeyframeEffect extends AnimationEffect {
     composite: CompositeOperation;
     iterationComposite: IterationCompositeOperation;
+    pseudoElement: string | null;
     target: Element | null;
     getKeyframes(): ComputedKeyframe[];
     setKeyframes(keyframes: Keyframe[] | PropertyIndexedKeyframes | null): void;
@@ -9780,89 +9198,67 @@ interface LinkStyle {
     readonly sheet: CSSStyleSheet | null;
 }
 
-interface ListeningStateChangedEvent extends Event {
-    readonly label: string;
-    readonly state: ListeningState;
-}
-
-declare var ListeningStateChangedEvent: {
-    prototype: ListeningStateChangedEvent;
-    new(): ListeningStateChangedEvent;
-};
-
 /** The location (URL) of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively. */
 interface Location {
-    /**
-     * Returns a DOMStringList object listing the origins of the ancestor browsing contexts, from the parent browsing context to the top-level browsing context.
-     */
+    /** Returns a DOMStringList object listing the origins of the ancestor browsing contexts, from the parent browsing context to the top-level browsing context. */
     readonly ancestorOrigins: DOMStringList;
     /**
      * Returns the Location object's URL's fragment (includes leading "#" if non-empty).
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed fragment (ignores leading "#").
      */
     hash: string;
     /**
      * Returns the Location object's URL's host and port (if different from the default port for the scheme).
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed host and port.
      */
     host: string;
     /**
      * Returns the Location object's URL's host.
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed host.
      */
     hostname: string;
     /**
      * Returns the Location object's URL.
-     * 
+     *
      * Can be set, to navigate to the given URL.
      */
     href: string;
     toString(): string;
-    /**
-     * Returns the Location object's URL's origin.
-     */
+    /** Returns the Location object's URL's origin. */
     readonly origin: string;
     /**
      * Returns the Location object's URL's path.
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed path.
      */
     pathname: string;
     /**
      * Returns the Location object's URL's port.
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed port.
      */
     port: string;
     /**
      * Returns the Location object's URL's scheme.
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed scheme.
      */
     protocol: string;
     /**
      * Returns the Location object's URL's query (includes leading "?" if non-empty).
-     * 
+     *
      * Can be set, to navigate to the same URL with a changed query (ignores leading "?").
      */
     search: string;
-    /**
-     * Navigates to the given URL.
-     */
-    assign(url: string): void;
-    /**
-     * Reloads the current page.
-     */
+    /** Navigates to the given URL. */
+    assign(url: string | URL): void;
+    /** Reloads the current page. */
     reload(): void;
-    /** @deprecated */
-    reload(forcedReload: boolean): void;
-    /**
-     * Removes the current page from the session history and navigates to the given URL.
-     */
-    replace(url: string): void;
+    /** Removes the current page from the session history and navigates to the given URL. */
+    replace(url: string | URL): void;
 }
 
 declare var Location: {
@@ -9870,260 +9266,58 @@ declare var Location: {
     new(): Location;
 };
 
-interface MSAssertion {
-    readonly id: string;
-    readonly type: MSCredentialType;
+/** Available only in secure contexts. */
+interface Lock {
+    readonly mode: LockMode;
+    readonly name: string;
 }
 
-declare var MSAssertion: {
-    prototype: MSAssertion;
-    new(): MSAssertion;
+declare var Lock: {
+    prototype: Lock;
+    new(): Lock;
 };
 
-interface MSBlobBuilder {
-    append(data: any, endings?: string): void;
-    getBlob(contentType?: string): Blob;
+/** Available only in secure contexts. */
+interface LockManager {
+    query(): Promise<LockManagerSnapshot>;
+    request(name: string, callback: LockGrantedCallback): Promise<any>;
+    request(name: string, options: LockOptions, callback: LockGrantedCallback): Promise<any>;
 }
 
-declare var MSBlobBuilder: {
-    prototype: MSBlobBuilder;
-    new(): MSBlobBuilder;
+declare var LockManager: {
+    prototype: LockManager;
+    new(): LockManager;
 };
 
-interface MSFIDOCredentialAssertion extends MSAssertion {
-    readonly algorithm: string | Algorithm;
-    readonly attestation: any;
-    readonly publicKey: string;
-    readonly transportHints: MSTransportType[];
+interface MathMLElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
 }
 
-declare var MSFIDOCredentialAssertion: {
-    prototype: MSFIDOCredentialAssertion;
-    new(): MSFIDOCredentialAssertion;
-};
-
-interface MSFIDOSignature {
-    readonly authnrData: string;
-    readonly clientData: string;
-    readonly signature: string;
-}
-
-declare var MSFIDOSignature: {
-    prototype: MSFIDOSignature;
-    new(): MSFIDOSignature;
-};
-
-interface MSFIDOSignatureAssertion extends MSAssertion {
-    readonly signature: MSFIDOSignature;
-}
-
-declare var MSFIDOSignatureAssertion: {
-    prototype: MSFIDOSignatureAssertion;
-    new(): MSFIDOSignatureAssertion;
-};
-
-interface MSFileSaver {
-    msSaveBlob(blob: any, defaultName?: string): boolean;
-    msSaveOrOpenBlob(blob: any, defaultName?: string): boolean;
-}
-
-interface MSGesture {
-    target: Element;
-    addPointer(pointerId: number): void;
-    stop(): void;
-}
-
-declare var MSGesture: {
-    prototype: MSGesture;
-    new(): MSGesture;
-};
-
-/** The MSGestureEvent is a proprietary interface specific to Internet Explorer and Microsoft Edge which represents events that occur due to touch gestures. Events using this interface include MSGestureStart, MSGestureEnd, MSGestureTap, MSGestureHold, MSGestureChange, and MSInertiaStart. */
-interface MSGestureEvent extends UIEvent {
-    readonly clientX: number;
-    readonly clientY: number;
-    readonly expansion: number;
-    readonly gestureObject: any;
-    readonly hwTimestamp: number;
-    readonly offsetX: number;
-    readonly offsetY: number;
-    readonly rotation: number;
-    readonly scale: number;
-    readonly screenX: number;
-    readonly screenY: number;
-    readonly translationX: number;
-    readonly translationY: number;
-    readonly velocityAngular: number;
-    readonly velocityExpansion: number;
-    readonly velocityX: number;
-    readonly velocityY: number;
-    initGestureEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, offsetXArg: number, offsetYArg: number, translationXArg: number, translationYArg: number, scaleArg: number, expansionArg: number, rotationArg: number, velocityXArg: number, velocityYArg: number, velocityExpansionArg: number, velocityAngularArg: number, hwTimestampArg: number): void;
-    readonly MSGESTURE_FLAG_BEGIN: number;
-    readonly MSGESTURE_FLAG_CANCEL: number;
-    readonly MSGESTURE_FLAG_END: number;
-    readonly MSGESTURE_FLAG_INERTIA: number;
-    readonly MSGESTURE_FLAG_NONE: number;
-}
-
-declare var MSGestureEvent: {
-    prototype: MSGestureEvent;
-    new(): MSGestureEvent;
-    readonly MSGESTURE_FLAG_BEGIN: number;
-    readonly MSGESTURE_FLAG_CANCEL: number;
-    readonly MSGESTURE_FLAG_END: number;
-    readonly MSGESTURE_FLAG_INERTIA: number;
-    readonly MSGESTURE_FLAG_NONE: number;
-};
-
-/** The msGraphicsTrust() constructor returns an object that provides properties for info on protected video playback. */
-interface MSGraphicsTrust {
-    readonly constrictionActive: boolean;
-    readonly status: string;
-}
-
-declare var MSGraphicsTrust: {
-    prototype: MSGraphicsTrust;
-    new(): MSGraphicsTrust;
-};
-
-interface MSInputMethodContextEventMap {
-    "MSCandidateWindowHide": Event;
-    "MSCandidateWindowShow": Event;
-    "MSCandidateWindowUpdate": Event;
-}
-
-interface MSInputMethodContext extends EventTarget {
-    readonly compositionEndOffset: number;
-    readonly compositionStartOffset: number;
-    oncandidatewindowhide: ((this: MSInputMethodContext, ev: Event) => any) | null;
-    oncandidatewindowshow: ((this: MSInputMethodContext, ev: Event) => any) | null;
-    oncandidatewindowupdate: ((this: MSInputMethodContext, ev: Event) => any) | null;
-    readonly target: HTMLElement;
-    getCandidateWindowClientRect(): ClientRect;
-    getCompositionAlternatives(): string[];
-    hasComposition(): boolean;
-    isCandidateWindowVisible(): boolean;
-    addEventListener<K extends keyof MSInputMethodContextEventMap>(type: K, listener: (this: MSInputMethodContext, ev: MSInputMethodContextEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+interface MathMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement {
+    addEventListener<K extends keyof MathMLElementEventMap>(type: K, listener: (this: MathMLElement, ev: MathMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof MSInputMethodContextEventMap>(type: K, listener: (this: MSInputMethodContext, ev: MSInputMethodContextEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener<K extends keyof MathMLElementEventMap>(type: K, listener: (this: MathMLElement, ev: MathMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var MSInputMethodContext: {
-    prototype: MSInputMethodContext;
-    new(): MSInputMethodContext;
+declare var MathMLElement: {
+    prototype: MathMLElement;
+    new(): MathMLElement;
 };
 
-interface MSMediaKeyError {
-    readonly code: number;
-    readonly systemCode: number;
-    readonly MS_MEDIA_KEYERR_CLIENT: number;
-    readonly MS_MEDIA_KEYERR_DOMAIN: number;
-    readonly MS_MEDIA_KEYERR_HARDWARECHANGE: number;
-    readonly MS_MEDIA_KEYERR_OUTPUT: number;
-    readonly MS_MEDIA_KEYERR_SERVICE: number;
-    readonly MS_MEDIA_KEYERR_UNKNOWN: number;
+interface MediaCapabilities {
+    decodingInfo(configuration: MediaDecodingConfiguration): Promise<MediaCapabilitiesDecodingInfo>;
+    encodingInfo(configuration: MediaEncodingConfiguration): Promise<MediaCapabilitiesEncodingInfo>;
 }
 
-declare var MSMediaKeyError: {
-    prototype: MSMediaKeyError;
-    new(): MSMediaKeyError;
-    readonly MS_MEDIA_KEYERR_CLIENT: number;
-    readonly MS_MEDIA_KEYERR_DOMAIN: number;
-    readonly MS_MEDIA_KEYERR_HARDWARECHANGE: number;
-    readonly MS_MEDIA_KEYERR_OUTPUT: number;
-    readonly MS_MEDIA_KEYERR_SERVICE: number;
-    readonly MS_MEDIA_KEYERR_UNKNOWN: number;
+declare var MediaCapabilities: {
+    prototype: MediaCapabilities;
+    new(): MediaCapabilities;
 };
 
-interface MSMediaKeyMessageEvent extends Event {
-    readonly destinationURL: string | null;
-    readonly message: Uint8Array;
-}
-
-declare var MSMediaKeyMessageEvent: {
-    prototype: MSMediaKeyMessageEvent;
-    new(): MSMediaKeyMessageEvent;
-};
-
-interface MSMediaKeyNeededEvent extends Event {
-    readonly initData: Uint8Array | null;
-}
-
-declare var MSMediaKeyNeededEvent: {
-    prototype: MSMediaKeyNeededEvent;
-    new(): MSMediaKeyNeededEvent;
-};
-
-interface MSMediaKeySession extends EventTarget {
-    readonly error: MSMediaKeyError | null;
-    readonly keySystem: string;
-    readonly sessionId: string;
-    close(): void;
-    update(key: Uint8Array): void;
-}
-
-declare var MSMediaKeySession: {
-    prototype: MSMediaKeySession;
-    new(): MSMediaKeySession;
-};
-
-interface MSMediaKeys {
-    readonly keySystem: string;
-    createSession(type: string, initData: Uint8Array, cdmData?: Uint8Array | null): MSMediaKeySession;
-}
-
-declare var MSMediaKeys: {
-    prototype: MSMediaKeys;
-    new(keySystem: string): MSMediaKeys;
-    isTypeSupported(keySystem: string, type?: string | null): boolean;
-    isTypeSupportedWithFeatures(keySystem: string, type?: string | null): string;
-};
-
-interface MSNavigatorDoNotTrack {
-    confirmSiteSpecificTrackingException(args: ConfirmSiteSpecificExceptionsInformation): boolean;
-    confirmWebWideTrackingException(args: ExceptionInformation): boolean;
-    removeSiteSpecificTrackingException(args: ExceptionInformation): void;
-    removeWebWideTrackingException(args: ExceptionInformation): void;
-    storeSiteSpecificTrackingException(args: StoreSiteSpecificExceptionsInformation): void;
-    storeWebWideTrackingException(args: StoreExceptionsInformation): void;
-}
-
-interface MSPointerEvent extends MouseEvent {
-    readonly currentPoint: any;
-    readonly height: number;
-    readonly hwTimestamp: number;
-    readonly intermediatePoints: any;
-    readonly isPrimary: boolean;
-    readonly pointerId: number;
-    readonly pointerType: any;
-    readonly pressure: number;
-    readonly rotation: number;
-    readonly tiltX: number;
-    readonly tiltY: number;
-    readonly width: number;
-    getCurrentPoint(element: Element): void;
-    getIntermediatePoints(element: Element): void;
-    initPointerEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, offsetXArg: number, offsetYArg: number, widthArg: number, heightArg: number, pressure: number, rotation: number, tiltX: number, tiltY: number, pointerIdArg: number, pointerType: any, hwTimestampArg: number, isPrimary: boolean): void;
-}
-
-declare var MSPointerEvent: {
-    prototype: MSPointerEvent;
-    new(typeArg: string, eventInitDict?: PointerEventInit): MSPointerEvent;
-};
-
-interface MSStream {
-    readonly type: string;
-    msClose(): void;
-    msDetachStream(): any;
-}
-
-declare var MSStream: {
-    prototype: MSStream;
-    new(): MSStream;
-};
-
-/** The MediaDevicesInfo interface contains information that describes a single media input or output device. */
+/**
+ * The MediaDevicesInfo interface contains information that describes a single media input or output device.
+ * Available only in secure contexts.
+ */
 interface MediaDeviceInfo {
     readonly deviceId: string;
     readonly groupId: string;
@@ -10141,10 +9335,14 @@ interface MediaDevicesEventMap {
     "devicechange": Event;
 }
 
-/** Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data. */
+/**
+ * Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.
+ * Available only in secure contexts.
+ */
 interface MediaDevices extends EventTarget {
     ondevicechange: ((this: MediaDevices, ev: Event) => any) | null;
     enumerateDevices(): Promise<MediaDeviceInfo[]>;
+    getDisplayMedia(options?: DisplayMediaStreamOptions): Promise<MediaStream>;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
     getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10197,7 +9395,10 @@ declare var MediaError: {
     readonly MEDIA_ERR_SRC_NOT_SUPPORTED: number;
 };
 
-/** This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session. */
+/**
+ * This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session.
+ * Available only in secure contexts.
+ */
 interface MediaKeyMessageEvent extends Event {
     readonly message: ArrayBuffer;
     readonly messageType: MediaKeyMessageType;
@@ -10213,9 +9414,12 @@ interface MediaKeySessionEventMap {
     "message": MediaKeyMessageEvent;
 }
 
-/** This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM). */
+/**
+ * This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM).
+ * Available only in secure contexts.
+ */
 interface MediaKeySession extends EventTarget {
-    readonly closed: Promise<void>;
+    readonly closed: Promise<MediaKeySessionClosedReason>;
     readonly expiration: number;
     readonly keyStatuses: MediaKeyStatusMap;
     onkeystatuseschange: ((this: MediaKeySession, ev: Event) => any) | null;
@@ -10237,7 +9441,10 @@ declare var MediaKeySession: {
     new(): MediaKeySession;
 };
 
-/** This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs. */
+/**
+ * This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs.
+ * Available only in secure contexts.
+ */
 interface MediaKeyStatusMap {
     readonly size: number;
     get(keyId: BufferSource): MediaKeyStatus | undefined;
@@ -10250,7 +9457,10 @@ declare var MediaKeyStatusMap: {
     new(): MediaKeyStatusMap;
 };
 
-/** This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method. */
+/**
+ * This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method.
+ * Available only in secure contexts.
+ */
 interface MediaKeySystemAccess {
     readonly keySystem: string;
     createMediaKeys(): Promise<MediaKeys>;
@@ -10262,7 +9472,10 @@ declare var MediaKeySystemAccess: {
     new(): MediaKeySystemAccess;
 };
 
-/** This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback. */
+/**
+ * This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback.
+ * Available only in secure contexts.
+ */
 interface MediaKeys {
     createSession(sessionType?: MediaKeySessionType): MediaKeySession;
     setServerCertificate(serverCertificate: BufferSource): Promise<boolean>;
@@ -10288,6 +9501,18 @@ declare var MediaList: {
     new(): MediaList;
 };
 
+interface MediaMetadata {
+    album: string;
+    artist: string;
+    artwork: ReadonlyArray<MediaImage>;
+    title: string;
+}
+
+declare var MediaMetadata: {
+    prototype: MediaMetadata;
+    new(init?: MediaMetadataInit): MediaMetadata;
+};
+
 interface MediaQueryListEventMap {
     "change": MediaQueryListEvent;
 }
@@ -10298,9 +9523,9 @@ interface MediaQueryList extends EventTarget {
     readonly media: string;
     onchange: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null;
     /** @deprecated */
-    addListener(listener: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null): void;
+    addListener(callback: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null): void;
     /** @deprecated */
-    removeListener(listener: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null): void;
+    removeListener(callback: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null): void;
     addEventListener<K extends keyof MediaQueryListEventMap>(type: K, listener: (this: MediaQueryList, ev: MediaQueryListEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MediaQueryListEventMap>(type: K, listener: (this: MediaQueryList, ev: MediaQueryListEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -10320,6 +9545,56 @@ interface MediaQueryListEvent extends Event {
 declare var MediaQueryListEvent: {
     prototype: MediaQueryListEvent;
     new(type: string, eventInitDict?: MediaQueryListEventInit): MediaQueryListEvent;
+};
+
+interface MediaRecorderEventMap {
+    "dataavailable": BlobEvent;
+    "error": Event;
+    "pause": Event;
+    "resume": Event;
+    "start": Event;
+    "stop": Event;
+}
+
+interface MediaRecorder extends EventTarget {
+    readonly audioBitsPerSecond: number;
+    readonly mimeType: string;
+    ondataavailable: ((this: MediaRecorder, ev: BlobEvent) => any) | null;
+    onerror: ((this: MediaRecorder, ev: Event) => any) | null;
+    onpause: ((this: MediaRecorder, ev: Event) => any) | null;
+    onresume: ((this: MediaRecorder, ev: Event) => any) | null;
+    onstart: ((this: MediaRecorder, ev: Event) => any) | null;
+    onstop: ((this: MediaRecorder, ev: Event) => any) | null;
+    readonly state: RecordingState;
+    readonly stream: MediaStream;
+    readonly videoBitsPerSecond: number;
+    pause(): void;
+    requestData(): void;
+    resume(): void;
+    start(timeslice?: number): void;
+    stop(): void;
+    addEventListener<K extends keyof MediaRecorderEventMap>(type: K, listener: (this: MediaRecorder, ev: MediaRecorderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MediaRecorderEventMap>(type: K, listener: (this: MediaRecorder, ev: MediaRecorderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var MediaRecorder: {
+    prototype: MediaRecorder;
+    new(stream: MediaStream, options?: MediaRecorderOptions): MediaRecorder;
+    isTypeSupported(type: string): boolean;
+};
+
+interface MediaSession {
+    metadata: MediaMetadata | null;
+    playbackState: MediaSessionPlaybackState;
+    setActionHandler(action: MediaSessionAction, handler: MediaSessionActionHandler | null): void;
+    setPositionState(state?: MediaPositionState): void;
+}
+
+declare var MediaSession: {
+    prototype: MediaSession;
+    new(): MediaSession;
 };
 
 interface MediaSourceEventMap {
@@ -10404,53 +9679,21 @@ declare var MediaStreamAudioSourceNode: {
     new(context: AudioContext, options: MediaStreamAudioSourceOptions): MediaStreamAudioSourceNode;
 };
 
-interface MediaStreamError {
-    readonly constraintName: string | null;
-    readonly message: string | null;
-    readonly name: string;
-}
-
-declare var MediaStreamError: {
-    prototype: MediaStreamError;
-    new(): MediaStreamError;
-};
-
-interface MediaStreamErrorEvent extends Event {
-    readonly error: MediaStreamError | null;
-}
-
-declare var MediaStreamErrorEvent: {
-    prototype: MediaStreamErrorEvent;
-    new(typeArg: string, eventInitDict?: MediaStreamErrorEventInit): MediaStreamErrorEvent;
-};
-
-/** Events that occurs in relation to a MediaStream. Two events of this type can be thrown: addstream and removestream. */
-interface MediaStreamEvent extends Event {
-    readonly stream: MediaStream | null;
-}
-
-declare var MediaStreamEvent: {
-    prototype: MediaStreamEvent;
-    new(type: string, eventInitDict: MediaStreamEventInit): MediaStreamEvent;
-};
-
 interface MediaStreamTrackEventMap {
     "ended": Event;
-    "isolationchange": Event;
     "mute": Event;
     "unmute": Event;
 }
 
 /** A single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well. */
 interface MediaStreamTrack extends EventTarget {
+    contentHint: string;
     enabled: boolean;
     readonly id: string;
-    readonly isolated: boolean;
     readonly kind: string;
     readonly label: string;
     readonly muted: boolean;
     onended: ((this: MediaStreamTrack, ev: Event) => any) | null;
-    onisolationchange: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onmute: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onunmute: ((this: MediaStreamTrack, ev: Event) => any) | null;
     readonly readyState: MediaStreamTrackState;
@@ -10471,14 +9714,6 @@ declare var MediaStreamTrack: {
     new(): MediaStreamTrack;
 };
 
-interface MediaStreamTrackAudioSourceNode extends AudioNode {
-}
-
-declare var MediaStreamTrackAudioSourceNode: {
-    prototype: MediaStreamTrackAudioSourceNode;
-    new(context: AudioContext, options: MediaStreamTrackAudioSourceOptions): MediaStreamTrackAudioSourceNode;
-};
-
 /** Events which indicate that a MediaStream has had tracks added to or removed from the stream through calls to Media Stream API methods. These events are sent to the stream when these changes occur. */
 interface MediaStreamTrackEvent extends Event {
     readonly track: MediaStreamTrack;
@@ -10491,13 +9726,9 @@ declare var MediaStreamTrackEvent: {
 
 /** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. */
 interface MessageChannel {
-    /**
-     * Returns the first MessagePort object.
-     */
+    /** Returns the first MessagePort object. */
     readonly port1: MessagePort;
-    /**
-     * Returns the second MessagePort object.
-     */
+    /** Returns the second MessagePort object. */
     readonly port2: MessagePort;
 }
 
@@ -10508,26 +9739,18 @@ declare var MessageChannel: {
 
 /** A message received by a target object. */
 interface MessageEvent<T = any> extends Event {
-    /**
-     * Returns the data of the message.
-     */
+    /** Returns the data of the message. */
     readonly data: T;
-    /**
-     * Returns the last event ID string, for server-sent events.
-     */
+    /** Returns the last event ID string, for server-sent events. */
     readonly lastEventId: string;
-    /**
-     * Returns the origin of the message, for server-sent events and cross-document messaging.
-     */
+    /** Returns the origin of the message, for server-sent events and cross-document messaging. */
     readonly origin: string;
-    /**
-     * Returns the MessagePort array sent with the message, for cross-document messaging and channel messaging.
-     */
+    /** Returns the MessagePort array sent with the message, for cross-document messaging and channel messaging. */
     readonly ports: ReadonlyArray<MessagePort>;
-    /**
-     * Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects.
-     */
+    /** Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects. */
     readonly source: MessageEventSource | null;
+    /** @deprecated */
+    initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: MessagePort[]): void;
 }
 
 declare var MessageEvent: {
@@ -10544,20 +9767,16 @@ interface MessagePortEventMap {
 interface MessagePort extends EventTarget {
     onmessage: ((this: MessagePort, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: MessagePort, ev: MessageEvent) => any) | null;
-    /**
-     * Disconnects the port, so that it is no longer active.
-     */
+    /** Disconnects the port, so that it is no longer active. */
     close(): void;
     /**
      * Posts a message through the channel. Objects listed in transfer are transferred, not just cloned, meaning that they are no longer usable on the sending side.
-     * 
+     *
      * Throws a "DataCloneError" DOMException if transfer contains duplicate objects or port, or if message could not be cloned.
      */
     postMessage(message: any, transfer: Transferable[]): void;
-    postMessage(message: any, options?: PostMessageOptions): void;
-    /**
-     * Begins dispatching messages received on the port.
-     */
+    postMessage(message: any, options?: StructuredSerializeOptions): void;
+    /** Begins dispatching messages received on the port. */
     start(): void;
     addEventListener<K extends keyof MessagePortEventMap>(type: K, listener: (this: MessagePort, ev: MessagePortEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -10570,39 +9789,54 @@ declare var MessagePort: {
     new(): MessagePort;
 };
 
-/** Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object. */
+/**
+ * Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object.
+ * @deprecated
+ */
 interface MimeType {
     /**
      * Returns the MIME type's description.
+     * @deprecated
      */
     readonly description: string;
     /**
      * Returns the Plugin object that implements this MIME type.
+     * @deprecated
      */
     readonly enabledPlugin: Plugin;
     /**
      * Returns the MIME type's typical file extensions, in a comma-separated list.
+     * @deprecated
      */
     readonly suffixes: string;
     /**
      * Returns the MIME type.
+     * @deprecated
      */
     readonly type: string;
 }
 
+/** @deprecated */
 declare var MimeType: {
     prototype: MimeType;
     new(): MimeType;
 };
 
-/** Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes. */
+/**
+ * Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes.
+ * @deprecated
+ */
 interface MimeTypeArray {
+    /** @deprecated */
     readonly length: number;
+    /** @deprecated */
     item(index: number): MimeType | null;
+    /** @deprecated */
     namedItem(name: string): MimeType | null;
     [index: number]: MimeType;
 }
 
+/** @deprecated */
 declare var MimeTypeArray: {
     prototype: MimeTypeArray;
     new(): MimeTypeArray;
@@ -10630,6 +9864,7 @@ interface MouseEvent extends UIEvent {
     readonly x: number;
     readonly y: number;
     getModifierState(keyArg: string): boolean;
+    /** @deprecated */
     initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget | null): void;
 }
 
@@ -10638,20 +9873,29 @@ declare var MouseEvent: {
     new(type: string, eventInitDict?: MouseEventInit): MouseEvent;
 };
 
-/** Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
- * @deprecated DOM4 [DOM] provides a new mechanism using a MutationObserver interface which addresses the use cases that mutation events solve, but in a more performant manner. Thus, this specification describes mutation events for reference and completeness of legacy behavior, but deprecates the use of the MutationEvent interface. */
+/**
+ * Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
+ * @deprecated DOM4 [DOM] provides a new mechanism using a MutationObserver interface which addresses the use cases that mutation events solve, but in a more performant manner. Thus, this specification describes mutation events for reference and completeness of legacy behavior, but deprecates the use of the MutationEvent interface.
+ */
 interface MutationEvent extends Event {
+    /** @deprecated */
     readonly attrChange: number;
+    /** @deprecated */
     readonly attrName: string;
+    /** @deprecated */
     readonly newValue: string;
+    /** @deprecated */
     readonly prevValue: string;
-    readonly relatedNode: Node;
-    initMutationEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, relatedNodeArg: Node, prevValueArg: string, newValueArg: string, attrNameArg: string, attrChangeArg: number): void;
+    /** @deprecated */
+    readonly relatedNode: Node | null;
+    /** @deprecated */
+    initMutationEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, relatedNodeArg?: Node | null, prevValueArg?: string, newValueArg?: string, attrNameArg?: string, attrChangeArg?: number): void;
     readonly ADDITION: number;
     readonly MODIFICATION: number;
     readonly REMOVAL: number;
 }
 
+/** @deprecated */
 declare var MutationEvent: {
     prototype: MutationEvent;
     new(): MutationEvent;
@@ -10662,19 +9906,15 @@ declare var MutationEvent: {
 
 /** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. */
 interface MutationObserver {
-    /**
-     * Stops observer from observing any mutations. Until the observe() method is used again, observer's callback will not be invoked.
-     */
+    /** Stops observer from observing any mutations. Until the observe() method is used again, observer's callback will not be invoked. */
     disconnect(): void;
     /**
      * Instructs the user agent to observe a given target (a node) and report any mutations based on the criteria given by options (an object).
-     * 
+     *
      * The options argument allows for setting mutation observation options via object members.
      */
     observe(target: Node, options?: MutationObserverInit): void;
-    /**
-     * Empties the record queue and returns what was in there.
-     */
+    /** Empties the record queue and returns what was in there. */
     takeRecords(): MutationRecord[];
 }
 
@@ -10685,41 +9925,23 @@ declare var MutationObserver: {
 
 /** A MutationRecord represents an individual DOM mutation. It is the object that is passed to MutationObserver's callback. */
 interface MutationRecord {
-    /**
-     * Return the nodes added and removed respectively.
-     */
+    /** Return the nodes added and removed respectively. */
     readonly addedNodes: NodeList;
-    /**
-     * Returns the local name of the changed attribute, and null otherwise.
-     */
+    /** Returns the local name of the changed attribute, and null otherwise. */
     readonly attributeName: string | null;
-    /**
-     * Returns the namespace of the changed attribute, and null otherwise.
-     */
+    /** Returns the namespace of the changed attribute, and null otherwise. */
     readonly attributeNamespace: string | null;
-    /**
-     * Return the previous and next sibling respectively of the added or removed nodes, and null otherwise.
-     */
+    /** Return the previous and next sibling respectively of the added or removed nodes, and null otherwise. */
     readonly nextSibling: Node | null;
-    /**
-     * The return value depends on type. For "attributes", it is the value of the changed attribute before the change. For "characterData", it is the data of the changed node before the change. For "childList", it is null.
-     */
+    /** The return value depends on type. For "attributes", it is the value of the changed attribute before the change. For "characterData", it is the data of the changed node before the change. For "childList", it is null. */
     readonly oldValue: string | null;
-    /**
-     * Return the previous and next sibling respectively of the added or removed nodes, and null otherwise.
-     */
+    /** Return the previous and next sibling respectively of the added or removed nodes, and null otherwise. */
     readonly previousSibling: Node | null;
-    /**
-     * Return the nodes added and removed respectively.
-     */
+    /** Return the nodes added and removed respectively. */
     readonly removedNodes: NodeList;
-    /**
-     * Returns the node the mutation affected, depending on the type. For "attributes", it is the element whose attribute changed. For "characterData", it is the CharacterData node. For "childList", it is the node whose children changed.
-     */
+    /** Returns the node the mutation affected, depending on the type. For "attributes", it is the element whose attribute changed. For "characterData", it is the CharacterData node. For "childList", it is the node whose children changed. */
     readonly target: Node;
-    /**
-     * Returns "attributes" if it was an attribute mutation. "characterData" if it was a mutation to a CharacterData node. And "childList" if it was a mutation to the tree of nodes.
-     */
+    /** Returns "attributes" if it was an attribute mutation. "characterData" if it was a mutation to a CharacterData node. And "childList" if it was a mutation to the tree of nodes. */
     readonly type: MutationRecordType;
 }
 
@@ -10746,6 +9968,7 @@ declare var NamedNodeMap: {
     new(): NamedNodeMap;
 };
 
+/** Available only in secure contexts. */
 interface NavigationPreloadManager {
     disable(): Promise<void>;
     enable(): Promise<void>;
@@ -10759,28 +9982,30 @@ declare var NavigationPreloadManager: {
 };
 
 /** The state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities. */
-interface Navigator extends MSFileSaver, MSNavigatorDoNotTrack, NavigatorAutomationInformation, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorContentUtils, NavigatorCookies, NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorPlugins, NavigatorStorage {
-    readonly activeVRDisplays: ReadonlyArray<VRDisplay>;
+interface Navigator extends NavigatorAutomationInformation, NavigatorConcurrentHardware, NavigatorContentUtils, NavigatorCookies, NavigatorID, NavigatorLanguage, NavigatorLocks, NavigatorOnLine, NavigatorPlugins, NavigatorStorage {
+    /** Available only in secure contexts. */
     readonly clipboard: Clipboard;
+    /** Available only in secure contexts. */
     readonly credentials: CredentialsContainer;
     readonly doNotTrack: string | null;
     readonly geolocation: Geolocation;
     readonly maxTouchPoints: number;
+    readonly mediaCapabilities: MediaCapabilities;
+    /** Available only in secure contexts. */
     readonly mediaDevices: MediaDevices;
-    readonly msManipulationViewsEnabled: boolean;
-    readonly msMaxTouchPoints: number;
-    readonly msPointerEnabled: boolean;
+    readonly mediaSession: MediaSession;
     readonly permissions: Permissions;
-    readonly pointerEnabled: boolean;
+    /** Available only in secure contexts. */
     readonly serviceWorker: ServiceWorkerContainer;
+    /** Available only in secure contexts. */
+    canShare(data?: ShareData): boolean;
     getGamepads(): (Gamepad | null)[];
-    getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
-    getVRDisplays(): Promise<VRDisplay[]>;
-    msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
+    /** Available only in secure contexts. */
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): Promise<MediaKeySystemAccess>;
-    sendBeacon(url: string, data?: BodyInit | null): boolean;
+    sendBeacon(url: string | URL, data?: BodyInit | null): boolean;
+    /** Available only in secure contexts. */
     share(data?: ShareData): Promise<void>;
-    vibrate(pattern: number | number[]): boolean;
+    vibrate(pattern: VibratePattern): boolean;
 }
 
 declare var Navigator: {
@@ -10792,17 +10017,13 @@ interface NavigatorAutomationInformation {
     readonly webdriver: boolean;
 }
 
-interface NavigatorBeacon {
-    sendBeacon(url: string, data?: Blob | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | FormData | string | null): boolean;
-}
-
 interface NavigatorConcurrentHardware {
     readonly hardwareConcurrency: number;
 }
 
 interface NavigatorContentUtils {
-    registerProtocolHandler(scheme: string, url: string, title: string): void;
-    unregisterProtocolHandler(scheme: string, url: string): void;
+    /** Available only in secure contexts. */
+    registerProtocolHandler(scheme: string, url: string | URL): void;
 }
 
 interface NavigatorCookies {
@@ -10810,14 +10031,22 @@ interface NavigatorCookies {
 }
 
 interface NavigatorID {
+    /** @deprecated */
     readonly appCodeName: string;
+    /** @deprecated */
     readonly appName: string;
+    /** @deprecated */
     readonly appVersion: string;
+    /** @deprecated */
     readonly platform: string;
+    /** @deprecated */
     readonly product: string;
+    /** @deprecated */
     readonly productSub: string;
     readonly userAgent: string;
+    /** @deprecated */
     readonly vendor: string;
+    /** @deprecated */
     readonly vendorSub: string;
 }
 
@@ -10826,166 +10055,110 @@ interface NavigatorLanguage {
     readonly languages: ReadonlyArray<string>;
 }
 
+/** Available only in secure contexts. */
+interface NavigatorLocks {
+    readonly locks: LockManager;
+}
+
 interface NavigatorOnLine {
     readonly onLine: boolean;
 }
 
 interface NavigatorPlugins {
+    /** @deprecated */
     readonly mimeTypes: MimeTypeArray;
+    readonly pdfViewerEnabled: boolean;
+    /** @deprecated */
     readonly plugins: PluginArray;
+    /** @deprecated */
     javaEnabled(): boolean;
 }
 
+/** Available only in secure contexts. */
 interface NavigatorStorage {
     readonly storage: StorageManager;
 }
 
 /** Node is an interface from which a number of DOM API object types inherit. It allows those types to be treated similarly; for example, inheriting the same set of methods, or being tested in the same way. */
 interface Node extends EventTarget {
-    /**
-     * Returns node's node document's document base URL.
-     */
+    /** Returns node's node document's document base URL. */
     readonly baseURI: string;
-    /**
-     * Returns the children.
-     */
+    /** Returns the children. */
     readonly childNodes: NodeListOf<ChildNode>;
-    /**
-     * Returns the first child.
-     */
+    /** Returns the first child. */
     readonly firstChild: ChildNode | null;
-    /**
-     * Returns true if node is connected and false otherwise.
-     */
+    /** Returns true if node is connected and false otherwise. */
     readonly isConnected: boolean;
-    /**
-     * Returns the last child.
-     */
+    /** Returns the last child. */
     readonly lastChild: ChildNode | null;
-    /** @deprecated */
-    readonly namespaceURI: string | null;
-    /**
-     * Returns the next sibling.
-     */
+    /** Returns the next sibling. */
     readonly nextSibling: ChildNode | null;
-    /**
-     * Returns a string appropriate for the type of node.
-     */
+    /** Returns a string appropriate for the type of node. */
     readonly nodeName: string;
-    /**
-     * Returns the type of node.
-     */
+    /** Returns the type of node. */
     readonly nodeType: number;
     nodeValue: string | null;
-    /**
-     * Returns the node document. Returns null for documents.
-     */
+    /** Returns the node document. Returns null for documents. */
     readonly ownerDocument: Document | null;
-    /**
-     * Returns the parent element.
-     */
+    /** Returns the parent element. */
     readonly parentElement: HTMLElement | null;
-    /**
-     * Returns the parent.
-     */
-    readonly parentNode: Node & ParentNode | null;
-    /**
-     * Returns the previous sibling.
-     */
+    /** Returns the parent. */
+    readonly parentNode: ParentNode | null;
+    /** Returns the previous sibling. */
     readonly previousSibling: ChildNode | null;
     textContent: string | null;
-    appendChild<T extends Node>(newChild: T): T;
-    /**
-     * Returns a copy of node. If deep is true, the copy also includes the node's descendants.
-     */
+    appendChild<T extends Node>(node: T): T;
+    /** Returns a copy of node. If deep is true, the copy also includes the node's descendants. */
     cloneNode(deep?: boolean): Node;
-    /**
-     * Returns a bitmask indicating the position of other relative to node.
-     */
+    /** Returns a bitmask indicating the position of other relative to node. */
     compareDocumentPosition(other: Node): number;
-    /**
-     * Returns true if other is an inclusive descendant of node, and false otherwise.
-     */
+    /** Returns true if other is an inclusive descendant of node, and false otherwise. */
     contains(other: Node | null): boolean;
-    /**
-     * Returns node's root.
-     */
+    /** Returns node's root. */
     getRootNode(options?: GetRootNodeOptions): Node;
-    /**
-     * Returns whether node has children.
-     */
+    /** Returns whether node has children. */
     hasChildNodes(): boolean;
-    insertBefore<T extends Node>(newChild: T, refChild: Node | null): T;
+    insertBefore<T extends Node>(node: T, child: Node | null): T;
     isDefaultNamespace(namespace: string | null): boolean;
-    /**
-     * Returns whether node and otherNode have the same properties.
-     */
+    /** Returns whether node and otherNode have the same properties. */
     isEqualNode(otherNode: Node | null): boolean;
     isSameNode(otherNode: Node | null): boolean;
     lookupNamespaceURI(prefix: string | null): string | null;
     lookupPrefix(namespace: string | null): string | null;
-    /**
-     * Removes empty exclusive Text nodes and concatenates the data of remaining contiguous exclusive Text nodes into the first of their nodes.
-     */
+    /** Removes empty exclusive Text nodes and concatenates the data of remaining contiguous exclusive Text nodes into the first of their nodes. */
     normalize(): void;
-    removeChild<T extends Node>(oldChild: T): T;
-    replaceChild<T extends Node>(newChild: Node, oldChild: T): T;
+    removeChild<T extends Node>(child: T): T;
+    replaceChild<T extends Node>(node: Node, child: T): T;
     readonly ATTRIBUTE_NODE: number;
-    /**
-     * node is a CDATASection node.
-     */
+    /** node is a CDATASection node. */
     readonly CDATA_SECTION_NODE: number;
-    /**
-     * node is a Comment node.
-     */
+    /** node is a Comment node. */
     readonly COMMENT_NODE: number;
-    /**
-     * node is a DocumentFragment node.
-     */
+    /** node is a DocumentFragment node. */
     readonly DOCUMENT_FRAGMENT_NODE: number;
-    /**
-     * node is a document.
-     */
+    /** node is a document. */
     readonly DOCUMENT_NODE: number;
-    /**
-     * Set when other is a descendant of node.
-     */
+    /** Set when other is a descendant of node. */
     readonly DOCUMENT_POSITION_CONTAINED_BY: number;
-    /**
-     * Set when other is an ancestor of node.
-     */
+    /** Set when other is an ancestor of node. */
     readonly DOCUMENT_POSITION_CONTAINS: number;
-    /**
-     * Set when node and other are not in the same tree.
-     */
+    /** Set when node and other are not in the same tree. */
     readonly DOCUMENT_POSITION_DISCONNECTED: number;
-    /**
-     * Set when other is following node.
-     */
+    /** Set when other is following node. */
     readonly DOCUMENT_POSITION_FOLLOWING: number;
     readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
-    /**
-     * Set when other is preceding node.
-     */
+    /** Set when other is preceding node. */
     readonly DOCUMENT_POSITION_PRECEDING: number;
-    /**
-     * node is a doctype.
-     */
+    /** node is a doctype. */
     readonly DOCUMENT_TYPE_NODE: number;
-    /**
-     * node is an element.
-     */
+    /** node is an element. */
     readonly ELEMENT_NODE: number;
     readonly ENTITY_NODE: number;
     readonly ENTITY_REFERENCE_NODE: number;
     readonly NOTATION_NODE: number;
-    /**
-     * node is a ProcessingInstruction node.
-     */
+    /** node is a ProcessingInstruction node. */
     readonly PROCESSING_INSTRUCTION_NODE: number;
-    /**
-     * node is a Text node.
-     */
+    /** node is a Text node. */
     readonly TEXT_NODE: number;
 }
 
@@ -10993,86 +10166,36 @@ declare var Node: {
     prototype: Node;
     new(): Node;
     readonly ATTRIBUTE_NODE: number;
-    /**
-     * node is a CDATASection node.
-     */
+    /** node is a CDATASection node. */
     readonly CDATA_SECTION_NODE: number;
-    /**
-     * node is a Comment node.
-     */
+    /** node is a Comment node. */
     readonly COMMENT_NODE: number;
-    /**
-     * node is a DocumentFragment node.
-     */
+    /** node is a DocumentFragment node. */
     readonly DOCUMENT_FRAGMENT_NODE: number;
-    /**
-     * node is a document.
-     */
+    /** node is a document. */
     readonly DOCUMENT_NODE: number;
-    /**
-     * Set when other is a descendant of node.
-     */
+    /** Set when other is a descendant of node. */
     readonly DOCUMENT_POSITION_CONTAINED_BY: number;
-    /**
-     * Set when other is an ancestor of node.
-     */
+    /** Set when other is an ancestor of node. */
     readonly DOCUMENT_POSITION_CONTAINS: number;
-    /**
-     * Set when node and other are not in the same tree.
-     */
+    /** Set when node and other are not in the same tree. */
     readonly DOCUMENT_POSITION_DISCONNECTED: number;
-    /**
-     * Set when other is following node.
-     */
+    /** Set when other is following node. */
     readonly DOCUMENT_POSITION_FOLLOWING: number;
     readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
-    /**
-     * Set when other is preceding node.
-     */
+    /** Set when other is preceding node. */
     readonly DOCUMENT_POSITION_PRECEDING: number;
-    /**
-     * node is a doctype.
-     */
+    /** node is a doctype. */
     readonly DOCUMENT_TYPE_NODE: number;
-    /**
-     * node is an element.
-     */
+    /** node is an element. */
     readonly ELEMENT_NODE: number;
     readonly ENTITY_NODE: number;
     readonly ENTITY_REFERENCE_NODE: number;
     readonly NOTATION_NODE: number;
-    /**
-     * node is a ProcessingInstruction node.
-     */
+    /** node is a ProcessingInstruction node. */
     readonly PROCESSING_INSTRUCTION_NODE: number;
-    /**
-     * node is a Text node.
-     */
+    /** node is a Text node. */
     readonly TEXT_NODE: number;
-};
-
-/** An object used to filter the nodes in a NodeIterator or TreeWalker. They don't know anything about the DOM or how to traverse nodes; they just know how to evaluate a single node against the provided filter. */
-interface NodeFilter {
-    acceptNode(node: Node): number;
-}
-
-declare var NodeFilter: {
-    readonly FILTER_ACCEPT: number;
-    readonly FILTER_REJECT: number;
-    readonly FILTER_SKIP: number;
-    readonly SHOW_ALL: number;
-    readonly SHOW_ATTRIBUTE: number;
-    readonly SHOW_CDATA_SECTION: number;
-    readonly SHOW_COMMENT: number;
-    readonly SHOW_DOCUMENT: number;
-    readonly SHOW_DOCUMENT_FRAGMENT: number;
-    readonly SHOW_DOCUMENT_TYPE: number;
-    readonly SHOW_ELEMENT: number;
-    readonly SHOW_ENTITY: number;
-    readonly SHOW_ENTITY_REFERENCE: number;
-    readonly SHOW_NOTATION: number;
-    readonly SHOW_PROCESSING_INSTRUCTION: number;
-    readonly SHOW_TEXT: number;
 };
 
 /** An iterator over the members of a list of the nodes in a subtree of the DOM. The nodes will be returned in document order. */
@@ -11082,6 +10205,7 @@ interface NodeIterator {
     readonly referenceNode: Node;
     readonly root: Node;
     readonly whatToShow: number;
+    /** @deprecated */
     detach(): void;
     nextNode(): Node | null;
     previousNode(): Node | null;
@@ -11094,13 +10218,9 @@ declare var NodeIterator: {
 
 /** NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll(). */
 interface NodeList {
-    /**
-     * Returns the number of nodes in the collection.
-     */
+    /** Returns the number of nodes in the collection. */
     readonly length: number;
-    /**
-     * Returns the node with index index from the collection. The nodes are sorted in tree order.
-     */
+    /** Returns the node with index index from the collection. The nodes are sorted in tree order. */
     item(index: number): Node | null;
     /**
      * Performs the specified action for each node in an list.
@@ -11128,20 +10248,14 @@ interface NodeListOf<TNode extends Node> extends NodeList {
 }
 
 interface NonDocumentTypeChildNode {
-    /**
-     * Returns the first following sibling that is an element, and null otherwise.
-     */
+    /** Returns the first following sibling that is an element, and null otherwise. */
     readonly nextElementSibling: Element | null;
-    /**
-     * Returns the first preceding sibling that is an element, and null otherwise.
-     */
+    /** Returns the first preceding sibling that is an element, and null otherwise. */
     readonly previousElementSibling: Element | null;
 }
 
 interface NonElementParentNode {
-    /**
-     * Returns the first element within node's descendants whose ID is elementId.
-     */
+    /** Returns the first element within node's descendants whose ID is elementId. */
     getElementById(elementId: string): Element | null;
 }
 
@@ -11154,25 +10268,17 @@ interface NotificationEventMap {
 
 /** This Notifications API interface is used to configure and display desktop notifications to the user. */
 interface Notification extends EventTarget {
-    readonly actions: ReadonlyArray<NotificationAction>;
-    readonly badge: string;
     readonly body: string;
     readonly data: any;
     readonly dir: NotificationDirection;
     readonly icon: string;
-    readonly image: string;
     readonly lang: string;
     onclick: ((this: Notification, ev: Event) => any) | null;
     onclose: ((this: Notification, ev: Event) => any) | null;
     onerror: ((this: Notification, ev: Event) => any) | null;
     onshow: ((this: Notification, ev: Event) => any) | null;
-    readonly renotify: boolean;
-    readonly requireInteraction: boolean;
-    readonly silent: boolean;
     readonly tag: string;
-    readonly timestamp: number;
     readonly title: string;
-    readonly vibrate: ReadonlyArray<number>;
     close(): void;
     addEventListener<K extends keyof NotificationEventMap>(type: K, listener: (this: Notification, ev: NotificationEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -11183,13 +10289,25 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
-    readonly maxActions: number;
     readonly permission: NotificationPermission;
     requestPermission(deprecatedCallback?: NotificationPermissionCallback): Promise<NotificationPermission>;
 };
 
+interface OES_draw_buffers_indexed {
+    blendEquationSeparateiOES(buf: GLuint, modeRGB: GLenum, modeAlpha: GLenum): void;
+    blendEquationiOES(buf: GLuint, mode: GLenum): void;
+    blendFuncSeparateiOES(buf: GLuint, srcRGB: GLenum, dstRGB: GLenum, srcAlpha: GLenum, dstAlpha: GLenum): void;
+    blendFunciOES(buf: GLuint, src: GLenum, dst: GLenum): void;
+    colorMaskiOES(buf: GLuint, r: GLboolean, g: GLboolean, b: GLboolean, a: GLboolean): void;
+    disableiOES(target: GLenum, index: GLuint): void;
+    enableiOES(target: GLenum, index: GLuint): void;
+}
+
 /** The OES_element_index_uint extension is part of the WebGL API and adds support for gl.UNSIGNED_INT types to WebGLRenderingContext.drawElements(). */
 interface OES_element_index_uint {
+}
+
+interface OES_fbo_render_mipmap {
 }
 
 /** The OES_standard_derivatives extension is part of the WebGL API and adds the GLSL derivative functions dFdx, dFdy, and fwidth. */
@@ -11220,6 +10338,14 @@ interface OES_vertex_array_object {
     deleteVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES | null): void;
     isVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES | null): GLboolean;
     readonly VERTEX_ARRAY_BINDING_OES: GLenum;
+}
+
+interface OVR_multiview2 {
+    framebufferTextureMultiviewOVR(target: GLenum, attachment: GLenum, texture: WebGLTexture | null, level: GLint, baseViewIndex: GLint, numViews: GLsizei): void;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR: GLenum;
+    readonly MAX_VIEWS_OVR: GLenum;
 }
 
 /** The Web Audio API OfflineAudioCompletionEvent interface represents events that occur when the processing of an OfflineAudioContext is terminated. The complete event implements this interface. */
@@ -11255,41 +10381,40 @@ declare var OfflineAudioContext: {
     new(numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
 };
 
+interface OffscreenCanvasEventMap {
+    "contextlost": Event;
+    "contextrestored": Event;
+}
+
 interface OffscreenCanvas extends EventTarget {
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
-     * 
+     *
      * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
      */
     height: number;
+    oncontextlost: ((this: OffscreenCanvas, ev: Event) => any) | null;
+    oncontextrestored: ((this: OffscreenCanvas, ev: Event) => any) | null;
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
-     * 
+     *
      * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
      */
     width: number;
     /**
-     * Returns a promise that will fulfill with a new Blob object representing a file containing the image in the OffscreenCanvas object.
-     * 
-     * The argument, if provided, is a dictionary that controls the encoding options of the image file to be created. The type field specifies the file format and has a default value of "image/png"; that type is also used if the requested type isn't supported. If the image format supports variable quality (such as "image/jpeg"), then the quality field is a number in the range 0.0 to 1.0 inclusive indicating the desired quality level for the resulting image.
-     */
-    convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
-    /**
      * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
-     * 
+     *
      * This specification defines the "2d" context below, which is similar but distinct from the "2d" context that is created from a canvas element. The WebGL specifications define the "webgl" and "webgl2" contexts. [WEBGL]
-     * 
+     *
      * Returns null if the canvas has already been initialized with another context type (e.g., trying to get a "2d" context after getting a "webgl" context).
      */
-    getContext(contextId: "2d", options?: CanvasRenderingContext2DSettings): OffscreenCanvasRenderingContext2D | null;
-    getContext(contextId: "bitmaprenderer", options?: ImageBitmapRenderingContextSettings): ImageBitmapRenderingContext | null;
-    getContext(contextId: "webgl", options?: WebGLContextAttributes): WebGLRenderingContext | null;
-    getContext(contextId: "webgl2", options?: WebGLContextAttributes): WebGL2RenderingContext | null;
     getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
-    /**
-     * Returns a newly created ImageBitmap object with the image in the OffscreenCanvas object. The image in the OffscreenCanvas object is replaced with a new blank image.
-     */
+    /** Returns a newly created ImageBitmap object with the image in the OffscreenCanvas object. The image in the OffscreenCanvas object is replaced with a new blank image. */
     transferToImageBitmap(): ImageBitmap;
+    addEventListener<K extends keyof OffscreenCanvasEventMap>(type: K, listener: (this: OffscreenCanvas, ev: OffscreenCanvasEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof OffscreenCanvasEventMap>(type: K, listener: (this: OffscreenCanvas, ev: OffscreenCanvasEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var OffscreenCanvas: {
@@ -11325,42 +10450,24 @@ declare var OscillatorNode: {
 };
 
 interface OverconstrainedError extends Error {
-    constraint: string;
+    readonly constraint: string;
 }
 
 declare var OverconstrainedError: {
     prototype: OverconstrainedError;
-    new(): OverconstrainedError;
-};
-
-interface OverflowEvent extends UIEvent {
-    readonly horizontalOverflow: boolean;
-    readonly orient: number;
-    readonly verticalOverflow: boolean;
-    readonly BOTH: number;
-    readonly HORIZONTAL: number;
-    readonly VERTICAL: number;
-}
-
-declare var OverflowEvent: {
-    prototype: OverflowEvent;
-    new(): OverflowEvent;
-    readonly BOTH: number;
-    readonly HORIZONTAL: number;
-    readonly VERTICAL: number;
+    new(constraint: string, message?: string): OverconstrainedError;
 };
 
 /** The PageTransitionEvent is fired when a document is being loaded or unloaded. */
 interface PageTransitionEvent extends Event {
     /**
      * For the pageshow event, returns false if the page is newly being loaded (and the load event will fire). Otherwise, returns true.
-     * 
+     *
      * For the pagehide event, returns false if the page is going away for the last time. Otherwise, returns true, meaning that (if nothing conspires to make the page unsalvageable) the page might be reused if the user navigates back to this page.
-     * 
+     *
      * Things that can cause the page to be unsalvageable include:
-     * 
-     * Listening for beforeunload events
-     * Listening for unload events
+     *
+     * The user agent decided to not keep the Document alive in a session history entry after unload
      * Having iframes that are not salvageable
      * Active WebSocket objects
      * Aborting a Document
@@ -11400,51 +10507,45 @@ declare var PannerNode: {
     new(context: BaseAudioContext, options?: PannerOptions): PannerNode;
 };
 
-interface ParentNode {
+interface ParentNode extends Node {
     readonly childElementCount: number;
-    /**
-     * Returns the child elements.
-     */
+    /** Returns the child elements. */
     readonly children: HTMLCollection;
-    /**
-     * Returns the first child that is an element, and null otherwise.
-     */
+    /** Returns the first child that is an element, and null otherwise. */
     readonly firstElementChild: Element | null;
-    /**
-     * Returns the last child that is an element, and null otherwise.
-     */
+    /** Returns the last child that is an element, and null otherwise. */
     readonly lastElementChild: Element | null;
     /**
      * Inserts nodes after the last child of node, while replacing strings in nodes with equivalent Text nodes.
-     * 
+     *
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     append(...nodes: (Node | string)[]): void;
     /**
      * Inserts nodes before the first child of node, while replacing strings in nodes with equivalent Text nodes.
-     * 
+     *
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     prepend(...nodes: (Node | string)[]): void;
-    /**
-     * Returns the first element that is a descendant of node that matches selectors.
-     */
+    /** Returns the first element that is a descendant of node that matches selectors. */
     querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
     querySelector<K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null;
     querySelector<E extends Element = Element>(selectors: string): E | null;
-    /**
-     * Returns all element descendants of node that match selectors.
-     */
+    /** Returns all element descendants of node that match selectors. */
     querySelectorAll<K extends keyof HTMLElementTagNameMap>(selectors: K): NodeListOf<HTMLElementTagNameMap[K]>;
     querySelectorAll<K extends keyof SVGElementTagNameMap>(selectors: K): NodeListOf<SVGElementTagNameMap[K]>;
     querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
+    /**
+     * Replace all children of node with nodes, while replacing strings in nodes with equivalent Text nodes.
+     *
+     * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
+     */
+    replaceChildren(...nodes: (Node | string)[]): void;
 }
 
 /** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. */
 interface Path2D extends CanvasPath {
-    /**
-     * Adds to the path the path given by the argument.
-     */
+    /** Adds to the path the path given by the argument. */
     addPath(path: Path2D, transform?: DOMMatrix2DInit): void;
 }
 
@@ -11453,43 +10554,31 @@ declare var Path2D: {
     new(path?: Path2D | string): Path2D;
 };
 
-/** This Payment Request API interface is used to store shipping or payment address information. */
-interface PaymentAddress {
-    readonly addressLine: string[];
-    readonly city: string;
-    readonly country: string;
-    readonly dependentLocality: string;
-    readonly languageCode: string;
-    readonly organization: string;
-    readonly phone: string;
-    readonly postalCode: string;
-    readonly recipient: string;
-    readonly region: string;
-    readonly sortingCode: string;
-    toJSON(): any;
+/** Available only in secure contexts. */
+interface PaymentMethodChangeEvent extends PaymentRequestUpdateEvent {
+    readonly methodDetails: any;
+    readonly methodName: string;
 }
 
-declare var PaymentAddress: {
-    prototype: PaymentAddress;
-    new(): PaymentAddress;
+declare var PaymentMethodChangeEvent: {
+    prototype: PaymentMethodChangeEvent;
+    new(type: string, eventInitDict?: PaymentMethodChangeEventInit): PaymentMethodChangeEvent;
 };
 
 interface PaymentRequestEventMap {
-    "shippingaddresschange": Event;
-    "shippingoptionchange": Event;
+    "paymentmethodchange": Event;
 }
 
-/** This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user. */
+/**
+ * This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user.
+ * Available only in secure contexts.
+ */
 interface PaymentRequest extends EventTarget {
     readonly id: string;
-    onshippingaddresschange: ((this: PaymentRequest, ev: Event) => any) | null;
-    onshippingoptionchange: ((this: PaymentRequest, ev: Event) => any) | null;
-    readonly shippingAddress: PaymentAddress | null;
-    readonly shippingOption: string | null;
-    readonly shippingType: PaymentShippingType | null;
+    onpaymentmethodchange: ((this: PaymentRequest, ev: Event) => any) | null;
     abort(): Promise<void>;
     canMakePayment(): Promise<boolean>;
-    show(): Promise<PaymentResponse>;
+    show(detailsPromise?: PaymentDetailsUpdate | PromiseLike<PaymentDetailsUpdate>): Promise<PaymentResponse>;
     addEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -11498,12 +10587,15 @@ interface PaymentRequest extends EventTarget {
 
 declare var PaymentRequest: {
     prototype: PaymentRequest;
-    new(methodData: PaymentMethodData[], details: PaymentDetailsInit, options?: PaymentOptions): PaymentRequest;
+    new(methodData: PaymentMethodData[], details: PaymentDetailsInit): PaymentRequest;
 };
 
-/** This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action. */
+/**
+ * This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action.
+ * Available only in secure contexts.
+ */
 interface PaymentRequestUpdateEvent extends Event {
-    updateWith(detailsPromise: PaymentDetailsUpdate | Promise<PaymentDetailsUpdate>): void;
+    updateWith(detailsPromise: PaymentDetailsUpdate | PromiseLike<PaymentDetailsUpdate>): void;
 }
 
 declare var PaymentRequestUpdateEvent: {
@@ -11511,17 +10603,16 @@ declare var PaymentRequestUpdateEvent: {
     new(type: string, eventInitDict?: PaymentRequestUpdateEventInit): PaymentRequestUpdateEvent;
 };
 
-/** This Payment Request API interface is returned after a user selects a payment method and approves a payment request. */
-interface PaymentResponse {
+/**
+ * This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
+ * Available only in secure contexts.
+ */
+interface PaymentResponse extends EventTarget {
     readonly details: any;
     readonly methodName: string;
-    readonly payerEmail: string | null;
-    readonly payerName: string | null;
-    readonly payerPhone: string | null;
     readonly requestId: string;
-    readonly shippingAddress: PaymentAddress | null;
-    readonly shippingOption: string | null;
     complete(result?: PaymentComplete): Promise<void>;
+    retry(errorFields?: PaymentValidationErrors): Promise<void>;
     toJSON(): any;
 }
 
@@ -11530,45 +10621,17 @@ declare var PaymentResponse: {
     new(): PaymentResponse;
 };
 
-interface PerfWidgetExternal {
-    readonly activeNetworkRequestCount: number;
-    readonly averageFrameTime: number;
-    readonly averagePaintTime: number;
-    readonly extraInformationEnabled: boolean;
-    readonly independentRenderingEnabled: boolean;
-    readonly irDisablingContentString: string;
-    readonly irStatusAvailable: boolean;
-    readonly maxCpuSpeed: number;
-    readonly paintRequestsPerSecond: number;
-    readonly performanceCounter: number;
-    readonly performanceCounterFrequency: number;
-    addEventListener(eventType: string, callback: Function): void;
-    getMemoryUsage(): number;
-    getProcessCpuUsage(): number;
-    getRecentCpuUsage(last: number | null): any;
-    getRecentFrames(last: number | null): any;
-    getRecentMemoryUsage(last: number | null): any;
-    getRecentPaintRequests(last: number | null): any;
-    removeEventListener(eventType: string, callback: Function): void;
-    repositionWindow(x: number, y: number): void;
-    resizeWindow(width: number, height: number): void;
-}
-
-declare var PerfWidgetExternal: {
-    prototype: PerfWidgetExternal;
-    new(): PerfWidgetExternal;
-};
-
 interface PerformanceEventMap {
     "resourcetimingbufferfull": Event;
 }
 
 /** Provides access to performance-related information for the current page. It's part of the High Resolution Time API, but is enhanced by the Performance Timeline API, the Navigation Timing API, the User Timing API, and the Resource Timing API. */
 interface Performance extends EventTarget {
+    readonly eventCounts: EventCounts;
     /** @deprecated */
     readonly navigation: PerformanceNavigation;
     onresourcetimingbufferfull: ((this: Performance, ev: Event) => any) | null;
-    readonly timeOrigin: number;
+    readonly timeOrigin: DOMHighResTimeStamp;
     /** @deprecated */
     readonly timing: PerformanceTiming;
     clearMarks(markName?: string): void;
@@ -11577,9 +10640,9 @@ interface Performance extends EventTarget {
     getEntries(): PerformanceEntryList;
     getEntriesByName(name: string, type?: string): PerformanceEntryList;
     getEntriesByType(type: string): PerformanceEntryList;
-    mark(markName: string): void;
-    measure(measureName: string, startMark?: string, endMark?: string): void;
-    now(): number;
+    mark(markName: string, markOptions?: PerformanceMarkOptions): PerformanceMark;
+    measure(measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string): PerformanceMeasure;
+    now(): DOMHighResTimeStamp;
     setResourceTimingBufferSize(maxSize: number): void;
     toJSON(): any;
     addEventListener<K extends keyof PerformanceEventMap>(type: K, listener: (this: Performance, ev: PerformanceEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -11595,10 +10658,10 @@ declare var Performance: {
 
 /** Encapsulates a single performance metric that is part of the performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries are also created in indirect ways such as loading a resource (such as an image). */
 interface PerformanceEntry {
-    readonly duration: number;
+    readonly duration: DOMHighResTimeStamp;
     readonly entryType: string;
     readonly name: string;
-    readonly startTime: number;
+    readonly startTime: DOMHighResTimeStamp;
     toJSON(): any;
 }
 
@@ -11607,17 +10670,32 @@ declare var PerformanceEntry: {
     new(): PerformanceEntry;
 };
 
+interface PerformanceEventTiming extends PerformanceEntry {
+    readonly cancelable: boolean;
+    readonly processingEnd: DOMHighResTimeStamp;
+    readonly processingStart: DOMHighResTimeStamp;
+    readonly target: Node | null;
+    toJSON(): any;
+}
+
+declare var PerformanceEventTiming: {
+    prototype: PerformanceEventTiming;
+    new(): PerformanceEventTiming;
+};
+
 /** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. */
 interface PerformanceMark extends PerformanceEntry {
+    readonly detail: any;
 }
 
 declare var PerformanceMark: {
     prototype: PerformanceMark;
-    new(): PerformanceMark;
+    new(markName: string, markOptions?: PerformanceMarkOptions): PerformanceMark;
 };
 
 /** PerformanceMeasure is an abstract interface for PerformanceEntry objects with an entryType of "measure". Entries of this type are created by calling performance.measure() to add a named DOMHighResTimeStamp (the measure) between two marks to the browser's performance timeline. */
 interface PerformanceMeasure extends PerformanceEntry {
+    readonly detail: any;
 }
 
 declare var PerformanceMeasure: {
@@ -11625,12 +10703,16 @@ declare var PerformanceMeasure: {
     new(): PerformanceMeasure;
 };
 
-/** The legacy PerformanceNavigation interface represents information about how the navigation to the current document was done.
+/**
+ * The legacy PerformanceNavigation interface represents information about how the navigation to the current document was done.
  * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
  */
 interface PerformanceNavigation {
+    /** @deprecated */
     readonly redirectCount: number;
+    /** @deprecated */
     readonly type: number;
+    /** @deprecated */
     toJSON(): any;
     readonly TYPE_BACK_FORWARD: number;
     readonly TYPE_NAVIGATE: number;
@@ -11638,6 +10720,7 @@ interface PerformanceNavigation {
     readonly TYPE_RESERVED: number;
 }
 
+/** @deprecated */
 declare var PerformanceNavigation: {
     prototype: PerformanceNavigation;
     new(): PerformanceNavigation;
@@ -11649,16 +10732,16 @@ declare var PerformanceNavigation: {
 
 /** Provides methods and properties to store and retrieve metrics regarding the browser's document navigation events. For example, this interface can be used to determine how much time it takes to load or unload a document. */
 interface PerformanceNavigationTiming extends PerformanceResourceTiming {
-    readonly domComplete: number;
-    readonly domContentLoadedEventEnd: number;
-    readonly domContentLoadedEventStart: number;
-    readonly domInteractive: number;
-    readonly loadEventEnd: number;
-    readonly loadEventStart: number;
+    readonly domComplete: DOMHighResTimeStamp;
+    readonly domContentLoadedEventEnd: DOMHighResTimeStamp;
+    readonly domContentLoadedEventStart: DOMHighResTimeStamp;
+    readonly domInteractive: DOMHighResTimeStamp;
+    readonly loadEventEnd: DOMHighResTimeStamp;
+    readonly loadEventStart: DOMHighResTimeStamp;
     readonly redirectCount: number;
-    readonly type: NavigationType;
-    readonly unloadEventEnd: number;
-    readonly unloadEventStart: number;
+    readonly type: NavigationTimingType;
+    readonly unloadEventEnd: DOMHighResTimeStamp;
+    readonly unloadEventStart: DOMHighResTimeStamp;
     toJSON(): any;
 }
 
@@ -11690,25 +10773,34 @@ declare var PerformanceObserverEntryList: {
     new(): PerformanceObserverEntryList;
 };
 
+interface PerformancePaintTiming extends PerformanceEntry {
+}
+
+declare var PerformancePaintTiming: {
+    prototype: PerformancePaintTiming;
+    new(): PerformancePaintTiming;
+};
+
 /** Enables retrieval and analysis of detailed network timing data regarding the loading of an application's resources. An application can use the timing metrics to determine, for example, the length of time it takes to fetch a specific resource, such as an XMLHttpRequest, <SVG>, image, or script. */
 interface PerformanceResourceTiming extends PerformanceEntry {
-    readonly connectEnd: number;
-    readonly connectStart: number;
+    readonly connectEnd: DOMHighResTimeStamp;
+    readonly connectStart: DOMHighResTimeStamp;
     readonly decodedBodySize: number;
-    readonly domainLookupEnd: number;
-    readonly domainLookupStart: number;
+    readonly domainLookupEnd: DOMHighResTimeStamp;
+    readonly domainLookupStart: DOMHighResTimeStamp;
     readonly encodedBodySize: number;
-    readonly fetchStart: number;
+    readonly fetchStart: DOMHighResTimeStamp;
     readonly initiatorType: string;
     readonly nextHopProtocol: string;
-    readonly redirectEnd: number;
-    readonly redirectStart: number;
-    readonly requestStart: number;
-    readonly responseEnd: number;
-    readonly responseStart: number;
-    readonly secureConnectionStart: number;
+    readonly redirectEnd: DOMHighResTimeStamp;
+    readonly redirectStart: DOMHighResTimeStamp;
+    readonly requestStart: DOMHighResTimeStamp;
+    readonly responseEnd: DOMHighResTimeStamp;
+    readonly responseStart: DOMHighResTimeStamp;
+    readonly secureConnectionStart: DOMHighResTimeStamp;
+    readonly serverTiming: ReadonlyArray<PerformanceServerTiming>;
     readonly transferSize: number;
-    readonly workerStart: number;
+    readonly workerStart: DOMHighResTimeStamp;
     toJSON(): any;
 }
 
@@ -11717,34 +10809,70 @@ declare var PerformanceResourceTiming: {
     new(): PerformanceResourceTiming;
 };
 
-/** A legacy interface kept for backwards compatibility and contains properties that offer performance timing information for various events which occur during the loading and use of the current page. You get a PerformanceTiming object describing your page using the window.performance.timing property.
- * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
- */
-interface PerformanceTiming {
-    readonly connectEnd: number;
-    readonly connectStart: number;
-    readonly domComplete: number;
-    readonly domContentLoadedEventEnd: number;
-    readonly domContentLoadedEventStart: number;
-    readonly domInteractive: number;
-    readonly domLoading: number;
-    readonly domainLookupEnd: number;
-    readonly domainLookupStart: number;
-    readonly fetchStart: number;
-    readonly loadEventEnd: number;
-    readonly loadEventStart: number;
-    readonly navigationStart: number;
-    readonly redirectEnd: number;
-    readonly redirectStart: number;
-    readonly requestStart: number;
-    readonly responseEnd: number;
-    readonly responseStart: number;
-    readonly secureConnectionStart: number;
-    readonly unloadEventEnd: number;
-    readonly unloadEventStart: number;
+interface PerformanceServerTiming {
+    readonly description: string;
+    readonly duration: DOMHighResTimeStamp;
+    readonly name: string;
     toJSON(): any;
 }
 
+declare var PerformanceServerTiming: {
+    prototype: PerformanceServerTiming;
+    new(): PerformanceServerTiming;
+};
+
+/**
+ * A legacy interface kept for backwards compatibility and contains properties that offer performance timing information for various events which occur during the loading and use of the current page. You get a PerformanceTiming object describing your page using the window.performance.timing property.
+ * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
+ */
+interface PerformanceTiming {
+    /** @deprecated */
+    readonly connectEnd: number;
+    /** @deprecated */
+    readonly connectStart: number;
+    /** @deprecated */
+    readonly domComplete: number;
+    /** @deprecated */
+    readonly domContentLoadedEventEnd: number;
+    /** @deprecated */
+    readonly domContentLoadedEventStart: number;
+    /** @deprecated */
+    readonly domInteractive: number;
+    /** @deprecated */
+    readonly domLoading: number;
+    /** @deprecated */
+    readonly domainLookupEnd: number;
+    /** @deprecated */
+    readonly domainLookupStart: number;
+    /** @deprecated */
+    readonly fetchStart: number;
+    /** @deprecated */
+    readonly loadEventEnd: number;
+    /** @deprecated */
+    readonly loadEventStart: number;
+    /** @deprecated */
+    readonly navigationStart: number;
+    /** @deprecated */
+    readonly redirectEnd: number;
+    /** @deprecated */
+    readonly redirectStart: number;
+    /** @deprecated */
+    readonly requestStart: number;
+    /** @deprecated */
+    readonly responseEnd: number;
+    /** @deprecated */
+    readonly responseStart: number;
+    /** @deprecated */
+    readonly secureConnectionStart: number;
+    /** @deprecated */
+    readonly unloadEventEnd: number;
+    /** @deprecated */
+    readonly unloadEventStart: number;
+    /** @deprecated */
+    toJSON(): any;
+}
+
+/** @deprecated */
 declare var PerformanceTiming: {
     prototype: PerformanceTiming;
     new(): PerformanceTiming;
@@ -11759,30 +10887,12 @@ declare var PeriodicWave: {
     new(context: BaseAudioContext, options?: PeriodicWaveOptions): PeriodicWave;
 };
 
-interface PermissionRequest extends DeferredPermissionRequest {
-    readonly state: MSWebViewPermissionState;
-    defer(): void;
-}
-
-declare var PermissionRequest: {
-    prototype: PermissionRequest;
-    new(): PermissionRequest;
-};
-
-interface PermissionRequestedEvent extends Event {
-    readonly permissionRequest: PermissionRequest;
-}
-
-declare var PermissionRequestedEvent: {
-    prototype: PermissionRequestedEvent;
-    new(): PermissionRequestedEvent;
-};
-
 interface PermissionStatusEventMap {
     "change": Event;
 }
 
 interface PermissionStatus extends EventTarget {
+    readonly name: string;
     onchange: ((this: PermissionStatus, ev: Event) => any) | null;
     readonly state: PermissionState;
     addEventListener<K extends keyof PermissionStatusEventMap>(type: K, listener: (this: PermissionStatus, ev: PermissionStatusEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -11797,7 +10907,7 @@ declare var PermissionStatus: {
 };
 
 interface Permissions {
-    query(permissionDesc: PermissionDescriptor | DevicePermissionDescriptor | MidiPermissionDescriptor | PushPermissionDescriptor): Promise<PermissionStatus>;
+    query(permissionDesc: PermissionDescriptor): Promise<PermissionStatus>;
 }
 
 declare var Permissions: {
@@ -11805,46 +10915,92 @@ declare var Permissions: {
     new(): Permissions;
 };
 
-/** Provides information about a browser plugin. */
+interface PictureInPictureEvent extends Event {
+    readonly pictureInPictureWindow: PictureInPictureWindow;
+}
+
+declare var PictureInPictureEvent: {
+    prototype: PictureInPictureEvent;
+    new(type: string, eventInitDict: PictureInPictureEventInit): PictureInPictureEvent;
+};
+
+interface PictureInPictureWindowEventMap {
+    "resize": Event;
+}
+
+interface PictureInPictureWindow extends EventTarget {
+    readonly height: number;
+    onresize: ((this: PictureInPictureWindow, ev: Event) => any) | null;
+    readonly width: number;
+    addEventListener<K extends keyof PictureInPictureWindowEventMap>(type: K, listener: (this: PictureInPictureWindow, ev: PictureInPictureWindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof PictureInPictureWindowEventMap>(type: K, listener: (this: PictureInPictureWindow, ev: PictureInPictureWindowEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var PictureInPictureWindow: {
+    prototype: PictureInPictureWindow;
+    new(): PictureInPictureWindow;
+};
+
+/**
+ * Provides information about a browser plugin.
+ * @deprecated
+ */
 interface Plugin {
     /**
      * Returns the plugin's description.
+     * @deprecated
      */
     readonly description: string;
     /**
      * Returns the plugin library's filename, if applicable on the current platform.
+     * @deprecated
      */
     readonly filename: string;
     /**
      * Returns the number of MIME types, represented by MimeType objects, supported by the plugin.
+     * @deprecated
      */
     readonly length: number;
     /**
      * Returns the plugin's name.
+     * @deprecated
      */
     readonly name: string;
     /**
      * Returns the specified MimeType object.
+     * @deprecated
      */
     item(index: number): MimeType | null;
+    /** @deprecated */
     namedItem(name: string): MimeType | null;
     [index: number]: MimeType;
 }
 
+/** @deprecated */
 declare var Plugin: {
     prototype: Plugin;
     new(): Plugin;
 };
 
-/** Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods. */
+/**
+ * Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods.
+ * @deprecated
+ */
 interface PluginArray {
+    /** @deprecated */
     readonly length: number;
+    /** @deprecated */
     item(index: number): Plugin | null;
+    /** @deprecated */
     namedItem(name: string): Plugin | null;
-    refresh(reload?: boolean): void;
+    /** @deprecated */
+    refresh(): void;
     [index: number]: Plugin;
 }
 
+/** @deprecated */
 declare var PluginArray: {
     prototype: PluginArray;
     new(): PluginArray;
@@ -11862,6 +11018,7 @@ interface PointerEvent extends MouseEvent {
     readonly tiltY: number;
     readonly twist: number;
     readonly width: number;
+    /** Available only in secure contexts. */
     getCoalescedEvents(): PointerEvent[];
     getPredictedEvents(): PointerEvent[];
 }
@@ -11873,9 +11030,7 @@ declare var PointerEvent: {
 
 /** PopStateEvent is an event handler for the popstate event on the window. */
 interface PopStateEvent extends Event {
-    /**
-     * Returns a copy of the information that was provided to pushState() or replaceState().
-     */
+    /** Returns a copy of the information that was provided to pushState() or replaceState(). */
     readonly state: any;
 }
 
@@ -11918,7 +11073,9 @@ declare var PromiseRejectionEvent: {
     new(type: string, eventInitDict: PromiseRejectionEventInit): PromiseRejectionEvent;
 };
 
+/** Available only in secure contexts. */
 interface PublicKeyCredential extends Credential {
+    readonly authenticatorAttachment: string | null;
     readonly rawId: ArrayBuffer;
     readonly response: AuthenticatorResponse;
     getClientExtensionResults(): AuthenticationExtensionsClientOutputs;
@@ -11930,10 +11087,13 @@ declare var PublicKeyCredential: {
     isUserVerifyingPlatformAuthenticatorAvailable(): Promise<boolean>;
 };
 
-/** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. */
+/**
+ * This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
+ * Available only in secure contexts.
+ */
 interface PushManager {
     getSubscription(): Promise<PushSubscription | null>;
-    permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<PermissionState>;
     subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
 
@@ -11943,10 +11103,13 @@ declare var PushManager: {
     readonly supportedContentEncodings: ReadonlyArray<string>;
 };
 
-/** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. */
+/**
+ * This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
+ * Available only in secure contexts.
+ */
 interface PushSubscription {
     readonly endpoint: string;
-    readonly expirationTime: number | null;
+    readonly expirationTime: EpochTimeStamp | null;
     readonly options: PushSubscriptionOptions;
     getKey(name: PushEncryptionKeyName): ArrayBuffer | null;
     toJSON(): PushSubscriptionJSON;
@@ -11958,6 +11121,7 @@ declare var PushSubscription: {
     new(): PushSubscription;
 };
 
+/** Available only in secure contexts. */
 interface PushSubscriptionOptions {
     readonly applicationServerKey: ArrayBuffer | null;
     readonly userVisibleOnly: boolean;
@@ -11969,14 +11133,13 @@ declare var PushSubscriptionOptions: {
 };
 
 interface RTCCertificate {
-    readonly expires: number;
+    readonly expires: EpochTimeStamp;
     getFingerprints(): RTCDtlsFingerprint[];
 }
 
 declare var RTCCertificate: {
     prototype: RTCCertificate;
     new(): RTCCertificate;
-    getSupportedAlgorithms(): AlgorithmIdentifier[];
 };
 
 interface RTCDTMFSenderEventMap {
@@ -12006,19 +11169,20 @@ interface RTCDTMFToneChangeEvent extends Event {
 
 declare var RTCDTMFToneChangeEvent: {
     prototype: RTCDTMFToneChangeEvent;
-    new(type: string, eventInitDict: RTCDTMFToneChangeEventInit): RTCDTMFToneChangeEvent;
+    new(type: string, eventInitDict?: RTCDTMFToneChangeEventInit): RTCDTMFToneChangeEvent;
 };
 
 interface RTCDataChannelEventMap {
     "bufferedamountlow": Event;
     "close": Event;
-    "error": RTCErrorEvent;
+    "closing": Event;
+    "error": Event;
     "message": MessageEvent;
     "open": Event;
 }
 
 interface RTCDataChannel extends EventTarget {
-    binaryType: string;
+    binaryType: BinaryType;
     readonly bufferedAmount: number;
     bufferedAmountLowThreshold: number;
     readonly id: number | null;
@@ -12028,11 +11192,11 @@ interface RTCDataChannel extends EventTarget {
     readonly negotiated: boolean;
     onbufferedamountlow: ((this: RTCDataChannel, ev: Event) => any) | null;
     onclose: ((this: RTCDataChannel, ev: Event) => any) | null;
-    onerror: ((this: RTCDataChannel, ev: RTCErrorEvent) => any) | null;
+    onclosing: ((this: RTCDataChannel, ev: Event) => any) | null;
+    onerror: ((this: RTCDataChannel, ev: Event) => any) | null;
     onmessage: ((this: RTCDataChannel, ev: MessageEvent) => any) | null;
     onopen: ((this: RTCDataChannel, ev: Event) => any) | null;
     readonly ordered: boolean;
-    readonly priority: RTCPriorityType;
     readonly protocol: string;
     readonly readyState: RTCDataChannelState;
     close(): void;
@@ -12061,13 +11225,13 @@ declare var RTCDataChannelEvent: {
 };
 
 interface RTCDtlsTransportEventMap {
-    "error": RTCErrorEvent;
+    "error": Event;
     "statechange": Event;
 }
 
 interface RTCDtlsTransport extends EventTarget {
     readonly iceTransport: RTCIceTransport;
-    onerror: ((this: RTCDtlsTransport, ev: RTCErrorEvent) => any) | null;
+    onerror: ((this: RTCDtlsTransport, ev: Event) => any) | null;
     onstatechange: ((this: RTCDtlsTransport, ev: Event) => any) | null;
     readonly state: RTCDtlsTransportState;
     getRemoteCertificates(): ArrayBuffer[];
@@ -12082,41 +11246,31 @@ declare var RTCDtlsTransport: {
     new(): RTCDtlsTransport;
 };
 
-interface RTCDtlsTransportStateChangedEvent extends Event {
-    readonly state: RTCDtlsTransportState;
+interface RTCEncodedAudioFrame {
+    data: ArrayBuffer;
+    readonly timestamp: number;
+    getMetadata(): RTCEncodedAudioFrameMetadata;
 }
 
-declare var RTCDtlsTransportStateChangedEvent: {
-    prototype: RTCDtlsTransportStateChangedEvent;
-    new(): RTCDtlsTransportStateChangedEvent;
+declare var RTCEncodedAudioFrame: {
+    prototype: RTCEncodedAudioFrame;
+    new(): RTCEncodedAudioFrame;
 };
 
-interface RTCDtmfSenderEventMap {
-    "tonechange": RTCDTMFToneChangeEvent;
+interface RTCEncodedVideoFrame {
+    data: ArrayBuffer;
+    readonly timestamp: number;
+    readonly type: RTCEncodedVideoFrameType;
+    getMetadata(): RTCEncodedVideoFrameMetadata;
 }
 
-interface RTCDtmfSender extends EventTarget {
-    readonly canInsertDTMF: boolean;
-    readonly duration: number;
-    readonly interToneGap: number;
-    ontonechange: ((this: RTCDtmfSender, ev: RTCDTMFToneChangeEvent) => any) | null;
-    readonly sender: RTCRtpSender;
-    readonly toneBuffer: string;
-    insertDTMF(tones: string, duration?: number, interToneGap?: number): void;
-    addEventListener<K extends keyof RTCDtmfSenderEventMap>(type: K, listener: (this: RTCDtmfSender, ev: RTCDtmfSenderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof RTCDtmfSenderEventMap>(type: K, listener: (this: RTCDtmfSender, ev: RTCDtmfSenderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var RTCDtmfSender: {
-    prototype: RTCDtmfSender;
-    new(sender: RTCRtpSender): RTCDtmfSender;
+declare var RTCEncodedVideoFrame: {
+    prototype: RTCEncodedVideoFrame;
+    new(): RTCEncodedVideoFrame;
 };
 
 interface RTCError extends DOMException {
     readonly errorDetail: RTCErrorDetailType;
-    readonly httpRequestStatusCode: number | null;
     readonly receivedAlert: number | null;
     readonly sctpCauseCode: number | null;
     readonly sdpLineNumber: number | null;
@@ -12139,6 +11293,7 @@ declare var RTCErrorEvent: {
 
 /** The RTCIceCandidate interface—part of the WebRTC API—represents a candidate Internet Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection. */
 interface RTCIceCandidate {
+    readonly address: string | null;
     readonly candidate: string;
     readonly component: RTCIceComponent | null;
     readonly foundation: string | null;
@@ -12160,67 +11315,17 @@ declare var RTCIceCandidate: {
     new(candidateInitDict?: RTCIceCandidateInit): RTCIceCandidate;
 };
 
-interface RTCIceCandidatePairChangedEvent extends Event {
-    readonly pair: RTCIceCandidatePair;
-}
-
-declare var RTCIceCandidatePairChangedEvent: {
-    prototype: RTCIceCandidatePairChangedEvent;
-    new(): RTCIceCandidatePairChangedEvent;
-};
-
-interface RTCIceGathererEventMap {
-    "error": Event;
-    "localcandidate": RTCIceGathererEvent;
-}
-
-interface RTCIceGatherer extends RTCStatsProvider {
-    readonly component: RTCIceComponent;
-    onerror: ((this: RTCIceGatherer, ev: Event) => any) | null;
-    onlocalcandidate: ((this: RTCIceGatherer, ev: RTCIceGathererEvent) => any) | null;
-    createAssociatedGatherer(): RTCIceGatherer;
-    getLocalCandidates(): RTCIceCandidateDictionary[];
-    getLocalParameters(): RTCIceParameters;
-    addEventListener<K extends keyof RTCIceGathererEventMap>(type: K, listener: (this: RTCIceGatherer, ev: RTCIceGathererEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof RTCIceGathererEventMap>(type: K, listener: (this: RTCIceGatherer, ev: RTCIceGathererEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var RTCIceGatherer: {
-    prototype: RTCIceGatherer;
-    new(options: RTCIceGatherOptions): RTCIceGatherer;
-};
-
-interface RTCIceGathererEvent extends Event {
-    readonly candidate: RTCIceCandidateDictionary | RTCIceCandidateComplete;
-}
-
-declare var RTCIceGathererEvent: {
-    prototype: RTCIceGathererEvent;
-    new(): RTCIceGathererEvent;
-};
-
 interface RTCIceTransportEventMap {
     "gatheringstatechange": Event;
-    "selectedcandidatepairchange": Event;
     "statechange": Event;
 }
 
 /** Provides access to information about the ICE transport layer over which the data is being sent and received. */
 interface RTCIceTransport extends EventTarget {
-    readonly component: RTCIceComponent;
     readonly gatheringState: RTCIceGathererState;
     ongatheringstatechange: ((this: RTCIceTransport, ev: Event) => any) | null;
-    onselectedcandidatepairchange: ((this: RTCIceTransport, ev: Event) => any) | null;
     onstatechange: ((this: RTCIceTransport, ev: Event) => any) | null;
-    readonly role: RTCIceRole;
     readonly state: RTCIceTransportState;
-    getLocalCandidates(): RTCIceCandidate[];
-    getLocalParameters(): RTCIceParameters | null;
-    getRemoteCandidates(): RTCIceCandidate[];
-    getRemoteParameters(): RTCIceParameters | null;
-    getSelectedCandidatePair(): RTCIceCandidatePair | null;
     addEventListener<K extends keyof RTCIceTransportEventMap>(type: K, listener: (this: RTCIceTransport, ev: RTCIceTransportEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof RTCIceTransportEventMap>(type: K, listener: (this: RTCIceTransport, ev: RTCIceTransportEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12232,35 +11337,15 @@ declare var RTCIceTransport: {
     new(): RTCIceTransport;
 };
 
-interface RTCIceTransportStateChangedEvent extends Event {
-    readonly state: RTCIceTransportState;
-}
-
-declare var RTCIceTransportStateChangedEvent: {
-    prototype: RTCIceTransportStateChangedEvent;
-    new(): RTCIceTransportStateChangedEvent;
-};
-
-interface RTCIdentityAssertion {
-    idp: string;
-    name: string;
-}
-
-declare var RTCIdentityAssertion: {
-    prototype: RTCIdentityAssertion;
-    new(idp: string, name: string): RTCIdentityAssertion;
-};
-
 interface RTCPeerConnectionEventMap {
     "connectionstatechange": Event;
     "datachannel": RTCDataChannelEvent;
     "icecandidate": RTCPeerConnectionIceEvent;
-    "icecandidateerror": RTCPeerConnectionIceErrorEvent;
+    "icecandidateerror": Event;
     "iceconnectionstatechange": Event;
     "icegatheringstatechange": Event;
     "negotiationneeded": Event;
     "signalingstatechange": Event;
-    "statsended": RTCStatsEvent;
     "track": RTCTrackEvent;
 }
 
@@ -12272,43 +11357,48 @@ interface RTCPeerConnection extends EventTarget {
     readonly currentRemoteDescription: RTCSessionDescription | null;
     readonly iceConnectionState: RTCIceConnectionState;
     readonly iceGatheringState: RTCIceGatheringState;
-    readonly idpErrorInfo: string | null;
-    readonly idpLoginUrl: string | null;
     readonly localDescription: RTCSessionDescription | null;
     onconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     ondatachannel: ((this: RTCPeerConnection, ev: RTCDataChannelEvent) => any) | null;
     onicecandidate: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any) | null;
-    onicecandidateerror: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceErrorEvent) => any) | null;
+    onicecandidateerror: ((this: RTCPeerConnection, ev: Event) => any) | null;
     oniceconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     onicegatheringstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     onnegotiationneeded: ((this: RTCPeerConnection, ev: Event) => any) | null;
     onsignalingstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
-    onstatsended: ((this: RTCPeerConnection, ev: RTCStatsEvent) => any) | null;
     ontrack: ((this: RTCPeerConnection, ev: RTCTrackEvent) => any) | null;
-    readonly peerIdentity: Promise<RTCIdentityAssertion>;
     readonly pendingLocalDescription: RTCSessionDescription | null;
     readonly pendingRemoteDescription: RTCSessionDescription | null;
     readonly remoteDescription: RTCSessionDescription | null;
     readonly sctp: RTCSctpTransport | null;
     readonly signalingState: RTCSignalingState;
-    addIceCandidate(candidate: RTCIceCandidateInit | RTCIceCandidate): Promise<void>;
+    addIceCandidate(candidate?: RTCIceCandidateInit): Promise<void>;
+    /** @deprecated */
+    addIceCandidate(candidate: RTCIceCandidateInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender;
     addTransceiver(trackOrKind: MediaStreamTrack | string, init?: RTCRtpTransceiverInit): RTCRtpTransceiver;
     close(): void;
-    createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
+    createAnswer(options?: RTCAnswerOptions): Promise<RTCSessionDescriptionInit>;
+    /** @deprecated */
+    createAnswer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel;
     createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
+    /** @deprecated */
+    createOffer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<void>;
     getConfiguration(): RTCConfiguration;
-    getIdentityAssertion(): Promise<string>;
     getReceivers(): RTCRtpReceiver[];
     getSenders(): RTCRtpSender[];
     getStats(selector?: MediaStreamTrack | null): Promise<RTCStatsReport>;
     getTransceivers(): RTCRtpTransceiver[];
     removeTrack(sender: RTCRtpSender): void;
-    setConfiguration(configuration: RTCConfiguration): void;
-    setIdentityProvider(provider: string, options?: RTCIdentityProviderOptions): void;
-    setLocalDescription(description: RTCSessionDescriptionInit): Promise<void>;
+    restartIce(): void;
+    setConfiguration(configuration?: RTCConfiguration): void;
+    setLocalDescription(description?: RTCLocalSessionDescriptionInit): Promise<void>;
+    /** @deprecated */
+    setLocalDescription(description: RTCLocalSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void>;
+    /** @deprecated */
+    setRemoteDescription(description: RTCSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12319,13 +11409,13 @@ declare var RTCPeerConnection: {
     prototype: RTCPeerConnection;
     new(configuration?: RTCConfiguration): RTCPeerConnection;
     generateCertificate(keygenAlgorithm: AlgorithmIdentifier): Promise<RTCCertificate>;
-    getDefaultIceServers(): RTCIceServer[];
 };
 
 interface RTCPeerConnectionIceErrorEvent extends Event {
+    readonly address: string | null;
     readonly errorCode: number;
     readonly errorText: string;
-    readonly hostCandidate: string;
+    readonly port: number | null;
     readonly url: string;
 }
 
@@ -12337,7 +11427,6 @@ declare var RTCPeerConnectionIceErrorEvent: {
 /** Events that occurs in relation to ICE candidates with the target, usually an RTCPeerConnection. Only one event is of this type: icecandidate. */
 interface RTCPeerConnectionIceEvent extends Event {
     readonly candidate: RTCIceCandidate | null;
-    readonly url: string | null;
 }
 
 declare var RTCPeerConnectionIceEvent: {
@@ -12347,7 +11436,6 @@ declare var RTCPeerConnectionIceEvent: {
 
 /** This WebRTC API interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection. */
 interface RTCRtpReceiver {
-    readonly rtcpTransport: RTCDtlsTransport | null;
     readonly track: MediaStreamTrack;
     readonly transport: RTCDtlsTransport | null;
     getContributingSources(): RTCRtpContributingSource[];
@@ -12365,7 +11453,6 @@ declare var RTCRtpReceiver: {
 /** Provides the ability to control and obtain details about how a particular MediaStreamTrack is encoded and sent to a remote peer. */
 interface RTCRtpSender {
     readonly dtmf: RTCDTMFSender | null;
-    readonly rtcpTransport: RTCDtlsTransport | null;
     readonly track: MediaStreamTrack | null;
     readonly transport: RTCDtlsTransport | null;
     getParameters(): RTCRtpSendParameters;
@@ -12426,54 +11513,7 @@ interface RTCSessionDescription {
 
 declare var RTCSessionDescription: {
     prototype: RTCSessionDescription;
-    new(descriptionInitDict?: RTCSessionDescriptionInit): RTCSessionDescription;
-};
-
-interface RTCSrtpSdesTransportEventMap {
-    "error": Event;
-}
-
-interface RTCSrtpSdesTransport extends EventTarget {
-    onerror: ((this: RTCSrtpSdesTransport, ev: Event) => any) | null;
-    readonly transport: RTCIceTransport;
-    addEventListener<K extends keyof RTCSrtpSdesTransportEventMap>(type: K, listener: (this: RTCSrtpSdesTransport, ev: RTCSrtpSdesTransportEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof RTCSrtpSdesTransportEventMap>(type: K, listener: (this: RTCSrtpSdesTransport, ev: RTCSrtpSdesTransportEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var RTCSrtpSdesTransport: {
-    prototype: RTCSrtpSdesTransport;
-    new(transport: RTCIceTransport, encryptParameters: RTCSrtpSdesParameters, decryptParameters: RTCSrtpSdesParameters): RTCSrtpSdesTransport;
-    getLocalParameters(): RTCSrtpSdesParameters[];
-};
-
-interface RTCSsrcConflictEvent extends Event {
-    readonly ssrc: number;
-}
-
-declare var RTCSsrcConflictEvent: {
-    prototype: RTCSsrcConflictEvent;
-    new(): RTCSsrcConflictEvent;
-};
-
-interface RTCStatsEvent extends Event {
-    readonly report: RTCStatsReport;
-}
-
-declare var RTCStatsEvent: {
-    prototype: RTCStatsEvent;
-    new(type: string, eventInitDict: RTCStatsEventInit): RTCStatsEvent;
-};
-
-interface RTCStatsProvider extends EventTarget {
-    getStats(): Promise<RTCStatsReport>;
-    msGetStats(): Promise<RTCStatsReport>;
-}
-
-declare var RTCStatsProvider: {
-    prototype: RTCStatsProvider;
-    new(): RTCStatsProvider;
+    new(descriptionInitDict: RTCSessionDescriptionInit): RTCSessionDescription;
 };
 
 interface RTCStatsReport {
@@ -12506,28 +11546,15 @@ declare var RadioNodeList: {
     new(): RadioNodeList;
 };
 
-interface RandomSource {
-    getRandomValues<T extends Int8Array | Uint8ClampedArray | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array>(array: T): T;
-}
-
-declare var RandomSource: {
-    prototype: RandomSource;
-    new(): RandomSource;
-};
-
 /** A fragment of a document that can contain nodes and parts of text nodes. */
 interface Range extends AbstractRange {
-    /**
-     * Returns the node, furthest away from the document, that is an ancestor of both range's start node and end node.
-     */
+    /** Returns the node, furthest away from the document, that is an ancestor of both range's start node and end node. */
     readonly commonAncestorContainer: Node;
     cloneContents(): DocumentFragment;
     cloneRange(): Range;
     collapse(toStart?: boolean): void;
     compareBoundaryPoints(how: number, sourceRange: Range): number;
-    /**
-     * Returns −1 if the point is before the range, 0 if the point is in the range, and 1 if the point is after the range.
-     */
+    /** Returns −1 if the point is before the range, 0 if the point is in the range, and 1 if the point is after the range. */
     comparePoint(node: Node, offset: number): number;
     createContextualFragment(fragment: string): DocumentFragment;
     deleteContents(): void;
@@ -12536,9 +11563,7 @@ interface Range extends AbstractRange {
     getBoundingClientRect(): DOMRect;
     getClientRects(): DOMRectList;
     insertNode(node: Node): void;
-    /**
-     * Returns whether range intersects node.
-     */
+    /** Returns whether range intersects node. */
     intersectsNode(node: Node): boolean;
     isPointInRange(node: Node, offset: number): boolean;
     selectNode(node: Node): void;
@@ -12567,25 +11592,63 @@ declare var Range: {
     toString(): string;
 };
 
+interface ReadableByteStreamController {
+    readonly byobRequest: ReadableStreamBYOBRequest | null;
+    readonly desiredSize: number | null;
+    close(): void;
+    enqueue(chunk: ArrayBufferView): void;
+    error(e?: any): void;
+}
+
+declare var ReadableByteStreamController: {
+    prototype: ReadableByteStreamController;
+    new(): ReadableByteStreamController;
+};
+
 /** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. */
 interface ReadableStream<R = any> {
     readonly locked: boolean;
     cancel(reason?: any): Promise<void>;
+    getReader(options: { mode: "byob" }): ReadableStreamBYOBReader;
     getReader(): ReadableStreamDefaultReader<R>;
+    getReader(options?: ReadableStreamGetReaderOptions): ReadableStreamReader<R>;
     pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
-    pipeTo(dest: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
+    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
     tee(): [ReadableStream<R>, ReadableStream<R>];
 }
 
 declare var ReadableStream: {
     prototype: ReadableStream;
+    new(underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number }): ReadableStream<Uint8Array>;
+    new<R = any>(underlyingSource: UnderlyingDefaultSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
     new<R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
+};
+
+interface ReadableStreamBYOBReader extends ReadableStreamGenericReader {
+    read<T extends ArrayBufferView>(view: T): Promise<ReadableStreamReadResult<T>>;
+    releaseLock(): void;
+}
+
+declare var ReadableStreamBYOBReader: {
+    prototype: ReadableStreamBYOBReader;
+    new(stream: ReadableStream): ReadableStreamBYOBReader;
+};
+
+interface ReadableStreamBYOBRequest {
+    readonly view: ArrayBufferView | null;
+    respond(bytesWritten: number): void;
+    respondWithNewView(view: ArrayBufferView): void;
+}
+
+declare var ReadableStreamBYOBRequest: {
+    prototype: ReadableStreamBYOBRequest;
+    new(): ReadableStreamBYOBRequest;
 };
 
 interface ReadableStreamDefaultController<R = any> {
     readonly desiredSize: number | null;
     close(): void;
-    enqueue(chunk: R): void;
+    enqueue(chunk?: R): void;
     error(e?: any): void;
 }
 
@@ -12595,7 +11658,7 @@ declare var ReadableStreamDefaultController: {
 };
 
 interface ReadableStreamDefaultReader<R = any> extends ReadableStreamGenericReader {
-    read(): Promise<ReadableStreamDefaultReadResult<R>>;
+    read(): Promise<ReadableStreamReadResult<R>>;
     releaseLock(): void;
 }
 
@@ -12609,74 +11672,65 @@ interface ReadableStreamGenericReader {
     cancel(reason?: any): Promise<void>;
 }
 
+interface RemotePlaybackEventMap {
+    "connect": Event;
+    "connecting": Event;
+    "disconnect": Event;
+}
+
+interface RemotePlayback extends EventTarget {
+    onconnect: ((this: RemotePlayback, ev: Event) => any) | null;
+    onconnecting: ((this: RemotePlayback, ev: Event) => any) | null;
+    ondisconnect: ((this: RemotePlayback, ev: Event) => any) | null;
+    readonly state: RemotePlaybackState;
+    cancelWatchAvailability(id?: number): Promise<void>;
+    prompt(): Promise<void>;
+    watchAvailability(callback: RemotePlaybackAvailabilityCallback): Promise<number>;
+    addEventListener<K extends keyof RemotePlaybackEventMap>(type: K, listener: (this: RemotePlayback, ev: RemotePlaybackEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof RemotePlaybackEventMap>(type: K, listener: (this: RemotePlayback, ev: RemotePlaybackEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var RemotePlayback: {
+    prototype: RemotePlayback;
+    new(): RemotePlayback;
+};
+
 /** This Fetch API interface represents a resource request. */
 interface Request extends Body {
-    /**
-     * Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.
-     */
+    /** Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching. */
     readonly cache: RequestCache;
-    /**
-     * Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL.
-     */
+    /** Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. */
     readonly credentials: RequestCredentials;
-    /**
-     * Returns the kind of resource requested by request, e.g., "document" or "script".
-     */
+    /** Returns the kind of resource requested by request, e.g., "document" or "script". */
     readonly destination: RequestDestination;
-    /**
-     * Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the "Host" header.
-     */
+    /** Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the "Host" header. */
     readonly headers: Headers;
-    /**
-     * Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]
-     */
+    /** Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI] */
     readonly integrity: string;
-    /**
-     * Returns a boolean indicating whether or not request is for a history navigation (a.k.a. back-foward navigation).
-     */
-    readonly isHistoryNavigation: boolean;
-    /**
-     * Returns a boolean indicating whether or not request is for a reload navigation.
-     */
-    readonly isReloadNavigation: boolean;
-    /**
-     * Returns a boolean indicating whether or not request can outlive the global in which it was created.
-     */
+    /** Returns a boolean indicating whether or not request can outlive the global in which it was created. */
     readonly keepalive: boolean;
-    /**
-     * Returns request's HTTP method, which is "GET" by default.
-     */
+    /** Returns request's HTTP method, which is "GET" by default. */
     readonly method: string;
-    /**
-     * Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs.
-     */
+    /** Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs. */
     readonly mode: RequestMode;
-    /**
-     * Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.
-     */
+    /** Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default. */
     readonly redirect: RequestRedirect;
-    /**
-     * Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and "about:client" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made.
-     */
+    /** Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and "about:client" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made. */
     readonly referrer: string;
-    /**
-     * Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer.
-     */
+    /** Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer. */
     readonly referrerPolicy: ReferrerPolicy;
-    /**
-     * Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler.
-     */
+    /** Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler. */
     readonly signal: AbortSignal;
-    /**
-     * Returns the URL of request as a string.
-     */
+    /** Returns the URL of request as a string. */
     readonly url: string;
     clone(): Request;
 }
 
 declare var Request: {
     prototype: Request;
-    new(input: RequestInfo, init?: RequestInit): Request;
+    new(input: RequestInfo | URL, init?: RequestInit): Request;
 };
 
 interface ResizeObserver {
@@ -12694,6 +11748,7 @@ interface ResizeObserverEntry {
     readonly borderBoxSize: ReadonlyArray<ResizeObserverSize>;
     readonly contentBoxSize: ReadonlyArray<ResizeObserverSize>;
     readonly contentRect: DOMRectReadOnly;
+    readonly devicePixelContentBoxSize: ReadonlyArray<ResizeObserverSize>;
     readonly target: Element;
 }
 
@@ -12719,7 +11774,6 @@ interface Response extends Body {
     readonly redirected: boolean;
     readonly status: number;
     readonly statusText: string;
-    readonly trailer: Promise<Headers>;
     readonly type: ResponseType;
     readonly url: string;
     clone(): Response;
@@ -12729,11 +11783,13 @@ declare var Response: {
     prototype: Response;
     new(body?: BodyInit | null, init?: ResponseInit): Response;
     error(): Response;
-    redirect(url: string, status?: number): Response;
+    redirect(url: string | URL, status?: number): Response;
 };
 
 /** Provides access to the properties of <a> element, as well as methods to manipulate them. */
 interface SVGAElement extends SVGGraphicsElement, SVGURIReference {
+    rel: string;
+    readonly relList: DOMTokenList;
     readonly target: SVGAnimatedString;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGAElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -12944,8 +12000,12 @@ declare var SVGAnimatedTransformList: {
     new(): SVGAnimatedTransformList;
 };
 
-interface SVGAnimationElement extends SVGElement {
-    readonly targetElement: SVGElement;
+interface SVGAnimationElement extends SVGElement, SVGTests {
+    readonly targetElement: SVGElement | null;
+    beginElement(): void;
+    beginElementAt(offset: number): void;
+    endElement(): void;
+    endElementAt(offset: number): void;
     getCurrentTime(): number;
     getSimpleDuration(): number;
     getStartTime(): number;
@@ -13023,20 +12083,6 @@ declare var SVGComponentTransferFunctionElement: {
     readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
 };
 
-interface SVGCursorElement extends SVGElement {
-    readonly x: SVGAnimatedLength;
-    readonly y: SVGAnimatedLength;
-    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGCursorElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGCursorElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var SVGCursorElement: {
-    prototype: SVGCursorElement;
-    new(): SVGCursorElement;
-};
-
 /** Corresponds to the <defs> element. */
 interface SVGDefsElement extends SVGGraphicsElement {
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGDefsElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -13063,11 +12109,11 @@ declare var SVGDescElement: {
     new(): SVGDescElement;
 };
 
-interface SVGElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
+interface SVGElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
 }
 
 /** All of the SVG DOM interfaces that correspond directly to elements in the SVG language derive from the SVGElement interface. */
-interface SVGElement extends Element, DocumentAndElementEventHandlers, DocumentAndElementEventHandlers, ElementCSSInlineStyle, GlobalEventHandlers, GlobalEventHandlers, HTMLOrSVGElement, SVGElementInstance {
+interface SVGElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement {
     /** @deprecated */
     readonly className: any;
     readonly ownerSVGElement: SVGSVGElement | null;
@@ -13081,28 +12127,6 @@ interface SVGElement extends Element, DocumentAndElementEventHandlers, DocumentA
 declare var SVGElement: {
     prototype: SVGElement;
     new(): SVGElement;
-};
-
-interface SVGElementInstance extends EventTarget {
-    readonly correspondingElement: SVGElement;
-    readonly correspondingUseElement: SVGUseElement;
-}
-
-declare var SVGElementInstance: {
-    prototype: SVGElementInstance;
-    new(): SVGElementInstance;
-};
-
-interface SVGElementInstanceList {
-    /** @deprecated */
-    readonly length: number;
-    /** @deprecated */
-    item(index: number): SVGElementInstance;
-}
-
-declare var SVGElementInstanceList: {
-    prototype: SVGElementInstanceList;
-    new(): SVGElementInstanceList;
 };
 
 /** Provides access to the properties of <ellipse> elements. */
@@ -13849,6 +12873,18 @@ declare var SVGLinearGradientElement: {
     new(): SVGLinearGradientElement;
 };
 
+interface SVGMPathElement extends SVGElement, SVGURIReference {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SVGMPathElement: {
+    prototype: SVGMPathElement;
+    new(): SVGMPathElement;
+};
+
 interface SVGMarkerElement extends SVGElement, SVGFitToViewBox {
     readonly markerHeight: SVGAnimatedLength;
     readonly markerUnits: SVGAnimatedEnumeration;
@@ -13944,51 +12980,7 @@ declare var SVGNumberList: {
 };
 
 /** Corresponds to the <path> element. */
-interface SVGPathElement extends SVGGraphicsElement {
-    /** @deprecated */
-    readonly pathSegList: SVGPathSegList;
-    /** @deprecated */
-    createSVGPathSegArcAbs(x: number, y: number, r1: number, r2: number, angle: number, largeArcFlag: boolean, sweepFlag: boolean): SVGPathSegArcAbs;
-    /** @deprecated */
-    createSVGPathSegArcRel(x: number, y: number, r1: number, r2: number, angle: number, largeArcFlag: boolean, sweepFlag: boolean): SVGPathSegArcRel;
-    /** @deprecated */
-    createSVGPathSegClosePath(): SVGPathSegClosePath;
-    /** @deprecated */
-    createSVGPathSegCurvetoCubicAbs(x: number, y: number, x1: number, y1: number, x2: number, y2: number): SVGPathSegCurvetoCubicAbs;
-    /** @deprecated */
-    createSVGPathSegCurvetoCubicRel(x: number, y: number, x1: number, y1: number, x2: number, y2: number): SVGPathSegCurvetoCubicRel;
-    /** @deprecated */
-    createSVGPathSegCurvetoCubicSmoothAbs(x: number, y: number, x2: number, y2: number): SVGPathSegCurvetoCubicSmoothAbs;
-    /** @deprecated */
-    createSVGPathSegCurvetoCubicSmoothRel(x: number, y: number, x2: number, y2: number): SVGPathSegCurvetoCubicSmoothRel;
-    /** @deprecated */
-    createSVGPathSegCurvetoQuadraticAbs(x: number, y: number, x1: number, y1: number): SVGPathSegCurvetoQuadraticAbs;
-    /** @deprecated */
-    createSVGPathSegCurvetoQuadraticRel(x: number, y: number, x1: number, y1: number): SVGPathSegCurvetoQuadraticRel;
-    /** @deprecated */
-    createSVGPathSegCurvetoQuadraticSmoothAbs(x: number, y: number): SVGPathSegCurvetoQuadraticSmoothAbs;
-    /** @deprecated */
-    createSVGPathSegCurvetoQuadraticSmoothRel(x: number, y: number): SVGPathSegCurvetoQuadraticSmoothRel;
-    /** @deprecated */
-    createSVGPathSegLinetoAbs(x: number, y: number): SVGPathSegLinetoAbs;
-    /** @deprecated */
-    createSVGPathSegLinetoHorizontalAbs(x: number): SVGPathSegLinetoHorizontalAbs;
-    /** @deprecated */
-    createSVGPathSegLinetoHorizontalRel(x: number): SVGPathSegLinetoHorizontalRel;
-    /** @deprecated */
-    createSVGPathSegLinetoRel(x: number, y: number): SVGPathSegLinetoRel;
-    /** @deprecated */
-    createSVGPathSegLinetoVerticalAbs(y: number): SVGPathSegLinetoVerticalAbs;
-    /** @deprecated */
-    createSVGPathSegLinetoVerticalRel(y: number): SVGPathSegLinetoVerticalRel;
-    /** @deprecated */
-    createSVGPathSegMovetoAbs(x: number, y: number): SVGPathSegMovetoAbs;
-    /** @deprecated */
-    createSVGPathSegMovetoRel(x: number, y: number): SVGPathSegMovetoRel;
-    /** @deprecated */
-    getPathSegAtLength(distance: number): number;
-    getPointAtLength(distance: number): SVGPoint;
-    getTotalLength(): number;
+interface SVGPathElement extends SVGGeometryElement {
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -13998,282 +12990,6 @@ interface SVGPathElement extends SVGGraphicsElement {
 declare var SVGPathElement: {
     prototype: SVGPathElement;
     new(): SVGPathElement;
-};
-
-interface SVGPathSeg {
-    readonly pathSegType: number;
-    readonly pathSegTypeAsLetter: string;
-    readonly PATHSEG_ARC_ABS: number;
-    readonly PATHSEG_ARC_REL: number;
-    readonly PATHSEG_CLOSEPATH: number;
-    readonly PATHSEG_CURVETO_CUBIC_ABS: number;
-    readonly PATHSEG_CURVETO_CUBIC_REL: number;
-    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_ABS: number;
-    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_REL: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_ABS: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_REL: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
-    readonly PATHSEG_LINETO_ABS: number;
-    readonly PATHSEG_LINETO_HORIZONTAL_ABS: number;
-    readonly PATHSEG_LINETO_HORIZONTAL_REL: number;
-    readonly PATHSEG_LINETO_REL: number;
-    readonly PATHSEG_LINETO_VERTICAL_ABS: number;
-    readonly PATHSEG_LINETO_VERTICAL_REL: number;
-    readonly PATHSEG_MOVETO_ABS: number;
-    readonly PATHSEG_MOVETO_REL: number;
-    readonly PATHSEG_UNKNOWN: number;
-}
-
-declare var SVGPathSeg: {
-    prototype: SVGPathSeg;
-    new(): SVGPathSeg;
-    readonly PATHSEG_ARC_ABS: number;
-    readonly PATHSEG_ARC_REL: number;
-    readonly PATHSEG_CLOSEPATH: number;
-    readonly PATHSEG_CURVETO_CUBIC_ABS: number;
-    readonly PATHSEG_CURVETO_CUBIC_REL: number;
-    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_ABS: number;
-    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_REL: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_ABS: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_REL: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: number;
-    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
-    readonly PATHSEG_LINETO_ABS: number;
-    readonly PATHSEG_LINETO_HORIZONTAL_ABS: number;
-    readonly PATHSEG_LINETO_HORIZONTAL_REL: number;
-    readonly PATHSEG_LINETO_REL: number;
-    readonly PATHSEG_LINETO_VERTICAL_ABS: number;
-    readonly PATHSEG_LINETO_VERTICAL_REL: number;
-    readonly PATHSEG_MOVETO_ABS: number;
-    readonly PATHSEG_MOVETO_REL: number;
-    readonly PATHSEG_UNKNOWN: number;
-};
-
-interface SVGPathSegArcAbs extends SVGPathSeg {
-    angle: number;
-    largeArcFlag: boolean;
-    r1: number;
-    r2: number;
-    sweepFlag: boolean;
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegArcAbs: {
-    prototype: SVGPathSegArcAbs;
-    new(): SVGPathSegArcAbs;
-};
-
-interface SVGPathSegArcRel extends SVGPathSeg {
-    angle: number;
-    largeArcFlag: boolean;
-    r1: number;
-    r2: number;
-    sweepFlag: boolean;
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegArcRel: {
-    prototype: SVGPathSegArcRel;
-    new(): SVGPathSegArcRel;
-};
-
-interface SVGPathSegClosePath extends SVGPathSeg {
-}
-
-declare var SVGPathSegClosePath: {
-    prototype: SVGPathSegClosePath;
-    new(): SVGPathSegClosePath;
-};
-
-interface SVGPathSegCurvetoCubicAbs extends SVGPathSeg {
-    x: number;
-    x1: number;
-    x2: number;
-    y: number;
-    y1: number;
-    y2: number;
-}
-
-declare var SVGPathSegCurvetoCubicAbs: {
-    prototype: SVGPathSegCurvetoCubicAbs;
-    new(): SVGPathSegCurvetoCubicAbs;
-};
-
-interface SVGPathSegCurvetoCubicRel extends SVGPathSeg {
-    x: number;
-    x1: number;
-    x2: number;
-    y: number;
-    y1: number;
-    y2: number;
-}
-
-declare var SVGPathSegCurvetoCubicRel: {
-    prototype: SVGPathSegCurvetoCubicRel;
-    new(): SVGPathSegCurvetoCubicRel;
-};
-
-interface SVGPathSegCurvetoCubicSmoothAbs extends SVGPathSeg {
-    x: number;
-    x2: number;
-    y: number;
-    y2: number;
-}
-
-declare var SVGPathSegCurvetoCubicSmoothAbs: {
-    prototype: SVGPathSegCurvetoCubicSmoothAbs;
-    new(): SVGPathSegCurvetoCubicSmoothAbs;
-};
-
-interface SVGPathSegCurvetoCubicSmoothRel extends SVGPathSeg {
-    x: number;
-    x2: number;
-    y: number;
-    y2: number;
-}
-
-declare var SVGPathSegCurvetoCubicSmoothRel: {
-    prototype: SVGPathSegCurvetoCubicSmoothRel;
-    new(): SVGPathSegCurvetoCubicSmoothRel;
-};
-
-interface SVGPathSegCurvetoQuadraticAbs extends SVGPathSeg {
-    x: number;
-    x1: number;
-    y: number;
-    y1: number;
-}
-
-declare var SVGPathSegCurvetoQuadraticAbs: {
-    prototype: SVGPathSegCurvetoQuadraticAbs;
-    new(): SVGPathSegCurvetoQuadraticAbs;
-};
-
-interface SVGPathSegCurvetoQuadraticRel extends SVGPathSeg {
-    x: number;
-    x1: number;
-    y: number;
-    y1: number;
-}
-
-declare var SVGPathSegCurvetoQuadraticRel: {
-    prototype: SVGPathSegCurvetoQuadraticRel;
-    new(): SVGPathSegCurvetoQuadraticRel;
-};
-
-interface SVGPathSegCurvetoQuadraticSmoothAbs extends SVGPathSeg {
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegCurvetoQuadraticSmoothAbs: {
-    prototype: SVGPathSegCurvetoQuadraticSmoothAbs;
-    new(): SVGPathSegCurvetoQuadraticSmoothAbs;
-};
-
-interface SVGPathSegCurvetoQuadraticSmoothRel extends SVGPathSeg {
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegCurvetoQuadraticSmoothRel: {
-    prototype: SVGPathSegCurvetoQuadraticSmoothRel;
-    new(): SVGPathSegCurvetoQuadraticSmoothRel;
-};
-
-interface SVGPathSegLinetoAbs extends SVGPathSeg {
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegLinetoAbs: {
-    prototype: SVGPathSegLinetoAbs;
-    new(): SVGPathSegLinetoAbs;
-};
-
-interface SVGPathSegLinetoHorizontalAbs extends SVGPathSeg {
-    x: number;
-}
-
-declare var SVGPathSegLinetoHorizontalAbs: {
-    prototype: SVGPathSegLinetoHorizontalAbs;
-    new(): SVGPathSegLinetoHorizontalAbs;
-};
-
-interface SVGPathSegLinetoHorizontalRel extends SVGPathSeg {
-    x: number;
-}
-
-declare var SVGPathSegLinetoHorizontalRel: {
-    prototype: SVGPathSegLinetoHorizontalRel;
-    new(): SVGPathSegLinetoHorizontalRel;
-};
-
-interface SVGPathSegLinetoRel extends SVGPathSeg {
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegLinetoRel: {
-    prototype: SVGPathSegLinetoRel;
-    new(): SVGPathSegLinetoRel;
-};
-
-interface SVGPathSegLinetoVerticalAbs extends SVGPathSeg {
-    y: number;
-}
-
-declare var SVGPathSegLinetoVerticalAbs: {
-    prototype: SVGPathSegLinetoVerticalAbs;
-    new(): SVGPathSegLinetoVerticalAbs;
-};
-
-interface SVGPathSegLinetoVerticalRel extends SVGPathSeg {
-    y: number;
-}
-
-declare var SVGPathSegLinetoVerticalRel: {
-    prototype: SVGPathSegLinetoVerticalRel;
-    new(): SVGPathSegLinetoVerticalRel;
-};
-
-interface SVGPathSegList {
-    readonly numberOfItems: number;
-    appendItem(newItem: SVGPathSeg): SVGPathSeg;
-    clear(): void;
-    getItem(index: number): SVGPathSeg;
-    initialize(newItem: SVGPathSeg): SVGPathSeg;
-    insertItemBefore(newItem: SVGPathSeg, index: number): SVGPathSeg;
-    removeItem(index: number): SVGPathSeg;
-    replaceItem(newItem: SVGPathSeg, index: number): SVGPathSeg;
-}
-
-declare var SVGPathSegList: {
-    prototype: SVGPathSegList;
-    new(): SVGPathSegList;
-};
-
-interface SVGPathSegMovetoAbs extends SVGPathSeg {
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegMovetoAbs: {
-    prototype: SVGPathSegMovetoAbs;
-    new(): SVGPathSegMovetoAbs;
-};
-
-interface SVGPathSegMovetoRel extends SVGPathSeg {
-    x: number;
-    y: number;
-}
-
-declare var SVGPathSegMovetoRel: {
-    prototype: SVGPathSegMovetoRel;
-    new(): SVGPathSegMovetoRel;
 };
 
 /** Corresponds to the <pattern> element. */
@@ -14417,54 +13133,35 @@ declare var SVGRectElement: {
     new(): SVGRectElement;
 };
 
-interface SVGSVGElementEventMap extends SVGElementEventMap {
-    "SVGUnload": Event;
-    "SVGZoom": SVGZoomEvent;
+interface SVGSVGElementEventMap extends SVGElementEventMap, WindowEventHandlersEventMap {
 }
 
 /** Provides access to the properties of <svg> elements, as well as methods to manipulate them. This interface contains also various miscellaneous commonly-used utility methods, such as matrix operations and the ability to control the time of redraw on visual rendering devices. */
-interface SVGSVGElement extends SVGGraphicsElement, DocumentEvent, SVGFitToViewBox, SVGZoomAndPan {
-    /** @deprecated */
-    contentScriptType: string;
-    /** @deprecated */
-    contentStyleType: string;
+interface SVGSVGElement extends SVGGraphicsElement, SVGFitToViewBox, WindowEventHandlers {
     currentScale: number;
-    readonly currentTranslate: SVGPoint;
+    readonly currentTranslate: DOMPointReadOnly;
     readonly height: SVGAnimatedLength;
-    onunload: ((this: SVGSVGElement, ev: Event) => any) | null;
-    onzoom: ((this: SVGSVGElement, ev: SVGZoomEvent) => any) | null;
-    /** @deprecated */
-    readonly pixelUnitToMillimeterX: number;
-    /** @deprecated */
-    readonly pixelUnitToMillimeterY: number;
-    /** @deprecated */
-    readonly screenPixelToMillimeterX: number;
-    /** @deprecated */
-    readonly screenPixelToMillimeterY: number;
-    /** @deprecated */
-    readonly viewport: SVGRect;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
     animationsPaused(): boolean;
-    checkEnclosure(element: SVGElement, rect: SVGRect): boolean;
-    checkIntersection(element: SVGElement, rect: SVGRect): boolean;
+    checkEnclosure(element: SVGElement, rect: DOMRectReadOnly): boolean;
+    checkIntersection(element: SVGElement, rect: DOMRectReadOnly): boolean;
     createSVGAngle(): SVGAngle;
     createSVGLength(): SVGLength;
-    createSVGMatrix(): SVGMatrix;
+    createSVGMatrix(): DOMMatrix;
     createSVGNumber(): SVGNumber;
-    createSVGPoint(): SVGPoint;
-    createSVGRect(): SVGRect;
+    createSVGPoint(): DOMPoint;
+    createSVGRect(): DOMRect;
     createSVGTransform(): SVGTransform;
-    createSVGTransformFromMatrix(matrix: SVGMatrix): SVGTransform;
+    createSVGTransformFromMatrix(matrix?: DOMMatrix2DInit): SVGTransform;
     deselectAll(): void;
     /** @deprecated */
     forceRedraw(): void;
-    getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleDeclaration;
     getCurrentTime(): number;
     getElementById(elementId: string): Element;
-    getEnclosureList(rect: SVGRect, referenceElement: SVGElement | null): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
-    getIntersectionList(rect: SVGRect, referenceElement: SVGElement | null): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
+    getEnclosureList(rect: DOMRectReadOnly, referenceElement: SVGElement | null): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
+    getIntersectionList(rect: DOMRectReadOnly, referenceElement: SVGElement | null): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
     pauseAnimations(): void;
     setCurrentTime(seconds: number): void;
     /** @deprecated */
@@ -14483,9 +13180,6 @@ interface SVGSVGElement extends SVGGraphicsElement, DocumentEvent, SVGFitToViewB
 declare var SVGSVGElement: {
     prototype: SVGSVGElement;
     new(): SVGSVGElement;
-    readonly SVG_ZOOMANDPAN_DISABLE: number;
-    readonly SVG_ZOOMANDPAN_MAGNIFY: number;
-    readonly SVG_ZOOMANDPAN_UNKNOWN: number;
 };
 
 /** Corresponds to the SVG <script> element. */
@@ -14500,6 +13194,18 @@ interface SVGScriptElement extends SVGElement, SVGURIReference {
 declare var SVGScriptElement: {
     prototype: SVGScriptElement;
     new(): SVGScriptElement;
+};
+
+interface SVGSetElement extends SVGAnimationElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGSetElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGSetElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SVGSetElement: {
+    prototype: SVGSetElement;
+    new(): SVGSetElement;
 };
 
 /** Corresponds to the <stop> element. */
@@ -14540,6 +13246,7 @@ interface SVGStyleElement extends SVGElement, LinkStyle {
     disabled: boolean;
     media: string;
     title: string;
+    /** @deprecated */
     type: string;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGStyleElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -14608,6 +13315,7 @@ interface SVGTextContentElement extends SVGGraphicsElement {
     getRotationOfChar(charnum: number): number;
     getStartPositionOfChar(charnum: number): DOMPoint;
     getSubStringLength(charnum: number, nchars: number): number;
+    /** @deprecated */
     selectSubString(charnum: number, nchars: number): void;
     readonly LENGTHADJUST_SPACING: number;
     readonly LENGTHADJUST_SPACINGANDGLYPHS: number;
@@ -14701,9 +13409,9 @@ declare var SVGTitleElement: {
 /** SVGTransform is the interface for one of the component transformations within an SVGTransformList; thus, an SVGTransform object corresponds to a single component (e.g., scale(…) or matrix(…)) within a transform attribute. */
 interface SVGTransform {
     readonly angle: number;
-    readonly matrix: SVGMatrix;
+    readonly matrix: DOMMatrix;
     readonly type: number;
-    setMatrix(matrix: SVGMatrix): void;
+    setMatrix(matrix?: DOMMatrix2DInit): void;
     setRotate(angle: number, cx: number, cy: number): void;
     setScale(sx: number, sy: number): void;
     setSkewX(angle: number): void;
@@ -14732,16 +13440,18 @@ declare var SVGTransform: {
 
 /** The SVGTransformList defines a list of SVGTransform objects. */
 interface SVGTransformList {
+    readonly length: number;
     readonly numberOfItems: number;
     appendItem(newItem: SVGTransform): SVGTransform;
     clear(): void;
-    consolidate(): SVGTransform;
-    createSVGTransformFromMatrix(matrix: SVGMatrix): SVGTransform;
+    consolidate(): SVGTransform | null;
+    createSVGTransformFromMatrix(matrix?: DOMMatrix2DInit): SVGTransform;
     getItem(index: number): SVGTransform;
     initialize(newItem: SVGTransform): SVGTransform;
     insertItemBefore(newItem: SVGTransform, index: number): SVGTransform;
     removeItem(index: number): SVGTransform;
     replaceItem(newItem: SVGTransform, index: number): SVGTransform;
+    [index: number]: SVGTransform;
 }
 
 declare var SVGTransformList: {
@@ -14770,9 +13480,7 @@ declare var SVGUnitTypes: {
 
 /** Corresponds to the <use> element. */
 interface SVGUseElement extends SVGGraphicsElement, SVGURIReference {
-    readonly animatedInstanceRoot: SVGElementInstance | null;
     readonly height: SVGAnimatedLength;
-    readonly instanceRoot: SVGElementInstance | null;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
@@ -14788,9 +13496,7 @@ declare var SVGUseElement: {
 };
 
 /** Provides access to the properties of <view> elements, as well as methods to manipulate them. */
-interface SVGViewElement extends SVGElement, SVGFitToViewBox, SVGZoomAndPan {
-    /** @deprecated */
-    readonly viewTarget: SVGStringList;
+interface SVGViewElement extends SVGElement, SVGFitToViewBox {
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGViewElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGViewElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -14800,53 +13506,6 @@ interface SVGViewElement extends SVGElement, SVGFitToViewBox, SVGZoomAndPan {
 declare var SVGViewElement: {
     prototype: SVGViewElement;
     new(): SVGViewElement;
-    readonly SVG_ZOOMANDPAN_DISABLE: number;
-    readonly SVG_ZOOMANDPAN_MAGNIFY: number;
-    readonly SVG_ZOOMANDPAN_UNKNOWN: number;
-};
-
-/** Used to reflect the zoomAndPan attribute, and is mixed in to other interfaces for elements that support this attribute. */
-interface SVGZoomAndPan {
-    readonly zoomAndPan: number;
-}
-
-declare var SVGZoomAndPan: {
-    readonly SVG_ZOOMANDPAN_DISABLE: number;
-    readonly SVG_ZOOMANDPAN_MAGNIFY: number;
-    readonly SVG_ZOOMANDPAN_UNKNOWN: number;
-};
-
-interface SVGZoomEvent extends UIEvent {
-    readonly newScale: number;
-    readonly newTranslate: SVGPoint;
-    readonly previousScale: number;
-    readonly previousTranslate: SVGPoint;
-    readonly zoomRectScreen: SVGRect;
-}
-
-declare var SVGZoomEvent: {
-    prototype: SVGZoomEvent;
-    new(): SVGZoomEvent;
-};
-
-interface ScopedCredential {
-    readonly id: ArrayBuffer;
-    readonly type: ScopedCredentialType;
-}
-
-declare var ScopedCredential: {
-    prototype: ScopedCredential;
-    new(): ScopedCredential;
-};
-
-interface ScopedCredentialInfo {
-    readonly credential: ScopedCredential;
-    readonly publicKey: CryptoKey;
-}
-
-declare var ScopedCredentialInfo: {
-    prototype: ScopedCredentialInfo;
-    new(): ScopedCredentialInfo;
 };
 
 /** A screen, usually the one on which the current window is being rendered, and is obtained using window.screen. */
@@ -14890,7 +13549,8 @@ interface ScriptProcessorNodeEventMap {
     "audioprocess": AudioProcessingEvent;
 }
 
-/** Allows the generation, processing, or analyzing of audio using JavaScript.
+/**
+ * Allows the generation, processing, or analyzing of audio using JavaScript.
  * @deprecated As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and was replaced by AudioWorklet (see AudioWorkletNode).
  */
 interface ScriptProcessorNode extends AudioNode {
@@ -14904,6 +13564,7 @@ interface ScriptProcessorNode extends AudioNode {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
 declare var ScriptProcessorNode: {
     prototype: ScriptProcessorNode;
     new(): ScriptProcessorNode;
@@ -14913,11 +13574,13 @@ declare var ScriptProcessorNode: {
 interface SecurityPolicyViolationEvent extends Event {
     readonly blockedURI: string;
     readonly columnNumber: number;
+    readonly disposition: SecurityPolicyViolationEventDisposition;
     readonly documentURI: string;
     readonly effectiveDirective: string;
     readonly lineNumber: number;
     readonly originalPolicy: string;
     readonly referrer: string;
+    readonly sample: string;
     readonly sourceFile: string;
     readonly statusCode: number;
     readonly violatedDirective: string;
@@ -14946,6 +13609,7 @@ interface Selection {
     empty(): void;
     extend(node: Node, offset?: number): void;
     getRangeAt(index: number): Range;
+    modify(alter?: string, direction?: string, granularity?: string): void;
     removeAllRanges(): void;
     removeRange(range: Range): void;
     selectAllChildren(node: Node): void;
@@ -14960,23 +13624,20 @@ declare var Selection: {
     toString(): string;
 };
 
-interface ServiceUIFrameContext {
-    getCachedFrameMessage(key: string): string;
-    postFrameMessage(key: string, data: string): void;
-}
-declare var ServiceUIFrameContext: ServiceUIFrameContext;
-
 interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
     "statechange": Event;
 }
 
-/** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. */
+/**
+ * This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
+ * Available only in secure contexts.
+ */
 interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
     readonly state: ServiceWorkerState;
     postMessage(message: any, transfer: Transferable[]): void;
-    postMessage(message: any, options?: PostMessageOptions): void;
+    postMessage(message: any, options?: StructuredSerializeOptions): void;
     addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -14994,14 +13655,17 @@ interface ServiceWorkerContainerEventMap {
     "messageerror": MessageEvent;
 }
 
-/** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. */
+/**
+ * The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
+ * Available only in secure contexts.
+ */
 interface ServiceWorkerContainer extends EventTarget {
     readonly controller: ServiceWorker | null;
     oncontrollerchange: ((this: ServiceWorkerContainer, ev: Event) => any) | null;
     onmessage: ((this: ServiceWorkerContainer, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: ServiceWorkerContainer, ev: MessageEvent) => any) | null;
     readonly ready: Promise<ServiceWorkerRegistration>;
-    getRegistration(clientURL?: string): Promise<ServiceWorkerRegistration | undefined>;
+    getRegistration(clientURL?: string | URL): Promise<ServiceWorkerRegistration | undefined>;
     getRegistrations(): Promise<ReadonlyArray<ServiceWorkerRegistration>>;
     register(scriptURL: string | URL, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
     startMessages(): void;
@@ -15016,27 +13680,14 @@ declare var ServiceWorkerContainer: {
     new(): ServiceWorkerContainer;
 };
 
-/** This ServiceWorker API interface contains information about an event sent to a ServiceWorkerContainer target. This extends the default message event to allow setting a ServiceWorker object as the source of a message. The event object is accessed via the handler function of a message event, when fired by a message received from a service worker.
- * @deprecated In modern browsers, this interface has been deprecated. Service worker messages will now use the MessageEvent interface, for consistency with other web messaging features.
- */
-interface ServiceWorkerMessageEvent extends Event {
-    readonly data: any;
-    readonly lastEventId: string;
-    readonly origin: string;
-    readonly ports: ReadonlyArray<MessagePort> | null;
-    readonly source: ServiceWorker | MessagePort | null;
-}
-
-declare var ServiceWorkerMessageEvent: {
-    prototype: ServiceWorkerMessageEvent;
-    new(type: string, eventInitDict?: ServiceWorkerMessageEventInit): ServiceWorkerMessageEvent;
-};
-
 interface ServiceWorkerRegistrationEventMap {
     "updatefound": Event;
 }
 
-/** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. */
+/**
+ * This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
+ * Available only in secure contexts.
+ */
 interface ServiceWorkerRegistration extends EventTarget {
     readonly active: ServiceWorker | null;
     readonly installing: ServiceWorker | null;
@@ -15044,7 +13695,6 @@ interface ServiceWorkerRegistration extends EventTarget {
     onupdatefound: ((this: ServiceWorkerRegistration, ev: Event) => any) | null;
     readonly pushManager: PushManager;
     readonly scope: string;
-    readonly sync: SyncManager;
     readonly updateViaCache: ServiceWorkerUpdateViaCache;
     readonly waiting: ServiceWorker | null;
     getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
@@ -15062,12 +13712,21 @@ declare var ServiceWorkerRegistration: {
     new(): ServiceWorkerRegistration;
 };
 
+interface ShadowRootEventMap {
+    "slotchange": Event;
+}
+
 interface ShadowRoot extends DocumentFragment, DocumentOrShadowRoot, InnerHTML {
+    readonly delegatesFocus: boolean;
     readonly host: Element;
     readonly mode: ShadowRootMode;
-    /**
-     * Throws a "NotSupportedError" DOMException if context object is a shadow root.
-     */
+    onslotchange: ((this: ShadowRoot, ev: Event) => any) | null;
+    readonly slotAssignment: SlotAssignmentMode;
+    /** Throws a "NotSupportedError" DOMException if context object is a shadow root. */
+    addEventListener<K extends keyof ShadowRootEventMap>(type: K, listener: (this: ShadowRoot, ev: ShadowRootEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof ShadowRootEventMap>(type: K, listener: (this: ShadowRoot, ev: ShadowRootEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var ShadowRoot: {
@@ -15076,9 +13735,7 @@ declare var ShadowRoot: {
 };
 
 interface SharedWorker extends EventTarget, AbstractWorker {
-    /**
-     * Returns sharedWorker's MessagePort object which can be used to communicate with the global environment.
-     */
+    /** Returns sharedWorker's MessagePort object which can be used to communicate with the global environment. */
     readonly port: MessagePort;
     addEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: SharedWorker, ev: AbstractWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -15088,7 +13745,7 @@ interface SharedWorker extends EventTarget, AbstractWorker {
 
 declare var SharedWorker: {
     prototype: SharedWorker;
-    new(scriptURL: string, options?: string | WorkerOptions): SharedWorker;
+    new(scriptURL: string | URL, options?: string | WorkerOptions): SharedWorker;
 };
 
 interface Slottable {
@@ -15118,6 +13775,7 @@ interface SourceBuffer extends EventTarget {
     readonly updating: boolean;
     abort(): void;
     appendBuffer(data: BufferSource): void;
+    changeType(type: string): void;
     remove(start: number, end: number): void;
     addEventListener<K extends keyof SourceBufferEventMap>(type: K, listener: (this: SourceBuffer, ev: SourceBufferEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -15152,74 +13810,6 @@ declare var SourceBufferList: {
     new(): SourceBufferList;
 };
 
-interface SpeechGrammar {
-    src: string;
-    weight: number;
-}
-
-declare var SpeechGrammar: {
-    prototype: SpeechGrammar;
-    new(): SpeechGrammar;
-};
-
-interface SpeechGrammarList {
-    readonly length: number;
-    addFromString(string: string, weight?: number): void;
-    addFromURI(src: string, weight?: number): void;
-    item(index: number): SpeechGrammar;
-    [index: number]: SpeechGrammar;
-}
-
-declare var SpeechGrammarList: {
-    prototype: SpeechGrammarList;
-    new(): SpeechGrammarList;
-};
-
-interface SpeechRecognitionEventMap {
-    "audioend": Event;
-    "audiostart": Event;
-    "end": Event;
-    "error": SpeechRecognitionErrorEvent;
-    "nomatch": SpeechRecognitionEvent;
-    "result": SpeechRecognitionEvent;
-    "soundend": Event;
-    "soundstart": Event;
-    "speechend": Event;
-    "speechstart": Event;
-    "start": Event;
-}
-
-interface SpeechRecognition extends EventTarget {
-    continuous: boolean;
-    grammars: SpeechGrammarList;
-    interimResults: boolean;
-    lang: string;
-    maxAlternatives: number;
-    onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onaudiostart: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onend: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null;
-    onnomatch: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
-    onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
-    onsoundend: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onsoundstart: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onspeechend: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onspeechstart: ((this: SpeechRecognition, ev: Event) => any) | null;
-    onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
-    abort(): void;
-    start(): void;
-    stop(): void;
-    addEventListener<K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var SpeechRecognition: {
-    prototype: SpeechRecognition;
-    new(): SpeechRecognition;
-};
-
 interface SpeechRecognitionAlternative {
     readonly confidence: number;
     readonly transcript: string;
@@ -15228,26 +13818,6 @@ interface SpeechRecognitionAlternative {
 declare var SpeechRecognitionAlternative: {
     prototype: SpeechRecognitionAlternative;
     new(): SpeechRecognitionAlternative;
-};
-
-interface SpeechRecognitionErrorEvent extends Event {
-    readonly error: SpeechRecognitionErrorCode;
-    readonly message: string;
-}
-
-declare var SpeechRecognitionErrorEvent: {
-    prototype: SpeechRecognitionErrorEvent;
-    new(type: string, eventInitDict: SpeechRecognitionErrorEventInit): SpeechRecognitionErrorEvent;
-};
-
-interface SpeechRecognitionEvent extends Event {
-    readonly resultIndex: number;
-    readonly results: SpeechRecognitionResultList;
-}
-
-declare var SpeechRecognitionEvent: {
-    prototype: SpeechRecognitionEvent;
-    new(type: string, eventInitDict: SpeechRecognitionEventInit): SpeechRecognitionEvent;
 };
 
 interface SpeechRecognitionResult {
@@ -15392,30 +13962,30 @@ declare var StereoPannerNode: {
 
 /** This Web Storage API interface provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items. */
 interface Storage {
-    /**
-     * Returns the number of key/value pairs currently present in the list associated with the object.
-     */
+    /** Returns the number of key/value pairs. */
     readonly length: number;
     /**
-     * Empties the list associated with the object of all key/value pairs, if there are any.
+     * Removes all key/value pairs, if there are any.
+     *
+     * Dispatches a storage event on Window objects holding an equivalent Storage object.
      */
     clear(): void;
-    /**
-     * Returns the current value associated with the given key, or null if the given key does not exist in the list associated with the object.
-     */
+    /** Returns the current value associated with the given key, or null if the given key does not exist. */
     getItem(key: string): string | null;
-    /**
-     * Returns the name of the nth key in the list, or null if n is greater than or equal to the number of key/value pairs in the object.
-     */
+    /** Returns the name of the nth key, or null if n is greater than or equal to the number of key/value pairs. */
     key(index: number): string | null;
     /**
-     * Removes the key/value pair with the given key from the list associated with the object, if a key/value pair with the given key exists.
+     * Removes the key/value pair with the given key, if a key/value pair with the given key exists.
+     *
+     * Dispatches a storage event on Window objects holding an equivalent Storage object.
      */
     removeItem(key: string): void;
     /**
      * Sets the value of the pair identified by key to value, creating a new key/value pair if none existed for key previously.
-     * 
+     *
      * Throws a "QuotaExceededError" DOMException exception if the new value couldn't be set. (Setting could fail if, e.g., the user has disabled storage for the site, or if the quota has been exceeded.)
+     *
+     * Dispatches a storage event on Window objects holding an equivalent Storage object.
      */
     setItem(key: string, value: string): void;
     [name: string]: any;
@@ -15428,26 +13998,18 @@ declare var Storage: {
 
 /** A StorageEvent is sent to a window when a storage area it has access to is changed within the context of another document. */
 interface StorageEvent extends Event {
-    /**
-     * Returns the key of the storage item being changed.
-     */
+    /** Returns the key of the storage item being changed. */
     readonly key: string | null;
-    /**
-     * Returns the new value of the key of the storage item whose value is being changed.
-     */
+    /** Returns the new value of the key of the storage item whose value is being changed. */
     readonly newValue: string | null;
-    /**
-     * Returns the old value of the key of the storage item whose value is being changed.
-     */
+    /** Returns the old value of the key of the storage item whose value is being changed. */
     readonly oldValue: string | null;
-    /**
-     * Returns the Storage object that was affected.
-     */
+    /** Returns the Storage object that was affected. */
     readonly storageArea: Storage | null;
-    /**
-     * Returns the URL of the document whose storage item changed.
-     */
+    /** Returns the URL of the document whose storage item changed. */
     readonly url: string;
+    /** @deprecated */
+    initStorageEvent(type: string, bubbles?: boolean, cancelable?: boolean, key?: string | null, oldValue?: string | null, newValue?: string | null, url?: string | URL, storageArea?: Storage | null): void;
 }
 
 declare var StorageEvent: {
@@ -15455,8 +14017,10 @@ declare var StorageEvent: {
     new(type: string, eventInitDict?: StorageEventInit): StorageEvent;
 };
 
+/** Available only in secure contexts. */
 interface StorageManager {
     estimate(): Promise<StorageEstimate>;
+    getDirectory(): Promise<FileSystemDirectoryHandle>;
     persist(): Promise<boolean>;
     persisted(): Promise<boolean>;
 }
@@ -15466,15 +14030,11 @@ declare var StorageManager: {
     new(): StorageManager;
 };
 
+/** @deprecated */
 interface StyleMedia {
-    readonly type: string;
+    type: string;
     matchMedium(mediaquery: string): boolean;
 }
-
-declare var StyleMedia: {
-    prototype: StyleMedia;
-    new(): StyleMedia;
-};
 
 /** A single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface. */
 interface StyleSheet {
@@ -15504,26 +14064,37 @@ declare var StyleSheetList: {
     new(): StyleSheetList;
 };
 
-/** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
+interface SubmitEvent extends Event {
+    /** Returns the element representing the submit button that triggered the form submission, or null if the submission was not triggered by a button. */
+    readonly submitter: HTMLElement | null;
+}
+
+declare var SubmitEvent: {
+    prototype: SubmitEvent;
+    new(type: string, eventInitDict?: SubmitEventInit): SubmitEvent;
+};
+
+/**
+ * This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
+ * Available only in secure contexts.
+ */
 interface SubtleCrypto {
-    decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
-    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length: number): Promise<ArrayBuffer>;
-    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
-    digest(algorithm: AlgorithmIdentifier, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
-    encrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
+    decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
+    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length: number): Promise<ArrayBuffer>;
+    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    digest(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<ArrayBuffer>;
+    encrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
     exportKey(format: "jwk", key: CryptoKey): Promise<JsonWebKey>;
-    exportKey(format: "raw" | "pkcs8" | "spki", key: CryptoKey): Promise<ArrayBuffer>;
-    exportKey(format: string, key: CryptoKey): Promise<JsonWebKey | ArrayBuffer>;
-    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair>;
-    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    exportKey(format: Exclude<KeyFormat, "jwk">, key: CryptoKey): Promise<ArrayBuffer>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
     generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair | CryptoKey>;
-    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
-    importKey(format: "raw" | "pkcs8" | "spki", keyData: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
-    importKey(format: string, keyData: JsonWebKey | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
-    sign(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
-    unwrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, wrappedKey: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
-    verify(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<boolean>;
-    wrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams): Promise<ArrayBuffer>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
+    importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    sign(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
+    unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    verify(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams, key: CryptoKey, signature: BufferSource, data: BufferSource): Promise<boolean>;
+    wrapKey(format: KeyFormat, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams): Promise<ArrayBuffer>;
 }
 
 declare var SubtleCrypto: {
@@ -15531,27 +14102,11 @@ declare var SubtleCrypto: {
     new(): SubtleCrypto;
 };
 
-/** This ServiceWorker API interface provides an interface for registering and listing sync registrations. */
-interface SyncManager {
-    getTags(): Promise<string[]>;
-    register(tag: string): Promise<void>;
-}
-
-declare var SyncManager: {
-    prototype: SyncManager;
-    new(): SyncManager;
-};
-
 /** The textual content of Element or Attr. If an element has no markup within its content, it has a single child implementing Text that contains the element's text. However, if the element contains markup, it is parsed into information items and Text nodes that form its children. */
 interface Text extends CharacterData, Slottable {
-    readonly assignedSlot: HTMLSlotElement | null;
-    /**
-     * Returns the combined data of all direct Text node siblings.
-     */
+    /** Returns the combined data of all direct Text node siblings. */
     readonly wholeText: string;
-    /**
-     * Splits data at the given offset and returns the remainder as Text node.
-     */
+    /** Splits data at the given offset and returns the remainder as Text node. */
     splitText(offset: number): Text;
 }
 
@@ -15564,7 +14119,7 @@ declare var Text: {
 interface TextDecoder extends TextDecoderCommon {
     /**
      * Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented input. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
-     * 
+     *
      * ```
      * var string = "", decoder = new TextDecoder(encoding), buffer;
      * while(buffer = next_chunk()) {
@@ -15572,7 +14127,7 @@ interface TextDecoder extends TextDecoderCommon {
      * }
      * string += decoder.decode(); // end-of-queue
      * ```
-     * 
+     *
      * If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
      */
     decode(input?: BufferSource, options?: TextDecodeOptions): string;
@@ -15584,17 +14139,11 @@ declare var TextDecoder: {
 };
 
 interface TextDecoderCommon {
-    /**
-     * Returns encoding's name, lowercased.
-     */
+    /** Returns encoding's name, lowercased. */
     readonly encoding: string;
-    /**
-     * Returns true if error mode is "fatal", otherwise false.
-     */
+    /** Returns true if error mode is "fatal", otherwise false. */
     readonly fatal: boolean;
-    /**
-     * Returns the value of ignore BOM.
-     */
+    /** Returns the value of ignore BOM. */
     readonly ignoreBOM: boolean;
 }
 
@@ -15610,13 +14159,9 @@ declare var TextDecoderStream: {
 
 /** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
 interface TextEncoder extends TextEncoderCommon {
-    /**
-     * Returns the result of running UTF-8's encoder.
-     */
+    /** Returns the result of running UTF-8's encoder. */
     encode(input?: string): Uint8Array;
-    /**
-     * Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as an object wherein read is the number of converted code units of source and written is the number of bytes modified in destination.
-     */
+    /** Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as an object wherein read is the number of converted code units of source and written is the number of bytes modified in destination. */
     encodeInto(source: string, destination: Uint8Array): TextEncoderEncodeIntoResult;
 }
 
@@ -15626,9 +14171,7 @@ declare var TextEncoder: {
 };
 
 interface TextEncoderCommon {
-    /**
-     * Returns "utf-8".
-     */
+    /** Returns "utf-8". */
     readonly encoding: string;
 }
 
@@ -15642,85 +14185,21 @@ declare var TextEncoderStream: {
     new(): TextEncoderStream;
 };
 
-interface TextEvent extends UIEvent {
-    readonly data: string;
-    initTextEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, dataArg: string, inputMethod: number, locale: string): void;
-    readonly DOM_INPUT_METHOD_DROP: number;
-    readonly DOM_INPUT_METHOD_HANDWRITING: number;
-    readonly DOM_INPUT_METHOD_IME: number;
-    readonly DOM_INPUT_METHOD_KEYBOARD: number;
-    readonly DOM_INPUT_METHOD_MULTIMODAL: number;
-    readonly DOM_INPUT_METHOD_OPTION: number;
-    readonly DOM_INPUT_METHOD_PASTE: number;
-    readonly DOM_INPUT_METHOD_SCRIPT: number;
-    readonly DOM_INPUT_METHOD_UNKNOWN: number;
-    readonly DOM_INPUT_METHOD_VOICE: number;
-}
-
-declare var TextEvent: {
-    prototype: TextEvent;
-    new(): TextEvent;
-    readonly DOM_INPUT_METHOD_DROP: number;
-    readonly DOM_INPUT_METHOD_HANDWRITING: number;
-    readonly DOM_INPUT_METHOD_IME: number;
-    readonly DOM_INPUT_METHOD_KEYBOARD: number;
-    readonly DOM_INPUT_METHOD_MULTIMODAL: number;
-    readonly DOM_INPUT_METHOD_OPTION: number;
-    readonly DOM_INPUT_METHOD_PASTE: number;
-    readonly DOM_INPUT_METHOD_SCRIPT: number;
-    readonly DOM_INPUT_METHOD_UNKNOWN: number;
-    readonly DOM_INPUT_METHOD_VOICE: number;
-};
-
 /** The dimensions of a piece of text in the canvas, as created by the CanvasRenderingContext2D.measureText() method. */
 interface TextMetrics {
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly actualBoundingBoxAscent: number;
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly actualBoundingBoxDescent: number;
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly actualBoundingBoxLeft: number;
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly actualBoundingBoxRight: number;
-    /**
-     * Returns the measurement described below.
-     */
-    readonly alphabeticBaseline: number;
-    /**
-     * Returns the measurement described below.
-     */
-    readonly emHeightAscent: number;
-    /**
-     * Returns the measurement described below.
-     */
-    readonly emHeightDescent: number;
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly fontBoundingBoxAscent: number;
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly fontBoundingBoxDescent: number;
-    /**
-     * Returns the measurement described below.
-     */
-    readonly hangingBaseline: number;
-    /**
-     * Returns the measurement described below.
-     */
-    readonly ideographicBaseline: number;
-    /**
-     * Returns the measurement described below.
-     */
+    /** Returns the measurement described below. */
     readonly width: number;
 }
 
@@ -15735,53 +14214,36 @@ interface TextTrackEventMap {
 
 /** This interface also inherits properties from EventTarget. */
 interface TextTrack extends EventTarget {
-    /**
-     * Returns the text track cues from the text track list of cues that are currently active (i.e. that start before the current playback position and end after it), as a TextTrackCueList object.
-     */
+    /** Returns the text track cues from the text track list of cues that are currently active (i.e. that start before the current playback position and end after it), as a TextTrackCueList object. */
     readonly activeCues: TextTrackCueList | null;
-    /**
-     * Returns the text track list of cues, as a TextTrackCueList object.
-     */
+    /** Returns the text track list of cues, as a TextTrackCueList object. */
     readonly cues: TextTrackCueList | null;
     /**
      * Returns the ID of the given track.
-     * 
+     *
      * For in-band tracks, this is the ID that can be used with a fragment if the format supports media fragment syntax, and that can be used with the getTrackById() method.
-     * 
+     *
      * For TextTrack objects corresponding to track elements, this is the ID of the track element.
      */
     readonly id: string;
-    /**
-     * Returns the text track in-band metadata track dispatch type string.
-     */
+    /** Returns the text track in-band metadata track dispatch type string. */
     readonly inBandMetadataTrackDispatchType: string;
-    /**
-     * Returns the text track kind string.
-     */
+    /** Returns the text track kind string. */
     readonly kind: TextTrackKind;
-    /**
-     * Returns the text track label, if there is one, or the empty string otherwise (indicating that a custom label probably needs to be generated from the other attributes of the object if the object is exposed to the user).
-     */
+    /** Returns the text track label, if there is one, or the empty string otherwise (indicating that a custom label probably needs to be generated from the other attributes of the object if the object is exposed to the user). */
     readonly label: string;
-    /**
-     * Returns the text track language string.
-     */
+    /** Returns the text track language string. */
     readonly language: string;
     /**
      * Returns the text track mode, represented by a string from the following list:
-     * 
+     *
      * Can be set, to change the mode.
      */
     mode: TextTrackMode;
     oncuechange: ((this: TextTrack, ev: Event) => any) | null;
-    readonly sourceBuffer: SourceBuffer | null;
-    /**
-     * Adds the given cue to textTrack's text track list of cues.
-     */
+    /** Adds the given cue to textTrack's text track list of cues. */
     addCue(cue: TextTrackCue): void;
-    /**
-     * Removes the given cue from textTrack's text track list of cues.
-     */
+    /** Removes the given cue from textTrack's text track list of cues. */
     removeCue(cue: TextTrackCue): void;
     addEventListener<K extends keyof TextTrackEventMap>(type: K, listener: (this: TextTrack, ev: TextTrackEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -15803,13 +14265,13 @@ interface TextTrackCueEventMap {
 interface TextTrackCue extends EventTarget {
     /**
      * Returns the text track cue end time, in seconds.
-     * 
+     *
      * Can be set.
      */
     endTime: number;
     /**
      * Returns the text track cue identifier.
-     * 
+     *
      * Can be set.
      */
     id: string;
@@ -15817,19 +14279,17 @@ interface TextTrackCue extends EventTarget {
     onexit: ((this: TextTrackCue, ev: Event) => any) | null;
     /**
      * Returns true if the text track cue pause-on-exit flag is set, false otherwise.
-     * 
+     *
      * Can be set.
      */
     pauseOnExit: boolean;
     /**
      * Returns the text track cue start time, in seconds.
-     * 
+     *
      * Can be set.
      */
     startTime: number;
-    /**
-     * Returns the TextTrack object to which this text track cue belongs, if any, or null otherwise.
-     */
+    /** Returns the TextTrack object to which this text track cue belongs, if any, or null otherwise. */
     readonly track: TextTrack | null;
     addEventListener<K extends keyof TextTrackCueEventMap>(type: K, listener: (this: TextTrackCue, ev: TextTrackCueEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -15843,13 +14303,11 @@ declare var TextTrackCue: {
 };
 
 interface TextTrackCueList {
-    /**
-     * Returns the number of cues in the list.
-     */
+    /** Returns the number of cues in the list. */
     readonly length: number;
     /**
      * Returns the first text track cue (in text track cue order) with text track cue identifier id.
-     * 
+     *
      * Returns null if none of the cues have the given identifier or if the argument is the empty string.
      */
     getCueById(id: string): TextTrackCue | null;
@@ -15887,19 +14345,17 @@ declare var TextTrackList: {
 
 /** Used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements. */
 interface TimeRanges {
-    /**
-     * Returns the number of ranges in the object.
-     */
+    /** Returns the number of ranges in the object. */
     readonly length: number;
     /**
      * Returns the time for the end of the range with the given index.
-     * 
+     *
      * Throws an "IndexSizeError" DOMException if the index is out of range.
      */
     end(index: number): number;
     /**
      * Returns the time for the start of the range with the given index.
-     * 
+     *
      * Throws an "IndexSizeError" DOMException if the index is out of range.
      */
     start(index: number): number;
@@ -15912,8 +14368,6 @@ declare var TimeRanges: {
 
 /** A single contact point on a touch-sensitive device. The contact point is commonly a finger or stylus and the device may be a touchscreen or trackpad. */
 interface Touch {
-    readonly altitudeAngle: number;
-    readonly azimuthAngle: number;
     readonly clientX: number;
     readonly clientY: number;
     readonly force: number;
@@ -15926,7 +14380,6 @@ interface Touch {
     readonly screenX: number;
     readonly screenY: number;
     readonly target: EventTarget;
-    readonly touchType: TouchType;
 }
 
 declare var Touch: {
@@ -15964,9 +14417,7 @@ declare var TouchList: {
 
 /** The TrackEvent interface, part of the HTML DOM specification, is used for events which represent changes to the set of available tracks on an HTML media element; these events are addtrack and removetrack. */
 interface TrackEvent extends Event {
-    /**
-     * Returns the track object (TextTrack, AudioTrack, or VideoTrack) to which the event relates.
-     */
+    /** Returns the track object (TextTrack, AudioTrack, or VideoTrack) to which the event relates. */
     readonly track: TextTrack | null;
 }
 
@@ -15987,7 +14438,7 @@ declare var TransformStream: {
 
 interface TransformStreamDefaultController<O = any> {
     readonly desiredSize: number | null;
-    enqueue(chunk: O): void;
+    enqueue(chunk?: O): void;
     error(reason?: any): void;
     terminate(): void;
 }
@@ -16035,6 +14486,8 @@ interface UIEvent extends Event {
     readonly view: Window | null;
     /** @deprecated */
     readonly which: number;
+    /** @deprecated */
+    initUIEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, viewArg?: Window | null, detailArg?: number): void;
 }
 
 declare var UIEvent: {
@@ -16062,8 +14515,8 @@ interface URL {
 
 declare var URL: {
     prototype: URL;
-    new(url: string, base?: string | URL): URL;
-    createObjectURL(object: any): string;
+    new(url: string | URL, base?: string | URL): URL;
+    createObjectURL(obj: Blob | MediaSource): string;
     revokeObjectURL(url: string): void;
 };
 
@@ -16071,34 +14524,20 @@ type webkitURL = URL;
 declare var webkitURL: typeof URL;
 
 interface URLSearchParams {
-    /**
-     * Appends a specified key/value pair as a new search parameter.
-     */
+    /** Appends a specified key/value pair as a new search parameter. */
     append(name: string, value: string): void;
-    /**
-     * Deletes the given search parameter, and its associated value, from the list of all search parameters.
-     */
+    /** Deletes the given search parameter, and its associated value, from the list of all search parameters. */
     delete(name: string): void;
-    /**
-     * Returns the first value associated to the given search parameter.
-     */
+    /** Returns the first value associated to the given search parameter. */
     get(name: string): string | null;
-    /**
-     * Returns all the values association with a given search parameter.
-     */
+    /** Returns all the values association with a given search parameter. */
     getAll(name: string): string[];
-    /**
-     * Returns a Boolean indicating if such a search parameter exists.
-     */
+    /** Returns a Boolean indicating if such a search parameter exists. */
     has(name: string): boolean;
-    /**
-     * Sets the value associated to a given search parameter to the given value. If there were several values, delete the others.
-     */
+    /** Sets the value associated to a given search parameter to the given value. If there were several values, delete the others. */
     set(name: string, value: string): void;
     sort(): void;
-    /**
-     * Returns a string containing a query string suitable for use in a URL. Does not include the question mark.
-     */
+    /** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. */
     toString(): string;
     forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
 }
@@ -16107,117 +14546,6 @@ declare var URLSearchParams: {
     prototype: URLSearchParams;
     new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
     toString(): string;
-};
-
-/** This WebVR API interface represents any VR device supported by this API. It includes generic information such as device IDs and descriptions, as well as methods for starting to present a VR scene, retrieving eye parameters and display capabilities, and other important functionality. */
-interface VRDisplay extends EventTarget {
-    readonly capabilities: VRDisplayCapabilities;
-    depthFar: number;
-    depthNear: number;
-    readonly displayId: number;
-    readonly displayName: string;
-    readonly isConnected: boolean;
-    readonly isPresenting: boolean;
-    readonly stageParameters: VRStageParameters | null;
-    cancelAnimationFrame(handle: number): void;
-    exitPresent(): Promise<void>;
-    getEyeParameters(whichEye: string): VREyeParameters;
-    getFrameData(frameData: VRFrameData): boolean;
-    getLayers(): VRLayer[];
-    /** @deprecated */
-    getPose(): VRPose;
-    requestAnimationFrame(callback: FrameRequestCallback): number;
-    requestPresent(layers: VRLayer[]): Promise<void>;
-    resetPose(): void;
-    submitFrame(pose?: VRPose): void;
-}
-
-declare var VRDisplay: {
-    prototype: VRDisplay;
-    new(): VRDisplay;
-};
-
-/** This WebVR API interface describes the capabilities of a VRDisplay — its features can be used to perform VR device capability tests, for example can it return position information. */
-interface VRDisplayCapabilities {
-    readonly canPresent: boolean;
-    readonly hasExternalDisplay: boolean;
-    readonly hasOrientation: boolean;
-    readonly hasPosition: boolean;
-    readonly maxLayers: number;
-}
-
-declare var VRDisplayCapabilities: {
-    prototype: VRDisplayCapabilities;
-    new(): VRDisplayCapabilities;
-};
-
-/** This WebVR API interface represents represents the event object of WebVR-related events (see the list of WebVR window extensions). */
-interface VRDisplayEvent extends Event {
-    readonly display: VRDisplay;
-    readonly reason: VRDisplayEventReason | null;
-}
-
-declare var VRDisplayEvent: {
-    prototype: VRDisplayEvent;
-    new(type: string, eventInitDict: VRDisplayEventInit): VRDisplayEvent;
-};
-
-/** This WebVR API interface represents all the information required to correctly render a scene for a given eye, including field of view information. */
-interface VREyeParameters {
-    /** @deprecated */
-    readonly fieldOfView: VRFieldOfView;
-    readonly offset: Float32Array;
-    readonly renderHeight: number;
-    readonly renderWidth: number;
-}
-
-declare var VREyeParameters: {
-    prototype: VREyeParameters;
-    new(): VREyeParameters;
-};
-
-/** This WebVR API interface represents a field of view defined by 4 different degree values describing the view from a center point. */
-interface VRFieldOfView {
-    readonly downDegrees: number;
-    readonly leftDegrees: number;
-    readonly rightDegrees: number;
-    readonly upDegrees: number;
-}
-
-declare var VRFieldOfView: {
-    prototype: VRFieldOfView;
-    new(): VRFieldOfView;
-};
-
-/** This WebVR API interface represents all the information needed to render a single frame of a VR scene; constructed by VRDisplay.getFrameData(). */
-interface VRFrameData {
-    readonly leftProjectionMatrix: Float32Array;
-    readonly leftViewMatrix: Float32Array;
-    readonly pose: VRPose;
-    readonly rightProjectionMatrix: Float32Array;
-    readonly rightViewMatrix: Float32Array;
-    readonly timestamp: number;
-}
-
-declare var VRFrameData: {
-    prototype: VRFrameData;
-    new(): VRFrameData;
-};
-
-/** This WebVR API interface represents the state of a VR sensor at a given timestamp (which includes orientation, position, velocity, and acceleration information.) */
-interface VRPose {
-    readonly angularAcceleration: Float32Array | null;
-    readonly angularVelocity: Float32Array | null;
-    readonly linearAcceleration: Float32Array | null;
-    readonly linearVelocity: Float32Array | null;
-    readonly orientation: Float32Array | null;
-    readonly position: Float32Array | null;
-    readonly timestamp: number;
-}
-
-declare var VRPose: {
-    prototype: VRPose;
-    new(): VRPose;
 };
 
 interface VTTCue extends TextTrackCue {
@@ -16279,9 +14607,24 @@ declare var ValidityState: {
     new(): ValidityState;
 };
 
+interface VideoColorSpace {
+    readonly fullRange: boolean | null;
+    readonly matrix: VideoMatrixCoefficients | null;
+    readonly primaries: VideoColorPrimaries | null;
+    readonly transfer: VideoTransferCharacteristics | null;
+    toJSON(): VideoColorSpaceInit;
+}
+
+declare var VideoColorSpace: {
+    prototype: VideoColorSpace;
+    new(init?: VideoColorSpaceInit): VideoColorSpace;
+};
+
 /** Returned by the HTMLVideoElement.getVideoPlaybackQuality() method and contains metrics that can be used to determine the playback quality of a video. */
 interface VideoPlaybackQuality {
-    readonly creationTime: number;
+    /** @deprecated */
+    readonly corruptedVideoFrames: number;
+    readonly creationTime: DOMHighResTimeStamp;
     readonly droppedVideoFrames: number;
     readonly totalVideoFrames: number;
 }
@@ -16292,7 +14635,7 @@ declare var VideoPlaybackQuality: {
 };
 
 interface VisualViewportEventMap {
-    "resize": UIEvent;
+    "resize": Event;
     "scroll": Event;
 }
 
@@ -16300,7 +14643,7 @@ interface VisualViewport extends EventTarget {
     readonly height: number;
     readonly offsetLeft: number;
     readonly offsetTop: number;
-    onresize: ((this: VisualViewport, ev: UIEvent) => any) | null;
+    onresize: ((this: VisualViewport, ev: Event) => any) | null;
     onscroll: ((this: VisualViewport, ev: Event) => any) | null;
     readonly pageLeft: number;
     readonly pageTop: number;
@@ -16353,6 +14696,23 @@ interface WEBGL_compressed_texture_astc {
     readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR: GLenum;
     readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR: GLenum;
     readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR: GLenum;
+}
+
+interface WEBGL_compressed_texture_etc {
+    readonly COMPRESSED_R11_EAC: GLenum;
+    readonly COMPRESSED_RG11_EAC: GLenum;
+    readonly COMPRESSED_RGB8_ETC2: GLenum;
+    readonly COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum;
+    readonly COMPRESSED_RGBA8_ETC2_EAC: GLenum;
+    readonly COMPRESSED_SIGNED_R11_EAC: GLenum;
+    readonly COMPRESSED_SIGNED_RG11_EAC: GLenum;
+    readonly COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: GLenum;
+    readonly COMPRESSED_SRGB8_ETC2: GLenum;
+    readonly COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum;
+}
+
+interface WEBGL_compressed_texture_etc1 {
+    readonly COMPRESSED_RGB_ETC1_WEBGL: GLenum;
 }
 
 /** The WEBGL_compressed_texture_s3tc extension is part of the WebGL API and exposes four S3TC compressed texture formats. */
@@ -16428,6 +14788,13 @@ interface WEBGL_lose_context {
     restoreContext(): void;
 }
 
+interface WEBGL_multi_draw {
+    multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | GLint[], firstsOffset: GLuint, countsList: Int32Array | GLsizei[], countsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | GLint[], firstsOffset: GLuint, countsList: Int32Array | GLsizei[], countsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | GLsizei[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | GLsizei[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, drawcount: GLsizei): void;
+}
+
 /** A WaveShaperNode always has exactly one input and one output. */
 interface WaveShaperNode extends AudioNode {
     curve: Float32Array | null;
@@ -16439,34 +14806,275 @@ declare var WaveShaperNode: {
     new(context: BaseAudioContext, options?: WaveShaperOptions): WaveShaperNode;
 };
 
-interface WebAuthentication {
-    getAssertion(assertionChallenge: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null, options?: AssertionOptions): Promise<WebAuthnAssertion>;
-    makeCredential(accountInformation: Account, cryptoParameters: ScopedCredentialParameters[], attestationChallenge: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null, options?: ScopedCredentialOptions): Promise<ScopedCredentialInfo>;
-}
-
-declare var WebAuthentication: {
-    prototype: WebAuthentication;
-    new(): WebAuthentication;
-};
-
-interface WebAuthnAssertion {
-    readonly authenticatorData: ArrayBuffer;
-    readonly clientData: ArrayBuffer;
-    readonly credential: ScopedCredential;
-    readonly signature: ArrayBuffer;
-}
-
-declare var WebAuthnAssertion: {
-    prototype: WebAuthnAssertion;
-    new(): WebAuthnAssertion;
-};
-
 interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {
 }
 
 declare var WebGL2RenderingContext: {
     prototype: WebGL2RenderingContext;
     new(): WebGL2RenderingContext;
+    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
+    readonly ALREADY_SIGNALED: GLenum;
+    readonly ANY_SAMPLES_PASSED: GLenum;
+    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
+    readonly COLOR: GLenum;
+    readonly COLOR_ATTACHMENT1: GLenum;
+    readonly COLOR_ATTACHMENT10: GLenum;
+    readonly COLOR_ATTACHMENT11: GLenum;
+    readonly COLOR_ATTACHMENT12: GLenum;
+    readonly COLOR_ATTACHMENT13: GLenum;
+    readonly COLOR_ATTACHMENT14: GLenum;
+    readonly COLOR_ATTACHMENT15: GLenum;
+    readonly COLOR_ATTACHMENT2: GLenum;
+    readonly COLOR_ATTACHMENT3: GLenum;
+    readonly COLOR_ATTACHMENT4: GLenum;
+    readonly COLOR_ATTACHMENT5: GLenum;
+    readonly COLOR_ATTACHMENT6: GLenum;
+    readonly COLOR_ATTACHMENT7: GLenum;
+    readonly COLOR_ATTACHMENT8: GLenum;
+    readonly COLOR_ATTACHMENT9: GLenum;
+    readonly COMPARE_REF_TO_TEXTURE: GLenum;
+    readonly CONDITION_SATISFIED: GLenum;
+    readonly COPY_READ_BUFFER: GLenum;
+    readonly COPY_READ_BUFFER_BINDING: GLenum;
+    readonly COPY_WRITE_BUFFER: GLenum;
+    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
+    readonly CURRENT_QUERY: GLenum;
+    readonly DEPTH: GLenum;
+    readonly DEPTH24_STENCIL8: GLenum;
+    readonly DEPTH32F_STENCIL8: GLenum;
+    readonly DEPTH_COMPONENT24: GLenum;
+    readonly DEPTH_COMPONENT32F: GLenum;
+    readonly DRAW_BUFFER0: GLenum;
+    readonly DRAW_BUFFER1: GLenum;
+    readonly DRAW_BUFFER10: GLenum;
+    readonly DRAW_BUFFER11: GLenum;
+    readonly DRAW_BUFFER12: GLenum;
+    readonly DRAW_BUFFER13: GLenum;
+    readonly DRAW_BUFFER14: GLenum;
+    readonly DRAW_BUFFER15: GLenum;
+    readonly DRAW_BUFFER2: GLenum;
+    readonly DRAW_BUFFER3: GLenum;
+    readonly DRAW_BUFFER4: GLenum;
+    readonly DRAW_BUFFER5: GLenum;
+    readonly DRAW_BUFFER6: GLenum;
+    readonly DRAW_BUFFER7: GLenum;
+    readonly DRAW_BUFFER8: GLenum;
+    readonly DRAW_BUFFER9: GLenum;
+    readonly DRAW_FRAMEBUFFER: GLenum;
+    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
+    readonly DYNAMIC_COPY: GLenum;
+    readonly DYNAMIC_READ: GLenum;
+    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
+    readonly FLOAT_MAT2x3: GLenum;
+    readonly FLOAT_MAT2x4: GLenum;
+    readonly FLOAT_MAT3x2: GLenum;
+    readonly FLOAT_MAT3x4: GLenum;
+    readonly FLOAT_MAT4x2: GLenum;
+    readonly FLOAT_MAT4x3: GLenum;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
+    readonly FRAMEBUFFER_DEFAULT: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
+    readonly HALF_FLOAT: GLenum;
+    readonly INTERLEAVED_ATTRIBS: GLenum;
+    readonly INT_2_10_10_10_REV: GLenum;
+    readonly INT_SAMPLER_2D: GLenum;
+    readonly INT_SAMPLER_2D_ARRAY: GLenum;
+    readonly INT_SAMPLER_3D: GLenum;
+    readonly INT_SAMPLER_CUBE: GLenum;
+    readonly INVALID_INDEX: GLenum;
+    readonly MAX: GLenum;
+    readonly MAX_3D_TEXTURE_SIZE: GLenum;
+    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
+    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
+    readonly MAX_COLOR_ATTACHMENTS: GLenum;
+    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_DRAW_BUFFERS: GLenum;
+    readonly MAX_ELEMENTS_INDICES: GLenum;
+    readonly MAX_ELEMENTS_VERTICES: GLenum;
+    readonly MAX_ELEMENT_INDEX: GLenum;
+    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
+    readonly MAX_SAMPLES: GLenum;
+    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
+    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
+    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
+    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
+    readonly MAX_VARYING_COMPONENTS: GLenum;
+    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    readonly MIN: GLenum;
+    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
+    readonly OBJECT_TYPE: GLenum;
+    readonly PACK_ROW_LENGTH: GLenum;
+    readonly PACK_SKIP_PIXELS: GLenum;
+    readonly PACK_SKIP_ROWS: GLenum;
+    readonly PIXEL_PACK_BUFFER: GLenum;
+    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
+    readonly PIXEL_UNPACK_BUFFER: GLenum;
+    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
+    readonly QUERY_RESULT: GLenum;
+    readonly QUERY_RESULT_AVAILABLE: GLenum;
+    readonly R11F_G11F_B10F: GLenum;
+    readonly R16F: GLenum;
+    readonly R16I: GLenum;
+    readonly R16UI: GLenum;
+    readonly R32F: GLenum;
+    readonly R32I: GLenum;
+    readonly R32UI: GLenum;
+    readonly R8: GLenum;
+    readonly R8I: GLenum;
+    readonly R8UI: GLenum;
+    readonly R8_SNORM: GLenum;
+    readonly RASTERIZER_DISCARD: GLenum;
+    readonly READ_BUFFER: GLenum;
+    readonly READ_FRAMEBUFFER: GLenum;
+    readonly READ_FRAMEBUFFER_BINDING: GLenum;
+    readonly RED: GLenum;
+    readonly RED_INTEGER: GLenum;
+    readonly RENDERBUFFER_SAMPLES: GLenum;
+    readonly RG: GLenum;
+    readonly RG16F: GLenum;
+    readonly RG16I: GLenum;
+    readonly RG16UI: GLenum;
+    readonly RG32F: GLenum;
+    readonly RG32I: GLenum;
+    readonly RG32UI: GLenum;
+    readonly RG8: GLenum;
+    readonly RG8I: GLenum;
+    readonly RG8UI: GLenum;
+    readonly RG8_SNORM: GLenum;
+    readonly RGB10_A2: GLenum;
+    readonly RGB10_A2UI: GLenum;
+    readonly RGB16F: GLenum;
+    readonly RGB16I: GLenum;
+    readonly RGB16UI: GLenum;
+    readonly RGB32F: GLenum;
+    readonly RGB32I: GLenum;
+    readonly RGB32UI: GLenum;
+    readonly RGB8: GLenum;
+    readonly RGB8I: GLenum;
+    readonly RGB8UI: GLenum;
+    readonly RGB8_SNORM: GLenum;
+    readonly RGB9_E5: GLenum;
+    readonly RGBA16F: GLenum;
+    readonly RGBA16I: GLenum;
+    readonly RGBA16UI: GLenum;
+    readonly RGBA32F: GLenum;
+    readonly RGBA32I: GLenum;
+    readonly RGBA32UI: GLenum;
+    readonly RGBA8: GLenum;
+    readonly RGBA8I: GLenum;
+    readonly RGBA8UI: GLenum;
+    readonly RGBA8_SNORM: GLenum;
+    readonly RGBA_INTEGER: GLenum;
+    readonly RGB_INTEGER: GLenum;
+    readonly RG_INTEGER: GLenum;
+    readonly SAMPLER_2D_ARRAY: GLenum;
+    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
+    readonly SAMPLER_2D_SHADOW: GLenum;
+    readonly SAMPLER_3D: GLenum;
+    readonly SAMPLER_BINDING: GLenum;
+    readonly SAMPLER_CUBE_SHADOW: GLenum;
+    readonly SEPARATE_ATTRIBS: GLenum;
+    readonly SIGNALED: GLenum;
+    readonly SIGNED_NORMALIZED: GLenum;
+    readonly SRGB: GLenum;
+    readonly SRGB8: GLenum;
+    readonly SRGB8_ALPHA8: GLenum;
+    readonly STATIC_COPY: GLenum;
+    readonly STATIC_READ: GLenum;
+    readonly STENCIL: GLenum;
+    readonly STREAM_COPY: GLenum;
+    readonly STREAM_READ: GLenum;
+    readonly SYNC_CONDITION: GLenum;
+    readonly SYNC_FENCE: GLenum;
+    readonly SYNC_FLAGS: GLenum;
+    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
+    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
+    readonly SYNC_STATUS: GLenum;
+    readonly TEXTURE_2D_ARRAY: GLenum;
+    readonly TEXTURE_3D: GLenum;
+    readonly TEXTURE_BASE_LEVEL: GLenum;
+    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
+    readonly TEXTURE_BINDING_3D: GLenum;
+    readonly TEXTURE_COMPARE_FUNC: GLenum;
+    readonly TEXTURE_COMPARE_MODE: GLenum;
+    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
+    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
+    readonly TEXTURE_MAX_LEVEL: GLenum;
+    readonly TEXTURE_MAX_LOD: GLenum;
+    readonly TEXTURE_MIN_LOD: GLenum;
+    readonly TEXTURE_WRAP_R: GLenum;
+    readonly TIMEOUT_EXPIRED: GLenum;
+    readonly TIMEOUT_IGNORED: GLint64;
+    readonly TRANSFORM_FEEDBACK: GLenum;
+    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
+    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
+    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
+    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
+    readonly UNIFORM_ARRAY_STRIDE: GLenum;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
+    readonly UNIFORM_BLOCK_BINDING: GLenum;
+    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
+    readonly UNIFORM_BLOCK_INDEX: GLenum;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
+    readonly UNIFORM_BUFFER: GLenum;
+    readonly UNIFORM_BUFFER_BINDING: GLenum;
+    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
+    readonly UNIFORM_BUFFER_SIZE: GLenum;
+    readonly UNIFORM_BUFFER_START: GLenum;
+    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
+    readonly UNIFORM_MATRIX_STRIDE: GLenum;
+    readonly UNIFORM_OFFSET: GLenum;
+    readonly UNIFORM_SIZE: GLenum;
+    readonly UNIFORM_TYPE: GLenum;
+    readonly UNPACK_IMAGE_HEIGHT: GLenum;
+    readonly UNPACK_ROW_LENGTH: GLenum;
+    readonly UNPACK_SKIP_IMAGES: GLenum;
+    readonly UNPACK_SKIP_PIXELS: GLenum;
+    readonly UNPACK_SKIP_ROWS: GLenum;
+    readonly UNSIGNALED: GLenum;
+    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
+    readonly UNSIGNED_INT_24_8: GLenum;
+    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
+    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
+    readonly UNSIGNED_INT_VEC2: GLenum;
+    readonly UNSIGNED_INT_VEC3: GLenum;
+    readonly UNSIGNED_INT_VEC4: GLenum;
+    readonly UNSIGNED_NORMALIZED: GLenum;
+    readonly VERTEX_ARRAY_BINDING: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
+    readonly WAIT_FAILED: GLenum;
     readonly ACTIVE_ATTRIBUTES: GLenum;
     readonly ACTIVE_TEXTURE: GLenum;
     readonly ACTIVE_UNIFORMS: GLenum;
@@ -16763,269 +15371,6 @@ declare var WebGL2RenderingContext: {
     readonly VERTEX_SHADER: GLenum;
     readonly VIEWPORT: GLenum;
     readonly ZERO: GLenum;
-    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
-    readonly ALREADY_SIGNALED: GLenum;
-    readonly ANY_SAMPLES_PASSED: GLenum;
-    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
-    readonly COLOR: GLenum;
-    readonly COLOR_ATTACHMENT1: GLenum;
-    readonly COLOR_ATTACHMENT10: GLenum;
-    readonly COLOR_ATTACHMENT11: GLenum;
-    readonly COLOR_ATTACHMENT12: GLenum;
-    readonly COLOR_ATTACHMENT13: GLenum;
-    readonly COLOR_ATTACHMENT14: GLenum;
-    readonly COLOR_ATTACHMENT15: GLenum;
-    readonly COLOR_ATTACHMENT2: GLenum;
-    readonly COLOR_ATTACHMENT3: GLenum;
-    readonly COLOR_ATTACHMENT4: GLenum;
-    readonly COLOR_ATTACHMENT5: GLenum;
-    readonly COLOR_ATTACHMENT6: GLenum;
-    readonly COLOR_ATTACHMENT7: GLenum;
-    readonly COLOR_ATTACHMENT8: GLenum;
-    readonly COLOR_ATTACHMENT9: GLenum;
-    readonly COMPARE_REF_TO_TEXTURE: GLenum;
-    readonly CONDITION_SATISFIED: GLenum;
-    readonly COPY_READ_BUFFER: GLenum;
-    readonly COPY_READ_BUFFER_BINDING: GLenum;
-    readonly COPY_WRITE_BUFFER: GLenum;
-    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
-    readonly CURRENT_QUERY: GLenum;
-    readonly DEPTH: GLenum;
-    readonly DEPTH24_STENCIL8: GLenum;
-    readonly DEPTH32F_STENCIL8: GLenum;
-    readonly DEPTH_COMPONENT24: GLenum;
-    readonly DEPTH_COMPONENT32F: GLenum;
-    readonly DRAW_BUFFER0: GLenum;
-    readonly DRAW_BUFFER1: GLenum;
-    readonly DRAW_BUFFER10: GLenum;
-    readonly DRAW_BUFFER11: GLenum;
-    readonly DRAW_BUFFER12: GLenum;
-    readonly DRAW_BUFFER13: GLenum;
-    readonly DRAW_BUFFER14: GLenum;
-    readonly DRAW_BUFFER15: GLenum;
-    readonly DRAW_BUFFER2: GLenum;
-    readonly DRAW_BUFFER3: GLenum;
-    readonly DRAW_BUFFER4: GLenum;
-    readonly DRAW_BUFFER5: GLenum;
-    readonly DRAW_BUFFER6: GLenum;
-    readonly DRAW_BUFFER7: GLenum;
-    readonly DRAW_BUFFER8: GLenum;
-    readonly DRAW_BUFFER9: GLenum;
-    readonly DRAW_FRAMEBUFFER: GLenum;
-    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
-    readonly DYNAMIC_COPY: GLenum;
-    readonly DYNAMIC_READ: GLenum;
-    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
-    readonly FLOAT_MAT2x3: GLenum;
-    readonly FLOAT_MAT2x4: GLenum;
-    readonly FLOAT_MAT3x2: GLenum;
-    readonly FLOAT_MAT3x4: GLenum;
-    readonly FLOAT_MAT4x2: GLenum;
-    readonly FLOAT_MAT4x3: GLenum;
-    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
-    readonly FRAMEBUFFER_DEFAULT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
-    readonly HALF_FLOAT: GLenum;
-    readonly INTERLEAVED_ATTRIBS: GLenum;
-    readonly INT_2_10_10_10_REV: GLenum;
-    readonly INT_SAMPLER_2D: GLenum;
-    readonly INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly INT_SAMPLER_3D: GLenum;
-    readonly INT_SAMPLER_CUBE: GLenum;
-    readonly INVALID_INDEX: GLenum;
-    readonly MAX: GLenum;
-    readonly MAX_3D_TEXTURE_SIZE: GLenum;
-    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
-    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
-    readonly MAX_COLOR_ATTACHMENTS: GLenum;
-    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_DRAW_BUFFERS: GLenum;
-    readonly MAX_ELEMENTS_INDICES: GLenum;
-    readonly MAX_ELEMENTS_VERTICES: GLenum;
-    readonly MAX_ELEMENT_INDEX: GLenum;
-    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly MAX_SAMPLES: GLenum;
-    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
-    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
-    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
-    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
-    readonly MAX_VARYING_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MIN: GLenum;
-    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly OBJECT_TYPE: GLenum;
-    readonly PACK_ROW_LENGTH: GLenum;
-    readonly PACK_SKIP_PIXELS: GLenum;
-    readonly PACK_SKIP_ROWS: GLenum;
-    readonly PIXEL_PACK_BUFFER: GLenum;
-    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
-    readonly PIXEL_UNPACK_BUFFER: GLenum;
-    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
-    readonly QUERY_RESULT: GLenum;
-    readonly QUERY_RESULT_AVAILABLE: GLenum;
-    readonly R11F_G11F_B10F: GLenum;
-    readonly R16F: GLenum;
-    readonly R16I: GLenum;
-    readonly R16UI: GLenum;
-    readonly R32F: GLenum;
-    readonly R32I: GLenum;
-    readonly R32UI: GLenum;
-    readonly R8: GLenum;
-    readonly R8I: GLenum;
-    readonly R8UI: GLenum;
-    readonly R8_SNORM: GLenum;
-    readonly RASTERIZER_DISCARD: GLenum;
-    readonly READ_BUFFER: GLenum;
-    readonly READ_FRAMEBUFFER: GLenum;
-    readonly READ_FRAMEBUFFER_BINDING: GLenum;
-    readonly RED: GLenum;
-    readonly RED_INTEGER: GLenum;
-    readonly RENDERBUFFER_SAMPLES: GLenum;
-    readonly RG: GLenum;
-    readonly RG16F: GLenum;
-    readonly RG16I: GLenum;
-    readonly RG16UI: GLenum;
-    readonly RG32F: GLenum;
-    readonly RG32I: GLenum;
-    readonly RG32UI: GLenum;
-    readonly RG8: GLenum;
-    readonly RG8I: GLenum;
-    readonly RG8UI: GLenum;
-    readonly RG8_SNORM: GLenum;
-    readonly RGB10_A2: GLenum;
-    readonly RGB10_A2UI: GLenum;
-    readonly RGB16F: GLenum;
-    readonly RGB16I: GLenum;
-    readonly RGB16UI: GLenum;
-    readonly RGB32F: GLenum;
-    readonly RGB32I: GLenum;
-    readonly RGB32UI: GLenum;
-    readonly RGB8: GLenum;
-    readonly RGB8I: GLenum;
-    readonly RGB8UI: GLenum;
-    readonly RGB8_SNORM: GLenum;
-    readonly RGB9_E5: GLenum;
-    readonly RGBA16F: GLenum;
-    readonly RGBA16I: GLenum;
-    readonly RGBA16UI: GLenum;
-    readonly RGBA32F: GLenum;
-    readonly RGBA32I: GLenum;
-    readonly RGBA32UI: GLenum;
-    readonly RGBA8: GLenum;
-    readonly RGBA8I: GLenum;
-    readonly RGBA8UI: GLenum;
-    readonly RGBA8_SNORM: GLenum;
-    readonly RGBA_INTEGER: GLenum;
-    readonly RGB_INTEGER: GLenum;
-    readonly RG_INTEGER: GLenum;
-    readonly SAMPLER_2D_ARRAY: GLenum;
-    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
-    readonly SAMPLER_2D_SHADOW: GLenum;
-    readonly SAMPLER_3D: GLenum;
-    readonly SAMPLER_BINDING: GLenum;
-    readonly SAMPLER_CUBE_SHADOW: GLenum;
-    readonly SEPARATE_ATTRIBS: GLenum;
-    readonly SIGNALED: GLenum;
-    readonly SIGNED_NORMALIZED: GLenum;
-    readonly SRGB: GLenum;
-    readonly SRGB8: GLenum;
-    readonly SRGB8_ALPHA8: GLenum;
-    readonly STATIC_COPY: GLenum;
-    readonly STATIC_READ: GLenum;
-    readonly STENCIL: GLenum;
-    readonly STREAM_COPY: GLenum;
-    readonly STREAM_READ: GLenum;
-    readonly SYNC_CONDITION: GLenum;
-    readonly SYNC_FENCE: GLenum;
-    readonly SYNC_FLAGS: GLenum;
-    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
-    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
-    readonly SYNC_STATUS: GLenum;
-    readonly TEXTURE_2D_ARRAY: GLenum;
-    readonly TEXTURE_3D: GLenum;
-    readonly TEXTURE_BASE_LEVEL: GLenum;
-    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
-    readonly TEXTURE_BINDING_3D: GLenum;
-    readonly TEXTURE_COMPARE_FUNC: GLenum;
-    readonly TEXTURE_COMPARE_MODE: GLenum;
-    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
-    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
-    readonly TEXTURE_MAX_LEVEL: GLenum;
-    readonly TEXTURE_MAX_LOD: GLenum;
-    readonly TEXTURE_MIN_LOD: GLenum;
-    readonly TEXTURE_WRAP_R: GLenum;
-    readonly TIMEOUT_EXPIRED: GLenum;
-    readonly TIMEOUT_IGNORED: GLint64;
-    readonly TRANSFORM_FEEDBACK: GLenum;
-    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
-    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
-    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
-    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
-    readonly UNIFORM_ARRAY_STRIDE: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
-    readonly UNIFORM_BLOCK_BINDING: GLenum;
-    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
-    readonly UNIFORM_BLOCK_INDEX: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
-    readonly UNIFORM_BUFFER: GLenum;
-    readonly UNIFORM_BUFFER_BINDING: GLenum;
-    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
-    readonly UNIFORM_BUFFER_SIZE: GLenum;
-    readonly UNIFORM_BUFFER_START: GLenum;
-    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
-    readonly UNIFORM_MATRIX_STRIDE: GLenum;
-    readonly UNIFORM_OFFSET: GLenum;
-    readonly UNIFORM_SIZE: GLenum;
-    readonly UNIFORM_TYPE: GLenum;
-    readonly UNPACK_IMAGE_HEIGHT: GLenum;
-    readonly UNPACK_ROW_LENGTH: GLenum;
-    readonly UNPACK_SKIP_IMAGES: GLenum;
-    readonly UNPACK_SKIP_PIXELS: GLenum;
-    readonly UNPACK_SKIP_ROWS: GLenum;
-    readonly UNSIGNALED: GLenum;
-    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
-    readonly UNSIGNED_INT_24_8: GLenum;
-    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
-    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
-    readonly UNSIGNED_INT_VEC2: GLenum;
-    readonly UNSIGNED_INT_VEC3: GLenum;
-    readonly UNSIGNED_INT_VEC4: GLenum;
-    readonly UNSIGNED_NORMALIZED: GLenum;
-    readonly VERTEX_ARRAY_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
-    readonly WAIT_FAILED: GLenum;
 };
 
 interface WebGL2RenderingContextBase {
@@ -17438,7 +15783,7 @@ declare var WebGLActiveInfo: {
 };
 
 /** Part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors. */
-interface WebGLBuffer extends WebGLObject {
+interface WebGLBuffer {
 }
 
 declare var WebGLBuffer: {
@@ -17457,7 +15802,7 @@ declare var WebGLContextEvent: {
 };
 
 /** Part of the WebGL API and represents a collection of buffers that serve as a rendering destination. */
-interface WebGLFramebuffer extends WebGLObject {
+interface WebGLFramebuffer {
 }
 
 declare var WebGLFramebuffer: {
@@ -17465,16 +15810,8 @@ declare var WebGLFramebuffer: {
     new(): WebGLFramebuffer;
 };
 
-interface WebGLObject {
-}
-
-declare var WebGLObject: {
-    prototype: WebGLObject;
-    new(): WebGLObject;
-};
-
 /** The WebGLProgram is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL). */
-interface WebGLProgram extends WebGLObject {
+interface WebGLProgram {
 }
 
 declare var WebGLProgram: {
@@ -17482,7 +15819,7 @@ declare var WebGLProgram: {
     new(): WebGLProgram;
 };
 
-interface WebGLQuery extends WebGLObject {
+interface WebGLQuery {
 }
 
 declare var WebGLQuery: {
@@ -17491,7 +15828,7 @@ declare var WebGLQuery: {
 };
 
 /** Part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation. */
-interface WebGLRenderbuffer extends WebGLObject {
+interface WebGLRenderbuffer {
 }
 
 declare var WebGLRenderbuffer: {
@@ -17865,29 +16202,40 @@ interface WebGLRenderingContextBase {
     getBufferParameter(target: GLenum, pname: GLenum): any;
     getContextAttributes(): WebGLContextAttributes | null;
     getError(): GLenum;
+    getExtension(extensionName: "ANGLE_instanced_arrays"): ANGLE_instanced_arrays | null;
     getExtension(extensionName: "EXT_blend_minmax"): EXT_blend_minmax | null;
-    getExtension(extensionName: "EXT_texture_filter_anisotropic"): EXT_texture_filter_anisotropic | null;
+    getExtension(extensionName: "EXT_color_buffer_float"): EXT_color_buffer_float | null;
+    getExtension(extensionName: "EXT_color_buffer_half_float"): EXT_color_buffer_half_float | null;
+    getExtension(extensionName: "EXT_float_blend"): EXT_float_blend | null;
     getExtension(extensionName: "EXT_frag_depth"): EXT_frag_depth | null;
-    getExtension(extensionName: "EXT_shader_texture_lod"): EXT_shader_texture_lod | null;
     getExtension(extensionName: "EXT_sRGB"): EXT_sRGB | null;
+    getExtension(extensionName: "EXT_shader_texture_lod"): EXT_shader_texture_lod | null;
+    getExtension(extensionName: "EXT_texture_compression_bptc"): EXT_texture_compression_bptc | null;
+    getExtension(extensionName: "EXT_texture_compression_rgtc"): EXT_texture_compression_rgtc | null;
+    getExtension(extensionName: "EXT_texture_filter_anisotropic"): EXT_texture_filter_anisotropic | null;
+    getExtension(extensionName: "KHR_parallel_shader_compile"): KHR_parallel_shader_compile | null;
+    getExtension(extensionName: "OES_element_index_uint"): OES_element_index_uint | null;
+    getExtension(extensionName: "OES_fbo_render_mipmap"): OES_fbo_render_mipmap | null;
+    getExtension(extensionName: "OES_standard_derivatives"): OES_standard_derivatives | null;
+    getExtension(extensionName: "OES_texture_float"): OES_texture_float | null;
+    getExtension(extensionName: "OES_texture_float_linear"): OES_texture_float_linear | null;
+    getExtension(extensionName: "OES_texture_half_float"): OES_texture_half_float | null;
+    getExtension(extensionName: "OES_texture_half_float_linear"): OES_texture_half_float_linear | null;
     getExtension(extensionName: "OES_vertex_array_object"): OES_vertex_array_object | null;
+    getExtension(extensionName: "OVR_multiview2"): OVR_multiview2 | null;
     getExtension(extensionName: "WEBGL_color_buffer_float"): WEBGL_color_buffer_float | null;
     getExtension(extensionName: "WEBGL_compressed_texture_astc"): WEBGL_compressed_texture_astc | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_etc"): WEBGL_compressed_texture_etc | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_etc1"): WEBGL_compressed_texture_etc1 | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_s3tc"): WEBGL_compressed_texture_s3tc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_s3tc_srgb"): WEBGL_compressed_texture_s3tc_srgb | null;
+    getExtension(extensionName: "WEBGL_debug_renderer_info"): WEBGL_debug_renderer_info | null;
     getExtension(extensionName: "WEBGL_debug_shaders"): WEBGL_debug_shaders | null;
+    getExtension(extensionName: "WEBGL_depth_texture"): WEBGL_depth_texture | null;
     getExtension(extensionName: "WEBGL_draw_buffers"): WEBGL_draw_buffers | null;
     getExtension(extensionName: "WEBGL_lose_context"): WEBGL_lose_context | null;
-    getExtension(extensionName: "WEBGL_depth_texture"): WEBGL_depth_texture | null;
-    getExtension(extensionName: "WEBGL_debug_renderer_info"): WEBGL_debug_renderer_info | null;
-    getExtension(extensionName: "WEBGL_compressed_texture_s3tc"): WEBGL_compressed_texture_s3tc | null;
-    getExtension(extensionName: "OES_texture_half_float_linear"): OES_texture_half_float_linear | null;
-    getExtension(extensionName: "OES_texture_half_float"): OES_texture_half_float | null;
-    getExtension(extensionName: "OES_texture_float_linear"): OES_texture_float_linear | null;
-    getExtension(extensionName: "OES_texture_float"): OES_texture_float | null;
-    getExtension(extensionName: "OES_standard_derivatives"): OES_standard_derivatives | null;
-    getExtension(extensionName: "OES_element_index_uint"): OES_element_index_uint | null;
-    getExtension(extensionName: "ANGLE_instanced_arrays"): ANGLE_instanced_arrays | null;
-    getExtension(extensionName: string): any;
+    getExtension(extensionName: "WEBGL_multi_draw"): WEBGL_multi_draw | null;
+    getExtension(name: string): any;
     getFramebufferAttachmentParameter(target: GLenum, attachment: GLenum, pname: GLenum): any;
     getParameter(pname: GLenum): any;
     getProgramInfoLog(program: WebGLProgram): string | null;
@@ -18270,7 +16618,7 @@ interface WebGLRenderingContextOverloads {
     uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
 }
 
-interface WebGLSampler extends WebGLObject {
+interface WebGLSampler {
 }
 
 declare var WebGLSampler: {
@@ -18279,7 +16627,7 @@ declare var WebGLSampler: {
 };
 
 /** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. */
-interface WebGLShader extends WebGLObject {
+interface WebGLShader {
 }
 
 declare var WebGLShader: {
@@ -18299,7 +16647,7 @@ declare var WebGLShaderPrecisionFormat: {
     new(): WebGLShaderPrecisionFormat;
 };
 
-interface WebGLSync extends WebGLObject {
+interface WebGLSync {
 }
 
 declare var WebGLSync: {
@@ -18308,7 +16656,7 @@ declare var WebGLSync: {
 };
 
 /** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. */
-interface WebGLTexture extends WebGLObject {
+interface WebGLTexture {
 }
 
 declare var WebGLTexture: {
@@ -18316,7 +16664,7 @@ declare var WebGLTexture: {
     new(): WebGLTexture;
 };
 
-interface WebGLTransformFeedback extends WebGLObject {
+interface WebGLTransformFeedback {
 }
 
 declare var WebGLTransformFeedback: {
@@ -18333,7 +16681,7 @@ declare var WebGLUniformLocation: {
     new(): WebGLUniformLocation;
 };
 
-interface WebGLVertexArrayObject extends WebGLObject {
+interface WebGLVertexArrayObject {
 }
 
 declare var WebGLVertexArrayObject: {
@@ -18341,18 +16689,8 @@ declare var WebGLVertexArrayObject: {
     new(): WebGLVertexArrayObject;
 };
 
-interface WebGLVertexArrayObjectOES extends WebGLObject {
+interface WebGLVertexArrayObjectOES {
 }
-
-interface WebKitPoint {
-    x: number;
-    y: number;
-}
-
-declare var WebKitPoint: {
-    prototype: WebKitPoint;
-    new(x?: number, y?: number): WebKitPoint;
-};
 
 interface WebSocketEventMap {
     "close": CloseEvent;
@@ -18365,43 +16703,31 @@ interface WebSocketEventMap {
 interface WebSocket extends EventTarget {
     /**
      * Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
-     * 
+     *
      * Can be set, to change how binary data is returned. The default is "blob".
      */
     binaryType: BinaryType;
     /**
      * Returns the number of bytes of application data (UTF-8 text and binary data) that have been queued using send() but not yet been transmitted to the network.
-     * 
+     *
      * If the WebSocket connection is closed, this attribute's value will only increase with each call to the send() method. (The number does not reset to zero once the connection closes.)
      */
     readonly bufferedAmount: number;
-    /**
-     * Returns the extensions selected by the server, if any.
-     */
+    /** Returns the extensions selected by the server, if any. */
     readonly extensions: string;
     onclose: ((this: WebSocket, ev: CloseEvent) => any) | null;
     onerror: ((this: WebSocket, ev: Event) => any) | null;
     onmessage: ((this: WebSocket, ev: MessageEvent) => any) | null;
     onopen: ((this: WebSocket, ev: Event) => any) | null;
-    /**
-     * Returns the subprotocol selected by the server, if any. It can be used in conjunction with the array form of the constructor's second argument to perform subprotocol negotiation.
-     */
+    /** Returns the subprotocol selected by the server, if any. It can be used in conjunction with the array form of the constructor's second argument to perform subprotocol negotiation. */
     readonly protocol: string;
-    /**
-     * Returns the state of the WebSocket object's connection. It can have the values described below.
-     */
+    /** Returns the state of the WebSocket object's connection. It can have the values described below. */
     readonly readyState: number;
-    /**
-     * Returns the URL that was used to establish the WebSocket connection.
-     */
+    /** Returns the URL that was used to establish the WebSocket connection. */
     readonly url: string;
-    /**
-     * Closes the WebSocket connection, optionally using code as the the WebSocket connection close code and reason as the the WebSocket connection close reason.
-     */
+    /** Closes the WebSocket connection, optionally using code as the the WebSocket connection close code and reason as the the WebSocket connection close reason. */
     close(code?: number, reason?: string): void;
-    /**
-     * Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView.
-     */
+    /** Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView. */
     send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
@@ -18415,7 +16741,7 @@ interface WebSocket extends EventTarget {
 
 declare var WebSocket: {
     prototype: WebSocket;
-    new(url: string, protocols?: string | string[]): WebSocket;
+    new(url: string | URL, protocols?: string | string[]): WebSocket;
     readonly CLOSED: number;
     readonly CLOSING: number;
     readonly CONNECTING: number;
@@ -18442,177 +16768,64 @@ declare var WheelEvent: {
 };
 
 interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandlersEventMap {
-    "abort": UIEvent;
-    "afterprint": Event;
-    "beforeprint": Event;
-    "beforeunload": BeforeUnloadEvent;
-    "blur": FocusEvent;
-    "canplay": Event;
-    "canplaythrough": Event;
-    "change": Event;
-    "click": MouseEvent;
-    "compassneedscalibration": Event;
-    "contextmenu": MouseEvent;
-    "dblclick": MouseEvent;
-    "devicelight": DeviceLightEvent;
+    "DOMContentLoaded": Event;
     "devicemotion": DeviceMotionEvent;
     "deviceorientation": DeviceOrientationEvent;
-    "deviceorientationabsolute": DeviceOrientationEvent;
-    "drag": DragEvent;
-    "dragend": DragEvent;
-    "dragenter": DragEvent;
-    "dragleave": DragEvent;
-    "dragover": DragEvent;
-    "dragstart": DragEvent;
-    "drop": DragEvent;
-    "durationchange": Event;
-    "emptied": Event;
-    "ended": Event;
-    "error": ErrorEvent;
-    "focus": FocusEvent;
     "gamepadconnected": GamepadEvent;
     "gamepaddisconnected": GamepadEvent;
-    "hashchange": HashChangeEvent;
-    "input": Event;
-    "invalid": Event;
-    "keydown": KeyboardEvent;
-    "keypress": KeyboardEvent;
-    "keyup": KeyboardEvent;
-    "load": Event;
-    "loadeddata": Event;
-    "loadedmetadata": Event;
-    "loadstart": Event;
-    "message": MessageEvent;
-    "mousedown": MouseEvent;
-    "mouseenter": MouseEvent;
-    "mouseleave": MouseEvent;
-    "mousemove": MouseEvent;
-    "mouseout": MouseEvent;
-    "mouseover": MouseEvent;
-    "mouseup": MouseEvent;
-    "mousewheel": Event;
-    "MSGestureChange": Event;
-    "MSGestureDoubleTap": Event;
-    "MSGestureEnd": Event;
-    "MSGestureHold": Event;
-    "MSGestureStart": Event;
-    "MSGestureTap": Event;
-    "MSInertiaStart": Event;
-    "MSPointerCancel": Event;
-    "MSPointerDown": Event;
-    "MSPointerEnter": Event;
-    "MSPointerLeave": Event;
-    "MSPointerMove": Event;
-    "MSPointerOut": Event;
-    "MSPointerOver": Event;
-    "MSPointerUp": Event;
-    "offline": Event;
-    "online": Event;
     "orientationchange": Event;
-    "pagehide": PageTransitionEvent;
-    "pageshow": PageTransitionEvent;
-    "pause": Event;
-    "play": Event;
-    "playing": Event;
-    "popstate": PopStateEvent;
-    "progress": ProgressEvent<Window>;
-    "ratechange": Event;
-    "readystatechange": ProgressEvent<Window>;
-    "reset": Event;
-    "resize": UIEvent;
-    "scroll": Event;
-    "seeked": Event;
-    "seeking": Event;
-    "select": Event;
-    "stalled": Event;
-    "storage": StorageEvent;
-    "submit": Event;
-    "suspend": Event;
-    "timeupdate": Event;
-    "unload": Event;
-    "volumechange": Event;
-    "vrdisplayactivate": Event;
-    "vrdisplayblur": Event;
-    "vrdisplayconnect": Event;
-    "vrdisplaydeactivate": Event;
-    "vrdisplaydisconnect": Event;
-    "vrdisplayfocus": Event;
-    "vrdisplaypointerrestricted": Event;
-    "vrdisplaypointerunrestricted": Event;
-    "vrdisplaypresentchange": Event;
-    "waiting": Event;
 }
 
 /** A window containing a DOM document; the document property points to the DOM document loaded in that window. */
 interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandlers, WindowEventHandlers, WindowLocalStorage, WindowOrWorkerGlobalScope, WindowSessionStorage {
-    readonly applicationCache: ApplicationCache;
+    /** @deprecated This is a legacy alias of `navigator`. */
     readonly clientInformation: Navigator;
+    /** Returns true if the window has been closed, false otherwise. */
     readonly closed: boolean;
-    customElements: CustomElementRegistry;
-    defaultStatus: string;
+    /** Defines a new custom element, mapping the given name to the given constructor as an autonomous custom element. */
+    readonly customElements: CustomElementRegistry;
     readonly devicePixelRatio: number;
-    readonly doNotTrack: string;
     readonly document: Document;
     /** @deprecated */
     readonly event: Event | undefined;
     /** @deprecated */
     readonly external: External;
     readonly frameElement: Element | null;
-    readonly frames: Window;
+    readonly frames: WindowProxy;
     readonly history: History;
     readonly innerHeight: number;
     readonly innerWidth: number;
     readonly length: number;
-    location: Location;
+    get location(): Location;
+    set location(href: string | Location);
+    /** Returns true if the location bar is visible; otherwise, returns false. */
     readonly locationbar: BarProp;
+    /** Returns true if the menu bar is visible; otherwise, returns false. */
     readonly menubar: BarProp;
-    readonly msContentScript: ExtensionScriptApis;
     name: string;
     readonly navigator: Navigator;
-    offscreenBuffering: string | boolean;
-    oncompassneedscalibration: ((this: Window, ev: Event) => any) | null;
-    ondevicelight: ((this: Window, ev: DeviceLightEvent) => any) | null;
+    /** Available only in secure contexts. */
     ondevicemotion: ((this: Window, ev: DeviceMotionEvent) => any) | null;
+    /** Available only in secure contexts. */
     ondeviceorientation: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
-    ondeviceorientationabsolute: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
-    ongamepadconnected: ((this: Window, ev: GamepadEvent) => any) | null;
-    ongamepaddisconnected: ((this: Window, ev: GamepadEvent) => any) | null;
-    onmousewheel: ((this: Window, ev: Event) => any) | null;
-    onmsgesturechange: ((this: Window, ev: Event) => any) | null;
-    onmsgesturedoubletap: ((this: Window, ev: Event) => any) | null;
-    onmsgestureend: ((this: Window, ev: Event) => any) | null;
-    onmsgesturehold: ((this: Window, ev: Event) => any) | null;
-    onmsgesturestart: ((this: Window, ev: Event) => any) | null;
-    onmsgesturetap: ((this: Window, ev: Event) => any) | null;
-    onmsinertiastart: ((this: Window, ev: Event) => any) | null;
-    onmspointercancel: ((this: Window, ev: Event) => any) | null;
-    onmspointerdown: ((this: Window, ev: Event) => any) | null;
-    onmspointerenter: ((this: Window, ev: Event) => any) | null;
-    onmspointerleave: ((this: Window, ev: Event) => any) | null;
-    onmspointermove: ((this: Window, ev: Event) => any) | null;
-    onmspointerout: ((this: Window, ev: Event) => any) | null;
-    onmspointerover: ((this: Window, ev: Event) => any) | null;
-    onmspointerup: ((this: Window, ev: Event) => any) | null;
     /** @deprecated */
     onorientationchange: ((this: Window, ev: Event) => any) | null;
-    onreadystatechange: ((this: Window, ev: ProgressEvent<Window>) => any) | null;
-    onvrdisplayactivate: ((this: Window, ev: Event) => any) | null;
-    onvrdisplayblur: ((this: Window, ev: Event) => any) | null;
-    onvrdisplayconnect: ((this: Window, ev: Event) => any) | null;
-    onvrdisplaydeactivate: ((this: Window, ev: Event) => any) | null;
-    onvrdisplaydisconnect: ((this: Window, ev: Event) => any) | null;
-    onvrdisplayfocus: ((this: Window, ev: Event) => any) | null;
-    onvrdisplaypointerrestricted: ((this: Window, ev: Event) => any) | null;
-    onvrdisplaypointerunrestricted: ((this: Window, ev: Event) => any) | null;
-    onvrdisplaypresentchange: ((this: Window, ev: Event) => any) | null;
     opener: any;
     /** @deprecated */
-    readonly orientation: string | number;
+    readonly orientation: number;
     readonly outerHeight: number;
     readonly outerWidth: number;
+    /** @deprecated This is a legacy alias of `scrollX`. */
     readonly pageXOffset: number;
+    /** @deprecated This is a legacy alias of `scrollY`. */
     readonly pageYOffset: number;
-    readonly parent: Window;
+    /**
+     * Refers to either the parent WindowProxy, or itself.
+     *
+     * It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent.
+     */
+    readonly parent: WindowProxy;
+    /** Returns true if the personal bar is visible; otherwise, returns false. */
     readonly personalbar: BarProp;
     readonly screen: Screen;
     readonly screenLeft: number;
@@ -18621,37 +16834,53 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
     readonly screenY: number;
     readonly scrollX: number;
     readonly scrollY: number;
+    /** Returns true if the scrollbars are visible; otherwise, returns false. */
     readonly scrollbars: BarProp;
     readonly self: Window & typeof globalThis;
     readonly speechSynthesis: SpeechSynthesis;
+    /** @deprecated */
     status: string;
+    /** Returns true if the status bar is visible; otherwise, returns false. */
     readonly statusbar: BarProp;
-    readonly styleMedia: StyleMedia;
+    /** Returns true if the toolbar is visible; otherwise, returns false. */
     readonly toolbar: BarProp;
-    readonly top: Window;
-    readonly visualViewport: VisualViewport;
+    readonly top: WindowProxy | null;
+    readonly visualViewport: VisualViewport | null;
     readonly window: Window & typeof globalThis;
     alert(message?: any): void;
     blur(): void;
+    cancelIdleCallback(handle: number): void;
     /** @deprecated */
     captureEvents(): void;
+    /** Closes the window. */
     close(): void;
     confirm(message?: string): boolean;
-    departFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
+    /** Moves the focus to the window's browsing context, if any. */
     focus(): void;
     getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleDeclaration;
-    getMatchedCSSRules(elt: Element, pseudoElt?: string | null): CSSRuleList;
     getSelection(): Selection | null;
     matchMedia(query: string): MediaQueryList;
     moveBy(x: number, y: number): void;
     moveTo(x: number, y: number): void;
-    msWriteProfilerMark(profilerMarkName: string): void;
-    open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
+    open(url?: string | URL, target?: string, features?: string): WindowProxy | null;
+    /**
+     * Posts a message to the given window. Messages can be structured objects, e.g. nested objects and arrays, can contain JavaScript values (strings, numbers, Date objects, etc), and can contain certain data objects such as File Blob, FileList, and ArrayBuffer objects.
+     *
+     * Objects listed in the transfer member of options are transferred, not just cloned, meaning that they are no longer usable on the sending side.
+     *
+     * A target origin can be specified using the targetOrigin member of options. If not provided, it defaults to "/". This default restricts the message to same-origin targets only.
+     *
+     * If the origin of the target window doesn't match the given target origin, the message is discarded, to avoid information leakage. To send the message to the target regardless of origin, set the target origin to "*".
+     *
+     * Throws a "DataCloneError" DOMException if transfer array contains duplicate objects or if message could not be cloned.
+     */
     postMessage(message: any, targetOrigin: string, transfer?: Transferable[]): void;
+    postMessage(message: any, options?: WindowPostMessageOptions): void;
     print(): void;
     prompt(message?: string, _default?: string): string | null;
     /** @deprecated */
     releaseEvents(): void;
+    requestIdleCallback(callback: IdleRequestCallback, options?: IdleRequestOptions): number;
     resizeBy(x: number, y: number): void;
     resizeTo(width: number, height: number): void;
     scroll(options?: ScrollToOptions): void;
@@ -18660,11 +16889,8 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
     scrollBy(x: number, y: number): void;
     scrollTo(options?: ScrollToOptions): void;
     scrollTo(x: number, y: number): void;
+    /** Cancels the document load. */
     stop(): void;
-    webkitCancelAnimationFrame(handle: number): void;
-    webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
-    webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
-    webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
     addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -18681,6 +16907,8 @@ interface WindowEventHandlersEventMap {
     "afterprint": Event;
     "beforeprint": Event;
     "beforeunload": BeforeUnloadEvent;
+    "gamepadconnected": GamepadEvent;
+    "gamepaddisconnected": GamepadEvent;
     "hashchange": HashChangeEvent;
     "languagechange": Event;
     "message": MessageEvent;
@@ -18700,6 +16928,8 @@ interface WindowEventHandlers {
     onafterprint: ((this: WindowEventHandlers, ev: Event) => any) | null;
     onbeforeprint: ((this: WindowEventHandlers, ev: Event) => any) | null;
     onbeforeunload: ((this: WindowEventHandlers, ev: BeforeUnloadEvent) => any) | null;
+    ongamepadconnected: ((this: WindowEventHandlers, ev: GamepadEvent) => any) | null;
+    ongamepaddisconnected: ((this: WindowEventHandlers, ev: GamepadEvent) => any) | null;
     onhashchange: ((this: WindowEventHandlers, ev: HashChangeEvent) => any) | null;
     onlanguagechange: ((this: WindowEventHandlers, ev: Event) => any) | null;
     onmessage: ((this: WindowEventHandlers, ev: MessageEvent) => any) | null;
@@ -18724,7 +16954,9 @@ interface WindowLocalStorage {
 }
 
 interface WindowOrWorkerGlobalScope {
+    /** Available only in secure contexts. */
     readonly caches: CacheStorage;
+    readonly crossOriginIsolated: boolean;
     readonly crypto: Crypto;
     readonly indexedDB: IDBFactory;
     readonly isSecureContext: boolean;
@@ -18732,14 +16964,16 @@ interface WindowOrWorkerGlobalScope {
     readonly performance: Performance;
     atob(data: string): string;
     btoa(data: string): string;
-    clearInterval(handle?: number): void;
-    clearTimeout(handle?: number): void;
+    clearInterval(id: number | undefined): void;
+    clearTimeout(id: number | undefined): void;
     createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
     queueMicrotask(callback: VoidFunction): void;
+    reportError(e: any): void;
     setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
     setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+    structuredClone(value: any, options?: StructuredSerializeOptions): any;
 }
 
 interface WindowSessionStorage {
@@ -18755,14 +16989,10 @@ interface WorkerEventMap extends AbstractWorkerEventMap {
 interface Worker extends EventTarget, AbstractWorker {
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: Worker, ev: MessageEvent) => any) | null;
-    /**
-     * Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned.
-     */
+    /** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. */
     postMessage(message: any, transfer: Transferable[]): void;
-    postMessage(message: any, options?: PostMessageOptions): void;
-    /**
-     * Aborts worker's associated global environment.
-     */
+    postMessage(message: any, options?: StructuredSerializeOptions): void;
+    /** Aborts worker's associated global environment. */
     terminate(): void;
     addEventListener<K extends keyof WorkerEventMap>(type: K, listener: (this: Worker, ev: WorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -18772,11 +17002,19 @@ interface Worker extends EventTarget, AbstractWorker {
 
 declare var Worker: {
     prototype: Worker;
-    new(stringUrl: string | URL, options?: WorkerOptions): Worker;
+    new(scriptURL: string | URL, options?: WorkerOptions): Worker;
 };
 
+/** Available only in secure contexts. */
 interface Worklet {
-    addModule(moduleURL: string, options?: WorkletOptions): Promise<void>;
+    /**
+     * Loads and executes the module script given by moduleURL into all of worklet's global scopes. It can also create additional global scopes as part of this process, depending on the worklet type. The returned promise will fulfill once the script has been successfully loaded and run in all global scopes.
+     *
+     * The credentials option can be set to a credentials mode to modify the script-fetching process. It defaults to "same-origin".
+     *
+     * Any failures in fetching the script or its dependencies will cause the returned promise to be rejected with an "AbortError" DOMException. Any errors in parsing the script or its dependencies will cause the returned promise to be rejected with the exception generated during parsing.
+     */
+    addModule(moduleURL: string | URL, options?: WorkletOptions): Promise<void>;
 }
 
 declare var Worklet: {
@@ -18788,6 +17026,7 @@ declare var Worklet: {
 interface WritableStream<W = any> {
     readonly locked: boolean;
     abort(reason?: any): Promise<void>;
+    close(): Promise<void>;
     getWriter(): WritableStreamDefaultWriter<W>;
 }
 
@@ -18798,6 +17037,7 @@ declare var WritableStream: {
 
 /** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
 interface WritableStreamDefaultController {
+    readonly signal: AbortSignal;
     error(e?: any): void;
 }
 
@@ -18814,7 +17054,7 @@ interface WritableStreamDefaultWriter<W = any> {
     abort(reason?: any): Promise<void>;
     close(): Promise<void>;
     releaseLock(): void;
-    write(chunk: W): Promise<void>;
+    write(chunk?: W): Promise<void>;
 }
 
 declare var WritableStreamDefaultWriter: {
@@ -18842,91 +17082,83 @@ interface XMLHttpRequestEventMap extends XMLHttpRequestEventTargetEventMap {
 /** Use XMLHttpRequest (XHR) objects to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing. */
 interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null;
-    /**
-     * Returns client's state.
-     */
+    /** Returns client's state. */
     readonly readyState: number;
-    /**
-     * Returns the response's body.
-     */
+    /** Returns the response body. */
     readonly response: any;
     /**
-     * Returns the text response.
-     * 
+     * Returns response as text.
+     *
      * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "text".
      */
     readonly responseText: string;
     /**
      * Returns the response type.
-     * 
+     *
      * Can be set to change the response type. Values are: the empty string (default), "arraybuffer", "blob", "document", "json", and "text".
-     * 
+     *
      * When set: setting to "document" is ignored if current global object is not a Window object.
-     * 
+     *
      * When set: throws an "InvalidStateError" DOMException if state is loading or done.
-     * 
+     *
      * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
      */
     responseType: XMLHttpRequestResponseType;
     readonly responseURL: string;
     /**
-     * Returns the document response.
-     * 
+     * Returns the response as document.
+     *
      * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "document".
      */
     readonly responseXML: Document | null;
     readonly status: number;
     readonly statusText: string;
     /**
-     * Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the request has not yet completed, and the synchronous flag is unset, a timeout event will then be dispatched, or a "TimeoutError" DOMException will be thrown otherwise (for the send() method).
-     * 
+     * Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the request has not yet completed, and this's synchronous flag is unset, a timeout event will then be dispatched, or a "TimeoutError" DOMException will be thrown otherwise (for the send() method).
+     *
      * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
      */
     timeout: number;
-    /**
-     * Returns the associated XMLHttpRequestUpload object. It can be used to gather transmission information when data is transferred to a server.
-     */
+    /** Returns the associated XMLHttpRequestUpload object. It can be used to gather transmission information when data is transferred to a server. */
     readonly upload: XMLHttpRequestUpload;
     /**
      * True when credentials are to be included in a cross-origin request. False when they are to be excluded in a cross-origin request and when cookies are to be ignored in its response. Initially false.
-     * 
+     *
      * When set: throws an "InvalidStateError" DOMException if state is not unsent or opened, or if the send() flag is set.
      */
     withCredentials: boolean;
-    /**
-     * Cancels any network activity.
-     */
+    /** Cancels any network activity. */
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(name: string): string | null;
     /**
      * Sets the request method, request URL, and synchronous flag.
-     * 
-     * Throws a "SyntaxError" DOMException if either method is not a valid HTTP method or url cannot be parsed.
-     * 
+     *
+     * Throws a "SyntaxError" DOMException if either method is not a valid method or url cannot be parsed.
+     *
      * Throws a "SecurityError" DOMException if method is a case-insensitive match for `CONNECT`, `TRACE`, or `TRACK`.
-     * 
+     *
      * Throws an "InvalidAccessError" DOMException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
      */
-    open(method: string, url: string): void;
-    open(method: string, url: string, async: boolean, username?: string | null, password?: string | null): void;
+    open(method: string, url: string | URL): void;
+    open(method: string, url: string | URL, async: boolean, username?: string | null, password?: string | null): void;
     /**
-     * Acts as if the `Content-Type` header value for response is mime. (It does not actually change the header though.)
-     * 
+     * Acts as if the `Content-Type` header value for a response is mime. (It does not change the header.)
+     *
      * Throws an "InvalidStateError" DOMException if state is loading or done.
      */
     overrideMimeType(mime: string): void;
     /**
      * Initiates the request. The body argument provides the request body, if any, and is ignored if the request method is GET or HEAD.
-     * 
+     *
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
      */
-    send(body?: Document | BodyInit | null): void;
+    send(body?: Document | XMLHttpRequestBodyInit | null): void;
     /**
      * Combines a header in author request headers.
-     * 
+     *
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
-     * 
+     *
      * Throws a "SyntaxError" DOMException if name is not a header name or if value is not a header value.
      */
     setRequestHeader(name: string, value: string): void;
@@ -19068,13 +17300,13 @@ declare var XPathResult: {
 /** An XSLTProcessor applies an XSLT stylesheet transformation to an XML document to produce a new XML document as output. It has methods to load the XSLT stylesheet, to manipulate <xsl:param> parameter values, and to apply the transformation to documents. */
 interface XSLTProcessor {
     clearParameters(): void;
-    getParameter(namespaceURI: string, localName: string): any;
+    getParameter(namespaceURI: string | null, localName: string): any;
     importStylesheet(style: Node): void;
-    removeParameter(namespaceURI: string, localName: string): void;
+    removeParameter(namespaceURI: string | null, localName: string): void;
     reset(): void;
-    setParameter(namespaceURI: string, localName: string, value: any): void;
+    setParameter(namespaceURI: string | null, localName: string, value: any): void;
     transformToDocument(source: Node): Document;
-    transformToFragment(source: Node, document: Document): DocumentFragment;
+    transformToFragment(source: Node, output: Document): DocumentFragment;
 }
 
 declare var XSLTProcessor: {
@@ -19082,22 +17314,7 @@ declare var XSLTProcessor: {
     new(): XSLTProcessor;
 };
 
-interface webkitRTCPeerConnection extends RTCPeerConnection {
-    addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: webkitRTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: webkitRTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var webkitRTCPeerConnection: {
-    prototype: webkitRTCPeerConnection;
-    new(configuration: RTCConfiguration): webkitRTCPeerConnection;
-};
-
-declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
-
 interface Console {
-    memory: any;
     assert(condition?: boolean, ...data: any[]): void;
     clear(): void;
     count(label?: string): void;
@@ -19106,7 +17323,6 @@ interface Console {
     dir(item?: any, options?: any): void;
     dirxml(...data: any[]): void;
     error(...data: any[]): void;
-    exception(message?: string, ...optionalParams: any[]): void;
     group(...data: any[]): void;
     groupCollapsed(...data: any[]): void;
     groupEnd(): void;
@@ -19131,54 +17347,56 @@ declare namespace CSS {
 }
 
 declare namespace WebAssembly {
-    interface CompileError {
+    interface CompileError extends Error {
     }
-    
+
     var CompileError: {
         prototype: CompileError;
-        new(): CompileError;
+        new(message?: string): CompileError;
+        (message?: string): CompileError;
     };
-    
+
     interface Global {
         value: any;
         valueOf(): any;
     }
-    
+
     var Global: {
         prototype: Global;
         new(descriptor: GlobalDescriptor, v?: any): Global;
     };
-    
+
     interface Instance {
         readonly exports: Exports;
     }
-    
+
     var Instance: {
         prototype: Instance;
         new(module: Module, importObject?: Imports): Instance;
     };
-    
-    interface LinkError {
+
+    interface LinkError extends Error {
     }
-    
+
     var LinkError: {
         prototype: LinkError;
-        new(): LinkError;
+        new(message?: string): LinkError;
+        (message?: string): LinkError;
     };
-    
+
     interface Memory {
         readonly buffer: ArrayBuffer;
         grow(delta: number): number;
     }
-    
+
     var Memory: {
         prototype: Memory;
         new(descriptor: MemoryDescriptor): Memory;
     };
-    
+
     interface Module {
     }
-    
+
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
@@ -19186,72 +17404,74 @@ declare namespace WebAssembly {
         exports(moduleObject: Module): ModuleExportDescriptor[];
         imports(moduleObject: Module): ModuleImportDescriptor[];
     };
-    
-    interface RuntimeError {
+
+    interface RuntimeError extends Error {
     }
-    
+
     var RuntimeError: {
         prototype: RuntimeError;
-        new(): RuntimeError;
+        new(message?: string): RuntimeError;
+        (message?: string): RuntimeError;
     };
-    
+
     interface Table {
         readonly length: number;
-        get(index: number): Function | null;
-        grow(delta: number): number;
-        set(index: number, value: Function | null): void;
+        get(index: number): any;
+        grow(delta: number, value?: any): number;
+        set(index: number, value?: any): void;
     }
-    
+
     var Table: {
         prototype: Table;
-        new(descriptor: TableDescriptor): Table;
+        new(descriptor: TableDescriptor, value?: any): Table;
     };
-    
+
     interface GlobalDescriptor {
         mutable?: boolean;
         value: ValueType;
     }
-    
+
     interface MemoryDescriptor {
         initial: number;
         maximum?: number;
+        shared?: boolean;
     }
-    
+
     interface ModuleExportDescriptor {
         kind: ImportExportKind;
         name: string;
     }
-    
+
     interface ModuleImportDescriptor {
         kind: ImportExportKind;
         module: string;
         name: string;
     }
-    
+
     interface TableDescriptor {
         element: TableKind;
         initial: number;
         maximum?: number;
     }
-    
+
     interface WebAssemblyInstantiatedSource {
         instance: Instance;
         module: Module;
     }
-    
+
     type ImportExportKind = "function" | "global" | "memory" | "table";
-    type TableKind = "anyfunc";
-    type ValueType = "f32" | "f64" | "i32" | "i64";
+    type TableKind = "anyfunc" | "externref";
+    type ValueType = "anyfunc" | "externref" | "f32" | "f64" | "i32" | "i64" | "v128";
     type ExportValue = Function | Global | Memory | Table;
     type Exports = Record<string, ExportValue>;
     type ImportValue = ExportValue | number;
-    type ModuleImports = Record<string, ImportValue>;
     type Imports = Record<string, ModuleImports>;
+    type ModuleImports = Record<string, ImportValue>;
     function compile(bytes: BufferSource): Promise<Module>;
-    function compileStreaming(source: Response | Promise<Response>): Promise<Module>;
+    function compileStreaming(source: Response | PromiseLike<Response>): Promise<Module>;
     function instantiate(bytes: BufferSource, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
     function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
-    function instantiateStreaming(response: Response | PromiseLike<Response>, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
+    function instantiateStreaming(source: Response | PromiseLike<Response>, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
     function validate(bytes: BufferSource): boolean;
 }
 
@@ -19271,40 +17491,48 @@ interface DecodeSuccessCallback {
     (decodedData: AudioBuffer): void;
 }
 
-interface EventHandlerNonNull {
-    (event: Event): any;
+interface ErrorCallback {
+    (err: DOMException): void;
 }
 
-interface ForEachCallback {
-    (keyId: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null, status: MediaKeyStatus): void;
+interface FileCallback {
+    (file: File): void;
+}
+
+interface FileSystemEntriesCallback {
+    (entries: FileSystemEntry[]): void;
+}
+
+interface FileSystemEntryCallback {
+    (entry: FileSystemEntry): void;
 }
 
 interface FrameRequestCallback {
-    (time: number): void;
+    (time: DOMHighResTimeStamp): void;
 }
 
 interface FunctionStringCallback {
     (data: string): void;
 }
 
+interface IdleRequestCallback {
+    (deadline: IdleDeadline): void;
+}
+
 interface IntersectionObserverCallback {
     (entries: IntersectionObserverEntry[], observer: IntersectionObserver): void;
 }
 
-interface MSLaunchUriCallback {
-    (): void;
+interface LockGrantedCallback {
+    (lock: Lock | null): any;
+}
+
+interface MediaSessionActionHandler {
+    (details: MediaSessionActionDetails): void;
 }
 
 interface MutationCallback {
     (mutations: MutationRecord[], observer: MutationObserver): void;
-}
-
-interface NavigatorUserMediaErrorCallback {
-    (error: MediaStreamError): void;
-}
-
-interface NavigatorUserMediaSuccessCallback {
-    (stream: MediaStream): void;
 }
 
 interface NotificationPermissionCallback {
@@ -19343,8 +17571,8 @@ interface RTCSessionDescriptionCallback {
     (description: RTCSessionDescriptionInit): void;
 }
 
-interface RTCStatsCallback {
-    (report: RTCStatsReport): void;
+interface RemotePlaybackAvailabilityCallback {
+    (available: boolean): void;
 }
 
 interface ResizeObserverCallback {
@@ -19356,7 +17584,7 @@ interface TransformerFlushCallback<O> {
 }
 
 interface TransformerStartCallback<O> {
-    (controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
+    (controller: TransformStreamDefaultController<O>): any;
 }
 
 interface TransformerTransformCallback<I, O> {
@@ -19364,7 +17592,7 @@ interface TransformerTransformCallback<I, O> {
 }
 
 interface UnderlyingSinkAbortCallback {
-    (reason: any): void | PromiseLike<void>;
+    (reason?: any): void | PromiseLike<void>;
 }
 
 interface UnderlyingSinkCloseCallback {
@@ -19372,7 +17600,7 @@ interface UnderlyingSinkCloseCallback {
 }
 
 interface UnderlyingSinkStartCallback {
-    (controller: WritableStreamDefaultController): void | PromiseLike<void>;
+    (controller: WritableStreamDefaultController): any;
 }
 
 interface UnderlyingSinkWriteCallback<W> {
@@ -19380,7 +17608,7 @@ interface UnderlyingSinkWriteCallback<W> {
 }
 
 interface UnderlyingSourceCancelCallback {
-    (reason: any): void | PromiseLike<void>;
+    (reason?: any): void | PromiseLike<void>;
 }
 
 interface UnderlyingSourcePullCallback<R> {
@@ -19388,7 +17616,11 @@ interface UnderlyingSourcePullCallback<R> {
 }
 
 interface UnderlyingSourceStartCallback<R> {
-    (controller: ReadableStreamController<R>): void | PromiseLike<void>;
+    (controller: ReadableStreamController<R>): any;
+}
+
+interface VideoFrameRequestCallback {
+    (now: DOMHighResTimeStamp, metadata: VideoFrameCallbackMetadata): void;
 }
 
 interface VoidFunction {
@@ -19399,14 +17631,12 @@ interface HTMLElementTagNameMap {
     "a": HTMLAnchorElement;
     "abbr": HTMLElement;
     "address": HTMLElement;
-    "applet": HTMLAppletElement;
     "area": HTMLAreaElement;
     "article": HTMLElement;
     "aside": HTMLElement;
     "audio": HTMLAudioElement;
     "b": HTMLElement;
     "base": HTMLBaseElement;
-    "basefont": HTMLBaseFontElement;
     "bdi": HTMLElement;
     "bdo": HTMLElement;
     "blockquote": HTMLQuoteElement;
@@ -19426,7 +17656,6 @@ interface HTMLElementTagNameMap {
     "details": HTMLDetailsElement;
     "dfn": HTMLElement;
     "dialog": HTMLDialogElement;
-    "dir": HTMLDirectoryElement;
     "div": HTMLDivElement;
     "dl": HTMLDListElement;
     "dt": HTMLElement;
@@ -19435,11 +17664,8 @@ interface HTMLElementTagNameMap {
     "fieldset": HTMLFieldSetElement;
     "figcaption": HTMLElement;
     "figure": HTMLElement;
-    "font": HTMLFontElement;
     "footer": HTMLElement;
     "form": HTMLFormElement;
-    "frame": HTMLFrameElement;
-    "frameset": HTMLFrameSetElement;
     "h1": HTMLHeadingElement;
     "h2": HTMLHeadingElement;
     "h3": HTMLHeadingElement;
@@ -19464,7 +17690,6 @@ interface HTMLElementTagNameMap {
     "main": HTMLElement;
     "map": HTMLMapElement;
     "mark": HTMLElement;
-    "marquee": HTMLMarqueeElement;
     "menu": HTMLMenuElement;
     "meta": HTMLMetaElement;
     "meter": HTMLMeterElement;
@@ -19476,7 +17701,6 @@ interface HTMLElementTagNameMap {
     "option": HTMLOptionElement;
     "output": HTMLOutputElement;
     "p": HTMLParagraphElement;
-    "param": HTMLParamElement;
     "picture": HTMLPictureElement;
     "pre": HTMLPreElement;
     "progress": HTMLProgressElement;
@@ -19500,11 +17724,11 @@ interface HTMLElementTagNameMap {
     "sup": HTMLElement;
     "table": HTMLTableElement;
     "tbody": HTMLTableSectionElement;
-    "td": HTMLTableDataCellElement;
+    "td": HTMLTableCellElement;
     "template": HTMLTemplateElement;
     "textarea": HTMLTextAreaElement;
     "tfoot": HTMLTableSectionElement;
-    "th": HTMLTableHeaderCellElement;
+    "th": HTMLTableCellElement;
     "thead": HTMLTableSectionElement;
     "time": HTMLTimeElement;
     "title": HTMLTitleElement;
@@ -19518,12 +17742,42 @@ interface HTMLElementTagNameMap {
 }
 
 interface HTMLElementDeprecatedTagNameMap {
+    "acronym": HTMLElement;
+    "applet": HTMLUnknownElement;
+    "basefont": HTMLElement;
+    "bgsound": HTMLUnknownElement;
+    "big": HTMLElement;
+    "blink": HTMLUnknownElement;
+    "center": HTMLElement;
+    "dir": HTMLDirectoryElement;
+    "font": HTMLFontElement;
+    "frame": HTMLFrameElement;
+    "frameset": HTMLFrameSetElement;
+    "isindex": HTMLUnknownElement;
+    "keygen": HTMLUnknownElement;
     "listing": HTMLPreElement;
+    "marquee": HTMLMarqueeElement;
+    "menuitem": HTMLElement;
+    "multicol": HTMLUnknownElement;
+    "nextid": HTMLUnknownElement;
+    "nobr": HTMLElement;
+    "noembed": HTMLElement;
+    "noframes": HTMLElement;
+    "param": HTMLParamElement;
+    "plaintext": HTMLElement;
+    "rb": HTMLElement;
+    "rtc": HTMLElement;
+    "spacer": HTMLUnknownElement;
+    "strike": HTMLElement;
+    "tt": HTMLElement;
     "xmp": HTMLPreElement;
 }
 
 interface SVGElementTagNameMap {
     "a": SVGAElement;
+    "animate": SVGAnimateElement;
+    "animateMotion": SVGAnimateMotionElement;
+    "animateTransform": SVGAnimateTransformElement;
     "circle": SVGCircleElement;
     "clipPath": SVGClipPathElement;
     "defs": SVGDefsElement;
@@ -19537,6 +17791,7 @@ interface SVGElementTagNameMap {
     "feDiffuseLighting": SVGFEDiffuseLightingElement;
     "feDisplacementMap": SVGFEDisplacementMapElement;
     "feDistantLight": SVGFEDistantLightElement;
+    "feDropShadow": SVGFEDropShadowElement;
     "feFlood": SVGFEFloodElement;
     "feFuncA": SVGFEFuncAElement;
     "feFuncB": SVGFEFuncBElement;
@@ -19562,6 +17817,7 @@ interface SVGElementTagNameMap {
     "marker": SVGMarkerElement;
     "mask": SVGMaskElement;
     "metadata": SVGMetadataElement;
+    "mpath": SVGMPathElement;
     "path": SVGPathElement;
     "pattern": SVGPatternElement;
     "polygon": SVGPolygonElement;
@@ -19569,6 +17825,7 @@ interface SVGElementTagNameMap {
     "radialGradient": SVGRadialGradientElement;
     "rect": SVGRectElement;
     "script": SVGScriptElement;
+    "set": SVGSetElement;
     "stop": SVGStopElement;
     "style": SVGStyleElement;
     "svg": SVGSVGElement;
@@ -19594,75 +17851,54 @@ declare var Image: {
 declare var Option: {
     new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement;
 };
-declare var applicationCache: ApplicationCache;
+/** @deprecated This is a legacy alias of `navigator`. */
 declare var clientInformation: Navigator;
+/** Returns true if the window has been closed, false otherwise. */
 declare var closed: boolean;
+/** Defines a new custom element, mapping the given name to the given constructor as an autonomous custom element. */
 declare var customElements: CustomElementRegistry;
-declare var defaultStatus: string;
 declare var devicePixelRatio: number;
-declare var doNotTrack: string;
 declare var document: Document;
 /** @deprecated */
 declare var event: Event | undefined;
 /** @deprecated */
 declare var external: External;
 declare var frameElement: Element | null;
-declare var frames: Window;
+declare var frames: WindowProxy;
 declare var history: History;
 declare var innerHeight: number;
 declare var innerWidth: number;
 declare var length: number;
 declare var location: Location;
+/** Returns true if the location bar is visible; otherwise, returns false. */
 declare var locationbar: BarProp;
+/** Returns true if the menu bar is visible; otherwise, returns false. */
 declare var menubar: BarProp;
-declare var msContentScript: ExtensionScriptApis;
 /** @deprecated */
 declare const name: void;
 declare var navigator: Navigator;
-declare var offscreenBuffering: string | boolean;
-declare var oncompassneedscalibration: ((this: Window, ev: Event) => any) | null;
-declare var ondevicelight: ((this: Window, ev: DeviceLightEvent) => any) | null;
+/** Available only in secure contexts. */
 declare var ondevicemotion: ((this: Window, ev: DeviceMotionEvent) => any) | null;
+/** Available only in secure contexts. */
 declare var ondeviceorientation: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
-declare var ondeviceorientationabsolute: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
-declare var ongamepadconnected: ((this: Window, ev: GamepadEvent) => any) | null;
-declare var ongamepaddisconnected: ((this: Window, ev: GamepadEvent) => any) | null;
-declare var onmousewheel: ((this: Window, ev: Event) => any) | null;
-declare var onmsgesturechange: ((this: Window, ev: Event) => any) | null;
-declare var onmsgesturedoubletap: ((this: Window, ev: Event) => any) | null;
-declare var onmsgestureend: ((this: Window, ev: Event) => any) | null;
-declare var onmsgesturehold: ((this: Window, ev: Event) => any) | null;
-declare var onmsgesturestart: ((this: Window, ev: Event) => any) | null;
-declare var onmsgesturetap: ((this: Window, ev: Event) => any) | null;
-declare var onmsinertiastart: ((this: Window, ev: Event) => any) | null;
-declare var onmspointercancel: ((this: Window, ev: Event) => any) | null;
-declare var onmspointerdown: ((this: Window, ev: Event) => any) | null;
-declare var onmspointerenter: ((this: Window, ev: Event) => any) | null;
-declare var onmspointerleave: ((this: Window, ev: Event) => any) | null;
-declare var onmspointermove: ((this: Window, ev: Event) => any) | null;
-declare var onmspointerout: ((this: Window, ev: Event) => any) | null;
-declare var onmspointerover: ((this: Window, ev: Event) => any) | null;
-declare var onmspointerup: ((this: Window, ev: Event) => any) | null;
 /** @deprecated */
 declare var onorientationchange: ((this: Window, ev: Event) => any) | null;
-declare var onreadystatechange: ((this: Window, ev: ProgressEvent<Window>) => any) | null;
-declare var onvrdisplayactivate: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplayblur: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplayconnect: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplaydeactivate: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplaydisconnect: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplayfocus: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplaypointerrestricted: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplaypointerunrestricted: ((this: Window, ev: Event) => any) | null;
-declare var onvrdisplaypresentchange: ((this: Window, ev: Event) => any) | null;
 declare var opener: any;
 /** @deprecated */
-declare var orientation: string | number;
+declare var orientation: number;
 declare var outerHeight: number;
 declare var outerWidth: number;
+/** @deprecated This is a legacy alias of `scrollX`. */
 declare var pageXOffset: number;
+/** @deprecated This is a legacy alias of `scrollY`. */
 declare var pageYOffset: number;
-declare var parent: Window;
+/**
+ * Refers to either the parent WindowProxy, or itself.
+ *
+ * It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent.
+ */
+declare var parent: WindowProxy;
+/** Returns true if the personal bar is visible; otherwise, returns false. */
 declare var personalbar: BarProp;
 declare var screen: Screen;
 declare var screenLeft: number;
@@ -19671,37 +17907,53 @@ declare var screenX: number;
 declare var screenY: number;
 declare var scrollX: number;
 declare var scrollY: number;
+/** Returns true if the scrollbars are visible; otherwise, returns false. */
 declare var scrollbars: BarProp;
 declare var self: Window & typeof globalThis;
 declare var speechSynthesis: SpeechSynthesis;
+/** @deprecated */
 declare var status: string;
+/** Returns true if the status bar is visible; otherwise, returns false. */
 declare var statusbar: BarProp;
-declare var styleMedia: StyleMedia;
+/** Returns true if the toolbar is visible; otherwise, returns false. */
 declare var toolbar: BarProp;
-declare var top: Window;
-declare var visualViewport: VisualViewport;
+declare var top: WindowProxy | null;
+declare var visualViewport: VisualViewport | null;
 declare var window: Window & typeof globalThis;
 declare function alert(message?: any): void;
 declare function blur(): void;
+declare function cancelIdleCallback(handle: number): void;
 /** @deprecated */
 declare function captureEvents(): void;
+/** Closes the window. */
 declare function close(): void;
 declare function confirm(message?: string): boolean;
-declare function departFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
+/** Moves the focus to the window's browsing context, if any. */
 declare function focus(): void;
 declare function getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleDeclaration;
-declare function getMatchedCSSRules(elt: Element, pseudoElt?: string | null): CSSRuleList;
 declare function getSelection(): Selection | null;
 declare function matchMedia(query: string): MediaQueryList;
 declare function moveBy(x: number, y: number): void;
 declare function moveTo(x: number, y: number): void;
-declare function msWriteProfilerMark(profilerMarkName: string): void;
-declare function open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
+declare function open(url?: string | URL, target?: string, features?: string): WindowProxy | null;
+/**
+ * Posts a message to the given window. Messages can be structured objects, e.g. nested objects and arrays, can contain JavaScript values (strings, numbers, Date objects, etc), and can contain certain data objects such as File Blob, FileList, and ArrayBuffer objects.
+ *
+ * Objects listed in the transfer member of options are transferred, not just cloned, meaning that they are no longer usable on the sending side.
+ *
+ * A target origin can be specified using the targetOrigin member of options. If not provided, it defaults to "/". This default restricts the message to same-origin targets only.
+ *
+ * If the origin of the target window doesn't match the given target origin, the message is discarded, to avoid information leakage. To send the message to the target regardless of origin, set the target origin to "*".
+ *
+ * Throws a "DataCloneError" DOMException if transfer array contains duplicate objects or if message could not be cloned.
+ */
 declare function postMessage(message: any, targetOrigin: string, transfer?: Transferable[]): void;
+declare function postMessage(message: any, options?: WindowPostMessageOptions): void;
 declare function print(): void;
 declare function prompt(message?: string, _default?: string): string | null;
 /** @deprecated */
 declare function releaseEvents(): void;
+declare function requestIdleCallback(callback: IdleRequestCallback, options?: IdleRequestOptions): number;
 declare function resizeBy(x: number, y: number): void;
 declare function resizeTo(width: number, height: number): void;
 declare function scroll(options?: ScrollToOptions): void;
@@ -19710,18 +17962,13 @@ declare function scrollBy(options?: ScrollToOptions): void;
 declare function scrollBy(x: number, y: number): void;
 declare function scrollTo(options?: ScrollToOptions): void;
 declare function scrollTo(x: number, y: number): void;
+/** Cancels the document load. */
 declare function stop(): void;
-declare function webkitCancelAnimationFrame(handle: number): void;
-declare function webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
-declare function webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
-declare function webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
 declare function toString(): string;
-/**
- * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
- */
+/** Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise. */
 declare function dispatchEvent(event: Event): boolean;
-declare var sessionStorage: Storage;
-declare var localStorage: Storage;
+declare function cancelAnimationFrame(handle: number): void;
+declare function requestAnimationFrame(callback: FrameRequestCallback): number;
 /**
  * Fires when the user aborts the download.
  * @param ev The event.
@@ -19732,6 +17979,7 @@ declare var onanimationend: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onanimationiteration: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onanimationstart: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onauxclick: ((this: Window, ev: MouseEvent) => any) | null;
+declare var onbeforeinput: ((this: Window, ev: InputEvent) => any) | null;
 /**
  * Fires when the object loses the input focus.
  * @param ev The focus event.
@@ -19781,7 +18029,6 @@ declare var ondragend: ((this: Window, ev: DragEvent) => any) | null;
  * @param ev The drag event.
  */
 declare var ondragenter: ((this: Window, ev: DragEvent) => any) | null;
-declare var ondragexit: ((this: Window, ev: Event) => any) | null;
 /**
  * Fires on the target object when the user moves the mouse out of a valid drop target during a drag operation.
  * @param ev The drag event.
@@ -19823,6 +18070,7 @@ declare var onerror: OnErrorEventHandler;
  * @param ev The event.
  */
 declare var onfocus: ((this: Window, ev: FocusEvent) => any) | null;
+declare var onformdata: ((this: Window, ev: FormDataEvent) => any) | null;
 declare var ongotpointercapture: ((this: Window, ev: PointerEvent) => any) | null;
 declare var oninput: ((this: Window, ev: Event) => any) | null;
 declare var oninvalid: ((this: Window, ev: Event) => any) | null;
@@ -19834,6 +18082,7 @@ declare var onkeydown: ((this: Window, ev: KeyboardEvent) => any) | null;
 /**
  * Fires when the user presses an alphanumeric key.
  * @param ev The event.
+ * @deprecated
  */
 declare var onkeypress: ((this: Window, ev: KeyboardEvent) => any) | null;
 /**
@@ -19951,12 +18200,13 @@ declare var onseeking: ((this: Window, ev: Event) => any) | null;
 declare var onselect: ((this: Window, ev: Event) => any) | null;
 declare var onselectionchange: ((this: Window, ev: Event) => any) | null;
 declare var onselectstart: ((this: Window, ev: Event) => any) | null;
+declare var onslotchange: ((this: Window, ev: Event) => any) | null;
 /**
  * Occurs when the download has stopped.
  * @param ev The event.
  */
 declare var onstalled: ((this: Window, ev: Event) => any) | null;
-declare var onsubmit: ((this: Window, ev: Event) => any) | null;
+declare var onsubmit: ((this: Window, ev: SubmitEvent) => any) | null;
 /**
  * Occurs if the load operation has been intentionally halted.
  * @param ev The event.
@@ -19986,28 +18236,20 @@ declare var onvolumechange: ((this: Window, ev: Event) => any) | null;
  * @param ev The event.
  */
 declare var onwaiting: ((this: Window, ev: Event) => any) | null;
+/** @deprecated This is a legacy alias of `onanimationend`. */
+declare var onwebkitanimationend: ((this: Window, ev: Event) => any) | null;
+/** @deprecated This is a legacy alias of `onanimationiteration`. */
+declare var onwebkitanimationiteration: ((this: Window, ev: Event) => any) | null;
+/** @deprecated This is a legacy alias of `onanimationstart`. */
+declare var onwebkitanimationstart: ((this: Window, ev: Event) => any) | null;
+/** @deprecated This is a legacy alias of `ontransitionend`. */
+declare var onwebkittransitionend: ((this: Window, ev: Event) => any) | null;
 declare var onwheel: ((this: Window, ev: WheelEvent) => any) | null;
-declare function cancelAnimationFrame(handle: number): void;
-declare function requestAnimationFrame(callback: FrameRequestCallback): number;
-declare var caches: CacheStorage;
-declare var crypto: Crypto;
-declare var indexedDB: IDBFactory;
-declare var isSecureContext: boolean;
-declare var origin: string;
-declare var performance: Performance;
-declare function atob(data: string): string;
-declare function btoa(data: string): string;
-declare function clearInterval(handle?: number): void;
-declare function clearTimeout(handle?: number): void;
-declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-declare function queueMicrotask(callback: VoidFunction): void;
-declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare var onafterprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
+declare var ongamepadconnected: ((this: Window, ev: GamepadEvent) => any) | null;
+declare var ongamepaddisconnected: ((this: Window, ev: GamepadEvent) => any) | null;
 declare var onhashchange: ((this: Window, ev: HashChangeEvent) => any) | null;
 declare var onlanguagechange: ((this: Window, ev: Event) => any) | null;
 declare var onmessage: ((this: Window, ev: MessageEvent) => any) | null;
@@ -20021,80 +18263,102 @@ declare var onrejectionhandled: ((this: Window, ev: PromiseRejectionEvent) => an
 declare var onstorage: ((this: Window, ev: StorageEvent) => any) | null;
 declare var onunhandledrejection: ((this: Window, ev: PromiseRejectionEvent) => any) | null;
 declare var onunload: ((this: Window, ev: Event) => any) | null;
+declare var localStorage: Storage;
+/** Available only in secure contexts. */
+declare var caches: CacheStorage;
+declare var crossOriginIsolated: boolean;
+declare var crypto: Crypto;
+declare var indexedDB: IDBFactory;
+declare var isSecureContext: boolean;
+declare var origin: string;
+declare var performance: Performance;
+declare function atob(data: string): string;
+declare function btoa(data: string): string;
+declare function clearInterval(id: number | undefined): void;
+declare function clearTimeout(id: number | undefined): void;
+declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+declare function queueMicrotask(callback: VoidFunction): void;
+declare function reportError(e: any): void;
+declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+declare function structuredClone(value: any, options?: StructuredSerializeOptions): any;
+declare var sessionStorage: Storage;
 declare function addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 declare function removeEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
 declare function removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-type HeadersInit = Headers | string[][] | Record<string, string>;
-type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream<Uint8Array> | string;
-type RequestInfo = Request | string;
+type AlgorithmIdentifier = Algorithm | string;
+type BigInteger = Uint8Array;
+type BinaryData = ArrayBuffer | ArrayBufferView;
 type BlobPart = BufferSource | Blob | string;
-type DOMHighResTimeStamp = number;
-type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
-type HTMLOrSVGImageElement = HTMLImageElement | SVGImageElement;
+type BodyInit = ReadableStream | XMLHttpRequestBodyInit;
+type BufferSource = ArrayBufferView | ArrayBuffer;
+type COSEAlgorithmIdentifier = number;
+type CSSNumberish = number;
 type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
-type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
-type MessageEventSource = WindowProxy | MessagePort | ServiceWorker;
-type HTMLOrSVGScriptElement = HTMLScriptElement | SVGScriptElement;
-type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
-type MediaProvider = MediaStream | MediaSource | Blob;
-type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
-type OnBeforeUnloadEventHandler = OnBeforeUnloadEventHandlerNonNull | null;
-type TimerHandler = string | Function;
-type ConstrainULong = number | ConstrainULongRange;
-type ConstrainDouble = number | ConstrainDoubleRange;
+type ClipboardItemData = Promise<string | Blob>;
+type ClipboardItems = ClipboardItem[];
 type ConstrainBoolean = boolean | ConstrainBooleanParameters;
 type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
-type PerformanceEntryList = PerformanceEntry[];
-type ReadableStreamReader<T> = ReadableStreamDefaultReader<T>;
-type ReadableStreamController<T> = ReadableStreamDefaultController<T>;
-type VibratePattern = number | number[];
-type COSEAlgorithmIdentifier = number;
-type UvmEntry = number[];
-type UvmEntries = UvmEntry[];
-type AlgorithmIdentifier = string | Algorithm;
-type HashAlgorithmIdentifier = AlgorithmIdentifier;
-type BigInteger = Uint8Array;
-type NamedCurve = string;
-type GLenum = number;
-type GLboolean = boolean;
+type ConstrainDouble = number | ConstrainDoubleRange;
+type ConstrainULong = number | ConstrainULongRange;
+type DOMHighResTimeStamp = number;
+type EpochTimeStamp = number;
+type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+type Float32List = Float32Array | GLfloat[];
+type FormDataEntryValue = File | string;
 type GLbitfield = number;
+type GLboolean = boolean;
+type GLclampf = number;
+type GLenum = number;
+type GLfloat = number;
 type GLint = number;
-type GLsizei = number;
+type GLint64 = number;
 type GLintptr = number;
+type GLsizei = number;
 type GLsizeiptr = number;
 type GLuint = number;
-type GLfloat = number;
-type GLclampf = number;
-type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | OffscreenCanvas;
-type Float32List = Float32Array | GLfloat[];
-type Int32List = Int32Array | GLint[];
-type GLint64 = number;
 type GLuint64 = number;
-type Uint32List = Uint32Array | GLuint[];
-type BufferSource = ArrayBufferView | ArrayBuffer;
-type DOMTimeStamp = number;
-type LineAndPositionSetting = number | AutoKeyword;
-type FormDataEntryValue = File | string;
+type HTMLOrSVGImageElement = HTMLImageElement | SVGImageElement;
+type HTMLOrSVGScriptElement = HTMLScriptElement | SVGScriptElement;
+type HashAlgorithmIdentifier = AlgorithmIdentifier;
+type HeadersInit = [string, string][] | Record<string, string> | Headers;
+type IDBValidKey = number | string | Date | BufferSource | IDBValidKey[];
+type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
 type InsertPosition = "beforebegin" | "afterbegin" | "beforeend" | "afterend";
-type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
+type Int32List = Int32Array | GLint[];
+type LineAndPositionSetting = number | AutoKeyword;
+type MediaProvider = MediaStream | MediaSource | Blob;
+type MessageEventSource = WindowProxy | MessagePort | ServiceWorker;
 type MutationRecordType = "attributes" | "characterData" | "childList";
-type IDBKeyPath = string;
-type Transferable = ArrayBuffer | MessagePort | ImageBitmap | OffscreenCanvas;
-type RTCIceGatherCandidate = RTCIceCandidateDictionary | RTCIceCandidateComplete;
-type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
-/** @deprecated */
-type MouseWheelEvent = WheelEvent;
+type NamedCurve = string;
+type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
+type OnBeforeUnloadEventHandler = OnBeforeUnloadEventHandlerNonNull | null;
+type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
+type PerformanceEntryList = PerformanceEntry[];
+type ReadableStreamController<T> = ReadableStreamDefaultController<T> | ReadableByteStreamController;
+type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
+type ReadableStreamReader<T> = ReadableStreamDefaultReader<T> | ReadableStreamBYOBReader;
+type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
+type RequestInfo = Request | string;
+type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | OffscreenCanvas;
+type TimerHandler = string | Function;
+type Transferable = OffscreenCanvas | ImageBitmap | MessagePort | ReadableStream | WritableStream | TransformStream | ArrayBuffer;
+type Uint32List = Uint32Array | GLuint[];
+type VibratePattern = number | number[];
 type WindowProxy = Window;
-type ReadableStreamDefaultReadResult<T> = ReadableStreamDefaultReadValueResult<T> | ReadableStreamDefaultReadDoneResult;
+type XMLHttpRequestBodyInit = Blob | BufferSource | FormData | URLSearchParams | string;
 type AlignSetting = "center" | "end" | "left" | "right" | "start";
 type AnimationPlayState = "finished" | "idle" | "paused" | "running";
+type AnimationReplaceState = "active" | "persisted" | "removed";
 type AppendMode = "segments" | "sequence";
 type AttestationConveyancePreference = "direct" | "enterprise" | "indirect" | "none";
 type AudioContextLatencyCategory = "balanced" | "interactive" | "playback";
 type AudioContextState = "closed" | "running" | "suspended";
 type AuthenticatorAttachment = "cross-platform" | "platform";
-type AuthenticatorTransport = "ble" | "internal" | "nfc" | "usb";
+type AuthenticatorTransport = "ble" | "hybrid" | "internal" | "nfc" | "usb";
 type AutoKeyword = "auto";
 type AutomationRate = "a-rate" | "k-rate";
 type BinaryType = "arraybuffer" | "blob";
@@ -20102,31 +18366,42 @@ type BiquadFilterType = "allpass" | "bandpass" | "highpass" | "highshelf" | "low
 type CanPlayTypeResult = "" | "maybe" | "probably";
 type CanvasDirection = "inherit" | "ltr" | "rtl";
 type CanvasFillRule = "evenodd" | "nonzero";
+type CanvasFontKerning = "auto" | "none" | "normal";
+type CanvasFontStretch = "condensed" | "expanded" | "extra-condensed" | "extra-expanded" | "normal" | "semi-condensed" | "semi-expanded" | "ultra-condensed" | "ultra-expanded";
+type CanvasFontVariantCaps = "all-petite-caps" | "all-small-caps" | "normal" | "petite-caps" | "small-caps" | "titling-caps" | "unicase";
 type CanvasLineCap = "butt" | "round" | "square";
 type CanvasLineJoin = "bevel" | "miter" | "round";
 type CanvasTextAlign = "center" | "end" | "left" | "right" | "start";
 type CanvasTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
+type CanvasTextRendering = "auto" | "geometricPrecision" | "optimizeLegibility" | "optimizeSpeed";
 type ChannelCountMode = "clamped-max" | "explicit" | "max";
 type ChannelInterpretation = "discrete" | "speakers";
 type ClientTypes = "all" | "sharedworker" | "window" | "worker";
+type ColorGamut = "p3" | "rec2020" | "srgb";
 type ColorSpaceConversion = "default" | "none";
 type CompositeOperation = "accumulate" | "add" | "replace";
 type CompositeOperationOrAuto = "accumulate" | "add" | "auto" | "replace";
 type CredentialMediationRequirement = "optional" | "required" | "silent";
 type DOMParserSupportedType = "application/xhtml+xml" | "application/xml" | "image/svg+xml" | "text/html" | "text/xml";
 type DirectionSetting = "" | "lr" | "rl";
-type DisplayCaptureSurfaceType = "application" | "browser" | "monitor" | "window";
+type DisplayCaptureSurfaceType = "browser" | "monitor" | "window";
 type DistanceModelType = "exponential" | "inverse" | "linear";
 type DocumentReadyState = "complete" | "interactive" | "loading";
+type DocumentVisibilityState = "hidden" | "visible";
 type EndOfStreamError = "decode" | "network";
 type EndingType = "native" | "transparent";
+type FileSystemHandleKind = "directory" | "file";
 type FillMode = "auto" | "backwards" | "both" | "forwards" | "none";
+type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
+type FontFaceSetLoadStatus = "loaded" | "loading";
 type FullscreenNavigationUI = "auto" | "hide" | "show";
-type GamepadHand = "" | "left" | "right";
 type GamepadHapticActuatorType = "vibration";
-type GamepadMappingType = "" | "standard";
+type GamepadMappingType = "" | "standard" | "xr-standard";
+type GlobalCompositeOperation = "color" | "color-burn" | "color-dodge" | "copy" | "darken" | "destination-atop" | "destination-in" | "destination-out" | "destination-over" | "difference" | "exclusion" | "hard-light" | "hue" | "lighten" | "lighter" | "luminosity" | "multiply" | "overlay" | "saturation" | "screen" | "soft-light" | "source-atop" | "source-in" | "source-out" | "source-over" | "xor";
+type HdrMetadataType = "smpteSt2086" | "smpteSt2094-10" | "smpteSt2094-40";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "done" | "pending";
+type IDBTransactionDurability = "default" | "relaxed" | "strict";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
 type ImageOrientation = "flipY" | "none";
 type ImageSmoothingQuality = "high" | "low" | "medium";
@@ -20135,96 +18410,96 @@ type KeyFormat = "jwk" | "pkcs8" | "raw" | "spki";
 type KeyType = "private" | "public" | "secret";
 type KeyUsage = "decrypt" | "deriveBits" | "deriveKey" | "encrypt" | "sign" | "unwrapKey" | "verify" | "wrapKey";
 type LineAlignSetting = "center" | "end" | "start";
-type ListeningState = "active" | "disambiguation" | "inactive";
-type MSCredentialType = "FIDO_2_0";
-type MSTransportType = "BT" | "Embedded" | "NFC" | "USB";
-type MSWebViewPermissionState = "allow" | "defer" | "deny" | "unknown";
-type MSWebViewPermissionType = "geolocation" | "media" | "pointerlock" | "unlimitedIndexedDBQuota" | "webnotifications";
+type LockMode = "exclusive" | "shared";
+type MediaDecodingType = "file" | "media-source" | "webrtc";
 type MediaDeviceKind = "audioinput" | "audiooutput" | "videoinput";
+type MediaEncodingType = "record" | "webrtc";
 type MediaKeyMessageType = "individualization-request" | "license-release" | "license-renewal" | "license-request";
+type MediaKeySessionClosedReason = "closed-by-application" | "hardware-context-reset" | "internal-error" | "release-acknowledged" | "resource-evicted";
 type MediaKeySessionType = "persistent-license" | "temporary";
-type MediaKeyStatus = "expired" | "internal-error" | "output-downscaled" | "output-restricted" | "released" | "status-pending" | "usable";
+type MediaKeyStatus = "expired" | "internal-error" | "output-downscaled" | "output-restricted" | "released" | "status-pending" | "usable" | "usable-in-future";
 type MediaKeysRequirement = "not-allowed" | "optional" | "required";
+type MediaSessionAction = "nexttrack" | "pause" | "play" | "previoustrack" | "seekbackward" | "seekforward" | "seekto" | "skipad" | "stop";
+type MediaSessionPlaybackState = "none" | "paused" | "playing";
 type MediaStreamTrackState = "ended" | "live";
-type NavigationReason = "down" | "left" | "right" | "up";
-type NavigationType = "back_forward" | "navigate" | "prerender" | "reload";
+type NavigationTimingType = "back_forward" | "navigate" | "prerender" | "reload";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
-type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2";
+type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2" | "webgpu";
 type OrientationLockType = "any" | "landscape" | "landscape-primary" | "landscape-secondary" | "natural" | "portrait" | "portrait-primary" | "portrait-secondary";
 type OrientationType = "landscape-primary" | "landscape-secondary" | "portrait-primary" | "portrait-secondary";
 type OscillatorType = "custom" | "sawtooth" | "sine" | "square" | "triangle";
 type OverSampleType = "2x" | "4x" | "none";
 type PanningModelType = "HRTF" | "equalpower";
 type PaymentComplete = "fail" | "success" | "unknown";
-type PaymentShippingType = "delivery" | "pickup" | "shipping";
-type PermissionName = "accelerometer" | "ambient-light-sensor" | "background-fetch" | "background-sync" | "bluetooth" | "camera" | "clipboard-read" | "clipboard-write" | "device-info" | "display-capture" | "geolocation" | "gyroscope" | "magnetometer" | "microphone" | "midi" | "nfc" | "notifications" | "persistent-storage" | "push" | "speaker";
+type PermissionName = "geolocation" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock" | "xr-spatial-tracking";
 type PermissionState = "denied" | "granted" | "prompt";
 type PlaybackDirection = "alternate" | "alternate-reverse" | "normal" | "reverse";
 type PositionAlignSetting = "auto" | "center" | "line-left" | "line-right";
+type PredefinedColorSpace = "display-p3" | "srgb";
 type PremultiplyAlpha = "default" | "none" | "premultiply";
+type PresentationStyle = "attachment" | "inline" | "unspecified";
 type PublicKeyCredentialType = "public-key";
 type PushEncryptionKeyName = "auth" | "p256dh";
-type PushPermissionState = "denied" | "granted" | "prompt";
 type RTCBundlePolicy = "balanced" | "max-bundle" | "max-compat";
 type RTCDataChannelState = "closed" | "closing" | "connecting" | "open";
 type RTCDegradationPreference = "balanced" | "maintain-framerate" | "maintain-resolution";
-type RTCDtlsRole = "auto" | "client" | "server";
 type RTCDtlsTransportState = "closed" | "connected" | "connecting" | "failed" | "new";
-type RTCDtxStatus = "disabled" | "enabled";
-type RTCErrorDetailType = "data-channel-failure" | "dtls-failure" | "fingerprint-failure" | "hardware-encoder-error" | "hardware-encoder-not-available" | "idp-bad-script-failure" | "idp-execution-failure" | "idp-load-failure" | "idp-need-login" | "idp-timeout" | "idp-tls-failure" | "idp-token-expired" | "idp-token-invalid" | "sctp-failure" | "sdp-syntax-error";
+type RTCEncodedVideoFrameType = "delta" | "empty" | "key";
+type RTCErrorDetailType = "data-channel-failure" | "dtls-failure" | "fingerprint-failure" | "hardware-encoder-error" | "hardware-encoder-not-available" | "sctp-failure" | "sdp-syntax-error";
 type RTCIceCandidateType = "host" | "prflx" | "relay" | "srflx";
 type RTCIceComponent = "rtcp" | "rtp";
 type RTCIceConnectionState = "checking" | "closed" | "completed" | "connected" | "disconnected" | "failed" | "new";
-type RTCIceCredentialType = "oauth" | "password";
-type RTCIceGatherPolicy = "all" | "nohost" | "relay";
 type RTCIceGathererState = "complete" | "gathering" | "new";
 type RTCIceGatheringState = "complete" | "gathering" | "new";
 type RTCIceProtocol = "tcp" | "udp";
-type RTCIceRole = "controlled" | "controlling" | "unknown";
 type RTCIceTcpCandidateType = "active" | "passive" | "so";
 type RTCIceTransportPolicy = "all" | "relay";
 type RTCIceTransportState = "checking" | "closed" | "completed" | "connected" | "disconnected" | "failed" | "new";
 type RTCPeerConnectionState = "closed" | "connected" | "connecting" | "disconnected" | "failed" | "new";
 type RTCPriorityType = "high" | "low" | "medium" | "very-low";
-type RTCRtcpMuxPolicy = "negotiate" | "require";
+type RTCRtcpMuxPolicy = "require";
 type RTCRtpTransceiverDirection = "inactive" | "recvonly" | "sendonly" | "sendrecv" | "stopped";
 type RTCSctpTransportState = "closed" | "connected" | "connecting";
 type RTCSdpType = "answer" | "offer" | "pranswer" | "rollback";
 type RTCSignalingState = "closed" | "have-local-offer" | "have-local-pranswer" | "have-remote-offer" | "have-remote-pranswer" | "stable";
-type RTCStatsIceCandidatePairState = "failed" | "frozen" | "in-progress" | "succeeded" | "waiting";
-type RTCStatsIceCandidateType = "host" | "peerreflexive" | "relayed" | "serverreflexive";
-type RTCStatsType = "candidate-pair" | "certificate" | "codec" | "csrc" | "data-channel" | "ice-server" | "inbound-rtp" | "local-candidate" | "media-source" | "outbound-rtp" | "peer-connection" | "receiver" | "remote-candidate" | "remote-inbound-rtp" | "remote-outbound-rtp" | "sctp-transport" | "sender" | "stream" | "track" | "transceiver" | "transport";
+type RTCStatsIceCandidatePairState = "failed" | "frozen" | "in-progress" | "inprogress" | "succeeded" | "waiting";
+type RTCStatsType = "candidate-pair" | "certificate" | "codec" | "data-channel" | "inbound-rtp" | "local-candidate" | "media-source" | "outbound-rtp" | "peer-connection" | "remote-candidate" | "remote-inbound-rtp" | "remote-outbound-rtp" | "track" | "transport";
+type ReadableStreamReaderMode = "byob";
+type ReadableStreamType = "bytes";
 type ReadyState = "closed" | "ended" | "open";
+type RecordingState = "inactive" | "paused" | "recording";
 type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url";
+type RemotePlaybackState = "connected" | "connecting" | "disconnected";
 type RequestCache = "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload";
 type RequestCredentials = "include" | "omit" | "same-origin";
-type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "image" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
+type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "frame" | "iframe" | "image" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
 type RequestMode = "cors" | "navigate" | "no-cors" | "same-origin";
 type RequestRedirect = "error" | "follow" | "manual";
 type ResidentKeyRequirement = "discouraged" | "preferred" | "required";
 type ResizeObserverBoxOptions = "border-box" | "content-box" | "device-pixel-content-box";
 type ResizeQuality = "high" | "low" | "medium" | "pixelated";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
-type ScopedCredentialType = "ScopedCred";
 type ScrollBehavior = "auto" | "smooth";
 type ScrollLogicalPosition = "center" | "end" | "nearest" | "start";
 type ScrollRestoration = "auto" | "manual";
 type ScrollSetting = "" | "up";
+type SecurityPolicyViolationEventDisposition = "enforce" | "report";
 type SelectionMode = "end" | "preserve" | "select" | "start";
 type ServiceWorkerState = "activated" | "activating" | "installed" | "installing" | "parsed" | "redundant";
 type ServiceWorkerUpdateViaCache = "all" | "imports" | "none";
 type ShadowRootMode = "closed" | "open";
-type SpeechRecognitionErrorCode = "aborted" | "audio-capture" | "bad-grammar" | "language-not-supported" | "network" | "no-speech" | "not-allowed" | "service-not-allowed";
+type SlotAssignmentMode = "manual" | "named";
 type SpeechSynthesisErrorCode = "audio-busy" | "audio-hardware" | "canceled" | "interrupted" | "invalid-argument" | "language-unavailable" | "network" | "not-allowed" | "synthesis-failed" | "synthesis-unavailable" | "text-too-long" | "voice-unavailable";
 type TextTrackKind = "captions" | "chapters" | "descriptions" | "metadata" | "subtitles";
 type TextTrackMode = "disabled" | "hidden" | "showing";
 type TouchType = "direct" | "stylus";
-type Transport = "ble" | "nfc" | "usb";
+type TransferFunction = "hlg" | "pq" | "srgb";
 type UserVerificationRequirement = "discouraged" | "preferred" | "required";
-type VRDisplayEventReason = "mounted" | "navigation" | "requested" | "unmounted";
+type VideoColorPrimaries = "bt470bg" | "bt709" | "smpte170m";
 type VideoFacingModeEnum = "environment" | "left" | "right" | "user";
-type VisibilityState = "hidden" | "visible";
+type VideoMatrixCoefficients = "bt470bg" | "bt709" | "rgb" | "smpte170m";
+type VideoTransferCharacteristics = "bt709" | "iec61966-2-1" | "smpte170m";
 type WebGLPowerPreference = "default" | "high-performance" | "low-power";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";

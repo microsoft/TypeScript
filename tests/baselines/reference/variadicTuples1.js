@@ -405,39 +405,43 @@ type U3 = [...[string, number], boolean];
 //// [variadicTuples1.js]
 "use strict";
 // Variadics in tuple types
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 // Variadics in array literals
 function tup2(t, u) {
-    return __spreadArray(__spreadArray(__spreadArray(__spreadArray([1], t), [2]), u), [3]);
+    return __spreadArray(__spreadArray(__spreadArray(__spreadArray([1], t, true), [2], false), u, true), [3], false);
 }
 var t2 = tup2(['hello'], [10, true]);
 function concat(t, u) {
-    return __spreadArray(__spreadArray([], t), u);
+    return __spreadArray(__spreadArray([], t, true), u, true);
 }
 var tc1 = concat([], []);
 var tc2 = concat(['hello'], [42]);
 var tc3 = concat([1, 2, 3], sa);
 var tc4 = concat(sa, [1, 2, 3]); // Ideally would be [...string[], number, number, number]
 function concat2(t, u) {
-    return __spreadArray(__spreadArray([], t), u); // (T[number] | U[number])[]
+    return __spreadArray(__spreadArray([], t, true), u, true); // (T[number] | U[number])[]
 }
 var tc5 = concat2([1, 2, 3], [4, 5, 6]); // (1 | 2 | 3 | 4 | 5 | 6)[]
 function foo2(t1, t2, a1) {
     foo1(1, 'abc', true, 42, 43, 44);
-    foo1.apply(void 0, __spreadArray(__spreadArray([], t1), [true, 42, 43, 44]));
-    foo1.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], t1), t2), [42, 43, 44]));
-    foo1.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], t1), t2), a1));
+    foo1.apply(void 0, __spreadArray(__spreadArray([], t1, false), [true, 42, 43, 44], false));
+    foo1.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], t1, false), t2, false), [42, 43, 44], false));
+    foo1.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], t1, false), t2, false), a1, false));
     foo1.apply(void 0, t1); // Error
-    foo1.apply(void 0, __spreadArray(__spreadArray([], t1), [45])); // Error
+    foo1.apply(void 0, __spreadArray(__spreadArray([], t1, false), [45], false)); // Error
 }
 function foo4(u) {
     foo3(1, 2);
     foo3(1, 'hello', true, 2);
-    foo3.apply(void 0, __spreadArray(__spreadArray([1], u), ['hi', 2]));
+    foo3.apply(void 0, __spreadArray(__spreadArray([1], u, false), ['hi', 2], false));
     foo3(1);
 }
 ft1(['hello', 42]); // (string | number)[]
@@ -471,17 +475,17 @@ function f3(t) {
 var tm1 = fm1([['abc'], [42], [true], ['def']]); // [boolean, string]
 function gx1(u, v) {
     fx1('abc'); // []
-    fx1.apply(void 0, __spreadArray(['abc'], u)); // U
-    fx1.apply(void 0, __spreadArray(['abc'], v)); // [...V]
-    fx1.apply(void 0, __spreadArray(['abc'], u)); // U
-    fx1.apply(void 0, __spreadArray(['abc'], v)); // Error
+    fx1.apply(void 0, __spreadArray(['abc'], u, false)); // U
+    fx1.apply(void 0, __spreadArray(['abc'], v, false)); // [...V]
+    fx1.apply(void 0, __spreadArray(['abc'], u, false)); // U
+    fx1.apply(void 0, __spreadArray(['abc'], v, false)); // Error
 }
 function gx2(u, v) {
     fx2('abc'); // []
-    fx2.apply(void 0, __spreadArray(['abc'], u)); // U
-    fx2.apply(void 0, __spreadArray(['abc'], v)); // [...V]
-    fx2.apply(void 0, __spreadArray(['abc'], u)); // U
-    fx2.apply(void 0, __spreadArray(['abc'], v)); // V
+    fx2.apply(void 0, __spreadArray(['abc'], u, false)); // U
+    fx2.apply(void 0, __spreadArray(['abc'], v, false)); // [...V]
+    fx2.apply(void 0, __spreadArray(['abc'], u, false)); // U
+    fx2.apply(void 0, __spreadArray(['abc'], v, false)); // V
 }
 // Relations involving variadic tuple types
 function f10(x, y, z) {
@@ -548,7 +552,7 @@ function curry(f) {
         for (var _i = 0; _i < arguments.length; _i++) {
             b[_i] = arguments[_i];
         }
-        return f.apply(void 0, __spreadArray(__spreadArray([], a), b));
+        return f.apply(void 0, __spreadArray(__spreadArray([], a, false), b, false));
     };
 }
 var fn1 = function (a, b, c, d) { return 0; };
@@ -577,10 +581,10 @@ var fn3 = function () {
 };
 var c20 = curry(fn3); // (...args: string[]) => number
 var c21 = curry(fn3, 'abc', 'def'); // (...args: string[]) => number
-var c22 = curry.apply(void 0, __spreadArray([fn3], sa)); // (...args: string[]) => number
+var c22 = curry.apply(void 0, __spreadArray([fn3], sa, false)); // (...args: string[]) => number
 // No inference to [...T, ...U] when there is no implied arity
 function curry2(f, t, u) {
-    return f.apply(void 0, __spreadArray(__spreadArray([], t), u));
+    return f.apply(void 0, __spreadArray(__spreadArray([], t, false), u, false));
 }
 curry2(fn10, ['hello', 42], [true]);
 curry2(fn10, ['hello'], [42, true]);
@@ -589,13 +593,13 @@ ft([1, 2], [1, 2, 3]);
 ft(['a', 'b'], ['c', 'd']);
 ft(['a', 'b'], ['c', 'd', 42]);
 call('hello', 32, function (a, b) { return 42; });
-call.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {
+call.apply(void 0, __spreadArray(__spreadArray([], sa, false), [function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
         return 42;
-    }]));
+    }], false));
 function f21(args) {
     var v1 = f20(args); // U
     var v2 = f20(["foo", "bar"]); // [string]
@@ -613,7 +617,7 @@ function callApi(method) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return method.apply(void 0, __spreadArray(__spreadArray([], args), [{}]));
+        return method.apply(void 0, __spreadArray(__spreadArray([], args, false), [{}], false));
     };
 }
 callApi(getUser);
@@ -622,17 +626,17 @@ var data = [false, false]; // Error
 
 
 //// [variadicTuples1.d.ts]
-declare type TV0<T extends unknown[]> = [string, ...T];
-declare type TV1<T extends unknown[]> = [string, ...T, number];
-declare type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-declare type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
-declare type TN1 = TV1<[boolean, string]>;
-declare type TN2 = TV1<[]>;
-declare type TN3 = TV1<[boolean?]>;
-declare type TN4 = TV1<string[]>;
-declare type TN5 = TV1<[boolean] | [symbol, symbol]>;
-declare type TN6 = TV1<any>;
-declare type TN7 = TV1<never>;
+type TV0<T extends unknown[]> = [string, ...T];
+type TV1<T extends unknown[]> = [string, ...T, number];
+type TV2<T extends unknown[]> = [string, ...T, number, ...T];
+type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
+type TN1 = TV1<[boolean, string]>;
+type TN2 = TV1<[]>;
+type TN3 = TV1<[boolean?]>;
+type TN4 = TV1<string[]>;
+type TN5 = TV1<[boolean] | [symbol, symbol]>;
+type TN6 = TV1<any>;
+type TN7 = TV1<never>;
 declare function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]): readonly [1, ...T, 2, ...U, 3];
 declare const t2: readonly [1, string, 2, number, boolean, 3];
 declare function concat<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]): [...T, ...U];
@@ -655,12 +659,12 @@ declare function f0<T extends unknown[]>(t: [string, ...T], n: number): void;
 declare function f1<T extends unknown[]>(t: [string, ...T, number], n: number): void;
 declare function f2<T extends unknown[]>(t: [string, ...T]): void;
 declare function f3<T extends unknown[]>(t: [string, ...T, number]): void;
-declare type Arrayify<T> = {
+type Arrayify<T> = {
     [P in keyof T]: T[P][];
 };
-declare type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;
-declare type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;
-declare type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;
+type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;
+type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;
+type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;
 declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
 declare let tm1: [boolean, string];
 declare function fx1<T extends unknown[]>(a: string, ...args: T): T;
@@ -673,78 +677,78 @@ declare function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly 
 declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
-declare type First<T extends readonly unknown[]> = T extends readonly [unknown, ...unknown[]] ? T[0] : T[0] | undefined;
-declare type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
-declare type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer U] ? U : T extends readonly [unknown, ...unknown[]] ? T[number] : T[number] | undefined;
-declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
-declare type T00 = First<[number, symbol, string]>;
-declare type T01 = First<[symbol, string]>;
-declare type T02 = First<[string]>;
-declare type T03 = First<[number, symbol, ...string[]]>;
-declare type T04 = First<[symbol, ...string[]]>;
-declare type T05 = First<[string?]>;
-declare type T06 = First<string[]>;
-declare type T07 = First<[]>;
-declare type T08 = First<any>;
-declare type T09 = First<never>;
-declare type T10 = DropFirst<[number, symbol, string]>;
-declare type T11 = DropFirst<[symbol, string]>;
-declare type T12 = DropFirst<[string]>;
-declare type T13 = DropFirst<[number, symbol, ...string[]]>;
-declare type T14 = DropFirst<[symbol, ...string[]]>;
-declare type T15 = DropFirst<[string?]>;
-declare type T16 = DropFirst<string[]>;
-declare type T17 = DropFirst<[]>;
-declare type T18 = DropFirst<any>;
-declare type T19 = DropFirst<never>;
-declare type T20 = Last<[number, symbol, string]>;
-declare type T21 = Last<[symbol, string]>;
-declare type T22 = Last<[string]>;
-declare type T23 = Last<[number, symbol, ...string[]]>;
-declare type T24 = Last<[symbol, ...string[]]>;
-declare type T25 = Last<[string?]>;
-declare type T26 = Last<string[]>;
-declare type T27 = Last<[]>;
-declare type T28 = Last<any>;
-declare type T29 = Last<never>;
-declare type T30 = DropLast<[number, symbol, string]>;
-declare type T31 = DropLast<[symbol, string]>;
-declare type T32 = DropLast<[string]>;
-declare type T33 = DropLast<[number, symbol, ...string[]]>;
-declare type T34 = DropLast<[symbol, ...string[]]>;
-declare type T35 = DropLast<[string?]>;
-declare type T36 = DropLast<string[]>;
-declare type T37 = DropLast<[]>;
-declare type T38 = DropLast<any>;
-declare type T39 = DropLast<never>;
-declare type R00 = First<readonly [number, symbol, string]>;
-declare type R01 = First<readonly [symbol, string]>;
-declare type R02 = First<readonly [string]>;
-declare type R03 = First<readonly [number, symbol, ...string[]]>;
-declare type R04 = First<readonly [symbol, ...string[]]>;
-declare type R05 = First<readonly string[]>;
-declare type R06 = First<readonly []>;
-declare type R10 = DropFirst<readonly [number, symbol, string]>;
-declare type R11 = DropFirst<readonly [symbol, string]>;
-declare type R12 = DropFirst<readonly [string]>;
-declare type R13 = DropFirst<readonly [number, symbol, ...string[]]>;
-declare type R14 = DropFirst<readonly [symbol, ...string[]]>;
-declare type R15 = DropFirst<readonly string[]>;
-declare type R16 = DropFirst<readonly []>;
-declare type R20 = Last<readonly [number, symbol, string]>;
-declare type R21 = Last<readonly [symbol, string]>;
-declare type R22 = Last<readonly [string]>;
-declare type R23 = Last<readonly [number, symbol, ...string[]]>;
-declare type R24 = Last<readonly [symbol, ...string[]]>;
-declare type R25 = Last<readonly string[]>;
-declare type R26 = Last<readonly []>;
-declare type R30 = DropLast<readonly [number, symbol, string]>;
-declare type R31 = DropLast<readonly [symbol, string]>;
-declare type R32 = DropLast<readonly [string]>;
-declare type R33 = DropLast<readonly [number, symbol, ...string[]]>;
-declare type R34 = DropLast<readonly [symbol, ...string[]]>;
-declare type R35 = DropLast<readonly string[]>;
-declare type R36 = DropLast<readonly []>;
+type First<T extends readonly unknown[]> = T extends readonly [unknown, ...unknown[]] ? T[0] : T[0] | undefined;
+type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer U] ? U : T extends readonly [unknown, ...unknown[]] ? T[number] : T[number] | undefined;
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
+type T00 = First<[number, symbol, string]>;
+type T01 = First<[symbol, string]>;
+type T02 = First<[string]>;
+type T03 = First<[number, symbol, ...string[]]>;
+type T04 = First<[symbol, ...string[]]>;
+type T05 = First<[string?]>;
+type T06 = First<string[]>;
+type T07 = First<[]>;
+type T08 = First<any>;
+type T09 = First<never>;
+type T10 = DropFirst<[number, symbol, string]>;
+type T11 = DropFirst<[symbol, string]>;
+type T12 = DropFirst<[string]>;
+type T13 = DropFirst<[number, symbol, ...string[]]>;
+type T14 = DropFirst<[symbol, ...string[]]>;
+type T15 = DropFirst<[string?]>;
+type T16 = DropFirst<string[]>;
+type T17 = DropFirst<[]>;
+type T18 = DropFirst<any>;
+type T19 = DropFirst<never>;
+type T20 = Last<[number, symbol, string]>;
+type T21 = Last<[symbol, string]>;
+type T22 = Last<[string]>;
+type T23 = Last<[number, symbol, ...string[]]>;
+type T24 = Last<[symbol, ...string[]]>;
+type T25 = Last<[string?]>;
+type T26 = Last<string[]>;
+type T27 = Last<[]>;
+type T28 = Last<any>;
+type T29 = Last<never>;
+type T30 = DropLast<[number, symbol, string]>;
+type T31 = DropLast<[symbol, string]>;
+type T32 = DropLast<[string]>;
+type T33 = DropLast<[number, symbol, ...string[]]>;
+type T34 = DropLast<[symbol, ...string[]]>;
+type T35 = DropLast<[string?]>;
+type T36 = DropLast<string[]>;
+type T37 = DropLast<[]>;
+type T38 = DropLast<any>;
+type T39 = DropLast<never>;
+type R00 = First<readonly [number, symbol, string]>;
+type R01 = First<readonly [symbol, string]>;
+type R02 = First<readonly [string]>;
+type R03 = First<readonly [number, symbol, ...string[]]>;
+type R04 = First<readonly [symbol, ...string[]]>;
+type R05 = First<readonly string[]>;
+type R06 = First<readonly []>;
+type R10 = DropFirst<readonly [number, symbol, string]>;
+type R11 = DropFirst<readonly [symbol, string]>;
+type R12 = DropFirst<readonly [string]>;
+type R13 = DropFirst<readonly [number, symbol, ...string[]]>;
+type R14 = DropFirst<readonly [symbol, ...string[]]>;
+type R15 = DropFirst<readonly string[]>;
+type R16 = DropFirst<readonly []>;
+type R20 = Last<readonly [number, symbol, string]>;
+type R21 = Last<readonly [symbol, string]>;
+type R22 = Last<readonly [string]>;
+type R23 = Last<readonly [number, symbol, ...string[]]>;
+type R24 = Last<readonly [symbol, ...string[]]>;
+type R25 = Last<readonly string[]>;
+type R26 = Last<readonly []>;
+type R30 = DropLast<readonly [number, symbol, string]>;
+type R31 = DropLast<readonly [symbol, string]>;
+type R32 = DropLast<readonly [string]>;
+type R33 = DropLast<readonly [number, symbol, ...string[]]>;
+type R34 = DropLast<readonly [symbol, ...string[]]>;
+type R35 = DropLast<readonly string[]>;
+type R36 = DropLast<readonly []>;
 declare function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T): (...b: U) => R;
 declare const fn1: (a: number, b: string, c: boolean, d: string[]) => number;
 declare const c0: (a: number, b: string, c: boolean, d: string[]) => number;
@@ -784,9 +788,9 @@ declare function getOrgUser(id: string, orgId: number, options?: {
     z?: boolean;
 }): void;
 declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args_0: T) => U;
-declare type Numbers = number[];
-declare type Unbounded = [...Numbers, boolean];
+type Numbers = number[];
+type Unbounded = [...Numbers, boolean];
 declare const data: Unbounded;
-declare type U1 = [string, ...Numbers, boolean];
-declare type U2 = [...[string, ...Numbers], boolean];
-declare type U3 = [...[string, number], boolean];
+type U1 = [string, ...Numbers, boolean];
+type U2 = [...[string, ...Numbers], boolean];
+type U3 = [...[string, number], boolean];

@@ -1,5 +1,5 @@
 {
-    "kind": "JSDocComment",
+    "kind": "JSDoc",
     "pos": 0,
     "end": 29,
     "flags": "JSDoc",
@@ -9,7 +9,7 @@
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
-            "end": 24,
+            "end": 27,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -18,7 +18,6 @@
                 "end": 15,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "ReturnKeyword",
                 "escapedText": "return"
             },
             "typeExpression": {
@@ -38,7 +37,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 24,
+        "end": 27,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

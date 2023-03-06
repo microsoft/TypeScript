@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/members/privateNames/privateStaticNameShadowing.ts ===
+class X {
+>X : X
+
+    static #f = X.#m();
+>#f : number
+>X.#m() : number
+>X.#m : () => number
+>X : typeof X
+
+    constructor() {
+      X.#m();
+>X.#m() : number
+>X.#m : () => number
+>X : typeof X
+    }
+    static #m() {
+>#m : () => number
+
+      const X: any = {}; // shadow the class
+>X : any
+>{} : {}
+
+      const _a: any = {}; // shadow the first generated var
+>_a : any
+>{} : {}
+
+      X.#m(); // Should check with X as the receiver with _b as the class constructor 
+>X.#m() : any
+>X.#m : any
+>X : any
+
+      return 1;
+>1 : 1
+    }
+  }
+  

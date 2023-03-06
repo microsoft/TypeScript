@@ -23,8 +23,8 @@ verify.completions(
     {
         marker: "prop",
         exact: [
-            { name: "x", text: "(property) I.x: number", documentation: "Prop doc", kind: "property", replacementSpan: test.ranges()[1] },
             { name: "m", text: "(method) I.m(): void", documentation: "Method doc", kind: "method", replacementSpan: test.ranges()[1] },
+            { name: "x", text: "(property) I.x: number", documentation: "Prop doc", kind: "property", replacementSpan: test.ranges()[1] },
         ],
     },
 );

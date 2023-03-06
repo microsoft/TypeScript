@@ -3,17 +3,17 @@ import fs = require('fs');
 >fs : any
 
 function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
->readdir : (path: string, accept: (stat: any, name: string) => boolean, callback: (error: Error, results: {    name: string;    stat: fs.Stats;}[]) => void) => void
+>readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: {    name: string;    stat: fs.Stats;}[]) => void) => void
 >path : string
->accept : (stat: any, name: string) => boolean
->stat : any
+>accept : (stat: fs.Stats, name: string) => boolean
+>stat : fs.Stats
 >fs : any
 >name : string
 >callback : (error: Error, results: {    name: string;    stat: fs.Stats;}[]) => void
 >error : Error
->results : { name: string; stat: any; }[]
+>results : { name: string; stat: fs.Stats; }[]
 >name : string
->stat : any
+>stat : fs.Stats
 >fs : any
 
 function join(...paths: string[]) {}
@@ -36,7 +36,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 
         readdir(covFileDir, () => {
 >readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } ) : void
->readdir : (path: string, accept: (stat: any, name: string) => boolean, callback: (error: Error, results: { name: string; stat: any; }[]) => void) => void
+>readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void) => void
 >covFileDir : string
 >() => {        } : () => void
 

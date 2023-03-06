@@ -3,13 +3,13 @@ type A = 1;
 >A : 1
 
 type B = 2 | 3;
->B : B
+>B : 2 | 3
 
 type C = 1 | 2 | 3;
->C : C
+>C : 2 | 3 | 1
 
 type D = 0 | 1 | 2;
->D : D
+>D : 0 | 2 | 1
 
 function f1(a: A, b: B, c: C, d: D) {
 >f1 : (a: A, b: B, c: C, d: D) => void

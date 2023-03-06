@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts ===
 type T1 = { x: string }
->T1 : T1
+>T1 : { x: string; }
 >x : string
 
 // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
@@ -16,7 +16,7 @@ class C1 implements T1 {
 
 // An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
 type T2 = { x: string }
->T2 : T2
+>T2 : { x: string; }
 >x : string
 
 type T2 = { y: number }

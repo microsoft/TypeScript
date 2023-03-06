@@ -1,0 +1,114 @@
+=== tests/cases/compiler/coAndContraVariantInferences.ts ===
+type A = { kind: 'a' };
+>A : Symbol(A, Decl(coAndContraVariantInferences.ts, 0, 0))
+>kind : Symbol(kind, Decl(coAndContraVariantInferences.ts, 0, 10))
+
+type B = { kind: 'b' };
+>B : Symbol(B, Decl(coAndContraVariantInferences.ts, 0, 23))
+>kind : Symbol(kind, Decl(coAndContraVariantInferences.ts, 1, 10))
+
+declare const a: A;
+>a : Symbol(a, Decl(coAndContraVariantInferences.ts, 3, 13))
+>A : Symbol(A, Decl(coAndContraVariantInferences.ts, 0, 0))
+
+declare const b: B;
+>b : Symbol(b, Decl(coAndContraVariantInferences.ts, 4, 13))
+>B : Symbol(B, Decl(coAndContraVariantInferences.ts, 0, 23))
+
+declare function fab(arg: A | B): void;
+>fab : Symbol(fab, Decl(coAndContraVariantInferences.ts, 4, 19))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences.ts, 6, 21))
+>A : Symbol(A, Decl(coAndContraVariantInferences.ts, 0, 0))
+>B : Symbol(B, Decl(coAndContraVariantInferences.ts, 0, 23))
+
+declare function foo<T>(x: { kind: T }, f: (arg: { kind: T }) => void): void;
+>foo : Symbol(foo, Decl(coAndContraVariantInferences.ts, 6, 39))
+>T : Symbol(T, Decl(coAndContraVariantInferences.ts, 8, 21))
+>x : Symbol(x, Decl(coAndContraVariantInferences.ts, 8, 24))
+>kind : Symbol(kind, Decl(coAndContraVariantInferences.ts, 8, 28))
+>T : Symbol(T, Decl(coAndContraVariantInferences.ts, 8, 21))
+>f : Symbol(f, Decl(coAndContraVariantInferences.ts, 8, 39))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences.ts, 8, 44))
+>kind : Symbol(kind, Decl(coAndContraVariantInferences.ts, 8, 50))
+>T : Symbol(T, Decl(coAndContraVariantInferences.ts, 8, 21))
+
+foo(a, fab);
+>foo : Symbol(foo, Decl(coAndContraVariantInferences.ts, 6, 39))
+>a : Symbol(a, Decl(coAndContraVariantInferences.ts, 3, 13))
+>fab : Symbol(fab, Decl(coAndContraVariantInferences.ts, 4, 19))
+
+foo(b, fab);
+>foo : Symbol(foo, Decl(coAndContraVariantInferences.ts, 6, 39))
+>b : Symbol(b, Decl(coAndContraVariantInferences.ts, 4, 13))
+>fab : Symbol(fab, Decl(coAndContraVariantInferences.ts, 4, 19))
+
+// Repro from #45603
+
+interface Action<TName extends string,TPayload> {
+>Action : Symbol(Action, Decl(coAndContraVariantInferences.ts, 11, 12))
+>TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 15, 17))
+>TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 15, 38))
+
+    name: TName,
+>name : Symbol(Action.name, Decl(coAndContraVariantInferences.ts, 15, 49))
+>TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 15, 17))
+
+    payload: TPayload
+>payload : Symbol(Action.payload, Decl(coAndContraVariantInferences.ts, 16, 16))
+>TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 15, 38))
+}
+
+const actionA = { payload: 'any-string' } as Action<'ACTION_A', string>;
+>actionA : Symbol(actionA, Decl(coAndContraVariantInferences.ts, 20, 5))
+>payload : Symbol(payload, Decl(coAndContraVariantInferences.ts, 20, 17))
+>Action : Symbol(Action, Decl(coAndContraVariantInferences.ts, 11, 12))
+
+const actionB = { payload: true } as Action<'ACTION_B', boolean>;
+>actionB : Symbol(actionB, Decl(coAndContraVariantInferences.ts, 21, 5))
+>payload : Symbol(payload, Decl(coAndContraVariantInferences.ts, 21, 17))
+>Action : Symbol(Action, Decl(coAndContraVariantInferences.ts, 11, 12))
+
+function call<TName extends string,TPayload>(
+>call : Symbol(call, Decl(coAndContraVariantInferences.ts, 21, 65))
+>TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 23, 14))
+>TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 23, 35))
+
+  action: Action<TName,TPayload>,
+>action : Symbol(action, Decl(coAndContraVariantInferences.ts, 23, 45))
+>Action : Symbol(Action, Decl(coAndContraVariantInferences.ts, 11, 12))
+>TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 23, 14))
+>TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 23, 35))
+
+  fn: (action: Action<TName,TPayload>)=> any,
+>fn : Symbol(fn, Decl(coAndContraVariantInferences.ts, 24, 33))
+>action : Symbol(action, Decl(coAndContraVariantInferences.ts, 25, 7))
+>Action : Symbol(Action, Decl(coAndContraVariantInferences.ts, 11, 12))
+>TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 23, 14))
+>TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 23, 35))
+
+) {
+  fn(action);
+>fn : Symbol(fn, Decl(coAndContraVariantInferences.ts, 24, 33))
+>action : Symbol(action, Decl(coAndContraVariantInferences.ts, 23, 45))
+}
+
+const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
+>printFn : Symbol(printFn, Decl(coAndContraVariantInferences.ts, 30, 5))
+>action : Symbol(action, Decl(coAndContraVariantInferences.ts, 30, 17))
+>actionA : Symbol(actionA, Decl(coAndContraVariantInferences.ts, 20, 5))
+>actionB : Symbol(actionB, Decl(coAndContraVariantInferences.ts, 21, 5))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>action : Symbol(action, Decl(coAndContraVariantInferences.ts, 30, 17))
+
+call(actionA, printFn);
+>call : Symbol(call, Decl(coAndContraVariantInferences.ts, 21, 65))
+>actionA : Symbol(actionA, Decl(coAndContraVariantInferences.ts, 20, 5))
+>printFn : Symbol(printFn, Decl(coAndContraVariantInferences.ts, 30, 5))
+
+call(actionB, printFn);
+>call : Symbol(call, Decl(coAndContraVariantInferences.ts, 21, 65))
+>actionB : Symbol(actionB, Decl(coAndContraVariantInferences.ts, 21, 5))
+>printFn : Symbol(printFn, Decl(coAndContraVariantInferences.ts, 30, 5))
+

@@ -44,23 +44,28 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
-WatchedFiles::
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (used version)
+/a/b/commonfile2.ts (used version)
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {"directoryName":"/a/b/tsconfig.json","fallbackPollingInterval":2000,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/commonfile1.ts:
-  {"directoryName":"/a/b/commonFile1.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/commonfile2.ts:
-  {"directoryName":"/a/b/commonFile2.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

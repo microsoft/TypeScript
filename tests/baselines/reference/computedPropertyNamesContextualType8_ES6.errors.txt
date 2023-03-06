@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts(6,5): error TS2322: Type '{ [x: string]: string | number; }' is not assignable to type 'I'.
-  Index signatures are incompatible.
+  'string' index signatures are incompatible.
     Type 'string | number' is not assignable to type 'boolean'.
       Type 'string' is not assignable to type 'boolean'.
 
@@ -13,7 +13,7 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualTy
     var o: I = {
         ~
 !!! error TS2322: Type '{ [x: string]: string | number; }' is not assignable to type 'I'.
-!!! error TS2322:   Index signatures are incompatible.
+!!! error TS2322:   'string' index signatures are incompatible.
 !!! error TS2322:     Type 'string | number' is not assignable to type 'boolean'.
 !!! error TS2322:       Type 'string' is not assignable to type 'boolean'.
         [""+"foo"]: "",

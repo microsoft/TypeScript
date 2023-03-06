@@ -1,0 +1,24 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as type from "#type";
+>type : any
+
+type;
+>type : any
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as type from "#type";
+>type : any
+
+type;
+>type : any
+
+=== tests/cases/conformance/node/index.cts ===
+// esm format file
+import * as type from "#type";
+>type : any
+
+type;
+>type : any
+

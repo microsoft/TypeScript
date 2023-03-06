@@ -1,0 +1,51 @@
+=== tests/cases/conformance/controlFlow/assertionTypePredicates2.js ===
+/**
+ * @typedef {{ x: number }} A
+ */
+
+/**
+ * @typedef { A & { y: number } } B
+ */
+
+/**
+ * @param {A} a
+ * @returns { asserts a is B }
+ */
+const foo = (a) => {
+>foo : (a: A) => asserts a is B
+>(a) => {    if (/** @type { B } */ (a).y !== 0) throw TypeError();    return undefined;} : (a: A) => asserts a is B
+>a : A
+
+    if (/** @type { B } */ (a).y !== 0) throw TypeError();
+>(a).y !== 0 : boolean
+>(a).y : number
+>(a) : B
+>a : A
+>y : number
+>0 : 0
+>TypeError() : TypeError
+>TypeError : TypeErrorConstructor
+
+    return undefined;
+>undefined : undefined
+
+};
+
+export const main = () => {
+>main : () => void
+>() => {    /** @type { A } */    const a = { x: 1 };    foo(a);} : () => void
+
+    /** @type { A } */
+    const a = { x: 1 };
+>a : A
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+    foo(a);
+>foo(a) : void
+>foo : (a: A) => asserts a is B
+>a : A
+
+};
+

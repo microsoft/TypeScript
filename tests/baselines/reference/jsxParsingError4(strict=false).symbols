@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsx/a.tsx ===
+declare const React: any
+>React : Symbol(React, Decl(a.tsx, 0, 13))
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(a.tsx, 0, 24))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(a.tsx, 1, 23))
+
+        [k: string]: any
+>k : Symbol(k, Decl(a.tsx, 3, 9))
+    }
+}
+
+const a = (
+>a : Symbol(a, Decl(a.tsx, 7, 5))
+
+  <public-foo></public-foo>
+>public-foo : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
+>public-foo : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
+
+);
+
+const b = (
+>b : Symbol(b, Decl(a.tsx, 11, 5))
+
+  <public></public>
+>public : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
+>public : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
+
+);
+

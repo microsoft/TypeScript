@@ -1,0 +1,23 @@
+=== tests/cases/conformance/decorators/decoratorInAmbientContext.ts ===
+declare function decorator(target: any, key: any): any;
+>decorator : Symbol(decorator, Decl(decoratorInAmbientContext.ts, 0, 0))
+>target : Symbol(target, Decl(decoratorInAmbientContext.ts, 0, 27))
+>key : Symbol(key, Decl(decoratorInAmbientContext.ts, 0, 39))
+
+const b = Symbol('b');
+>b : Symbol(b, Decl(decoratorInAmbientContext.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(decoratorInAmbientContext.ts, 2, 22))
+
+    @decorator declare a: number;
+>decorator : Symbol(decorator, Decl(decoratorInAmbientContext.ts, 0, 0))
+>a : Symbol(Foo.a, Decl(decoratorInAmbientContext.ts, 3, 11))
+
+    @decorator declare [b]: number;
+>decorator : Symbol(decorator, Decl(decoratorInAmbientContext.ts, 0, 0))
+>[b] : Symbol(Foo[b], Decl(decoratorInAmbientContext.ts, 4, 33))
+>b : Symbol(b, Decl(decoratorInAmbientContext.ts, 2, 5))
+}
+

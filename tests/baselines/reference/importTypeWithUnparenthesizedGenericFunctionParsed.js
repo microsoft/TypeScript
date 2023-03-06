@@ -3,4 +3,4 @@ export declare const fail1: import("module").Modifier<<T>(x: T) => T>; // should
 
 //// [importTypeWithUnparenthesizedGenericFunctionParsed.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

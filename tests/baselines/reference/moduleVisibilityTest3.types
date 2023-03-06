@@ -30,12 +30,12 @@ module editor {
 >Bug : Bug
 
      constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
->p1 : any
->p2 : any
+>p1 : modes
+>p2 : modes.Mode
 >modes : any
 
          var x:modes.Mode;
->x : any
+>x : modes.Mode
 >modes : any
      }
     

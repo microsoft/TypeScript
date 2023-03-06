@@ -23,18 +23,17 @@
 ////d./*1*/
 ////D./*2*/
 
-verify.completions({ marker: "1", exact: ["foo2", "foo"] });
+verify.completions({ marker: "1", exact: ["foo", "foo2"] });
 edit.insert('foo()');
 verify.completions({
     marker: "2",
-    exact: [
-        { name: "prototype", sortText: completion.SortText.LocationPriority },
-        { name: "bar2", sortText: completion.SortText.LocalDeclarationPriority },
+    exact: completion.functionMembersPlus([
         { name: "bar", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "bar2", sortText: completion.SortText.LocalDeclarationPriority },
         { name: "baz", sortText: completion.SortText.LocationPriority },
+        { name: "prototype", sortText: completion.SortText.LocationPriority },
         { name: "x", sortText: completion.SortText.LocationPriority },
-        ...completion.functionMembers
-    ]
+    ])
 });
 edit.insert('bar()');
 verify.noErrors();

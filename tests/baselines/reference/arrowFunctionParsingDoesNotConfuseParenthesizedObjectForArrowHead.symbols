@@ -1,0 +1,27 @@
+=== tests/cases/compiler/arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts ===
+// regression test for https://github.com/microsoft/TypeScript/issues/32914
+declare var value: boolean;
+>value : Symbol(value, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 1, 11))
+
+declare var a: any;
+>a : Symbol(a, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 2, 11))
+
+const test = () => ({
+>test : Symbol(test, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 4, 5))
+
+    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
+    prop: !value, // remove ! to see that errors will be gone
+>prop : Symbol(prop, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 4, 21))
+>value : Symbol(value, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 1, 11))
+
+    run: () => { //replace arrow function with regular function to see that errors will be gone
+>run : Symbol(run, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 6, 17))
+
+        // comment next line or remove "()" to see that errors will be gone
+        if(!a.b()) { return 'special'; }
+>a : Symbol(a, Decl(arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts, 2, 11))
+
+        return 'default';
+    }
+}); 
+

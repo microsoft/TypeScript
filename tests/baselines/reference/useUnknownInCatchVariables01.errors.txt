@@ -1,0 +1,47 @@
+tests/cases/compiler/useUnknownInCatchVariables01.ts(6,12): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+tests/cases/compiler/useUnknownInCatchVariables01.ts(7,10): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/useUnknownInCatchVariables01.ts(8,10): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+
+
+==== tests/cases/compiler/useUnknownInCatchVariables01.ts (3 errors) ====
+    try {
+        // ...
+    }
+    catch (e) {
+        // error!
+        void e.toUpperCase();
+               ~~~~~~~~~~~
+!!! error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+        void e++;
+             ~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+        void e();
+             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+    
+        if (typeof e === "string") {
+            // works!
+            // We've narrowed 'e' down to the type 'string'.
+            console.log(e.toUpperCase());
+        }
+        if (e instanceof Error) {
+            e.stack?.toUpperCase();
+        }
+        if (typeof e === "number") {
+            e.toExponential();
+            e++;
+        }
+    }
+    
+    
+    try {
+        // ...
+    }
+    catch (e: any) {
+        // All are allowed.
+        void e.toUpperCase();
+        void e.toExponential();
+        void e();
+    }

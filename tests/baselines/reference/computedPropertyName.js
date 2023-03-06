@@ -56,8 +56,8 @@ class D {
     constructor() {
         this[_a] = 0; // Error
     }
+    static { _a = onInit; }
 }
-_a = onInit;
 class E {
     [onInit]() { } // Error
 }

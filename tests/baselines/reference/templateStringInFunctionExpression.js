@@ -6,6 +6,6 @@ var x = function y() {
 
 //// [templateStringInFunctionExpression.js]
 var x = function y() {
-    "abc" + 0 + "def";
-    return "abc" + 0 + "def";
+    "abc".concat(0, "def");
+    return "abc".concat(0, "def");
 };

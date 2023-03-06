@@ -6,7 +6,7 @@ type T02 = string & never;
 >T02 : never
 
 type T03 = string | number | never;
->T03 : T03
+>T03 : string | number
 
 type T04 = string & number & never;
 >T04 : never

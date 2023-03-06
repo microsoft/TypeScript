@@ -7,7 +7,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts(21,7): error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
   Property 'x' is protected but type 'Bar4' is not a class derived from 'Foo'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts(26,7): error TS2420: Class 'Bar5' incorrectly implements interface 'I'.
-  Property 'y' is missing in type 'Bar5' but required in type 'I'.
+  Property 'y' is missing in type 'Foo' but required in type 'I'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Class 'Bar6' incorrectly implements interface 'I'.
   Property 'y' is protected in type 'Bar6' but public in type 'I'.
 
@@ -54,7 +54,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
     class Bar5 extends Foo implements I { // error
           ~~~~
 !!! error TS2420: Class 'Bar5' incorrectly implements interface 'I'.
-!!! error TS2420:   Property 'y' is missing in type 'Bar5' but required in type 'I'.
+!!! error TS2420:   Property 'y' is missing in type 'Foo' but required in type 'I'.
 !!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:6:5: 'y' is declared here.
     }
     

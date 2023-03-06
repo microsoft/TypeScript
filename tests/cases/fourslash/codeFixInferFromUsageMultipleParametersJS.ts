@@ -11,7 +11,7 @@
 
 verify.codeFix({
     description: "Infer parameter types from usage",
-    index: 4,
+    index: 3,
     newFileContent:
 `/**
  * @param {number} a

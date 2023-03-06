@@ -45,6 +45,6 @@
 //// let checked/*14*/LeaderStatus = isLeader/*15*/Guard(a);
 
 verify.completions(
-    { marker: ["2", "6"], exact: ["lead", "isLeader", "isFollower"] },
-    { marker: ["4", "8"], exact: ["follow", "isLeader", "isFollower"] },
+    { marker: ["2", "6"], unsorted: ["lead", "isLeader", "isFollower"] },
+    { marker: ["4", "8"], unsorted: ["follow", "isLeader", "isFollower"] },
 );

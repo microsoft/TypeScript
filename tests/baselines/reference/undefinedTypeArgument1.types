@@ -1,6 +1,6 @@
 === tests/cases/compiler/undefinedTypeArgument1.ts ===
 var cats = new Array<WAWA>();
->cats : any[]
->new Array<WAWA>() : any[]
+>cats : WAWA[]
+>new Array<WAWA>() : WAWA[]
 >Array : ArrayConstructor
 

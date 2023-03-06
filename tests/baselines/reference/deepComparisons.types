@@ -1,0 +1,89 @@
+=== tests/cases/compiler/deepComparisons.ts ===
+function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
+>f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
+
+    let v1: Extract<T, string> = 0 as any as T;  // Error
+>v1 : Extract<T, string>
+>0 as any as T : T
+>0 as any : any
+>0 : 0
+
+    let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error
+>v2 : Extract<T[K1], string>
+>0 as any as T[K1] : T[K1]
+>0 as any : any
+>0 : 0
+
+    let v3: Extract<T[K1][K2], string> = 0 as any as T[K1][K2];  // No error
+>v3 : Extract<T[K1][K2], string>
+>0 as any as T[K1][K2] : T[K1][K2]
+>0 as any : any
+>0 : 0
+}
+
+type Foo<T> = { x: Foo<T> };
+>Foo : Foo<T>
+>x : Foo<T>
+
+type Bar<T> = { x: Bar<T[]> };
+>Bar : Bar<T>
+>x : Bar<T[]>
+
+function f2<U>() {
+>f2 : <U>() => void
+
+    let x: Foo<U> = 0 as any as Bar<U>;  // Error, excessive stack depth
+>x : Foo<U>
+>0 as any as Bar<U> : Bar<U>
+>0 as any : any
+>0 : 0
+}
+
+type Foo1<T> = { x: Foo2<T> };
+>Foo1 : Foo1<T>
+>x : Foo2<T>
+
+type Foo2<T> = { x: Foo1<T> };
+>Foo2 : Foo2<T>
+>x : Foo1<T>
+
+function f3<U>() {
+>f3 : <U>() => void
+
+    let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
+>x : Foo1<U>
+>0 as any as Bar<U> : Bar<U>
+>0 as any : any
+>0 : 0
+}
+
+// Repro from #46500
+
+type F<T> = {} & (
+>F : F<T>
+
+    T extends [any, ...any[]]
+        ? { [K in keyof T]?: F<T[K]> }
+        : T extends any[]
+            ? F<T[number]>[]
+            : T extends { [K: string]: any }
+>K : string
+
+                ? { [K in keyof T]?: F<T[K]> }
+                : { x: string }
+>x : string
+
+);
+
+declare function f<T = any>(): F<T>;
+>f : <T = any>() => F<T>
+
+function g() {
+>g : () => F<any>
+
+    return f() as F<any>;
+>f() as F<any> : F<any>
+>f() : F<any>
+>f : <T = any>() => F<T>
+}
+

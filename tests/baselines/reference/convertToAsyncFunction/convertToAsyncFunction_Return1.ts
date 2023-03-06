@@ -9,7 +9,7 @@ function /*[#|*/f/*|]*/(p: Promise<unknown>) {
 
 async function f(p: Promise<unknown>) {
     try {
-        return p;
+        return await p;
     } catch (error) {
         return await Promise.reject(error);
     }

@@ -1,10 +1,10 @@
 === tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
 type A = { a: number };
->A : A
+>A : { a: number; }
 >a : number
 
 type B = { b: number };
->B : B
+>B : { b: number; }
 >b : number
 
 type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];

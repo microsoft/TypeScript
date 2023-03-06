@@ -1,13 +1,13 @@
 === tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts ===
 let e1: intrinsic;
->e1 : any
+>e1 : intrinsic
 
 let e2: { intrinsic: intrinsic };
->e2 : { intrinsic: any; }
->intrinsic : any
+>e2 : { intrinsic: intrinsic; }
+>intrinsic : intrinsic
 
 type TE1 = (intrinsic);
->TE1 : any
+>TE1 : intrinsic
 
 type TE2<intrinsic> = intrinsic;
 >TE2 : intrinsic
@@ -25,7 +25,7 @@ function f1() {
 >f1 : () => void
 
     let intrinsic: intrinsic.intrinsic;
->intrinsic : any
+>intrinsic : intrinsic.intrinsic
 >intrinsic : any
 }
 

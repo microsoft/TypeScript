@@ -64,3 +64,25 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(24,17): error TS2407: Th
                     ~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'never'.
     
+    function f5() {
+        let x: never[] = [];  // Ok
+    }
+    
+    // Repro from #46032
+    
+    interface A {
+        foo: "a";
+    }
+    
+    interface B {
+        foo: "b";
+    }
+    
+    type Union = A & B;
+    
+    function func(): { value: Union[] } {
+        return {
+            value: [],
+        };
+    }
+    

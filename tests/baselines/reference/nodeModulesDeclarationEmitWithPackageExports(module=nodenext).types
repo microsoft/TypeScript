@@ -1,0 +1,204 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as cjs from "package/cjs";
+>cjs : typeof cjs
+
+import * as mjs from "package/mjs";
+>mjs : typeof mjs
+
+import * as type from "package";
+>type : typeof type
+
+export const a = cjs;
+>a : typeof cjs
+>cjs : typeof cjs
+
+export const b = mjs;
+>b : typeof mjs
+>mjs : typeof mjs
+
+export const c = type;
+>c : typeof type
+>type : typeof type
+
+import * as cjsi from "inner/cjs";
+>cjsi : typeof cjsi
+
+import * as mjsi from "inner/mjs";
+>mjsi : typeof mjsi
+
+import * as typei from "inner";
+>typei : typeof typei
+
+export const d = cjsi;
+>d : typeof cjsi
+>cjsi : typeof cjsi
+
+export const e = mjsi;
+>e : typeof mjsi
+>mjsi : typeof mjsi
+
+export const f = typei;
+>f : typeof typei
+>typei : typeof typei
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as cjs from "package/cjs";
+>cjs : typeof cjs
+
+import * as mjs from "package/mjs";
+>mjs : typeof mjs
+
+import * as type from "package";
+>type : typeof type
+
+export const a = cjs;
+>a : typeof cjs
+>cjs : typeof cjs
+
+export const b = mjs;
+>b : typeof mjs
+>mjs : typeof mjs
+
+export const c = type;
+>c : typeof type
+>type : typeof type
+
+import * as cjsi from "inner/cjs";
+>cjsi : typeof cjsi
+
+import * as mjsi from "inner/mjs";
+>mjsi : typeof mjsi
+
+import * as typei from "inner";
+>typei : typeof typei
+
+export const d = cjsi;
+>d : typeof cjsi
+>cjsi : typeof cjsi
+
+export const e = mjsi;
+>e : typeof mjsi
+>mjsi : typeof mjsi
+
+export const f = typei;
+>f : typeof typei
+>typei : typeof typei
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+import * as cjs from "package/cjs";
+>cjs : typeof cjs
+
+import * as mjs from "package/mjs";
+>mjs : typeof mjs
+
+import * as type from "package";
+>type : typeof type
+
+export const a = cjs;
+>a : typeof cjs
+>cjs : typeof cjs
+
+export const b = mjs;
+>b : typeof mjs
+>mjs : typeof mjs
+
+export const c = type;
+>c : typeof type
+>type : typeof type
+
+import * as cjsi from "inner/cjs";
+>cjsi : typeof cjsi
+
+import * as mjsi from "inner/mjs";
+>mjsi : typeof mjsi
+
+import * as typei from "inner";
+>typei : typeof typei
+
+export const d = cjsi;
+>d : typeof cjsi
+>cjsi : typeof cjsi
+
+export const e = mjsi;
+>e : typeof mjsi
+>mjsi : typeof mjsi
+
+export const f = typei;
+>f : typeof typei
+>typei : typeof typei
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// cjs format file
+import * as cjs from "inner/cjs";
+>cjs : typeof cjs
+
+import * as mjs from "inner/mjs";
+>mjs : typeof mjs
+
+import * as type from "inner";
+>type : typeof type
+
+cjs;
+>cjs : typeof cjs
+
+mjs;
+>mjs : typeof mjs
+
+type;
+>type : typeof type
+
+export const cjsMain = true;
+>cjsMain : true
+>true : true
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+// esm format file
+import * as cjs from "inner/cjs";
+>cjs : typeof cjs
+
+import * as mjs from "inner/mjs";
+>mjs : typeof mjs
+
+import * as type from "inner";
+>type : typeof type
+
+cjs;
+>cjs : typeof cjs
+
+mjs;
+>mjs : typeof mjs
+
+type;
+>type : typeof type
+
+export const esm = true;
+>esm : true
+>true : true
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+// cjs format file
+import * as cjs from "inner/cjs";
+>cjs : typeof cjs
+
+import * as mjs from "inner/mjs";
+>mjs : typeof mjs
+
+import * as type from "inner";
+>type : typeof type
+
+cjs;
+>cjs : typeof cjs
+
+mjs;
+>mjs : typeof mjs
+
+type;
+>type : typeof type
+
+export const cjsNonmain = true;
+>cjsNonmain : true
+>true : true
+

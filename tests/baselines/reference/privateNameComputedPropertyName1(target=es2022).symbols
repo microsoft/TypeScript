@@ -1,0 +1,127 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName1.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+    #a = 'a';
+>#a : Symbol(A.#a, Decl(privateNameComputedPropertyName1.ts, 0, 9))
+
+    #b: string;
+>#b : Symbol(A.#b, Decl(privateNameComputedPropertyName1.ts, 1, 13))
+
+    readonly #c = 'c';
+>#c : Symbol(A.#c, Decl(privateNameComputedPropertyName1.ts, 2, 15))
+
+    readonly #d: string;
+>#d : Symbol(A.#d, Decl(privateNameComputedPropertyName1.ts, 4, 22))
+
+    #e = '';
+>#e : Symbol(A.#e, Decl(privateNameComputedPropertyName1.ts, 5, 24))
+
+    constructor() {
+        this.#b = 'b';
+>this.#b : Symbol(A.#b, Decl(privateNameComputedPropertyName1.ts, 1, 13))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+        this.#d = 'd';
+>this.#d : Symbol(A.#d, Decl(privateNameComputedPropertyName1.ts, 4, 22))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+    }
+
+    test() {
+>test : Symbol(A.test, Decl(privateNameComputedPropertyName1.ts, 12, 5))
+
+        const data: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 15, 46))
+>b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 15, 54))
+>c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 15, 62))
+>d : Symbol(d, Decl(privateNameComputedPropertyName1.ts, 15, 70))
+>e : Symbol(e, Decl(privateNameComputedPropertyName1.ts, 15, 78))
+
+        const {
+            [this.#a]: a,
+>this.#a : Symbol(A.#a, Decl(privateNameComputedPropertyName1.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+>a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 16, 15))
+
+            [this.#b]: b,
+>this.#b : Symbol(A.#b, Decl(privateNameComputedPropertyName1.ts, 1, 13))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+>b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 17, 25))
+
+            [this.#c]: c,
+>this.#c : Symbol(A.#c, Decl(privateNameComputedPropertyName1.ts, 2, 15))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+>c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 18, 25))
+
+            [this.#d]: d,
+>this.#d : Symbol(A.#d, Decl(privateNameComputedPropertyName1.ts, 4, 22))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+>d : Symbol(d, Decl(privateNameComputedPropertyName1.ts, 19, 25))
+
+            [this.#e = 'e']: e,
+>this.#e : Symbol(A.#e, Decl(privateNameComputedPropertyName1.ts, 5, 24))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+>e : Symbol(e, Decl(privateNameComputedPropertyName1.ts, 20, 25))
+
+        } = data;
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+
+        console.log(a, b, c, d, e);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 16, 15))
+>b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 17, 25))
+>c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 18, 25))
+>d : Symbol(d, Decl(privateNameComputedPropertyName1.ts, 19, 25))
+>e : Symbol(e, Decl(privateNameComputedPropertyName1.ts, 20, 25))
+
+        const a1 = data[this.#a];
+>a1 : Symbol(a1, Decl(privateNameComputedPropertyName1.ts, 25, 13))
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+>this.#a : Symbol(A.#a, Decl(privateNameComputedPropertyName1.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+        const b1 = data[this.#b];
+>b1 : Symbol(b1, Decl(privateNameComputedPropertyName1.ts, 26, 13))
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+>this.#b : Symbol(A.#b, Decl(privateNameComputedPropertyName1.ts, 1, 13))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+        const c1 = data[this.#c];
+>c1 : Symbol(c1, Decl(privateNameComputedPropertyName1.ts, 27, 13))
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+>this.#c : Symbol(A.#c, Decl(privateNameComputedPropertyName1.ts, 2, 15))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+        const d1 = data[this.#d];
+>d1 : Symbol(d1, Decl(privateNameComputedPropertyName1.ts, 28, 13))
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+>this.#d : Symbol(A.#d, Decl(privateNameComputedPropertyName1.ts, 4, 22))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+        const e1 = data[this.#e];
+>e1 : Symbol(e1, Decl(privateNameComputedPropertyName1.ts, 29, 13))
+>data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
+>this.#e : Symbol(A.#e, Decl(privateNameComputedPropertyName1.ts, 5, 24))
+>this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+
+        console.log(a1, b1, c1, d1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a1 : Symbol(a1, Decl(privateNameComputedPropertyName1.ts, 25, 13))
+>b1 : Symbol(b1, Decl(privateNameComputedPropertyName1.ts, 26, 13))
+>c1 : Symbol(c1, Decl(privateNameComputedPropertyName1.ts, 27, 13))
+>d1 : Symbol(d1, Decl(privateNameComputedPropertyName1.ts, 28, 13))
+    }
+}
+
+new A().test();
+>new A().test : Symbol(A.test, Decl(privateNameComputedPropertyName1.ts, 12, 5))
+>A : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
+>test : Symbol(A.test, Decl(privateNameComputedPropertyName1.ts, 12, 5))
+
+

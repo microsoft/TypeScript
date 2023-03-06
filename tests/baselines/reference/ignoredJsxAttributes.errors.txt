@@ -1,0 +1,32 @@
+tests/cases/compiler/ignoredJsxAttributes.tsx(16,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/ignoredJsxAttributes.tsx(20,11): error TS2741: Property 'foo' is missing in type '{ bar: string; "data-yadda": number; }' but required in type 'Props'.
+
+
+==== tests/cases/compiler/ignoredJsxAttributes.tsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    // Repro from #44797
+    
+    import * as React from "react";
+    
+    interface Props {
+        foo: string;
+        [dataProp: string]: string;
+    }
+    
+    declare function Yadda(props: Props): JSX.Element;
+    
+    let props: Props = {
+        foo: "",
+        "data-yadda": 42,  // Error
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/compiler/ignoredJsxAttributes.tsx:9:5: The expected type comes from this index signature.
+    };
+    
+    let x1 = <Yadda foo="hello" data-yadda={42}/>;
+    let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
+              ~~~~~
+!!! error TS2741: Property 'foo' is missing in type '{ bar: string; "data-yadda": number; }' but required in type 'Props'.
+!!! related TS2728 tests/cases/compiler/ignoredJsxAttributes.tsx:8:5: 'foo' is declared here.
+    

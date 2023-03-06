@@ -31,4 +31,4 @@
 ////import * as c from "./C";
 ////var x = c./**/
 
-verify.completions({ marker: "", exact: ["cVar", "C1", "Inner", "bVar"] });
+verify.completions({ marker: "", exact: ["bVar", "C1", "cVar", "Inner"] });

@@ -1,9 +1,0 @@
-SameNameFilesNotSpecifiedWithAllowJs/tsconfig.json(1,24): error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
-
-
-==== SameNameFilesNotSpecifiedWithAllowJs/tsconfig.json (1 errors) ====
-    { "compilerOptions": { "allowJs": true } }
-                           ~~~~~~~~~
-!!! error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
-==== SameNameFilesNotSpecifiedWithAllowJs/a.ts (0 errors) ====
-    var test = 10;

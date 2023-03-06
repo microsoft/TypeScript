@@ -17,11 +17,10 @@
 verify.completions(
     {
         marker: "1",
-        exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        exact: completion.functionMembersPlus([
             { name: "staticMethod", sortText: completion.SortText.LocalDeclarationPriority },
-            ...completion.functionMembers
-        ]
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        ])
     },
     { marker: ["2", "3", "4"], exact: undefined },
 );

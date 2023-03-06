@@ -1,0 +1,106 @@
+=== tests/cases/conformance/override/override5.ts ===
+class B {
+>B : Symbol(B, Decl(override5.ts, 0, 0))
+
+    p1: number = 1;
+>p1 : Symbol(B.p1, Decl(override5.ts, 0, 9))
+
+    p2: number = 2;
+>p2 : Symbol(B.p2, Decl(override5.ts, 1, 19))
+
+    p3: number = 3;
+>p3 : Symbol(B.p3, Decl(override5.ts, 2, 19))
+
+    p4: number = 4;
+>p4 : Symbol(B.p4, Decl(override5.ts, 3, 19))
+
+    oop: number;
+>oop : Symbol(B.oop, Decl(override5.ts, 4, 19))
+
+    pp: number;
+>pp : Symbol(B.pp, Decl(override5.ts, 5, 16))
+
+    op: number;
+>op : Symbol(B.op, Decl(override5.ts, 6, 15))
+}
+
+class D extends B{
+>D : Symbol(D, Decl(override5.ts, 8, 1))
+>B : Symbol(B, Decl(override5.ts, 0, 0))
+
+    declare p1: number
+>p1 : Symbol(D.p1, Decl(override5.ts, 10, 18))
+
+    override declare p2: number;
+>p2 : Symbol(D.p2, Decl(override5.ts, 11, 22))
+
+    readonly override p3: number;
+>p3 : Symbol(D.p3, Decl(override5.ts, 13, 32))
+
+    override readonly p4: number;
+>p4 : Symbol(D.p4, Decl(override5.ts, 15, 33))
+
+    static override sp: number;
+>sp : Symbol(D.sp, Decl(override5.ts, 17, 33))
+
+    override override oop: number;
+>oop : Symbol(D.oop, Decl(override5.ts, 19, 31))
+
+    public override pp: number;
+>pp : Symbol(D.pp, Decl(override5.ts, 21, 34))
+
+    override public op: number;
+>op : Symbol(D.op, Decl(override5.ts, 23, 31))
+
+    override constructor () {
+        super();
+>super : Symbol(B, Decl(override5.ts, 0, 0))
+    }
+}
+
+
+abstract class AB {
+>AB : Symbol(AB, Decl(override5.ts, 29, 1))
+
+    abstract f (): void;
+>f : Symbol(AB.f, Decl(override5.ts, 32, 19))
+
+    abstract b (): void;
+>b : Symbol(AB.b, Decl(override5.ts, 33, 24))
+}
+
+abstract class AD extends AB {
+>AD : Symbol(AD, Decl(override5.ts, 35, 1))
+>AB : Symbol(AB, Decl(override5.ts, 29, 1))
+
+    override abstract f(): void;
+>f : Symbol(AD.f, Decl(override5.ts, 37, 30))
+
+    abstract override b(): void;
+>b : Symbol(AD.b, Decl(override5.ts, 38, 32))
+}
+
+abstract class AND {
+>AND : Symbol(AND, Decl(override5.ts, 40, 1))
+
+    override abstract f(): void;
+>f : Symbol(AND.f, Decl(override5.ts, 42, 20))
+
+    abstract override b(): void;
+>b : Symbol(AND.b, Decl(override5.ts, 43, 32))
+}
+
+class ADD extends AD {
+>ADD : Symbol(ADD, Decl(override5.ts, 45, 1))
+>AD : Symbol(AD, Decl(override5.ts, 35, 1))
+
+    f(): void {
+>f : Symbol(ADD.f, Decl(override5.ts, 47, 22))
+
+    }
+    override b(): void {
+>b : Symbol(ADD.b, Decl(override5.ts, 50, 5))
+
+    }
+}
+

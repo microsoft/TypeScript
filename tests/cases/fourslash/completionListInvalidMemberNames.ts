@@ -17,7 +17,7 @@
 const replacementSpan = test.ranges()[0];
 const replacementSpan1 = test.ranges()[1];
 verify.completions(
-    { marker: "b", exact: [
+    { marker: "b", unsorted: [
         { name: "foo ", replacementSpan: replacementSpan1 },
         { name: "bar", replacementSpan: replacementSpan1 },
         { name: "break", replacementSpan: replacementSpan1 },
@@ -29,7 +29,7 @@ verify.completions(
     ] },
     {
         marker: "a",
-        exact: [
+        unsorted: [
             { name: "foo ", insertText: '["foo "]', replacementSpan },
             "bar",
             "break",

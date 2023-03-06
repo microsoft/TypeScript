@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
+////[|class /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////}|]
 ////[|export = [|{| "contextRangeIndex": 2 |}A|];|]
 
 // @Filename: b.ts
-////[|export import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}b|] = require('./a');|]
+////[|export import /*2*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}b|] = require('./a');|]
 
 // @Filename: c.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}b|] = require('./b');|]
-////var a = new [|b|]./**/[|b|]();
+////[|import /*3*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}b|] = require('./b');|]
+////var a = new /*4*/[|b|]./**/[|b|]();
 
 goTo.marker();
 verify.quickInfoExists();
@@ -21,15 +21,7 @@ const aRanges = [a0, a1];
 const bRanges = [b0, c2];
 const cRanges = [c0, c1];
 
-const bGroup = { definition: "(alias) class b\nimport b = require('./a')", ranges: bRanges }
-
-verify.referenceGroups(aRanges, [
-    { definition: "class A", ranges: aRanges },
-    bGroup
-]);
-verify.referenceGroups(b0, [bGroup]);
-verify.referenceGroups(c2, [{ ...bGroup, definition: "(alias) class b\nimport b = require('./a')"}]);
-verify.singleReferenceGroup("import b = require('./b')", cRanges);
+verify.baselineFindAllReferences('1', '2', '3', '4')
 
 verify.rangesAreRenameLocations(aRanges);
 verify.rangesAreRenameLocations(bRanges);

@@ -1,11 +1,11 @@
 === tests/cases/compiler/noStrictGenericChecks.ts ===
 type A = <T, U>(x: T, y: U) => [T, U];
->A : A
+>A : <T, U>(x: T, y: U) => [T, U]
 >x : T
 >y : U
 
 type B = <S>(x: S, y: S) => [S, S];
->B : B
+>B : <S>(x: S, y: S) => [S, S]
 >x : S
 >y : S
 

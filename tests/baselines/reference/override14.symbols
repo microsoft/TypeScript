@@ -1,0 +1,16 @@
+=== tests/cases/conformance/override/override14.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(override14.ts, 0, 0))
+
+    property = 1
+>property : Symbol(Foo.property, Decl(override14.ts, 0, 11))
+}
+
+class SubFoo extends Foo {
+>SubFoo : Symbol(SubFoo, Decl(override14.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(override14.ts, 0, 0))
+
+    declare property: number
+>property : Symbol(SubFoo.property, Decl(override14.ts, 4, 26))
+}
+

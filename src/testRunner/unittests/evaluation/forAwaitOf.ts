@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
@@ -101,5 +104,32 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.strictEqual(result.output[0], 1);
         assert.instanceOf(result.output[1], Promise);
         assert.instanceOf(result.output[2], Promise);
+    });
+
+    it("don't call return when non-user code throws (es2015)", async () => {
+        const result = evaluator.evaluateTypeScript(`
+        let returnCalled = false;
+        async function f() {
+            let i = 0;
+            const iterator = {
+                [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
+                async next() {
+                    i++;
+                    if (i < 2) return { value: undefined, done: false };
+                    throw new Error();
+                },
+                async return() {
+                    returnCalled = true;
+                }
+            };
+            for await (const item of iterator) {
+            }
+        }
+        export async function main() {
+            try { await f(); } catch { }
+            return returnCalled;
+        }
+        `, { target: ts.ScriptTarget.ES2015 });
+        assert.isFalse(await result.main());
     });
 });

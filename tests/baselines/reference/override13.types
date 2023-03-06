@@ -1,0 +1,68 @@
+=== tests/cases/conformance/override/override13.ts ===
+class Foo {
+>Foo : Foo
+
+    property = 1
+>property : number
+>1 : 1
+
+    static staticProperty = 2
+>staticProperty : number
+>2 : 2
+}
+
+class SubFoo extends Foo {
+>SubFoo : SubFoo
+>Foo : Foo
+
+    property = 42;
+>property : number
+>42 : 42
+
+    staticProperty = 42;
+>staticProperty : number
+>42 : 42
+}
+
+class StaticSubFoo extends Foo {
+>StaticSubFoo : StaticSubFoo
+>Foo : Foo
+
+    static property = 42;
+>property : number
+>42 : 42
+
+    static staticProperty = 42;
+>staticProperty : number
+>42 : 42
+}
+
+class Intermediate extends Foo {}
+>Intermediate : Intermediate
+>Foo : Foo
+
+class Derived extends Intermediate {
+>Derived : Derived
+>Intermediate : Intermediate
+
+    property = 42;
+>property : number
+>42 : 42
+
+    staticProperty = 42;
+>staticProperty : number
+>42 : 42
+}
+
+class StaticDerived extends Intermediate {
+>StaticDerived : StaticDerived
+>Intermediate : Intermediate
+
+    static property = 42;
+>property : number
+>42 : 42
+
+    static staticProperty = 42;
+>staticProperty : number
+>42 : 42
+}

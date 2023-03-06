@@ -44,23 +44,28 @@ Semantic diagnostics in builder refreshed for::
 /a/rootFolder/project/Scripts/Javascript.js
 /a/rootFolder/project/Scripts/TypeScript.ts
 
-WatchedFiles::
-/a/rootfolder/project/tsconfig.json:
-  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/rootfolder/project/scripts/javascript.js (used version)
+/a/rootfolder/project/scripts/typescript.ts (used version)
+
+PolledWatches::
+/a/rootfolder/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/rootfolder/project/tsconfig.json: *new*
+  {}
+/a/rootfolder/project/scripts/javascript.js: *new*
+  {}
+/a/rootfolder/project/scripts/typescript.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/rootfolder/project/node_modules/@types:
-  {"directoryName":"/a/rootFolder/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/rootfolder/project/scripts:
-  {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/rootfolder/project/scripts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -101,23 +106,9 @@ Semantic diagnostics in builder refreshed for::
 /a/rootFolder/project/Scripts/Javascript.js
 /a/rootFolder/project/Scripts/TypeScript.ts
 
-WatchedFiles::
-/a/rootfolder/project/tsconfig.json:
-  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/rootfolder/project/node_modules/@types:
-  {"directoryName":"/a/rootFolder/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/rootfolder/project/scripts:
-  {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+Shape signatures in builder refreshed for::
+/a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
+/a/rootfolder/project/scripts/javascript.js (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 

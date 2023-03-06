@@ -1,0 +1,20 @@
+tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts(1,1): error TS1375: 'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts(1,7): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts(5,5): error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+
+
+==== tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts (3 errors) ====
+    await x;
+    ~~~~~
+!!! error TS1375: 'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+          ~
+!!! error TS2304: Cannot find name 'x'.
+    
+    const arr = [Promise.resolve()];
+    
+    for await (const item of arr) {
+        ~~~~~
+!!! error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+      item;
+    }
+    

@@ -46,36 +46,38 @@ Semantic diagnostics in builder refreshed for::
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
 
-WatchedFiles::
-/user/someone/projects/myproject/file3.ts:
-  {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
-/user/someone/projects/myproject/file2.ts:
-  {"fileName":"/user/someone/projects/myproject/file2.ts","pollingInterval":250}
-/user/someone/projects/myproject/file1.ts:
-  {"fileName":"/user/someone/projects/myproject/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/someone/projects/myproject/file1.ts (used version)
+/user/someone/projects/myproject/file2.ts (used version)
+/user/someone/projects/myproject/file3.ts (used version)
 
 FsWatches::
-
-FsWatchesRecursive::
+/user/someone/projects/myproject/file3.ts: *new*
+  {}
+/user/someone/projects/myproject/file2.ts: *new*
+  {}
+/user/someone/projects/myproject/file1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/someone/projects/myproject/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/someone/projects/myproject/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
-exports.__esModule = true;
-var v = 1 /* V */;
+Object.defineProperty(exports, "__esModule", { value: true });
+var v = 1 /* E2.V */;
 
 
 
@@ -106,26 +108,15 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/someone/projects/myproject/file3.ts
 
-WatchedFiles::
-/user/someone/projects/myproject/file3.ts:
-  {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
-/user/someone/projects/myproject/file2.ts:
-  {"fileName":"/user/someone/projects/myproject/file2.ts","pollingInterval":250}
-/user/someone/projects/myproject/file1.ts:
-  {"fileName":"/user/someone/projects/myproject/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
+Shape signatures in builder refreshed for::
+/user/someone/projects/myproject/file3.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
-exports.__esModule = true;
-var v = 1 /* V */;
+Object.defineProperty(exports, "__esModule", { value: true });
+var v = 1 /* E2.V */;
 function foo2() { return 2; }
 
 

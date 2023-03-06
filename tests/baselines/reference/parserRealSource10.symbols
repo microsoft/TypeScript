@@ -551,6 +551,7 @@ module TypeScript {
                     public text: string, public ers: ErrorRecoverySet) { }
 >text : Symbol(TokenInfo.text, Decl(parserRealSource10.ts, 177, 79))
 >ers : Symbol(TokenInfo.ers, Decl(parserRealSource10.ts, 178, 40))
+>ErrorRecoverySet : Symbol(ErrorRecoverySet)
     }
 
     function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
@@ -568,6 +569,7 @@ module TypeScript {
         text: string, ers: ErrorRecoverySet) {
 >text : Symbol(text, Decl(parserRealSource10.ts, 182, 76))
 >ers : Symbol(ers, Decl(parserRealSource10.ts, 183, 21))
+>ErrorRecoverySet : Symbol(ErrorRecoverySet)
 
         if (tokenId !== undefined) {
 >tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))

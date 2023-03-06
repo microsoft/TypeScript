@@ -1,0 +1,89 @@
+=== tests/cases/conformance/override/override1.ts ===
+class B {
+>B : Symbol(B, Decl(override1.ts, 0, 0))
+
+    foo (v: string) {}
+>foo : Symbol(B.foo, Decl(override1.ts, 0, 9))
+>v : Symbol(v, Decl(override1.ts, 1, 9))
+
+    fooo (v: string) {}
+>fooo : Symbol(B.fooo, Decl(override1.ts, 1, 22))
+>v : Symbol(v, Decl(override1.ts, 2, 10))
+}
+
+class D extends B {
+>D : Symbol(D, Decl(override1.ts, 3, 1))
+>B : Symbol(B, Decl(override1.ts, 0, 0))
+
+    override foo (v: string) {}
+>foo : Symbol(D.foo, Decl(override1.ts, 5, 19))
+>v : Symbol(v, Decl(override1.ts, 6, 18))
+
+    fooo (v: string) {}
+>fooo : Symbol(D.fooo, Decl(override1.ts, 6, 31))
+>v : Symbol(v, Decl(override1.ts, 8, 10))
+
+    override bar(v: string) {}
+>bar : Symbol(D.bar, Decl(override1.ts, 8, 23))
+>v : Symbol(v, Decl(override1.ts, 10, 17))
+}
+
+class C {
+>C : Symbol(C, Decl(override1.ts, 11, 1))
+
+    override foo(v: string) {}
+>foo : Symbol(C.foo, Decl(override1.ts, 13, 9))
+>v : Symbol(v, Decl(override1.ts, 14, 17))
+}
+
+function f () {
+>f : Symbol(f, Decl(override1.ts, 15, 1))
+
+    return class extends B {
+>B : Symbol(B, Decl(override1.ts, 0, 0))
+
+        override foo (v: string) {}
+>foo : Symbol((Anonymous class).foo, Decl(override1.ts, 18, 28))
+>v : Symbol(v, Decl(override1.ts, 19, 22))
+    
+        fooo (v: string) {}
+>fooo : Symbol((Anonymous class).fooo, Decl(override1.ts, 19, 35))
+>v : Symbol(v, Decl(override1.ts, 21, 14))
+    
+        override bar(v: string) {}
+>bar : Symbol((Anonymous class).bar, Decl(override1.ts, 21, 27))
+>v : Symbol(v, Decl(override1.ts, 23, 21))
+    }
+}
+
+class E extends (class {
+>E : Symbol(E, Decl(override1.ts, 25, 1))
+
+    foo () { }
+>foo : Symbol((Anonymous class).foo, Decl(override1.ts, 27, 24))
+
+    bar () { }
+>bar : Symbol((Anonymous class).bar, Decl(override1.ts, 28, 14))
+
+}) {
+    override foo () { }
+>foo : Symbol(E.foo, Decl(override1.ts, 30, 4))
+
+    bar () { }
+>bar : Symbol(E.bar, Decl(override1.ts, 31, 23))
+
+    baz() {}
+>baz : Symbol(E.baz, Decl(override1.ts, 32, 14))
+
+    override bazz () {}
+>bazz : Symbol(E.bazz, Decl(override1.ts, 34, 12))
+}
+
+function ff () {
+>ff : Symbol(ff, Decl(override1.ts, 37, 1))
+
+    return class {
+        override foo () {}
+>foo : Symbol((Anonymous class).foo, Decl(override1.ts, 40, 18))
+    }
+}

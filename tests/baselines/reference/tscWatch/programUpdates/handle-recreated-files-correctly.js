@@ -28,11 +28,11 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -50,23 +50,28 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (used version)
+/a/b/commonfile2.ts (used version)
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -79,6 +84,53 @@ var y = 1;
 
 
 
+Change:: change file to ensure signatures are updated
+
+Input::
+//// [/a/b/commonFile2.ts]
+let y = 1;let xy = 10;
+
+
+Output::
+>> Screen clear
+[[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
+
+a/lib/lib.d.ts
+  Default library for target 'es5'
+a/b/commonFile1.ts
+  Matched by default include pattern '**/*'
+a/b/commonFile2.ts
+  Matched by default include pattern '**/*'
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","explainFiles":true,"configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/commonfile2.ts (computed .d.ts)
+/a/b/commonfile1.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js]
+var y = 1;
+var xy = 10;
+
+
+
 Change:: delete file2
 
 Input::
@@ -86,13 +138,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+  Matched by default include pattern '**/*'
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -106,21 +158,28 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/b/commonfile1.ts (computed .d.ts)
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/commonfile2.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -135,15 +194,15 @@ let y = 1
 
 Output::
 >> Screen clear
-[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+  Matched by default include pattern '**/*'
+[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -160,25 +219,32 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/b/commonfile2.ts (computed .d.ts)
+/a/b/commonfile1.ts (computed .d.ts)
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js] file written with same contents
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+

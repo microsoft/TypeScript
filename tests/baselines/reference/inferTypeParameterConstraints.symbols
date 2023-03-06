@@ -1,0 +1,51 @@
+=== tests/cases/compiler/inferTypeParameterConstraints.ts ===
+// Repro from #42636
+
+type SubGuard<A, X extends [A]> = X;
+>SubGuard : Symbol(SubGuard, Decl(inferTypeParameterConstraints.ts, 0, 0))
+>A : Symbol(A, Decl(inferTypeParameterConstraints.ts, 2, 14))
+>X : Symbol(X, Decl(inferTypeParameterConstraints.ts, 2, 16))
+>A : Symbol(A, Decl(inferTypeParameterConstraints.ts, 2, 14))
+>X : Symbol(X, Decl(inferTypeParameterConstraints.ts, 2, 16))
+
+type IsSub<M extends any[], S extends any[]> = M extends [...SubGuard<M[number], infer B>, ...S, ...any[]] ? B : never;
+>IsSub : Symbol(IsSub, Decl(inferTypeParameterConstraints.ts, 2, 36))
+>M : Symbol(M, Decl(inferTypeParameterConstraints.ts, 4, 11))
+>S : Symbol(S, Decl(inferTypeParameterConstraints.ts, 4, 27))
+>M : Symbol(M, Decl(inferTypeParameterConstraints.ts, 4, 11))
+>SubGuard : Symbol(SubGuard, Decl(inferTypeParameterConstraints.ts, 0, 0))
+>M : Symbol(M, Decl(inferTypeParameterConstraints.ts, 4, 11))
+>B : Symbol(B, Decl(inferTypeParameterConstraints.ts, 4, 86))
+>S : Symbol(S, Decl(inferTypeParameterConstraints.ts, 4, 27))
+>B : Symbol(B, Decl(inferTypeParameterConstraints.ts, 4, 86))
+
+type E0 = IsSub<[1, 2, 3, 4], [2, 3, 4]>;  // [1 | 2 | 3 | 4]
+>E0 : Symbol(E0, Decl(inferTypeParameterConstraints.ts, 4, 119))
+>IsSub : Symbol(IsSub, Decl(inferTypeParameterConstraints.ts, 2, 36))
+
+type E1 = [1, 2, 3, 4] extends [...infer B, 2, 3, 4, ...any[]] ? B : never;  // unknown[]
+>E1 : Symbol(E1, Decl(inferTypeParameterConstraints.ts, 6, 41))
+>B : Symbol(B, Decl(inferTypeParameterConstraints.ts, 8, 40))
+>B : Symbol(B, Decl(inferTypeParameterConstraints.ts, 8, 40))
+
+// Repro from #42636
+
+type Constrain<T extends C, C> = unknown;
+>Constrain : Symbol(Constrain, Decl(inferTypeParameterConstraints.ts, 8, 75))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 12, 15))
+>C : Symbol(C, Decl(inferTypeParameterConstraints.ts, 12, 27))
+>C : Symbol(C, Decl(inferTypeParameterConstraints.ts, 12, 27))
+
+type Foo<A> = A extends Constrain<infer X, A> ? X : never;
+>Foo : Symbol(Foo, Decl(inferTypeParameterConstraints.ts, 12, 41))
+>A : Symbol(A, Decl(inferTypeParameterConstraints.ts, 14, 9))
+>A : Symbol(A, Decl(inferTypeParameterConstraints.ts, 14, 9))
+>Constrain : Symbol(Constrain, Decl(inferTypeParameterConstraints.ts, 8, 75))
+>X : Symbol(X, Decl(inferTypeParameterConstraints.ts, 14, 39))
+>A : Symbol(A, Decl(inferTypeParameterConstraints.ts, 14, 9))
+>X : Symbol(X, Decl(inferTypeParameterConstraints.ts, 14, 39))
+
+type T0 = Foo<string>;  // string
+>T0 : Symbol(T0, Decl(inferTypeParameterConstraints.ts, 14, 58))
+>Foo : Symbol(Foo, Decl(inferTypeParameterConstraints.ts, 12, 41))
+

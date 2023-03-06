@@ -31,6 +31,6 @@ var A = /** @class */ (function () {
     };
     __decorate([
         dec()
-    ], A.prototype, "__foo");
+    ], A.prototype, "__foo", null);
     return A;
 }());

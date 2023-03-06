@@ -18,11 +18,11 @@ type OmitIndex<T, I extends string | number> = {
 };
 
 type IndexObject = { [key: string]: unknown; };
->IndexObject : IndexObject
+>IndexObject : { [key: string]: unknown; }
 >key : string
 
 type FooBar = { foo: "hello"; bar: "world"; };
->FooBar : FooBar
+>FooBar : { foo: "hello"; bar: "world"; }
 >foo : "hello"
 >bar : "world"
 
@@ -39,5 +39,5 @@ type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: stri
 >WithIndexKey : string | number
 
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
->WithoutIndexKey : number | "foo" | "bar"
+>WithoutIndexKey : "foo" | "bar"
 

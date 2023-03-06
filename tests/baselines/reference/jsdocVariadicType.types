@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @type {function(boolean, string, ...*):void}
+ */
+const foo = function (a, b, ...r) { };
+>foo : (arg0: boolean, arg1: string, ...arg2: any[]) => void
+>function (a, b, ...r) { } : (a: boolean, b: string, ...r: any[]) => void
+>a : boolean
+>b : string
+>r : any[]
+
+=== tests/cases/conformance/jsdoc/b.ts ===
+foo(false, '');
+>foo(false, '') : void
+>foo : (arg0: boolean, arg1: string, ...arg2: any[]) => void
+>false : false
+>'' : ""
+

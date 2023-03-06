@@ -4,6 +4,7 @@
 
 let point = [3, 4] as const;
 >point : Symbol(point, Decl(readonlyTupleAndArrayElaboration.ts, 3, 3))
+>const : Symbol(const)
 
 function distanceFromOrigin([x, y]: [number, number]) {
 >distanceFromOrigin : Symbol(distanceFromOrigin, Decl(readonlyTupleAndArrayElaboration.ts, 3, 28))

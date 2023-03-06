@@ -1,0 +1,41 @@
+=== tests/cases/conformance/salsa/bug43713.js ===
+const { funky } = require('./commonJSAliasedExport');
+>funky : Symbol(funky, Decl(bug43713.js, 0, 7))
+>require : Symbol(require)
+>'./commonJSAliasedExport' : Symbol("tests/cases/conformance/salsa/commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
+
+/** @type {boolean} */
+var diddy
+>diddy : Symbol(diddy, Decl(bug43713.js, 2, 3), Decl(bug43713.js, 3, 3))
+
+var diddy = funky(1)
+>diddy : Symbol(diddy, Decl(bug43713.js, 2, 3), Decl(bug43713.js, 3, 3))
+>funky : Symbol(funky, Decl(bug43713.js, 0, 7))
+
+
+=== tests/cases/conformance/salsa/commonJSAliasedExport.js ===
+const donkey = (ast) =>  ast;
+>donkey : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
+>ast : Symbol(ast, Decl(commonJSAliasedExport.js, 0, 16))
+>ast : Symbol(ast, Decl(commonJSAliasedExport.js, 0, 16))
+
+function funky(declaration) {
+>funky : Symbol(funky, Decl(commonJSAliasedExport.js, 0, 29))
+>declaration : Symbol(declaration, Decl(commonJSAliasedExport.js, 2, 15))
+
+    return false;
+}
+module.exports = donkey;
+>module.exports : Symbol(module.exports, Decl(commonJSAliasedExport.js, 0, 0))
+>module : Symbol(export=, Decl(commonJSAliasedExport.js, 4, 1))
+>exports : Symbol(export=, Decl(commonJSAliasedExport.js, 4, 1))
+>donkey : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
+
+module.exports.funky = funky;
+>module.exports.funky : Symbol(funky, Decl(commonJSAliasedExport.js, 5, 24))
+>module.exports : Symbol(funky, Decl(commonJSAliasedExport.js, 5, 24))
+>module : Symbol(module, Decl(commonJSAliasedExport.js, 4, 1))
+>exports : Symbol(module.exports, Decl(commonJSAliasedExport.js, 0, 0))
+>funky : Symbol(funky, Decl(commonJSAliasedExport.js, 5, 24))
+>funky : Symbol(funky, Decl(commonJSAliasedExport.js, 0, 29))
+

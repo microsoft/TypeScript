@@ -1,0 +1,44 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts ===
+const C = class D {
+>C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
+>D : Symbol(D, Decl(privateNameStaticMethodClassExpression.ts, 0, 9))
+
+    static #field = D.#method();
+>#field : Symbol(D.#field, Decl(privateNameStaticMethodClassExpression.ts, 0, 19))
+>D.#method : Symbol(D.#method, Decl(privateNameStaticMethodClassExpression.ts, 1, 32))
+>D : Symbol(D, Decl(privateNameStaticMethodClassExpression.ts, 0, 9))
+
+    static #method() { return 42; }
+>#method : Symbol(D.#method, Decl(privateNameStaticMethodClassExpression.ts, 1, 32))
+
+    static getClass() { return D; }
+>getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+>D : Symbol(D, Decl(privateNameStaticMethodClassExpression.ts, 0, 9))
+
+    static getField() { return C.#field };
+>getField : Symbol(D.getField, Decl(privateNameStaticMethodClassExpression.ts, 3, 35))
+>C.#field : Symbol(D.#field, Decl(privateNameStaticMethodClassExpression.ts, 0, 19))
+>C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
+}
+
+console.log(C.getClass().getField());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>C.getClass().getField : Symbol(D.getField, Decl(privateNameStaticMethodClassExpression.ts, 3, 35))
+>C.getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+>C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
+>getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+>getField : Symbol(D.getField, Decl(privateNameStaticMethodClassExpression.ts, 3, 35))
+
+C.getClass().#method; // Error
+>C.getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+>C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
+>getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+
+C.getClass().#field; // Error
+>C.getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+>C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
+>getClass : Symbol(D.getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
+
+

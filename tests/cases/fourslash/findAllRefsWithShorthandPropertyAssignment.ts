@@ -1,16 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
-//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}name|] = "Foo";|]
+//// var /*0*/name = "Foo";
 ////
-//// var obj = { [|{| "isWriteAccess": true, "isDefinition": true |}name|] };
-//// var obj1 = { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}name|]:[|name|]|] };
-//// obj.[|name|];
+//// var obj = { /*1*/name };
+//// var obj1 = { /*2*/name: /*3*/name };
+//// obj./*4*/name;
 
-const [r0Def, r0, r1, r2Def, r2, r3, r4] = test.ranges();
-verify.referenceGroups([r0, r3], [{ definition: "var name: string", ranges: [r0, r1, r3] }]);
-verify.referenceGroups(r1, [
-    { definition: "var name: string", ranges: [r0, r1, r3] },
-    { definition: "(property) name: string", ranges: [r4] }
-]);
-verify.singleReferenceGroup("(property) name: string", [r2]);
-verify.referenceGroups(r4, [{ definition: "(property) name: string", ranges: [r1, r4] }]);
+verify.baselineFindAllReferences('0', '3', '1', '2', '4')

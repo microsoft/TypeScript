@@ -16,3 +16,13 @@ enum Bar {
 }
 let foo = Foo.A as const;
 let bar = Bar.A as const;
+
+// @filename: ns.ts
+namespace ns {
+    export enum Foo { X }
+    ns.Foo.X as const;
+}
+
+// @filename: more.ts
+export enum Foo { X }
+(Foo).X as const;

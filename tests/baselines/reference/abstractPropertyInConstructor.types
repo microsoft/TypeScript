@@ -12,7 +12,7 @@ abstract class AbstractClass {
 >this : this
 >method : (num: number) => void
 >parseInt(str) : number
->parseInt : (s: string, radix?: number) => number
+>parseInt : (string: string, radix?: number) => number
 >str : string
 
         let val = this.prop.toLowerCase();
@@ -247,6 +247,72 @@ class User {
 >a.method2 : () => void
 >a : AbstractClass
 >method2 : () => void
+    }
+}
+
+abstract class C1 {
+>C1 : C1
+
+    abstract x: string;
+>x : string
+
+    abstract y: string;
+>y : string
+
+    constructor() {
+        let self = this;                // ok
+>self : this
+>this : this
+
+        let { x, y: y1 } = this;        // error
+>x : string
+>y : any
+>y1 : string
+>this : this
+
+        ({ x, y: y1, "y": y1 } = this); // error
+>({ x, y: y1, "y": y1 } = this) : this
+>{ x, y: y1, "y": y1 } = this : this
+>{ x, y: y1, "y": y1 } : { x: string; y: string; }
+>x : string
+>y : string
+>y1 : string
+>"y" : string
+>y1 : string
+>this : this
+    }
+}
+
+class C2 {
+>C2 : C2
+
+    x: string;
+>x : string
+
+    y: string;
+>y : string
+
+    constructor() {
+        let self = this;                // ok
+>self : this
+>this : this
+
+        let { x, y: y1 } = this;        // ok
+>x : string
+>y : any
+>y1 : string
+>this : this
+
+        ({ x, y: y1, "y": y1 } = this); // ok
+>({ x, y: y1, "y": y1 } = this) : this
+>{ x, y: y1, "y": y1 } = this : this
+>{ x, y: y1, "y": y1 } : { x: string; y: string; }
+>x : string
+>y : string
+>y1 : string
+>"y" : string
+>y1 : string
+>this : this
     }
 }
 

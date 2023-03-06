@@ -23,5 +23,5 @@
 verify.noErrors();
 verify.completions(
     { marker: ["1", "2", "3", "4", "5", "6"], exact: completion.functionMembersWithPrototype },
-    { marker: "7", exact: ["prototype", ...completion.functionMembers] },
+    { marker: "7", exact: completion.functionMembersPlus(["prototype"]) },
 );

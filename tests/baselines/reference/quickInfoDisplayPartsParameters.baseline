@@ -1,3 +1,49 @@
+=== /tests/cases/fourslash/quickInfoDisplayPartsParameters.ts ===
+// /** @return *crunch* */
+// function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | @return *crunch*
+// | ----------------------------------------------------------------------
+//              ^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) param: string
+// | ----------------------------------------------------------------------
+//                             ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) optionalParam: string
+// | ----------------------------------------------------------------------
+//                                                     ^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) paramWithInitializer: string
+// | ----------------------------------------------------------------------
+//                                                                                        ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) restParam: string[]
+// | ----------------------------------------------------------------------
+//     param = "Hello";
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) param: string
+// | ----------------------------------------------------------------------
+//     optionalParam = "World";
+//     ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) optionalParam: string
+// | ----------------------------------------------------------------------
+//     paramWithInitializer = "Hello";
+//     ^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) paramWithInitializer: string
+// | ----------------------------------------------------------------------
+//     restParam[0] = "World";
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) restParam: string[]
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +51,7 @@
       "position": 33,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -158,7 +204,12 @@
       "tags": [
         {
           "name": "return",
-          "text": "*crunch*"
+          "text": [
+            {
+              "text": "*crunch*",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -169,7 +220,7 @@
       "position": 37,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -219,7 +270,7 @@
       "position": 52,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -269,7 +320,7 @@
       "position": 76,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -319,7 +370,7 @@
       "position": 111,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -377,7 +428,7 @@
       "position": 138,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -427,7 +478,7 @@
       "position": 159,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -477,7 +528,7 @@
       "position": 188,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -527,7 +578,7 @@
       "position": 224,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {

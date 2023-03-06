@@ -8,7 +8,7 @@ export type { A } from './a';
 
 === tests/cases/conformance/externalModules/typeOnly/c.ts ===
 export * as a from './b';
->a : typeof a
+>a : typeof import("tests/cases/conformance/externalModules/typeOnly/b")
 
 === tests/cases/conformance/externalModules/typeOnly/d.ts ===
 import { a } from './c';

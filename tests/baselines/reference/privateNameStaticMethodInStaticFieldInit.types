@@ -1,0 +1,24 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodInStaticFieldInit.ts ===
+class C {
+>C : C
+
+    static s = C.#method();
+>s : number
+>C.#method() : number
+>C.#method : () => number
+>C : typeof C
+
+    static #method() { return 42; }
+>#method : () => number
+>42 : 42
+}
+
+console.log(C.s);
+>console.log(C.s) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>C.s : number
+>C : typeof C
+>s : number
+

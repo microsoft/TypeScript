@@ -11,14 +11,18 @@
 ////[|/*useG*/g|]();
 ////[|/*useH*/h|]();
 
-////const i = /*i*/() => 0;
+////const /*i*/i = () => 0;
+////const /*iFn*/iFn = function () { return 0; };
 ////const /*j*/j = i;
 
 ////[|/*useI*/i|]();
+////[|/*useIFn*/iFn|]();
 ////[|/*useJ*/j|]();
 
-////const o = { m: /*m*/() => 0 };
+////const o = { /*m*/m: () => 0 };
 ////o.[|/*useM*/m|]();
+////const oFn = { /*mFn*/mFn: function () { return 0; } };
+////oFn.[|/*useMFn*/mFn|]();
 
 ////class Component { /*componentCtr*/constructor(props: {}) {} }
 ////type ComponentClass = /*ComponentClass*/new () => Component;
@@ -44,8 +48,10 @@ verify.goToDefinition({
     useH: ["h", "f"],
 
     useI: "i",
+    useIFn: "iFn",
     useJ: ["j", "i"],
     useM: "m",
+    useMFn: "mFn",
 
     jsxMyComponent: "MyComponent",
     newMyComponent: ["MyComponent", "componentCtr"],

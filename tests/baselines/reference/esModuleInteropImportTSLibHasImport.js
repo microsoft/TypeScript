@@ -26,7 +26,7 @@ exports.username = username;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-(0, tslib_1.__exportStar)(require("./username"), exports);
+tslib_1.__exportStar(require("./username"), exports);
 //// [hello.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -36,6 +36,6 @@ exports.default = sayHello;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-const hello_1 = (0, tslib_1.__importDefault)(require("./hello"));
+const hello_1 = tslib_1.__importDefault(require("./hello"));
 const utils_1 = require("./utils");
 (0, hello_1.default)((0, utils_1.username)());

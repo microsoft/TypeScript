@@ -168,7 +168,7 @@ var a: {
 var b: { [x: number]: string; } = {
 >b : { [x: number]: string; }
 >x : number
->{    a: '',    b: 1,     c: () => { },     "d": '',     "e": 1,     1.0: '',    2.0: 1,     "3.0": '',     "4.0": 1,     f: <Myn>null,     get X() {         return '';    },    set X(v) { },     foo() {         return '';    }} : { a: string; b: number; c: () => void; d: string; e: number; 1: string; 2: number; "3.0": string; "4.0": number; f: any; X: string; foo(): string; }
+>{    a: '',    b: 1,     c: () => { },     "d": '',     "e": 1,     1.0: '',    2.0: 1,     "3.0": '',     "4.0": 1,     f: <Myn>null,     get X() {         return '';    },    set X(v) { },     foo() {         return '';    }} : { a: string; b: number; c: () => void; d: string; e: number; 1: string; 2: number; "3.0": string; "4.0": number; f: Myn; X: string; foo(): string; }
 
     a: '',
 >a : string
@@ -207,8 +207,8 @@ var b: { [x: number]: string; } = {
 >1 : 1
 
     f: <Myn>null, 
->f : any
-><Myn>null : any
+>f : Myn
+><Myn>null : Myn
 >null : null
 
     get X() { 

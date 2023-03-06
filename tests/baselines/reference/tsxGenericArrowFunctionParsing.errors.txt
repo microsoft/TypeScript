@@ -36,4 +36,7 @@ tests/cases/conformance/jsx/file.tsx(24,25): error TS1382: Unexpected token. Did
 !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
     x5.isElement;
     
+    // This is a generic function
+    var x6 = <T = string,>() => {};
+    x6();
     

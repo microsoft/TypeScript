@@ -15,7 +15,7 @@ declare module "OuterModule" {
 >InstanceVar : number
 
         public x: m2.c;
->x : any
+>x : m2.c
 >m2 : any
 
         constructor();

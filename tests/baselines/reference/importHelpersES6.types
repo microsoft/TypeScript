@@ -18,6 +18,13 @@ declare var dec: any;
 >await this.#x : number
 >this.#x : number
 >this : this
+
+    g(u) { return #x in u; }
+>g : (u: any) => boolean
+>u : any
+>#x in u : boolean
+>#x : any
+>u : any
 }
 
 const o = { a: 1 };
@@ -61,9 +68,23 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >P : Function
 >generator : Function
 
-export declare function __classPrivateFieldGet(): any;
->__classPrivateFieldGet : () => any
+export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
+>__classPrivateFieldGet : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
 
-export declare function __classPrivateFieldSet(): any;
->__classPrivateFieldSet : () => any
+export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
+>__classPrivateFieldSet : (a: any, b: any, c: any, d: any, e: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
+
+export declare function __classPrivateFieldIn(a: any, b: any): boolean;
+>__classPrivateFieldIn : (a: any, b: any) => boolean
+>a : any
+>b : any
 

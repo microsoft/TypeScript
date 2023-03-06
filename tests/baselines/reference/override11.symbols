@@ -1,0 +1,20 @@
+=== tests/cases/conformance/override/override11.ts ===
+class Base {
+>Base : Symbol(Base, Decl(override11.ts, 0, 0))
+
+    foo = 1;
+>foo : Symbol(Base.foo, Decl(override11.ts, 0, 12))
+}
+
+class Sub extends Base {
+>Sub : Symbol(Sub, Decl(override11.ts, 2, 1))
+>Base : Symbol(Base, Decl(override11.ts, 0, 0))
+
+    constructor (override public foo: number) {
+>foo : Symbol(Sub.foo, Decl(override11.ts, 5, 17))
+
+        super();
+>super : Symbol(Base, Decl(override11.ts, 0, 0))
+    }
+}
+

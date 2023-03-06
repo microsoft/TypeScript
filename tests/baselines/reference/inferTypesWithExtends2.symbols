@@ -1,0 +1,32 @@
+=== tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts ===
+// infer twice with different constraints (same behavior as class/interface)
+type X1<T> =
+>X1 : Symbol(X1, Decl(inferTypesWithExtends2.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypesWithExtends2.ts, 1, 8))
+
+    T extends { a: infer U extends string, b: infer U extends number } ? U :
+>T : Symbol(T, Decl(inferTypesWithExtends2.ts, 1, 8))
+>a : Symbol(a, Decl(inferTypesWithExtends2.ts, 2, 15))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 2, 24), Decl(inferTypesWithExtends2.ts, 2, 51))
+>b : Symbol(b, Decl(inferTypesWithExtends2.ts, 2, 42))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 2, 24), Decl(inferTypesWithExtends2.ts, 2, 51))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 2, 24), Decl(inferTypesWithExtends2.ts, 2, 51))
+
+    never;
+
+// infer cannot reference type params in same 'extends' clause
+type X2<T> =
+>X2 : Symbol(X2, Decl(inferTypesWithExtends2.ts, 3, 10))
+>T : Symbol(T, Decl(inferTypesWithExtends2.ts, 6, 8))
+
+    T extends { a: infer U, b: infer V extends U } ? [U, V] :
+>T : Symbol(T, Decl(inferTypesWithExtends2.ts, 6, 8))
+>a : Symbol(a, Decl(inferTypesWithExtends2.ts, 7, 15))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 7, 24))
+>b : Symbol(b, Decl(inferTypesWithExtends2.ts, 7, 27))
+>V : Symbol(V, Decl(inferTypesWithExtends2.ts, 7, 36))
+>U : Symbol(U)
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 7, 24))
+>V : Symbol(V, Decl(inferTypesWithExtends2.ts, 7, 36))
+
+    never;

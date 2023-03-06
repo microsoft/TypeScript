@@ -30,7 +30,9 @@ verify.codeFixAll({
          * @type {number[] | undefined}
          */
         this.p = undefined;
-        /** @type {number[] | undefined} */
+        /**
+         * @type {number[] | undefined}
+         */
         this.q = undefined
     }
     method() {

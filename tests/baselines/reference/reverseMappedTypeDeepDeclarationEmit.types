@@ -1,0 +1,72 @@
+=== tests/cases/compiler/reverseMappedTypeDeepDeclarationEmit.ts ===
+export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>
+>Validator : Validator<T>
+
+export type NativeTypeValidator<T> = (n: any) => T | undefined
+>NativeTypeValidator : NativeTypeValidator<T>
+>n : any
+
+export type ObjectValidator<O> = {
+>ObjectValidator : ObjectValidator<O>
+
+  [K in keyof O]: Validator<O[K]> 
+}
+
+//native validators
+export declare const SimpleStringValidator: NativeTypeValidator<string>;
+>SimpleStringValidator : NativeTypeValidator<string>
+
+///object validator function
+export declare const ObjValidator: <V>(validatorObj: ObjectValidator<V>) => (o: any) => V;
+>ObjValidator : <V>(validatorObj: ObjectValidator<V>) => (o: any) => V
+>validatorObj : ObjectValidator<V>
+>o : any
+
+export const test  = {
+>test : { Test: { Test1: { Test2: NativeTypeValidator<string>; }; }; }
+>{  Test: {    Test1: {      Test2: SimpleStringValidator    },  }} : { Test: { Test1: { Test2: NativeTypeValidator<string>; }; }; }
+
+  Test: {
+>Test : { Test1: { Test2: NativeTypeValidator<string>; }; }
+>{    Test1: {      Test2: SimpleStringValidator    },  } : { Test1: { Test2: NativeTypeValidator<string>; }; }
+
+    Test1: {
+>Test1 : { Test2: NativeTypeValidator<string>; }
+>{      Test2: SimpleStringValidator    } : { Test2: NativeTypeValidator<string>; }
+
+      Test2: SimpleStringValidator
+>Test2 : NativeTypeValidator<string>
+>SimpleStringValidator : NativeTypeValidator<string>
+
+    },
+  }
+}
+
+export const validatorFunc = ObjValidator(test);
+>validatorFunc : (o: any) => { Test: { Test1: { Test2: string; }; }; }
+>ObjValidator(test) : (o: any) => { Test: { Test1: { Test2: string; }; }; }
+>ObjValidator : <V>(validatorObj: ObjectValidator<V>) => (o: any) => V
+>test : { Test: { Test1: { Test2: NativeTypeValidator<string>; }; }; }
+
+export const outputExample = validatorFunc({
+>outputExample : { Test: { Test1: { Test2: string; }; }; }
+>validatorFunc({  Test: {    Test1: {      Test2: "hi"    },  }}) : { Test: { Test1: { Test2: string; }; }; }
+>validatorFunc : (o: any) => { Test: { Test1: { Test2: string; }; }; }
+>{  Test: {    Test1: {      Test2: "hi"    },  }} : { Test: { Test1: { Test2: string; }; }; }
+
+  Test: {
+>Test : { Test1: { Test2: string; }; }
+>{    Test1: {      Test2: "hi"    },  } : { Test1: { Test2: string; }; }
+
+    Test1: {
+>Test1 : { Test2: string; }
+>{      Test2: "hi"    } : { Test2: string; }
+
+      Test2: "hi"
+>Test2 : string
+>"hi" : "hi"
+
+    },
+  }
+});
+

@@ -1,5 +1,7 @@
 ﻿// @module: system
 // @target: esnext
+// @useDefineForClassFields: false
+
 // @filename: 0.ts
 export class B {
     print() { return "I am B"}

@@ -42,11 +42,11 @@ identical.value = 12; // error, lhs can't be a readonly property
 let mutable: Base & Mutable;
 >mutable : Base & Mutable
 
-mutable.value = 12; // error, lhs can't be a readonly property
+mutable.value = 12;
 >mutable.value = 12 : 12
->mutable.value : any
+>mutable.value : number
 >mutable : Base & Mutable
->value : any
+>value : number
 >12 : 12
 
 let differentType: Base & DifferentType;

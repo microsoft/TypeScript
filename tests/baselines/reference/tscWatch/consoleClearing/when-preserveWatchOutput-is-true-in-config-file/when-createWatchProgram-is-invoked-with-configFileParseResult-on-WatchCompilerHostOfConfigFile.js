@@ -38,19 +38,21 @@ Semantic diagnostics in builder refreshed for::
 /f.ts
 /a/lib/lib.d.ts
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/f.ts (used version)
+/a/lib/lib.d.ts (used version)
 
 FsWatches::
+/tsconfig.json: *new*
+  {}
+/f.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -82,19 +84,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /f.ts
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 

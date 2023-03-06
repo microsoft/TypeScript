@@ -23,7 +23,7 @@
 
 goTo.marker('1');
 edit.insert('.');
-verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });
+verify.completions({ includes: { name: "substring", kind: "method", kindModifiers: "declare" } });
 edit.backspace();
 
 goTo.marker('2');

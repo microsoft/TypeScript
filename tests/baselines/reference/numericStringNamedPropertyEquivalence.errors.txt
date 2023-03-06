@@ -4,7 +4,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(16,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(17,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(17,5): error TS2717: Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(22,5): error TS2300: Duplicate identifier '0'.
+tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(22,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
 ==== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts (7 errors) ====
@@ -44,5 +44,5 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
         "0": '',
         0: ''
         ~
-!!! error TS2300: Duplicate identifier '0'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     }

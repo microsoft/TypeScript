@@ -21,14 +21,14 @@ export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
   let zz = arr[1];  // Error
 >zz : string | number
 >arr[1] : string | number
->arr : T & (NumList | StrList)
+>arr : NumList | StrList
 >1 : 1
 }
 
 // Repro from #38102
 
 export type TypedArray = Int32Array | Uint8Array;
->TypedArray : TypedArray
+>TypedArray : Int32Array | Uint8Array
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
@@ -51,11 +51,11 @@ export function flatten<T extends number|TypedArray>(arr: T) {
   if (isTypedArray(arr)) {
 >isTypedArray(arr) : boolean
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
->arr : T
+>arr : number | TypedArray
 
       arr[1];
 >arr[1] : number
->arr : T & (Int32Array | Uint8Array)
+>arr : TypedArray
 >1 : 1
   }
 }

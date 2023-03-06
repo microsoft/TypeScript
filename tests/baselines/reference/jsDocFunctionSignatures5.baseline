@@ -1,3 +1,27 @@
+=== /tests/cases/fourslash/Foo.js ===
+// /**
+//  * Filters a path based on a regexp or glob pattern.
+//  * @param {String} basePath The base path where the search will be performed.
+//  * @param {String} pattern A string defining a regexp of a glob pattern.
+//  * @param {String} type The search pattern type, can be a regexp or a glob.
+//  * @param {Object} options A object containing options to the search.
+//  * @return {Array} A list containing the filtered paths.
+//  */
+// function pathFilter(basePath, pattern, type, options){
+// //...
+// }
+// pathFilter('foo', 'bar', 'baz', {});
+//            ^
+// | ----------------------------------------------------------------------
+// | pathFilter(**basePath: string**, pattern: string, type: string, options: any): any[]
+// | Filters a path based on a regexp or glob pattern.
+// | @param basePath The base path where the search will be performed.
+// | @param pattern A string defining a regexp of a glob pattern.
+// | @param type The search pattern type, can be a regexp or a glob.
+// | @param options A object containing options to the search.
+// | @return A list containing the filtered paths.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +29,7 @@
       "position": 489,
       "name": ""
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -182,23 +206,80 @@
           "tags": [
             {
               "name": "param",
-              "text": "basePath The base path where the search will be performed."
+              "text": [
+                {
+                  "text": "basePath",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The base path where the search will be performed.",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "pattern A string defining a regexp of a glob pattern."
+              "text": [
+                {
+                  "text": "pattern",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A string defining a regexp of a glob pattern.",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "type The search pattern type, can be a regexp or a glob."
+              "text": [
+                {
+                  "text": "type",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The search pattern type, can be a regexp or a glob.",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "options A object containing options to the search."
+              "text": [
+                {
+                  "text": "options",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A object containing options to the search.",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "return",
-              "text": "A list containing the filtered paths."
+              "text": [
+                {
+                  "text": "A list containing the filtered paths.",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }

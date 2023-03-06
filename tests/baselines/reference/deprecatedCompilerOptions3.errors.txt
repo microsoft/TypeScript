@@ -1,0 +1,43 @@
+/foo/tsconfig.json(3,19): error TS5102: Flag 'ES3' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(4,9): error TS5102: Flag 'noImplicitUseStrict' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(5,9): error TS5102: Flag 'keyofStringsOnly' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(6,9): error TS5102: Flag 'suppressExcessPropertyErrors' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(7,9): error TS5102: Flag 'suppressImplicitAnyIndexErrors' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(8,9): error TS5102: Flag 'noStrictGenericChecks' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(9,9): error TS5102: Flag 'charset' is deprecated. Please remove it from your configuration.
+/foo/tsconfig.json(10,9): error TS5102: Flag 'out' is deprecated. Please remove it from your configuration.
+
+
+==== /foo/tsconfig.json (8 errors) ====
+    {
+        "compilerOptions": {
+            "target": "ES3",
+                      ~~~~~
+!!! error TS5102: Flag 'ES3' is deprecated. Please remove it from your configuration.
+            "noImplicitUseStrict": true,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Flag 'noImplicitUseStrict' is deprecated. Please remove it from your configuration.
+            "keyofStringsOnly": true,
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Flag 'keyofStringsOnly' is deprecated. Please remove it from your configuration.
+            "suppressExcessPropertyErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Flag 'suppressExcessPropertyErrors' is deprecated. Please remove it from your configuration.
+            "suppressImplicitAnyIndexErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Flag 'suppressImplicitAnyIndexErrors' is deprecated. Please remove it from your configuration.
+            "noStrictGenericChecks": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Flag 'noStrictGenericChecks' is deprecated. Please remove it from your configuration.
+            "charset": "utf8",
+            ~~~~~~~~~
+!!! error TS5102: Flag 'charset' is deprecated. Please remove it from your configuration.
+            "out": "dist.js",
+            ~~~~~
+!!! error TS5102: Flag 'out' is deprecated. Please remove it from your configuration.
+        }
+    }
+    
+==== /foo/a.ts (0 errors) ====
+    const a = 1;
+    

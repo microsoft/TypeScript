@@ -1,5 +1,5 @@
 === tests/cases/conformance/types/tuple/indexerWithTuple.ts ===
-var strNumTuple: [string, number] = ["foo", 10]; 
+var strNumTuple: [string, number] = ["foo", 10];
 >strNumTuple : [string, number]
 >["foo", 10] : [string, number]
 >"foo" : "foo"
@@ -13,13 +13,13 @@ var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
 >"bar" : "bar"
 >20 : 20
 
-var unionTuple1: [number, string| number] = [10, "foo"]; 
+var unionTuple1: [number, string| number] = [10, "foo"];
 >unionTuple1 : [number, string | number]
 >[10, "foo"] : [number, string]
 >10 : 10
 >"foo" : "foo"
 
-var unionTuple2: [boolean, string| number] = [true, "foo"]; 
+var unionTuple2: [boolean, string| number] = [true, "foo"];
 >unionTuple2 : [boolean, string | number]
 >[true, "foo"] : [true, string]
 >true : true
@@ -87,6 +87,13 @@ var ele17 = numTupleTuple[2]; // number | [string, number]
 >numTupleTuple[2] : undefined
 >numTupleTuple : [number, [string, number]]
 >2 : 2
+
+var ele19 = strNumTuple[-1]   // undefined
+>ele19 : undefined
+>strNumTuple[-1] : undefined
+>strNumTuple : [string, number]
+>-1 : -1
+>1 : 1
 
 var eleUnion10 = unionTuple1[0]; // number
 >eleUnion10 : number
@@ -171,4 +178,15 @@ var eleUnion26 = unionTuple2["1"]; // string | number
 >unionTuple2["1"] : string | number
 >unionTuple2 : [boolean, string | number]
 >"1" : "1"
+
+type t1 = [string, number][0];  // string
+>t1 : string
+
+type t2 = [string, number][1];  // number
+>t2 : number
+
+type t3 = [string, number][-1]; // undefined
+>t3 : undefined
+>-1 : -1
+>1 : 1
 

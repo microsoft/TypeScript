@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @this {string} */
+export function f1() {}
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+
+/** @this */
+export function f2() {}
+>f2 : Symbol(f2, Decl(a.js, 1, 23))
+

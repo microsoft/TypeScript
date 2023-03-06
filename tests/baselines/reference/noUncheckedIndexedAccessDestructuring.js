@@ -42,6 +42,18 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
     q.z.toFixed(); // Should error
 }
 
+{
+    const { x, ...q } = numMapPoint;
+    x.
+    toFixed(); // Should OK
+
+    q.
+    y.toFixed(); // Should OK
+
+    q.
+    z.toFixed(); // Should error
+}
+
 
 declare let target_string: string;
 declare let target_string_undef: string | undefined;
@@ -99,6 +111,15 @@ t2.z.toString(); // Should error
     x.toFixed(); // Should OK
     q.y.toFixed(); // Should OK
     q.z.toFixed(); // Should error
+}
+{
+    var x = numMapPoint.x, q = __rest(numMapPoint, ["x"]);
+    x.
+        toFixed(); // Should OK
+    q.
+        y.toFixed(); // Should OK
+    q.
+        z.toFixed(); // Should error
 }
 // Assignment forms
 target_string = strArray[0]; // Should error

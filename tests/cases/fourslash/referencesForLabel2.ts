@@ -8,4 +8,4 @@
 ////    if (true) continue label;
 ////}
 
-verify.noReferences("");
+verify.baselineFindAllReferences("");

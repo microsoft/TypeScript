@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}I|] {
+/////*1*/interface /*2*/I {
 ////    p: number;
-////}|]
-////let i: [|I|] = { p: 12 };
+////}
+////let i: /*3*/I = { p: 12 };
 
-verify.singleReferenceGroup("interface I", "I");
+verify.baselineFindAllReferences('1', '2', '3');

@@ -32,7 +32,7 @@ foo1.b;
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -40,7 +40,11 @@ foo1.b;
 //// [1.js]
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -67,14 +71,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    exports["default"] = __importStar(require("./0"));
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = void 0;
+    exports.default = __importStar(require("./0"));
 });
 //// [11.js]
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -101,9 +109,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var ns = __importStar(require("./0"));
-    exports["default"] = ns;
+    exports.default = ns;
 });
 //// [2.js]
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -119,13 +127,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var _1_1 = __importDefault(require("./1"));
     var _11_1 = __importDefault(require("./11"));
-    _1_1["default"].a;
-    _11_1["default"].a;
-    _1_1["default"].b;
-    _11_1["default"].b;
+    _1_1.default.a;
+    _11_1.default.a;
+    _1_1.default.b;
+    _11_1.default.b;
 });
 
 

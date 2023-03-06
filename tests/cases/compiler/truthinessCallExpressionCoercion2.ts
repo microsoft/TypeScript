@@ -48,6 +48,22 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // error
+    if (required1 || b) {
+    }
+
+    // error
+    if (required1 || required2) {
+    }
+
+    // error
+    if (required1 ?? b) {
+    }
+
+    // error
+    if (required1 ?? required2) {
+    }
+
+    // error
     if (((required1 && b))) {
     }
 
@@ -57,15 +73,50 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // ok
+    if (required1 || b) {
+        required1();
+    }
+
+    // ok
+    if (required1 ?? b) {
+        required1();
+    }
+
+    // ok
+    if (b ?? required1) {
+        required1();
+    }
+
+    // ok
     if (((required1 && b))) {
         required1();
+    }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {
+    }
+
+    // error
+    if (b && (required1 || required2)) {
+    }
+
+    // error
+    if ((required1 || required2) && b) {
+    }
+
+    // error
+    if (b && (required1 ?? required2)) {
+    }
+
+    // error
+    if ((required1 ?? required2) && b) {
     }
 }
 
 function checksConsole() {
     // error
     typeof window !== 'undefined' && window.console &&
-        ((window.console as any).firebug || (window.console.exception && window.console.table));
+        ((window.console as any).firebug || (window.console.error && window.console.table));
 }
 
 function checksPropertyAccess() {
@@ -100,6 +151,26 @@ function checksPropertyAccess() {
 
     // error
     x1.a.b.c && x2.a.b.c();
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+    }
+
+    // error
+    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+    }
+
+    // error
+    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+    }
 }
 
 class Foo {

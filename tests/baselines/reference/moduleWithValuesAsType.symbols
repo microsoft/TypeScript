@@ -8,4 +8,5 @@ module A {
 
 var a: A; // no error
 >a : Symbol(a, Decl(moduleWithValuesAsType.ts, 4, 3))
+>A : Symbol(A)
 

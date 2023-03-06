@@ -1,0 +1,67 @@
+=== tests/cases/compiler/discriminatedUnionJsxElement.tsx ===
+// Repro from #46021
+
+interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
+>IData : Symbol(IData, Decl(discriminatedUnionJsxElement.tsx, 0, 0))
+>MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 16))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+
+    menuItemsVariant?: MenuItemVariant;
+>menuItemsVariant : Symbol(IData.menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
+>MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 16))
+}
+
+function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
+>Menu : Symbol(Menu, Decl(discriminatedUnionJsxElement.tsx, 4, 1))
+>MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 6, 14))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+>data : Symbol(data, Decl(discriminatedUnionJsxElement.tsx, 6, 81))
+>IData : Symbol(IData, Decl(discriminatedUnionJsxElement.tsx, 0, 0))
+>MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 6, 14))
+
+    const listItemVariant = data.menuItemsVariant ?? ListItemVariant.OneLine;
+>listItemVariant : Symbol(listItemVariant, Decl(discriminatedUnionJsxElement.tsx, 7, 9))
+>data.menuItemsVariant : Symbol(IData.menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
+>data : Symbol(data, Decl(discriminatedUnionJsxElement.tsx, 6, 81))
+>menuItemsVariant : Symbol(IData.menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
+>ListItemVariant.OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+
+    return <ListItem variant={listItemVariant} />;
+>ListItem : Symbol(ListItem, Decl(discriminatedUnionJsxElement.tsx, 16, 1))
+>variant : Symbol(variant, Decl(discriminatedUnionJsxElement.tsx, 8, 20))
+>listItemVariant : Symbol(listItemVariant, Decl(discriminatedUnionJsxElement.tsx, 7, 9))
+}
+
+type IListItemData = { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; };
+>IListItemData : Symbol(IListItemData, Decl(discriminatedUnionJsxElement.tsx, 9, 1))
+>variant : Symbol(variant, Decl(discriminatedUnionJsxElement.tsx, 11, 22))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>Avatar : Symbol(ListItemVariant.Avatar, Decl(discriminatedUnionJsxElement.tsx, 14, 12))
+>variant : Symbol(variant, Decl(discriminatedUnionJsxElement.tsx, 11, 61))
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+>OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+
+enum ListItemVariant {
+>ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+
+    OneLine,
+>OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+
+    Avatar,
+>Avatar : Symbol(ListItemVariant.Avatar, Decl(discriminatedUnionJsxElement.tsx, 14, 12))
+}
+
+function ListItem(_data: IListItemData) {
+>ListItem : Symbol(ListItem, Decl(discriminatedUnionJsxElement.tsx, 16, 1))
+>_data : Symbol(_data, Decl(discriminatedUnionJsxElement.tsx, 18, 18))
+>IListItemData : Symbol(IListItemData, Decl(discriminatedUnionJsxElement.tsx, 9, 1))
+
+    return null; 
+}
+

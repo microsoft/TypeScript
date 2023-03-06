@@ -32,25 +32,25 @@ type Result5 = Example5<Record<'x', any>, Record<'y', any>>;  // "x" | "y"
 
 
 //// [keyofIntersection.d.ts]
-declare type A = {
+type A = {
     a: string;
 };
-declare type B = {
+type B = {
     b: string;
 };
-declare type T01 = keyof (A & B);
-declare type T02<T> = keyof (T & B);
-declare type T03<U> = keyof (A & U);
-declare type T04<T, U> = keyof (T & U);
-declare type T05 = T02<A>;
-declare type T06 = T03<B>;
-declare type T07 = T04<A, B>;
-declare type Example1<T extends string, U extends string> = keyof (Record<T, any> & Record<U, any>);
-declare type Result1 = Example1<'x', 'y'>;
-declare type Result2 = keyof (Record<'x', any> & Record<'y', any>);
-declare type Example3<T extends string> = keyof (Record<T, any>);
-declare type Result3 = Example3<'x' | 'y'>;
-declare type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
-declare type Result4 = keyof Example4<'x', 'y'>;
-declare type Example5<T, U> = keyof (T & U);
-declare type Result5 = Example5<Record<'x', any>, Record<'y', any>>;
+type T01 = keyof (A & B);
+type T02<T> = keyof (T & B);
+type T03<U> = keyof (A & U);
+type T04<T, U> = keyof (T & U);
+type T05 = T02<A>;
+type T06 = T03<B>;
+type T07 = T04<A, B>;
+type Example1<T extends string, U extends string> = keyof (Record<T, any> & Record<U, any>);
+type Result1 = Example1<'x', 'y'>;
+type Result2 = keyof (Record<'x', any> & Record<'y', any>);
+type Example3<T extends string> = keyof (Record<T, any>);
+type Result3 = Example3<'x' | 'y'>;
+type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
+type Result4 = keyof Example4<'x', 'y'>;
+type Example5<T, U> = keyof (T & U);
+type Result5 = Example5<Record<'x', any>, Record<'y', any>>;

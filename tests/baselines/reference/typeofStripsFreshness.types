@@ -31,7 +31,7 @@ type Another = typeof ANOTHER;
 >ANOTHER : "another"
 
 type Both = Another | All;
->Both : Both
+>Both : "all" | "another"
 
 const result2: Collection<Both> = new Collection();
 >result2 : Collection<Both>

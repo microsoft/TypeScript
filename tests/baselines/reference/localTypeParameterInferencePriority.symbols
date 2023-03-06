@@ -1,0 +1,69 @@
+=== tests/cases/compiler/localTypeParameterInferencePriority.ts ===
+export type UnrollOnHover<O extends object> = O extends object ?
+>UnrollOnHover : Symbol(UnrollOnHover, Decl(localTypeParameterInferencePriority.ts, 0, 0))
+>O : Symbol(O, Decl(localTypeParameterInferencePriority.ts, 0, 26))
+>O : Symbol(O, Decl(localTypeParameterInferencePriority.ts, 0, 26))
+
+    { [K in keyof O]: O[K]; } :
+>K : Symbol(K, Decl(localTypeParameterInferencePriority.ts, 1, 7))
+>O : Symbol(O, Decl(localTypeParameterInferencePriority.ts, 0, 26))
+>O : Symbol(O, Decl(localTypeParameterInferencePriority.ts, 0, 26))
+>K : Symbol(K, Decl(localTypeParameterInferencePriority.ts, 1, 7))
+
+    never;
+
+
+export type Schema = Record<string, unknown>;
+>Schema : Symbol(Schema, Decl(localTypeParameterInferencePriority.ts, 2, 10))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+class Table<S extends Schema>  {
+>Table : Symbol(Table, Decl(localTypeParameterInferencePriority.ts, 5, 45))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
+>Schema : Symbol(Schema, Decl(localTypeParameterInferencePriority.ts, 2, 10))
+
+    __schema!: S;
+>__schema : Symbol(Table.__schema, Decl(localTypeParameterInferencePriority.ts, 6, 32))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
+
+    // Removing this line, removes the error 
+    getRows<C extends keyof S>(): Array<UnrollOnHover<Pick<S, C>>> {
+>getRows : Symbol(Table.getRows, Decl(localTypeParameterInferencePriority.ts, 7, 17))
+>C : Symbol(C, Decl(localTypeParameterInferencePriority.ts, 10, 12))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>UnrollOnHover : Symbol(UnrollOnHover, Decl(localTypeParameterInferencePriority.ts, 0, 0))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
+>C : Symbol(C, Decl(localTypeParameterInferencePriority.ts, 10, 12))
+
+        return null!
+    }
+}
+
+class ColumnSelectViewImp<S extends Schema> extends Table<S> { }
+>ColumnSelectViewImp : Symbol(ColumnSelectViewImp, Decl(localTypeParameterInferencePriority.ts, 13, 1))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 15, 26))
+>Schema : Symbol(Schema, Decl(localTypeParameterInferencePriority.ts, 2, 10))
+>Table : Symbol(Table, Decl(localTypeParameterInferencePriority.ts, 5, 45))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 15, 26))
+
+
+const ColumnSelectView1: new <S extends Schema>() => Table<UnrollOnHover<S>> = ColumnSelectViewImp;
+>ColumnSelectView1 : Symbol(ColumnSelectView1, Decl(localTypeParameterInferencePriority.ts, 18, 5))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 18, 30))
+>Schema : Symbol(Schema, Decl(localTypeParameterInferencePriority.ts, 2, 10))
+>Table : Symbol(Table, Decl(localTypeParameterInferencePriority.ts, 5, 45))
+>UnrollOnHover : Symbol(UnrollOnHover, Decl(localTypeParameterInferencePriority.ts, 0, 0))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 18, 30))
+>ColumnSelectViewImp : Symbol(ColumnSelectViewImp, Decl(localTypeParameterInferencePriority.ts, 13, 1))
+
+const ColumnSelectView2: new <S extends Schema>() => Table<UnrollOnHover<S>> = Table;
+>ColumnSelectView2 : Symbol(ColumnSelectView2, Decl(localTypeParameterInferencePriority.ts, 19, 5))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 19, 30))
+>Schema : Symbol(Schema, Decl(localTypeParameterInferencePriority.ts, 2, 10))
+>Table : Symbol(Table, Decl(localTypeParameterInferencePriority.ts, 5, 45))
+>UnrollOnHover : Symbol(UnrollOnHover, Decl(localTypeParameterInferencePriority.ts, 0, 0))
+>S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 19, 30))
+>Table : Symbol(Table, Decl(localTypeParameterInferencePriority.ts, 5, 45))
+

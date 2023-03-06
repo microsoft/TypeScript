@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts ===
+class Base {
+>Base : Symbol(Base, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 0))
+
+    static #prop: number = 123;
+>#prop : Symbol(Base.#prop, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 12))
+
+    static method(x: Derived) {
+>method : Symbol(Base.method, Decl(privateNameStaticFieldDerivedClasses.ts, 1, 31))
+>x : Symbol(x, Decl(privateNameStaticFieldDerivedClasses.ts, 2, 18))
+>Derived : Symbol(Derived, Decl(privateNameStaticFieldDerivedClasses.ts, 6, 1))
+
+        Derived.#derivedProp // error
+>Derived : Symbol(Derived, Decl(privateNameStaticFieldDerivedClasses.ts, 6, 1))
+
+        Base.#prop  = 10;
+>Base.#prop : Symbol(Base.#prop, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 12))
+>Base : Symbol(Base, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 0))
+    }
+}
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(privateNameStaticFieldDerivedClasses.ts, 6, 1))
+>Base : Symbol(Base, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 0))
+
+    static #derivedProp: number = 10;
+>#derivedProp : Symbol(Derived.#derivedProp, Decl(privateNameStaticFieldDerivedClasses.ts, 7, 28))
+
+    static method(x: Derived) {
+>method : Symbol(Derived.method, Decl(privateNameStaticFieldDerivedClasses.ts, 8, 37))
+>x : Symbol(x, Decl(privateNameStaticFieldDerivedClasses.ts, 9, 18))
+>Derived : Symbol(Derived, Decl(privateNameStaticFieldDerivedClasses.ts, 6, 1))
+
+        Derived.#derivedProp
+>Derived.#derivedProp : Symbol(Derived.#derivedProp, Decl(privateNameStaticFieldDerivedClasses.ts, 7, 28))
+>Derived : Symbol(Derived, Decl(privateNameStaticFieldDerivedClasses.ts, 6, 1))
+
+        Base.#prop  = 10; // error
+>Base : Symbol(Base, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 0))
+    }
+}
+
+

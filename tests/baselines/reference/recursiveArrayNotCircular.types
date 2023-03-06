@@ -22,7 +22,7 @@ enum ActionType {
 }
 
 type ReducerAction =
->ReducerAction : ReducerAction
+>ReducerAction : { type: ActionType.Bar; payload: number; } | { type: ActionType.Baz; payload: false; } | { type: ActionType.Baz; payload: true; } | { type: ActionType.Foo; payload: string; } | { type: ActionType.Batch; payload: ReducerAction[]; }
 
   | Action<ActionType.Bar, number>
 >ActionType : any

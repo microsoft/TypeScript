@@ -14,11 +14,12 @@ let v: types.Value;
 const a: types.A = {};
 const b: types.B = {};
 const c: types.C<string> = "";
+const d = { types };
 
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = exports.B = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -35,10 +36,11 @@ exports.B = B;
 exports.Value = {};
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 types;
 types.Value;
 var v;
 var a = {};
 var b = {};
 var c = "";
+var d = { types: types };

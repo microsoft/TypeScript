@@ -17,7 +17,7 @@ module mod1 {
 }
 
 var c : mod1.C; // ERROR: C should not be visible
->c : any
+>c : mod1.C
 >mod1 : any
 
 

@@ -1,0 +1,14 @@
+tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts(5,26): error TS2339: Property '#myField' does not exist on type 'A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts (1 errors) ====
+    class A {
+        static #myField = "hello world";
+        constructor() {
+            console.log(A.#myField); //Ok
+            console.log(this.#myField); //Error
+                             ~~~~~~~~
+!!! error TS2339: Property '#myField' does not exist on type 'A'.
+        }
+    }
+    

@@ -16,4 +16,6 @@ declare module ng {
         all(promises: IPromise < any > []): IPromise<
 >all : Symbol(IQService.all, Decl(parserUnterminatedGeneric2.ts, 6, 25))
 >promises : Symbol(promises, Decl(parserUnterminatedGeneric2.ts, 7, 12))
+>IPromise : Symbol(IPromise)
+>IPromise : Symbol(IPromise)
 

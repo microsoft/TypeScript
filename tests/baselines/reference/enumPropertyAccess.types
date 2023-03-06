@@ -34,12 +34,12 @@ function fill<B extends Colors>(f: B) {
 
     f.Green; // error
 >f.Green : any
->f : B
+>f : Colors
 >Green : any
 
     f.toFixed(); // ok
 >f.toFixed() : string
 >f.toFixed : (fractionDigits?: number) => string
->f : B
+>f : Colors
 >toFixed : (fractionDigits?: number) => string
 }

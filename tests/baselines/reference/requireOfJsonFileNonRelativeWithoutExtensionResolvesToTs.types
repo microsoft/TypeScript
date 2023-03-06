@@ -7,5 +7,5 @@ let fnumber: number = f;
 >f : 10
 
 === /src/node_modules/f.ts ===
+
 export = 10;
-No type information for this code.

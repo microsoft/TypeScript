@@ -1,0 +1,42 @@
+=== tests/cases/compiler/recursiveConditionalCrash2.ts ===
+// Simplified #43529
+
+export type CanBeExpanded<T extends object> = {
+>CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash2.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalCrash2.ts, 2, 26))
+
+  value: T
+>value : Symbol(value, Decl(recursiveConditionalCrash2.ts, 2, 47))
+>T : Symbol(T, Decl(recursiveConditionalCrash2.ts, 2, 26))
+}
+
+type Expand__<O, N, Depth> =
+>Expand__ : Symbol(Expand__, Decl(recursiveConditionalCrash2.ts, 4, 1))
+>O : Symbol(O, Decl(recursiveConditionalCrash2.ts, 6, 14))
+>N : Symbol(N, Decl(recursiveConditionalCrash2.ts, 6, 16))
+>Depth : Symbol(Depth, Decl(recursiveConditionalCrash2.ts, 6, 19))
+
+  N extends Depth ?
+>N : Symbol(N, Decl(recursiveConditionalCrash2.ts, 6, 16))
+>Depth : Symbol(Depth, Decl(recursiveConditionalCrash2.ts, 6, 19))
+
+      unknown :
+      O extends CanBeExpanded<any> ?
+>O : Symbol(O, Decl(recursiveConditionalCrash2.ts, 6, 14))
+>CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash2.ts, 0, 0))
+
+          Expand__<O['value'], N, Depth> :
+>Expand__ : Symbol(Expand__, Decl(recursiveConditionalCrash2.ts, 4, 1))
+>O : Symbol(O, Decl(recursiveConditionalCrash2.ts, 6, 14))
+>N : Symbol(N, Decl(recursiveConditionalCrash2.ts, 6, 16))
+>Depth : Symbol(Depth, Decl(recursiveConditionalCrash2.ts, 6, 19))
+
+          O
+>O : Symbol(O, Decl(recursiveConditionalCrash2.ts, 6, 14))
+
+export type UseQueryOptions<T> = Expand__<T, 4, 2>
+>UseQueryOptions : Symbol(UseQueryOptions, Decl(recursiveConditionalCrash2.ts, 11, 11))
+>T : Symbol(T, Decl(recursiveConditionalCrash2.ts, 13, 28))
+>Expand__ : Symbol(Expand__, Decl(recursiveConditionalCrash2.ts, 4, 1))
+>T : Symbol(T, Decl(recursiveConditionalCrash2.ts, 13, 28))
+

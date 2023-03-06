@@ -43,11 +43,11 @@ class B extends A {
 		 * @type object
 		 */
 		this.bar = super.arguments.foo;
->this.bar = super.arguments.foo : any
+>this.bar = super.arguments.foo : error
 >this.bar : any
 >this : this
 >bar : any
->super.arguments.foo : any
+>super.arguments.foo : error
 >super.arguments : { bar: {}; }
 >super : A
 >arguments : { bar: {}; }

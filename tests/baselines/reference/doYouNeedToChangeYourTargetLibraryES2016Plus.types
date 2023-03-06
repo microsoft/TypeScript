@@ -55,9 +55,9 @@ const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
 >new Intl.DateTimeFormat("en-US").formatToParts() : any
 >new Intl.DateTimeFormat("en-US").formatToParts : any
 >new Intl.DateTimeFormat("en-US") : Intl.DateTimeFormat
->Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; }
+>Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >Intl : typeof Intl
->DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; }
+>DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >"en-US" : "en-US"
 >formatToParts : any
 
@@ -128,24 +128,35 @@ const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
 >0 : 0
 
 const testAsyncGenerator: AsyncGenerator<any> = null as any;
->testAsyncGenerator : any
+>testAsyncGenerator : AsyncGenerator<any>
 >null as any : any
 >null : null
 
 const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
->testAsyncGeneratorFunction : any
+>testAsyncGeneratorFunction : AsyncGeneratorFunction
 >null as any : any
 >null : null
 
 const testAsyncIterable: AsyncIterable<any> = null as any;
->testAsyncIterable : any
+>testAsyncIterable : AsyncIterable<any>
 >null as any : any
 >null : null
 
 const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
->testAsyncIterableIterator : any
+>testAsyncIterableIterator : AsyncIterableIterator<any>
 >null as any : any
 >null : null
+
+const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+>testNumberFormatFormatToParts : any
+>new Intl.NumberFormat("en-US").formatToParts() : any
+>new Intl.NumberFormat("en-US").formatToParts : any
+>new Intl.NumberFormat("en-US") : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; readonly prototype: Intl.NumberFormat; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; readonly prototype: Intl.NumberFormat; }
+>"en-US" : "en-US"
+>formatToParts : any
 
 // es2019
 const testArrayFlat = [].flat();
@@ -238,7 +249,7 @@ const testBigInt = BigInt(123);
 >BigInt : any
 >123 : 123
 
-// esnext
+// es2021
 const testPromiseAny = Promise.any([]);
 >testPromiseAny : any
 >Promise.any([]) : any
@@ -254,14 +265,5 @@ const testStringReplaceAll = "".replaceAll();
 >"" : ""
 >replaceAll : any
 
-const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
->testNumberFormatFormatToParts : any
->new Intl.NumberFormat("en-US").formatToParts() : any
->new Intl.NumberFormat("en-US").formatToParts : any
->new Intl.NumberFormat("en-US") : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
->Intl : typeof Intl
->NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
->"en-US" : "en-US"
->formatToParts : any
+// esnext
 

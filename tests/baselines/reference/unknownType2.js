@@ -241,7 +241,7 @@ function notNotEquals(u: unknown)  {
     else {
         const a: NumberEnum.A = u;
     }
-    
+
 
     if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
     else {

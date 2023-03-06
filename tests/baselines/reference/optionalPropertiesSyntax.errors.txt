@@ -8,15 +8,16 @@ tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2300: Duplicate 
 tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2687: All declarations of 'prop' must have identical modifiers.
 tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2300: Duplicate identifier 'prop'.
 tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2687: All declarations of 'prop' must have identical modifiers.
-tests/cases/compiler/optionalPropertiesSyntax.ts(32,5): error TS2375: Duplicate number index signature.
+tests/cases/compiler/optionalPropertiesSyntax.ts(31,5): error TS2374: Duplicate index signature for type 'number'.
+tests/cases/compiler/optionalPropertiesSyntax.ts(32,5): error TS2374: Duplicate index signature for type 'number'.
 tests/cases/compiler/optionalPropertiesSyntax.ts(32,18): error TS1005: ';' expected.
 tests/cases/compiler/optionalPropertiesSyntax.ts(32,19): error TS1131: Property or signature expected.
 tests/cases/compiler/optionalPropertiesSyntax.ts(33,5): error TS1131: Property or signature expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(33,7): error TS2375: Duplicate number index signature.
-tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2375: Duplicate number index signature.
+tests/cases/compiler/optionalPropertiesSyntax.ts(33,7): error TS2374: Duplicate index signature for type 'number'.
+tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2374: Duplicate index signature for type 'number'.
 
 
-==== tests/cases/compiler/optionalPropertiesSyntax.ts (16 errors) ====
+==== tests/cases/compiler/optionalPropertiesSyntax.ts (17 errors) ====
     interface fnSigs {
         //functions signatures can be optional
         fn(): void;
@@ -68,9 +69,11 @@ tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2375: Duplicate 
     interface indexSig {
         //Index signatures can't be optional
         [idx: number]: any;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'number'.
         [idx: number]?: any; //err
         ~~~~~~~~~~~~~
-!!! error TS2375: Duplicate number index signature.
+!!! error TS2374: Duplicate index signature for type 'number'.
                      ~
 !!! error TS1005: ';' expected.
                       ~
@@ -79,8 +82,8 @@ tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2375: Duplicate 
         ~
 !!! error TS1131: Property or signature expected.
           ~~~~~~~~~~~~~~~~~~~
-!!! error TS2375: Duplicate number index signature.
+!!! error TS2374: Duplicate index signature for type 'number'.
         [idx?: number]: any; //err
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2375: Duplicate number index signature.
+!!! error TS2374: Duplicate index signature for type 'number'.
     }

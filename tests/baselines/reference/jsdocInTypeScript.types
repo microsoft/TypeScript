@@ -22,7 +22,7 @@ x.prop;
  * @property {string} yes
  */
 declare const myType: MyType; // should error, no such type
->myType : any
+>myType : MyType
 
 // @param type has no effect.
 /**

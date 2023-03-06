@@ -399,6 +399,7 @@ class FileService {
 
                 var result: IUploadResult = { // This should be error
 >result : Symbol(result, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 114, 19))
+>IUploadResult : Symbol(IUploadResult)
 
                     stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
 >stat : Symbol(stat, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 114, 45))

@@ -36,8 +36,8 @@ var { 'b': renamed, ...justA } = o;
 
 var { b: { '0': n, '1': oooo }, ...justA } = o;
 >b : any
->n : any
->oooo : any
+>n : string
+>oooo : string
 >justA : { a: number; }
 >o : { a: number; b: string; }
 

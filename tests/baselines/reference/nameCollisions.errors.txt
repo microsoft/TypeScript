@@ -7,10 +7,10 @@ tests/cases/compiler/nameCollisions.ts(24,9): error TS2300: Duplicate identifier
 tests/cases/compiler/nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
 tests/cases/compiler/nameCollisions.ts(28,9): error TS2300: Duplicate identifier 'f2'.
-tests/cases/compiler/nameCollisions.ts(33,11): error TS2300: Duplicate identifier 'C'.
-tests/cases/compiler/nameCollisions.ts(34,14): error TS2300: Duplicate identifier 'C'.
-tests/cases/compiler/nameCollisions.ts(36,14): error TS2300: Duplicate identifier 'C2'.
-tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifier 'C2'.
+tests/cases/compiler/nameCollisions.ts(33,11): error TS2813: Class declaration cannot implement overload list for 'C'.
+tests/cases/compiler/nameCollisions.ts(34,14): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/nameCollisions.ts(36,14): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overload list for 'C2'.
 
 
 ==== tests/cases/compiler/nameCollisions.ts (13 errors) ====
@@ -66,21 +66,21 @@ tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifie
     
         class C { }
               ~
-!!! error TS2300: Duplicate identifier 'C'.
-!!! related TS6203 tests/cases/compiler/nameCollisions.ts:34:14: 'C' was also declared here.
+!!! error TS2813: Class declaration cannot implement overload list for 'C'.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
         function C() { } // error
                  ~
-!!! error TS2300: Duplicate identifier 'C'.
-!!! related TS6203 tests/cases/compiler/nameCollisions.ts:33:11: 'C' was also declared here.
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
     
         function C2() { }
                  ~~
-!!! error TS2300: Duplicate identifier 'C2'.
-!!! related TS6203 tests/cases/compiler/nameCollisions.ts:37:11: 'C2' was also declared here.
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
         class C2 { } // error
               ~~
-!!! error TS2300: Duplicate identifier 'C2'.
-!!! related TS6203 tests/cases/compiler/nameCollisions.ts:36:14: 'C2' was also declared here.
+!!! error TS2813: Class declaration cannot implement overload list for 'C2'.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
     
         function fi() { }
         interface fi { } // ok

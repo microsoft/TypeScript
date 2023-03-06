@@ -177,14 +177,14 @@ function check6(obj) {
 
 
 === tests/cases/conformance/jsdoc/mod7.js ===
+
 /** 
-No type information for this code.   Multiline type expressions in comments without leading * are not supported.
-No type information for this code.   @typedef {{
-No type information for this code.     foo:
-No type information for this code.     *,
-No type information for this code.     bar:
-No type information for this code.     *
-No type information for this code.   }} Type7
-No type information for this code. */
-No type information for this code.
-No type information for this code.
+   Multiline type expressions in comments without leading * are not supported.
+   @typedef {{
+     foo:
+     *,
+     bar:
+     *
+   }} Type7
+ */
+

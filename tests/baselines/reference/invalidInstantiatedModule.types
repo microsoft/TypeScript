@@ -29,7 +29,7 @@ var m = M2;
 >M2 : typeof M2
 
 var p: m.Point; // Error
->p : any
+>p : m.Point
 >m : any
 
 

@@ -6,9 +6,11 @@
 // Not included:
 ////export function abcde() {}
 ////export function dbf() {}
-// Included:
 ////export function bdf() {}
 ////export function abcdef() {}
+// Included:
+////export function aBcdef() {}
+////export function a_bcdef() {}
 ////export function BDF() {}
 
 // @Filename: /b.ts
@@ -16,7 +18,7 @@
 
 verify.completions({
     marker: "",
-    includes: ["bdf", "abcdef", "BDF"].map(name =>
+    includes: ["aBcdef", "a_bcdef", "BDF"].map(name =>
         ({
             name,
             source: "/a",

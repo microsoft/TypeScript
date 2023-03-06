@@ -1,4 +1,4 @@
-tests/cases/compiler/declarationEmitIndexTypeNotFound.ts(2,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
+tests/cases/compiler/declarationEmitIndexTypeNotFound.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 tests/cases/compiler/declarationEmitIndexTypeNotFound.ts(2,13): error TS2304: Cannot find name 'TypeNotFound'.
 tests/cases/compiler/declarationEmitIndexTypeNotFound.ts(2,13): error TS4092: Parameter 'index' of index signature from exported interface has or is using private name 'TypeNotFound'.
 
@@ -7,7 +7,7 @@ tests/cases/compiler/declarationEmitIndexTypeNotFound.ts(2,13): error TS4092: Pa
     export interface Test {
         [index: TypeNotFound]: any;
          ~~~~~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
                 ~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeNotFound'.
                 ~~~~~~~~~~~~

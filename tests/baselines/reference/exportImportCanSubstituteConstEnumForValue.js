@@ -77,9 +77,9 @@ var MsPortalFx;
         var SomeUsagesOfTheseConsts = /** @class */ (function () {
             function SomeUsagesOfTheseConsts() {
                 // these do get replaced by the const value
-                var value1 = 1 /* Cancel */;
+                var value1 = 1 /* ReExportedEnum.Cancel */;
                 console.log(value1);
-                var value2 = 2 /* OKCancel */;
+                var value2 = 2 /* DialogButtons.OKCancel */;
                 console.log(value2);
             }
             return SomeUsagesOfTheseConsts;

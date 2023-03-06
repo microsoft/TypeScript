@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: false
 interface Mup<K, V> {
     readonly size: number;
 }

@@ -1,0 +1,13 @@
+tests/cases/conformance/salsa/plainJSRedeclare.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+tests/cases/conformance/salsa/plainJSRedeclare.js(2,5): error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+
+
+==== tests/cases/conformance/salsa/plainJSRedeclare.js (2 errors) ====
+    const orbitol = 1
+          ~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+    var orbitol = 1 + false
+        ~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+    orbitol.toExponential()
+    

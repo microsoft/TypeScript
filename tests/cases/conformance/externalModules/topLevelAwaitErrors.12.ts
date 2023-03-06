@@ -1,5 +1,5 @@
 // @target: esnext
-// @module: esnext
+// @module: es2022,esnext
 
 export {};
 declare namespace foo { const await: any; }

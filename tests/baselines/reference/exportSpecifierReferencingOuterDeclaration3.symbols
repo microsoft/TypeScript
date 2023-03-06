@@ -21,4 +21,5 @@ declare module "m" {
     export function bar(): X.bar; // error
 >bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 4, 33))
 >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
+>bar : Symbol(X.bar)
 }

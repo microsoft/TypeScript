@@ -1,0 +1,73 @@
+=== tests/cases/conformance/jsdoc/jsdocSignatureOnReturnedFunction.js ===
+function f1() {
+>f1 : () => (a: number, b: number) => number
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+    return (a, b) => {
+>(a, b) => {        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
+
+        return a + b;
+>a + b : number
+>a : number
+>b : number
+    }
+}
+
+function f2() {
+>f2 : () => (a: number, b: number) => number
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+    return function (a, b){
+>function (a, b){        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
+
+        return a + b;
+>a + b : number
+>a : number
+>b : number
+    }
+}
+
+function f3() {
+>f3 : () => (a: number, b: number) => number
+
+    /** @type {(a: number, b: number) => number} */
+    return (a, b) => {
+>(a, b) => {        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
+
+        return a + b;
+>a + b : number
+>a : number
+>b : number
+    }
+}
+
+function f4() {
+>f4 : () => (a: number, b: number) => number
+
+    /** @type {(a: number, b: number) => number} */
+    return function (a, b){
+>function (a, b){        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
+
+        return a + b;
+>a + b : number
+>a : number
+>b : number
+    }
+}
+

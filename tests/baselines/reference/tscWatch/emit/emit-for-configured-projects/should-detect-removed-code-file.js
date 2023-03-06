@@ -50,29 +50,34 @@ Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile1.ts
 /a/b/referenceFile1.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/referencefile1.ts (used version)
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/referencefile1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -81,7 +86,7 @@ exports.Foo = Foo;
 
 //// [/a/b/referenceFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference path="./moduleFile1.ts" />
 exports.x = Foo();
@@ -121,23 +126,30 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/referenceFile1.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/modulefile1.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/b/referencefile1.ts (computed .d.ts)
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile1.ts: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/referencefile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile1.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

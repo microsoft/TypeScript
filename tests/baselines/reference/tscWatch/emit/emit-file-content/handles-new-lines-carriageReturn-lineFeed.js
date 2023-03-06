@@ -37,15 +37,15 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/app.ts
 
-WatchedFiles::
-/a/app.ts:
-  {"fileName":"/a/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/app.ts (used version)
 
 FsWatches::
-
-FsWatchesRecursive::
+/a/app.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -83,15 +83,8 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/app.ts
 
-WatchedFiles::
-/a/app.ts:
-  {"fileName":"/a/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
+Shape signatures in builder refreshed for::
+/a/app.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 

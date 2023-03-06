@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/typeTagNoErasure.js ===
+/** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
+
+/** @type {Test<number>} */
+const test = dibbity => dibbity
+>test : Symbol(test, Decl(typeTagNoErasure.js, 3, 5))
+>dibbity : Symbol(dibbity, Decl(typeTagNoErasure.js, 3, 12))
+>dibbity : Symbol(dibbity, Decl(typeTagNoErasure.js, 3, 12))
+
+test(1) // ok, T=1
+>test : Symbol(test, Decl(typeTagNoErasure.js, 3, 5))
+
+test('hi') // error, T=number
+>test : Symbol(test, Decl(typeTagNoErasure.js, 3, 5))
+

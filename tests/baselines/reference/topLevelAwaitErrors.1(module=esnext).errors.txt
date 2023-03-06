@@ -1,0 +1,107 @@
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(4,8): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(4,10): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(5,14): error TS1005: '>' expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(5,16): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(8,14): error TS1005: '>' expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(8,16): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(11,17): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(11,22): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(11,23): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(11,29): error TS1005: ',' expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(15,8): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(18,2): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(18,8): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(21,2): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(26,6): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(30,6): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(34,12): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(40,14): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(41,14): error TS1109: Expression expected.
+tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts(42,20): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts (20 errors) ====
+    export {};
+    
+    // reparse call as invalid await should error
+    await (1,);
+           ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+             ~
+!!! error TS1109: Expression expected.
+    await <number, string>(1);
+                 ~
+!!! error TS1005: '>' expected.
+                   ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+    
+    // reparse tagged template as invalid await should error
+    await <number, string> ``;
+                 ~
+!!! error TS1005: '>' expected.
+                   ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+    
+    // reparse class extends clause should fail
+    class C extends await<string> {
+                    ~~~~~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1109: Expression expected.
+                          ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                ~
+!!! error TS1005: ',' expected.
+    }
+    
+    // await in class decorators should fail
+    @(await)
+           ~
+!!! error TS1109: Expression expected.
+    class C1 {}
+    
+    @await(x)
+     ~~~~~
+!!! error TS1109: Expression expected.
+           ~
+!!! error TS2304: Cannot find name 'x'.
+    class C2 {}
+    
+    @await
+     ~~~~~
+!!! error TS1109: Expression expected.
+    class C3 {}
+    
+    // await in member decorators should fail
+    class C4 {
+        @await
+         ~~~~~
+!!! error TS1109: Expression expected.
+        ["foo"]() {}
+    }
+    class C5 {
+        @await(1)
+         ~~~~~
+!!! error TS1109: Expression expected.
+        ["foo"]() {}
+    }
+    class C6 {
+        @(await)
+               ~
+!!! error TS1109: Expression expected.
+        ["foo"]() {}
+    }
+    
+    // await in parameter decorators should fail
+    class C7 {
+        method1(@await [x]) {}
+                 ~~~~~
+!!! error TS1109: Expression expected.
+        method2(@await(1) [x]) {}
+                 ~~~~~
+!!! error TS1109: Expression expected.
+        method3(@(await) [x]) {}
+                       ~
+!!! error TS1109: Expression expected.
+    }
+    

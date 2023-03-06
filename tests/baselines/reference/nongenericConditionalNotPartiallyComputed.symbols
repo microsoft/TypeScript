@@ -1,0 +1,12 @@
+=== tests/cases/compiler/nongenericConditionalNotPartiallyComputed.ts ===
+// Expected: type A = number
+// Got: type A = number[] extends (infer T)[] ? T : never
+type A = Array<number> extends Array<any> ? Array<number> extends Array<infer T> ? T : never : never
+>A : Symbol(A, Decl(nongenericConditionalNotPartiallyComputed.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(nongenericConditionalNotPartiallyComputed.ts, 2, 77))
+>T : Symbol(T, Decl(nongenericConditionalNotPartiallyComputed.ts, 2, 77))
+

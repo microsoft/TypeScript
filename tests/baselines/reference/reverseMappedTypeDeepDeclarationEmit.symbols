@@ -1,0 +1,81 @@
+=== tests/cases/compiler/reverseMappedTypeDeepDeclarationEmit.ts ===
+export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>
+>Validator : Symbol(Validator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 22))
+>NativeTypeValidator : Symbol(NativeTypeValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 70))
+>T : Symbol(T, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 22))
+>ObjectValidator : Symbol(ObjectValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 2, 62))
+>T : Symbol(T, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 22))
+
+export type NativeTypeValidator<T> = (n: any) => T | undefined
+>NativeTypeValidator : Symbol(NativeTypeValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 70))
+>T : Symbol(T, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 2, 32))
+>n : Symbol(n, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 2, 38))
+>T : Symbol(T, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 2, 32))
+
+export type ObjectValidator<O> = {
+>ObjectValidator : Symbol(ObjectValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 2, 62))
+>O : Symbol(O, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 3, 28))
+
+  [K in keyof O]: Validator<O[K]> 
+>K : Symbol(K, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 4, 3))
+>O : Symbol(O, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 3, 28))
+>Validator : Symbol(Validator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 0))
+>O : Symbol(O, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 3, 28))
+>K : Symbol(K, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 4, 3))
+}
+
+//native validators
+export declare const SimpleStringValidator: NativeTypeValidator<string>;
+>SimpleStringValidator : Symbol(SimpleStringValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 8, 20))
+>NativeTypeValidator : Symbol(NativeTypeValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 70))
+
+///object validator function
+export declare const ObjValidator: <V>(validatorObj: ObjectValidator<V>) => (o: any) => V;
+>ObjValidator : Symbol(ObjValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 20))
+>V : Symbol(V, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 36))
+>validatorObj : Symbol(validatorObj, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 39))
+>ObjectValidator : Symbol(ObjectValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 2, 62))
+>V : Symbol(V, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 36))
+>o : Symbol(o, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 77))
+>V : Symbol(V, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 36))
+
+export const test  = {
+>test : Symbol(test, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 13, 12))
+
+  Test: {
+>Test : Symbol(Test, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 13, 22))
+
+    Test1: {
+>Test1 : Symbol(Test1, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 14, 9))
+
+      Test2: SimpleStringValidator
+>Test2 : Symbol(Test2, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 15, 12))
+>SimpleStringValidator : Symbol(SimpleStringValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 8, 20))
+
+    },
+  }
+}
+
+export const validatorFunc = ObjValidator(test);
+>validatorFunc : Symbol(validatorFunc, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 21, 12))
+>ObjValidator : Symbol(ObjValidator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 11, 20))
+>test : Symbol(test, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 13, 12))
+
+export const outputExample = validatorFunc({
+>outputExample : Symbol(outputExample, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 22, 12))
+>validatorFunc : Symbol(validatorFunc, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 21, 12))
+
+  Test: {
+>Test : Symbol(Test, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 22, 44))
+
+    Test1: {
+>Test1 : Symbol(Test1, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 23, 9))
+
+      Test2: "hi"
+>Test2 : Symbol(Test2, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 24, 12))
+
+    },
+  }
+});
+

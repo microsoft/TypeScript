@@ -41,15 +41,15 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/file.ts
 
-WatchedFiles::
-/a/b/file.ts:
-  {"fileName":"/a/b/file.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/file.ts (used version)
 
 FsWatches::
-
-FsWatchesRecursive::
+/a/b/file.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -93,21 +93,14 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/file.ts
 
-WatchedFiles::
-/a/b/file.ts:
-  {"fileName":"/a/b/file.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
+Shape signatures in builder refreshed for::
+/a/b/file.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.two = void 0;
 function one() { }
 function two() {

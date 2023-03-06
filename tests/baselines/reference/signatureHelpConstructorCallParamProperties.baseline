@@ -1,3 +1,20 @@
+=== /tests/cases/fourslash/signatureHelpConstructorCallParamProperties.ts ===
+// class Circle {
+//     /**
+//       * Initialize a circle.
+//       * @param  radius The radius of the circle.
+//       */
+//     constructor(private radius: number) {
+//     }
+// }
+// var a = new Circle(
+//                    ^
+// | ----------------------------------------------------------------------
+// | Circle(**radius: number**): Circle
+// | Initialize a circle.
+// | @param radius The radius of the circle.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +22,7 @@
       "position": 179,
       "name": ""
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -87,7 +104,20 @@
           "tags": [
             {
               "name": "param",
-              "text": "radius The radius of the circle."
+              "text": [
+                {
+                  "text": "radius",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The radius of the circle.",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }

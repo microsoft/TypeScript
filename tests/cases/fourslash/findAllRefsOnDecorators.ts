@@ -1,16 +1,16 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}decorator|](target) {
+/////*1*/function /*2*/decorator(target) {
 ////    return target;
-////}|]
-////[|decorator|]();
+////}
+/////*3*/decorator();
 
 // @Filename: b.ts
-////@[|decorator|] @[|decorator|]("again")
+////@/*4*/decorator @/*5*/decorator("again")
 ////class C {
-////    @[|decorator|]
+////    @/*6*/decorator
 ////    method() {}
 ////}
 
-verify.singleReferenceGroup("function decorator(target: any): any", "decorator");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6');

@@ -1,0 +1,49 @@
+=== /a.js ===
+const a = () => {
+>a : Symbol(a, Decl(a.js, 0, 5))
+
+    return {
+        arguments: [],
+>arguments : Symbol(arguments, Decl(a.js, 1, 12))
+
+    };
+};
+
+const b = () => {
+>b : Symbol(b, Decl(a.js, 6, 5))
+
+    const c = {
+>c : Symbol(c, Decl(a.js, 7, 9))
+
+        arguments: [],
+>arguments : Symbol(arguments, Decl(a.js, 7, 15))
+    }
+    return c;
+>c : Symbol(c, Decl(a.js, 7, 9))
+
+};
+
+const c = () => {
+>c : Symbol(c, Decl(a.js, 13, 5))
+
+    return {
+        arguments,
+>arguments : Symbol(arguments, Decl(a.js, 14, 12))
+
+    };
+}
+
+const d = () => {
+>d : Symbol(d, Decl(a.js, 19, 5))
+
+    const arguments = undefined;
+>arguments : Symbol(arguments, Decl(a.js, 20, 9))
+>undefined : Symbol(undefined)
+
+    return {
+        arguments,
+>arguments : Symbol(arguments, Decl(a.js, 21, 12))
+
+    };
+}
+

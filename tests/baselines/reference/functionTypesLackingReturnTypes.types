@@ -7,7 +7,7 @@ function f(x: ()) {
 
 // Error (no '=>')
 var g: (param);
->g : any
+>g : param
 
 // Okay
 var h: { () }

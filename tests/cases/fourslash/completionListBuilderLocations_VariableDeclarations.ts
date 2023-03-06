@@ -29,12 +29,12 @@
 // first declaration
 verify.completions({
     marker: ["var1"],
-    exact: completion.globalsPlus(["y", "C"]),
+    exact: completion.globalsPlus(["C", "y"]),
     isNewIdentifierLocation: true
 });
 
 verify.completions({
     marker: ["var2", "var3", "var4", "var5", "var6", "var7", "var8", "var9", "var10", "var11", "var12"],
-    exact: completion.globalsPlus(["x", "y", "C"]),
+    exact: completion.globalsPlus(["C", "x", "y"]),
     isNewIdentifierLocation: true
 });

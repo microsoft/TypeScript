@@ -1,0 +1,11 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldInitializer.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameStaticFieldInitializer.ts, 0, 0))
+
+    static #field = 10;
+>#field : Symbol(A.#field, Decl(privateNameStaticFieldInitializer.ts, 0, 9))
+
+    static #uninitialized;
+>#uninitialized : Symbol(A.#uninitialized, Decl(privateNameStaticFieldInitializer.ts, 1, 23))
+}
+

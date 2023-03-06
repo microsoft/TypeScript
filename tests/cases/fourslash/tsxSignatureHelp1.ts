@@ -27,12 +27,12 @@
 verify.signatureHelp(
     {
         marker: "1",
-        text: "MainButton(props: ButtonProps): any",
+        text: "MainButton(props: ButtonProps): JSX.Element",
         parameterSpan: "props: ButtonProps",
     },
     {
         marker: "2",
-        text: "MainButton(props: ButtonProps): any",
+        text: "MainButton(props: ButtonProps): JSX.Element",
         parameterSpan: "props: ButtonProps",
     },
 );

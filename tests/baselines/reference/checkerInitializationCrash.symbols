@@ -1,0 +1,78 @@
+=== /node_modules/@fullcalendar/react/index.d.ts ===
+import * as react from 'react';
+>react : Symbol(react, Decl(index.d.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 0, 31))
+
+  namespace FullCalendarVDom {
+>FullCalendarVDom : Symbol(FullCalendarVDom, Decl(index.d.ts, 1, 16), Decl(index.d.ts, 1, 16))
+
+    export import VNode = react.ReactNode;
+>VNode : Symbol(FullCalendarVDom.VNode, Decl(index.d.ts, 2, 30))
+>react : Symbol(react, Decl(index.d.ts, 0, 6))
+>ReactNode : Symbol(react.ReactNode, Decl(index.d.ts, 2, 25), Decl(index.d.ts, 2, 30))
+  }
+}
+
+export default class FullCalendar {
+>FullCalendar : Symbol(FullCalendar, Decl(index.d.ts, 5, 1))
+}
+
+=== /node_modules/@fullcalendar/core/index.d.ts ===
+import * as preact from 'preact';
+>preact : Symbol(preact, Decl(index.d.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 0, 33))
+
+  namespace FullCalendarVDom {
+>FullCalendarVDom : Symbol(FullCalendarVDom, Decl(index.d.ts, 1, 16), Decl(index.d.ts, 1, 16))
+
+    type VNode = preact.VNode<any>;
+>VNode : Symbol(React.ReactNode, Decl(index.d.ts, 2, 25), Decl(index.d.ts, 2, 30))
+>preact : Symbol(preact, Decl(index.d.ts, 0, 6))
+>VNode : Symbol(preact.VNode, Decl(index.d.ts, 0, 27))
+  }
+}
+
+export type EventInput = any;
+>EventInput : Symbol(EventInput, Decl(index.d.ts, 5, 1))
+
+=== /node_modules/@types/react/index.d.ts ===
+export = React;
+>React : Symbol(React, Decl(index.d.ts, 1, 26))
+
+export as namespace React;
+>React : Symbol(React, Decl(index.d.ts, 0, 15))
+
+declare namespace React {
+>React : Symbol(React, Decl(index.d.ts, 1, 26))
+
+    type ReactNode = any;
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 2, 25), Decl(index.d.ts, 2, 30))
+
+    function useMemo<T>(factory: () => T, deps: undefined): T;
+>useMemo : Symbol(useMemo, Decl(index.d.ts, 3, 25))
+>T : Symbol(T, Decl(index.d.ts, 4, 21))
+>factory : Symbol(factory, Decl(index.d.ts, 4, 24))
+>T : Symbol(T, Decl(index.d.ts, 4, 21))
+>deps : Symbol(deps, Decl(index.d.ts, 4, 41))
+>T : Symbol(T, Decl(index.d.ts, 4, 21))
+}
+
+=== /node_modules/preact/index.d.ts ===
+export as namespace preact;
+>preact : Symbol(preact, Decl(index.d.ts, 0, 0))
+
+export interface VNode<P = {}> {}
+>VNode : Symbol(VNode, Decl(index.d.ts, 0, 27))
+>P : Symbol(P, Decl(index.d.ts, 1, 23))
+
+=== /index.tsx ===
+import FullCalendar from "@fullcalendar/react";
+>FullCalendar : Symbol(FullCalendar, Decl(index.tsx, 0, 6))
+
+import { EventInput } from "@fullcalendar/core";
+>EventInput : Symbol(EventInput, Decl(index.tsx, 1, 8))
+

@@ -14,7 +14,7 @@ export var dummy = 1
 
 //// [mod1.d.ts]
 /** @typedef {number} Dotted.Name */
-export var dummy: number;
+export const dummy: number;
 export namespace Dotted {
     type Name = number;
 }

@@ -4,7 +4,7 @@ import x = require("./file1");
 
 import "./file2";
 let a: x.A; // should not work
->a : any
+>a : x.A
 >x : any
 
 === tests/cases/compiler/file1.ts ===

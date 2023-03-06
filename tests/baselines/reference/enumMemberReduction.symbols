@@ -1,0 +1,112 @@
+=== tests/cases/compiler/enumMemberReduction.ts ===
+enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+
+  A,
+>A : Symbol(MyEnum.A, Decl(enumMemberReduction.ts, 0, 13))
+
+  B,
+>B : Symbol(MyEnum.B, Decl(enumMemberReduction.ts, 1, 4))
+
+  C,
+>C : Symbol(MyEnum.C, Decl(enumMemberReduction.ts, 2, 4))
+}
+
+enum MyStringEnum {
+>MyStringEnum : Symbol(MyStringEnum, Decl(enumMemberReduction.ts, 4, 1))
+
+  A = "a",
+>A : Symbol(MyStringEnum.A, Decl(enumMemberReduction.ts, 6, 19))
+
+  B = "b",
+>B : Symbol(MyStringEnum.B, Decl(enumMemberReduction.ts, 7, 10))
+
+  C = "c",
+>C : Symbol(MyStringEnum.C, Decl(enumMemberReduction.ts, 8, 10))
+}
+
+enum MyStringEnumWithEmpty {
+>MyStringEnumWithEmpty : Symbol(MyStringEnumWithEmpty, Decl(enumMemberReduction.ts, 10, 1))
+
+  A = "",
+>A : Symbol(MyStringEnumWithEmpty.A, Decl(enumMemberReduction.ts, 12, 28))
+
+  B = "b",
+>B : Symbol(MyStringEnumWithEmpty.B, Decl(enumMemberReduction.ts, 13, 9))
+
+  C = "c",
+>C : Symbol(MyStringEnumWithEmpty.C, Decl(enumMemberReduction.ts, 14, 10))
+}
+
+export function fn(optionalEnum: MyEnum | undefined) {
+>fn : Symbol(fn, Decl(enumMemberReduction.ts, 16, 1))
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 18, 19))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+
+  return optionalEnum ?? MyEnum.A;
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 18, 19))
+>MyEnum.A : Symbol(MyEnum.A, Decl(enumMemberReduction.ts, 0, 13))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+>A : Symbol(MyEnum.A, Decl(enumMemberReduction.ts, 0, 13))
+}
+
+export function fn2(optionalEnum: MyEnum | undefined) {
+>fn2 : Symbol(fn2, Decl(enumMemberReduction.ts, 20, 1))
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 22, 20))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+
+  return optionalEnum || MyEnum.B;
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 22, 20))
+>MyEnum.B : Symbol(MyEnum.B, Decl(enumMemberReduction.ts, 1, 4))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+>B : Symbol(MyEnum.B, Decl(enumMemberReduction.ts, 1, 4))
+}
+
+export function fn3(optionalEnum?: MyEnum) {
+>fn3 : Symbol(fn3, Decl(enumMemberReduction.ts, 24, 1))
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 26, 20))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+
+  return optionalEnum ?? MyEnum.A;
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 26, 20))
+>MyEnum.A : Symbol(MyEnum.A, Decl(enumMemberReduction.ts, 0, 13))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+>A : Symbol(MyEnum.A, Decl(enumMemberReduction.ts, 0, 13))
+}
+
+export function fn4(optionalEnum?: MyEnum) {
+>fn4 : Symbol(fn4, Decl(enumMemberReduction.ts, 28, 1))
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 30, 20))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+
+  return optionalEnum || MyEnum.B;
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 30, 20))
+>MyEnum.B : Symbol(MyEnum.B, Decl(enumMemberReduction.ts, 1, 4))
+>MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
+>B : Symbol(MyEnum.B, Decl(enumMemberReduction.ts, 1, 4))
+}
+
+export function fn5(optionalEnum?: MyStringEnum) {
+>fn5 : Symbol(fn5, Decl(enumMemberReduction.ts, 32, 1))
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 34, 20))
+>MyStringEnum : Symbol(MyStringEnum, Decl(enumMemberReduction.ts, 4, 1))
+
+  return optionalEnum || MyStringEnum.B;
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 34, 20))
+>MyStringEnum.B : Symbol(MyStringEnum.B, Decl(enumMemberReduction.ts, 7, 10))
+>MyStringEnum : Symbol(MyStringEnum, Decl(enumMemberReduction.ts, 4, 1))
+>B : Symbol(MyStringEnum.B, Decl(enumMemberReduction.ts, 7, 10))
+}
+
+export function fn6(optionalEnum?: MyStringEnumWithEmpty) {
+>fn6 : Symbol(fn6, Decl(enumMemberReduction.ts, 36, 1))
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 38, 20))
+>MyStringEnumWithEmpty : Symbol(MyStringEnumWithEmpty, Decl(enumMemberReduction.ts, 10, 1))
+
+  return optionalEnum || MyStringEnumWithEmpty.B;
+>optionalEnum : Symbol(optionalEnum, Decl(enumMemberReduction.ts, 38, 20))
+>MyStringEnumWithEmpty.B : Symbol(MyStringEnumWithEmpty.B, Decl(enumMemberReduction.ts, 13, 9))
+>MyStringEnumWithEmpty : Symbol(MyStringEnumWithEmpty, Decl(enumMemberReduction.ts, 10, 1))
+>B : Symbol(MyStringEnumWithEmpty.B, Decl(enumMemberReduction.ts, 13, 9))
+}
+

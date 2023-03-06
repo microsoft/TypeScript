@@ -11,6 +11,7 @@ class Linq {
 >func : Symbol(func, Decl(unknownSymbolInGenericReturnType.ts, 1, 43))
 >v : Symbol(v, Decl(unknownSymbolInGenericReturnType.ts, 1, 51))
 >T : Symbol(T, Decl(unknownSymbolInGenericReturnType.ts, 1, 25))
+>A : Symbol(A)
 
         var result = new Array(values.length);
 >result : Symbol(result, Decl(unknownSymbolInGenericReturnType.ts, 2, 11))

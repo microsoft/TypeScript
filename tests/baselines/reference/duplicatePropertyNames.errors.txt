@@ -12,8 +12,8 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(35,5): error TS2
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(36,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(38,5): error TS2300: Duplicate identifier 'bar'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(39,5): error TS2300: Duplicate identifier 'bar'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(44,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2300: Duplicate identifier 'bar'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(44,5): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
 ==== tests/cases/conformance/types/members/duplicatePropertyNames.ts (16 errors) ====
@@ -90,10 +90,10 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2
         foo: '',
         foo: '',
         ~~~
-!!! error TS2300: Duplicate identifier 'foo'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
         bar: () => { },
         bar: () => { }
         ~~~
-!!! error TS2300: Duplicate identifier 'bar'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     }
     

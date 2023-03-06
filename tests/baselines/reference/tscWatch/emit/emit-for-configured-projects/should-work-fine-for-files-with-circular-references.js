@@ -46,29 +46,34 @@ Semantic diagnostics in builder refreshed for::
 /a/b/file2.ts
 /a/b/file1.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/b/file2.ts:
-  {"fileName":"/a/b/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/file2.ts (used version)
+/a/b/file1.ts (used version)
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/file1.ts: *new*
+  {}
+/a/b/file2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.t2 = void 0;
 /// <reference path="./file1.ts" />
 exports.t2 = 10;
@@ -76,7 +81,7 @@ exports.t2 = 10;
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
@@ -111,30 +116,16 @@ Semantic diagnostics in builder refreshed for::
 /a/b/file2.ts
 /a/b/file1.ts
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/b/file2.ts:
-  {"fileName":"/a/b/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+Shape signatures in builder refreshed for::
+/a/b/file1.ts (computed .d.ts)
+/a/b/file2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file2.js] file written with same contents
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.t3 = exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;

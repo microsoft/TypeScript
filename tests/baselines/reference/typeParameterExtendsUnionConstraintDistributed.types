@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsdoc/typeParameterExtendsUnionConstraintDistributed.ts ===
 type A = 1 | 2;
->A : A
+>A : 1 | 2
 
 function f<T extends A>(a: T): A & T { return a; } // Shouldn't error
 >f : <T extends A>(a: T) => A & T
@@ -8,7 +8,7 @@ function f<T extends A>(a: T): A & T { return a; } // Shouldn't error
 >a : T
 
 type B = 2 | 3;
->B : B
+>B : 2 | 3
 
 function f2<T extends A, U extends B>(ab: T & U): (A | B) & T & U { return ab; } // Also shouldn't error
 >f2 : <T extends A, U extends B>(ab: T & U) => (A | B) & T & U

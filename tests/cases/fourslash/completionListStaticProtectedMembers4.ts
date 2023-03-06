@@ -26,17 +26,16 @@
 ////}
 //// Derived./*2*/
 
-const publicCompletions: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+const publicCompletions: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = completion.functionMembersPlus([
     { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
     { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
-    ...completion.functionMembers
-];
+]);
 
 verify.completions(
     {
         // Sub class, everything but private is visible
         marker: "1",
-        exact: [
+        unsorted: [
             { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
@@ -48,7 +47,7 @@ verify.completions(
     {
         // Can see protected methods elevated to public
         marker: "2",
-        exact: [
+        unsorted: [
             { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },

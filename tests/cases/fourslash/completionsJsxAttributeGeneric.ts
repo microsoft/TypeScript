@@ -11,7 +11,7 @@
     marker,
     exact: [{
       name: 'name',
-      kind: 'JSX attribute',
+      kind: 'property',
       kindModifiers: 'declare'
     }]
   })

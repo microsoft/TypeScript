@@ -8,7 +8,7 @@ interface StrVal { val: string; }
 >val : string
 
 type Val = NumVal | StrVal;
->Val : Val
+>Val : NumVal | StrVal
 
 function isNumVal(x: Val): x is NumVal {
 >isNumVal : (x: Val) => x is NumVal

@@ -5,7 +5,7 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No 
         Type 'string' is not assignable to type 'boolean'.
   Overload 2 of 2, '(list: Dictionary<unknown>, iterator?: Iterator_<unknown, boolean>, context?: any): boolean', gave the following error.
     Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
-      Index signature is missing in type '(string | number | boolean)[]'.
+      Index signature for type 'string' is missing in type '(string | number | boolean)[]'.
 
 
 ==== tests/cases/compiler/underscoreTest1_underscoreTests.ts (1 errors) ====
@@ -43,7 +43,7 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No 
 !!! error TS2769:         Type 'string' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(list: Dictionary<unknown>, iterator?: Iterator_<unknown, boolean>, context?: any): boolean', gave the following error.
 !!! error TS2769:     Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
-!!! error TS2769:       Index signature is missing in type '(string | number | boolean)[]'.
+!!! error TS2769:       Index signature for type 'string' is missing in type '(string | number | boolean)[]'.
     
     _.any([null, 0, 'yes', false]);
     

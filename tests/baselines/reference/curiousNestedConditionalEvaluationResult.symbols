@@ -1,0 +1,11 @@
+=== tests/cases/compiler/curiousNestedConditionalEvaluationResult.ts ===
+// regression test for #43123
+type Hmm = [0] extends [infer T, any?] ?
+>Hmm : Symbol(Hmm, Decl(curiousNestedConditionalEvaluationResult.ts, 0, 0))
+>T : Symbol(T, Decl(curiousNestedConditionalEvaluationResult.ts, 1, 29))
+
+    [T, [0] extends [T] ? true : false]
+>T : Symbol(T, Decl(curiousNestedConditionalEvaluationResult.ts, 1, 29))
+>T : Symbol(T, Decl(curiousNestedConditionalEvaluationResult.ts, 1, 29))
+
+    : never

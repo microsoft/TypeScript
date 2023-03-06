@@ -1,0 +1,43 @@
+=== tests/cases/compiler/a.js ===
+/**
+ * @typedef A
+ * @property {string} a
+ */
+
+/**
+ * @typedef B
+ * @property {number} b
+ */
+
+ class C1 {
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+    /**
+     * @type {A}
+     */
+    value;
+>value : Symbol(C1.value, Decl(a.js, 10, 11))
+}
+
+class C2 extends C1 {
+>C2 : Symbol(C2, Decl(a.js, 15, 1))
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+    /**
+     * @type {A}
+     */
+    value;
+>value : Symbol(C2.value, Decl(a.js, 17, 21))
+}
+
+class C3 extends C1 {
+>C3 : Symbol(C3, Decl(a.js, 22, 1))
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+    /**
+     * @type {A & B}
+     */
+    value;
+>value : Symbol(C3.value, Decl(a.js, 24, 21))
+}
+

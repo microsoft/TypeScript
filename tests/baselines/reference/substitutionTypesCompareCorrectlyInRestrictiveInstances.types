@@ -9,12 +9,12 @@ type Bug<TAll> =  BugHelper<TAll, TAll>
 >Bug : Bug<TAll>
 
 type Q = UnionKeys<{ a : any } | { b: any }>    // should be "a" | "b"
->Q : Q
+>Q : "a" | "b"
 >a : any
 >b : any
 
 type R = Bug<{ a : any } | { b: any }>          // should be "a" | "b"
->R : R
+>R : "a" | "b"
 >a : any
 >b : any
 

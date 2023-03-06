@@ -1,0 +1,11 @@
+=== tests/cases/conformance/externalModules/topLevelAwait.2.ts ===
+declare namespace foo { const await: any; }
+>foo : Symbol(foo, Decl(topLevelAwait.2.ts, 0, 0))
+>await : Symbol(await, Decl(topLevelAwait.2.ts, 0, 29))
+
+// await allowed in import=namespace when not a module
+import await = foo.await;
+>await : Symbol(await, Decl(topLevelAwait.2.ts, 0, 43))
+>foo : Symbol(foo, Decl(topLevelAwait.2.ts, 0, 0))
+>await : Symbol(await, Decl(topLevelAwait.2.ts, 0, 29))
+

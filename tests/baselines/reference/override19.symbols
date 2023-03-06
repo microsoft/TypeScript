@@ -1,0 +1,53 @@
+=== tests/cases/conformance/override/override19.ts ===
+type Foo = abstract new(...args: any) => any;
+>Foo : Symbol(Foo, Decl(override19.ts, 0, 0))
+>args : Symbol(args, Decl(override19.ts, 0, 24))
+
+declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {
+>CreateMixin : Symbol(CreateMixin, Decl(override19.ts, 0, 45))
+>C : Symbol(C, Decl(override19.ts, 1, 29))
+>Foo : Symbol(Foo, Decl(override19.ts, 0, 0))
+>T : Symbol(T, Decl(override19.ts, 1, 43))
+>Foo : Symbol(Foo, Decl(override19.ts, 0, 0))
+>Context : Symbol(Context, Decl(override19.ts, 1, 59))
+>C : Symbol(C, Decl(override19.ts, 1, 29))
+>Base : Symbol(Base, Decl(override19.ts, 1, 70))
+>T : Symbol(T, Decl(override19.ts, 1, 43))
+>T : Symbol(T, Decl(override19.ts, 1, 43))
+
+   new (...args: any[]): { context: InstanceType<C> }
+>args : Symbol(args, Decl(override19.ts, 2, 8))
+>context : Symbol(context, Decl(override19.ts, 2, 26))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(override19.ts, 1, 29))
+}
+class Context {}
+>Context : Symbol(Context, Decl(override19.ts, 3, 1))
+
+class A {
+>A : Symbol(A, Decl(override19.ts, 4, 16))
+
+    doSomething() {}
+>doSomething : Symbol(A.doSomething, Decl(override19.ts, 6, 9))
+}
+
+class B extends CreateMixin(Context, A) {
+>B : Symbol(B, Decl(override19.ts, 8, 1))
+>CreateMixin : Symbol(CreateMixin, Decl(override19.ts, 0, 45))
+>Context : Symbol(Context, Decl(override19.ts, 3, 1))
+>A : Symbol(A, Decl(override19.ts, 4, 16))
+
+   override foo() {} // Remove override
+>foo : Symbol(B.foo, Decl(override19.ts, 10, 41))
+}
+
+class C extends CreateMixin(Context, A) {
+>C : Symbol(C, Decl(override19.ts, 12, 1))
+>CreateMixin : Symbol(CreateMixin, Decl(override19.ts, 0, 45))
+>Context : Symbol(Context, Decl(override19.ts, 3, 1))
+>A : Symbol(A, Decl(override19.ts, 4, 16))
+
+    override doSomethang() {} // Suggestion 'doSomething'
+>doSomethang : Symbol(C.doSomethang, Decl(override19.ts, 14, 41))
+}
+

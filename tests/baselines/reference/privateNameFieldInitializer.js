@@ -6,11 +6,11 @@ class A {
 
 
 //// [privateNameFieldInitializer.js]
-var _field, _uninitialized;
+var _A_field, _A_uninitialized;
 class A {
     constructor() {
-        _field.set(this, 10);
-        _uninitialized.set(this, void 0);
+        _A_field.set(this, 10);
+        _A_uninitialized.set(this, void 0);
     }
 }
-_field = new WeakMap(), _uninitialized = new WeakMap();
+_A_field = new WeakMap(), _A_uninitialized = new WeakMap();

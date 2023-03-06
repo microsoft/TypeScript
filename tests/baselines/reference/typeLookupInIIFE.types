@@ -8,5 +8,5 @@ var ns = (function() {})();
 
 /** @type {ns.NotFound} */
 var crash;
->crash : any
+>crash : ns.NotFound
 

@@ -44,6 +44,7 @@ function use() {
   var p3:booz.bar;
 >p3 : Symbol(p3, Decl(aliasBug.ts, 15, 5))
 >booz : Symbol(booz, Decl(aliasBug.ts, 7, 21))
+>bar : Symbol(booz.bar)
 
   var p22 = new provide.Provide();
 >p22 : Symbol(p22, Decl(aliasBug.ts, 16, 5))

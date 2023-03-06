@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////let o = { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}1|]: 12|] };
-////let y = o[[|1|]];
+////let o = { /*1*/1: 12 };
+////let y = o[/*2*/1];
 
-verify.singleReferenceGroup("(property) 1: number", "1");
+verify.baselineFindAllReferences('1', '2');

@@ -23,6 +23,7 @@ const testAsyncGenerator: AsyncGenerator<any> = null as any;
 const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
 const testAsyncIterable: AsyncIterable<any> = null as any;
 const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
+const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 
 // es2019
 const testArrayFlat = [].flat();
@@ -40,7 +41,8 @@ const testStringMatchAll = "".matchAll();
 const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 const testBigInt = BigInt(123);
 
-// esnext
+// es2021
 const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
-const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+
+// esnext

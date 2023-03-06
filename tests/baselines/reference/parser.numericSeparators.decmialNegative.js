@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.decmialNegative.ts] ////
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.decmialNegative.ts] ////
 
 //// [1.ts]
 _10

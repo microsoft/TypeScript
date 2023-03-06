@@ -33,6 +33,6 @@ var C = /** @class */ (function () {
     C.prototype[a] = function () { };
     C[true] = function () { };
     C.prototype["hello bye"] = function () { };
-    C["hello " + a + " bye"] = function () { };
+    C["hello ".concat(a, " bye")] = function () { };
     return C;
 }());

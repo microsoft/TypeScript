@@ -453,10 +453,10 @@ function ff3(x: 'foo' | 'bar', y: object) {
 }
 
 type Action = "verify" | "write";
->Action : Action
+>Action : "verify" | "write"
 
 type ContentMatch = "match" | "nonMatch";
->ContentMatch : ContentMatch
+>ContentMatch : "match" | "nonMatch"
 
 type Outcome = `${Action}_${ContentMatch}`;
 >Outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"

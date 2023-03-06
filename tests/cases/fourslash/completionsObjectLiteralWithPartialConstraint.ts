@@ -56,8 +56,8 @@
 
 verify.completions(
     { marker: "1", exact: [{ name: "world", sortText: completion.SortText.OptionalMember }] },
-    { marker: "2", exact: [{ name: "keyPath", sortText: completion.SortText.OptionalMember }, { name: "autoIncrement", sortText: completion.SortText.OptionalMember }] },
-    { marker: "3", exact: ["r", "g", "b"] },
+    { marker: "2", exact: [{ name: "autoIncrement", sortText: completion.SortText.OptionalMember }, { name: "keyPath", sortText: completion.SortText.OptionalMember }] },
+    { marker: "3", exact: ["b", "g", "r"] },
     { marker: "4", exact: [{ name: "a", sortText: completion.SortText.OptionalMember }] },
     { marker: "5", exact: [{ name: "x", sortText: completion.SortText.OptionalMember }] },
     { marker: "6", exact: ["a"] },

@@ -12,5 +12,5 @@ test<{t?: string}, bigint>();
 >test : <A, B extends A>() => void
 >t : string
 
-// should have global error when bigint is used but ES2020 lib is not present
+// no error when bigint is used even when ES2020 lib is not present
 

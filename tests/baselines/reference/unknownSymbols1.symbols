@@ -4,11 +4,14 @@ var x = asdf;
 
 var y: asdf;
 >y : Symbol(y, Decl(unknownSymbols1.ts, 1, 3))
+>asdf : Symbol(asdf)
 
 function foo(x: asdf, y: number): asdf { }
 >foo : Symbol(foo, Decl(unknownSymbols1.ts, 1, 12))
 >x : Symbol(x, Decl(unknownSymbols1.ts, 3, 13))
+>asdf : Symbol(asdf)
 >y : Symbol(y, Decl(unknownSymbols1.ts, 3, 21))
+>asdf : Symbol(asdf)
 
 function foo2() {
 >foo2 : Symbol(foo2, Decl(unknownSymbols1.ts, 3, 42))
@@ -18,6 +21,7 @@ function foo2() {
 
 var z = <asdf>x; // should be an error
 >z : Symbol(z, Decl(unknownSymbols1.ts, 8, 3))
+>asdf : Symbol(asdf)
 >x : Symbol(x, Decl(unknownSymbols1.ts, 0, 3))
 
 class C<T> {
@@ -26,10 +30,12 @@ class C<T> {
 
     foo: asdf;
 >foo : Symbol(C.foo, Decl(unknownSymbols1.ts, 10, 12))
+>asdf : Symbol(asdf)
 
     bar: C<asdf>;
 >bar : Symbol(C.bar, Decl(unknownSymbols1.ts, 11, 14))
 >C : Symbol(C, Decl(unknownSymbols1.ts, 8, 16))
+>asdf : Symbol(asdf)
 }
 
 class C2 implements asdf { }

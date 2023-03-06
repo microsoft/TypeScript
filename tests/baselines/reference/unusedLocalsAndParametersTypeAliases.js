@@ -28,7 +28,7 @@ y[0]();
 
 //// [unusedLocalsAndParametersTypeAliases.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 x();
 var y;

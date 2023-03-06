@@ -1,0 +1,59 @@
+=== tests/cases/compiler/abstractPropertyBasics.ts ===
+interface A {
+>A : Symbol(A, Decl(abstractPropertyBasics.ts, 0, 0))
+
+    prop: string;
+>prop : Symbol(A.prop, Decl(abstractPropertyBasics.ts, 0, 13))
+
+    raw: string;
+>raw : Symbol(A.raw, Decl(abstractPropertyBasics.ts, 1, 17))
+
+    m(): void;
+>m : Symbol(A.m, Decl(abstractPropertyBasics.ts, 2, 16))
+}
+abstract class B implements A {
+>B : Symbol(B, Decl(abstractPropertyBasics.ts, 4, 1))
+>A : Symbol(A, Decl(abstractPropertyBasics.ts, 0, 0))
+
+    abstract prop: string;
+>prop : Symbol(B.prop, Decl(abstractPropertyBasics.ts, 5, 31))
+
+    abstract raw: string;
+>raw : Symbol(B.raw, Decl(abstractPropertyBasics.ts, 6, 26))
+
+    abstract readonly ro: string;
+>ro : Symbol(B.ro, Decl(abstractPropertyBasics.ts, 7, 25))
+
+    abstract get readonlyProp(): string;
+>readonlyProp : Symbol(B.readonlyProp, Decl(abstractPropertyBasics.ts, 8, 33), Decl(abstractPropertyBasics.ts, 9, 40))
+
+    abstract set readonlyProp(val: string);
+>readonlyProp : Symbol(B.readonlyProp, Decl(abstractPropertyBasics.ts, 8, 33), Decl(abstractPropertyBasics.ts, 9, 40))
+>val : Symbol(val, Decl(abstractPropertyBasics.ts, 10, 30))
+
+    abstract m(): void;
+>m : Symbol(B.m, Decl(abstractPropertyBasics.ts, 10, 43))
+}
+class C extends B {
+>C : Symbol(C, Decl(abstractPropertyBasics.ts, 12, 1))
+>B : Symbol(B, Decl(abstractPropertyBasics.ts, 4, 1))
+
+    get prop() { return "foo"; }
+>prop : Symbol(C.prop, Decl(abstractPropertyBasics.ts, 13, 19), Decl(abstractPropertyBasics.ts, 14, 32))
+
+    set prop(v) { }
+>prop : Symbol(C.prop, Decl(abstractPropertyBasics.ts, 13, 19), Decl(abstractPropertyBasics.ts, 14, 32))
+>v : Symbol(v, Decl(abstractPropertyBasics.ts, 15, 13))
+
+    raw = "edge";
+>raw : Symbol(C.raw, Decl(abstractPropertyBasics.ts, 15, 19))
+
+    readonly ro = "readonly please";
+>ro : Symbol(C.ro, Decl(abstractPropertyBasics.ts, 16, 17))
+
+    readonlyProp: string; // don't have to give a value, in fact
+>readonlyProp : Symbol(C.readonlyProp, Decl(abstractPropertyBasics.ts, 17, 36))
+
+    m() { }
+>m : Symbol(C.m, Decl(abstractPropertyBasics.ts, 18, 25))
+}

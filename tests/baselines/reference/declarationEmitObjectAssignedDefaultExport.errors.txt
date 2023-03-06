@@ -1,0 +1,47 @@
+tests/cases/compiler/index.ts(7,1): error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
+
+
+==== tests/cases/compiler/node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts (0 errors) ====
+    interface Statics {
+        "$$whatever": string;
+    }
+    declare namespace hoistNonReactStatics {
+        type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+    }
+    export = hoistNonReactStatics;
+==== tests/cases/compiler/node_modules/styled-components/index.d.ts (0 errors) ====
+    import * as hoistNonReactStatics from "hoist-non-react-statics";
+    export interface DefaultTheme {}
+    export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
+        string
+        & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
+        & hoistNonReactStatics.NonReactStatics<TTag>;
+    export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
+        tag: TTag;
+        theme: TTheme;
+        style: TStyle;
+        whatever: TWhatever;
+    }
+    export interface StyledInterface {
+        div: (a: TemplateStringsArray) => StyledComponent<"div">;
+    }
+    
+    declare const styled: StyledInterface;
+    export default styled;
+==== tests/cases/compiler/index.ts (1 errors) ====
+    import styled from "styled-components";
+    
+    const A = styled.div``;
+    const B = styled.div``;
+    export const C = styled.div``;
+    
+    export default Object.assign(A, {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        B,
+    ~~~~~~
+        C
+    ~~~~~
+    });
+    ~~~
+!!! error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
+    

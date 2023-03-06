@@ -41,8 +41,8 @@ class SomeDerived<T> extends SomeBase<number, string, T> {
 //// [taggedTemplatesWithTypeArguments2.js]
 const a = new tag `${100} ${200}`("hello", "world");
 const b = new tag `${"hello"} ${"world"}`(100, 200);
-const c = (new tag `${100} ${200}`)("hello", "world");
-const d = (new tag `${"hello"} ${"world"}`)(100, 200);
+const c = new tag `${100} ${200}`("hello", "world");
+const d = new tag `${"hello"} ${"world"}`(100, 200);
 /**
  * Testing ASI. This should never parse as
  *

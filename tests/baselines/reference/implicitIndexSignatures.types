@@ -1,6 +1,6 @@
 === tests/cases/compiler/implicitIndexSignatures.ts ===
 type StringMap = { [x: string]: string };
->StringMap : StringMap
+>StringMap : { [x: string]: string; }
 >x : string
 
 const empty1 = {};

@@ -1,0 +1,36 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+export {default} from "fs";
+>default : Symbol(default, Decl(index.js, 1, 8))
+
+export {default as foo} from "fs";
+>default : Symbol("fs", Decl(types.d.ts, 0, 0))
+>foo : Symbol(foo, Decl(index.js, 2, 8))
+
+export {bar as baz} from "fs";
+>bar : Symbol("fs", Decl(types.d.ts, 0, 0))
+>baz : Symbol(baz, Decl(index.js, 3, 8))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+export {default} from "fs";
+>default : Symbol(default, Decl(index.js, 1, 8))
+
+export {default as foo} from "fs";
+>default : Symbol("fs", Decl(types.d.ts, 0, 0))
+>foo : Symbol(foo, Decl(index.js, 2, 8))
+
+export {bar as baz} from "fs";
+>bar : Symbol("fs", Decl(types.d.ts, 0, 0))
+>baz : Symbol(baz, Decl(index.js, 3, 8))
+
+=== tests/cases/conformance/node/allowJs/types.d.ts ===
+declare module "fs";
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+
+declare module "tslib" {
+>"tslib" : Symbol("tslib", Decl(types.d.ts, 0, 20))
+
+    export {};
+    // intentionally missing all helpers
+}

@@ -6,13 +6,13 @@ declare module mAmbient {
 >e : e
 
         x,
->x : e
+>x : e.x
 
         y,
->y : e
+>y : e.y
 
         z
->z : e
+>z : e.z
     }
 }
 

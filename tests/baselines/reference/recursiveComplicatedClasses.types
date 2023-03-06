@@ -22,7 +22,7 @@ class Symbol {
 >bound : boolean
 
     public visible() {
->visible : () => any
+>visible : () => boolean
 
         var b: TypeSymbol;
 >b : TypeSymbol

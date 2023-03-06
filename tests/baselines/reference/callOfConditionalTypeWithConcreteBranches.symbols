@@ -1,0 +1,125 @@
+=== tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts ===
+type Q<T> = number extends T ? (n: number) => void : never;
+>Q : Symbol(Q, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 0))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 7))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 7))
+>n : Symbol(n, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 32))
+
+function fn<T>(arg: Q<T>) {
+>fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 12))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 15))
+>Q : Symbol(Q, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 0))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 12))
+
+  // Expected: OK
+  // Actual: Cannot convert 10 to number & T
+  arg(10);
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 15))
+}
+// Legal invocations are not problematic
+fn<string | number>(m => m.toFixed());
+>fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
+>m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+fn<number>(m => m.toFixed());
+>fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
+>m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// Ensure the following real-world example that relies on substitution still works
+type ExtractParameters<T> = "parameters" extends keyof T
+>ExtractParameters : Symbol(ExtractParameters, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 29))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+
+  // The above allows "parameters" to index `T` since all later
+  // instances are actually implicitly `"parameters" & keyof T`
+  ?  {
+        [K in keyof T["parameters"]]: T["parameters"][K];
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 15, 9))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 15, 9))
+
+      }[keyof T["parameters"]]
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+
+  : {};
+
+// Original example, but with inverted variance
+type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
+>Q2 : Symbol(Q2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 17, 7))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 8))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 8))
+>cb : Symbol(cb, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 33))
+>n : Symbol(n, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 38))
+
+function fn2<T>(arg: Q2<T>) {
+>fn2 : Symbol(fn2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 74))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 13))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 16))
+>Q2 : Symbol(Q2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 17, 7))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 13))
+
+  function useT(_arg: T): void {}
+>useT : Symbol(useT, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 29))
+>_arg : Symbol(_arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 22, 16))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 13))
+
+  // Expected: OK
+  arg(arg => useT(arg));
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 16))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 24, 6))
+>useT : Symbol(useT, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 29))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 24, 6))
+}
+// Legal invocations are not problematic
+fn2<string | number>(m => m(42));
+>fn2 : Symbol(fn2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 74))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 27, 21))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 27, 21))
+
+fn2<number>(m => m(42));
+>fn2 : Symbol(fn2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 74))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 28, 12))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 28, 12))
+
+// webidl-conversions example where substituion must occur, despite contravariance of the position
+// due to the invariant usage in `Parameters`
+
+type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;
+>X : Symbol(X, Decl(callOfConditionalTypeWithConcreteBranches.ts, 28, 24))
+>V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
+>V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
+>args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 23))
+>args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 49))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// vscode - another `Parameters` example
+export type AddFirstParameterToFunctions<Target> = {
+>AddFirstParameterToFunctions : Symbol(AddFirstParameterToFunctions, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 92))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+
+  [K in keyof Target]: Target[K] extends (...args: any[]) => void
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
+>args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 42))
+
+      ? (...args: Parameters<Target[K]>) => void
+>args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 38, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
+
+      : void
+};

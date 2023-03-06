@@ -248,7 +248,7 @@ tests/cases/conformance/types/unknown/unknownType2.ts(216,13): error TS2322: Typ
         else {
             const a: NumberEnum.A = u;
         }
-        
+    
     
         if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
         else {

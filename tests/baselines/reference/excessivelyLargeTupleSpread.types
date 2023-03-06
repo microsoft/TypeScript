@@ -10,7 +10,7 @@ type A = BuildTuple<3>
 >A : any
 
 type T0 = [any];
->T0 : T0
+>T0 : [any]
 
 type T1 = [...T0, ...T0];
 >T1 : [any, any]

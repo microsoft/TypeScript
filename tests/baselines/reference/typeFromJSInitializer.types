@@ -127,43 +127,43 @@ var n;
 
 // should get any on parameter initialisers
 function f(a = null, b = n, l = []) {
->f : (a?: any, b?: number | undefined, l?: any[]) => void
->a : any
+>f : (a?: null, b?: number | undefined, l?: any[]) => void
+>a : null
 >null : null
 >b : number | undefined
 >n : number | undefined
 >l : any[]
 >[] : never[]
 
-    // a should be any
+    // a should be null in strict mode
     a = undefined
 >a = undefined : undefined
->a : any
+>a : null
 >undefined : undefined
 
     a = null
 >a = null : null
->a : any
+>a : null
 >null : null
 
     a = 1
 >a = 1 : 1
->a : any
+>a : null
 >1 : 1
 
     a = true
 >a = true : true
->a : any
+>a : null
 >true : true
 
     a = {}
 >a = {} : {}
->a : any
+>a : null
 >{} : {}
 
     a = 'ok'
 >a = 'ok' : "ok"
->a : any
+>a : null
 >'ok' : "ok"
 
     // b should be number | undefined, not any
@@ -254,7 +254,7 @@ const e = [1, undefined];
 >1 : 1
 >undefined : undefined
 
-// should be  undefined[]
+// should be undefined[]
 const g = e.filter(isUndef);
 >g : undefined[]
 >e.filter(isUndef) : undefined[]

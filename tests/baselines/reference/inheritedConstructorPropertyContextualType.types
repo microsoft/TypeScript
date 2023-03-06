@@ -1,0 +1,30 @@
+=== tests/cases/compiler/inheritedConstructorPropertyContextualType.ts ===
+interface State {
+    version: 2
+>version : 2
+}
+declare class Base<S> {
+>Base : Base<S>
+
+    state: S
+>state : S
+}
+class Assignment extends Base<State> {
+>Assignment : Assignment
+>Base : Base<State>
+
+    constructor() {
+        super()
+>super() : void
+>super : typeof Base
+
+        this.state = { version: 2 }
+>this.state = { version: 2 } : { version: 2; }
+>this.state : State
+>this : this
+>state : State
+>{ version: 2 } : { version: 2; }
+>version : 2
+>2 : 2
+    }
+}

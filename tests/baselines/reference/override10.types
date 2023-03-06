@@ -1,0 +1,21 @@
+=== tests/cases/conformance/override/override10.ts ===
+abstract class Base {
+>Base : Base
+
+    abstract foo(): unknown;
+>foo : () => unknown
+
+    abstract bar(): void;
+>bar : () => void
+}
+
+abstract class Sub extends Base {
+>Sub : Sub
+>Base : Base
+
+    abstract override foo(): number;
+>foo : () => number
+
+    bar() { }
+>bar : () => void
+}

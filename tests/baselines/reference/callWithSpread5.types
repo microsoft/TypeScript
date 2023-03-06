@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts ===
+declare const x: number
+>x : number
+
+declare const nnnu: [number, number, number?]
+>nnnu : [number, number, number?]
+
+declare const nntnnnt: [number, number] | [number, number, number]
+>nntnnnt : [number, number] | [number, number, number]
+
+declare function fn(a: number, b: number, bb: number, ...c: number[]): number
+>fn : (a: number, b: number, bb: number, ...c: number[]) => number
+>a : number
+>b : number
+>bb : number
+>c : number[]
+
+fn(...nnnu, x)
+>fn(...nnnu, x) : number
+>fn : (a: number, b: number, bb: number, ...c: number[]) => number
+>...nnnu : number
+>nnnu : [number, number, number?]
+>x : number
+
+fn(...nntnnnt, x)
+>fn(...nntnnnt, x) : number
+>fn : (a: number, b: number, bb: number, ...c: number[]) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+>x : number
+

@@ -21,6 +21,8 @@ declare module _Core {
 >collect : Symbol(Array.collect, Decl(extendArray.ts, 5, 19))
 >fn : Symbol(fn, Decl(extendArray.ts, 6, 12))
 >e : Symbol(e, Decl(extendArray.ts, 6, 16))
+>_element : Symbol(_element)
+>_element : Symbol(_element)
   }
 }
 

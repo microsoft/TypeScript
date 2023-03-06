@@ -16,11 +16,7 @@ const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForM
 verify.completions(
     {
         marker: "0",
-        exact: [
-            completion.globalThisEntry,
-            completion.undefinedVarEntry,
-            ...completion.statementKeywordsWithTypes
-        ],
+        exact: completion.globalsPlus([], { noLib: true }),
         preferences
     },
     {
@@ -41,7 +37,7 @@ verify.completions(
 verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",
     source: "/src/foo-bar",
-    description: `Import default 'fooBar' from module "./foo-bar"`,
+    description: `Add import from "./foo-bar"`,
     newFileContent: `import fooBar from "./foo-bar"
 
 def

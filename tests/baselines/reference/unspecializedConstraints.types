@@ -288,7 +288,7 @@ module ts {
 >Symbol : Symbol
 
         constructor(public typeParameters: TypeParameter[], public parameters: Parameter[], public returnType: Type) {
->typeParameters : any[]
+>typeParameters : TypeParameter[]
 >parameters : Parameter[]
 >returnType : Type
 
@@ -319,14 +319,14 @@ module ts {
                 this.typeParameters.length === other.typeParameters.length &&
 >this.typeParameters.length === other.typeParameters.length : boolean
 >this.typeParameters.length : number
->this.typeParameters : any[]
+>this.typeParameters : TypeParameter[]
 >this : this
->typeParameters : any[]
+>typeParameters : TypeParameter[]
 >length : number
 >other.typeParameters.length : number
->other.typeParameters : any[]
+>other.typeParameters : TypeParameter[]
 >other : Signature
->typeParameters : any[]
+>typeParameters : TypeParameter[]
 >length : number
 
                 arrayEquals(this.parameters, other.parameters) &&
@@ -342,12 +342,12 @@ module ts {
                 arrayEquals(this.typeParameters, other.typeParameters);
 >arrayEquals(this.typeParameters, other.typeParameters) : boolean
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->this.typeParameters : any[]
+>this.typeParameters : TypeParameter[]
 >this : this
->typeParameters : any[]
->other.typeParameters : any[]
+>typeParameters : TypeParameter[]
+>other.typeParameters : TypeParameter[]
 >other : Signature
->typeParameters : any[]
+>typeParameters : TypeParameter[]
         }
         equals(other: Signature): boolean {
 >equals : (other: Signature) => boolean

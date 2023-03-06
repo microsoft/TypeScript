@@ -11,6 +11,8 @@ namespace Test1 {
 
         let a: T.abc = x.abc;
 >a : Symbol(a, Decl(errorForUsingPropertyOfTypeAsType02.ts, 2, 11))
+>T : Symbol(T)
+>abc : Symbol(T.abc)
 >x.abc : Symbol(abc, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 28))
 >x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 44))
 >abc : Symbol(abc, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 28))

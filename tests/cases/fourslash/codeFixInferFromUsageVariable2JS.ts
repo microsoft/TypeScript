@@ -10,7 +10,9 @@
 ////    x++;
 ////}|]
 
-verify.rangeAfterCodeFix(`/** @type {number} */
+verify.rangeAfterCodeFix(`/**
+ * @type {number}
+ */
 var x;
 function f() {
     x++;

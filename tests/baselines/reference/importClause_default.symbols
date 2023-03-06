@@ -15,3 +15,7 @@ let a: A = { a: '' };
 >A : Symbol(A, Decl(b.ts, 0, 6))
 >a : Symbol(a, Decl(b.ts, 2, 12))
 
+let b = { A };
+>b : Symbol(b, Decl(b.ts, 3, 3))
+>A : Symbol(A, Decl(b.ts, 3, 9))
+

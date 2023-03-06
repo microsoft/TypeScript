@@ -5,4 +5,5 @@ class foo<T> {
 
     static P: T;
 >P : Symbol(foo.P, Decl(typeParametersInStaticProperties.ts, 0, 14))
+>T : Symbol(T)
 } 

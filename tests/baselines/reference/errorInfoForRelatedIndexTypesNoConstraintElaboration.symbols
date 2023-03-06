@@ -1,0 +1,29 @@
+=== tests/cases/compiler/errorInfoForRelatedIndexTypesNoConstraintElaboration.ts ===
+/// <reference path="react16.d.ts" />
+
+class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicElements> {
+>I : Symbol(I, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 0, 0))
+>T1 : Symbol(T1, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 2, 8))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>T2 : Symbol(T2, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 2, 47))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+
+    M() {
+>M : Symbol(I.M, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 2, 89))
+
+        let c1: JSX.IntrinsicElements[T1] = {};
+>c1 : Symbol(c1, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 4, 11))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>T1 : Symbol(T1, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 2, 8))
+
+        const c2: JSX.IntrinsicElements[T2] = c1;
+>c2 : Symbol(c2, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 5, 13))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>T2 : Symbol(T2, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 2, 47))
+>c1 : Symbol(c1, Decl(errorInfoForRelatedIndexTypesNoConstraintElaboration.ts, 4, 11))
+    }
+}

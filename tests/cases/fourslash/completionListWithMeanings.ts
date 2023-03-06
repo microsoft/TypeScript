@@ -15,8 +15,7 @@
 ////var kk: m3.point3/*membertypeExpr*/ = m3.zz2/*membervalueExpr*/;
 ////var zz = </*typeExpr2*/point>{ x: 4, y: 3 };
 
-const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
-    completion.globalThisEntry,
+const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = completion.globalsPlus([
     { name: "m2", text: "namespace m2" }, // With no type side, allowed only in value
     { name: "m3", text: "namespace m3" },
     { name: "xx", text: "var xx: number" },
@@ -24,17 +23,15 @@ const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
     { name: "yy", text: "var yy: point" },
     { name: "kk", text: "var kk: m3.point3" },
     { name: "zz", text: "var zz: point" },
-    completion.undefinedVarEntry,
-    ...completion.statementKeywordsWithTypes,
-];
+], { noLib: true });
 
-const types: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+const types: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = completion.sorted([
     completion.globalThisEntry,
     { name: "m", text: "namespace m" },
     { name: "m3", text: "namespace m3" },
     { name: "point", text: "interface point" },
     ...completion.typeKeywords,
-];
+]);
 
 const filterValuesByName = (name: string) => {
     return values.filter(entry => {

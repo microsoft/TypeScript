@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameStaticFieldAccess.ts, 0, 0))
+
+    static #myField = "hello world";
+>#myField : Symbol(A.#myField, Decl(privateNameStaticFieldAccess.ts, 0, 9))
+
+    constructor() {
+        console.log(A.#myField); //Ok
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>A.#myField : Symbol(A.#myField, Decl(privateNameStaticFieldAccess.ts, 0, 9))
+>A : Symbol(A, Decl(privateNameStaticFieldAccess.ts, 0, 0))
+
+        console.log(this.#myField); //Error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(A, Decl(privateNameStaticFieldAccess.ts, 0, 0))
+    }
+}
+

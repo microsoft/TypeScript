@@ -30,7 +30,7 @@ var bizz = 8;
 >bizz : number
 >8 : 8
 
-bizz++; // compiles to exports.bizz = bizz += 1
+bizz++; // compiles to exports.bizz = (bizz++, bizz)
 >bizz++ : number
 >bizz : number
 

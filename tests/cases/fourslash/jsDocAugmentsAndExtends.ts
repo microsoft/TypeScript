@@ -26,6 +26,6 @@
 goTo.marker();
 verify.quickInfoIs("(local var) x: number");
 verify.getSemanticDiagnostics([{
-    message: "Class declarations cannot have more than one \`@augments\` or \`@extends\` tag.",
+    message: "Class declarations cannot have more than one '@augments' or '@extends' tag.",
     code: 8025
 }]);

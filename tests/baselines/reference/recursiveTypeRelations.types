@@ -77,8 +77,8 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >keys : (o: object) => string[]
 >arg : ClassNameObjectMap<S>
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->(obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      } : (obj: any, key: keyof S) => any
->obj : any
+>(obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      } : (obj: ClassNameObject, key: keyof S) => ClassNameObject
+>obj : ClassNameObject
 >key : keyof S
 
         const exportedClassName = styles[key];
@@ -88,18 +88,18 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >key : keyof S
 
         obj[exportedClassName] = (arg as ClassNameMap<S>)[key]; 
->obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : ClassNameMap<S>[keyof S]
->obj[exportedClassName] : any
->obj : any
+>obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : boolean
+>obj[exportedClassName] : ClassNameObject
+>obj : ClassNameObject
 >exportedClassName : S[keyof S]
->(arg as ClassNameMap<S>)[key] : ClassNameMap<S>[keyof S]
+>(arg as ClassNameMap<S>)[key] : boolean
 >(arg as ClassNameMap<S>) : ClassNameMap<S>
 >arg as ClassNameMap<S> : ClassNameMap<S>
 >arg : ClassNameObjectMap<S>
 >key : keyof S
 
         return obj;
->obj : any
+>obj : ClassNameObject
 
       }, {});
 >{} : {}

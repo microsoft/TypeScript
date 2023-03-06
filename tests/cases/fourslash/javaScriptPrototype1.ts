@@ -34,10 +34,10 @@ edit.backspace();
 // Members of the invocation of a class method (1)
 goTo.marker('3');
 edit.insert('.');
-verify.completions({ includes: "toFixed", excludes: "substr" });
+verify.completions({ includes: "toFixed", excludes: "substring" });
 edit.backspace();
 
 // Members of the invocation of a class method (2)
 goTo.marker('4');
 edit.insert('.');
-verify.completions({ includes: "substr", excludes: "toFixed" });
+verify.completions({ includes: "substring", excludes: "toFixed" });

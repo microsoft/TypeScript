@@ -2,7 +2,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(10,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(11,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(11,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,11): error TS1023: An index signature parameter type must be either 'string' or 'number'.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,11): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(14,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
@@ -46,7 +46,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     var d: { [x: I]: I };
               ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
                  ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
                      ~

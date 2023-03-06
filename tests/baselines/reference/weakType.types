@@ -64,15 +64,15 @@ doSomething(false);
 // this is an oddly popular way of defining settings
 // this example is from services/textChanges.ts
 type ConfigurableStart = { useStart?: boolean }
->ConfigurableStart : ConfigurableStart
+>ConfigurableStart : { useStart?: boolean; }
 >useStart : boolean
 
 type ConfigurableEnd = { useEnd?: boolean }
->ConfigurableEnd : ConfigurableEnd
+>ConfigurableEnd : { useEnd?: boolean; }
 >useEnd : boolean
 
 type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
->ConfigurableStartEnd : ConfigurableStartEnd
+>ConfigurableStartEnd : ConfigurableStart & ConfigurableEnd
 
 interface InsertOptions {
     prefix?: string
@@ -82,7 +82,7 @@ interface InsertOptions {
 >suffix : string
 }
 type ChangeOptions = ConfigurableStartEnd & InsertOptions;
->ChangeOptions : ChangeOptions
+>ChangeOptions : ConfigurableStart & ConfigurableEnd & InsertOptions
 
 function del(options: ConfigurableStartEnd = {},
 >del : (options?: ConfigurableStartEnd, error?: {    error?: number;}) => void
@@ -131,11 +131,11 @@ let ctor: Ctor = K
 >K : typeof K
 
 type Spoiler = { nope?: string }
->Spoiler : Spoiler
+>Spoiler : { nope?: string; }
 >nope : string
 
 type Weak = {
->Weak : Weak
+>Weak : { a?: number; properties?: {    b?: number;}; }
 
     a?: number
 >a : number

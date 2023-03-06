@@ -1,5 +1,6 @@
 // @target: esnext
 // @strict: true
+// @useDefineForClassFields: false
 
 export interface SomethingTaggable {
     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;

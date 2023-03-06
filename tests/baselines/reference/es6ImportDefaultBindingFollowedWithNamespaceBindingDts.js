@@ -9,7 +9,7 @@ export var x = new nameSpaceBinding.a();
 
 //// [server.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 var a = /** @class */ (function () {
     function a() {
@@ -19,7 +19,7 @@ var a = /** @class */ (function () {
 exports.a = a;
 //// [client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.a();

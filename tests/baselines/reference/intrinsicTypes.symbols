@@ -7,11 +7,11 @@ type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
 >TU2 : Symbol(TU2, Decl(intrinsicTypes.ts, 0, 30))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
 
-type TU3 = Uppercase<string>;  // string
+type TU3 = Uppercase<string>;  // Uppercase<string>
 >TU3 : Symbol(TU3, Decl(intrinsicTypes.ts, 1, 36))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
 
-type TU4 = Uppercase<any>;  // any
+type TU4 = Uppercase<any>;  // Uppercase<`${any}`>
 >TU4 : Symbol(TU4, Decl(intrinsicTypes.ts, 2, 29))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
 
@@ -31,11 +31,11 @@ type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
 >TL2 : Symbol(TL2, Decl(intrinsicTypes.ts, 7, 30))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 
-type TL3 = Lowercase<string>;  // string
+type TL3 = Lowercase<string>;  // Lowercase<string>
 >TL3 : Symbol(TL3, Decl(intrinsicTypes.ts, 8, 36))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 
-type TL4 = Lowercase<any>;  // any
+type TL4 = Lowercase<any>;  // Lowercase<`${any}`>
 >TL4 : Symbol(TL4, Decl(intrinsicTypes.ts, 9, 29))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 
@@ -55,11 +55,11 @@ type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
 >TC2 : Symbol(TC2, Decl(intrinsicTypes.ts, 14, 31))
 >Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 
-type TC3 = Capitalize<string>;  // string
+type TC3 = Capitalize<string>;  // Capitalize<string>
 >TC3 : Symbol(TC3, Decl(intrinsicTypes.ts, 15, 37))
 >Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 
-type TC4 = Capitalize<any>;  // any
+type TC4 = Capitalize<any>;  // Capitalize<`${any}`>
 >TC4 : Symbol(TC4, Decl(intrinsicTypes.ts, 16, 30))
 >Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 
@@ -79,11 +79,11 @@ type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
 >TN2 : Symbol(TN2, Decl(intrinsicTypes.ts, 21, 33))
 >Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
 
-type TN3 = Uncapitalize<string>;  // string
+type TN3 = Uncapitalize<string>;  // Uncapitalize<string>
 >TN3 : Symbol(TN3, Decl(intrinsicTypes.ts, 22, 39))
 >Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
 
-type TN4 = Uncapitalize<any>;  // any
+type TN4 = Uncapitalize<any>;  // Uncapitalize<`${any}`>
 >TN4 : Symbol(TN4, Decl(intrinsicTypes.ts, 23, 32))
 >Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
 

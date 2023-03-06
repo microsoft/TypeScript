@@ -17,6 +17,7 @@ var p: M.P;             // Used as ModuleName
 
 var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
 >m : Symbol(m, Decl(primaryExpressionMods.ts, 6, 3))
+>M : Symbol(M)
 >M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
 
 var m2: typeof M = M;   // Used as PrimaryExpression in TypeQuery
@@ -36,4 +37,6 @@ var x2 = m.a;           // Same as M.a
 
 var q: m.P;             // Error
 >q : Symbol(q, Decl(primaryExpressionMods.ts, 10, 3))
+>m : Symbol(m)
+>P : Symbol(m.P)
 

@@ -1,0 +1,125 @@
+// === /tests/cases/fourslash/referencesForNumericLiteralPropertyNames.ts ===
+// class Foo {
+//     public /*FIND ALL REFS*/[|12|]: any;
+// }
+// 
+// var x: Foo;
+// x[[|12|]];
+// x = { "[|12|]": 0 };
+// x = { [|12|]: 0 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForNumericLiteralPropertyNames.ts",
+      "kind": "property",
+      "name": "(property) Foo[12]: any",
+      "textSpan": {
+        "start": 23,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "12",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 16,
+        "length": 15
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 23,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForNumericLiteralPropertyNames.ts",
+        "contextSpan": {
+          "start": 16,
+          "length": 15
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 49,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForNumericLiteralPropertyNames.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 61,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForNumericLiteralPropertyNames.ts",
+        "contextSpan": {
+          "start": 60,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 77,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForNumericLiteralPropertyNames.ts",
+        "contextSpan": {
+          "start": 77,
+          "length": 5
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

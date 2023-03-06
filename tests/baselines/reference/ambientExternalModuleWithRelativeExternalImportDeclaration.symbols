@@ -17,7 +17,7 @@ declare module "OuterModule" {
         public x: m2.c;
 >x : Symbol(SubModule.x, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 4, 35))
 >m2 : Symbol(m2, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 0, 30))
->c : Symbol(m2)
+>c : Symbol(m2.c)
 
         constructor();
     }

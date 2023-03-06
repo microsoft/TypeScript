@@ -1,0 +1,67 @@
+error TS2318: Cannot find global type 'IterableIterator'.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts(3,9): error TS18037: Await expression cannot be used inside a class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts(4,9): error TS1163: A 'yield' expression is only allowed in a generator body.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts(5,9): error TS18041: A 'return' statement cannot be used inside a class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts(12,13): error TS18037: Await expression cannot be used inside a class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts(24,13): error TS1163: A 'yield' expression is only allowed in a generator body.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts(36,13): error TS18041: A 'return' statement cannot be used inside a class static block.
+
+
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts (6 errors) ====
+    class C {
+        static {
+            await 1;
+            ~~~~~~~
+!!! error TS18037: Await expression cannot be used inside a class static block.
+            yield 1;
+            ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+            return 1;
+            ~~~~~~
+!!! error TS18041: A 'return' statement cannot be used inside a class static block.
+        }
+    }
+    
+    async function f1 () {
+        class C {
+            static {
+                await 1;
+                ~~~~~~~
+!!! error TS18037: Await expression cannot be used inside a class static block.
+    
+                async function ff () {
+                    await 1;
+                }
+            }
+        }
+    }
+    
+    function * f2 () {
+        class C {
+            static {
+                yield 1;
+                ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+    
+                function * ff () {
+                    yield 1;
+                }
+            }
+        }
+    }
+    
+    function f3 () {
+        class C {
+            static {
+                return 1;
+                ~~~~~~
+!!! error TS18041: A 'return' statement cannot be used inside a class static block.
+    
+                function ff () {
+                    return 1
+                }
+            }
+        }
+    }
+    

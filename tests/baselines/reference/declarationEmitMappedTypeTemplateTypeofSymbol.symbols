@@ -1,0 +1,35 @@
+=== tests/cases/compiler/a.d.ts ===
+export declare const timestampSymbol: unique symbol;
+>timestampSymbol : Symbol(timestampSymbol, Decl(a.d.ts, 0, 20))
+
+export declare const Timestamp: {
+>Timestamp : Symbol(Timestamp, Decl(a.d.ts, 2, 20))
+
+    [TKey in typeof timestampSymbol]: true;
+>TKey : Symbol(TKey, Decl(a.d.ts, 3, 5))
+>timestampSymbol : Symbol(timestampSymbol, Decl(a.d.ts, 0, 20))
+
+};
+
+export declare function now(): typeof Timestamp;
+>now : Symbol(now, Decl(a.d.ts, 4, 2))
+>Timestamp : Symbol(Timestamp, Decl(a.d.ts, 2, 20))
+
+=== tests/cases/compiler/b.ts ===
+import * as x from "./a";
+>x : Symbol(x, Decl(b.ts, 0, 6))
+
+export const timestamp = x.now();
+>timestamp : Symbol(timestamp, Decl(b.ts, 1, 12))
+>x.now : Symbol(x.now, Decl(a.d.ts, 4, 2))
+>x : Symbol(x, Decl(b.ts, 0, 6))
+>now : Symbol(x.now, Decl(a.d.ts, 4, 2))
+
+=== tests/cases/compiler/c.ts ===
+import { now } from "./a";
+>now : Symbol(now, Decl(c.ts, 0, 8))
+
+export const timestamp = now();
+>timestamp : Symbol(timestamp, Decl(c.ts, 2, 12))
+>now : Symbol(now, Decl(c.ts, 0, 8))
+

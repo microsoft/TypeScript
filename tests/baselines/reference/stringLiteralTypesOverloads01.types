@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts ===
 type PrimitiveName = 'string' | 'number' | 'boolean';
->PrimitiveName : PrimitiveName
+>PrimitiveName : "string" | "number" | "boolean"
 
 function getFalsyPrimitive(x: "string"): string;
 >getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "string" | "boolean"): string | boolean; (x: "number" | "boolean"): number | boolean; (x: "string" | "number"): string | number; (x: "string" | "number" | "boolean"): string | number | boolean; }

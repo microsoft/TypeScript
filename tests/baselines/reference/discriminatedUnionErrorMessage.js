@@ -17,5 +17,5 @@ let shape: Shape = {
 var shape = {
     kind: "sq",
     x: 12,
-    y: 13
+    y: 13,
 };

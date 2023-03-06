@@ -1,0 +1,25 @@
+tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts(4,17): error TS18013: Property '#derivedProp' is not accessible outside class 'Derived' because it has a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts(12,14): error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts (2 errors) ====
+    class Base {
+        static #prop: number = 123;
+        static method(x: Derived) {
+            Derived.#derivedProp // error
+                    ~~~~~~~~~~~~
+!!! error TS18013: Property '#derivedProp' is not accessible outside class 'Derived' because it has a private identifier.
+            Base.#prop  = 10;
+        }
+    }
+    class Derived extends Base {
+        static #derivedProp: number = 10;
+        static method(x: Derived) {
+            Derived.#derivedProp
+            Base.#prop  = 10; // error
+                 ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
+        }
+    }
+    
+    

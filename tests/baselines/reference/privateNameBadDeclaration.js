@@ -1,11 +1,15 @@
 //// [privateNameBadDeclaration.ts]
 function A() { }
 A.prototype = {
-  #x: 1         // Error
+  #x: 1,         // Error
+  #m() {},       // Error
+  get #p() { return "" } // Error
 }
 class B { }
 B.prototype = {
-  #y: 2         // Error
+  #y: 2,         // Error
+  #m() {},       // Error
+  get #p() { return "" } // Error
 }
 class C {
   constructor() {
@@ -16,7 +20,9 @@ class C {
 //// [privateNameBadDeclaration.js]
 function A() { }
 A.prototype = {
-    : 1 // Error
+    : 1,
+    : function () { },
+    get () { return ""; } // Error
 };
 var B = /** @class */ (function () {
     function B() {
@@ -24,7 +30,9 @@ var B = /** @class */ (function () {
     return B;
 }());
 B.prototype = {
-    : 2 // Error
+    : 2,
+    : function () { },
+    get () { return ""; } // Error
 };
 var C = /** @class */ (function () {
     function C() {

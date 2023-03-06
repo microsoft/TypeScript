@@ -1,0 +1,74 @@
+=== tests/cases/compiler/indexedAccessNormalization.ts ===
+// Repro from from #43152
+
+type MyMap<M extends object> = {
+>MyMap : Symbol(MyMap, Decl(indexedAccessNormalization.ts, 0, 0))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 2, 11))
+
+    [K in keyof M]: {
+>K : Symbol(K, Decl(indexedAccessNormalization.ts, 3, 5))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 2, 11))
+
+        x: number
+>x : Symbol(x, Decl(indexedAccessNormalization.ts, 3, 21))
+    }
+}
+
+declare function g<T>(value?: T): void;
+>g : Symbol(g, Decl(indexedAccessNormalization.ts, 6, 1))
+>T : Symbol(T, Decl(indexedAccessNormalization.ts, 8, 19))
+>value : Symbol(value, Decl(indexedAccessNormalization.ts, 8, 22))
+>T : Symbol(T, Decl(indexedAccessNormalization.ts, 8, 19))
+
+function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
+>f1 : Symbol(f1, Decl(indexedAccessNormalization.ts, 8, 39))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 10, 12))
+>mymap : Symbol(mymap, Decl(indexedAccessNormalization.ts, 10, 30))
+>MyMap : Symbol(MyMap, Decl(indexedAccessNormalization.ts, 0, 0))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 10, 12))
+>k : Symbol(k, Decl(indexedAccessNormalization.ts, 10, 46))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 10, 12))
+
+    const elemofM = mymap[k];
+>elemofM : Symbol(elemofM, Decl(indexedAccessNormalization.ts, 11, 9))
+>mymap : Symbol(mymap, Decl(indexedAccessNormalization.ts, 10, 30))
+>k : Symbol(k, Decl(indexedAccessNormalization.ts, 10, 46))
+
+    g(elemofM);
+>g : Symbol(g, Decl(indexedAccessNormalization.ts, 6, 1))
+>elemofM : Symbol(elemofM, Decl(indexedAccessNormalization.ts, 11, 9))
+}
+
+function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
+>f2 : Symbol(f2, Decl(indexedAccessNormalization.ts, 13, 1))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>mymap : Symbol(mymap, Decl(indexedAccessNormalization.ts, 15, 30))
+>MyMap : Symbol(MyMap, Decl(indexedAccessNormalization.ts, 0, 0))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>k : Symbol(k, Decl(indexedAccessNormalization.ts, 15, 46))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>z : Symbol(z, Decl(indexedAccessNormalization.ts, 15, 58))
+>x : Symbol(x, Decl(indexedAccessNormalization.ts, 15, 63))
+
+    const q1: MyMap<M>[keyof M] = z;
+>q1 : Symbol(q1, Decl(indexedAccessNormalization.ts, 16, 9))
+>MyMap : Symbol(MyMap, Decl(indexedAccessNormalization.ts, 0, 0))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>z : Symbol(z, Decl(indexedAccessNormalization.ts, 15, 58))
+
+    const q2: MyMap<M>[keyof M] | undefined = z;
+>q2 : Symbol(q2, Decl(indexedAccessNormalization.ts, 17, 9))
+>MyMap : Symbol(MyMap, Decl(indexedAccessNormalization.ts, 0, 0))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>z : Symbol(z, Decl(indexedAccessNormalization.ts, 15, 58))
+
+    const q3: MyMap<M>[keyof M] | string = z;
+>q3 : Symbol(q3, Decl(indexedAccessNormalization.ts, 18, 9))
+>MyMap : Symbol(MyMap, Decl(indexedAccessNormalization.ts, 0, 0))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>M : Symbol(M, Decl(indexedAccessNormalization.ts, 15, 12))
+>z : Symbol(z, Decl(indexedAccessNormalization.ts, 15, 58))
+}
+

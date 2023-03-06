@@ -1,6 +1,8 @@
 // @target: esnext
 // @module: commonjs
 // @declaration: true
+// @useDefineForClassFields: false
+
 const c0 = "1";
 const c1 = 1;
 

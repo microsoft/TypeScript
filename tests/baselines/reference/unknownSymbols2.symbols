@@ -4,6 +4,7 @@ module M {
 
     var x: asdf;
 >x : Symbol(x, Decl(unknownSymbols2.ts, 1, 7))
+>asdf : Symbol(asdf)
 
     var y = x + asdf;
 >y : Symbol(y, Decl(unknownSymbols2.ts, 2, 7))
@@ -11,6 +12,7 @@ module M {
 
     var z = <asdf>x; // should be an error
 >z : Symbol(z, Decl(unknownSymbols2.ts, 3, 7))
+>asdf : Symbol(asdf)
 >x : Symbol(x, Decl(unknownSymbols2.ts, 1, 7))
 
     if (asdf) {

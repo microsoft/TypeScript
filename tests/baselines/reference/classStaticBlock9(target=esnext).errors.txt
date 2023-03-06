@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts(2,20): error TS2729: Property 'foo' is used before its initialization.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts(4,11): error TS2729: Property 'foo' is used before its initialization.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts (2 errors) ====
+    class A {
+        static bar = A.foo + 1
+                       ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts:6:12: 'foo' is declared here.
+        static {
+            A.foo + 2;
+              ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts:6:12: 'foo' is declared here.
+        }
+        static foo = 1;
+    }
+    

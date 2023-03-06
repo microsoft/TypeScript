@@ -1,0 +1,22 @@
+=== tests/cases/compiler/getterErrorMessageNotDuplicated.ts ===
+interface Thing {
+    get style(): Foo;
+>style : Foo
+
+    set style(cssText: string | Bar);
+>style : Foo
+>cssText : string | Bar
+}
+
+interface Foo {
+    hello: string;
+>hello : string
+
+    world: number;
+>world : number
+}
+
+interface Bar extends Foo {
+    extra: any;
+>extra : any
+}

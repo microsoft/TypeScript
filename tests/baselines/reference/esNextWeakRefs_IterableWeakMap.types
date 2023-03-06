@@ -306,10 +306,10 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 }
 
 Object.defineProperties(IterableWeakMap.prototype, {
->Object.defineProperties(IterableWeakMap.prototype, {    [Symbol.iterator]: {        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    },    [Symbol.toStringTag]: {        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    },}) : any
->Object.defineProperties : (o: any, properties: PropertyDescriptorMap & ThisType<any>) => any
+>Object.defineProperties(IterableWeakMap.prototype, {    [Symbol.iterator]: {        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    },    [Symbol.toStringTag]: {        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    },}) : IterableWeakMap<any, any>
+>Object.defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperties : (o: any, properties: PropertyDescriptorMap & ThisType<any>) => any
+>defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
 >IterableWeakMap.prototype : IterableWeakMap<any, any>
 >IterableWeakMap : typeof IterableWeakMap
 >prototype : IterableWeakMap<any, any>

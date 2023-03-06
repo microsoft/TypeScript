@@ -113,7 +113,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(504,58): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(506,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(507,58): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(518,32): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(520,29): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(520,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(525,27): error TS2304: Cannot find name 'Signature'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(527,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(528,34): error TS2304: Cannot find name 'NodeType'.
@@ -241,7 +241,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(959,27): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(961,25): error TS2304: Cannot find name 'IHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(963,27): error TS2304: Cannot find name 'Signature'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(981,27): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(985,29): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(985,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,44): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,67): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1005,57): error TS2304: Cannot find name 'FncFlags'.
@@ -1263,7 +1263,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                          public target: AST,
                          public arguments: ASTList) {
                                 ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 super(nodeType);
                 this.minChar = this.target.minChar;
             }
@@ -1984,7 +1984,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
                          public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
                                 ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 nodeType: number) {
     
                 super(nodeType);

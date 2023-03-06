@@ -33,7 +33,7 @@
 
 //// [parserModule1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CompilerDiagnostics = void 0;
 var CompilerDiagnostics;
 (function (CompilerDiagnostics) {

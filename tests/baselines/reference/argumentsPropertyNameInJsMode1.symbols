@@ -1,0 +1,24 @@
+=== tests/cases/compiler/a.js ===
+const foo = {
+>foo : Symbol(foo, Decl(a.js, 0, 5))
+
+   f1: (params) => { }
+>f1 : Symbol(f1, Decl(a.js, 0, 13))
+>params : Symbol(params, Decl(a.js, 1, 8))
+}
+
+function f2(x) {
+>f2 : Symbol(f2, Decl(a.js, 2, 1))
+>x : Symbol(x, Decl(a.js, 4, 12))
+
+  foo.f1({ x, arguments: [] });
+>foo.f1 : Symbol(f1, Decl(a.js, 0, 13))
+>foo : Symbol(foo, Decl(a.js, 0, 5))
+>f1 : Symbol(f1, Decl(a.js, 0, 13))
+>x : Symbol(x, Decl(a.js, 5, 10))
+>arguments : Symbol(arguments, Decl(a.js, 5, 13))
+}
+
+f2(1, 2, 3);
+>f2 : Symbol(f2, Decl(a.js, 2, 1))
+

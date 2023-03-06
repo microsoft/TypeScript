@@ -11,13 +11,12 @@ declare module JSX {
 // Issue error about missing span closing tag, not missing div closing tag
 let x1 = <div><span></div>;
 >x1 : JSX.Element
-><div><span></div>; : JSX.Element
+><div><span></div> : JSX.Element
 >div : any
-><span></div> : JSX.Element
+><span> : JSX.Element
 >span : any
->div : any
-
 > : any
+>div : any
 
 === tests/cases/conformance/jsx/Error2.tsx ===
 let x2 = <div></span>;

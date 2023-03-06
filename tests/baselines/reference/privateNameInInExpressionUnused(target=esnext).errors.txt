@@ -1,0 +1,16 @@
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts(2,5): error TS6133: '#unused' is declared but its value is never read.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts (1 errors) ====
+    class Foo {
+        #unused: undefined; // expect unused error
+        ~~~~~~~
+!!! error TS6133: '#unused' is declared but its value is never read.
+        #brand: undefined; // expect no error
+    
+        isFoo(v: any): v is Foo {
+            // This should count as using/reading '#brand'
+            return #brand in v;
+        }
+    }
+    

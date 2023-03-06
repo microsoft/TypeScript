@@ -7,7 +7,7 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    Object.defineProperty(C, "Foo", {
+    Object.defineProperty(C.prototype, "Foo", {
         get: function () { },
         enumerable: false,
         configurable: true

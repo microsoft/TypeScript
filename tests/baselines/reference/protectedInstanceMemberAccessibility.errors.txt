@@ -2,13 +2,13 @@ tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAcc
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(16,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(18,24): error TS2339: Property 'y' does not exist on type 'A'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(19,24): error TS2339: Property 'z' does not exist on type 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(22,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(23,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'.
+tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(22,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
+tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(23,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(24,20): error TS2339: Property 'y' does not exist on type 'A'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(25,20): error TS2339: Property 'z' does not exist on type 'A'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(31,20): error TS2339: Property 'z' does not exist on type 'B'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(34,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(35,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'.
+tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(34,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
+tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(35,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(36,20): error TS2339: Property 'y' does not exist on type 'C'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(37,20): error TS2445: Property 'z' is protected and only accessible within class 'C' and its subclasses.
 
@@ -45,10 +45,10 @@ tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAcc
             var a: A;
             var a1 = a.x;    // error
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
             var a2 = a.f();  // error
                        ~
-!!! error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'.
+!!! error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
             var a3 = a.y;    // error
                        ~
 !!! error TS2339: Property 'y' does not exist on type 'A'.
@@ -67,10 +67,10 @@ tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAcc
             var c: C;
             var c1 = c.x;    // error
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
             var c2 = c.f();  // error
                        ~
-!!! error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'.
+!!! error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
             var c3 = c.y;    // error
                        ~
 !!! error TS2339: Property 'y' does not exist on type 'C'.

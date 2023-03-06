@@ -28,7 +28,7 @@
 ////d./*1*/
 ////D./*2*/
 
-verify.completions({ marker: "1", exact: ["foo2", "foo"] });
+verify.completions({ marker: "1", exact: ["foo", "foo2"] });
 edit.insert('foo()');
 
 verify.completions({

@@ -1,0 +1,60 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as cjs from "#cjs";
+>cjs : Symbol(cjs, Decl(index.ts, 1, 6))
+
+import * as mjs from "#mjs";
+>mjs : Symbol(mjs, Decl(index.ts, 2, 6))
+
+import * as type from "#type";
+>type : Symbol(type, Decl(index.ts, 3, 6))
+
+cjs;
+>cjs : Symbol(cjs, Decl(index.ts, 1, 6))
+
+mjs;
+>mjs : Symbol(mjs, Decl(index.ts, 2, 6))
+
+type;
+>type : Symbol(type, Decl(index.ts, 3, 6))
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as cjs from "#cjs";
+>cjs : Symbol(cjs, Decl(index.mts, 1, 6))
+
+import * as mjs from "#mjs";
+>mjs : Symbol(mjs, Decl(index.mts, 2, 6))
+
+import * as type from "#type";
+>type : Symbol(type, Decl(index.mts, 3, 6))
+
+cjs;
+>cjs : Symbol(cjs, Decl(index.mts, 1, 6))
+
+mjs;
+>mjs : Symbol(mjs, Decl(index.mts, 2, 6))
+
+type;
+>type : Symbol(type, Decl(index.mts, 3, 6))
+
+=== tests/cases/conformance/node/index.cts ===
+// esm format file
+import * as cjs from "#cjs";
+>cjs : Symbol(cjs, Decl(index.cts, 1, 6))
+
+import * as mjs from "#mjs";
+>mjs : Symbol(mjs, Decl(index.cts, 2, 6))
+
+import * as type from "#type";
+>type : Symbol(type, Decl(index.cts, 3, 6))
+
+cjs;
+>cjs : Symbol(cjs, Decl(index.cts, 1, 6))
+
+mjs;
+>mjs : Symbol(mjs, Decl(index.cts, 2, 6))
+
+type;
+>type : Symbol(type, Decl(index.cts, 3, 6))
+

@@ -3,13 +3,13 @@
 declare namespace lf {
   export interface Transaction {
     attach(query: query.Builder): Promise<Array<Object>>
->attach : (query: any) => Promise<Array<Object>>
->query : any
+>attach : (query: query.Builder) => Promise<Array<Object>>
+>query : query.Builder
 >query : any
 
     begin(scope: Array<schema.Table>): Promise<void>
 >begin : (scope: Array<schema.Table>) => Promise<void>
->scope : any[]
+>scope : schema.Table[]
 >schema : any
 
     commit(): Promise<void>
@@ -17,14 +17,14 @@ declare namespace lf {
 
     exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
 >exec : (queries: Array<query.Builder>) => Promise<Array<Array<Object>>>
->queries : any[]
+>queries : query.Builder[]
 >query : any
 
     rollback(): Promise<void>
 >rollback : () => Promise<void>
 
     stats(): TransactionStats
->stats : () => any
+>stats : () => TransactionStats
   }
 }
 === tests/cases/conformance/salsa/lovefield.js ===
@@ -40,7 +40,7 @@ lf.Transaction = function() {};
  * @return {!IThenable}
  */
 lf.Transaction.prototype.begin = function(scope) {};
->lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<any>) => any
+>lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
 >lf.Transaction.prototype.begin : any
 >lf.Transaction.prototype : any
 >lf.Transaction : typeof Transaction
@@ -48,6 +48,6 @@ lf.Transaction.prototype.begin = function(scope) {};
 >Transaction : typeof Transaction
 >prototype : any
 >begin : any
->function(scope) {} : (scope: Array<any>) => any
->scope : any[]
+>function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
+>scope : lf.schema.Table[]
 

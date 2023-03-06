@@ -136,4 +136,30 @@ class G {
     constructor(public p1: number) {}
 >p1 : Symbol(G.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 39, 16))
 }
+class H {
+>H : Symbol(H, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 40, 1))
+
+    constructor(public p1: C) {}
+>p1 : Symbol(H.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 42, 16))
+>C : Symbol(C, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 0))
+
+    public p2 = () => {
+>p2 : Symbol(H.p2, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 42, 32))
+
+        return this.p1.foo;
+>this.p1.foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 10, 16))
+>this.p1 : Symbol(H.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 42, 16))
+>this : Symbol(H, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 40, 1))
+>p1 : Symbol(H.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 42, 16))
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 10, 16))
+    }
+
+    public p3 = () => this.p1.foo;
+>p3 : Symbol(H.p3, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 46, 5))
+>this.p1.foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 10, 16))
+>this.p1 : Symbol(H.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 42, 16))
+>this : Symbol(H, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 40, 1))
+>p1 : Symbol(H.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 42, 16))
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 10, 16))
+}
 

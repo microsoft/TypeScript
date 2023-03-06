@@ -1,0 +1,112 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateNameInInExpressionTransform.ts, 0, 0))
+
+    #field = 1;
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+
+    #method() {}
+>#method : Symbol(Foo.#method, Decl(privateNameInInExpressionTransform.ts, 1, 15))
+
+    static #staticField= 2;
+>#staticField : Symbol(Foo.#staticField, Decl(privateNameInInExpressionTransform.ts, 2, 16))
+
+    static #staticMethod() {}
+>#staticMethod : Symbol(Foo.#staticMethod, Decl(privateNameInInExpressionTransform.ts, 3, 27))
+
+    check(v: any) {
+>check : Symbol(Foo.check, Decl(privateNameInInExpressionTransform.ts, 4, 29))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
+
+        #field in v; // expect Foo's 'field' WeakMap
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
+
+        #method in v; // expect Foo's 'instances' WeakSet
+>#method : Symbol(Foo.#method, Decl(privateNameInInExpressionTransform.ts, 1, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
+
+        #staticField in v; // expect Foo's constructor
+>#staticField : Symbol(Foo.#staticField, Decl(privateNameInInExpressionTransform.ts, 2, 16))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
+
+        #staticMethod in v; // expect Foo's constructor
+>#staticMethod : Symbol(Foo.#staticMethod, Decl(privateNameInInExpressionTransform.ts, 3, 27))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
+    }
+    precedence(v: any) {
+>precedence : Symbol(Foo.precedence, Decl(privateNameInInExpressionTransform.ts, 11, 5))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+
+        // '==' and '||' have lower precedence than 'in'
+        // 'in'  naturally has same precedence as 'in'
+        // '<<' has higher precedence than 'in'
+
+        v == #field in v || v; // Good precedence: (v == (#field in v)) || v
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+
+        v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+
+        v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+
+        v == #field in v in v; // Good precedence: v == ((#field in v) in v)
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+
+        #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+    }
+    invalidLHS(v: any) {
+>invalidLHS : Symbol(Foo.invalidLHS, Decl(privateNameInInExpressionTransform.ts, 26, 5))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 27, 15))
+
+        'prop' in v = 10;
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 27, 15))
+
+        #field in v = 10;
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 27, 15))
+    }
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(privateNameInInExpressionTransform.ts, 31, 1))
+
+    #field = 1;
+>#field : Symbol(Bar.#field, Decl(privateNameInInExpressionTransform.ts, 33, 11))
+
+    check(v: any) {
+>check : Symbol(Bar.check, Decl(privateNameInInExpressionTransform.ts, 34, 15))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 35, 10))
+
+        #field in v; // expect Bar's 'field' WeakMap
+>#field : Symbol(Bar.#field, Decl(privateNameInInExpressionTransform.ts, 33, 11))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 35, 10))
+    }
+}
+
+function syntaxError(v: Foo) {
+>syntaxError : Symbol(syntaxError, Decl(privateNameInInExpressionTransform.ts, 38, 1))
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 40, 21))
+>Foo : Symbol(Foo, Decl(privateNameInInExpressionTransform.ts, 0, 0))
+
+    return #field in v; // expect `return in v` so runtime will have a syntax error
+>v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 40, 21))
+}
+
+export { }
+

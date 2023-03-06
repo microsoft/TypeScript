@@ -237,6 +237,17 @@ function ff(o: O, k: K) {
     return o[k];
 }
 
+// Repro from #35431
+type A = { kind: "abc" } | { kind: "def" };
+
+function f35431(a: A) {
+  switch (a.kind) {
+    case "abc":
+    case "def": return;
+    default:
+      a!.kind; // Error expected
+  }
+}
 
 //// [exhaustiveSwitchStatements1.js]
 "use strict";
@@ -453,6 +464,14 @@ function ff(o, k) {
     k === 'c'; // Error
     return o[k];
 }
+function f35431(a) {
+    switch (a.kind) {
+        case "abc":
+        case "def": return;
+        default:
+            a.kind; // Error expected
+    }
+}
 
 
 //// [exhaustiveSwitchStatements1.d.ts]
@@ -482,7 +501,7 @@ interface Triangle {
     kind: "triangle";
     side: number;
 }
-declare type Shape = Square | Rectangle | Circle | Triangle;
+type Shape = Square | Rectangle | Circle | Triangle;
 declare function area(s: Shape): number;
 declare function areaWrapped(s: Shape): number;
 declare enum MyEnum {
@@ -505,7 +524,7 @@ interface Circle2 {
     kind: "circle";
     radius: number;
 }
-declare type Shape2 = Square2 | Circle2;
+type Shape2 = Square2 | Circle2;
 declare function withDefault(s1: Shape2, s2: Shape2): string;
 declare function withoutDefault(s1: Shape2, s2: Shape2): string;
 declare function test4(value: 1 | 2): string;
@@ -518,9 +537,15 @@ declare const zoo: {
 } | undefined;
 declare function expression(): Animal;
 declare function foo(): void;
-declare type O = {
+type O = {
     a: number;
     b: number;
 };
-declare type K = keyof O | 'c';
+type K = keyof O | 'c';
 declare function ff(o: O, k: K): number;
+type A = {
+    kind: "abc";
+} | {
+    kind: "def";
+};
+declare function f35431(a: A): void;

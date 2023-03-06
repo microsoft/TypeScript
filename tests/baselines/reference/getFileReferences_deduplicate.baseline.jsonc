@@ -11,8 +11,7 @@
       "start": 15,
       "length": 6
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   },
   {
     "fileName": "/test.ts",
@@ -20,7 +19,6 @@
       "start": 8,
       "length": 6
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   }
 ]

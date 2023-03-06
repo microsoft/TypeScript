@@ -1,0 +1,21 @@
+=== tests/cases/compiler/internal.ts ===
+export declare function usePrivateType<T extends unknown[]>(...args: T): PrivateMapped<T[any]>;
+>usePrivateType : <T extends unknown[]>(...args: T) => PrivateMapped<T[any]>
+>args : T
+
+type PrivateMapped<Obj> = {[K in keyof Obj]: Obj[K]};
+>PrivateMapped : PrivateMapped<Obj>
+
+=== tests/cases/compiler/api.ts ===
+import {usePrivateType} from './internal';
+>usePrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+
+export const mappedUnionWithPrivateType = <T extends unknown[]>(...args: T) => usePrivateType(...args);
+>mappedUnionWithPrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+><T extends unknown[]>(...args: T) => usePrivateType(...args) : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+>args : T
+>usePrivateType(...args) : { [K in keyof T[any]]: T[any][K]; }
+>usePrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+>...args : unknown
+>args : T
+

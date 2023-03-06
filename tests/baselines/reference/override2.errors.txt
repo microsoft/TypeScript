@@ -1,0 +1,35 @@
+tests/cases/conformance/override/override2.ts(13,14): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'AB'.
+tests/cases/conformance/override/override2.ts(18,14): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'AB'.
+
+
+==== tests/cases/conformance/override/override2.ts (2 errors) ====
+    abstract class AB {
+        abstract foo(v: string): void;
+    
+        abstract bar(v: string): void;
+        abstract baz(v: string): void;
+    }
+    
+    abstract class AD1 extends AB {
+    
+    }
+    
+    abstract class AD2 extends AB {
+        abstract foo(v: ''): void // need override?
+                 ~~~
+!!! error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'AB'.
+    }
+    
+    abstract class AD3 extends AB {
+        override foo(v: ''): void { } // need override?
+        abstract bar(): void;
+                 ~~~
+!!! error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'AB'.
+        baz(): void { }
+    }
+    
+    class D4 extends AB {
+        override foo(v: ''): void {}
+        override bar(v: ''): void {}
+        baz(): void { }
+    }

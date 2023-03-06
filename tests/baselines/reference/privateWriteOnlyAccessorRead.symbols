@@ -1,0 +1,119 @@
+=== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts ===
+class Test {
+>Test : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+
+  set #value(v: { foo: { bar: number } }) {}
+>#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>v : Symbol(v, Decl(privateWriteOnlyAccessorRead.ts, 1, 13))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+>bar : Symbol(bar, Decl(privateWriteOnlyAccessorRead.ts, 1, 24))
+
+  set #valueRest(v: number[]) {}
+>#valueRest : Symbol(Test.#valueRest, Decl(privateWriteOnlyAccessorRead.ts, 1, 44))
+>v : Symbol(v, Decl(privateWriteOnlyAccessorRead.ts, 2, 17))
+
+  set #valueOne(v: number) {}
+>#valueOne : Symbol(Test.#valueOne, Decl(privateWriteOnlyAccessorRead.ts, 2, 32))
+>v : Symbol(v, Decl(privateWriteOnlyAccessorRead.ts, 3, 16))
+
+  set #valueCompound(v: number) {}
+>#valueCompound : Symbol(Test.#valueCompound, Decl(privateWriteOnlyAccessorRead.ts, 3, 29))
+>v : Symbol(v, Decl(privateWriteOnlyAccessorRead.ts, 4, 21))
+
+  m() {
+>m : Symbol(Test.m, Decl(privateWriteOnlyAccessorRead.ts, 4, 34))
+
+    const foo = { bar: 1 };
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 7, 9))
+>bar : Symbol(bar, Decl(privateWriteOnlyAccessorRead.ts, 7, 17))
+
+    console.log(this.#value); // error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+
+    this.#value = { foo }; // ok
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 9, 19))
+
+    this.#value = { foo }; // ok
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 10, 19))
+
+    this.#value.foo = foo; // error
+>this.#value.foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 7, 9))
+
+    ({ o: this.#value } = { o: { foo } }); //ok
+>o : Symbol(o, Decl(privateWriteOnlyAccessorRead.ts, 13, 6))
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>o : Symbol(o, Decl(privateWriteOnlyAccessorRead.ts, 13, 27))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 13, 32))
+
+    ({ ...this.#value } = { foo }); //ok
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 14, 27))
+
+    ({ foo: this.#value.foo } = { foo }); //error
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 16, 6))
+>this.#value.foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 16, 33))
+
+    ({
+      foo: { ...this.#value.foo },
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 17, 6))
+>this.#value.foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
+
+    } = { foo }); //error
+>foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 19, 9))
+
+    let r = { o: this.#value }; //error
+>r : Symbol(r, Decl(privateWriteOnlyAccessorRead.ts, 21, 7))
+>o : Symbol(o, Decl(privateWriteOnlyAccessorRead.ts, 21, 13))
+>this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+
+    [this.#valueOne, ...this.#valueRest] = [1, 2, 3];
+>this.#valueOne : Symbol(Test.#valueOne, Decl(privateWriteOnlyAccessorRead.ts, 2, 32))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>this.#valueRest : Symbol(Test.#valueRest, Decl(privateWriteOnlyAccessorRead.ts, 1, 44))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+
+    let arr = [
+>arr : Symbol(arr, Decl(privateWriteOnlyAccessorRead.ts, 24, 7))
+
+        this.#valueOne,
+>this.#valueOne : Symbol(Test.#valueOne, Decl(privateWriteOnlyAccessorRead.ts, 2, 32))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+
+        ...this.#valueRest
+>this.#valueRest : Symbol(Test.#valueRest, Decl(privateWriteOnlyAccessorRead.ts, 1, 44))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+
+    ];
+
+    this.#valueCompound += 3;
+>this.#valueCompound : Symbol(Test.#valueCompound, Decl(privateWriteOnlyAccessorRead.ts, 3, 29))
+>this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+  }
+}
+new Test().m();
+>new Test().m : Symbol(Test.m, Decl(privateWriteOnlyAccessorRead.ts, 4, 34))
+>Test : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
+>m : Symbol(Test.m, Decl(privateWriteOnlyAccessorRead.ts, 4, 34))
+

@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "license": "Apache-2.0",
-  "repository":  {
+  "repository": {
     "type": "git",
     "url": "https://github.com/pirix-gh/ts-toolbelt"
   },

@@ -258,6 +258,7 @@ module ts {
 
         constructor(public typeParameters: TypeParameter[], public parameters: Parameter[], public returnType: Type) {
 >typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>TypeParameter : Symbol(TypeParameter)
 >parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
 >Parameter : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
 >returnType : Symbol(Signature.returnType, Decl(unspecializedConstraints.ts, 83, 91))

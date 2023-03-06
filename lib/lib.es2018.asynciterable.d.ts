@@ -26,7 +26,7 @@ interface SymbolConstructor {
      * A method that returns the default async iterator for an object. Called by the semantics of
      * the for-await-of statement.
      */
-    readonly asyncIterator: symbol;
+    readonly asyncIterator: unique symbol;
 }
 
 interface AsyncIterator<T, TReturn = any, TNext = undefined> {

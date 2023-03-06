@@ -39,23 +39,25 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/username/project/src/file1.ts
 
-WatchedFiles::
-/a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
-/a/username/project/src/file1.ts:
-  {"fileName":"/a/username/project/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/username/project/src/file1.ts (used version)
+
+PolledWatches::
+/a/username/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/node_modules/@types:
-  {"directoryName":"/a/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/username/project:
-  {"directoryName":"/a/username/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/username/project/src:
-  {"directoryName":"/a/username/project/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
+/a/username/project/tsconfig.json: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/a/username/project: *new*
+  {}
+/a/username/project/src: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -89,23 +91,28 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/username/project/src/file2.ts
 
-WatchedFiles::
-/a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/username/project/src/file2.ts:
-  {"fileName":"/a/username/project/src/file2.ts","pollingInterval":250}
+Shape signatures in builder refreshed for::
+/a/username/project/src/file2.ts (used version)
+
+PolledWatches::
+/a/username/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/node_modules/@types:
-  {"directoryName":"/a/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/username/project/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /a/username/project:
-  {"directoryName":"/a/username/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /a/username/project/src:
-  {"directoryName":"/a/username/project/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
+/a/username/project/src/file2.ts: *new*
+  {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 

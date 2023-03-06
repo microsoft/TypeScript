@@ -1,0 +1,61 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldClassExpression.ts ===
+class B {
+>B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))
+
+    static #foo = class {
+>#foo : Symbol(B.#foo, Decl(privateNameStaticFieldClassExpression.ts, 0, 9))
+
+        constructor() {
+            console.log("hello");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+            new B.#foo2();
+>B.#foo2 : Symbol(B.#foo2, Decl(privateNameStaticFieldClassExpression.ts, 8, 6))
+>B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))
+        }
+        static test = 123;
+>test : Symbol((Anonymous class).test, Decl(privateNameStaticFieldClassExpression.ts, 5, 9))
+
+        field = 10;
+>field : Symbol((Anonymous class).field, Decl(privateNameStaticFieldClassExpression.ts, 6, 26))
+
+    };
+    static #foo2 = class Foo {
+>#foo2 : Symbol(B.#foo2, Decl(privateNameStaticFieldClassExpression.ts, 8, 6))
+>Foo : Symbol(Foo, Decl(privateNameStaticFieldClassExpression.ts, 9, 18))
+
+        static otherClass = 123;
+>otherClass : Symbol(Foo.otherClass, Decl(privateNameStaticFieldClassExpression.ts, 9, 30))
+
+    };
+
+    m() {
+>m : Symbol(B.m, Decl(privateNameStaticFieldClassExpression.ts, 11, 6))
+
+        console.log(B.#foo.test)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>B.#foo.test : Symbol((Anonymous class).test, Decl(privateNameStaticFieldClassExpression.ts, 5, 9))
+>B.#foo : Symbol(B.#foo, Decl(privateNameStaticFieldClassExpression.ts, 0, 9))
+>B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))
+>test : Symbol((Anonymous class).test, Decl(privateNameStaticFieldClassExpression.ts, 5, 9))
+
+        B.#foo.test = 10;
+>B.#foo.test : Symbol((Anonymous class).test, Decl(privateNameStaticFieldClassExpression.ts, 5, 9))
+>B.#foo : Symbol(B.#foo, Decl(privateNameStaticFieldClassExpression.ts, 0, 9))
+>B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))
+>test : Symbol((Anonymous class).test, Decl(privateNameStaticFieldClassExpression.ts, 5, 9))
+
+        new B.#foo().field;
+>new B.#foo().field : Symbol((Anonymous class).field, Decl(privateNameStaticFieldClassExpression.ts, 6, 26))
+>B.#foo : Symbol(B.#foo, Decl(privateNameStaticFieldClassExpression.ts, 0, 9))
+>B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))
+>field : Symbol((Anonymous class).field, Decl(privateNameStaticFieldClassExpression.ts, 6, 26))
+    }
+}
+
+
+

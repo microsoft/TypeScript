@@ -26,6 +26,6 @@ define(["require", "exports", "tslib", "./a"], function (require, exports, tslib
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    a = (0, tslib_1.__importStar)(a);
+    a = tslib_1.__importStar(a);
     exports.a = a;
 });

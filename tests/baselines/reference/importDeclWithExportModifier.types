@@ -9,5 +9,5 @@ export import a = x.c;
 >c : any
 
 var b: a;
->b : any
+>b : a
 

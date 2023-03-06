@@ -1,0 +1,56 @@
+=== tests/cases/conformance/decorators/class/a.ts ===
+function decorator() {
+>decorator : () => (target: new (...args: any[]) => any) => void
+
+    return (target: new (...args: any[]) => any) => {}
+>(target: new (...args: any[]) => any) => {} : (target: new (...args: any[]) => any) => void
+>target : new (...args: any[]) => any
+>args : any[]
+}
+
+@decorator()
+>decorator() : (target: new (...args: any[]) => any) => void
+>decorator : () => (target: new (...args: any[]) => any) => void
+
+class Foo {
+>Foo : Foo
+
+    public static func(): Foo {
+>func : () => Foo
+
+        return new Foo();
+>new Foo() : Foo
+>Foo : typeof Foo
+    }
+}
+Foo.func();
+>Foo.func() : Foo
+>Foo.func : () => Foo
+>Foo : typeof Foo
+>func : () => Foo
+
+try {
+    @decorator()
+>decorator() : (target: new (...args: any[]) => any) => void
+>decorator : () => (target: new (...args: any[]) => any) => void
+
+    class Foo {
+>Foo : Foo
+
+        public static func(): Foo {
+>func : () => Foo
+
+            return new Foo();
+>new Foo() : Foo
+>Foo : typeof Foo
+        }
+    }
+    Foo.func();
+>Foo.func() : Foo
+>Foo.func : () => Foo
+>Foo : typeof Foo
+>func : () => Foo
+}
+catch (e) {}
+>e : any
+

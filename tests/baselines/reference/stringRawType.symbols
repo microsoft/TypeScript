@@ -1,0 +1,7 @@
+=== tests/cases/compiler/stringRawType.ts ===
+String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2);
+>String.raw : Symbol(StringConstructor.raw, Decl(lib.es2015.core.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>raw : Symbol(StringConstructor.raw, Decl(lib.es2015.core.d.ts, --, --))
+>raw : Symbol(raw, Decl(stringRawType.ts, 0, 12))
+

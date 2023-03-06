@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameHashCharName.ts ===
+#
+
+class C {
+>C : C
+
+    #
+># : any
+
+    m() {
+>m : () => void
+
+        this.#
+>this.# : any
+>this : this
+    }
+}
+

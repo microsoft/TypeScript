@@ -9,9 +9,9 @@ var x1 = new SS<number>(); // OK
 >new SS<number>() : SS<number>
 >SS : typeof SS
 
-var x2 = new SS < number>;   // Correctly give error 
+var x2 = new SS<number>;   // OK 
 >x2 : SS<number>
->new SS < number> : SS<number>
+>new SS<number> : SS<number>
 >SS : typeof SS
 
 var x3 = new SS();         // OK
@@ -19,7 +19,7 @@ var x3 = new SS();         // OK
 >new SS() : SS<unknown>
 >SS : typeof SS
 
-var x4 = new SS;           // Should be allowed, but currently give error ('supplied parameters do not match any signature of the call target')
+var x4 = new SS;           // OK
 >x4 : SS<unknown>
 >new SS : SS<unknown>
 >SS : typeof SS

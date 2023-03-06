@@ -32,4 +32,4 @@
 ////import * as c from "./C";
 ////var x = c.Inner./**/
 
-verify.completions({ marker: "", exact: ["varVar", "letVar", "constVar"] });
+verify.completions({ marker: "", exact: ["constVar", "letVar", "varVar"] });

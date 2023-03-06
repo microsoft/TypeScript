@@ -1,0 +1,148 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldUnaryMutation.ts ===
+class C {
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+    static #test: number = 24;
+>#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+
+    constructor() {
+        C.#test++;
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        C.#test--;
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        ++C.#test;
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        --C.#test;
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        const a = C.#test++;
+>a : Symbol(a, Decl(privateNameStaticFieldUnaryMutation.ts, 7, 13))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        const b = C.#test--;
+>b : Symbol(b, Decl(privateNameStaticFieldUnaryMutation.ts, 8, 13))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        const c = ++C.#test;
+>c : Symbol(c, Decl(privateNameStaticFieldUnaryMutation.ts, 9, 13))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        const d = --C.#test;
+>d : Symbol(d, Decl(privateNameStaticFieldUnaryMutation.ts, 10, 13))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        for (C.#test = 0; C.#test < 10; ++C.#test) {}
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+
+        for (C.#test = 0; C.#test < 10; C.#test++) {}
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>C.#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+    }
+    test() {
+>test : Symbol(C.test, Decl(privateNameStaticFieldUnaryMutation.ts, 13, 5))
+
+        this.getClass().#test++;
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        this.getClass().#test--;
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        ++this.getClass().#test;
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        --this.getClass().#test;
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        const a = this.getClass().#test++;
+>a : Symbol(a, Decl(privateNameStaticFieldUnaryMutation.ts, 19, 13))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        const b = this.getClass().#test--;
+>b : Symbol(b, Decl(privateNameStaticFieldUnaryMutation.ts, 20, 13))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        const c = ++this.getClass().#test;
+>c : Symbol(c, Decl(privateNameStaticFieldUnaryMutation.ts, 21, 13))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        const d = --this.getClass().#test;
+>d : Symbol(d, Decl(privateNameStaticFieldUnaryMutation.ts, 22, 13))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        for (this.getClass().#test = 0; this.getClass().#test < 10; ++this.getClass().#test) {}
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+
+        for (this.getClass().#test = 0; this.getClass().#test < 10; this.getClass().#test++) {}
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this.getClass().#test : Symbol(C.#test, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 9))
+>this.getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>this : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+    }
+    getClass() { return C; }
+>getClass : Symbol(C.getClass, Decl(privateNameStaticFieldUnaryMutation.ts, 25, 5))
+>C : Symbol(C, Decl(privateNameStaticFieldUnaryMutation.ts, 0, 0))
+}
+

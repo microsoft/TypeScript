@@ -38,6 +38,7 @@ const x: zzz = { x: "" };
 >x : Symbol(x, Decl(index.ts, 2, 16))
 
 zzz;
+>zzz : Symbol(zzz, Decl(index.ts, 0, 6))
 
 import originalZZZ from "./b";
 >originalZZZ : Symbol(originalZZZ, Decl(index.ts, 5, 6))
@@ -47,5 +48,6 @@ originalZZZ;
 
 const y: originalZZZ = x;
 >y : Symbol(y, Decl(index.ts, 8, 5))
+>originalZZZ : Symbol(originalZZZ)
 >x : Symbol(x, Decl(index.ts, 2, 5))
 

@@ -1,4 +1,4 @@
-/// <reference path="fourslash.ts"/>
+/// <reference path="../fourslash.ts"/>
 
 // @typeRoots: src/types
 // @Filename: src/types/lib/index.d.ts

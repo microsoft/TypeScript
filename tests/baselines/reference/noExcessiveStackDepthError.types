@@ -1,0 +1,24 @@
+=== tests/cases/compiler/noExcessiveStackDepthError.ts ===
+// Repro from #46631
+
+interface FindOperator<T> {
+    foo: T;
+>foo : T
+}
+
+type FindConditions<T> = {
+>FindConditions : FindConditions<T>
+
+    [P in keyof T]?: FindConditions<T[P]> | FindOperator<FindConditions<T[P]>>;
+};
+
+function foo<Entity>() {
+>foo : <Entity>() => void
+
+    var x: FindConditions<any>;
+>x : FindConditions<any>
+
+    var x: FindConditions<Entity>;  // Excessive stack depth error not expected here
+>x : FindConditions<any>
+}
+

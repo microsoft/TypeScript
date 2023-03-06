@@ -39,20 +39,20 @@ Output::
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Xy/a.ts' differs from file name '/user/username/projects/myproject/XY/a.ts' only in casing.
   The file is in the program because:
     Imported via "./Xy/a" from file '/user/username/projects/myproject/b.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m2[0m import { a } from "./Xy/a";
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -68,25 +68,27 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/Xy/a.ts","pollingInterval":250}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+No shapes updated in the builder::
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/xy/a.ts: *new*
+  {}
+/user/username/projects/myproject/link/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -155,20 +157,20 @@ Output::
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Xy/a.ts' differs from file name '/user/username/projects/myproject/XY/a.ts' only in casing.
   The file is in the program because:
     Imported via "./Xy/a" from file '/user/username/projects/myproject/b.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m2[0m import { a } from "./Xy/a";
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -184,25 +186,7 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/Xy/a.ts","pollingInterval":250}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 

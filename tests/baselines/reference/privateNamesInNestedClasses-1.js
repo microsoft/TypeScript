@@ -28,35 +28,34 @@ new A().method();
 
 //// [privateNamesInNestedClasses-1.js]
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _foo, _bar;
+var _A_foo, _A_bar;
 class A {
     constructor() {
-        _foo.set(this, "A's #foo");
-        _bar.set(this, "A's #bar");
+        _A_foo.set(this, "A's #foo");
+        _A_bar.set(this, "A's #bar");
     }
     method() {
-        var _foo_1;
+        var _B_foo;
         class B {
             constructor() {
-                _foo_1.set(this, "B's #foo");
+                _B_foo.set(this, "B's #foo");
             }
             bar(a) {
-                __classPrivateFieldGet(a, _foo_1); // OK, no compile-time error, don't know what `a` is
+                __classPrivateFieldGet(a, _B_foo, "f"); // OK, no compile-time error, don't know what `a` is
             }
             baz(a) {
-                __classPrivateFieldGet(a, _foo_1); // compile-time error, shadowed
+                __classPrivateFieldGet(a, _B_foo, "f"); // compile-time error, shadowed
             }
             quux(b) {
-                __classPrivateFieldGet(b, _foo_1); // OK
+                __classPrivateFieldGet(b, _B_foo, "f"); // OK
             }
         }
-        _foo_1 = new WeakMap();
+        _B_foo = new WeakMap();
         const a = new A();
         new B().bar(a);
         new B().baz(a);
@@ -64,5 +63,5 @@ class A {
         new B().quux(b);
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
+_A_foo = new WeakMap(), _A_bar = new WeakMap();
 new A().method();

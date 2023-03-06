@@ -40,7 +40,7 @@ function bar<T extends A | B>(x: T) {
 
     var y: A | B = x;  // Ok
 >y : A | B
->x : T
+>x : A | B
 }
 
 bar(new A);

@@ -1,7 +1,7 @@
 === tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts ===
 // must target esnext for `String.normalize` to exist
 type Validate = (text: string, pos: number, self: Rule) => number | boolean;
->Validate : Validate
+>Validate : (text: string, pos: number, self: Rule) => number | boolean
 >text : string
 >pos : number
 >self : Rule
@@ -17,7 +17,7 @@ interface FullRule {
 }
 
 type Rule = string | FullRule;
->Rule : Rule
+>Rule : string | FullRule
 
 const obj: {field: Rule} = {
 >obj : { field: Rule; }

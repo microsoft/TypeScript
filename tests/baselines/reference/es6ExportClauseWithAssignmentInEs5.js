@@ -9,7 +9,7 @@ var buzz = 10;
 buzz += 3;
 
 var bizz = 8;
-bizz++; // compiles to exports.bizz = bizz += 1
+bizz++; // compiles to exports.bizz = (bizz++, bizz)
 bizz--; // similarly
 ++bizz; // compiles to exports.bizz = ++bizz
 
@@ -32,6 +32,6 @@ exports.buzz = buzz;
 exports.buzz = buzz += 3;
 var bizz = 8;
 exports.bizz = bizz;
-(exports.bizz = ++bizz) - 1; // compiles to exports.bizz = bizz += 1
-(exports.bizz = --bizz) + 1; // similarly
+exports.bizz = (bizz++, bizz); // compiles to exports.bizz = (bizz++, bizz)
+exports.bizz = (bizz--, bizz); // similarly
 exports.bizz = ++bizz; // compiles to exports.bizz = ++bizz

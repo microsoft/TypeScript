@@ -1,0 +1,650 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts ===
+declare function fx<T>(x: T): T;
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 0, 20))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 0, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 0, 20))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 0, 20))
+
+declare function fx<T>(x: T, n: number): T;
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 1, 20))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 1, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 1, 20))
+>n : Symbol(n, Decl(instantiationExpressions.ts, 1, 28))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 1, 20))
+
+declare function fx<T, U>(t: [T, U]): [T, U];
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 2, 20))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 2, 22))
+>t : Symbol(t, Decl(instantiationExpressions.ts, 2, 26))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 2, 20))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 2, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 2, 20))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 2, 22))
+
+function f1() {
+>f1 : Symbol(f1, Decl(instantiationExpressions.ts, 2, 45))
+
+    let f0 = fx<>;  // Error
+>f0 : Symbol(f0, Decl(instantiationExpressions.ts, 5, 7))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+    let f1 = fx<string>;  // { (x: string): string; (x: string, n: number): string; }
+>f1 : Symbol(f1, Decl(instantiationExpressions.ts, 6, 7))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+    let f2 = fx<string, number>;  // (t: [string, number]) => [string, number]
+>f2 : Symbol(f2, Decl(instantiationExpressions.ts, 7, 7))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+    let f3 = fx<string, number, boolean>;  // Error
+>f3 : Symbol(f3, Decl(instantiationExpressions.ts, 8, 7))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+}
+
+type T10 = typeof fx<>;  // Error
+>T10 : Symbol(T10, Decl(instantiationExpressions.ts, 9, 1))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+type T11 = typeof fx<string>;  // { (x: string): string; (x: string, n: number): string; }
+>T11 : Symbol(T11, Decl(instantiationExpressions.ts, 11, 23))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+type T12 = typeof fx<string, number>;  // (t: [string, number]) => [string, number]
+>T12 : Symbol(T12, Decl(instantiationExpressions.ts, 12, 29))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+type T13 = typeof fx<string, number, boolean>;  // Error
+>T13 : Symbol(T13, Decl(instantiationExpressions.ts, 13, 37))
+>fx : Symbol(fx, Decl(instantiationExpressions.ts, 0, 0), Decl(instantiationExpressions.ts, 0, 32), Decl(instantiationExpressions.ts, 1, 43))
+
+function f2() {
+>f2 : Symbol(f2, Decl(instantiationExpressions.ts, 14, 46))
+
+    const A0 = Array<>;  // Error
+>A0 : Symbol(A0, Decl(instantiationExpressions.ts, 17, 9))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    const A1 = Array<string>;  // new (...) => string[]
+>A1 : Symbol(A1, Decl(instantiationExpressions.ts, 18, 9))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    const A2 = Array<string, number>;  // Error
+>A2 : Symbol(A2, Decl(instantiationExpressions.ts, 19, 9))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+type T20 = typeof Array<>;  // Error
+>T20 : Symbol(T20, Decl(instantiationExpressions.ts, 20, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type T21 = typeof Array<string>;  // new (...) => string[]
+>T21 : Symbol(T21, Decl(instantiationExpressions.ts, 22, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type T22 = typeof Array<string, number>;  // Error
+>T22 : Symbol(T22, Decl(instantiationExpressions.ts, 23, 32))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare class C<T> {
+>C : Symbol(C, Decl(instantiationExpressions.ts, 24, 40))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 26, 16))
+
+    constructor(x: T);
+>x : Symbol(x, Decl(instantiationExpressions.ts, 27, 16))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 26, 16))
+
+    static f<U>(x: U): U[];
+>f : Symbol(C.f, Decl(instantiationExpressions.ts, 27, 22))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 28, 13))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 28, 16))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 28, 13))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 28, 13))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(instantiationExpressions.ts, 29, 1))
+
+    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+>c1 : Symbol(c1, Decl(instantiationExpressions.ts, 32, 7))
+>C : Symbol(C, Decl(instantiationExpressions.ts, 24, 40))
+
+    let f1 = C.f<string>;  // (x: string) => string[]
+>f1 : Symbol(f1, Decl(instantiationExpressions.ts, 33, 7))
+>C.f : Symbol(C.f, Decl(instantiationExpressions.ts, 27, 22))
+>C : Symbol(C, Decl(instantiationExpressions.ts, 24, 40))
+>f : Symbol(C.f, Decl(instantiationExpressions.ts, 27, 22))
+}
+
+function f10(f: { <T>(a: T): T, <U>(a: U, b: number): U[] }) {
+>f10 : Symbol(f10, Decl(instantiationExpressions.ts, 34, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 36, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 36, 19))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 36, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 36, 19))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 36, 19))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 36, 33))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 36, 36))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 36, 33))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 36, 41))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 36, 33))
+
+    let fs = f<string>;  // { (a: string): string; (a: string, b: number): string[]; }
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 37, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 36, 13))
+}
+
+function f11(f: { <T>(a: T): T, (a: string, b: number): string[] }) {
+>f11 : Symbol(f11, Decl(instantiationExpressions.ts, 38, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 40, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 40, 19))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 40, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 40, 19))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 40, 19))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 40, 33))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 40, 43))
+
+    let fs = f<string>;  // (a: string) => string
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 41, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 40, 13))
+}
+
+function f12(f: { <T>(a: T): T, x: string }) {
+>f12 : Symbol(f12, Decl(instantiationExpressions.ts, 42, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 44, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 44, 19))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 44, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 44, 19))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 44, 19))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 44, 31))
+
+    let fs = f<string>;  // { (a: string): string; x: string; }
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 45, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 44, 13))
+}
+
+function f13(f: { x: string, y: string }) {
+>f13 : Symbol(f13, Decl(instantiationExpressions.ts, 46, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 48, 13))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 48, 17))
+>y : Symbol(y, Decl(instantiationExpressions.ts, 48, 28))
+
+    let fs = f<string>;  // Error, no applicable signatures
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 49, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 48, 13))
+}
+
+function f14(f: { new <T>(a: T): T, new <U>(a: U, b: number): U[] }) {
+>f14 : Symbol(f14, Decl(instantiationExpressions.ts, 50, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 52, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 52, 23))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 52, 26))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 52, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 52, 23))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 52, 41))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 52, 44))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 52, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 52, 49))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 52, 41))
+
+    let fs = f<string>;  // { new (a: string): string; new (a: string, b: number): string[]; }
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 53, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 52, 13))
+}
+
+function f15(f: { new <T>(a: T): T, <U>(a: U, b: number): U[] }) {
+>f15 : Symbol(f15, Decl(instantiationExpressions.ts, 54, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 56, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 56, 23))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 56, 26))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 56, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 56, 23))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 56, 37))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 56, 40))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 56, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 56, 45))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 56, 37))
+
+    let fs = f<string>;  // { new (a: string): string; (a: string, b: number): string[]; }
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 57, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 56, 13))
+}
+
+function f16(f: { new <T>(a: T): T, (a: string, b: number): string[] }) {
+>f16 : Symbol(f16, Decl(instantiationExpressions.ts, 58, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 60, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 60, 23))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 60, 26))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 60, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 60, 23))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 60, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 60, 47))
+
+    let fs = f<string>;  // new (a: string) => string
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 61, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 60, 13))
+}
+
+function f17(f: { <T>(a: T): T, new (a: string, b: number): string[] }) {
+>f17 : Symbol(f17, Decl(instantiationExpressions.ts, 62, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 64, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 64, 19))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 64, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 64, 19))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 64, 19))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 64, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 64, 47))
+
+    let fs = f<string>;  // (a: string) => string
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 65, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 64, 13))
+}
+
+function f20(f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
+>f20 : Symbol(f20, Decl(instantiationExpressions.ts, 66, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 68, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 68, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 68, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 68, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 68, 18))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 68, 37))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 68, 40))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 68, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 68, 45))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 68, 37))
+
+    let fs = f<string>;  // ((a: string) => string) & ((a: string, b: number) => string[]])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 69, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 68, 13))
+}
+
+function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])) {
+>f21 : Symbol(f21, Decl(instantiationExpressions.ts, 70, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 72, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 72, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 72, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 72, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 72, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 72, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 72, 47))
+
+    let fs = f<string>;  // (a: string) => string
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 73, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 72, 13))
+}
+
+function f22(f: (<T>(a: T) => T) & { x: string }) {
+>f22 : Symbol(f22, Decl(instantiationExpressions.ts, 74, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 76, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 76, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 76, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 76, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 76, 18))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 76, 36))
+
+    let fs = f<string>;  // ((a: string) => string) & { x: string }
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 77, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 76, 13))
+}
+
+function f23(f: { x: string } & { y: string }) {
+>f23 : Symbol(f23, Decl(instantiationExpressions.ts, 78, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 80, 13))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 80, 17))
+>y : Symbol(y, Decl(instantiationExpressions.ts, 80, 33))
+
+    let fs = f<string>;  // Error, no applicable signatures
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 81, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 80, 13))
+}
+
+function f24(f: (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])) {
+>f24 : Symbol(f24, Decl(instantiationExpressions.ts, 82, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 84, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 84, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 84, 25))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 84, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 84, 22))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 84, 45))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 84, 48))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 84, 45))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 84, 53))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 84, 45))
+
+    let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 85, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 84, 13))
+}
+
+function f25(f: (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
+>f25 : Symbol(f25, Decl(instantiationExpressions.ts, 86, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 88, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 88, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 88, 25))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 88, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 88, 22))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 88, 41))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 88, 44))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 88, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 88, 49))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 88, 41))
+
+    let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 89, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 88, 13))
+}
+
+function f26(f: (new <T>(a: T) => T) & ((a: string, b: number) => string[])) {
+>f26 : Symbol(f26, Decl(instantiationExpressions.ts, 90, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 92, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 92, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 92, 25))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 92, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 92, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 92, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 92, 51))
+
+    let fs = f<string>;  // new (a: string) => string
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 93, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 92, 13))
+}
+
+function f27(f: (<T>(a: T) => T) & (new (a: string, b: number) => string[])) {
+>f27 : Symbol(f27, Decl(instantiationExpressions.ts, 94, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 96, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 96, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 96, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 96, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 96, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 96, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 96, 51))
+
+    let fs = f<string>;  // (a: string) => string
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 97, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 96, 13))
+}
+
+function f30(f: (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
+>f30 : Symbol(f30, Decl(instantiationExpressions.ts, 98, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 100, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 100, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 100, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 100, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 100, 18))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 100, 37))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 100, 40))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 100, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 100, 45))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 100, 37))
+
+    let fs = f<string>;  // ((a: string) => string) | ((a: string, b: number) => string[]])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 101, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 100, 13))
+}
+
+function f31(f: (<T>(a: T) => T) | ((a: string, b: number) => string[])) {
+>f31 : Symbol(f31, Decl(instantiationExpressions.ts, 102, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 104, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 104, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 104, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 104, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 104, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 104, 37))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 104, 47))
+
+    let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 105, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 104, 13))
+}
+
+function f32(f: (<T>(a: T) => T) | { x: string }) {
+>f32 : Symbol(f32, Decl(instantiationExpressions.ts, 106, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 108, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 108, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 108, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 108, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 108, 18))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 108, 36))
+
+    let fs = f<string>;  // ((a: string) => string) | { x: string }
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 109, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 108, 13))
+}
+
+function f33(f: { x: string } | { y: string }) {
+>f33 : Symbol(f33, Decl(instantiationExpressions.ts, 110, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 112, 13))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 112, 17))
+>y : Symbol(y, Decl(instantiationExpressions.ts, 112, 33))
+
+    let fs = f<string>;  // Error, no applicable signatures
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 113, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 112, 13))
+}
+
+function f34(f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])) {
+>f34 : Symbol(f34, Decl(instantiationExpressions.ts, 114, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 116, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 116, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 116, 25))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 116, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 116, 22))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 116, 45))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 116, 48))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 116, 45))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 116, 53))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 116, 45))
+
+    let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 117, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 116, 13))
+}
+
+function f35(f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
+>f35 : Symbol(f35, Decl(instantiationExpressions.ts, 118, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 120, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 120, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 120, 25))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 120, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 120, 22))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 120, 41))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 120, 44))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 120, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 120, 49))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 120, 41))
+
+    let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 121, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 120, 13))
+}
+
+function f36(f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])) {
+>f36 : Symbol(f36, Decl(instantiationExpressions.ts, 122, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 124, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 124, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 124, 25))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 124, 22))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 124, 22))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 124, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 124, 51))
+
+    let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 125, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 124, 13))
+}
+
+function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
+>f37 : Symbol(f37, Decl(instantiationExpressions.ts, 126, 1))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 128, 13))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 128, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 128, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 128, 18))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 128, 18))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 128, 41))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 128, 51))
+
+    let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 129, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 128, 13))
+}
+
+function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
+>f38 : Symbol(f38, Decl(instantiationExpressions.ts, 130, 1))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 132, 13))
+>A : Symbol(A, Decl(instantiationExpressions.ts, 132, 25))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 132, 28))
+>A : Symbol(A, Decl(instantiationExpressions.ts, 132, 25))
+>A : Symbol(A, Decl(instantiationExpressions.ts, 132, 25))
+>B : Symbol(B, Decl(instantiationExpressions.ts, 132, 44))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 132, 47))
+>B : Symbol(B, Decl(instantiationExpressions.ts, 132, 44))
+>B : Symbol(B, Decl(instantiationExpressions.ts, 132, 44))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 132, 61))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 132, 65))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 132, 13))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 132, 61))
+>C : Symbol(C, Decl(instantiationExpressions.ts, 132, 78))
+>x : Symbol(x, Decl(instantiationExpressions.ts, 132, 81))
+>C : Symbol(C, Decl(instantiationExpressions.ts, 132, 78))
+>C : Symbol(C, Decl(instantiationExpressions.ts, 132, 78))
+
+    let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+>fs : Symbol(fs, Decl(instantiationExpressions.ts, 133, 7))
+>f : Symbol(f, Decl(instantiationExpressions.ts, 132, 65))
+}
+
+function makeBox<T>(value: T) {
+>makeBox : Symbol(makeBox, Decl(instantiationExpressions.ts, 134, 1))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 136, 17))
+>value : Symbol(value, Decl(instantiationExpressions.ts, 136, 20))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 136, 17))
+
+    return { value };
+>value : Symbol(value, Decl(instantiationExpressions.ts, 137, 12))
+}
+
+type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
+>BoxFunc : Symbol(BoxFunc, Decl(instantiationExpressions.ts, 138, 1))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 140, 13))
+>makeBox : Symbol(makeBox, Decl(instantiationExpressions.ts, 134, 1))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 140, 13))
+
+type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
+>StringBoxFunc : Symbol(StringBoxFunc, Decl(instantiationExpressions.ts, 140, 36))
+>BoxFunc : Symbol(BoxFunc, Decl(instantiationExpressions.ts, 138, 1))
+
+type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
+>Box : Symbol(Box, Decl(instantiationExpressions.ts, 141, 37))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 143, 9))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>makeBox : Symbol(makeBox, Decl(instantiationExpressions.ts, 134, 1))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 143, 9))
+
+type StringBox = Box<string>;  // { value: string }
+>StringBox : Symbol(StringBox, Decl(instantiationExpressions.ts, 143, 44))
+>Box : Symbol(Box, Decl(instantiationExpressions.ts, 141, 37))
+
+type A<U> = InstanceType<typeof Array<U>>;  // U[]
+>A : Symbol(A, Decl(instantiationExpressions.ts, 144, 29))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 146, 7))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 146, 7))
+
+declare const g1: {
+>g1 : Symbol(g1, Decl(instantiationExpressions.ts, 148, 13))
+
+    <T>(a: T): { a: T };
+>T : Symbol(T, Decl(instantiationExpressions.ts, 149, 5))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 149, 8))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 149, 5))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 149, 16))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 149, 5))
+
+    new <U>(b: U): { b: U };
+>U : Symbol(U, Decl(instantiationExpressions.ts, 150, 9))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 150, 12))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 150, 9))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 150, 20))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 150, 9))
+}
+
+type T30<V> = typeof g1<V>;  // { (a: V) => { a: V }; new (b: V) => { b: V }; }
+>T30 : Symbol(T30, Decl(instantiationExpressions.ts, 151, 1))
+>V : Symbol(V, Decl(instantiationExpressions.ts, 153, 9))
+>g1 : Symbol(g1, Decl(instantiationExpressions.ts, 148, 13))
+>V : Symbol(V, Decl(instantiationExpressions.ts, 153, 9))
+
+type T31<A> = ReturnType<T30<A>>;  // { a: A }
+>T31 : Symbol(T31, Decl(instantiationExpressions.ts, 153, 27))
+>A : Symbol(A, Decl(instantiationExpressions.ts, 154, 9))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T30 : Symbol(T30, Decl(instantiationExpressions.ts, 151, 1))
+>A : Symbol(A, Decl(instantiationExpressions.ts, 154, 9))
+
+type T32<B> = InstanceType<T30<B>>;  // { b: B }
+>T32 : Symbol(T32, Decl(instantiationExpressions.ts, 154, 33))
+>B : Symbol(B, Decl(instantiationExpressions.ts, 155, 9))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>T30 : Symbol(T30, Decl(instantiationExpressions.ts, 151, 1))
+>B : Symbol(B, Decl(instantiationExpressions.ts, 155, 9))
+
+declare const g2: {
+>g2 : Symbol(g2, Decl(instantiationExpressions.ts, 157, 13))
+
+    <T extends string>(a: T): T;
+>T : Symbol(T, Decl(instantiationExpressions.ts, 158, 5))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 158, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 158, 5))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 158, 5))
+
+    new <T extends number>(b: T): T;
+>T : Symbol(T, Decl(instantiationExpressions.ts, 159, 9))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 159, 27))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 159, 9))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 159, 9))
+}
+
+type T40<U extends string> = typeof g2<U>;  // Error
+>T40 : Symbol(T40, Decl(instantiationExpressions.ts, 160, 1))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 162, 9))
+>g2 : Symbol(g2, Decl(instantiationExpressions.ts, 157, 13))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 162, 9))
+
+type T41<U extends number> = typeof g2<U>;  // Error
+>T41 : Symbol(T41, Decl(instantiationExpressions.ts, 162, 42))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 163, 9))
+>g2 : Symbol(g2, Decl(instantiationExpressions.ts, 157, 13))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 163, 9))
+
+declare const g3: {
+>g3 : Symbol(g3, Decl(instantiationExpressions.ts, 165, 13))
+
+    <T extends string>(a: T): T;
+>T : Symbol(T, Decl(instantiationExpressions.ts, 166, 5))
+>a : Symbol(a, Decl(instantiationExpressions.ts, 166, 23))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 166, 5))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 166, 5))
+
+    new <T extends number, Q>(b: T): T;
+>T : Symbol(T, Decl(instantiationExpressions.ts, 167, 9))
+>Q : Symbol(Q, Decl(instantiationExpressions.ts, 167, 26))
+>b : Symbol(b, Decl(instantiationExpressions.ts, 167, 30))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 167, 9))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 167, 9))
+}
+
+type T50<U extends string> = typeof g3<U>;  // (a: U) => U
+>T50 : Symbol(T50, Decl(instantiationExpressions.ts, 168, 1))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 170, 9))
+>g3 : Symbol(g3, Decl(instantiationExpressions.ts, 165, 13))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 170, 9))
+
+type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
+>T51 : Symbol(T51, Decl(instantiationExpressions.ts, 170, 42))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 171, 9))
+>g3 : Symbol(g3, Decl(instantiationExpressions.ts, 165, 13))
+>U : Symbol(U, Decl(instantiationExpressions.ts, 171, 9))
+

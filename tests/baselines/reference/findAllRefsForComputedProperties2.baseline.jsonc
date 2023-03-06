@@ -1,0 +1,578 @@
+// === /tests/cases/fourslash/findAllRefsForComputedProperties2.ts ===
+// interface I {
+//     [/*FIND ALL REFS*/[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [[|42|]]: any;
+// }
+// 
+// var x: I = {
+//     ["[|42|]"]: function () { }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+      "kind": "method",
+      "name": "(method) I[42](): void",
+      "textSpan": {
+        "start": 19,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "42",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 18,
+        "length": 13
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 18,
+          "length": 13
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 93,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+      "kind": "property",
+      "name": "(property) C[42]: any",
+      "textSpan": {
+        "start": 63,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "42",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 62,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 63,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 62,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForComputedProperties2.ts ===
+// interface I {
+//     [[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [/*FIND ALL REFS*/[|42|]]: any;
+// }
+// 
+// var x: I = {
+//     ["[|42|]"]: function () { }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+      "kind": "method",
+      "name": "(method) I[42](): void",
+      "textSpan": {
+        "start": 19,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "42",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 18,
+        "length": 13
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 18,
+          "length": 13
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 93,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+      "kind": "property",
+      "name": "(property) C[42]: any",
+      "textSpan": {
+        "start": 63,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "42",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 62,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 63,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 62,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForComputedProperties2.ts ===
+// interface I {
+//     [[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [[|42|]]: any;
+// }
+// 
+// var x: I = {
+//     ["/*FIND ALL REFS*/[|42|]"]: function () { }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+      "kind": "method",
+      "name": "(method) I[42](): void",
+      "textSpan": {
+        "start": 19,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "42",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 18,
+        "length": 13
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 18,
+          "length": 13
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 93,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+      "kind": "property",
+      "name": "(property) C[42]: any",
+      "textSpan": {
+        "start": 63,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "42",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 62,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 63,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForComputedProperties2.ts",
+        "contextSpan": {
+          "start": 62,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

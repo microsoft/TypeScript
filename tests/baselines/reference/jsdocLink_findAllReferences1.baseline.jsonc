@@ -1,0 +1,73 @@
+// === /tests/cases/fourslash/jsdocLink_findAllReferences1.ts ===
+// interface [|A|]/*FIND ALL REFS*/ {}
+// /**
+//  * {@link [|A|]()} is ok
+//  */
+// declare const a: [|A|]
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/jsdocLink_findAllReferences1.ts",
+      "kind": "interface",
+      "name": "interface A",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/jsdocLink_findAllReferences1.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 14
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 29,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/jsdocLink_findAllReferences1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 61,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/jsdocLink_findAllReferences1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

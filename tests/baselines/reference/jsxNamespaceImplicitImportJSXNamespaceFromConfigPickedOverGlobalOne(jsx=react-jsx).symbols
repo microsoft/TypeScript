@@ -1,0 +1,184 @@
+=== /node_modules/react/index.d.ts ===
+export = React;
+>React : Symbol(React, Decl(index.d.ts, 1, 26))
+
+export as namespace React;
+>React : Symbol(React, Decl(index.d.ts, 0, 15))
+
+declare namespace React {}
+>React : Symbol(React, Decl(index.d.ts, 1, 26))
+
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 3, 26))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(index.d.ts, 6, 17))
+
+    interface ElementClass {}
+>ElementClass : Symbol(ElementClass, Decl(index.d.ts, 7, 24))
+
+    interface ElementAttributesProperty {}
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(index.d.ts, 8, 29))
+
+    interface ElementChildrenAttribute {}
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 9, 42))
+
+    type LibraryManagedAttributes<C, P> = {}
+>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(index.d.ts, 10, 41))
+>C : Symbol(C, Decl(index.d.ts, 11, 34))
+>P : Symbol(P, Decl(index.d.ts, 11, 36))
+
+    interface IntrinsicAttributes {}
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(index.d.ts, 11, 44))
+
+    interface IntrinsicClassAttributes<T> {}
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(index.d.ts, 12, 36))
+>T : Symbol(T, Decl(index.d.ts, 13, 39))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 13, 44))
+
+      div: {}
+>div : Symbol(IntrinsicElements.div, Decl(index.d.ts, 14, 33))
+    }
+  }
+}
+=== /node_modules/@emotion/react/jsx-runtime/index.d.ts ===
+export { EmotionJSX as JSX } from './jsx-namespace'
+>EmotionJSX : Symbol(EmotionJSX, Decl(jsx-namespace.d.ts, 13, 54))
+>JSX : Symbol(JSX, Decl(index.d.ts, 0, 8))
+
+=== /node_modules/@emotion/react/jsx-runtime/jsx-namespace.d.ts ===
+import 'react'
+
+type WithConditionalCSSProp<P> = 'className' extends keyof P
+>WithConditionalCSSProp : Symbol(WithConditionalCSSProp, Decl(jsx-namespace.d.ts, 0, 14))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 2, 28))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 2, 28))
+
+  ? (P extends { className?: string } ? P & { css?: string } : P)
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 2, 28))
+>className : Symbol(className, Decl(jsx-namespace.d.ts, 3, 16))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 2, 28))
+>css : Symbol(css, Decl(jsx-namespace.d.ts, 3, 45))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 2, 28))
+
+  : P
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 2, 28))
+
+type ReactJSXElement = JSX.Element
+>ReactJSXElement : Symbol(ReactJSXElement, Decl(jsx-namespace.d.ts, 4, 5))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>Element : Symbol(JSX.Element, Decl(index.d.ts, 6, 17))
+
+type ReactJSXElementClass = JSX.ElementClass
+>ReactJSXElementClass : Symbol(ReactJSXElementClass, Decl(jsx-namespace.d.ts, 6, 34))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>ElementClass : Symbol(JSX.ElementClass, Decl(index.d.ts, 7, 24))
+
+type ReactJSXElementAttributesProperty = JSX.ElementAttributesProperty
+>ReactJSXElementAttributesProperty : Symbol(ReactJSXElementAttributesProperty, Decl(jsx-namespace.d.ts, 7, 44))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>ElementAttributesProperty : Symbol(JSX.ElementAttributesProperty, Decl(index.d.ts, 8, 29))
+
+type ReactJSXElementChildrenAttribute = JSX.ElementChildrenAttribute
+>ReactJSXElementChildrenAttribute : Symbol(ReactJSXElementChildrenAttribute, Decl(jsx-namespace.d.ts, 8, 70))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>ElementChildrenAttribute : Symbol(JSX.ElementChildrenAttribute, Decl(index.d.ts, 9, 42))
+
+type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
+>ReactJSXLibraryManagedAttributes : Symbol(ReactJSXLibraryManagedAttributes, Decl(jsx-namespace.d.ts, 9, 68))
+>C : Symbol(C, Decl(jsx-namespace.d.ts, 10, 38))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 10, 40))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>LibraryManagedAttributes : Symbol(JSX.LibraryManagedAttributes, Decl(index.d.ts, 10, 41))
+>C : Symbol(C, Decl(jsx-namespace.d.ts, 10, 38))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 10, 40))
+
+type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
+>ReactJSXIntrinsicAttributes : Symbol(ReactJSXIntrinsicAttributes, Decl(jsx-namespace.d.ts, 10, 80))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>IntrinsicAttributes : Symbol(JSX.IntrinsicAttributes, Decl(index.d.ts, 11, 44))
+
+type ReactJSXIntrinsicClassAttributes<T> = JSX.IntrinsicClassAttributes<T>
+>ReactJSXIntrinsicClassAttributes : Symbol(ReactJSXIntrinsicClassAttributes, Decl(jsx-namespace.d.ts, 11, 58))
+>T : Symbol(T, Decl(jsx-namespace.d.ts, 12, 38))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>IntrinsicClassAttributes : Symbol(JSX.IntrinsicClassAttributes, Decl(index.d.ts, 12, 36))
+>T : Symbol(T, Decl(jsx-namespace.d.ts, 12, 38))
+
+type ReactJSXIntrinsicElements = JSX.IntrinsicElements
+>ReactJSXIntrinsicElements : Symbol(ReactJSXIntrinsicElements, Decl(jsx-namespace.d.ts, 12, 74))
+>JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(index.d.ts, 13, 44))
+
+export namespace EmotionJSX {
+>EmotionJSX : Symbol(EmotionJSX, Decl(jsx-namespace.d.ts, 13, 54))
+
+  interface Element extends ReactJSXElement {}
+>Element : Symbol(Element, Decl(jsx-namespace.d.ts, 15, 29))
+>ReactJSXElement : Symbol(ReactJSXElement, Decl(jsx-namespace.d.ts, 4, 5))
+
+  interface ElementClass extends ReactJSXElementClass {}
+>ElementClass : Symbol(ElementClass, Decl(jsx-namespace.d.ts, 16, 46))
+>ReactJSXElementClass : Symbol(ReactJSXElementClass, Decl(jsx-namespace.d.ts, 6, 34))
+
+  interface ElementAttributesProperty
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsx-namespace.d.ts, 17, 56))
+
+    extends ReactJSXElementAttributesProperty {}
+>ReactJSXElementAttributesProperty : Symbol(ReactJSXElementAttributesProperty, Decl(jsx-namespace.d.ts, 7, 44))
+
+  interface ElementChildrenAttribute extends ReactJSXElementChildrenAttribute {}
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsx-namespace.d.ts, 19, 48))
+>ReactJSXElementChildrenAttribute : Symbol(ReactJSXElementChildrenAttribute, Decl(jsx-namespace.d.ts, 8, 70))
+
+  type LibraryManagedAttributes<C, P> = WithConditionalCSSProp<P> &
+>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(jsx-namespace.d.ts, 20, 80))
+>C : Symbol(C, Decl(jsx-namespace.d.ts, 22, 32))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 22, 34))
+>WithConditionalCSSProp : Symbol(WithConditionalCSSProp, Decl(jsx-namespace.d.ts, 0, 14))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 22, 34))
+
+    ReactJSXLibraryManagedAttributes<C, P>
+>ReactJSXLibraryManagedAttributes : Symbol(ReactJSXLibraryManagedAttributes, Decl(jsx-namespace.d.ts, 9, 68))
+>C : Symbol(C, Decl(jsx-namespace.d.ts, 22, 32))
+>P : Symbol(P, Decl(jsx-namespace.d.ts, 22, 34))
+
+  interface IntrinsicAttributes extends ReactJSXIntrinsicAttributes {}
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(jsx-namespace.d.ts, 23, 42))
+>ReactJSXIntrinsicAttributes : Symbol(ReactJSXIntrinsicAttributes, Decl(jsx-namespace.d.ts, 10, 80))
+
+  interface IntrinsicClassAttributes<T>
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(jsx-namespace.d.ts, 25, 70))
+>T : Symbol(T, Decl(jsx-namespace.d.ts, 26, 37))
+
+    extends ReactJSXIntrinsicClassAttributes<T> {}
+>ReactJSXIntrinsicClassAttributes : Symbol(ReactJSXIntrinsicClassAttributes, Decl(jsx-namespace.d.ts, 11, 58))
+>T : Symbol(T, Decl(jsx-namespace.d.ts, 26, 37))
+
+  type IntrinsicElements = {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsx-namespace.d.ts, 27, 50))
+
+    [K in keyof ReactJSXIntrinsicElements]: ReactJSXIntrinsicElements[K] & {
+>K : Symbol(K, Decl(jsx-namespace.d.ts, 30, 5))
+>ReactJSXIntrinsicElements : Symbol(ReactJSXIntrinsicElements, Decl(jsx-namespace.d.ts, 12, 74))
+>ReactJSXIntrinsicElements : Symbol(ReactJSXIntrinsicElements, Decl(jsx-namespace.d.ts, 12, 74))
+>K : Symbol(K, Decl(jsx-namespace.d.ts, 30, 5))
+
+      css?: string
+>css : Symbol(css, Decl(jsx-namespace.d.ts, 30, 76))
+    }
+  }
+}
+
+=== /index.tsx ===
+export const Comp = () => <div css="color: hotpink;"></div>;
+>Comp : Symbol(Comp, Decl(index.tsx, 0, 12))
+>div : Symbol(div, Decl(index.d.ts, 14, 33))
+>css : Symbol(css, Decl(index.tsx, 0, 30))
+>div : Symbol(div, Decl(index.d.ts, 14, 33))
+

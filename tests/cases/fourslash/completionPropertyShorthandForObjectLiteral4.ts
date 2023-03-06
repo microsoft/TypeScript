@@ -7,5 +7,5 @@
 
 verify.completions({
     marker: ["1"],
-    exact: completion.globalsPlus(["foo", "bar"]),
+    exact: completion.globalsPlus(["bar", "foo"]),
 });

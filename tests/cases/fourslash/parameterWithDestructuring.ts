@@ -1,19 +1,18 @@
 /// <reference path='fourslash.ts'/>
 
-// Repros from issues #4949 and #4818
-
-////const result = [{ foo: 'hello' }]
-////    .map(({ /*1*/foo }) => /*2*/foo)
-////    .map(foo => foo);
+////const result = [{ a: 'hello' }]
+////    .map(({ /*1*/a }) => /*2*/a)
+////    .map(a => a);
 ////
-////const f = (foo: (bar: string[]) => void) => { };
+////const f1 = (a: (b: string[]) => void) => {};
+////f1(([a, b]) => { /*3*/a.charAt(0); });
 ////
-////f(([a, b]) => {
-////    /*3*/a.charAt(0); // Not okay: inferred as `any`
-////});
+////function f2({/*4*/a }: { a: string; }, [/*5*/b]: [string]) {}
 
 verify.quickInfos({
-    1: "var foo: string",
-    2: "var foo: string",
-    3: "var a: string"
+    1: "(parameter) a: string",
+    2: "(parameter) a: string",
+    3: "(parameter) a: string",
+    4: "(parameter) a: string",
+    5: "(parameter) b: string"
 });

@@ -23,7 +23,7 @@ namespace Test1 {
 >Color : typeof Color
 
     let a1: Color.Red.toString;
->a1 : any
+>a1 : Color.Red.toString
 >Color : any
 >Red : any
 
@@ -41,24 +41,24 @@ namespace Test1 {
 >Color : typeof Color
 
     let c1: C1.Red.toString;
->c1 : any
+>c1 : C1.Red.toString
 >C1 : any
 >Red : any
 
     let c2: C1.Red["toString"];
->c2 : any
+>c2 : C1.Red
 >C1 : any
 
     let c3: C1["Red"]["toString"];
 >c3 : any
 
     let d1: C2.Red.toString;
->d1 : any
+>d1 : C2.Red.toString
 >C2 : any
 >Red : any
 
     let d2: C2.Red["toString"];
->d2 : any
+>d2 : C2.Red
 >C2 : any
 
     let d3: C2["Red"]["toString"];

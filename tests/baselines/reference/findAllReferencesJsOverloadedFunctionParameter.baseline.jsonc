@@ -1,0 +1,95 @@
+// === /tests/cases/fourslash/foo.js ===
+// /**
+//  * @overload
+//  * @param {number} x
+//  * @returns {number}
+//  *
+//  * @overload
+//  * @param {string} x
+//  * @returns {string} 
+//  *
+//  * @param {unknown} [|x|]
+//  * @returns {unknown} 
+//  */
+// function foo([|x|]/*FIND ALL REFS*/) {
+//   return [|x|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.js",
+      "kind": "parameter",
+      "name": "(parameter) x: unknown",
+      "textSpan": {
+        "start": 183,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "unknown",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 141,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 183,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 197,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

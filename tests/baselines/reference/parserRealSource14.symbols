@@ -56,6 +56,7 @@ module TypeScript {
         public asts: TypeScript.AST[] = [];
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 
         public top: number = -1;
 >top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
@@ -113,6 +114,7 @@ module TypeScript {
         public pop(): TypeScript.AST {
 >pop : Symbol(AstPath.pop, Decl(parserRealSource14.ts, 35, 9))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 
             var head = this.ast();
 >head : Symbol(head, Decl(parserRealSource14.ts, 38, 15))
@@ -150,6 +152,7 @@ module TypeScript {
 >push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 47, 20))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 
             while (this.asts.length > this.count()) {
 >this.asts.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -229,6 +232,7 @@ module TypeScript {
         public nodeType(): TypeScript.NodeType {
 >nodeType : Symbol(AstPath.nodeType, Decl(parserRealSource14.ts, 65, 9))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>NodeType : Symbol(TypeScript.NodeType)
 
             if (this.ast() == null)
 >this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
@@ -249,6 +253,7 @@ module TypeScript {
 
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >AstPath.reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
 >AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
@@ -270,6 +275,7 @@ module TypeScript {
 
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >AstPath.reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
 >AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
@@ -299,6 +305,7 @@ module TypeScript {
 >get : Symbol(AstPath.get, Decl(parserRealSource14.ts, 83, 9))
 >index : Symbol(index, Decl(parserRealSource14.ts, 85, 19))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 
             return this.asts[index];
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -334,6 +341,7 @@ module TypeScript {
 
                 ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
 >this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
@@ -369,6 +377,7 @@ module TypeScript {
 
                 ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
 >this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
@@ -404,6 +413,7 @@ module TypeScript {
 
                 ((<TypeScript.ArgDecl>this.parent()).id === this.ast());
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ArgDecl : Symbol(TypeScript.ArgDecl)
 >this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
@@ -439,6 +449,7 @@ module TypeScript {
 
                 ((<TypeScript.VarDecl>this.parent()).id === this.ast());
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>VarDecl : Symbol(TypeScript.VarDecl)
 >this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
@@ -474,6 +485,7 @@ module TypeScript {
 
                 ((<TypeScript.ModuleDeclaration>this.parent()).name === this.ast());
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
 >this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
@@ -509,6 +521,7 @@ module TypeScript {
 
                 ((<TypeScript.FuncDecl>this.parent()).name === this.ast());
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
@@ -708,6 +721,7 @@ module TypeScript {
 
                 ((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) &&
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -717,6 +731,7 @@ module TypeScript {
 
                 ((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) &&
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -732,6 +747,7 @@ module TypeScript {
 
                 ((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]);
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ClassDeclaration : Symbol(TypeScript.ClassDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -809,6 +825,7 @@ module TypeScript {
                 TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -846,6 +863,7 @@ module TypeScript {
 
                  (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] &&
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -862,6 +880,7 @@ module TypeScript {
                 TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -890,6 +909,7 @@ module TypeScript {
 
                  (<TypeScript.Script>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Script : Symbol(TypeScript.Script)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -923,6 +943,7 @@ module TypeScript {
 
                  (<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -956,6 +977,7 @@ module TypeScript {
 
                  (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -989,6 +1011,7 @@ module TypeScript {
 
                  (<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ClassDeclaration : Symbol(TypeScript.ClassDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1022,6 +1045,7 @@ module TypeScript {
 
                  (<TypeScript.FuncDecl>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1055,6 +1079,7 @@ module TypeScript {
 
                  (<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1088,6 +1113,7 @@ module TypeScript {
 
                 (<TypeScript.Block>this.asts[this.top - 1]).statements == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Block : Symbol(TypeScript.Block)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1121,6 +1147,7 @@ module TypeScript {
 
                 (<TypeScript.ForStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ForStatement : Symbol(TypeScript.ForStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1154,6 +1181,7 @@ module TypeScript {
 
                 (<TypeScript.CaseStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>CaseStatement : Symbol(TypeScript.CaseStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1187,6 +1215,7 @@ module TypeScript {
 
                 (<TypeScript.Try>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Try : Symbol(TypeScript.Try)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1220,6 +1249,7 @@ module TypeScript {
 
                 (<TypeScript.Catch>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Catch : Symbol(TypeScript.Catch)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1253,6 +1283,7 @@ module TypeScript {
 
                 (<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>DoWhileStatement : Symbol(TypeScript.DoWhileStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1286,6 +1317,7 @@ module TypeScript {
 
                 (<TypeScript.WhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>WhileStatement : Symbol(TypeScript.WhileStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1319,6 +1351,7 @@ module TypeScript {
 
                 (<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ForInStatement : Symbol(TypeScript.ForInStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1352,6 +1385,7 @@ module TypeScript {
 
                 (<TypeScript.WithStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>WithStatement : Symbol(TypeScript.WithStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1385,6 +1419,7 @@ module TypeScript {
 
                 (<TypeScript.Finally>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Finally : Symbol(TypeScript.Finally)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1427,6 +1462,7 @@ module TypeScript {
 
                 (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1469,6 +1505,7 @@ module TypeScript {
 
                 (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] &&
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1484,6 +1521,7 @@ module TypeScript {
 
                 (<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1526,6 +1564,7 @@ module TypeScript {
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1577,6 +1616,7 @@ module TypeScript {
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] &&
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1592,6 +1632,7 @@ module TypeScript {
 
                 (<TypeScript.ASTList>this.asts[this.top - 0]).members.length == 0;
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ASTList : Symbol(TypeScript.ASTList)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1637,6 +1678,7 @@ module TypeScript {
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand == this.asts[this.top - 1];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1697,6 +1739,7 @@ module TypeScript {
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand == this.asts[this.top - 2];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1739,6 +1782,7 @@ module TypeScript {
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1772,6 +1816,7 @@ module TypeScript {
 
                 (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 === this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>BinaryExpression : Symbol(TypeScript.BinaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1805,6 +1850,7 @@ module TypeScript {
 
                 (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>BinaryExpression : Symbol(TypeScript.BinaryExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1858,6 +1904,7 @@ module TypeScript {
 
                 (<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IfStatement : Symbol(TypeScript.IfStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1891,6 +1938,7 @@ module TypeScript {
 
                 (<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod == this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IfStatement : Symbol(TypeScript.IfStatement)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1933,6 +1981,7 @@ module TypeScript {
 
                 (<TypeScript.ASTList>this.asts[this.top]).members.length === 1;
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ASTList : Symbol(TypeScript.ASTList)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -1969,6 +2018,7 @@ module TypeScript {
 
                 (<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -2011,6 +2061,7 @@ module TypeScript {
 
                 (<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -2053,6 +2104,7 @@ module TypeScript {
 
                 (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>CallExpression : Symbol(TypeScript.CallExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -2095,6 +2147,7 @@ module TypeScript {
 
                 (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>CallExpression : Symbol(TypeScript.CallExpression)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -2128,6 +2181,7 @@ module TypeScript {
 
                 (<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock === false;
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Block : Symbol(TypeScript.Block)
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -2141,6 +2195,7 @@ module TypeScript {
 >isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 431, 35))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ASTSpan : Symbol(TypeScript.ASTSpan)
 
         if (ast === null)
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 431, 35))
@@ -2193,6 +2248,7 @@ module TypeScript {
 >getAstPathToPosition : Symbol(getAstPathToPosition, Decl(parserRealSource14.ts, 456, 5))
 >script : Symbol(script, Decl(parserRealSource14.ts, 461, 41))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
 >options : Symbol(options, Decl(parserRealSource14.ts, 461, 77))
 >GetAstPathOptions.Default : Symbol(GetAstPathOptions.Default, Decl(parserRealSource14.ts, 445, 35))
@@ -2205,6 +2261,7 @@ module TypeScript {
 >lookInComments : Symbol(lookInComments, Decl(parserRealSource14.ts, 462, 11))
 >comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Comment : Symbol(TypeScript.Comment)
 
             if (comments && comments.length > 0) {
 >comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
@@ -2260,9 +2317,12 @@ module TypeScript {
 >pre : Symbol(pre, Decl(parserRealSource14.ts, 477, 11))
 >cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >parent : Symbol(parent, Decl(parserRealSource14.ts, 477, 48))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >walker : Symbol(walker, Decl(parserRealSource14.ts, 477, 72))
+>IAstWalker : Symbol(IAstWalker)
 
             if (isValidAstNode(cur)) {
 >isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
@@ -2398,6 +2458,7 @@ module TypeScript {
 >getTokenizationOffset : Symbol(getTokenizationOffset, Decl(parserRealSource14.ts, 526, 5))
 >script : Symbol(script, Decl(parserRealSource14.ts, 532, 42))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Script : Symbol(TypeScript.Script)
 >position : Symbol(position, Decl(parserRealSource14.ts, 532, 68))
 
         var bestOffset = 0;
@@ -2407,11 +2468,15 @@ module TypeScript {
 >pre : Symbol(pre, Decl(parserRealSource14.ts, 534, 11))
 >cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >parent : Symbol(parent, Decl(parserRealSource14.ts, 534, 39))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >walker : Symbol(walker, Decl(parserRealSource14.ts, 534, 63))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 
             if (TypeScript.isValidAstNode(cur)) {
 >TypeScript.isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
@@ -2463,20 +2528,25 @@ module TypeScript {
 >walkAST : Symbol(walkAST, Decl(parserRealSource14.ts, 552, 5))
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 557, 28))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >callback : Symbol(callback, Decl(parserRealSource14.ts, 557, 48))
 >path : Symbol(path, Decl(parserRealSource14.ts, 557, 60))
 >AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >walker : Symbol(walker, Decl(parserRealSource14.ts, 557, 74))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
 >pre : Symbol(pre, Decl(parserRealSource14.ts, 558, 11))
 >cur : Symbol(cur, Decl(parserRealSource14.ts, 558, 28))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >parent : Symbol(parent, Decl(parserRealSource14.ts, 558, 48))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >walker : Symbol(walker, Decl(parserRealSource14.ts, 558, 72))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
 
             var path: TypeScript.AstPath = walker.state;
 >path : Symbol(path, Decl(parserRealSource14.ts, 559, 15))
@@ -2502,10 +2572,13 @@ module TypeScript {
 >post : Symbol(post, Decl(parserRealSource14.ts, 564, 11))
 >cur : Symbol(cur, Decl(parserRealSource14.ts, 564, 29))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >parent : Symbol(parent, Decl(parserRealSource14.ts, 564, 49))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
 >walker : Symbol(walker, Decl(parserRealSource14.ts, 564, 73))
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
 
             var path: TypeScript.AstPath = walker.state;
 >path : Symbol(path, Decl(parserRealSource14.ts, 565, 15))

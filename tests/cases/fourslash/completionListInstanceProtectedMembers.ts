@@ -32,11 +32,11 @@
 verify.completions(
     {
         marker: ["1", "2"],
-        exact: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "protectedOverriddenMethod", "protectedOverriddenProperty", "test"],
+        unsorted: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "protectedOverriddenMethod", "protectedOverriddenProperty", "test"],
     },
     {
         marker: "3",
         // Can not access protected properties overridden in subclass
-        exact: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "test"],
+        unsorted: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "test"],
     },
 );

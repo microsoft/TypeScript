@@ -13,10 +13,10 @@
 
 verify.completions({
     marker: ["1"],
-    exact: completion.globalsPlus(["foo", "bar", "obj2"]),
+    exact: completion.globalsPlus(["bar", "foo", "obj2"]),
 });
 
 verify.completions({
     marker: ["2"],
-    exact: completion.globalsPlus(["foo", "bar", "obj1"]),
+    exact: completion.globalsPlus(["bar", "foo", "obj1"]),
 });

@@ -128,7 +128,7 @@ verify.completions(
     {
         // Not a class element declaration location
         marker: "InsideMethod",
-        exact: [
+        unsorted: [
             "arguments",
             completion.globalThisEntry,
             "B", "C", "D", "D1", "D2", "D3", "D4", "D5", "D6", "E", "F", "F2", "G", "G2", "H", "I", "J", "K", "L", "L2", "M", "N", "O",
@@ -146,9 +146,7 @@ verify.completions(
             "classThatStartedWritingIdentifierAfterPrivateModifier",
             "classThatStartedWritingIdentifierAfterPrivateStaticModifier",
         ],
-        exact: ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(
-            name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
-            ),
+        unsorted: completion.classElementKeywords,
         isNewIdentifierLocation: true,
     },
     {
@@ -176,13 +174,13 @@ verify.completions(
             "classThatHasWrittenAsyncKeyword",
             "classElementAfterConstructorSeparatedByComma",
         ],
-        exact: [protectedMethod, getValue, ...completion.classElementKeywords],
+        unsorted: [protectedMethod, getValue, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
         // Static Base members and class member keywords allowed
         marker: ["classElementContainingStatic", "classThatStartedWritingIdentifierAfterStaticModifier"],
-        exact: [staticMethod, ...completion.classElementKeywords],
+        unsorted: [staticMethod, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
@@ -190,7 +188,7 @@ verify.completions(
             "classThatHasAlreadyImplementedAnotherClassMethod",
             "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
         ],
-        exact: [protectedMethod, ...completion.classElementKeywords],
+        unsorted: [protectedMethod, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
@@ -198,19 +196,19 @@ verify.completions(
             "classThatHasAlreadyImplementedAnotherClassProtectedMethod",
             "classThatHasDifferentMethodThanBaseAfterProtectedMethod",
         ],
-        exact: [getValue, ...completion.classElementKeywords],
+        unsorted: [getValue, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
         // instance memebers in D1 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClass",
-        exact: ["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords],
+        unsorted: ["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
         // instance memebers in D2 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClassWithOverridingMember",
-        exact: [
+        unsorted: [
             { name: "protectedMethod", text: "(method) D2.protectedMethod(): void" },
             getValue,
             ...completion.classElementKeywords,
@@ -223,7 +221,7 @@ verify.completions(
             "classThatExtendsClassExtendingAnotherClassAndTypesStatic",
             "classThatExtendsClassExtendingAnotherClassWithOverridingMemberAndTypesStatic"
         ],
-        exact: [staticMethod, ...completion.classElementKeywords],
+        unsorted: [staticMethod, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
 );

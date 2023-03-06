@@ -1,6 +1,6 @@
 === tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts ===
 export type ElChildren =
->ElChildren : ElChildren
+>ElChildren : string | undefined
 
   | ElChildren.Void
 >ElChildren : any

@@ -1,6 +1,6 @@
 === tests/cases/compiler/locale.d.ts ===
 export type Locale = {
->Locale : Locale
+>Locale : { weekdays: {    shorthand: [string, string, string, string, string, string, string];    longhand: [string, string, string, string, string, string, string];}; }
 
     weekdays: {
 >weekdays : { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }
@@ -14,7 +14,7 @@ export type Locale = {
     };
 };
 export type CustomLocale = {
->CustomLocale : CustomLocale
+>CustomLocale : { weekdays: {    shorthand: [string, string, string, string, string, string, string];    longhand: [string, string, string, string, string, string, string];}; }
 
     weekdays: {
 >weekdays : { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }
@@ -28,7 +28,7 @@ export type CustomLocale = {
     };
 };
 export type key = "ar" | "bg";
->key : key
+>key : "ar" | "bg"
 
 === tests/cases/compiler/instance.d.ts ===
 import { Locale, CustomLocale, key as LocaleKey } from "./locale";

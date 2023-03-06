@@ -19,5 +19,5 @@ var bin1 = 6;
 var obj1 = {
     26: "hi",
     26: "Hello",
-    "26": "world"
+    "26": "world",
 };

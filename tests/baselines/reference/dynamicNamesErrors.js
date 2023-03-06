@@ -109,7 +109,7 @@ export declare class ClassMemberVisibility {
     get [z](): number;
     set [w](value: number);
 }
-export declare type ObjectTypeVisibility = {
+export type ObjectTypeVisibility = {
     [x]: number;
     [y](): number;
 };

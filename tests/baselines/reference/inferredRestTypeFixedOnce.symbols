@@ -1,0 +1,12 @@
+=== tests/cases/compiler/inferredRestTypeFixedOnce.ts ===
+function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
+>wrap : Symbol(wrap, Decl(inferredRestTypeFixedOnce.ts, 0, 0))
+>Args : Symbol(Args, Decl(inferredRestTypeFixedOnce.ts, 0, 14))
+>_ : Symbol(_, Decl(inferredRestTypeFixedOnce.ts, 0, 38))
+>args : Symbol(args, Decl(inferredRestTypeFixedOnce.ts, 0, 42))
+>Args : Symbol(Args, Decl(inferredRestTypeFixedOnce.ts, 0, 14))
+
+wrap(({ cancelable } = {}) => {});
+>wrap : Symbol(wrap, Decl(inferredRestTypeFixedOnce.ts, 0, 0))
+>cancelable : Symbol(cancelable, Decl(inferredRestTypeFixedOnce.ts, 1, 7))
+

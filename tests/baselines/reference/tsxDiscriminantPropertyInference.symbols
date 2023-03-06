@@ -1,0 +1,83 @@
+=== tests/cases/compiler/tsxDiscriminantPropertyInference.tsx ===
+// Repro from #41759
+namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxDiscriminantPropertyInference.tsx, 0, 0))
+
+    export interface Element {}
+>Element : Symbol(Element, Decl(tsxDiscriminantPropertyInference.tsx, 1, 15))
+}
+
+type DiscriminatorTrue = {
+>DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(tsxDiscriminantPropertyInference.tsx, 3, 1))
+
+    disc: true;
+>disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 5, 26))
+
+    cb: (x: string) => void;
+>cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 6, 15))
+>x : Symbol(x, Decl(tsxDiscriminantPropertyInference.tsx, 7, 9))
+}
+
+type DiscriminatorFalse = {
+>DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(tsxDiscriminantPropertyInference.tsx, 8, 1))
+
+    disc?: false;
+>disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 10, 27))
+
+    cb: (x: number) => void;
+>cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 11, 17))
+>x : Symbol(x, Decl(tsxDiscriminantPropertyInference.tsx, 12, 9))
+}
+
+type Props = DiscriminatorTrue | DiscriminatorFalse;
+>Props : Symbol(Props, Decl(tsxDiscriminantPropertyInference.tsx, 13, 1))
+>DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(tsxDiscriminantPropertyInference.tsx, 3, 1))
+>DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(tsxDiscriminantPropertyInference.tsx, 8, 1))
+
+declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
+>Comp : Symbol(Comp, Decl(tsxDiscriminantPropertyInference.tsx, 15, 52))
+>props : Symbol(props, Decl(tsxDiscriminantPropertyInference.tsx, 17, 22))
+>DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(tsxDiscriminantPropertyInference.tsx, 3, 1))
+>DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(tsxDiscriminantPropertyInference.tsx, 8, 1))
+>JSX : Symbol(JSX, Decl(tsxDiscriminantPropertyInference.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(tsxDiscriminantPropertyInference.tsx, 1, 15))
+
+// simple inference
+void (<Comp disc cb={s => parseInt(s)} />);
+>Comp : Symbol(Comp, Decl(tsxDiscriminantPropertyInference.tsx, 15, 52))
+>disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 20, 11))
+>cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 20, 16))
+>s : Symbol(s, Decl(tsxDiscriminantPropertyInference.tsx, 20, 21))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(tsxDiscriminantPropertyInference.tsx, 20, 21))
+
+// simple inference
+void (<Comp disc={false} cb={n => n.toFixed()} />);
+>Comp : Symbol(Comp, Decl(tsxDiscriminantPropertyInference.tsx, 15, 52))
+>disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 23, 11))
+>cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 23, 24))
+>n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 23, 29))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 23, 29))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// simple inference when strict-null-checks are enabled
+void (<Comp disc={undefined} cb={n => n.toFixed()} />);
+>Comp : Symbol(Comp, Decl(tsxDiscriminantPropertyInference.tsx, 15, 52))
+>disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 26, 11))
+>undefined : Symbol(undefined)
+>cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 26, 28))
+>n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 26, 33))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 26, 33))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// requires checking type information since discriminator is missing from object
+void (<Comp cb={n => n.toFixed()} />);
+>Comp : Symbol(Comp, Decl(tsxDiscriminantPropertyInference.tsx, 15, 52))
+>cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 29, 11))
+>n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 29, 16))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 29, 16))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+

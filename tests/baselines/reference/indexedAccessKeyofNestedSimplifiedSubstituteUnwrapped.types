@@ -1,6 +1,6 @@
 === tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts ===
 type AnyFunction = (...args: any[]) => any;
->AnyFunction : AnyFunction
+>AnyFunction : (...args: any[]) => any
 >args : any[]
 
 type Params<T> = Parameters<Extract<T, AnyFunction>>;

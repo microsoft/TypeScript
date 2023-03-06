@@ -1,0 +1,11 @@
+=== tests/cases/compiler/templateLiteralsInTypes.ts ===
+const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n`;
+>f : Symbol(f, Decl(templateLiteralsInTypes.ts, 0, 5))
+>hdr : Symbol(hdr, Decl(templateLiteralsInTypes.ts, 0, 11))
+>val : Symbol(val, Decl(templateLiteralsInTypes.ts, 0, 23))
+>hdr : Symbol(hdr, Decl(templateLiteralsInTypes.ts, 0, 11))
+>val : Symbol(val, Decl(templateLiteralsInTypes.ts, 0, 23))
+
+f("x").foo;
+>f : Symbol(f, Decl(templateLiteralsInTypes.ts, 0, 5))
+

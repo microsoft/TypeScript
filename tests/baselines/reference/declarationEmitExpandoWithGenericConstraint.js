@@ -16,7 +16,7 @@ Point.zero = (): Point => Point(0, 0);
 
 //// [declarationEmitExpandoWithGenericConstraint.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rect = exports.Point = void 0;
 var Point = function (x, y) { return ({ x: x, y: y }); };
 exports.Point = Point;

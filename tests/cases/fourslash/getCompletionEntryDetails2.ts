@@ -7,11 +7,10 @@
 ////}
 ////Foo./**/
 
-const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = completion.functionMembersPlus([
     "prototype",
     { name: "x", text: "var Foo.x: number" },
-    ...completion.functionMembers,
-];
+]);
 verify.completions({ marker: "", exact });
 
 // Make an edit

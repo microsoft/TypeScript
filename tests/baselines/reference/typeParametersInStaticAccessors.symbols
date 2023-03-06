@@ -5,9 +5,11 @@ class foo<T> {
 
     static get Foo(): () => T { return null; }
 >Foo : Symbol(foo.Foo, Decl(typeParametersInStaticAccessors.ts, 0, 14))
+>T : Symbol(T)
 
     static set Bar(v: { v: T }) { }
 >Bar : Symbol(foo.Bar, Decl(typeParametersInStaticAccessors.ts, 1, 46))
 >v : Symbol(v, Decl(typeParametersInStaticAccessors.ts, 2, 19))
 >v : Symbol(v, Decl(typeParametersInStaticAccessors.ts, 2, 23))
+>T : Symbol(T)
 } 

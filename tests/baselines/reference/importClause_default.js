@@ -7,19 +7,21 @@ export default class A { a!: string }
 import type A from './a';
 new A();
 let a: A = { a: '' };
+let b = { A };
 
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-exports["default"] = A;
+exports.default = A;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 new A();
 var a = { a: '' };
+var b = { A: A };

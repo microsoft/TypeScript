@@ -1,0 +1,32 @@
+=== tests/cases/compiler/uncalledFunctionChecksInConditionalPerf.ts ===
+declare const b: boolean;
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+
+((((((((((((((((((((((((((b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b);
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+>b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
+

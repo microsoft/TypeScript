@@ -1,0 +1,23 @@
+tests/cases/compiler/a.js(8,30): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Foo'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
+
+
+==== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment6.js (0 errors) ====
+    
+==== tests/cases/compiler/a.js (1 errors) ====
+    /**
+     * @typedef {Object} Foo
+     * @property {number} a
+     * @property {number} b
+     */
+    
+    /** @type {Foo} */
+    export default { a: 1, b: 1, c: 1 };
+                                 ~~~~
+!!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Foo'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
+    
+==== tests/cases/compiler/b.js (0 errors) ====
+    import a from "./a";
+    a;
+    

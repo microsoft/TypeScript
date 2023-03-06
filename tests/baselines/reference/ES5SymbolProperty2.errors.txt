@@ -1,4 +1,4 @@
-tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
+tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 
 
 ==== tests/cases/conformance/Symbols/ES5SymbolProperty2.ts (1 errors) ====
@@ -13,4 +13,4 @@ tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2585: 'Sym
     
     (new M.C)[Symbol.iterator];
               ~~~~~~
-!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.

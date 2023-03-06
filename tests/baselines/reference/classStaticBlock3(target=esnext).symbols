@@ -1,0 +1,49 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts ===
+const a = 1;
+>a : Symbol(a, Decl(classStaticBlock3.ts, 0, 5))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+
+    static f1 = 1;
+>f1 : Symbol(C.f1, Decl(classStaticBlock3.ts, 2, 9))
+
+    static {
+        console.log(C.f1, C.f2, C.f3)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>C.f1 : Symbol(C.f1, Decl(classStaticBlock3.ts, 2, 9))
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+>f1 : Symbol(C.f1, Decl(classStaticBlock3.ts, 2, 9))
+>C.f2 : Symbol(C.f2, Decl(classStaticBlock3.ts, 7, 5))
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+>f2 : Symbol(C.f2, Decl(classStaticBlock3.ts, 7, 5))
+>C.f3 : Symbol(C.f3, Decl(classStaticBlock3.ts, 13, 5))
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+>f3 : Symbol(C.f3, Decl(classStaticBlock3.ts, 13, 5))
+    }
+
+    static f2 = 2;
+>f2 : Symbol(C.f2, Decl(classStaticBlock3.ts, 7, 5))
+
+    static {
+        console.log(C.f1, C.f2, C.f3)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>C.f1 : Symbol(C.f1, Decl(classStaticBlock3.ts, 2, 9))
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+>f1 : Symbol(C.f1, Decl(classStaticBlock3.ts, 2, 9))
+>C.f2 : Symbol(C.f2, Decl(classStaticBlock3.ts, 7, 5))
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+>f2 : Symbol(C.f2, Decl(classStaticBlock3.ts, 7, 5))
+>C.f3 : Symbol(C.f3, Decl(classStaticBlock3.ts, 13, 5))
+>C : Symbol(C, Decl(classStaticBlock3.ts, 0, 12))
+>f3 : Symbol(C.f3, Decl(classStaticBlock3.ts, 13, 5))
+    }
+
+    static f3 = 3;
+>f3 : Symbol(C.f3, Decl(classStaticBlock3.ts, 13, 5))
+}
+

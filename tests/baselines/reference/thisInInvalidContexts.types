@@ -1,13 +1,4 @@
 === tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts ===
-//'this' in static member initializer
-class ErrClass1 {
->ErrClass1 : ErrClass1
-
-    static t = this; // Error
->t : typeof ErrClass1
->this : typeof ErrClass1
-}
-
 class BaseErrClass {
 >BaseErrClass : BaseErrClass
 
@@ -81,11 +72,11 @@ enum SomeEnum {
 >SomeEnum : SomeEnum
 
     A = this, // Should not be allowed
->A : SomeEnum
+>A : SomeEnum.A
 >this : any
 
     B = this.spaaaace // Also should not be allowed
->B : SomeEnum
+>B : SomeEnum.B
 >this.spaaaace : any
 >this : any
 >spaaaace : any

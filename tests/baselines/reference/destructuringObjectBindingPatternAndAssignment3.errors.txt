@@ -1,6 +1,5 @@
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
-  Type '{ i: number; }' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2339: Property 'i' does not exist on type 'string | number'.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(4,6): error TS2339: Property 'i1' does not exist on type 'string | number | {}'.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(5,12): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
@@ -18,7 +17,6 @@ tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAs
     var {i}: string | number = { i: 2 };
         ~~~
 !!! error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
-!!! error TS2322:   Type '{ i: number; }' is not assignable to type 'number'.
          ~
 !!! error TS2339: Property 'i' does not exist on type 'string | number'.
     var {i1}: string | number| {} = { i1: 2 };

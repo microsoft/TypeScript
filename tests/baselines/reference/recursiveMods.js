@@ -25,7 +25,7 @@ export module Foo {
 
 //// [recursiveMods.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo;
 (function (Foo) {

@@ -9,4 +9,4 @@
 ////    foo += 2;
 ////}
 
-verify.rangeAfterCodeFix("/** @type {number} */\nvar foo;",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("/**\n * @type {number}\n*/\nvar foo;",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

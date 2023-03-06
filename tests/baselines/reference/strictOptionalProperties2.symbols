@@ -1,0 +1,11 @@
+=== tests/cases/compiler/strictOptionalProperties2.ts ===
+// Repro from #44567
+
+type T1 = { 0?: string | undefined } extends { 0?: string } ? true : false;  // false
+>T1 : Symbol(T1, Decl(strictOptionalProperties2.ts, 0, 0))
+>0 : Symbol(0, Decl(strictOptionalProperties2.ts, 2, 11))
+>0 : Symbol(0, Decl(strictOptionalProperties2.ts, 2, 46))
+
+type T2 = [(string | undefined)?] extends [string?] ? true : false;  // false
+>T2 : Symbol(T2, Decl(strictOptionalProperties2.ts, 2, 75))
+

@@ -42,7 +42,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("0", {
     name: "C",
     source: "/a",
-    description: `Import 'C' from module "./a"`,
+    description: `Add import from "./a"`,
     newFileContent:
 `import { C } from "./a";
 

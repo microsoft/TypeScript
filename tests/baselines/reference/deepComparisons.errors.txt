@@ -1,0 +1,68 @@
+tests/cases/compiler/deepComparisons.ts(2,9): error TS2322: Type 'T' is not assignable to type 'Extract<T, string>'.
+tests/cases/compiler/deepComparisons.ts(3,9): error TS2322: Type 'T[K1]' is not assignable to type 'Extract<T[K1], string>'.
+  Type 'T[keyof T]' is not assignable to type 'Extract<T[K1], string>'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'Extract<T[K1], string>'.
+      Type 'T[string]' is not assignable to type 'Extract<T[K1], string>'.
+tests/cases/compiler/deepComparisons.ts(4,9): error TS2322: Type 'T[K1][K2]' is not assignable to type 'Extract<T[K1][K2], string>'.
+  Type 'T[K1][keyof T[K1]]' is not assignable to type 'Extract<T[K1][K2], string>'.
+    Type 'T[K1][string] | T[K1][number] | T[K1][symbol]' is not assignable to type 'Extract<T[K1][K2], string>'.
+      Type 'T[K1][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+        Type 'T[keyof T][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+          Type 'T[string][string] | T[number][string] | T[symbol][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+            Type 'T[string][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+
+
+==== tests/cases/compiler/deepComparisons.ts (3 errors) ====
+    function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
+        let v1: Extract<T, string> = 0 as any as T;  // Error
+            ~~
+!!! error TS2322: Type 'T' is not assignable to type 'Extract<T, string>'.
+        let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error
+            ~~
+!!! error TS2322: Type 'T[K1]' is not assignable to type 'Extract<T[K1], string>'.
+!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'Extract<T[K1], string>'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'Extract<T[K1], string>'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'Extract<T[K1], string>'.
+        let v3: Extract<T[K1][K2], string> = 0 as any as T[K1][K2];  // No error
+            ~~
+!!! error TS2322: Type 'T[K1][K2]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:   Type 'T[K1][keyof T[K1]]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:     Type 'T[K1][string] | T[K1][number] | T[K1][symbol]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:       Type 'T[K1][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:         Type 'T[keyof T][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:           Type 'T[string][string] | T[number][string] | T[symbol][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:             Type 'T[string][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+    }
+    
+    type Foo<T> = { x: Foo<T> };
+    type Bar<T> = { x: Bar<T[]> };
+    
+    function f2<U>() {
+        let x: Foo<U> = 0 as any as Bar<U>;  // Error, excessive stack depth
+    }
+    
+    type Foo1<T> = { x: Foo2<T> };
+    type Foo2<T> = { x: Foo1<T> };
+    
+    function f3<U>() {
+        let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
+    }
+    
+    // Repro from #46500
+    
+    type F<T> = {} & (
+        T extends [any, ...any[]]
+            ? { [K in keyof T]?: F<T[K]> }
+            : T extends any[]
+                ? F<T[number]>[]
+                : T extends { [K: string]: any }
+                    ? { [K in keyof T]?: F<T[K]> }
+                    : { x: string }
+    );
+    
+    declare function f<T = any>(): F<T>;
+    
+    function g() {
+        return f() as F<any>;
+    }
+    

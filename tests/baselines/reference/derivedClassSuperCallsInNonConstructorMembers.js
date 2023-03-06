@@ -58,37 +58,35 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    ;
+    Derived.prototype.b = function () {
+        _this = _super.call(this) || this;
+    };
+    Object.defineProperty(Derived.prototype, "C", {
+        get: function () {
+            _this = _super.call(this) || this;
+            return 1;
+        },
+        set: function (v) {
+            _this = _super.call(this) || this;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    ;
+    Derived.b = function () {
+        _this = _super.call(this) || this;
+    };
+    Object.defineProperty(Derived, "C", {
+        get: function () {
+            _this = _super.call(this) || this;
+            return 1;
+        },
+        set: function (v) {
+            _this = _super.call(this) || this;
+        },
+        enumerable: false,
+        configurable: true
+    });
     return Derived;
 }(Base));
-();
-b();
-{
-    _this = _super.call(this) || this;
-}
-get;
-C();
-{
-    _this = _super.call(this) || this;
-    return 1;
-}
-set;
-C(v);
-{
-    _this = _super.call(this) || this;
-}
-a: _this = _super.call(this) || this;
-b();
-{
-    _this = _super.call(this) || this;
-}
-get;
-C();
-{
-    _this = _super.call(this) || this;
-    return 1;
-}
-set;
-C(v);
-{
-    _this = _super.call(this) || this;
-}

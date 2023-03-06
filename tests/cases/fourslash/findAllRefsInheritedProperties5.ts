@@ -1,20 +1,16 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class C extends D {
-////     [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}prop0|]: string;|]  // r0
-////     [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}prop1|]: number;|]  // r1
+////     /*0*/prop0: string;
+////     /*1*/prop1: number;
 //// }
 ////
 //// class D extends C {
-////     [|[|{| "isDefinition": true, "contextRangeIndex": 4 |}prop0|]: string;|]  // r2
+////     /*2*/prop0: string;
 //// }
 ////
 //// var d: D;
-//// d.[|prop0|];  // r3
-//// d.[|prop1|];  // r4
+//// d./*3*/prop0;
+//// d./*4*/prop1;
 
-const [r0Def, r0, r1Def, r1, r2Def, r2, r3, r4] = test.ranges();
-verify.singleReferenceGroup("(property) C.prop0: string", [r0]);
-verify.singleReferenceGroup("(property) C.prop1: number", [r1]);
-verify.singleReferenceGroup("(property) D.prop0: string", [r2, r3]);
-verify.noReferences(r4);
+verify.baselineFindAllReferences('0', '1', '2', '3', '4')

@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts ===
+const C = class {
+>C : typeof C
+>class {    set #x(x) {}    m() {        this.#x += 2; // Error    }} : typeof C
+
+    set #x(x) {}
+>#x : any
+>x : any
+
+    m() {
+>m : () => void
+
+        this.#x += 2; // Error
+>this.#x += 2 : any
+>this.#x : any
+>this : this
+>2 : 2
+    }
+}
+
+console.log(new C().m());
+>console.log(new C().m()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>new C().m() : void
+>new C().m : () => void
+>new C() : C
+>C : typeof C
+>m : () => void
+

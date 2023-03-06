@@ -1,0 +1,24 @@
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.js, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.js, 1, 6))
+
+=== tests/cases/conformance/node/allowJs/index.mjs ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.mjs, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.mjs, 1, 6))
+
+=== tests/cases/conformance/node/allowJs/index.cjs ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.cjs, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.cjs, 1, 6))
+

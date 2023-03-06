@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-3.ts ===
+const obj = {
+>obj : {}
+>{    get #foo() {        return ""    }} : {}
+
+    get #foo() {
+>#foo : string
+
+        return ""
+>"" : ""
+    }
+};
+

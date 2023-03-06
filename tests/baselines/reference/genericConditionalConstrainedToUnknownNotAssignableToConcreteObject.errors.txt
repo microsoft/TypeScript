@@ -1,0 +1,56 @@
+tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts(13,5): error TS2322: Type 'ReturnType<T[M]>' is not assignable to type 'A'.
+  Type 'unknown' is not assignable to type 'A'.
+    Type 'ReturnType<T[keyof T]>' is not assignable to type 'A'.
+      Type 'unknown' is not assignable to type 'A'.
+        Type 'ReturnType<T[string | number | symbol]>' is not assignable to type 'A'.
+          Type 'unknown' is not assignable to type 'A'.
+            Type 'ReturnType<T[string]> | ReturnType<T[number]> | ReturnType<T[symbol]>' is not assignable to type 'A'.
+              Type 'ReturnType<T[string]>' is not assignable to type 'A'.
+                Type 'unknown' is not assignable to type 'A'.
+                  Type 'ReturnType<FunctionsObj<T>[string]>' is not assignable to type 'A'.
+                    Type 'unknown' is not assignable to type 'A'.
+                      Property 'x' is missing in type '{}' but required in type 'A'.
+
+
+==== tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts (1 errors) ====
+    interface A { x: number }
+    
+    declare function isA(a: unknown): a is A;
+    
+    type FunctionsObj<T> = {
+        [K in keyof T]: () => unknown
+    }
+    
+    function g<
+        T extends FunctionsObj<T>,
+        M extends keyof T
+    >(a2: ReturnType<T[M]>, x: A) {
+        x = a2;
+        ~
+!!! error TS2322: Type 'ReturnType<T[M]>' is not assignable to type 'A'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'A'.
+!!! error TS2322:     Type 'ReturnType<T[keyof T]>' is not assignable to type 'A'.
+!!! error TS2322:       Type 'unknown' is not assignable to type 'A'.
+!!! error TS2322:         Type 'ReturnType<T[string | number | symbol]>' is not assignable to type 'A'.
+!!! error TS2322:           Type 'unknown' is not assignable to type 'A'.
+!!! error TS2322:             Type 'ReturnType<T[string]> | ReturnType<T[number]> | ReturnType<T[symbol]>' is not assignable to type 'A'.
+!!! error TS2322:               Type 'ReturnType<T[string]>' is not assignable to type 'A'.
+!!! error TS2322:                 Type 'unknown' is not assignable to type 'A'.
+!!! error TS2322:                   Type 'ReturnType<FunctionsObj<T>[string]>' is not assignable to type 'A'.
+!!! error TS2322:                     Type 'unknown' is not assignable to type 'A'.
+!!! error TS2322:                       Property 'x' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts:1:15: 'x' is declared here.
+    }
+    
+    // Original CFA report of the above issue
+    
+    function g2<
+        T extends FunctionsObj<T>,
+        M extends keyof T
+    >(a2: ReturnType<T[M]>) {
+        if (isA(a2)) {
+            // a2 is not narrowed
+            a2.x // error, but should be ok
+        }
+    }
+    

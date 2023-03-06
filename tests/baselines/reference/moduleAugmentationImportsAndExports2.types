@@ -54,7 +54,7 @@ declare module "./f1" {
     // should have explicit export
     interface A {
         foo(): B;
->foo : () => any
+>foo : () => B
 
         bar(): I;
 >bar : () => I

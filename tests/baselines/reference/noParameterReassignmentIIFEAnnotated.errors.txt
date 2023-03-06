@@ -1,0 +1,15 @@
+tests/cases/compiler/index.js(3,28): error TS8029: JSDoc '@param' tag has name 'rest', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+
+
+==== tests/cases/compiler/index.js (1 errors) ====
+    self.importScripts = (function (importScripts) {
+        /**
+         * @param {...unknown} rest
+                               ~~~~
+!!! error TS8029: JSDoc '@param' tag has name 'rest', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+         */
+        return function () {
+            return importScripts.apply(this, arguments);
+        };
+    })(importScripts);
+    

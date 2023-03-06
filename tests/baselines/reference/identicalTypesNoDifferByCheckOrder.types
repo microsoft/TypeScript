@@ -11,7 +11,7 @@ interface SomeProps {
 }
 
 type SomePropsX = Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">;
->SomePropsX : SomePropsX
+>SomePropsX : Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">
 
 interface SomePropsClone {
     x?: string;
@@ -25,7 +25,7 @@ interface SomePropsClone {
 }
 
 type SomePropsCloneX = Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x">;
->SomePropsCloneX : SomePropsCloneX
+>SomePropsCloneX : Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x">
 
 type Validator<T> = {(): boolean, opt?: T};
 >Validator : Validator<T>

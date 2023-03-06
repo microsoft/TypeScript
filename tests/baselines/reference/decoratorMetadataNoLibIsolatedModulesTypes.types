@@ -6,6 +6,6 @@ export class B {
 >Decorate : any
 
     member: Map<string, number>;
->member : any
+>member : Map<string, number>
 }
 

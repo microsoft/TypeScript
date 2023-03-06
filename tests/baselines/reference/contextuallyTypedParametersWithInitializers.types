@@ -21,7 +21,7 @@ declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 >input : T
 
 declare function id5<T extends (x?: number) => any>(input: T): T;
->id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+>id5 : <T extends (x?: number) => any>(input: T) => T
 >x : number | undefined
 >input : T
 

@@ -1,0 +1,48 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts ===
+class Base {
+>Base : Base
+
+    static #prop: number = 123;
+>#prop : number
+>123 : 123
+
+    static method(x: Derived) {
+>method : (x: Derived) => void
+>x : Derived
+
+        Derived.#derivedProp // error
+>Derived.#derivedProp : any
+>Derived : typeof Derived
+
+        Base.#prop  = 10;
+>Base.#prop  = 10 : 10
+>Base.#prop : number
+>Base : typeof Base
+>10 : 10
+    }
+}
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    static #derivedProp: number = 10;
+>#derivedProp : number
+>10 : 10
+
+    static method(x: Derived) {
+>method : (x: Derived) => void
+>x : Derived
+
+        Derived.#derivedProp
+>Derived.#derivedProp : number
+>Derived : typeof Derived
+
+        Base.#prop  = 10; // error
+>Base.#prop  = 10 : 10
+>Base.#prop : any
+>Base : typeof Base
+>10 : 10
+    }
+}
+
+

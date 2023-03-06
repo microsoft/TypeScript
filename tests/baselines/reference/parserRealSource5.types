@@ -29,7 +29,7 @@ module TypeScript {
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
 >outfile : ITextWriter
->parser : any
+>parser : Parser
         }
 
         public increaseIndent() {
@@ -175,22 +175,22 @@ module TypeScript {
     }
 
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
->prePrintAST : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>prePrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>ast : AST
+>parent : AST
+>walker : IAstWalker
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
 ><PrintContext>walker.state : PrintContext
 >walker.state : any
->walker : any
+>walker : IAstWalker
 >state : any
 
         ast.print(pc);
 >ast.print(pc) : any
 >ast.print : any
->ast : any
+>ast : AST
 >print : any
 >pc : PrintContext
 
@@ -201,21 +201,21 @@ module TypeScript {
 >increaseIndent : () => void
 
         return ast;
->ast : any
+>ast : AST
     }
 
 
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
->postPrintAST : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>postPrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>ast : AST
+>parent : AST
+>walker : IAstWalker
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
 ><PrintContext>walker.state : PrintContext
 >walker.state : any
->walker : any
+>walker : IAstWalker
 >state : any
 
         pc.decreaseIndent();
@@ -225,6 +225,6 @@ module TypeScript {
 >decreaseIndent : () => void
 
         return ast;
->ast : any
+>ast : AST
     }
 }

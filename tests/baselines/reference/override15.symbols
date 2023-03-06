@@ -1,0 +1,16 @@
+=== tests/cases/conformance/override/override15.ts ===
+class A {
+>A : Symbol(A, Decl(override15.ts, 0, 0))
+
+    doSomething() {}
+>doSomething : Symbol(A.doSomething, Decl(override15.ts, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(override15.ts, 2, 1))
+>A : Symbol(A, Decl(override15.ts, 0, 0))
+
+    override doSomethang() {}
+>doSomethang : Symbol(B.doSomethang, Decl(override15.ts, 4, 19))
+}
+

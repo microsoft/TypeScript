@@ -8,13 +8,13 @@ const c: C = a;
 
 
 //// [privateNamesUnique-4.js]
-var _something;
+var _C_something;
 class A1 {
 }
 class C {
     constructor() {
-        _something.set(this, void 0);
+        _C_something.set(this, void 0);
     }
 }
-_something = new WeakMap();
+_C_something = new WeakMap();
 const c = a;

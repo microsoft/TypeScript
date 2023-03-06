@@ -1,0 +1,5 @@
+=== tests/cases/compiler/defaultKeywordWithoutExport2.ts ===
+default function () {
+> : () => void
+
+}

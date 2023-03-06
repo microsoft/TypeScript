@@ -1,0 +1,52 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts ===
+class A3 {
+>A3 : A3
+
+    #method() { };
+>#method : () => void
+
+    constructor(a: A3, b: any) {
+>a : A3
+>b : any
+
+        this.#method = () => {} // Error, not writable 
+>this.#method = () => {} : () => void
+>this.#method : () => void
+>this : this
+>() => {} : () => void
+
+        a.#method = () => { }; // Error, not writable 
+>a.#method = () => { } : () => void
+>a.#method : () => void
+>a : A3
+>() => { } : () => void
+
+        b.#method =  () => { } //Error, not writable 
+>b.#method =  () => { } : () => void
+>b.#method : any
+>b : any
+>() => { } : () => void
+
+        ({ x: this.#method } = { x: () => {}}); //Error, not writable 
+>({ x: this.#method } = { x: () => {}}) : { x: () => void; }
+>{ x: this.#method } = { x: () => {}} : { x: () => void; }
+>{ x: this.#method } : { x: () => void; }
+>x : () => void
+>this.#method : () => void
+>this : this
+>{ x: () => {}} : { x: () => void; }
+>x : () => void
+>() => {} : () => void
+
+        let x = this.#method;
+>x : () => void
+>this.#method : () => void
+>this : this
+
+        b.#method++ //Error, not writable 
+>b.#method++ : number
+>b.#method : any
+>b : any
+    }
+}
+

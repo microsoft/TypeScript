@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodInStaticFieldInit.ts ===
+class C {
+>C : Symbol(C, Decl(privateNameStaticMethodInStaticFieldInit.ts, 0, 0))
+
+    static s = C.#method();
+>s : Symbol(C.s, Decl(privateNameStaticMethodInStaticFieldInit.ts, 0, 9))
+>C.#method : Symbol(C.#method, Decl(privateNameStaticMethodInStaticFieldInit.ts, 1, 27))
+>C : Symbol(C, Decl(privateNameStaticMethodInStaticFieldInit.ts, 0, 0))
+
+    static #method() { return 42; }
+>#method : Symbol(C.#method, Decl(privateNameStaticMethodInStaticFieldInit.ts, 1, 27))
+}
+
+console.log(C.s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>C.s : Symbol(C.s, Decl(privateNameStaticMethodInStaticFieldInit.ts, 0, 9))
+>C : Symbol(C, Decl(privateNameStaticMethodInStaticFieldInit.ts, 0, 0))
+>s : Symbol(C.s, Decl(privateNameStaticMethodInStaticFieldInit.ts, 0, 9))
+

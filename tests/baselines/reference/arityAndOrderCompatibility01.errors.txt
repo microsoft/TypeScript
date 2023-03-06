@@ -21,7 +21,8 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(28,5): error
     Type '2' is not assignable to type '1'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(29,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string]'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(30,5): error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
-  Type 'string' is not assignable to type 'number'.
+  Type at position 0 in source is not compatible with type at position 0 in target.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(31,5): error TS2322: Type 'StrNum' is not assignable to type '[number, string]'.
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -97,7 +98,8 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     var n1: [number, string] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+!!! error TS2322:   Type at position 0 in source is not compatible with type at position 0 in target.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var n2: [number, string] = y;
         ~~
 !!! error TS2322: Type 'StrNum' is not assignable to type '[number, string]'.

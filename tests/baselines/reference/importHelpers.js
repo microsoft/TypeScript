@@ -58,7 +58,7 @@ var A = /** @class */ (function () {
 }());
 exports.A = A;
 var B = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(B, _super);
+    tslib_1.__extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -70,13 +70,13 @@ var C = /** @class */ (function () {
     }
     C.prototype.method = function (x) {
     };
-    (0, tslib_1.__decorate)([
-        (0, tslib_1.__param)(0, dec),
-        (0, tslib_1.__metadata)("design:type", Function),
-        (0, tslib_1.__metadata)("design:paramtypes", [Number]),
-        (0, tslib_1.__metadata)("design:returntype", void 0)
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
     ], C.prototype, "method", null);
-    C = (0, tslib_1.__decorate)([
+    C = tslib_1.__decorate([
         dec
     ], C);
     return C;
@@ -84,7 +84,7 @@ var C = /** @class */ (function () {
 function id(x) {
     return x;
 }
-exports.result = id(templateObject_1 || (templateObject_1 = (0, tslib_1.__makeTemplateObject)(["hello world"], ["hello world"])));
+exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
 var templateObject_1;
 //// [script.js]
 var __extends = (this && this.__extends) || (function () {

@@ -1,0 +1,42 @@
+=== tests/cases/conformance/controlFlow/assertionTypePredicates2.js ===
+/**
+ * @typedef {{ x: number }} A
+ */
+
+/**
+ * @typedef { A & { y: number } } B
+ */
+
+/**
+ * @param {A} a
+ * @returns { asserts a is B }
+ */
+const foo = (a) => {
+>foo : Symbol(foo, Decl(assertionTypePredicates2.js, 12, 5))
+>a : Symbol(a, Decl(assertionTypePredicates2.js, 12, 13))
+
+    if (/** @type { B } */ (a).y !== 0) throw TypeError();
+>(a).y : Symbol(y, Decl(assertionTypePredicates2.js, 5, 19))
+>a : Symbol(a, Decl(assertionTypePredicates2.js, 12, 13))
+>y : Symbol(y, Decl(assertionTypePredicates2.js, 5, 19))
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return undefined;
+>undefined : Symbol(undefined)
+
+};
+
+export const main = () => {
+>main : Symbol(main, Decl(assertionTypePredicates2.js, 17, 12))
+
+    /** @type { A } */
+    const a = { x: 1 };
+>a : Symbol(a, Decl(assertionTypePredicates2.js, 19, 9))
+>x : Symbol(x, Decl(assertionTypePredicates2.js, 19, 15))
+
+    foo(a);
+>foo : Symbol(foo, Decl(assertionTypePredicates2.js, 12, 5))
+>a : Symbol(a, Decl(assertionTypePredicates2.js, 19, 9))
+
+};
+

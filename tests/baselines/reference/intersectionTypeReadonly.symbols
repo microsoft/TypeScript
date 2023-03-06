@@ -53,7 +53,7 @@ let mutable: Base & Mutable;
 >Base : Symbol(Base, Decl(intersectionTypeReadonly.ts, 0, 0))
 >Mutable : Symbol(Mutable, Decl(intersectionTypeReadonly.ts, 5, 1))
 
-mutable.value = 12; // error, lhs can't be a readonly property
+mutable.value = 12;
 >mutable.value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16), Decl(intersectionTypeReadonly.ts, 6, 19))
 >mutable : Symbol(mutable, Decl(intersectionTypeReadonly.ts, 19, 3))
 >value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16), Decl(intersectionTypeReadonly.ts, 6, 19))

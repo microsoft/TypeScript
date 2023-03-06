@@ -4,9 +4,9 @@
 // @Filename: /a.js
 
 /////**
-//// * @template [|{| "isWriteAccess": true, "isDefinition": true |}T|]
-//// * @return {[|T|]}
+//// * @template /*1*/T
+//// * @return {/*2*/T}
 //// */
 ////function f() {}
 
-verify.singleReferenceGroup("(type parameter) T"); // TODO:GH#??? should be "(type parameter) T in f<T>(): void"
+verify.baselineFindAllReferences('1', '2');

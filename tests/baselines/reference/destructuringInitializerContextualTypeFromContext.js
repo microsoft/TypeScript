@@ -55,7 +55,7 @@ var Parent = function (_a) {
 };
 var Child = function (_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "Artemis" : _b, props = __rest(_a, ["children", "name"]);
-    return "name: " + name + " props: " + JSON.stringify(props);
+    return "name: ".concat(name, " props: ").concat(JSON.stringify(props));
 };
 f(function (_a) {
     var _1 = _a[0], _b = _a[1], _2 = _b === void 0 ? undefined : _b;

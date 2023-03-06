@@ -22,7 +22,7 @@ StillEnum.Foo;
 
 //// [usages.js]
 "use strict";
-exports.__esModule = true;
-0 /* Foo */;
-0 /* Foo */;
-0 /* Foo */;
+Object.defineProperty(exports, "__esModule", { value: true });
+0 /* MyConstEnum.Foo */;
+0 /* AlsoEnum.Foo */;
+0 /* StillEnum.Foo */;

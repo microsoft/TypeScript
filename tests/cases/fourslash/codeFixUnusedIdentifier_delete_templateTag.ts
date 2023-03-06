@@ -53,9 +53,9 @@ function second(p) { return p; }`,
 goTo.file("/both.js");
 verify.codeFix({
     description: "Remove template tag",
+    index: 0,
     newFileContent:
 `/**
- * Comment
- */
+ * */
 function both() {}`,
 });
