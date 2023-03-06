@@ -100,14 +100,20 @@ jobs:
     # Pre-build the main branch so we can check lib folder size changes.
     - if: github.event_name == 'pull_request'
       run: |
-        git fetch origin ${{ github.base_ref }}
-        git checkout ${{ github.base_ref }}
-    - if: github.event_name == 'pull_request'
-      run: npm ci
-    - if: github.event_name == 'pull_request'
-      run: npx hereby lkg
-    - if: github.event_name == 'pull_request'
-      run: git checkout ${{ github.sha }}
+        echo ${{ github.base_sha }}
+        if [ ! -d lib ]; then
+          git fetch origin ${{ github.base_ref }}
+          git checkout ${{ github.base_ref }}
+          npm ci
+          npx hereby lkg
+          mkdir /tmp/lkg
+          mv lib /tmp/lkg/
+          git restore lib
+          git clean -fdx lib
+          git checkout ${{ github.sha }}
+          rm -rf lib
+          mv /tmp/lkg/lib .
+        fi
 
     - run:  npm ci
 
