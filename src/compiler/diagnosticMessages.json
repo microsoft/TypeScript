@@ -6419,6 +6419,10 @@
         "category": "Error",
         "code": 7061
     },
+    "A Promise must be awaited, returned, or explicitly ignored with the 'void' operator": {
+        "category": "Error",
+        "code": 7062
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

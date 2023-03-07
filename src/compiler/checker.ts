@@ -22993,6 +22993,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reduceLeft(types, (s, t) => isTypeSubtypeOf(t, s) ? t : s)!;
     }
 
+    function isPromiseType(type: Type): type is TypeReference {
+        return !!(getObjectFlags(type) & ObjectFlags.Reference) && ((type as TypeReference).target === getGlobalPromiseType(/*reportErrors*/ false));
+    }
+
     function isArrayType(type: Type): type is TypeReference {
         return !!(getObjectFlags(type) & ObjectFlags.Reference) && ((type as TypeReference).target === globalArrayType || (type as TypeReference).target === globalReadonlyArrayType);
     }
@@ -40811,7 +40815,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
 
-        checkExpression(node.expression);
+        const exprType = checkExpression(node.expression);
+        if (!isAssignmentExpression(node.expression, /*excludeCompoundAssignment*/ true) && isPromiseType(exprType)) {
+            error(node.expression, Diagnostics.A_Promise_must_be_awaited_returned_or_explicitly_ignored_with_the_void_operator);
+        }
     }
 
     function checkIfStatement(node: IfStatement) {
