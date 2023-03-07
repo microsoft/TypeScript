@@ -1204,6 +1204,7 @@ export namespace Completion {
         typeEntry("Record"),
         typeEntry("Exclude"),
         typeEntry("Extract"),
+        typeEntry("MappedOmit"),
         typeEntry("Omit"),
         typeEntry("NonNullable"),
         typeEntry("Parameters"),
