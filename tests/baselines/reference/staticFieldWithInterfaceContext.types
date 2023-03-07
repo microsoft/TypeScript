@@ -130,7 +130,7 @@ let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
 >{ a: "a" } : { a: "a"; }
 >a : "a"
 >"a" : "a"
->[] : undefined[]
+>[] : I[]
 
 let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
 >c10 : I

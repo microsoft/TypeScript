@@ -6,7 +6,7 @@
 
 export default /** @type {NumberLike[]} */([ ]);
 >([ ]) : NumberLike[]
->[ ] : undefined[]
+>[ ] : NumberLike[]
 
 === tests/cases/compiler/b.ts ===
 import A from './a'

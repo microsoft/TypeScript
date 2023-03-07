@@ -81,35 +81,35 @@ var f1 = function () { return new C1();}
 
 var arr_any: any[] = [];
 >arr_any : any[]
->[] : undefined[]
+>[] : any[]
 
 var arr_i1: I1[] = [];
 >arr_i1 : I1[]
->[] : undefined[]
+>[] : I1[]
 
 var arr_c1: C1[] = [];
 >arr_c1 : C1[]
->[] : undefined[]
+>[] : C1[]
 
 var arr_c2: C2[] = [];
 >arr_c2 : C2[]
->[] : undefined[]
+>[] : C2[]
 
 var arr_i1_2: I1[] = [];
 >arr_i1_2 : I1[]
->[] : undefined[]
+>[] : I1[]
 
 var arr_c1_2: C1[] = [];
 >arr_c1_2 : C1[]
->[] : undefined[]
+>[] : C1[]
 
 var arr_c2_2: C2[] = [];
 >arr_c2_2 : C2[]
->[] : undefined[]
+>[] : C2[]
 
 var arr_c3: C3[] = [];
 >arr_c3 : C3[]
->[] : undefined[]
+>[] : C3[]
 
 var i1_error: I1 = []; // should be an error - is
 >i1_error : I1

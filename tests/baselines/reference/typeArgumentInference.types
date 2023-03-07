@@ -448,7 +448,7 @@ var arr = someGenerics9([], null, undefined);
 >arr : any[]
 >someGenerics9([], null, undefined) : any[]
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->[] : undefined[]
+>[] : any[]
 >null : null
 >undefined : undefined
 

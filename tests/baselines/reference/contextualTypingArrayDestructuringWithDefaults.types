@@ -24,7 +24,7 @@ let [ c_ = {a: "a"} ]: I[] = [];
 >{a: "a"} : { a: "a"; }
 >a : "a"
 >"a" : "a"
->[] : undefined[]
+>[] : I[]
 
 // not a great example, expect an error
 function foo() {

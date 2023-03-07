@@ -40,7 +40,7 @@ type T4 = [number, T4]
 // A type query directly depends on the type of the referenced entity.
 var x: T5[] = []
 >x : any
->[] : undefined[]
+>[] : any[]
 
 type T5 = typeof x
 >T5 : any

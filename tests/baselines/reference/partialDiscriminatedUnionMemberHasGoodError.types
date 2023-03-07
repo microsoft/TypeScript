@@ -25,7 +25,7 @@ interface Wrapper {
 
 const foo: Wrapper[] = [];
 >foo : Wrapper[]
->[] : undefined[]
+>[] : Wrapper[]
 
 foo.push({
 >foo.push({    types: [{        type: "A"    }]}) : number

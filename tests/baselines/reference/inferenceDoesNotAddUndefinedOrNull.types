@@ -26,7 +26,7 @@ function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | 
 
     const result: T[] = [];
 >result : T[]
->[] : never[]
+>[] : T[]
 
     node.forEachChild(child => {
 >node.forEachChild(child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    }) : void | undefined
@@ -71,7 +71,7 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
 
     const result: T[] = [];
 >result : T[]
->[] : never[]
+>[] : T[]
 
     node.forEachChild(child => {
 >node.forEachChild(child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    }) : void | undefined

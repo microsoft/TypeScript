@@ -1955,7 +1955,7 @@ function extractCoordinates(f: Feature): number[] {
 >'test' : "test"
 
         return [];
->[] : never[]
+>[] : number[]
     }
     return f.geometry.coordinates;
 >f.geometry.coordinates : number[]

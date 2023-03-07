@@ -18,7 +18,7 @@
 (...arg:number [] = []) => 104;
 >(...arg:number [] = []) => 104 : (...arg?: number[]) => number
 >arg : number[]
->[] : undefined[]
+>[] : number[]
 >104 : 104
 
 // Uninitialized parameter makes the initialized one required

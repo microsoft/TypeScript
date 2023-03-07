@@ -1,7 +1,7 @@
 === tests/cases/compiler/register.ts ===
 const r: any[] = [];
 >r : any[]
->[] : undefined[]
+>[] : any[]
 
 export function register(data: any) {
 >register : (data: any) => void

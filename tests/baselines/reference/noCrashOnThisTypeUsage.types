@@ -59,7 +59,7 @@ export class ObservableValue<T> {
     changeListeners: Function[] | null = [];
 >changeListeners : Function[] | null
 >null : null
->[] : never[]
+>[] : Function[]
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
 >observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void

@@ -15,7 +15,7 @@ module test {
 
         var ys: U[] = [];
 >ys : U[]
->[] : undefined[]
+>[] : U[]
     }
 }
 

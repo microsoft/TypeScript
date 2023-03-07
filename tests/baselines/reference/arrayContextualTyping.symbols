@@ -1,0 +1,105 @@
+=== tests/cases/compiler/arrayContextualTyping.ts ===
+// Setup
+declare class MyCustomArray extends Array<number> {
+>MyCustomArray : Symbol(MyCustomArray, Decl(arrayContextualTyping.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    isCustom: true;
+>isCustom : Symbol(MyCustomArray.isCustom, Decl(arrayContextualTyping.ts, 1, 51))
+}
+
+// MVP: An empty array contextually typed by an array type gets that array's type
+const m1 = [] satisfies number[];
+>m1 : Symbol(m1, Decl(arrayContextualTyping.ts, 6, 5))
+
+m1.push(0); // Should be OK
+>m1.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>m1 : Symbol(m1, Decl(arrayContextualTyping.ts, 6, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+m1.push(""); // Should error
+>m1.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>m1 : Symbol(m1, Decl(arrayContextualTyping.ts, 6, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+// Works in object fields?
+const m2 = { a: [] satisfies string[] };
+>m2 : Symbol(m2, Decl(arrayContextualTyping.ts, 11, 5))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 11, 12))
+
+m2.a.push(""); // Should be OK
+>m2.a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>m2.a : Symbol(a, Decl(arrayContextualTyping.ts, 11, 12))
+>m2 : Symbol(m2, Decl(arrayContextualTyping.ts, 11, 5))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 11, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+m2.a.push(0); // Should error
+>m2.a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>m2.a : Symbol(a, Decl(arrayContextualTyping.ts, 11, 12))
+>m2 : Symbol(m2, Decl(arrayContextualTyping.ts, 11, 5))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 11, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+// If the contextual type is a union, keep the array-supertyping parts of the union
+const m3 = [] satisfies number[] | ArrayLike<string>;
+>m3 : Symbol(m3, Decl(arrayContextualTyping.ts, 16, 5))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+const m3t: number[] | string[] = m3;
+>m3t : Symbol(m3t, Decl(arrayContextualTyping.ts, 17, 5))
+>m3 : Symbol(m3, Decl(arrayContextualTyping.ts, 16, 5))
+
+// Keep only the array parts
+const m4 = [] satisfies MyCustomArray | string[];
+>m4 : Symbol(m4, Decl(arrayContextualTyping.ts, 20, 5))
+>MyCustomArray : Symbol(MyCustomArray, Decl(arrayContextualTyping.ts, 0, 0))
+
+const m4t: string[] = m4;
+>m4t : Symbol(m4t, Decl(arrayContextualTyping.ts, 21, 5))
+>m4 : Symbol(m4, Decl(arrayContextualTyping.ts, 20, 5))
+
+// Should OK
+const m5: string[] | number[] = [] satisfies string[] | number[];
+>m5 : Symbol(m5, Decl(arrayContextualTyping.ts, 24, 5))
+
+// Should OK
+type Obj = { a: string[] } | { a: number[] };
+>Obj : Symbol(Obj, Decl(arrayContextualTyping.ts, 24, 65))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 26, 12))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 26, 30))
+
+const m6: Obj = { a: [] } satisfies Obj;
+>m6 : Symbol(m6, Decl(arrayContextualTyping.ts, 27, 5))
+>Obj : Symbol(Obj, Decl(arrayContextualTyping.ts, 24, 65))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 27, 17))
+>Obj : Symbol(Obj, Decl(arrayContextualTyping.ts, 24, 65))
+
+// Should all OK
+type DiscrObj = { a: string[], kind: "strings" } | { a: number[], kind: "numbers" };
+>DiscrObj : Symbol(DiscrObj, Decl(arrayContextualTyping.ts, 27, 40))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 30, 17))
+>kind : Symbol(kind, Decl(arrayContextualTyping.ts, 30, 30))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 30, 52))
+>kind : Symbol(kind, Decl(arrayContextualTyping.ts, 30, 65))
+
+const m7: DiscrObj = { a: [], kind: "numbers"};
+>m7 : Symbol(m7, Decl(arrayContextualTyping.ts, 31, 5))
+>DiscrObj : Symbol(DiscrObj, Decl(arrayContextualTyping.ts, 27, 40))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 31, 22))
+>kind : Symbol(kind, Decl(arrayContextualTyping.ts, 31, 29))
+
+const m8: DiscrObj = { a: [], kind: "numbers"} satisfies DiscrObj;
+>m8 : Symbol(m8, Decl(arrayContextualTyping.ts, 32, 5))
+>DiscrObj : Symbol(DiscrObj, Decl(arrayContextualTyping.ts, 27, 40))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 32, 22))
+>kind : Symbol(kind, Decl(arrayContextualTyping.ts, 32, 29))
+>DiscrObj : Symbol(DiscrObj, Decl(arrayContextualTyping.ts, 27, 40))
+
+const m9: DiscrObj = { a: [], kind: "strings"} satisfies DiscrObj;
+>m9 : Symbol(m9, Decl(arrayContextualTyping.ts, 33, 5))
+>DiscrObj : Symbol(DiscrObj, Decl(arrayContextualTyping.ts, 27, 40))
+>a : Symbol(a, Decl(arrayContextualTyping.ts, 33, 22))
+>kind : Symbol(kind, Decl(arrayContextualTyping.ts, 33, 29))
+>DiscrObj : Symbol(DiscrObj, Decl(arrayContextualTyping.ts, 27, 40))
+

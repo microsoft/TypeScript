@@ -30,5 +30,5 @@ var a: D = foo("hi", []);
 >foo("hi", []) : (x: "hi", items: string[]) => typeof foo
 >foo : (x: "hi", items: string[]) => typeof foo
 >"hi" : "hi"
->[] : undefined[]
+>[] : string[]
 

@@ -22,6 +22,6 @@ foo([]).bar;
 >foo([]).bar : any
 >foo([]) : any
 >foo : <T>(arr: T[]) => T
->[] : undefined[]
+>[] : any[]
 >bar : any
 

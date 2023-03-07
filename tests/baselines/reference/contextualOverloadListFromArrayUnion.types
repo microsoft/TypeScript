@@ -83,7 +83,7 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 
     let results: T[] = []
 >results : T[]
->[] : never[]
+>[] : T[]
 
     function next() {
 >next : () => void

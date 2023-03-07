@@ -489,9 +489,9 @@ function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = []
 >fnOpt1 : (id: number, children?: number[], expectedPath?: number[], isRoot?: boolean) => void
 >id : number
 >children : number[]
->[] : undefined[]
+>[] : number[]
 >expectedPath : number[]
->[] : undefined[]
+>[] : number[]
 >isRoot : boolean
 
 function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}

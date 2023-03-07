@@ -181,6 +181,6 @@ const t6: A[] = coAndContraArray([], acceptA);
 >t6 : A[]
 >coAndContraArray([], acceptA) : A[]
 >coAndContraArray : <T>(value: T[], func: (t: T) => void) => T[]
->[] : never[]
+>[] : A[]
 >acceptA : (x: A) => void
 

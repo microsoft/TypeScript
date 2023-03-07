@@ -61,7 +61,7 @@ interface Foo {
 }
 const c: Foo[] = [];
 >c : Foo[]
->[] : never[]
+>[] : Foo[]
 
 const cIndex = 1;
 >cIndex : 1

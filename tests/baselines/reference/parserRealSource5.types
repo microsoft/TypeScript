@@ -21,7 +21,7 @@ module TypeScript {
 
         public indentStrings: string[] = [];
 >indentStrings : string[]
->[] : undefined[]
+>[] : string[]
 
         public indentAmt = 0;
 >indentAmt : number

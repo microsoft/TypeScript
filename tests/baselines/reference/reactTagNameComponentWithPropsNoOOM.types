@@ -18,7 +18,7 @@ const rest: {} = {};
 
 const children: any[] = [];
 >children : any[]
->[] : never[]
+>[] : any[]
 
 <Tag className={classes} {...rest}>
 ><Tag className={classes} {...rest}>{children}</Tag> : JSX.Element

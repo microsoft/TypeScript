@@ -62,7 +62,7 @@ interface Foo {
 }
 const c: Foo[] = [];
 >c : Foo[]
->[] : never[]
+>[] : Foo[]
 
 if (c[cIndex].x) {
 >c[cIndex].x : number | undefined

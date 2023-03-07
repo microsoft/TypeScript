@@ -85,7 +85,7 @@ const catMap: CatMap = {
   dog: [] as never[]
 >dog : never[]
 >[] as never[] : never[]
->[] : undefined[]
+>[] : never[]
 
 };
 

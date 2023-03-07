@@ -102,7 +102,7 @@ interface FolderContentItem {
 
 let a: FolderContentItem[] = [];
 >a : FolderContentItem[]
->[] : never[]
+>[] : FolderContentItem[]
 
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' })) : { type: "folder"; }[]
@@ -193,7 +193,7 @@ function bug(): Diagnostic[] {
 
 	let values: any[] = [];
 >values : any[]
->[] : never[]
+>[] : any[]
 
 	return values.map((value) => {
 >values.map((value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	}) : { severity: 1; message: string; }[]

@@ -42,11 +42,11 @@ const arr: number[] | string[] = [];  // Works with Array<number | string>
 
 const arr1: number[]  = [];
 >arr1 : number[]
->[] : never[]
+>[] : number[]
 
 const arr2:  string[] = [];
 >arr2 : string[]
->[] : never[]
+>[] : string[]
 
 arr.map((a: number | string, index: number) => { 
 >arr.map((a: number | string, index: number) => {     return index}) : number[]
@@ -122,7 +122,7 @@ arr1.reduce((acc: number[], a: number, index: number) => {
 >a : number
 
 }, [])
->[] : never[]
+>[] : number[]
 
 arr1.forEach((a: number, index: number) => { 
 >arr1.forEach((a: number, index: number) => {     return index}) : void
