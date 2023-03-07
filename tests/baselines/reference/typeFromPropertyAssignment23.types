@@ -71,7 +71,6 @@ Module.prototype.size = null
 >Module : typeof Module
 >prototype : Module
 >size : any
->null : null
 
 class NormalModule extends Module {
 >NormalModule : NormalModule

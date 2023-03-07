@@ -3005,8 +3005,7 @@ function getCompletionData(
 
         // Since this is qualified name check it's a type node location
         const isImportType = isLiteralImportTypeNode(node);
-        const isTypeLocation = insideJsDocTagTypeExpression
-            || (isImportType && !(node as ImportTypeNode).isTypeOf)
+        const isTypeLocation = (isImportType && !(node as ImportTypeNode).isTypeOf)
             || isPartOfTypeNode(node.parent)
             || isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
@@ -3029,7 +3028,7 @@ function getCompletionData(
                             : isRhsOfImportDeclaration ?
                                 // Any kind is allowed when dotting off namespace in internal import equals declaration
                                 symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
-                                isTypeLocation ? isValidTypeAccess : isValidValueAccess;
+                                isTypeLocation || insideJsDocTagTypeExpression ? isValidTypeAccess : isValidValueAccess;
                     for (const exportedSymbol of exportedSymbols) {
                         if (isValidAccess(exportedSymbol)) {
                             symbols.push(exportedSymbol);
@@ -3038,6 +3037,7 @@ function getCompletionData(
 
                     // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
                     if (!isTypeLocation &&
+                        !insideJsDocTagTypeExpression &&
                         symbol.declarations &&
                         symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                         let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();

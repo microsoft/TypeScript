@@ -152,8 +152,8 @@ export function createClassifier(): Classifier {
                 handleToken();
                 lastNonTriviaToken = token;
             }
-            const end = scanner.getTextPos();
-            pushEncodedClassification(scanner.getTokenPos(), end, offset, classFromKind(token), spans);
+            const end = scanner.getTokenEnd();
+            pushEncodedClassification(scanner.getTokenStart(), end, offset, classFromKind(token), spans);
             if (end >= text.length) {
                 const end = getNewEndOfLineState(scanner, token, lastOrUndefined(templateStack));
                 if (end !== undefined) {
@@ -700,16 +700,16 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
     }
 
     function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
-        triviaScanner.setTextPos(token.pos);
+        triviaScanner.resetTokenState(token.pos);
         while (true) {
-            const start = triviaScanner.getTextPos();
+            const start = triviaScanner.getTokenEnd();
             // only bother scanning if we have something that could be trivia.
             if (!couldStartTrivia(sourceFile.text, start)) {
                 return start;
             }
 
             const kind = triviaScanner.scan();
-            const end = triviaScanner.getTextPos();
+            const end = triviaScanner.getTokenEnd();
             const width = end - start;
 
             // The moment we get something that isn't trivia, then stop processing.
@@ -731,7 +731,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     // Classifying a comment might cause us to reuse the trivia scanner
                     // (because of jsdoc comments).  So after we classify the comment make
                     // sure we set the scanner position back to where it needs to be.
-                    triviaScanner.setTextPos(end);
+                    triviaScanner.resetTokenState(end);
                     continue;
 
                 case SyntaxKind.ConflictMarkerTrivia:
@@ -989,17 +989,17 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             }
         }
         pushClassification(start, i - start, ClassificationType.comment);
-        mergeConflictScanner.setTextPos(i);
+        mergeConflictScanner.resetTokenState(i);
 
-        while (mergeConflictScanner.getTextPos() < end) {
+        while (mergeConflictScanner.getTokenEnd() < end) {
             classifyDisabledCodeToken();
         }
     }
 
     function classifyDisabledCodeToken() {
-        const start = mergeConflictScanner.getTextPos();
+        const start = mergeConflictScanner.getTokenEnd();
         const tokenKind = mergeConflictScanner.scan();
-        const end = mergeConflictScanner.getTextPos();
+        const end = mergeConflictScanner.getTokenEnd();
 
         const type = classifyTokenType(tokenKind);
         if (type) {

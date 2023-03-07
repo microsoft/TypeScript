@@ -1710,7 +1710,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         createIndexInfo,
         getAnyType: () => anyType,
         getStringType: () => stringType,
+        getStringLiteralType,
         getNumberType: () => numberType,
+        getNumberLiteralType,
+        getBigIntType: () => bigintType,
         createPromiseType,
         createArrayType,
         getElementTypeOfArrayType,
@@ -20708,9 +20711,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                     Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
-                                    errorNode = propDeclaration;
-
                                     const name = propDeclaration.name!;
+                                    errorNode = name;
+
                                     if (isIdentifier(name)) {
                                         suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
                                     }
@@ -38247,7 +38250,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAccessorDeclaration(node: AccessorDeclaration) {
-        if (isIdentifier(node.name) && idText(node.name) === "constructor") {
+        if (isIdentifier(node.name) && idText(node.name) === "constructor" && isClassLike(node.parent)) {
             error(node.name, Diagnostics.Class_constructor_may_not_be_an_accessor);
         }
         addLazyDiagnostic(checkAccessorDeclarationDiagnostics);

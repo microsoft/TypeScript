@@ -31,7 +31,6 @@ declare namespace React {
   }
   type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
 >ReactNode : boolean | ReactText | ReactFragment
->null : null
 
   type ReactText = string | number;
 >ReactText : string | number
