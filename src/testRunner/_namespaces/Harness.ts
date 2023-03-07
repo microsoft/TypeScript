@@ -1,3 +1,6 @@
+// TODO(jakebailey): Why do random ts-eslint errors appear when this is removed?
+/// <reference types="node" />
+
 /* Generated file to emulate the Harness namespace. */
 
 export * from "../../harness/_namespaces/Harness";
