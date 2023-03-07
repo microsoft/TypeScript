@@ -326,3 +326,234 @@ function fx11(): { x?: number } {
 >2 : 2
 }
 
+// Repros from #52827
+
+declare function isArrayLike(value: any): value is { length: number };
+>isArrayLike : (value: any) => value is { length: number; }
+>value : any
+>length : number
+
+function ff1(value: { [index: number]: boolean, length: number } | undefined) {
+>ff1 : (value: { [index: number]: boolean; length: number; } | undefined) => void
+>value : { [index: number]: boolean; length: number; } | undefined
+>index : number
+>length : number
+
+    if (isArrayLike(value)) {
+>isArrayLike(value) : boolean
+>isArrayLike : (value: any) => value is { length: number; }
+>value : { [index: number]: boolean; length: number; } | undefined
+
+        value;
+>value : { [index: number]: boolean; length: number; }
+
+    } else {
+        value;
+>value : undefined
+    }
+    value;
+>value : { [index: number]: boolean; length: number; } | undefined
+}
+
+function ff2(value: { [index: number]: boolean, length: number } | string) {
+>ff2 : (value: string | { [index: number]: boolean; length: number; }) => void
+>value : string | { [index: number]: boolean; length: number; }
+>index : number
+>length : number
+
+    if (isArrayLike(value)) {
+>isArrayLike(value) : boolean
+>isArrayLike : (value: any) => value is { length: number; }
+>value : string | { [index: number]: boolean; length: number; }
+
+        value;
+>value : string | { [index: number]: boolean; length: number; }
+
+    } else {
+        value;
+>value : never
+    }
+    value;
+>value : string | { [index: number]: boolean; length: number; }
+}
+
+function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
+>ff3 : (value: string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined) => void
+>value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
+>index : number
+>length : number
+>length : string
+>a : string
+>null : null
+
+    if (isArrayLike(value)) {
+>isArrayLike(value) : boolean
+>isArrayLike : (value: any) => value is { length: number; }
+>value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
+
+        value;
+>value : string | { [index: number]: boolean; length: number; } | [number, boolean] | string[]
+
+    } else {
+        value;
+>value : number | { length: string; } | { a: string; } | null | undefined
+    }
+    value;
+>value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
+}
+
+// Repro from comment in #52984
+
+type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
+>DistributedKeyOf : DistributedKeyOf<T>
+
+type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
+>NarrowByKeyValue : NarrowByKeyValue<ObjT, KeyT, ValueT>
+
+    ? KeyT extends keyof ObjT
+        ? ValueT extends ObjT[KeyT]
+            ? ObjT & Readonly<Record<KeyT, ValueT>>
+            : never
+        : never
+    : never;
+
+type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
+>NarrowByDeepValue : NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+
+    infer Head extends DistributedKeyOf<ObjT>,
+]
+    ? NarrowByKeyValue<ObjT, Head, ValueT>
+    : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
+    ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
+    : never;
+
+
+declare function doesValueAtDeepPathSatisfy<
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+
+    ObjT extends object,
+    const DeepPathT extends ReadonlyArray<number | string>,
+    ValueT,
+>(
+    obj: ObjT,
+>obj : ObjT
+
+    deepPath: DeepPathT,
+>deepPath : DeepPathT
+
+    predicate: (arg: unknown) => arg is ValueT,
+>predicate : (arg: unknown) => arg is ValueT
+>arg : unknown
+
+): obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>;
+
+
+type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
+>Foo : { value: {    type: 'A';}; a?: number | undefined; } | { value: {    type: 'B';}; b?: number | undefined; }
+>value : { type: 'A'; }
+>type : "A"
+>a : number | undefined
+>value : { type: 'B'; }
+>type : "B"
+>b : number | undefined
+
+declare function isA(arg: unknown): arg is 'A';
+>isA : (arg: unknown) => arg is "A"
+>arg : unknown
+
+declare function isB(arg: unknown): arg is 'B';
+>isB : (arg: unknown) => arg is "B"
+>arg : unknown
+
+declare function assert(condition: boolean): asserts condition;
+>assert : (condition: boolean) => asserts condition
+>condition : boolean
+
+function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
+>test1 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>foo : Foo
+>value : { type: 'A'; }
+>type : "A"
+>a : number | undefined
+
+    assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA));
+>assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA)) : void
+>assert : (condition: boolean) => asserts condition
+>doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA) : boolean
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>foo : Foo
+>['value', 'type'] : ["value", "type"]
+>'value' : "value"
+>'type' : "type"
+>isA : (arg: unknown) => arg is "A"
+
+    return foo;
+>foo : { value: { type: "A"; }; a?: number | undefined; }
+}
+
+function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
+>test2 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>foo : Foo
+>value : { type: 'A'; }
+>type : "A"
+>a : number | undefined
+
+    assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
+>assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB)) : void
+>assert : (condition: boolean) => asserts condition
+>!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
+>doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>foo : Foo
+>['value', 'type'] : ["value", "type"]
+>'value' : "value"
+>'type' : "type"
+>isB : (arg: unknown) => arg is "B"
+
+    return foo;
+>foo : { value: { type: "A"; }; a?: number | undefined; }
+}
+
+// Repro from #53063
+
+interface Free {
+    premium: false;
+>premium : false
+>false : false
+}
+
+interface Premium {
+    premium: true;
+>premium : true
+>true : true
+}
+
+type Union = { premium: false } | { premium: true };
+>Union : { premium: false; } | { premium: true; }
+>premium : false
+>false : false
+>premium : true
+>true : true
+
+declare const checkIsPremium: (a: Union) => a is Union & Premium;
+>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+>a : Union
+
+const f = (value: Union) => {
+>f : (value: Union) => void
+>(value: Union) => {    if (!checkIsPremium(value)) {        value.premium;    }} : (value: Union) => void
+>value : Union
+
+    if (!checkIsPremium(value)) {
+>!checkIsPremium(value) : boolean
+>checkIsPremium(value) : boolean
+>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+>value : Union
+
+        value.premium;
+>value.premium : false
+>value : { premium: false; }
+>premium : false
+    }
+};
+
