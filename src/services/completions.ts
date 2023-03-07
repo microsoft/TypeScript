@@ -2139,11 +2139,9 @@ export function getCompletionEntriesFromSymbols(
                 (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
             )) {
                 const symbolDeclarationPos = symbolDeclaration.pos;
-                const parameters = isParameter(variableOrParameterDeclaration) ?
-                    variableOrParameterDeclaration.parent.parameters :
-                    isInferTypeNode(variableOrParameterDeclaration.parent) ?
-                        undefined :
-                        variableOrParameterDeclaration.parent.typeParameters;
+                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
+                    isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
+                    variableOrParameterDeclaration.parent.typeParameters;
                 if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
                     return false;
                 }
@@ -5111,18 +5109,18 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
 function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
     if (!contextToken) return;
 
-    return findAncestor(contextToken, node =>
-        ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)) ||
-            (isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+    const declaration = findAncestor(contextToken, node =>
+        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node))) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+            : isVariableDeclaration(node) || ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+    return declaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
     return node.parent && isArrowFunction(node.parent) &&
         (node.parent.body === node ||
         // const a = () => /**/;
-        (node.kind === SyntaxKind.EqualsGreaterThanToken && node.parent.equalsGreaterThanToken === node)
+        node.kind === SyntaxKind.EqualsGreaterThanToken
     );
 }
 
