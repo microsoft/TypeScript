@@ -719,13 +719,8 @@ export namespace Compiler {
             return !!diagnostic.file && (vpath.isTsConfigFile(diagnostic.file.fileName));
         });
 
-        const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-            // Count an error generated from tests262-harness folder.This should only apply for test262
-            return !!diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
-        });
-
         // Verify we didn't miss any errors in total
-        assert.equal(totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
+        assert.equal(totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length, "total number of errors");
     }
 
     export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {

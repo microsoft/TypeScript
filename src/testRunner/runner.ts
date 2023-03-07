@@ -11,7 +11,6 @@ import {
     setLightMode,
     setShardId,
     setShards,
-    Test262BaselineRunner,
     TestRunnerKind,
 } from "./_namespaces/Harness";
 import * as project from "./_namespaces/project";
@@ -76,8 +75,6 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new project.ProjectRunner();
         case "rwc":
             return new RWC.RWCRunner();
-        case "test262":
-            return new Test262BaselineRunner();
         case "dt":
             return new DefinitelyTypedRunner();
     }
@@ -213,9 +210,6 @@ function handleTestConfig() {
                         break;
                     case "rwc":
                         runners.push(new RWC.RWCRunner());
-                        break;
-                    case "test262":
-                        runners.push(new Test262BaselineRunner());
                         break;
                     case "dt":
                         runners.push(new DefinitelyTypedRunner());
