@@ -30,16 +30,13 @@ export const obj = {
 >dis.a : string
 >dis : Foo
 >a : string
->null : null
 >dis.b != null : boolean
 >dis.b : number
 >dis : Foo
 >b : number
->null : null
 >dis.c != null : boolean
 >dis.c : boolean
 >dis : Foo
 >c : boolean
->null : null
     }
 }

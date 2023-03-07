@@ -384,7 +384,6 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 >length : number
 >length : string
 >a : string
->null : null
 
     if (isArrayLike(value)) {
 >isArrayLike(value) : boolean

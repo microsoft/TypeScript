@@ -33,6 +33,4 @@ var v = {
 
     [null]: null
 >[null] : null
->null : null
->null : null
 }
