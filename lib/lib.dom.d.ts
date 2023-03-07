@@ -2107,8 +2107,8 @@ interface AbstractWorker {
 
 /** A node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations. */
 interface AnalyserNode extends AudioNode {
-    fftSize: number;
-    readonly frequencyBinCount: number;
+    fftSize: 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384 | 32768;
+    readonly frequencyBinCount: 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384;
     maxDecibels: number;
     minDecibels: number;
     smoothingTimeConstant: number;
