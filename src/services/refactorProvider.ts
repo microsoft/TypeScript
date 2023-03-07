@@ -5,6 +5,7 @@ import {
     Refactor,
     RefactorContext,
     RefactorEditInfo,
+    SourceFile,
 } from "./_namespaces/ts";
 import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
 
@@ -33,4 +34,10 @@ export function getApplicableRefactors(context: RefactorContext): ApplicableRefa
 export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
     const refactor = refactors.get(refactorName);
     return refactor && refactor.getEditsForAction(context, actionName);
+}
+
+/** @internal */
+export function getEditsForMoveToFileRefactor(context: RefactorContext, newFile: SourceFile, refactorName: string, actionName: string): RefactorEditInfo | undefined {
+    const refactor = refactors.get(refactorName);
+    return refactor && refactor.getEditsForAction(context, actionName, newFile);
 }

@@ -452,7 +452,11 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
-
+        moveToAnotherFile(options: {
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly newFile: string;
+            readonly preferences?: UserPreferences;
+        }): void;
         generateTypes(...options: GenerateTypesOptions[]): void;
 
         organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: UserPreferences): void;

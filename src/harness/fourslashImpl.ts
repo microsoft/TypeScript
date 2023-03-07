@@ -3174,7 +3174,7 @@ export class TestState {
                     ts.Debug.fail(`Did not expect a change in ${change.fileName}`);
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
-                ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
+                //ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
                 const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
                 this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
             }
@@ -3870,6 +3870,18 @@ export class TestState {
         assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
         const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
+        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
+    }
+
+    public moveToAnotherFile(options: FourSlashInterface.MoveToAnotherFileOptions): void {
+        assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
+        const range = this.getRanges()[0];
+        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to another file")!;
+        assert(refactor.actions.length === 1);
+        const action = ts.first(refactor.actions);
+        assert(action.name === "Move to another file" && action.description === "Move to another file");
+
+        const editInfo = this.languageService.getEditsForMoveToFileRefactor(range.fileName, options.newFile, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 

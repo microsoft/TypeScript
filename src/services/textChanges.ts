@@ -483,6 +483,7 @@ export class ChangeTracker {
     private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
+    private readonly changeExistingFile: { readonly oldFile: SourceFile, readonly newFile: SourceFile, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
 
     public static fromContext(context: TextChangesContext): ChangeTracker {
         return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -1131,11 +1132,17 @@ export class ChangeTracker {
         for (const { oldFile, fileName, statements } of this.newFiles) {
             changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
         }
+        for (const { oldFile, newFile, statements } of this.changeExistingFile) {
+            changes.push(changesToText.existingFileChanges(oldFile, newFile.fileName, statements, this.newLineCharacter, this.formatContext));
+        }
         return changes;
     }
 
     public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
         this.newFiles.push({ oldFile, fileName, statements });
+    }
+    public addStatementsToNewFile(oldFile: SourceFile, newFile: SourceFile, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
+        this.changeExistingFile.push({ oldFile, newFile, statements });
     }
 }
 
@@ -1242,6 +1249,11 @@ namespace changesToText {
     }
 
     export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
+        return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
+    }
+
+    export function existingFileChanges(oldFile: SourceFile, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
         const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }

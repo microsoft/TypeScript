@@ -6,6 +6,7 @@ export * from "../refactors/convertImport";
 export * from "../refactors/extractType";
 export * from "../refactors/helpers";
 export * from "../refactors/moveToNewFile";
+export * from "../refactors/moveToAnotherFile";
 import * as addOrRemoveBracesToArrowFunction from "./ts.refactor.addOrRemoveBracesToArrowFunction";
 export { addOrRemoveBracesToArrowFunction };
 import * as convertArrowFunctionOrFunctionExpression from "./ts.refactor.convertArrowFunctionOrFunctionExpression";

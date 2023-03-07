@@ -2712,6 +2712,39 @@ export class Session<TMessage = string> implements EventSender {
             return result;
         }
     }
+//@ts-ignore
+    private getEditsForMoveToFileRefactor(args: protocol.GetEditsForRefactorRequestArgs, newFile: string, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
+        const { file, project } = this.getFileAndProject(args);
+        const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+        const result = project.getLanguageService().getEditsForMoveToFileRefactor(
+            file,
+            newFile,
+            this.getFormatOptions(file),
+            this.extractPositionOrRange(args, scriptInfo),
+            "Move to another file", //args.refactor="Move to another file"
+            "Move to another file",//"args.action =Move to another file"
+            this.getPreferences(file),
+        );
+
+        if (result === undefined) {
+            return {
+                edits: []
+            };
+        }
+
+        if (simplifiedResult) {
+            const { renameFilename, renameLocation, edits } = result;
+            let mappedRenameLocation: protocol.Location | undefined;
+            if (renameFilename !== undefined && renameLocation !== undefined) {
+                const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
+                mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
+            }
+            return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
+        }
+        else {
+            return result;
+        }
+    }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         Debug.assert(args.scope.type === "file");

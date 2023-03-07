@@ -638,6 +638,10 @@ export class Verify extends VerifyNegatable {
         this.state.moveToNewFile(options);
     }
 
+    public moveToAnotherFile(options: MoveToAnotherFileOptions): void {
+        this.state.moveToAnotherFile(options);
+    }
+
     public noMoveToNewFile(): void {
         this.state.noMoveToNewFile();
     }
@@ -1917,6 +1921,12 @@ export interface GetEditsForFileRenameOptions {
 
 export interface MoveToNewFileOptions {
     readonly newFileContents: { readonly [fileName: string]: string };
+    readonly preferences?: ts.UserPreferences;
+}
+
+export interface MoveToAnotherFileOptions {
+    readonly newFileContents: { readonly [fileName: string]: string };
+    readonly newFile: string;
     readonly preferences?: ts.UserPreferences;
 }
 

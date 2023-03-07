@@ -2946,6 +2946,20 @@ export function createLanguageService(
         return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
     }
 
+    function getEditsForMoveToFileRefactor(
+        fileName: string,
+        newFile: string,
+        formatOptions: FormatCodeSettings,
+        positionOrRange: number | TextRange,
+        refactorName: string,
+        actionName: string,
+        preferences: UserPreferences = emptyOptions,
+    ): RefactorEditInfo | undefined {
+        synchronizeHostData();
+        const file = getValidSourceFile(fileName);
+        return refactor.getEditsForMoveToFileRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), getValidSourceFile(newFile), refactorName, actionName);
+    }
+
     function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
         // Go to Definition supports returning a zero-length span at position 0 for
         // non-existent files. We need to special-case the conversion of position 0
@@ -3040,6 +3054,7 @@ export function createLanguageService(
         updateIsDefinitionOfReferencedSymbols,
         getApplicableRefactors,
         getEditsForRefactor,
+        getEditsForMoveToFileRefactor,
         toLineColumnOffset,
         getSourceMapper: () => sourceMapper,
         clearSourceMapperCache: () => sourceMapper.clearCache(),
