@@ -610,7 +610,7 @@ export namespace Compiler {
             // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
             // then they will be added twice thus triggering 'total errors' assertion with condition
             // Similarly for tsconfig, which may be in the input files and contain errors.
-            // 'totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
+            // 'totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length
 
             if (!error.file || !isDefaultLibraryFile(error.file.fileName) && !vpath.isTsConfigFile(error.file.fileName)) {
                 totalErrorsReportedInNonLibraryNonTsconfigFiles++;
