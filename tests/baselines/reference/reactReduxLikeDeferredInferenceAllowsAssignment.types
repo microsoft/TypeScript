@@ -32,7 +32,6 @@ interface FunctionComponent<P = {}> {
 >props : P & { children?: {} | undefined; }
 >children : {} | undefined
 >context : any
->null : null
 
   propTypes?: WeakValidationMap<P>;
 >propTypes : WeakValidationMap<P> | undefined
@@ -65,8 +64,6 @@ interface Validator<T> {
 >propFullName : string
 
   ): Error | null;
->null : null
-
   [nominalTypeHack]?: T;
 >[nominalTypeHack] : T | undefined
 >nominalTypeHack : unique symbol
@@ -75,15 +72,9 @@ type WeakValidationMap<T> = {
 >WeakValidationMap : WeakValidationMap<T>
 
   [K in keyof T]?: null extends T[K]
->null : null
-
     ? Validator<T[K] | null | undefined>
->null : null
-
     : undefined extends T[K]
     ? Validator<T[K] | null | undefined>
->null : null
-
     : Validator<T[K]>
 };
 type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
@@ -149,7 +140,6 @@ declare const connect: {
   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
     mapStateToProps: null | undefined,
 >mapStateToProps : null | undefined
->null : null
 
     mapDispatchToProps: TDispatchProps
 >mapDispatchToProps : TDispatchProps
@@ -278,8 +268,6 @@ const Test1 = connect(
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
 
   null,
->null : null
-
   mapDispatchToProps
 >mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
 

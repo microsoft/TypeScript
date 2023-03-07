@@ -175,13 +175,11 @@ function f4<T extends Number>(x: T) {
 >true ? x : null : T
 >true : true
 >x : T
->null : null
 
     var r0 = true ? null : x; // ok
 >r0 : T
 >true ? null : x : T
 >true : true
->null : null
 >x : T
 
     var u: typeof undefined;

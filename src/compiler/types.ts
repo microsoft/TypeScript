@@ -5104,17 +5104,46 @@ export interface TypeChecker {
     getBaseConstraintOfType(type: Type): Type | undefined;
     getDefaultFromTypeParameter(type: Type): Type | undefined;
 
-    /** @internal */ getAnyType(): Type;
-    /** @internal */ getStringType(): Type;
-    /** @internal */ getNumberType(): Type;
-    /** @internal */ getBooleanType(): Type;
-    /** @internal */ getFalseType(fresh?: boolean): Type;
-    /** @internal */ getTrueType(fresh?: boolean): Type;
-    /** @internal */ getVoidType(): Type;
-    /** @internal */ getUndefinedType(): Type;
-    /** @internal */ getNullType(): Type;
-    /** @internal */ getESSymbolType(): Type;
-    /** @internal */ getNeverType(): Type;
+    /**
+     * Gets the intrinsic `any` type. There are multiple types that act as `any` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `any`. Instead, use `type.flags & TypeFlags.Any`.
+     */
+    getAnyType(): Type;
+    getStringType(): Type;
+    getStringLiteralType(value: string): StringLiteralType;
+    getNumberType(): Type;
+    getNumberLiteralType(value: number): NumberLiteralType;
+    getBigIntType(): Type;
+    getBooleanType(): Type;
+    /* eslint-disable @typescript-eslint/unified-signatures */
+    /** @internal */
+    getFalseType(fresh?: boolean): Type;
+    getFalseType(): Type;
+    /** @internal */
+    getTrueType(fresh?: boolean): Type;
+    getTrueType(): Type;
+    /* eslint-enable @typescript-eslint/unified-signatures */
+    getVoidType(): Type;
+    /**
+     * Gets the intrinsic `undefined` type. There are multiple types that act as `undefined` used internally in the compiler
+     * depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+     * if another type is `undefined`. Instead, use `type.flags & TypeFlags.Undefined`.
+     */
+    getUndefinedType(): Type;
+    /**
+     * Gets the intrinsic `null` type. There are multiple types that act as `null` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `null`. Instead, use `type.flags & TypeFlags.Null`.
+     */
+    getNullType(): Type;
+    getESSymbolType(): Type;
+    /**
+     * Gets the intrinsic `never` type. There are multiple types that act as `never` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `never`. Instead, use `type.flags & TypeFlags.Never`.
+     */
+    getNeverType(): Type;
     /** @internal */ getOptionalType(): Type;
     /** @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
     /** @internal */ createArrayType(elementType: Type): Type;
@@ -6916,6 +6945,12 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowe
 
 export enum ModuleResolutionKind {
     Classic  = 1,
+    /**
+     * @deprecated
+     * `NodeJs` was renamed to `Node10` to better reflect the version of Node that it targets.
+     * Use the new name or consider switching to a modern module resolution target.
+     */
+    NodeJs   = 2,
     Node10   = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
     // to better support ecmascript modules and their use within node - however more features are still being added.
@@ -6924,7 +6959,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
-    Bundler   = 100,
+    Bundler  = 100,
 }
 
 export enum ModuleDetectionKind {
@@ -9874,13 +9909,4 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
-}
-
-/** @internal */
-export const enum DeprecationVersion {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    v5_0 = "5.0",
-    v5_5 = "5.5",
-    v6_0 = "6.0",
-    /* eslint-enable @typescript-eslint/naming-convention */
 }
