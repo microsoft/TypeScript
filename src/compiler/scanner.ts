@@ -2466,8 +2466,7 @@ export function createScanner(languageVersion: ScriptTarget,
         }
         for (let ch = codePointAt(text, pos); // TODO: Only allow 1 (one) asterisk!
              pos < end && (isWhiteSpaceSingleLine(ch) || ch === CharacterCodes.asterisk);
-             ch = codePointAt(text, pos += charSize(ch))) {
-        }
+             ch = codePointAt(text, pos += charSize(ch)));
         if (pos === tokenPos) {
             return scanJsDocToken();
         }
