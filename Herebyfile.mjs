@@ -799,6 +799,13 @@ export const updateSublime = task({
     }
 });
 
+// TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
+export const importDefinitelyTypedTests = task({
+    name: "importDefinitelyTypedTests",
+    description: "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests",
+    run: () => exec(process.execPath, ["scripts/importDefinitelyTypedTests.mjs", "./", "../DefinitelyTyped"]),
+});
+
 
 export const produceLKG = task({
     name: "LKG",
