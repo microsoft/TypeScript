@@ -6,7 +6,7 @@
 //// export function bar() { return 1; }
 
 //// var x1 = import("./foo");
-//// x1.then(foo => {
+//// void x1.then(foo => {
 ////    var s: string = foo.bar();
 //// })
 //// /*1*/
