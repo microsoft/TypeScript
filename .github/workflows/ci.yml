@@ -166,6 +166,9 @@ jobs:
     - name: Build scripts
       run: npx hereby scripts
 
+    - name: Build scripts
+      run: npx tsc -p ./scripts --listFiles
+
     - name: ESLint tests
       run: npx hereby run-eslint-rules-tests
 
