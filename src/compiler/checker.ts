@@ -244,6 +244,7 @@ import {
     getCombinedModifierFlags,
     getCombinedNodeFlags,
     getContainingClass,
+    getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
     getDeclarationModifierFlagsFromSymbol,
@@ -12213,9 +12214,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function addInheritedMembers(symbols: SymbolTable, baseSymbols: Symbol[]) {
-        for (const s of baseSymbols) {
-            if (!symbols.has(s.escapedName) && !isStaticPrivateIdentifierProperty(s)) {
-                symbols.set(s.escapedName, s);
+        for (const base of baseSymbols) {
+            if (isStaticPrivateIdentifierProperty(base)) {
+                continue;
+            }
+            const derived = symbols.get(base.escapedName);
+            if (!derived
+                // non-constructor/static-block assignment declarations are ignored here; they're not treated as overrides
+                || derived.valueDeclaration
+                    && isBinaryExpression(derived.valueDeclaration)
+                    && !isConstructorDeclaredProperty(derived)
+                    && !getContainingClassStaticBlock(derived.valueDeclaration)) {
+                    symbols.set(base.escapedName, base);
+                symbols.set(base.escapedName, base);
             }
         }
     }
