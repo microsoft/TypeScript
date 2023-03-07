@@ -2471,7 +2471,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
-        startPos = tokenPos = pos;
+        fullStartPos = tokenStart = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
@@ -2491,10 +2491,10 @@ export function createScanner(languageVersion: ScriptTarget,
                 }
             }
         }
-        if (pos === tokenPos) {
+        if (pos === tokenStart) {
             return scanJsDocToken();
         }
-        tokenValue = text.substring(tokenPos, pos);
+        tokenValue = text.substring(tokenStart, pos);
         return token = SyntaxKind.JSDocCommentTextToken;
     }
 

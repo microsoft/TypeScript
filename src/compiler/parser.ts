@@ -8606,10 +8606,6 @@ namespace Parser {
                 }
                 loop: while (true) {
                     switch (token()) {
-                        case SyntaxKind.JSDocCommentTextToken:
-                            state = JSDocState.SavingComments;
-                            pushComment(scanner.getTokenValue());
-                            break;
                         case SyntaxKind.AtToken:
                             removeTrailingWhitespace(comments);
                             if (!commentsPos) commentsPos = getNodePos();
@@ -8650,6 +8646,10 @@ namespace Parser {
                             break;
                         case SyntaxKind.EndOfFileToken:
                             break loop;
+                        case SyntaxKind.JSDocCommentTextToken:
+                            state = JSDocState.SavingComments;
+                            pushComment(scanner.getTokenValue());
+                            break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
                             const commentEnd = scanner.getTokenFullStart();
@@ -8882,12 +8882,6 @@ namespace Parser {
                 let tok = token() as JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
                 loop: while (true) {
                     switch (tok) {
-                        case SyntaxKind.JSDocCommentTextToken:
-                            if (state !== JSDocState.SavingBackticks) {
-                                state = JSDocState.SavingComments; // leading identifiers start recording as well
-                            }
-                            pushComment(scanner.getTokenValue());
-                            break;
                         case SyntaxKind.NewLineTrivia:
                             state = JSDocState.BeginningOfLine;
                             // don't use pushComment here because we want to keep the margin unchanged
@@ -8895,7 +8889,6 @@ namespace Parser {
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
-                            scanner.setTextPos(scanner.getTextPos() - 1);
                             scanner.resetTokenState(scanner.getTokenEnd() - 1);
                             break loop;
                         case SyntaxKind.EndOfFileToken:
@@ -8934,6 +8927,12 @@ namespace Parser {
                                 state = JSDocState.SavingBackticks;
                             }
                             pushComment(scanner.getTokenText());
+                            break;
+                        case SyntaxKind.JSDocCommentTextToken:
+                            if (state !== JSDocState.SavingBackticks) {
+                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                            }
+                            pushComment(scanner.getTokenValue());
                             break;
                         case SyntaxKind.AsteriskToken:
                             if (state === JSDocState.BeginningOfLine) {
