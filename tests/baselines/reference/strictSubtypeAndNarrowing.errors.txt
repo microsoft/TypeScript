@@ -130,11 +130,11 @@ tests/cases/compiler/strictSubtypeAndNarrowing.ts(129,26): error TS2322: Type '{
     
     function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
         obj1 = obj2 = { x: 1, y: 2 };
-                              ~~~~
+                              ~
 !!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
         obj2 = obj1 = { x: 1, y: 2 };
-                              ~~~~
+                              ~
 !!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
     }
@@ -142,7 +142,7 @@ tests/cases/compiler/strictSubtypeAndNarrowing.ts(129,26): error TS2322: Type '{
     function fx11(): { x?: number } {
         let obj: { x?: number, y?: number };
         return obj = { x: 1, y: 2 };
-                             ~~~~
+                             ~
 !!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
     }

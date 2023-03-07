@@ -20708,9 +20708,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                     Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
-                                    errorNode = propDeclaration;
-
                                     const name = propDeclaration.name!;
+                                    errorNode = name;
+
                                     if (isIdentifier(name)) {
                                         suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
                                     }
