@@ -1133,7 +1133,7 @@ export class ChangeTracker {
             changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
         }
         for (const { oldFile, newFile, statements } of this.changeExistingFile) {
-            changes.push(changesToText.existingFileChanges(oldFile, newFile.fileName, statements, this.newLineCharacter, this.formatContext));
+            changes.push(changesToText.existingFileChanges(oldFile, newFile.fileName, statements, changes, this.newLineCharacter, this.formatContext));
         }
         return changes;
     }
@@ -1253,17 +1253,25 @@ namespace changesToText {
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }
 
-    export function existingFileChanges(oldFile: SourceFile, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
-        const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
-        return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
-    }
-
     export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
         const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
         const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
         const changes = formatting.formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
+    }
+
+    export function existingFileChanges(oldFile: SourceFile, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], changes: FileTextChanges[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        const text = existingFileChangesWorker(oldFile, changes, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
+        return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
+    }
+
+    export function existingFileChangesWorker(oldFile: SourceFile | undefined, _changes: FileTextChanges[], scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
+        // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
+        const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+        const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
+        const changeFormatting = formatting.formatDocument(sourceFile, formatContext);
+        return applyChanges(nonFormattedText, changeFormatting) + newLineCharacter;
     }
 
     function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
