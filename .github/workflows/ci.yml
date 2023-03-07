@@ -97,10 +97,11 @@ jobs:
         node-version: "*"
         check-latest: true
     
-    # Pre-build the main branch so we can check lib folder size changes.
+    # Pre-build the base branch so we can check lib folder size changes.
+    # Note that github.sha points to a merge commit, meaning we're testing
+    # the base branch versus the base branch with the PR applied.
     - if: github.event_name == 'pull_request'
       run: |
-        echo ${{ github.base_sha }}
         if [ ! -d lib ]; then
           git fetch origin ${{ github.base_ref }}
           git checkout ${{ github.base_ref }}
