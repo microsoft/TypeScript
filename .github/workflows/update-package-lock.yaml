@@ -19,6 +19,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 16
+    - run: corepack enable npm
 
     - name: Configure git and update package-lock.json
       run: |

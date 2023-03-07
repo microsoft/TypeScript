@@ -10,6 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
+    - run: corepack enable npm
 
     - name: Configure Git and Update LKG
       run: |
