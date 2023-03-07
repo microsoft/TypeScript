@@ -596,3 +596,63 @@ async function mainFindMany() {
 >include : Symbol(include, Decl(awaitedType.ts, 225, 41))
 }
 
+// repro from #41831
+
+{
+  const promises = [Promise.resolve(0)] as const
+>promises : Symbol(promises, Decl(awaitedType.ts, 231, 7))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>const : Symbol(const)
+
+  Promise.all(promises).then((results) => {
+>Promise.all(promises).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>promises : Symbol(promises, Decl(awaitedType.ts, 231, 7))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(awaitedType.ts, 233, 30))
+
+    const first = results[0]
+>first : Symbol(first, Decl(awaitedType.ts, 234, 9))
+>results : Symbol(results, Decl(awaitedType.ts, 233, 30))
+>0 : Symbol(0)
+
+    const second = results[1] // error
+>second : Symbol(second, Decl(awaitedType.ts, 235, 9))
+>results : Symbol(results, Decl(awaitedType.ts, 233, 30))
+
+  })
+}
+
+// repro from #40330
+
+async function test40330() {
+>test40330 : Symbol(test40330, Decl(awaitedType.ts, 237, 1))
+
+    const promiseNumber = Promise.resolve(1);
+>promiseNumber : Symbol(promiseNumber, Decl(awaitedType.ts, 243, 9))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    const promiseVoid = async () => {}
+>promiseVoid : Symbol(promiseVoid, Decl(awaitedType.ts, 244, 9))
+
+    const res = await Promise.all([
+>res : Symbol(res, Decl(awaitedType.ts, 246, 9))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+        promiseNumber,
+>promiseNumber : Symbol(promiseNumber, Decl(awaitedType.ts, 243, 9))
+
+        ...[promiseVoid()]
+>promiseVoid : Symbol(promiseVoid, Decl(awaitedType.ts, 244, 9))
+
+    ])
+}
+
