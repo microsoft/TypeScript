@@ -9,7 +9,6 @@ type Request = { l1: { l2: boolean } };
 type Example<T> = { ex?: T | null };
 >Example : Example<T>
 >ex : T | null | undefined
->null : null
 
 type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
 >Schema1 : Schema1<T>

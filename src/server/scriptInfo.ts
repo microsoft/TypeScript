@@ -53,14 +53,9 @@ import {
 } from "./_namespaces/ts.server";
 import * as protocol from "./protocol";
 
-export interface ScriptInfoVersion {
-    svc: number;
-    text: number;
-}
-
 /** @internal */
 export class TextStorage {
-    version: ScriptInfoVersion;
+    version: number;
 
     /**
      * Generated only on demand (based on edits, or information requested)
@@ -74,6 +69,7 @@ export class TextStorage {
      * Only on edits to the script version cache, the text will be set to undefined
      */
     private text: string | undefined;
+    private textSnapshot: IScriptSnapshot | undefined;
     /**
      * Line map for the text when there is no script version cache present
      */
@@ -100,22 +96,18 @@ export class TextStorage {
      */
     private pendingReloadFromDisk = false;
 
-    constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
-        this.version = initialVersion || { svc: 0, text: 0 };
+    constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: number) {
+        this.version = initialVersion || 0;
     }
 
     public getVersion() {
         return this.svc
-            ? `SVC-${this.version.svc}-${this.svc.getSnapshotVersion()}`
-            : `Text-${this.version.text}`;
+            ? `SVC-${this.version}-${this.svc.getSnapshotVersion()}`
+            : `Text-${this.version}`;
     }
 
     public hasScriptVersionCache_TestOnly() {
         return this.svc !== undefined;
-    }
-
-    public useScriptVersionCache_TestOnly() {
-        this.switchToScriptVersionCache();
     }
 
     private resetSourceMapInfo() {
@@ -128,19 +120,21 @@ export class TextStorage {
     }
 
     /** Public for testing */
-    public useText(newText?: string) {
+    public useText(newText: string) {
         this.svc = undefined;
         this.text = newText;
+        this.textSnapshot = undefined;
         this.lineMap = undefined;
         this.fileSize = undefined;
         this.resetSourceMapInfo();
-        this.version.text++;
+        this.version++;
     }
 
     public edit(start: number, end: number, newText: string) {
         this.switchToScriptVersionCache().edit(start, end - start, newText);
         this.ownFileText = false;
         this.text = undefined;
+        this.textSnapshot = undefined;
         this.lineMap = undefined;
         this.fileSize = undefined;
         this.resetSourceMapInfo();
@@ -161,7 +155,12 @@ export class TextStorage {
         // we are switching back to text.
         // The change to version cache will happen when needed
         // Thus avoiding the computation if there are no changes
+        if (!this.text && this.svc) {
+            // Ensure we have text representing current state
+            this.text = getSnapshotText(this.svc.getSnapshot());
+        }
         if (this.text !== newText) {
+            // Update the text
             this.useText(newText);
             // We cant guarantee new text is own file text
             this.ownFileText = false;
@@ -176,7 +175,9 @@ export class TextStorage {
      * returns true if text changed
      */
     public reloadWithFileText(tempFileName?: string) {
-        const { text: newText, fileSize } = this.getFileTextAndSize(tempFileName);
+        const { text: newText, fileSize } = tempFileName || !this.info.isDynamicOrHasMixedContent() ?
+            this.getFileTextAndSize(tempFileName) :
+            { text: "", fileSize: undefined };
         const reloaded = this.reload(newText);
         this.fileSize = fileSize; // NB: after reload since reload clears it
         this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
@@ -184,14 +185,13 @@ export class TextStorage {
     }
 
     /**
-     * Reloads the contents from the file if there is no pending reload from disk or the contents of file are same as file text
-     * returns true if text changed
+     * Schedule reload from the disk if its not already scheduled and its not own text
+     * returns true when scheduling reload
      */
-    public reloadFromDisk() {
-        if (!this.pendingReloadFromDisk && !this.ownFileText) {
-            return this.reloadWithFileText();
-        }
-        return false;
+    public scheduleReloadIfNeeded() {
+        return !this.pendingReloadFromDisk && !this.ownFileText ?
+            this.pendingReloadFromDisk = true :
+            false;
     }
 
     public delayReloadFromFileIntoText() {
@@ -216,25 +216,34 @@ export class TextStorage {
     }
 
     public getSnapshot(): IScriptSnapshot {
-        return this.useScriptVersionCacheIfValidOrOpen()
-            ? this.svc!.getSnapshot()
-            : ScriptSnapshot.fromString(this.getOrLoadText());
+        return this.tryUseScriptVersionCache()?.getSnapshot() ||
+            (this.textSnapshot ??= ScriptSnapshot.fromString(Debug.checkDefined(this.text)));
     }
 
-    public getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
-        return this.switchToScriptVersionCache().getAbsolutePositionAndLineText(line);
+    public getAbsolutePositionAndLineText(oneBasedLine: number): AbsolutePositionAndLineText {
+        const svc = this.tryUseScriptVersionCache();
+        if (svc) return svc.getAbsolutePositionAndLineText(oneBasedLine);
+        const lineMap = this.getLineMap();
+        return oneBasedLine <= lineMap.length ?
+            {
+                absolutePosition: lineMap[oneBasedLine - 1],
+                lineText: this.text!.substring(lineMap[oneBasedLine - 1], lineMap[oneBasedLine]),
+            } :
+            {
+                absolutePosition: this.text!.length,
+                lineText: undefined,
+            };
     }
     /**
      *  @param line 0 based index
      */
     lineToTextSpan(line: number): TextSpan {
-        if (!this.useScriptVersionCacheIfValidOrOpen()) {
-            const lineMap = this.getLineMap();
-            const start = lineMap[line]; // -1 since line is 1-based
-            const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text!.length;
-            return createTextSpanFromBounds(start, end);
-        }
-        return this.svc!.lineToTextSpan(line);
+        const svc = this.tryUseScriptVersionCache();
+        if (svc) return svc.lineToTextSpan(line);
+        const lineMap = this.getLineMap();
+        const start = lineMap[line]; // -1 since line is 1-based
+        const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text!.length;
+        return createTextSpanFromBounds(start, end);
     }
 
     /**
@@ -242,20 +251,17 @@ export class TextStorage {
      * @param offset 1 based index
      */
     lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
-        if (!this.useScriptVersionCacheIfValidOrOpen()) {
-            return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
-        }
-
-        // TODO: assert this offset is actually on the line
-        return this.svc!.lineOffsetToPosition(line, offset);
+        const svc = this.tryUseScriptVersionCache();
+        return svc ?
+            svc.lineOffsetToPosition(line, offset) :
+            computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
     }
 
     positionToLineOffset(position: number): protocol.Location {
-        if (!this.useScriptVersionCacheIfValidOrOpen()) {
-            const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
-            return { line: line + 1, offset: character + 1 };
-        }
-        return this.svc!.positionToLineOffset(position);
+        const svc = this.tryUseScriptVersionCache();
+        if (svc) return svc.positionToLineOffset(position);
+        const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
+        return { line: line + 1, offset: character + 1 };
     }
 
     private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
@@ -276,23 +282,29 @@ export class TextStorage {
         return { text: getText() };
     }
 
-    private switchToScriptVersionCache(): ScriptVersionCache {
+    /** @internal */
+    switchToScriptVersionCache(): ScriptVersionCache {
         if (!this.svc || this.pendingReloadFromDisk) {
             this.svc = ScriptVersionCache.fromString(this.getOrLoadText());
-            this.version.svc++;
+            this.textSnapshot = undefined;
+            this.version++;
         }
         return this.svc;
     }
 
-    private useScriptVersionCacheIfValidOrOpen(): ScriptVersionCache | undefined {
-        // If this is open script, use the cache
-        if (this.isOpen) {
-            return this.switchToScriptVersionCache();
+    private tryUseScriptVersionCache(): ScriptVersionCache | undefined {
+        if (!this.svc || this.pendingReloadFromDisk) {
+            // Ensure updated text
+            this.getOrLoadText();
         }
 
-        // If there is pending reload from the disk then, reload the text
-        if (this.pendingReloadFromDisk) {
-            this.reloadWithFileText();
+        // If this is open script, use the cache
+        if (this.isOpen) {
+            if (!this.svc && !this.textSnapshot) {
+                this.svc = ScriptVersionCache.fromString(Debug.checkDefined(this.text));
+                this.textSnapshot = undefined;
+            }
+            return this.svc;
         }
 
         // At this point if svc is present it's valid
@@ -309,14 +321,15 @@ export class TextStorage {
 
     private getLineMap() {
         Debug.assert(!this.svc, "ScriptVersionCache should not be set");
-        return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
+        return this.lineMap || (this.lineMap = computeLineStarts(Debug.checkDefined(this.text)));
     }
 
     getLineInfo(): LineInfo {
-        if (this.svc) {
+        const svc = this.tryUseScriptVersionCache();
+        if (svc) {
             return {
-                getLineCount: () => this.svc!.getLineCount(),
-                getLineText: line => this.svc!.getAbsolutePositionAndLineText(line + 1).lineText!
+                getLineCount: () => svc.getLineCount(),
+                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!
             };
         }
         const lineMap = this.getLineMap();
@@ -353,7 +366,8 @@ export class ScriptInfo {
 
     /** @internal */
     fileWatcher: FileWatcher | undefined;
-    private textStorage: TextStorage;
+    /** @internal */
+    readonly textStorage: TextStorage;
 
     /** @internal */
     readonly isDynamic: boolean;
@@ -391,27 +405,16 @@ export class ScriptInfo {
         readonly scriptKind: ScriptKind,
         public readonly hasMixedContent: boolean,
         readonly path: Path,
-        initialVersion?: ScriptInfoVersion) {
+        initialVersion?: number) {
         this.isDynamic = isDynamicFileName(fileName);
 
         this.textStorage = new TextStorage(host, this, initialVersion);
         if (hasMixedContent || this.isDynamic) {
-            this.textStorage.reload("");
             this.realpath = this.path;
         }
         this.scriptKind = scriptKind
             ? scriptKind
             : getScriptKindFromFileName(fileName);
-    }
-
-    /** @internal */
-    getVersion() {
-        return this.textStorage.version;
-    }
-
-    /** @internal */
-    getTelemetryFileSize() {
-        return this.textStorage.getTelemetryFileSize();
     }
 
     /** @internal */
@@ -423,7 +426,7 @@ export class ScriptInfo {
         return this.textStorage.isOpen;
     }
 
-    public open(newText: string) {
+    public open(newText: string | undefined) {
         this.textStorage.isOpen = true;
         if (newText !== undefined &&
             this.textStorage.reload(newText)) {
@@ -434,12 +437,7 @@ export class ScriptInfo {
 
     public close(fileExists = true) {
         this.textStorage.isOpen = false;
-        if (this.isDynamicOrHasMixedContent() || !fileExists) {
-            if (this.textStorage.reload("")) {
-                this.markContainingProjectsAsDirty();
-            }
-        }
-        else if (this.textStorage.reloadFromDisk()) {
+        if (fileExists && this.textStorage.scheduleReloadIfNeeded()) {
             this.markContainingProjectsAsDirty();
         }
     }
@@ -644,23 +642,11 @@ export class ScriptInfo {
     }
 
     reloadFromFile(tempFileName?: NormalizedPath) {
-        if (this.isDynamicOrHasMixedContent()) {
-            this.textStorage.reload("");
+        if (this.textStorage.reloadWithFileText(tempFileName)) {
             this.markContainingProjectsAsDirty();
             return true;
         }
-        else {
-            if (this.textStorage.reloadWithFileText(tempFileName)) {
-                this.markContainingProjectsAsDirty();
-                return true;
-            }
-        }
         return false;
-    }
-
-    /** @internal */
-    getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
-        return this.textStorage.getAbsolutePositionAndLineText(line);
     }
 
     editContent(start: number, end: number, newText: string): void {
@@ -712,11 +698,6 @@ export class ScriptInfo {
 
     public isJavaScript() {
         return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
-    }
-
-    /** @internal */
-    getLineInfo(): LineInfo {
-        return this.textStorage.getLineInfo();
     }
 
     /** @internal */

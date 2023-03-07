@@ -126,27 +126,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/reexport/src/pure/package.json:
+/user/username/projects/reexport/src/pure/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json:
+/user/username/projects/reexport/src/pure/tsconfig.json: *new*
   {}
-/user/username/projects/reexport/src/pure/index.ts:
+/user/username/projects/reexport/src/pure/index.ts: *new*
   {}
-/user/username/projects/reexport/src/pure/session.ts:
+/user/username/projects/reexport/src/pure/session.ts: *new*
   {}
-/user/username/projects/reexport/src/main/tsconfig.json:
+/user/username/projects/reexport/src/main/tsconfig.json: *new*
   {}
-/user/username/projects/reexport/src/main/index.ts:
+/user/username/projects/reexport/src/main/index.ts: *new*
   {}
-/user/username/projects/reexport/src/tsconfig.json:
+/user/username/projects/reexport/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/reexport/src/pure:
+/user/username/projects/reexport/src/pure: *new*
   {}
-/user/username/projects/reexport/src/main:
+/user/username/projects/reexport/src/main: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -343,30 +343,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
 /user/username/projects/reexport/src/main/index.ts (used version)
 
-PolledWatches::
-/user/username/projects/reexport/src/pure/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json:
-  {}
-/user/username/projects/reexport/src/pure/index.ts:
-  {}
-/user/username/projects/reexport/src/pure/session.ts:
-  {}
-/user/username/projects/reexport/src/main/tsconfig.json:
-  {}
-/user/username/projects/reexport/src/main/index.ts:
-  {}
-/user/username/projects/reexport/src/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/reexport/src/pure:
-  {}
-/user/username/projects/reexport/src/main:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
@@ -517,30 +493,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/session.d.ts (used version)
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
 /user/username/projects/reexport/src/main/index.ts (used version)
-
-PolledWatches::
-/user/username/projects/reexport/src/pure/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json:
-  {}
-/user/username/projects/reexport/src/pure/index.ts:
-  {}
-/user/username/projects/reexport/src/pure/session.ts:
-  {}
-/user/username/projects/reexport/src/main/tsconfig.json:
-  {}
-/user/username/projects/reexport/src/main/index.ts:
-  {}
-/user/username/projects/reexport/src/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/reexport/src/pure:
-  {}
-/user/username/projects/reexport/src/main:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -67,39 +67,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/a/src/index.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
+/user/username/projects/myproject/packages/a/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
+/user/username/projects/myproject/packages/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/a/src/index.ts:
+/user/username/projects/myproject/packages/a/src/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/src/index.ts:
+/user/username/projects/myproject/packages/b/src/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
+/user/username/projects/myproject/packages/b/src/bar.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/package.json:
+/user/username/projects/myproject/packages/b/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/b/src:
+/user/username/projects/myproject/packages/b/src: *new*
   {}
-/user/username/projects/myproject/packages/a/src:
+/user/username/projects/myproject/packages/a/src: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined

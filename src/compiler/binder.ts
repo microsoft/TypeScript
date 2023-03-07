@@ -488,7 +488,7 @@ function initFlowNode<T extends FlowNode>(node: T) {
     return node;
 }
 
-const binder = createBinder();
+const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {

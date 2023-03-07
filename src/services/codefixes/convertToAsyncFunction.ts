@@ -285,7 +285,7 @@ function isPromiseTypedExpression(node: Node, checker: TypeChecker): node is Exp
 */
 function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<string, SynthIdentifier>): FunctionLikeDeclaration {
     const identsToRenameMap = new Map<string, Identifier>(); // key is the symbol id
-    const collidingSymbolMap = createMultiMap<Symbol>();
+    const collidingSymbolMap = createMultiMap<string, Symbol>();
     forEachChild(nodeToRename, function visit(node: Node) {
         if (!isIdentifier(node)) {
             forEachChild(node, visit);

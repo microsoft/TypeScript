@@ -594,7 +594,7 @@ interface Identifiers {
 
 type FreeIdentifiers = ReadonlyMap<string, readonly Identifier[]>;
 function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
-    const map = createMultiMap<Identifier>();
+    const map = createMultiMap<string, Identifier>();
     forEachFreeIdentifier(file, id => map.add(id.text, id));
     return map;
 }
