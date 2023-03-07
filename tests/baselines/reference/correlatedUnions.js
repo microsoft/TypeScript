@@ -270,6 +270,37 @@ const getStringAndNumberFromOriginalAndMapped = <
   return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
 };
 
+// repro from #31675
+interface Config {
+  string: string;
+  number: number;
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+  userConfig: Partial<Config>,
+  key: T,
+  defaultValue: Config[T]
+): Config[T] {
+  const userValue = userConfig[key]; 
+  const assertedCheck = userValue ? userValue! : defaultValue;
+  return assertedCheck;
+}
+
+// repro from #47523
+
+type Foo1 = {
+  x: number;
+  y: string;
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+  o: Partial<Foo1>,
+  k: K
+): Foo1[K] | undefined {
+  return o[k];
+}
+
+
 //// [correlatedUnions.js]
 "use strict";
 // Various repros from #30581
@@ -392,6 +423,14 @@ var BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 var getStringAndNumberFromOriginalAndMapped = function (original, mappedFromOriginal, key, nestedKey) {
     return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
 };
+function getConfigOrDefault(userConfig, key, defaultValue) {
+    var userValue = userConfig[key];
+    var assertedCheck = userValue ? userValue : defaultValue;
+    return assertedCheck;
+}
+function getValueConcrete(o, k) {
+    return o[k];
+}
 
 
 //// [correlatedUnions.d.ts]
@@ -562,3 +601,13 @@ type SameKeys<T> = {
 };
 type MappedFromOriginal = SameKeys<Original>;
 declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
+interface Config {
+    string: string;
+    number: number;
+}
+declare function getConfigOrDefault<T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]): Config[T];
+type Foo1 = {
+    x: number;
+    y: string;
+};
+declare function getValueConcrete<K extends keyof Foo1>(o: Partial<Foo1>, k: K): Foo1[K] | undefined;

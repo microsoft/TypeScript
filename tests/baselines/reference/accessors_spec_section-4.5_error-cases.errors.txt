@@ -8,11 +8,11 @@ tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(11,51): error TS2
     class LanguageSpec_section_4_5_error_cases {
         public set AnnotatedSetter_SetterFirst(a: number) { }
         public get AnnotatedSetter_SetterFirst() { return ""; }
-                                                   ~~~~~~~~~~
+                                                   ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         public get AnnotatedSetter_SetterLast() { return ""; }
-                                                  ~~~~~~~~~~
+                                                  ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
         public set AnnotatedSetter_SetterLast(a: number) { }
     
