@@ -15,7 +15,9 @@ jobs:
 
     steps:
     - uses: actions/setup-node@v3
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}

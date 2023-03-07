@@ -36,7 +36,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - name: Tests
@@ -52,7 +54,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - name: Linter
@@ -67,7 +71,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - name: Adding playwright
@@ -85,7 +91,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - name: Build src
@@ -100,7 +108,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - run: npx hereby lkg
@@ -166,7 +176,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - name: Build scripts
@@ -184,7 +196,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - run:  npm ci
 
     - name: Build tsc

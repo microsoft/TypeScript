@@ -31,7 +31,9 @@ jobs:
     - if: ${{ !github.event.inputs.bisect }}
       uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-    - run: corepack enable npm
+    - run: |
+        corepack enable npm
+        npm --version
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}

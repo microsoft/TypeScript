@@ -20,7 +20,9 @@ jobs:
           fetch-depth: 5
 
       - uses: actions/setup-node@v3
-      - run: corepack enable npm
+      - run: |
+        corepack enable npm
+        npm --version
 
       - name: Install dependencies
         run:  npm ci
