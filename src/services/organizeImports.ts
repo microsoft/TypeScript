@@ -202,7 +202,7 @@ function isNewGroup(sourceFile: SourceFile, decl: ImportDeclaration | ExportDecl
     scanner.setText(sourceFile.text, startPos, endPos - startPos);
 
     let numberOfNewLines = 0;
-    while (scanner.getTokenPos() < endPos) {
+    while (scanner.getTokenStart() < endPos) {
         const tokenKind = scanner.scan();
 
         if (tokenKind === SyntaxKind.NewLineTrivia) {
