@@ -1803,7 +1803,7 @@ namespace Parser {
 
         sourceFlags = contextFlags;
 
-        // Prime the 
+        // Prime the scanner.
         nextToken();
 
         const statements = parseList(ParsingContext.SourceElements, parseStatement);
