@@ -2790,7 +2790,7 @@ export class Session<TMessage = string> implements EventSender {
         const commands = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
         for (const command of toArray(commands)) {
             const { file, project } = this.getFileAndProject(command);
-            project.getLanguageService().applyCodeActionCommand(command, this.getFormatOptions(file)).then(
+            void project.getLanguageService().applyCodeActionCommand(command, this.getFormatOptions(file)).then(
                 _result => { /* TODO: GH#20447 report success message? */ },
                 _error => { /* TODO: GH#20447 report errors */ });
         }
