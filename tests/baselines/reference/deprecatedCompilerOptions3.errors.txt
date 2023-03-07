@@ -6,6 +6,7 @@
 /foo/tsconfig.json(8,9): error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
 /foo/tsconfig.json(9,9): error TS5102: Option 'charset' has been removed. Please remove it from your configuration.
 /foo/tsconfig.json(10,9): error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+  Use 'outFile' instead.
 
 
 ==== /foo/tsconfig.json (8 errors) ====
@@ -35,6 +36,7 @@
             "out": "dist.js",
             ~~~~~
 !!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
         }
     }
     

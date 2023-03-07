@@ -4407,7 +4407,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 createDeprecatedDiagnostic("charset");
             }
             if (options.out) {
-                createDeprecatedDiagnostic("out");
+                createDeprecatedDiagnostic("out", /*value*/ undefined, "outFile");
             }
             if (options.importsNotUsedAsValues) {
                 createDeprecatedDiagnostic("importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
