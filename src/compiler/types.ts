@@ -6052,8 +6052,6 @@ export const enum TypeFlags {
     PossiblyFalsy = DefinitelyFalsy | String | Number | BigInt | Boolean,
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
-    /** @internal */
-    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol | TemplateLiteral | StringMapping,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
     NumberLike = Number | NumberLiteral | Enum,
     BigIntLike = BigInt | BigIntLiteral,
@@ -6061,6 +6059,8 @@ export const enum TypeFlags {
     EnumLike = Enum | EnumLiteral,
     ESSymbolLike = ESSymbol | UniqueESSymbol,
     VoidLike = Void | Undefined,
+    /** @internal */
+    Primitive = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | VoidLike | Null,
     /** @internal */
     DefinitelyNonNullable = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | Object | NonPrimitive,
     /** @internal */
