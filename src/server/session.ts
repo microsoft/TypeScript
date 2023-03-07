@@ -483,7 +483,7 @@ interface ProjectNavigateToItems {
 }
 
 function createDocumentSpanSet(): Set<DocumentSpan> {
-    return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
+    return createSet(({ textSpan }) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
 }
 
 function getRenameLocationsWorker(
@@ -2224,8 +2224,11 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): WithMetadata<readonly protocol.CompletionEntry[]> | protocol.CompletionInfo | CompletionInfo | undefined {
-        throw new Error('Test error message.');
-        
+        // Should always return true.
+        if (kind === "completionInfo" || kind === "completions" || kind === "completions-full") {
+            throw new Error('Test error message.');
+        }
+
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const position = this.getPosition(args, scriptInfo);
@@ -2758,7 +2761,7 @@ export class Session<TMessage = string> implements EventSender {
         try {
             codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
         }
-        catch(e) {
+        catch (e) {
             const ls = project.getLanguageService();
             const existingDiagCodes = [
                 ...ls.getSyntacticDiagnostics(file),
@@ -3707,5 +3710,5 @@ function isCompletionEntryData(data: any): data is CompletionEntryData {
         && typeof data.exportName === "string"
         && (data.fileName === undefined || typeof data.fileName === "string")
         && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
-        && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
+            && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
 }
