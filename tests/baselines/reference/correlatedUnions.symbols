@@ -928,3 +928,89 @@ const getStringAndNumberFromOriginalAndMapped = <
 >nestedKey : Symbol(nestedKey, Decl(correlatedUnions.ts, 265, 9))
 
 };
+
+// repro from #31675
+interface Config {
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+
+  string: string;
+>string : Symbol(Config.string, Decl(correlatedUnions.ts, 272, 18))
+
+  number: number;
+>number : Symbol(Config.number, Decl(correlatedUnions.ts, 273, 17))
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+>getConfigOrDefault : Symbol(getConfigOrDefault, Decl(correlatedUnions.ts, 275, 1))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+
+  userConfig: Partial<Config>,
+>userConfig : Symbol(userConfig, Decl(correlatedUnions.ts, 277, 52))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+
+  key: T,
+>key : Symbol(key, Decl(correlatedUnions.ts, 278, 30))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+
+  defaultValue: Config[T]
+>defaultValue : Symbol(defaultValue, Decl(correlatedUnions.ts, 279, 9))
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+
+): Config[T] {
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+
+  const userValue = userConfig[key]; 
+>userValue : Symbol(userValue, Decl(correlatedUnions.ts, 282, 7))
+>userConfig : Symbol(userConfig, Decl(correlatedUnions.ts, 277, 52))
+>key : Symbol(key, Decl(correlatedUnions.ts, 278, 30))
+
+  const assertedCheck = userValue ? userValue! : defaultValue;
+>assertedCheck : Symbol(assertedCheck, Decl(correlatedUnions.ts, 283, 7))
+>userValue : Symbol(userValue, Decl(correlatedUnions.ts, 282, 7))
+>userValue : Symbol(userValue, Decl(correlatedUnions.ts, 282, 7))
+>defaultValue : Symbol(defaultValue, Decl(correlatedUnions.ts, 279, 9))
+
+  return assertedCheck;
+>assertedCheck : Symbol(assertedCheck, Decl(correlatedUnions.ts, 283, 7))
+}
+
+// repro from #47523
+
+type Foo1 = {
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+
+  x: number;
+>x : Symbol(x, Decl(correlatedUnions.ts, 289, 13))
+
+  y: string;
+>y : Symbol(y, Decl(correlatedUnions.ts, 290, 12))
+
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+>getValueConcrete : Symbol(getValueConcrete, Decl(correlatedUnions.ts, 292, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 294, 26))
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+
+  o: Partial<Foo1>,
+>o : Symbol(o, Decl(correlatedUnions.ts, 294, 48))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+
+  k: K
+>k : Symbol(k, Decl(correlatedUnions.ts, 295, 19))
+>K : Symbol(K, Decl(correlatedUnions.ts, 294, 26))
+
+): Foo1[K] | undefined {
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 294, 26))
+
+  return o[k];
+>o : Symbol(o, Decl(correlatedUnions.ts, 294, 48))
+>k : Symbol(k, Decl(correlatedUnions.ts, 295, 19))
+}
+
