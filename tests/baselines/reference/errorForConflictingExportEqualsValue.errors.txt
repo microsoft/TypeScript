@@ -1,10 +1,13 @@
 /a.ts(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+/a.ts(3,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 
 
-==== /a.ts (1 errors) ====
+==== /a.ts (2 errors) ====
     export var x;
     export = x;
     ~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     import("./a");
+    ~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
     

@@ -1,0 +1,48 @@
+tests/cases/conformance/dynamicImport/1.ts(8,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+tests/cases/conformance/dynamicImport/1.ts(9,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+tests/cases/conformance/dynamicImport/1.ts(15,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+tests/cases/conformance/dynamicImport/1.ts(25,9): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/dynamicImport/defaultPath.ts (0 errors) ====
+    export class C {}
+    
+==== tests/cases/conformance/dynamicImport/1.ts (4 errors) ====
+    import * as defaultModule from "./defaultPath";
+    declare function getSpecifier(): string;
+    declare function ValidSomeCondition(): boolean;
+    declare var whatToLoad: boolean;
+    declare const directory: string;
+    declare const moduleFile: number;
+    
+    import(`${directory}\\${moduleFile}`);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    import(getSpecifier());
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    
+    var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
+    var p1: Promise<any> = import(getSpecifier());
+    var p11: Promise<typeof defaultModule> = import(getSpecifier());
+    const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule>;
+    p1.then(zero => {
+    ~~~~~~~~~~~~~~~~~
+        return zero.foo();  // ok, zero is any
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    });
+    ~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    
+    let j: string;
+    var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
+    
+    function * loadModule(directories: string[]) {
+        for (const directory of directories) {
+            const path = `${directory}\\moduleFile`;
+            import(yield path);
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+        }
+    }
+    

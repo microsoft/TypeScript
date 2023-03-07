@@ -1,3 +1,4 @@
+tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(5,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(5,8): error TS1325: Argument of dynamic import cannot be spread element.
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(7,17): error TS1325: Argument of dynamic import cannot be spread element.
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(8,12): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
@@ -6,12 +7,14 @@ tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,35):
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,35): error TS2559: Type '"secondModule"' has no properties in common with type 'ImportCallOptions'.
 
 
-==== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts (6 errors) ====
+==== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts (7 errors) ====
     declare function getSpecifier(): string;
     declare var whatToLoad: boolean;
     
     var a = ["./0"];
     import(...["PathModule"]);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
            ~~~~~~~~~~~~~~~~~
 !!! error TS1325: Argument of dynamic import cannot be spread element.
     

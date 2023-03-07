@@ -1,0 +1,9 @@
+tests/cases/compiler/exportDefaultAsyncFunction.ts(2,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/exportDefaultAsyncFunction.ts (1 errors) ====
+    export default async function foo(): Promise<void> {}
+    foo();
+    ~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    

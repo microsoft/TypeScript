@@ -1,0 +1,9 @@
+tests/cases/compiler/asyncImportNestedYield.ts(2,5): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/asyncImportNestedYield.ts (1 errors) ====
+    async function* foo() {
+        import((await import(yield "foo")).default);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    }

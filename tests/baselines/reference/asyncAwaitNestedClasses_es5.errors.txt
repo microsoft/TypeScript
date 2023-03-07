@@ -1,0 +1,21 @@
+tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts(15,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts (1 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/20744
+    class A {
+        static B = class B {
+            static func2(): Promise<void> {
+                return new Promise((resolve) => { resolve(null); });
+            }
+            static C = class C {
+                static async func() {
+                    await B.func2();
+                }
+            }
+        }
+    }
+    
+    A.B.C.func();
+    ~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator

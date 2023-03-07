@@ -1,0 +1,10 @@
+tests/cases/compiler/es2018ObjectAssign.ts(4,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/es2018ObjectAssign.ts (1 errors) ====
+    const test = Object.assign({}, { test: true });
+    
+    declare const p: Promise<number>;
+    p.finally();
+    ~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator

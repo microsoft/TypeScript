@@ -1,0 +1,25 @@
+=== tests/cases/compiler/unawaitedPromise.ts ===
+declare function doThing(): Promise<string>;
+>doThing : Symbol(doThing, Decl(unawaitedPromise.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+function f() {
+>f : Symbol(f, Decl(unawaitedPromise.ts, 0, 44))
+
+    // Should error
+    doThing();
+>doThing : Symbol(doThing, Decl(unawaitedPromise.ts, 0, 0))
+
+    let m: Promise<string>;
+>m : Symbol(m, Decl(unawaitedPromise.ts, 6, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    // Should not error
+    m = doThing();
+>m : Symbol(m, Decl(unawaitedPromise.ts, 6, 7))
+>doThing : Symbol(doThing, Decl(unawaitedPromise.ts, 0, 0))
+
+    // Should not error
+    void doThing();
+>doThing : Symbol(doThing, Decl(unawaitedPromise.ts, 0, 0))
+}

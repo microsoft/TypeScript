@@ -1,8 +1,9 @@
 tests/cases/compiler/genericFunctionInference1.ts(135,14): error TS2345: Argument of type '<a>(value: { key: a; }) => a' is not assignable to parameter of type '(value: Data) => string'.
   Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/genericFunctionInference1.ts(196,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 
 
-==== tests/cases/compiler/genericFunctionInference1.ts (1 errors) ====
+==== tests/cases/compiler/genericFunctionInference1.ts (2 errors) ====
     declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;
     declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;
     declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D;
@@ -202,11 +203,18 @@ tests/cases/compiler/genericFunctionInference1.ts(135,14): error TS2345: Argumen
     
     const promise = Promise.resolve(1);
     promise.then(
+    ~~~~~~~~~~~~~
         pipe(
+    ~~~~~~~~~
             x => x + 1,
+    ~~~~~~~~~~~~~~~~~~~
             x => x * 2,
+    ~~~~~~~~~~~~~~~~~~~
         ),
+    ~~~~~~
     );
+    ~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
     
     // #29904.4
     

@@ -1,0 +1,19 @@
+tests/cases/compiler/unawaitedPromise.ts(5,5): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/unawaitedPromise.ts (1 errors) ====
+    declare function doThing(): Promise<string>;
+    
+    function f() {
+        // Should error
+        doThing();
+        ~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    
+        let m: Promise<string>;
+        // Should not error
+        m = doThing();
+    
+        // Should not error
+        void doThing();
+    }

@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/modules/b.ts(3,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/es6/modules/a.ts (0 errors) ====
+    const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
+    export default x;
+    
+==== tests/cases/conformance/es6/modules/b.ts (1 errors) ====
+    import x from './a';
+    
+    ( async function() {
+    ~~~~~~~~~~~~~~~~~~~~
+        const value = await x;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }() );
+    ~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    

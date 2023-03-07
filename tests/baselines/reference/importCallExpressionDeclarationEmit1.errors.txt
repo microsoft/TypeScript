@@ -1,0 +1,20 @@
+tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit1.ts(6,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit1.ts (1 errors) ====
+    declare function getSpecifier(): string;
+    declare var whatToLoad: boolean;
+    declare const directory: string;
+    declare const moduleFile: number;
+    
+    import(getSpecifier());
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    
+    var p0 = import(`${directory}\\${moduleFile}`);
+    var p1 = import(getSpecifier());
+    const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
+    
+    function returnDynamicLoad(path: string) {
+        return import(path);
+    }

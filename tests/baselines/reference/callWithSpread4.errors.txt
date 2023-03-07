@@ -1,8 +1,10 @@
+tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(16,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(18,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(29,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts (2 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts (4 errors) ====
     type R = { a: number }
     type W = { b: number }
     type RW = { a: number, b: number }
@@ -19,15 +21,24 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): erro
     declare var gz: RW[]
     declare var fun: (inp: any) => AsyncGenerator<string, void, unknown>
     pli(
+    ~~~~
         reads,
+    ~~~~~~~~~~
         ...gun,
+    ~~~~~~~~~~~
         ~~~~~~
 !!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
         tr,
+    ~~~~~~~
         fun,
+    ~~~~~~~~
         ...gz,
+    ~~~~~~~~~~
         writes
+    ~~~~~~~~~~
     );
+    ~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
     
     declare function test(x: any, y: () => string): string | undefined;
     declare var anys: any[]
@@ -36,4 +47,6 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): erro
 !!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
     
     pli(...[reads, writes, writes] as const)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
     

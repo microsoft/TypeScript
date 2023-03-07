@@ -1,0 +1,13 @@
+tests/cases/conformance/salsa/importer.js(1,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/salsa/bug28014.js (0 errors) ====
+    exports.version = 1
+    function alias() { }
+    module.exports = alias
+    
+==== tests/cases/conformance/salsa/importer.js (1 errors) ====
+    import('./bug28014')
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    

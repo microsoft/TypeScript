@@ -1,0 +1,20 @@
+tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts(13,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts (1 errors) ====
+    const C = class {
+        async #bar() { return await Promise.resolve(42); }
+        async foo() {
+            const b = await this.#bar();
+            return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);
+        }
+        *#baz() { yield 42; }
+        async *#qux() {
+            yield (await Promise.resolve(42));
+        }
+    }
+    
+    new C().foo().then(console.log);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    

@@ -1,0 +1,37 @@
+tests/cases/conformance/dynamicImport/2.ts(6,9): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+    export class B {
+        print() { return "I am B"}
+    }
+    
+    export function foo() { return "foo" }
+    
+==== tests/cases/conformance/dynamicImport/1.ts (0 errors) ====
+    export function backup() { return "backup"; }
+    
+==== tests/cases/conformance/dynamicImport/2.ts (1 errors) ====
+    declare var console: any;
+    class C {
+        private myModule = import("./0");
+        method() {
+            const loadAsync = import ("./0");
+            this.myModule.then(Zero => {
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                console.log(Zero.foo());
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }, async err => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                console.log(err);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                let one = await import("./1");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                console.log(one.backup());
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            });
+    ~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+        }
+    }
+    

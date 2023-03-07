@@ -1,0 +1,17 @@
+tests/cases/compiler/dynamicImportWithNestedThis_es2015.ts(11,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/dynamicImportWithNestedThis_es2015.ts (1 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/17564
+    class C {
+    	private _path = './other';
+    
+    	dynamic() {
+    		return import(this._path);
+    	}
+    }
+    
+    const c = new C();
+    c.dynamic();
+    ~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator

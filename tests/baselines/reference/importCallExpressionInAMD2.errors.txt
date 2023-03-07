@@ -1,0 +1,23 @@
+tests/cases/conformance/dynamicImport/2.ts(3,5): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+    export class B {
+        print() { return "I am B"}
+    }
+    
+==== tests/cases/conformance/dynamicImport/2.ts (1 errors) ====
+    // We use Promise<any> for now as there is no way to specify shape of module object
+    function foo(x: Promise<any>) {
+        x.then(value => {
+        ~~~~~~~~~~~~~~~~~
+            let b = new value.B();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            b.print();
+    ~~~~~~~~~~~~~~~~~~
+        })
+    ~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    }
+    
+    foo(import("./0"));

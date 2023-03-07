@@ -2,6 +2,7 @@
 /main.ts(2,13): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main.ts(3,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main.ts(5,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(5,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 /main.ts(8,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main.ts(14,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main2.ts(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -22,7 +23,7 @@
         export default _default;
     }
     
-==== /main.ts (6 errors) ====
+==== /main.ts (7 errors) ====
     import esmy from "./decl"; // error
            ~~~~
 !!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
@@ -36,6 +37,8 @@
     import("./decl"); // error
     ~~~~~~~~~~~~~~~~
 !!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    ~~~~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
     type T = typeof import("./decl"); // ok
     export {}; // error
     export const x = 1; // error

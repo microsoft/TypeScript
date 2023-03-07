@@ -1,0 +1,18 @@
+tests/cases/compiler/asyncIIFE.ts(2,5): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/asyncIIFE.ts (1 errors) ====
+    function f1() {
+        (async () => {
+        ~~~~~~~~~~~~~~
+            await 10
+    ~~~~~~~~~~~~~~~~
+            throw new Error();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        })();
+    ~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    
+        var x = 1;
+    }
+    

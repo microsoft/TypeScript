@@ -1,0 +1,16 @@
+tests/cases/compiler/index.ts(1,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/compiler/foo.d.ts (0 errors) ====
+    declare function foo(): void;
+    declare namespace foo {}
+    export = foo;
+    
+==== tests/cases/compiler/index.ts (1 errors) ====
+    import("./foo").then(f => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        f.default;
+    ~~~~~~~~~~~~~~
+    });
+    ~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator

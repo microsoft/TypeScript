@@ -5,9 +5,11 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: 
 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(111,28): error TS2448: Block-scoped variable 'a' used before its declaration.
 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(112,21): error TS2448: Block-scoped variable 'a' used before its declaration.
 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(127,9): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(130,9): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
 
 
-==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (7 errors) ====
+==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (9 errors) ====
     function foo0() {
         let a = x;
                 ~
@@ -156,9 +158,13 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
     function foo17() {
         const promise = (async () => {
             promise
+            ~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
             foo
             await null
             promise
+            ~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
             foo
         })()
     

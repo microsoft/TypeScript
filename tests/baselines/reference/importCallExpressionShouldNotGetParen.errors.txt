@@ -1,0 +1,22 @@
+tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts(2,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts(6,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts (2 errors) ====
+    const localeName = "zh-CN";
+    import(`./locales/${localeName}.js`).then(bar => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        let x = bar;
+    ~~~~~~~~~~~~~~~~
+    });
+    ~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    
+    import("./locales/" + localeName + ".js").then(bar => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        let x = bar;
+    ~~~~~~~~~~~~~~~~
+    });
+    ~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    

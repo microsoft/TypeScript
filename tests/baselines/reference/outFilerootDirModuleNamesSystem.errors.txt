@@ -1,0 +1,17 @@
+tests/cases/conformance/es6/moduleExportsSystem/src/b.ts(5,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/es6/moduleExportsSystem/src/a.ts (0 errors) ====
+    import foo from "./b";
+    export default class Foo {}
+    foo();
+    
+==== tests/cases/conformance/es6/moduleExportsSystem/src/b.ts (1 errors) ====
+    import Foo from "./a";
+    export default function foo() { new Foo(); }
+    
+    // https://github.com/microsoft/TypeScript/issues/37429
+    import("./a");
+    ~~~~~~~~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+    

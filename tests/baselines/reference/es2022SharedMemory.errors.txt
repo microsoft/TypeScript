@@ -1,0 +1,23 @@
+tests/cases/conformance/es2022/es2022SharedMemory.ts(17,1): error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
+
+
+==== tests/cases/conformance/es2022/es2022SharedMemory.ts (1 errors) ====
+    const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
+    const int32 = new Int32Array(sab);
+    const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);
+    const int64 = new BigInt64Array(sab64);
+    const waitValue = Atomics.wait(int32, 0, 0);
+    const { async, value } = Atomics.waitAsync(int32, 0, 0);
+    const { async: async64, value: value64 } = Atomics.waitAsync(int64, 0, BigInt(0));
+    
+    const main = async () => {
+        if (async) {
+            await value;
+        }
+        if (async64) {
+            await value64;
+        }
+    }
+    main();
+    ~~~~~~
+!!! error TS7062: A Promise must be awaited, returned, or explicitly ignored with the 'void' operator
