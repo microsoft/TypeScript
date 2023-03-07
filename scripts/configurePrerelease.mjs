@@ -12,6 +12,7 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
     name: string;
     version: string;
     keywords: string[];
+    gitHead?: string;
 }} PackageJson
  */
 
