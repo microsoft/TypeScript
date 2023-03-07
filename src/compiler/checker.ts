@@ -15724,7 +15724,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getGlobalOmitSymbol(): Symbol | undefined {
         // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
-        deferredGlobalOmitSymbol ||= getGlobalTypeAliasSymbol("Omit" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+        deferredGlobalOmitSymbol ||= getGlobalTypeAliasSymbol("MappedOmit" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
         return deferredGlobalOmitSymbol === unknownSymbol ? undefined : deferredGlobalOmitSymbol;
     }
 
@@ -40810,7 +40810,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkExpressionStatement(node: ExpressionStatement) {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
-
         checkExpression(node.expression);
     }
 
