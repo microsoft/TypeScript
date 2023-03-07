@@ -1,7 +1,0 @@
-Exit Code: 2
-Standard output:
-node_modules/@types/react-native/index.d.ts(8685,18): error TS2717: Subsequent property declarations must have the same type.  Property 'geolocation' must be of type 'Geolocation', but here has type 'GeolocationStatic'.
-
-
-
-Standard error:

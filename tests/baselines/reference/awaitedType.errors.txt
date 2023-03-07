@@ -1,8 +1,9 @@
 tests/cases/compiler/awaitedType.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/compiler/awaitedType.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
 
 
-==== tests/cases/compiler/awaitedType.ts (2 errors) ====
+==== tests/cases/compiler/awaitedType.ts (3 errors) ====
     type T1 = Awaited<number>;
     type T2 = Awaited<Promise<number>>;
     type T3 = Awaited<number | Promise<number>>;
@@ -233,5 +234,31 @@ tests/cases/compiler/awaitedType.ts(26,12): error TS2589: Type instantiation is 
       const itsOne = await findManyWrapper({});
       const itsTwo1 = await findManyWrapper({ select: "foo" });
       const itsTwo2 = await findManyWrapper({ include: "bar" });
+    }
+    
+    // repro from #41831
+    
+    {
+      const promises = [Promise.resolve(0)] as const
+    
+      Promise.all(promises).then((results) => {
+        const first = results[0]
+        const second = results[1] // error
+                               ~
+!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+      })
+    }
+    
+    // repro from #40330
+    
+    async function test40330() {
+    
+        const promiseNumber = Promise.resolve(1);
+        const promiseVoid = async () => {}
+    
+        const res = await Promise.all([
+            promiseNumber,
+            ...[promiseVoid()]
+        ])
     }
     
