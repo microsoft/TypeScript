@@ -2161,6 +2161,9 @@ namespace Parser {
         return nextTokenWithoutCheck();
     }
 
+    function nextTokenJSDocInitialIndent(): JSDocSyntaxKind {
+        return currentToken = scanner.scanJSDocInitialIndent();
+    }
     function nextTokenJSDoc(): JSDocSyntaxKind {
         return currentToken = scanner.scanJsDocToken();
     }
@@ -8641,7 +8644,7 @@ namespace Parser {
                                 comments.push(scanner.getTokenText());
                             }
                             else if (margin !== undefined && indent + whitespaceLength > margin) {
-                                comments.push(scanner.getTokenText().slice(margin - indent));
+                                comments.push(scanner.getText().slice(scanner.getTokenPos() + margin - indent, scanner.getTextPos()));
                             }
                             indent += whitespaceLength;
                             break;
@@ -8671,7 +8674,12 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    nextTokenJSDoc();
+                    if (state === JSDocState.BeginningOfLine) {
+                        nextTokenJSDocInitialIndent();
+                    }
+                    else {
+                        nextTokenJSDoc();
+                    }
                 }
                 removeTrailingWhitespace(comments);
                 if (parts.length && comments.length) {
@@ -8891,7 +8899,7 @@ namespace Parser {
                                 const whitespaceLength = scanner.getTextPos() - scanner.getTokenPos();
                                 // if the whitespace crosses the margin, take only the whitespace that passes the margin
                                 if (margin !== undefined && indent + whitespaceLength > margin) {
-                                    comments.push(scanner.getTokenText().slice(margin - indent));
+                                    comments.push(scanner.getText().slice(scanner.getTokenPos() + margin - indent, scanner.getTextPos()));
                                 }
                                 indent += whitespaceLength;
                             }
@@ -8937,7 +8945,12 @@ namespace Parser {
                             break;
                     }
                     previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
-                    tok = nextTokenJSDoc();
+                    if (state === JSDocState.BeginningOfLine) {
+                        tok = nextTokenJSDocInitialIndent();
+                    }
+                    else {
+                        tok = nextTokenJSDoc();
+                    }
                 }
 
                 removeLeadingNewlines(comments);

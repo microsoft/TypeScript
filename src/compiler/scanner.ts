@@ -74,6 +74,8 @@ export interface Scanner {
     reScanQuestionToken(): SyntaxKind;
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
+    /** @internal */
+    scanJSDocInitialIndent(): JSDocSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
     scan(): SyntaxKind;
 
@@ -1019,6 +1021,7 @@ export function createScanner(languageVersion: ScriptTarget,
         reScanQuestionToken,
         reScanInvalidIdentifier,
         scanJsxToken,
+        scanJSDocInitialIndent,
         scanJsDocToken,
         scan,
         getText,
@@ -2453,6 +2456,22 @@ export function createScanner(languageVersion: ScriptTarget,
     function reScanJsxAttributeValue(): SyntaxKind {
         pos = tokenPos = startPos;
         return scanJsxAttributeValue();
+    }
+
+    function scanJSDocInitialIndent(): JSDocSyntaxKind {
+        startPos = tokenPos = pos;
+        tokenFlags = TokenFlags.None;
+        if (pos >= end) {
+            return token = SyntaxKind.EndOfFileToken;
+        }
+        for (let ch = codePointAt(text, pos); // TODO: Only allow 1 (one) asterisk!
+             pos < end && (isWhiteSpaceSingleLine(ch) || ch === CharacterCodes.asterisk);
+             ch = codePointAt(text, pos += charSize(ch))) {
+        }
+        if (pos === tokenPos) {
+            return scanJsDocToken();
+        }
+        return token = SyntaxKind.WhitespaceTrivia;
     }
 
     function scanJsDocToken(): JSDocSyntaxKind {
