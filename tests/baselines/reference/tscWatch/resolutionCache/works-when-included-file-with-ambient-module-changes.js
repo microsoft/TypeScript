@@ -61,20 +61,18 @@ Shape signatures in builder refreshed for::
 /a/b/bar.d.ts (used version)
 
 PolledWatches::
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.ts:
+/a/b/foo.ts: *new*
   {}
-/a/b/bar.d.ts:
+/a/b/bar.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -126,22 +124,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/bar.d.ts (used version)
 /a/b/foo.ts (computed .d.ts)
-
-PolledWatches::
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/foo.ts:
-  {}
-/a/b/bar.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

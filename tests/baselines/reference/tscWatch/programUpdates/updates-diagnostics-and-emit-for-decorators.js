@@ -56,20 +56,18 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/a.ts:
+/a.ts: *new*
   {}
-/b.ts:
+/b.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -171,22 +169,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/b.js] file written with same contents
@@ -240,22 +222,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 exitCode:: ExitStatus.undefined
 

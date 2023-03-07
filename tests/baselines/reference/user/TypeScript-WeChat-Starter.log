@@ -1,7 +1,0 @@
-Exit Code: 2
-Standard output:
-node_modules/@types/connect/index.d.ts(20,42): error TS2689: Cannot extend an interface 'http.IncomingMessage'. Did you mean 'implements'?
-
-
-
-Standard error:
