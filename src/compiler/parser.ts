@@ -1407,7 +1407,51 @@ namespace Parser {
 
     // Share a single scanner across all calls to parse a source file.  This helps speed things
     // up by avoiding the cost of creating/compiling scanners over and over again.
-    var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+    var {
+        clearCommentDirectives,
+        getCommentDirectives,
+        getNumericLiteralFlags,
+        getStartPos,
+        getTextPos,
+        getToken,
+        getTokenFlags,
+        getTokenPos,
+        getTokenPos,
+        getTokenText,
+        getTokenValue,
+        hasExtendedUnicodeEscape,
+        hasExtendedUnicodeEscape: scanner_hasExtendedUnicodeEscape,
+        hasPrecedingJSDocComment,
+        hasPrecedingLineBreak,
+        hasUnicodeEscape,
+        isReservedWord: scanner_isReservedWord,
+        isUnterminated,
+        lookAhead: scanner_lookAhead,
+        reScanAsteriskEqualsToken,
+        reScanGreaterToken: scanner_reScanGreaterToken,
+        reScanHashToken: scanner_reScanHashToken,
+        reScanInvalidIdentifier,
+        reScanJsxToken,
+        reScanLessThanToken: scanner_reScanLessThanToken,
+        reScanQuestionToken,
+        reScanSlashToken: scanner_reScanSlashToken,
+        reScanTemplateHeadOrNoSubstitutionTemplate: scanner_reScanTemplateHeadOrNoSubstitutionTemplate,
+        reScanTemplateToken: scanner_reScanTemplateToken,
+        scan,
+        scanJsDocToken,
+        scanJsxAttributeValue: scanner_scanJsxAttributeValue,
+        scanJsxIdentifier: scanner_scanJsxIdentifier,
+        scanJsxToken,
+        scanRange,
+        setInJSDocType,
+        setLanguageVariant,
+        setOnError,
+        setScriptTarget,
+        setText,
+        setText,
+        setTextPos,
+        tryScan,
+    } = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     var disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
@@ -1724,17 +1768,17 @@ namespace Parser {
         parseErrorBeforeNextFinishedNode = false;
 
         // Initialize and prime the scanner before parsing the source elements.
-        scanner.setText(sourceText);
-        scanner.setOnError(scanError);
-        scanner.setScriptTarget(languageVersion);
-        scanner.setLanguageVariant(languageVariant);
+        setText(sourceText);
+        setOnError(scanError);
+        setScriptTarget(languageVersion);
+        setLanguageVariant(languageVariant);
     }
 
     function clearState() {
         // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
-        scanner.clearCommentDirectives();
-        scanner.setText("");
-        scanner.setOnError(undefined);
+        clearCommentDirectives();
+        setText("");
+        setOnError(undefined);
 
         // Clear any data.  We don't want to accidentally hold onto it for too long.
         sourceText = undefined!;
@@ -1759,7 +1803,7 @@ namespace Parser {
 
         sourceFlags = contextFlags;
 
-        // Prime the scanner.
+        // Prime the 
         nextToken();
 
         const statements = parseList(ParsingContext.SourceElements, parseStatement);
@@ -1772,7 +1816,7 @@ namespace Parser {
         processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
         processPragmasIntoFields(sourceFile as {} as PragmaContext, reportPragmaDiagnostic);
 
-        sourceFile.commentDirectives = scanner.getCommentDirectives();
+        sourceFile.commentDirectives = getCommentDirectives();
         sourceFile.nodeCount = nodeCount;
         sourceFile.identifierCount = identifierCount;
         sourceFile.identifiers = identifiers;
@@ -1838,14 +1882,14 @@ namespace Parser {
             speculationHelper(() => {
                 const savedContextFlags = contextFlags;
                 contextFlags |= NodeFlags.AwaitContext;
-                scanner.setTextPos(nextStatement.pos);
+                setTextPos(nextStatement.pos);
                 nextToken();
 
                 while (token() !== SyntaxKind.EndOfFileToken) {
-                    const startPos = scanner.getStartPos();
+                    const startPos = getStartPos();
                     const statement = parseListElement(ParsingContext.SourceElements, parseStatement);
                     statements.push(statement);
-                    if (startPos === scanner.getStartPos()) {
+                    if (startPos === getStartPos()) {
                         nextToken();
                     }
 
@@ -2095,7 +2139,7 @@ namespace Parser {
     }
 
     function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
-        return parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
+        return parseErrorAt(getTokenPos(), getTextPos(), message, arg0);
     }
 
     function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
@@ -2122,15 +2166,11 @@ namespace Parser {
     }
 
     function scanError(message: DiagnosticMessage, length: number): void {
-        parseErrorAtPosition(scanner.getTextPos(), length, message);
+        parseErrorAtPosition(getTextPos(), length, message);
     }
 
     function getNodePos(): number {
-        return scanner.getStartPos();
-    }
-
-    function hasPrecedingJSDocComment() {
-        return scanner.hasPrecedingJSDocComment();
+        return getStartPos();
     }
 
     // Use this function to access the current token instead of reading the currentToken
@@ -2144,7 +2184,7 @@ namespace Parser {
     }
 
     function nextTokenWithoutCheck() {
-        return currentToken = scanner.scan();
+        return currentToken = scan();
     }
 
     function nextTokenAnd<T>(func: () => T): T {
@@ -2154,51 +2194,51 @@ namespace Parser {
 
     function nextToken(): SyntaxKind {
         // if the keyword had an escape
-        if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
+        if (isKeyword(currentToken) && (hasUnicodeEscape() || hasExtendedUnicodeEscape())) {
             // issue a parse error for the escape
-            parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keywords_cannot_contain_escape_characters);
+            parseErrorAt(getTokenPos(), getTextPos(), Diagnostics.Keywords_cannot_contain_escape_characters);
         }
         return nextTokenWithoutCheck();
     }
 
     function nextTokenJSDoc(): JSDocSyntaxKind {
-        return currentToken = scanner.scanJsDocToken();
+        return currentToken = scanJsDocToken();
     }
 
     function reScanGreaterToken(): SyntaxKind {
-        return currentToken = scanner.reScanGreaterToken();
+        return currentToken = scanner_reScanGreaterToken();
     }
 
     function reScanSlashToken(): SyntaxKind {
-        return currentToken = scanner.reScanSlashToken();
+        return currentToken = scanner_reScanSlashToken();
     }
 
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
-        return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
+        return currentToken = scanner_reScanTemplateToken(isTaggedTemplate);
     }
 
     function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-        return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
+        return currentToken = scanner_reScanTemplateHeadOrNoSubstitutionTemplate();
     }
 
     function reScanLessThanToken(): SyntaxKind {
-        return currentToken = scanner.reScanLessThanToken();
+        return currentToken = scanner_reScanLessThanToken();
     }
 
     function reScanHashToken(): SyntaxKind {
-        return currentToken = scanner.reScanHashToken();
+        return currentToken = scanner_reScanHashToken();
     }
 
     function scanJsxIdentifier(): SyntaxKind {
-        return currentToken = scanner.scanJsxIdentifier();
+        return currentToken = scanner_scanJsxIdentifier();
     }
 
     function scanJsxText(): SyntaxKind {
-        return currentToken = scanner.scanJsxToken();
+        return currentToken = scanJsxToken();
     }
 
     function scanJsxAttributeValue(): SyntaxKind {
-        return currentToken = scanner.scanJsxAttributeValue();
+        return currentToken = scanner_scanJsxAttributeValue();
     }
 
     function speculationHelper<T>(callback: () => T, speculationKind: SpeculationKind): T {
@@ -2218,8 +2258,8 @@ namespace Parser {
         // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
         // same.
         const result = speculationKind !== SpeculationKind.TryParse
-            ? scanner.lookAhead(callback)
-            : scanner.tryScan(callback);
+            ? scanner_lookAhead(callback)
+            : tryScan(callback);
 
         Debug.assert(saveContextFlags === contextFlags);
 
@@ -2344,7 +2384,7 @@ namespace Parser {
                 return;
 
             case "is":
-                parseErrorAt(pos, scanner.getTextPos(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                parseErrorAt(pos, getTextPos(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
                 return;
 
             case "module":
@@ -2385,7 +2425,7 @@ namespace Parser {
             parseErrorAtCurrentToken(blankDiagnostic);
         }
         else {
-            parseErrorAtCurrentToken(nameDiagnostic, scanner.getTokenValue());
+            parseErrorAtCurrentToken(nameDiagnostic, getTokenValue());
         }
     }
 
@@ -2400,7 +2440,7 @@ namespace Parser {
     }
 
     function parseSemicolonAfterPropertyName(name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
-        if (token() === SyntaxKind.AtToken && !scanner.hasPrecedingLineBreak()) {
+        if (token() === SyntaxKind.AtToken && !hasPrecedingLineBreak()) {
             parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_the_name_and_all_keywords_of_property_declarations);
             return;
         }
@@ -2516,7 +2556,7 @@ namespace Parser {
         }
 
         // We can parse out an optional semicolon in ASI cases in the following cases.
-        return token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
+        return token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.EndOfFileToken || hasPrecedingLineBreak();
     }
 
     function tryParseSemicolon() {
@@ -2538,12 +2578,12 @@ namespace Parser {
 
     function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number, hasTrailingComma?: boolean): NodeArray<T> {
         const array = factoryCreateNodeArray(elements, hasTrailingComma);
-        setTextRangePosEnd(array, pos, end ?? scanner.getStartPos());
+        setTextRangePosEnd(array, pos, end ?? getStartPos());
         return array;
     }
 
     function finishNode<T extends Node>(node: T, pos: number, end?: number): T {
-        setTextRangePosEnd(node, pos, end ?? scanner.getStartPos());
+        setTextRangePosEnd(node, pos, end ?? getStartPos());
         if (contextFlags) {
             (node as Mutable<T>).flags |= contextFlags;
         }
@@ -2563,7 +2603,7 @@ namespace Parser {
     function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T;
     function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage?: DiagnosticMessage, arg0?: any): T {
         if (reportAtCurrentPosition) {
-            parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage!, arg0);
+            parseErrorAtPosition(getStartPos(), 0, diagnosticMessage!, arg0);
         }
         else if (diagnosticMessage) {
             parseErrorAtCurrentToken(diagnosticMessage, arg0);
@@ -2597,8 +2637,8 @@ namespace Parser {
             const pos = getNodePos();
             // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
             const originalKeywordKind = token();
-            const text = internIdentifier(scanner.getTokenValue());
-            const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
+            const text = internIdentifier(getTokenValue());
+            const hasExtendedUnicodeEscape = scanner_hasExtendedUnicodeEscape();
             nextTokenWithoutCheck();
             return finishNode(factoryCreateIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
         }
@@ -2608,7 +2648,7 @@ namespace Parser {
             return createIdentifier(/*isIdentifier*/ true);
         }
 
-        if (token() === SyntaxKind.Unknown && scanner.tryScan(() => scanner.reScanInvalidIdentifier() === SyntaxKind.Identifier)) {
+        if (token() === SyntaxKind.Unknown && tryScan(() => reScanInvalidIdentifier() === SyntaxKind.Identifier)) {
             // Scanner has already recorded an 'Invalid character' error, so no need to add another from the parser.
             return createIdentifier(/*isIdentifier*/ true);
         }
@@ -2617,8 +2657,8 @@ namespace Parser {
         // Only for end of file because the error gets reported incorrectly on embedded script tags.
         const reportAtCurrentPosition = token() === SyntaxKind.EndOfFileToken;
 
-        const isReservedWord = scanner.isReservedWord();
-        const msgArg = scanner.getTokenText();
+        const isReservedWord = scanner_isReservedWord();
+        const msgArg = getTokenText();
 
         const defaultMessage = isReservedWord ?
             Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here :
@@ -2685,7 +2725,7 @@ namespace Parser {
 
     function parsePrivateIdentifier(): PrivateIdentifier {
         const pos = getNodePos();
-        const node = factoryCreatePrivateIdentifier(internIdentifier(scanner.getTokenValue()));
+        const node = factoryCreatePrivateIdentifier(internIdentifier(getTokenValue()));
         nextToken();
         return finishNode(node, pos);
     }
@@ -2696,7 +2736,7 @@ namespace Parser {
 
     function nextTokenIsOnSameLineAndCanFollowModifier() {
         nextToken();
-        if (scanner.hasPrecedingLineBreak()) {
+        if (hasPrecedingLineBreak()) {
             return false;
         }
         return canFollowModifier();
@@ -3052,7 +3092,7 @@ namespace Parser {
             return undefined;
         }
 
-        const node = syntaxCursor.currentNode(pos ?? scanner.getStartPos());
+        const node = syntaxCursor.currentNode(pos ?? getStartPos());
 
         // Can't reuse a missing node.
         // Can't reuse a node that intersected the change range.
@@ -3094,7 +3134,7 @@ namespace Parser {
 
     function consumeNode(node: Node) {
         // Move the scanner so it is after the node we just consumed.
-        scanner.setTextPos(node.end);
+        setTextPos(node.end);
         nextToken();
         return node;
     }
@@ -3387,14 +3427,14 @@ namespace Parser {
         let commaStart = -1; // Meaning the previous token was not a comma
         while (true) {
             if (isListElement(kind, /*inErrorRecovery*/ false)) {
-                const startPos = scanner.getStartPos();
+                const startPos = getStartPos();
                 const result = parseListElement(kind, parseElement);
                 if (!result) {
                     parsingContext = saveParsingContext;
                     return undefined;
                 }
                 list.push(result);
-                commaStart = scanner.getTokenPos();
+                commaStart = getTokenPos();
 
                 if (parseOptional(SyntaxKind.CommaToken)) {
                     // No need to check for a zero length node since we know we parsed a comma
@@ -3415,10 +3455,10 @@ namespace Parser {
                 // parse errors.  For example, this can happen when people do things like use
                 // a semicolon to delimit object literal members.   Note: we'll have already
                 // reported an error when we called parseExpected above.
-                if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !hasPrecedingLineBreak()) {
                     nextToken();
                 }
-                if (startPos === scanner.getStartPos()) {
+                if (startPos === getStartPos()) {
                     // What we're parsing isn't actually remotely recognizable as a element and we've consumed no tokens whatsoever
                     // Consume a token to advance the parser in some way and avoid an infinite loop
                     // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
@@ -3519,7 +3559,7 @@ namespace Parser {
         // the code would be implicitly: "name.identifierOrKeyword; identifierNameOrKeyword".
         // In the first case though, ASI will not take effect because there is not a
         // line terminator after the identifier or keyword.
-        if (scanner.hasPrecedingLineBreak() && tokenIsIdentifierOrKeyword(token())) {
+        if (hasPrecedingLineBreak() && tokenIsIdentifierOrKeyword(token())) {
             const matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
             if (matchesPattern) {
@@ -3638,30 +3678,30 @@ namespace Parser {
 
     function getTemplateLiteralRawText(kind: TemplateLiteralToken["kind"]) {
         const isLast = kind === SyntaxKind.NoSubstitutionTemplateLiteral || kind === SyntaxKind.TemplateTail;
-        const tokenText = scanner.getTokenText();
-        return tokenText.substring(1, tokenText.length - (scanner.isUnterminated() ? 0 : isLast ? 1 : 2));
+        const tokenText = getTokenText();
+        return tokenText.substring(1, tokenText.length - (isUnterminated() ? 0 : isLast ? 1 : 2));
     }
 
     function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
         const pos = getNodePos();
         const node =
-            isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, scanner.getTokenValue(), getTemplateLiteralRawText(kind), scanner.getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags) :
+            isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, getTokenValue(), getTemplateLiteralRawText(kind), getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags) :
             // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal. But because of how the scanner separates the tokens, we would
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
-            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
-            isLiteralKind(kind) ? factoryCreateLiteralLikeNode(kind, scanner.getTokenValue()) :
+            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral(getTokenValue(), getNumericLiteralFlags()) :
+            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral(getTokenValue(), /*isSingleQuote*/ undefined, hasExtendedUnicodeEscape()) :
+            isLiteralKind(kind) ? factoryCreateLiteralLikeNode(kind, getTokenValue()) :
             Debug.fail();
 
-        if (scanner.hasExtendedUnicodeEscape()) {
+        if (hasExtendedUnicodeEscape()) {
             node.hasExtendedUnicodeEscape = true;
         }
 
-        if (scanner.isUnterminated()) {
+        if (isUnterminated()) {
             node.isUnterminated = true;
         }
 
@@ -3676,7 +3716,7 @@ namespace Parser {
     }
 
     function parseTypeArgumentsOfTypeReference() {
-        if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
+        if (!hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
             return parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
         }
     }
@@ -3794,7 +3834,7 @@ namespace Parser {
     }
 
     function parseJSDocType(): TypeNode {
-        scanner.setInJSDocType(true);
+        setInJSDocType(true);
         const pos = getNodePos();
         if (parseOptional(SyntaxKind.ModuleKeyword)) {
             // TODO(rbuckton): We never set the type for a JSDocNamepathType. What should we put here?
@@ -3811,13 +3851,13 @@ namespace Parser {
                 }
             }
 
-            scanner.setInJSDocType(false);
+            setInJSDocType(false);
             return finishNode(moduleTag, pos);
         }
 
         const hasDotDotDot = parseOptional(SyntaxKind.DotDotDotToken);
         let type = parseTypeOrTypePredicate();
-        scanner.setInJSDocType(false);
+        setInJSDocType(false);
         if (hasDotDotDot) {
             type = finishNode(factory.createJSDocVariadicType(type), pos);
         }
@@ -3833,7 +3873,7 @@ namespace Parser {
         parseExpected(SyntaxKind.TypeOfKeyword);
         const entityName = parseEntityName(/*allowReservedWords*/ true);
         // Make sure we perform ASI to prevent parsing the next line's type arguments as part of an instantiation expression.
-        const typeArguments = !scanner.hasPrecedingLineBreak() ? tryParseTypeArguments() : undefined;
+        const typeArguments = !hasPrecedingLineBreak() ? tryParseTypeArguments() : undefined;
         return finishNode(factory.createTypeQueryNode(entityName, typeArguments), pos);
     }
 
@@ -4430,9 +4470,9 @@ namespace Parser {
 
     function parseImportTypeAssertions(): ImportTypeAssertionContainer {
         const pos = getNodePos();
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = getTokenPos();
         parseExpected(SyntaxKind.OpenBraceToken);
-        const multiLine = scanner.hasPrecedingLineBreak();
+        const multiLine = hasPrecedingLineBreak();
         parseExpected(SyntaxKind.AssertKeyword);
         parseExpected(SyntaxKind.ColonToken);
         const clause = parseAssertClause(/*skipAssertKeyword*/ true);
@@ -4486,13 +4526,13 @@ namespace Parser {
                 return tryParse(parseKeywordAndNoDot) || parseTypeReference();
             case SyntaxKind.AsteriskEqualsToken:
                 // If there is '*=', treat it as * followed by postfix =
-                scanner.reScanAsteriskEqualsToken();
+                reScanAsteriskEqualsToken();
                 // falls through
             case SyntaxKind.AsteriskToken:
                 return parseJSDocAllType();
             case SyntaxKind.QuestionQuestionToken:
                 // If there is '??', treat it as prefix-'?' in JSDoc type.
-                scanner.reScanQuestionToken();
+                reScanQuestionToken();
                 // falls through
             case SyntaxKind.QuestionToken:
                 return parseJSDocUnknownOrNullableType();
@@ -4514,7 +4554,7 @@ namespace Parser {
                 return parseTokenNode<TypeNode>();
             case SyntaxKind.ThisKeyword: {
                 const thisKeyword = parseThisTypeNode();
-                if (token() === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                if (token() === SyntaxKind.IsKeyword && !hasPrecedingLineBreak()) {
                     return parseThisTypePredicate(thisKeyword);
                 }
                 else {
@@ -4600,7 +4640,7 @@ namespace Parser {
     function parsePostfixTypeOrHigher(): TypeNode {
         const pos = getNodePos();
         let type = parseNonArrayType();
-        while (!scanner.hasPrecedingLineBreak()) {
+        while (!hasPrecedingLineBreak()) {
             switch (token()) {
                 case SyntaxKind.ExclamationToken:
                     nextToken();
@@ -4806,7 +4846,7 @@ namespace Parser {
 
     function parseTypePredicatePrefix() {
         const id = parseIdentifier();
-        if (token() === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+        if (token() === SyntaxKind.IsKeyword && !hasPrecedingLineBreak()) {
             nextToken();
             return id;
         }
@@ -4829,7 +4869,7 @@ namespace Parser {
         }
         const pos = getNodePos();
         const type = parseUnionTypeOrHigher();
-        if (!inDisallowConditionalTypesContext() && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
+        if (!inDisallowConditionalTypesContext() && !hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
             // The type following 'extends' is not permitted to be another conditional type
             const extendsType = disallowConditionalTypesAnd(parseType);
             parseExpected(SyntaxKind.QuestionToken);
@@ -5045,7 +5085,7 @@ namespace Parser {
 
     function nextTokenIsIdentifierOnSameLine() {
         nextToken();
-        return !scanner.hasPrecedingLineBreak() && isIdentifier();
+        return !hasPrecedingLineBreak() && isIdentifier();
     }
 
     function parseYieldExpression(): YieldExpression {
@@ -5057,7 +5097,7 @@ namespace Parser {
         //      yield [no LineTerminator here] * [Lexical goal InputElementRegExp]AssignmentExpression[?In, Yield]
         nextToken();
 
-        if (!scanner.hasPrecedingLineBreak() &&
+        if (!hasPrecedingLineBreak() &&
             (token() === SyntaxKind.AsteriskToken || isStartOfExpression())) {
             return finishNode(
                 factory.createYieldExpression(
@@ -5131,7 +5171,7 @@ namespace Parser {
     function isParenthesizedArrowFunctionExpressionWorker() {
         if (token() === SyntaxKind.AsyncKeyword) {
             nextToken();
-            if (scanner.hasPrecedingLineBreak()) {
+            if (hasPrecedingLineBreak()) {
                 return Tristate.False;
             }
             if (token() !== SyntaxKind.OpenParenToken && token() !== SyntaxKind.LessThanToken) {
@@ -5259,7 +5299,7 @@ namespace Parser {
     }
 
     function parsePossibleParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction: boolean): ArrowFunction | undefined {
-        const tokenPos = scanner.getTokenPos();
+        const tokenPos = getTokenPos();
         if (notParenthesizedArrow?.has(tokenPos)) {
             return undefined;
         }
@@ -5293,12 +5333,12 @@ namespace Parser {
             nextToken();
             // If the "async" is followed by "=>" token then it is not a beginning of an async arrow-function
             // but instead a simple arrow-function which will be parsed inside "parseAssignmentExpressionOrHigher"
-            if (scanner.hasPrecedingLineBreak() || token() === SyntaxKind.EqualsGreaterThanToken) {
+            if (hasPrecedingLineBreak() || token() === SyntaxKind.EqualsGreaterThanToken) {
                 return Tristate.False;
             }
             // Check for un-parenthesized AsyncArrowFunction
             const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
-            if (!scanner.hasPrecedingLineBreak() && expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
+            if (!hasPrecedingLineBreak() && expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
                 return Tristate.True;
             }
         }
@@ -5526,7 +5566,7 @@ namespace Parser {
                 //    as (Bar)
                 // This should be parsed as an initialized variable, followed
                 // by a function call to 'as' with the argument 'Bar'
-                if (scanner.hasPrecedingLineBreak()) {
+                if (hasPrecedingLineBreak()) {
                     break;
                 }
                 else {
@@ -5759,7 +5799,7 @@ namespace Parser {
         const expression = parseLeftHandSideExpressionOrHigher();
 
         Debug.assert(isLeftHandSideExpression(expression));
-        if ((token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
+        if ((token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) && !hasPrecedingLineBreak()) {
             const operator = token() as PostfixUnaryOperator;
             nextToken();
             return finishNode(factory.createPostfixUnaryExpression(expression, operator), expression.pos);
@@ -5984,8 +6024,8 @@ namespace Parser {
 
     function parseJsxText(): JsxText {
         const pos = getNodePos();
-        const node = factory.createJsxText(scanner.getTokenValue(), currentToken === SyntaxKind.JsxTextAllWhiteSpaces);
-        currentToken = scanner.scanJsxToken();
+        const node = factory.createJsxText(getTokenValue(), currentToken === SyntaxKind.JsxTextAllWhiteSpaces);
+        currentToken = scanJsxToken();
         return finishNode(node, pos);
     }
 
@@ -6027,7 +6067,7 @@ namespace Parser {
         parsingContext |= 1 << ParsingContext.JsxChildren;
 
         while (true) {
-            const child = parseJsxChild(openingTag, currentToken = scanner.reScanJsxToken());
+            const child = parseJsxChild(openingTag, currentToken = reScanJsxToken());
             if (!child) break;
             list.push(child);
             if (isJsxOpeningElement(openingTag)
@@ -6311,7 +6351,7 @@ namespace Parser {
             }
 
             if (!questionDotToken) {
-                if (token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                if (token() === SyntaxKind.ExclamationToken && !hasPrecedingLineBreak()) {
                     nextToken();
                     expression = finishNode(factory.createNonNullExpression(expression), pos);
                     continue;
@@ -6431,7 +6471,7 @@ namespace Parser {
         }
         // We favor the type argument list interpretation when it is immediately followed by
         // a line break, a binary operator, or something that can't start an expression.
-        return scanner.hasPrecedingLineBreak() || isBinaryOperator() || !isStartOfExpression();
+        return hasPrecedingLineBreak() || isBinaryOperator() || !isStartOfExpression();
     }
 
     function parsePrimaryExpression(): PrimaryExpression {
@@ -6513,9 +6553,9 @@ namespace Parser {
 
     function parseArrayLiteralExpression(): ArrayLiteralExpression {
         const pos = getNodePos();
-        const openBracketPosition = scanner.getTokenPos();
+        const openBracketPosition = getTokenPos();
         const openBracketParsed = parseExpected(SyntaxKind.OpenBracketToken);
-        const multiLine = scanner.hasPrecedingLineBreak();
+        const multiLine = hasPrecedingLineBreak();
         const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketParsed, openBracketPosition);
         return finishNode(factoryCreateArrayLiteralExpression(elements, multiLine), pos);
@@ -6579,9 +6619,9 @@ namespace Parser {
 
     function parseObjectLiteralExpression(): ObjectLiteralExpression {
         const pos = getNodePos();
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = getTokenPos();
         const openBraceParsed = parseExpected(SyntaxKind.OpenBraceToken);
-        const multiLine = scanner.hasPrecedingLineBreak();
+        const multiLine = hasPrecedingLineBreak();
         const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
         return finishNode(factoryCreateObjectLiteralExpression(properties, multiLine), pos);
@@ -6649,10 +6689,10 @@ namespace Parser {
     function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = getTokenPos();
         const openBraceParsed = parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage);
         if (openBraceParsed || ignoreMissingOpenBrace) {
-            const multiLine = scanner.hasPrecedingLineBreak();
+            const multiLine = hasPrecedingLineBreak();
             const statements = parseList(ParsingContext.BlockStatements, parseStatement);
             parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
             const result = withJSDoc(finishNode(factoryCreateBlock(statements, multiLine), pos), hasJSDoc);
@@ -6710,7 +6750,7 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.IfKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = getTokenPos();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
@@ -6725,7 +6765,7 @@ namespace Parser {
         parseExpected(SyntaxKind.DoKeyword);
         const statement = parseStatement();
         parseExpected(SyntaxKind.WhileKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = getTokenPos();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
@@ -6742,7 +6782,7 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.WhileKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = getTokenPos();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
@@ -6821,7 +6861,7 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.WithKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = getTokenPos();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
@@ -6883,7 +6923,7 @@ namespace Parser {
         // directly as that might consume an expression on the following line.
         // Instead, we create a "missing" identifier, but don't report an error. The actual error
         // will be reported in the grammar walker.
-        let expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
+        let expression = hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
         if (expression === undefined) {
             identifierCount++;
             expression = finishNode(factoryCreateIdentifier(""), getNodePos());
@@ -6967,22 +7007,22 @@ namespace Parser {
 
     function nextTokenIsIdentifierOrKeywordOnSameLine() {
         nextToken();
-        return tokenIsIdentifierOrKeyword(token()) && !scanner.hasPrecedingLineBreak();
+        return tokenIsIdentifierOrKeyword(token()) && !hasPrecedingLineBreak();
     }
 
     function nextTokenIsClassKeywordOnSameLine() {
         nextToken();
-        return token() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak();
+        return token() === SyntaxKind.ClassKeyword && !hasPrecedingLineBreak();
     }
 
     function nextTokenIsFunctionKeywordOnSameLine() {
         nextToken();
-        return token() === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak();
+        return token() === SyntaxKind.FunctionKeyword && !hasPrecedingLineBreak();
     }
 
     function nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine() {
         nextToken();
-        return (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NumericLiteral || token() === SyntaxKind.BigIntLiteral || token() === SyntaxKind.StringLiteral) && !scanner.hasPrecedingLineBreak();
+        return (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NumericLiteral || token() === SyntaxKind.BigIntLiteral || token() === SyntaxKind.StringLiteral) && !hasPrecedingLineBreak();
     }
 
     function isDeclaration(): boolean {
@@ -7033,7 +7073,7 @@ namespace Parser {
                 case SyntaxKind.ReadonlyKeyword:
                     nextToken();
                     // ASI takes effect for this modifier.
-                    if (scanner.hasPrecedingLineBreak()) {
+                    if (hasPrecedingLineBreak()) {
                         return false;
                     }
                     continue;
@@ -7301,7 +7341,7 @@ namespace Parser {
 
     function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
         nextToken();
-        return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
+        return !hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
     }
 
     function parseFunctionBlockOrSemicolon(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block | undefined {
@@ -7392,7 +7432,7 @@ namespace Parser {
         const name = parseIdentifierOrPattern(Diagnostics.Private_identifiers_are_not_allowed_in_variable_declarations);
         let exclamationToken: ExclamationToken | undefined;
         if (allowExclamation && name.kind === SyntaxKind.Identifier &&
-            token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+            token() === SyntaxKind.ExclamationToken && !hasPrecedingLineBreak()) {
             exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
         }
         const type = parseTypeAnnotation();
@@ -7544,7 +7584,7 @@ namespace Parser {
         name: PropertyName,
         questionToken: QuestionToken | undefined
     ): PropertyDeclaration {
-        const exclamationToken = !questionToken && !scanner.hasPrecedingLineBreak() ? parseOptionalToken(SyntaxKind.ExclamationToken) : undefined;
+        const exclamationToken = !questionToken && !hasPrecedingLineBreak() ? parseOptionalToken(SyntaxKind.ExclamationToken) : undefined;
         const type = parseTypeAnnotation();
         const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
         parseSemicolonAfterPropertyName(name, type, initializer);
@@ -8103,7 +8143,7 @@ namespace Parser {
     function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ImportEqualsDeclaration | ImportDeclaration {
         parseExpected(SyntaxKind.ImportKeyword);
 
-        const afterImportPos = scanner.getStartPos();
+        const afterImportPos = getStartPos();
 
         // We don't parse the identifier here in await context, instead we will report a grammar error in the checker.
         let identifier: Identifier | undefined;
@@ -8138,7 +8178,7 @@ namespace Parser {
         const moduleSpecifier = parseModuleSpecifier();
 
         let assertClause: AssertClause | undefined;
-        if (token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
+        if (token() === SyntaxKind.AssertKeyword && !hasPrecedingLineBreak()) {
             assertClause = parseAssertClause();
         }
 
@@ -8160,9 +8200,9 @@ namespace Parser {
         if (!skipAssertKeyword) {
             parseExpected(SyntaxKind.AssertKeyword);
         }
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = getTokenPos();
         if (parseExpected(SyntaxKind.OpenBraceToken)) {
-            const multiLine = scanner.hasPrecedingLineBreak();
+            const multiLine = hasPrecedingLineBreak();
             const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
             if (!parseExpected(SyntaxKind.CloseBraceToken)) {
                 const lastError = lastOrUndefined(parseDiagnostics);
@@ -8295,8 +8335,8 @@ namespace Parser {
         //   IdentifierName
         //   IdentifierName as IdentifierName
         let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
-        let checkIdentifierStart = scanner.getTokenPos();
-        let checkIdentifierEnd = scanner.getTextPos();
+        let checkIdentifierStart = getTokenPos();
+        let checkIdentifierEnd = getTextPos();
         let isTypeOnly = false;
         let propertyName: Identifier | undefined;
         let canParseAsKeyword = true;
@@ -8363,8 +8403,8 @@ namespace Parser {
 
         function parseNameWithKeywordCheck() {
             checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
-            checkIdentifierStart = scanner.getTokenPos();
-            checkIdentifierEnd = scanner.getTextPos();
+            checkIdentifierStart = getTokenPos();
+            checkIdentifierEnd = getTextPos();
             return parseIdentifierName();
         }
     }
@@ -8393,12 +8433,12 @@ namespace Parser {
             // It is not uncommon to accidentally omit the 'from' keyword. Additionally, in editing scenarios,
             // the 'from' keyword can be parsed as a named export when the export clause is unterminated (i.e. `export { from "moduleName";`)
             // If we don't have a 'from' keyword, see if we have a string literal such that ASI won't take effect.
-            if (token() === SyntaxKind.FromKeyword || (token() === SyntaxKind.StringLiteral && !scanner.hasPrecedingLineBreak())) {
+            if (token() === SyntaxKind.FromKeyword || (token() === SyntaxKind.StringLiteral && !hasPrecedingLineBreak())) {
                 parseExpected(SyntaxKind.FromKeyword);
                 moduleSpecifier = parseModuleSpecifier();
             }
         }
-        if (moduleSpecifier && token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
+        if (moduleSpecifier && token() === SyntaxKind.AssertKeyword && !hasPrecedingLineBreak()) {
             assertClause = parseAssertClause();
         }
         parseSemicolon();
@@ -8462,8 +8502,8 @@ namespace Parser {
     export namespace JSDocParser {
         export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
             initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
-            scanner.setText(content, start, length);
-            currentToken = scanner.scan();
+            setText(content, start, length);
+            currentToken = scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
 
             const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factoryCreateToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
@@ -8577,7 +8617,7 @@ namespace Parser {
             const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
-            return scanner.scanRange(start + 3, length - 5, () => {
+            return scanRange(start + 3, length - 5, () => {
                 // Initially we can parse out a tag.  We also have seen a starting asterisk.
                 // This is so that /** * @type */ doesn't parse.
                 let state = JSDocState.SawAsterisk;
@@ -8613,16 +8653,16 @@ namespace Parser {
                                 margin = undefined;
                             }
                             else {
-                                pushComment(scanner.getTokenText());
+                                pushComment(getTokenText());
                             }
                             break;
                         case SyntaxKind.NewLineTrivia:
-                            comments.push(scanner.getTokenText());
+                            comments.push(getTokenText());
                             state = JSDocState.BeginningOfLine;
                             indent = 0;
                             break;
                         case SyntaxKind.AsteriskToken:
-                            const asterisk = scanner.getTokenText();
+                            const asterisk = getTokenText();
                             if (state === JSDocState.SawAsterisk || state === JSDocState.SavingComments) {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
@@ -8636,7 +8676,7 @@ namespace Parser {
                             break;
                         case SyntaxKind.WhitespaceTrivia:
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
-                            const whitespace = scanner.getTokenText();
+                            const whitespace = getTokenText();
                             if (state === JSDocState.SavingComments) {
                                 comments.push(whitespace);
                             }
@@ -8649,8 +8689,8 @@ namespace Parser {
                             break loop;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
-                            const commentEnd = scanner.getStartPos();
-                            const linkStart = scanner.getTextPos() - 1;
+                            const commentEnd = getStartPos();
+                            const linkStart = getTextPos() - 1;
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 if (!linkEnd) {
@@ -8659,7 +8699,7 @@ namespace Parser {
                                 parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentEnd));
                                 parts.push(link);
                                 comments = [];
-                                linkEnd = scanner.getTextPos();
+                                linkEnd = getTextPos();
                                 break;
                             }
                             // fallthrough if it's not a {@link sequence
@@ -8668,7 +8708,7 @@ namespace Parser {
                             // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                             // line break.
                             state = JSDocState.SavingComments;
-                            pushComment(scanner.getTokenText());
+                            pushComment(getTokenText());
                             break;
                     }
                     nextTokenJSDoc();
@@ -8725,11 +8765,11 @@ namespace Parser {
                     }
                 }
 
-                let precedingLineBreak = scanner.hasPrecedingLineBreak();
+                let precedingLineBreak = hasPrecedingLineBreak();
                 let seenLineBreak = false;
                 let indentText = "";
                 while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
-                    indentText += scanner.getTokenText();
+                    indentText += getTokenText();
                     if (token() === SyntaxKind.NewLineTrivia) {
                         precedingLineBreak = true;
                         seenLineBreak = true;
@@ -8745,7 +8785,7 @@ namespace Parser {
 
             function parseTag(margin: number) {
                 Debug.assert(token() === SyntaxKind.AtToken);
-                const start = scanner.getTokenPos();
+                const start = getTokenPos();
                 nextTokenJSDoc();
 
                 const tagName = parseJSDocIdentifierName(/*message*/ undefined);
@@ -8868,27 +8908,27 @@ namespace Parser {
                         case SyntaxKind.NewLineTrivia:
                             state = JSDocState.BeginningOfLine;
                             // don't use pushComment here because we want to keep the margin unchanged
-                            comments.push(scanner.getTokenText());
+                            comments.push(getTokenText());
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.SavingBackticks
                                 || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
                                 // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
-                                comments.push(scanner.getTokenText());
+                                comments.push(getTokenText());
                                 break;
                             }
-                            scanner.setTextPos(scanner.getTextPos() - 1);
+                            setTextPos(getTextPos() - 1);
                             // falls through
                         case SyntaxKind.EndOfFileToken:
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
                             if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
-                                pushComment(scanner.getTokenText());
+                                pushComment(getTokenText());
                             }
                             else {
-                                const whitespace = scanner.getTokenText();
+                                const whitespace = getTokenText();
                                 // if the whitespace crosses the margin, take only the whitespace that passes the margin
                                 if (margin !== undefined && indent + whitespace.length > margin) {
                                     comments.push(whitespace.slice(margin - indent));
@@ -8898,17 +8938,17 @@ namespace Parser {
                             break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
-                            const commentEnd = scanner.getStartPos();
-                            const linkStart = scanner.getTextPos() - 1;
+                            const commentEnd = getStartPos();
+                            const linkStart = getTextPos() - 1;
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos, commentEnd));
                                 parts.push(link);
                                 comments = [];
-                                linkEnd = scanner.getTextPos();
+                                linkEnd = getTextPos();
                             }
                             else {
-                                pushComment(scanner.getTokenText());
+                                pushComment(getTokenText());
                             }
                             break;
                         case SyntaxKind.BacktickToken:
@@ -8918,7 +8958,7 @@ namespace Parser {
                             else {
                                 state = JSDocState.SavingBackticks;
                             }
-                            pushComment(scanner.getTokenText());
+                            pushComment(getTokenText());
                             break;
                         case SyntaxKind.AsteriskToken:
                             if (state === JSDocState.BeginningOfLine) {
@@ -8933,7 +8973,7 @@ namespace Parser {
                             if (state !== JSDocState.SavingBackticks) {
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                             }
-                            pushComment(scanner.getTokenText());
+                            pushComment(getTokenText());
                             break;
                     }
                     previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
@@ -8946,7 +8986,7 @@ namespace Parser {
                     if (comments.length) {
                         parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
                     }
-                    return createNodeArray(parts, commentsPos, scanner.getTextPos());
+                    return createNodeArray(parts, commentsPos, getTextPos());
                 }
                 else if (comments.length) {
                     return comments.join("");
@@ -8979,13 +9019,13 @@ namespace Parser {
                 }
                 const text = [];
                 while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
-                    text.push(scanner.getTokenText());
+                    text.push(getTokenText());
                     nextTokenJSDoc();
                 }
                 const create = linkType === "link" ? factory.createJSDocLink
                     : linkType === "linkcode" ? factory.createJSDocLinkCode
                     : factory.createJSDocLinkPlain;
-                return finishNode(create(name, text.join("")), start, scanner.getTextPos());
+                return finishNode(create(name, text.join("")), start, getTextPos());
             }
 
             function parseJSDocLinkPrefix() {
@@ -8993,7 +9033,7 @@ namespace Parser {
                 if (token() === SyntaxKind.OpenBraceToken
                     && nextTokenJSDoc() === SyntaxKind.AtToken
                     && tokenIsIdentifierOrKeyword(nextTokenJSDoc())) {
-                    const kind = scanner.getTokenValue();
+                    const kind = getTokenValue();
                     if (isJSDocLinkTag(kind)) return kind;
                 }
             }
@@ -9105,7 +9145,7 @@ namespace Parser {
 
             function parseReturnTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocReturnTag {
                 if (some(tags, isJSDocReturnTag)) {
-                    parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    parseErrorAt(tagName.pos, getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                 }
 
                 const typeExpression = tryParseTypeExpression();
@@ -9114,7 +9154,7 @@ namespace Parser {
 
             function parseTypeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocTypeTag {
                 if (some(tags, isJSDocTypeTag)) {
-                    parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    parseErrorAt(tagName.pos, getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                 }
 
                 const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
@@ -9124,7 +9164,7 @@ namespace Parser {
 
             function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
                 const isMarkdownOrJSDocLink = token() === SyntaxKind.OpenBracketToken
-                    || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && isJSDocLinkTag(scanner.getTokenValue()));
+                    || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && isJSDocLinkTag(getTokenValue()));
                 const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                 const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                 return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
@@ -9139,10 +9179,10 @@ namespace Parser {
             function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
                 const commentStart = getNodePos();
                 const textOnly = parseAuthorNameAndEmail();
-                let commentEnd = scanner.getStartPos();
+                let commentEnd = getStartPos();
                 const comments = parseTrailingTagComments(start, commentEnd, indent, indentText);
                 if (!comments) {
-                    commentEnd = scanner.getStartPos();
+                    commentEnd = getStartPos();
                 }
                 const allParts = typeof comments !== "string"
                     ? createNodeArray(concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as JSDocComment[], commentStart) // cast away readonly
@@ -9153,7 +9193,7 @@ namespace Parser {
             function parseAuthorNameAndEmail(): JSDocText {
                 const comments: string[] = [];
                 let inEmail = false;
-                let token = scanner.getToken();
+                let token = getToken();
                 while (token !== SyntaxKind.EndOfFileToken && token !== SyntaxKind.NewLineTrivia) {
                     if (token === SyntaxKind.LessThanToken) {
                         inEmail = true;
@@ -9162,11 +9202,11 @@ namespace Parser {
                         break;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && inEmail) {
-                        comments.push(scanner.getTokenText());
-                        scanner.setTextPos(scanner.getTokenPos() + 1);
+                        comments.push(getTokenText());
+                        setTextPos(getTokenPos() + 1);
                         break;
                     }
-                    comments.push(scanner.getTokenText());
+                    comments.push(getTokenText());
                     token = nextTokenJSDoc();
                 }
 
@@ -9284,7 +9324,7 @@ namespace Parser {
             }
 
             function parseJSDocTypeNameWithNamespace(nested?: boolean) {
-                const pos = scanner.getTokenPos();
+                const pos = getTokenPos();
                 if (!tokenIsIdentifierOrKeyword(token())) {
                     return undefined;
                 }
@@ -9408,7 +9448,7 @@ namespace Parser {
 
             function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                 Debug.assert(token() === SyntaxKind.AtToken);
-                const start = scanner.getStartPos();
+                const start = getStartPos();
                 nextTokenJSDoc();
 
                 const tagName = parseJSDocIdentifierName();
@@ -9520,10 +9560,10 @@ namespace Parser {
                 }
 
                 identifierCount++;
-                const pos = scanner.getTokenPos();
-                const end = scanner.getTextPos();
+                const pos = getTokenPos();
+                const end = getTextPos();
                 const originalKeywordKind = token();
-                const text = internIdentifier(scanner.getTokenValue());
+                const text = internIdentifier(getTokenValue());
                 const result = finishNode(factoryCreateIdentifier(text, originalKeywordKind), pos, end);
                 nextTokenJSDoc();
                 return result;
