@@ -587,6 +587,8 @@ export namespace Debug {
     export function enableDebugInfo() {
         if (isDebugInfoEnabled) return;
 
+        console.log(ts);
+
         // avoid recomputing
         const weakTypeTextMap = new WeakMap<Type, string>();
         const weakNodeTextMap = new WeakMap<Node, string>();

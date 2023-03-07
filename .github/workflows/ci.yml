@@ -188,3 +188,19 @@ jobs:
 
     - name: Self build
       run: npx hereby build-src --built
+
+  pkg-size-report:
+    name: Package Size Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
+      - name: Package size report
+        uses: pkg-size/action@7cbd5229062f24aec6543e0b8fd5eb09233bf355
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          build-command: npx hereby lkg
+          hide-files: 'lib*.d.ts'
