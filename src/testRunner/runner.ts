@@ -2,7 +2,6 @@ import * as FourSlash from "./_namespaces/FourSlash";
 import {
     CompilerBaselineRunner,
     CompilerTestType,
-    DefinitelyTypedRunner,
     FourSlashRunner,
     GeneratedFourslashRunner,
     IO,
@@ -75,8 +74,6 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new project.ProjectRunner();
         case "rwc":
             return new RWC.RWCRunner();
-        case "dt":
-            return new DefinitelyTypedRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -210,9 +207,6 @@ function handleTestConfig() {
                         break;
                     case "rwc":
                         runners.push(new RWC.RWCRunner());
-                        break;
-                    case "dt":
-                        runners.push(new DefinitelyTypedRunner());
                         break;
                 }
             }
