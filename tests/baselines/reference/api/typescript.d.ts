@@ -3049,6 +3049,12 @@ declare namespace ts {
     enum ModuleResolutionKind {
         Classic = 1,
         Node10 = 2,
+        /**
+         * @deprecated
+         * `NodeJs` was renamed to `Node10` to better reflect the version of Node that it targets.
+         * Use the new name or consider switching to a modern module resolution target.
+         */
+        NodeJs = 2,
         Node16 = 3,
         NodeNext = 99,
         Bundler = 100
