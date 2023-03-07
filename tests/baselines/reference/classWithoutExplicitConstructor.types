@@ -20,7 +20,6 @@ var c2 = new C(null); // error
 >c2 : C
 >new C(null) : C
 >C : typeof C
->null : null
 
 class D<T extends Date> {
 >D : D<T>
@@ -31,7 +30,6 @@ class D<T extends Date> {
 
     y: T = null;
 >y : T
->null : null
 }
 
 var d = new D();
@@ -43,5 +41,4 @@ var d2 = new D(null); // error
 >d2 : D<Date>
 >new D(null) : D<Date>
 >D : typeof D
->null : null
 

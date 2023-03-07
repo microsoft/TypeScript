@@ -123,11 +123,11 @@ function gg2(x: Record<string, unknown>) {
 >x : Record<string, unknown>
 
         x;  // {}
->x : {}
+>x : Record<string, unknown>
     }
     else {
         x;  // Record<string, unknown>
->x : Record<string, unknown>
+>x : never
     }
     x;  // Record<string, unknown>
 >x : Record<string, unknown>

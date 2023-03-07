@@ -6370,6 +6370,40 @@ declare namespace ts {
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
         /**
+         * Gets the intrinsic `any` type. There are multiple types that act as `any` used internally in the compiler,
+         * so the type returned by this function should not be used in equality checks to determine if another type
+         * is `any`. Instead, use `type.flags & TypeFlags.Any`.
+         */
+        getAnyType(): Type;
+        getStringType(): Type;
+        getStringLiteralType(value: string): StringLiteralType;
+        getNumberType(): Type;
+        getNumberLiteralType(value: number): NumberLiteralType;
+        getBigIntType(): Type;
+        getBooleanType(): Type;
+        getFalseType(): Type;
+        getTrueType(): Type;
+        getVoidType(): Type;
+        /**
+         * Gets the intrinsic `undefined` type. There are multiple types that act as `undefined` used internally in the compiler
+         * depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+         * if another type is `undefined`. Instead, use `type.flags & TypeFlags.Undefined`.
+         */
+        getUndefinedType(): Type;
+        /**
+         * Gets the intrinsic `null` type. There are multiple types that act as `null` used internally in the compiler,
+         * so the type returned by this function should not be used in equality checks to determine if another type
+         * is `null`. Instead, use `type.flags & TypeFlags.Null`.
+         */
+        getNullType(): Type;
+        getESSymbolType(): Type;
+        /**
+         * Gets the intrinsic `never` type. There are multiple types that act as `never` used internally in the compiler,
+         * so the type returned by this function should not be used in equality checks to determine if another type
+         * is `never`. Instead, use `type.flags & TypeFlags.Never`.
+         */
+        getNeverType(): Type;
+        /**
          * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
          * This function will _not_ return true if passed a type which
          * extends `Array` (for example, the TypeScript AST's `NodeArray` type).
@@ -6957,6 +6991,12 @@ declare namespace ts {
     }
     enum ModuleResolutionKind {
         Classic = 1,
+        /**
+         * @deprecated
+         * `NodeJs` was renamed to `Node10` to better reflect the version of Node that it targets.
+         * Use the new name or consider switching to a modern module resolution target.
+         */
+        NodeJs = 2,
         Node10 = 2,
         Node16 = 3,
         NodeNext = 99,

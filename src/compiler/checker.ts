@@ -1710,7 +1710,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         createIndexInfo,
         getAnyType: () => anyType,
         getStringType: () => stringType,
+        getStringLiteralType,
         getNumberType: () => numberType,
+        getNumberLiteralType,
+        getBigIntType: () => bigintType,
         createPromiseType,
         createArrayType,
         getElementTypeOfArrayType,
@@ -19107,6 +19110,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeRelatedTo(source, target, subtypeRelation);
     }
 
+    function isTypeStrictSubtypeOf(source: Type, target: Type): boolean {
+        return isTypeRelatedTo(source, target, strictSubtypeRelation);
+    }
+
     function isTypeAssignableTo(source: Type, target: Type): boolean {
         return isTypeRelatedTo(source, target, assignableRelation);
     }
@@ -20704,9 +20711,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                     Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
-                                    errorNode = propDeclaration;
-
                                     const name = propDeclaration.name!;
+                                    errorNode = name;
+
                                     if (isIdentifier(name)) {
                                         suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
                                     }
@@ -27270,7 +27277,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // prototype object types.
                 const directlyRelated = mapType(matching || type, checkDerived ?
                     t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                    t => isTypeSubtypeOf(c, t) && !isTypeIdenticalTo(c, t) ? c : isTypeSubtypeOf(t, c) ? t : neverType);
+                    t => isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType);
                 // If no constituents are directly related, create intersections for any generic constituents that
                 // are related by constraint.
                 return directlyRelated.flags & TypeFlags.Never ?
@@ -38247,7 +38254,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAccessorDeclaration(node: AccessorDeclaration) {
-        if (isIdentifier(node.name) && idText(node.name) === "constructor") {
+        if (isIdentifier(node.name) && idText(node.name) === "constructor" && isClassLike(node.parent)) {
             error(node.name, Diagnostics.Class_constructor_may_not_be_an_accessor);
         }
         addLazyDiagnostic(checkAccessorDeclarationDiagnostics);

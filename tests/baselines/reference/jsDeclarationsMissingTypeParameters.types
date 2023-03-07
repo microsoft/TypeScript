@@ -18,7 +18,6 @@ function y(func) { return; }
  */
 function z() { return null ;}
 >z : () => (any[] | null)
->null : null
 
 /**
  * 
@@ -26,5 +25,4 @@ function z() { return null ;}
  */
 function w() { return null; }
 >w : () => Promise<any> | null
->null : null
 

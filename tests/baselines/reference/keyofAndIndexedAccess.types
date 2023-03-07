@@ -74,7 +74,6 @@ type K05 = keyof undefined;  // never
 
 type K06 = keyof null;  // never
 >K06 : never
->null : null
 
 type K07 = keyof never;  // string | number | symbol
 >K07 : string | number | symbol
@@ -1291,7 +1290,6 @@ function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
 
     let a: {} | null | undefined;
 >a : {} | null | undefined
->null : null
 
     a = x;
 >a = x : T
@@ -2064,7 +2062,6 @@ function fn<T extends I, K extends keyof T>(o: T, k: K) {
     take<{} | null | undefined>(o[k]);
 >take<{} | null | undefined>(o[k]) : void
 >take : <T>(p: T) => void
->null : null
 >o[k] : T[K]
 >o : T
 >k : K
@@ -2088,7 +2085,6 @@ class Unbounded<T> {
 
         let y: {} | undefined | null = x;
 >y : {} | null | undefined
->null : null
 >x : T[keyof T]
     }
 }

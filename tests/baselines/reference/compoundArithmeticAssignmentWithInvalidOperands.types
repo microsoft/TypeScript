@@ -53,7 +53,6 @@ x1 *= {};
 x1 *= null;
 >x1 *= null : number
 >x1 : boolean
->null : null
 
 x1 *= undefined;
 >x1 *= undefined : number
@@ -103,7 +102,6 @@ x2 *= {};
 x2 *= null;
 >x2 *= null : number
 >x2 : string
->null : null
 
 x2 *= undefined;
 >x2 *= undefined : number
@@ -153,7 +151,6 @@ x3 *= {};
 x3 *= null;
 >x3 *= null : number
 >x3 : {}
->null : null
 
 x3 *= undefined;
 >x3 *= undefined : number
@@ -203,7 +200,6 @@ x4 *= {};
 x4 *= null;
 >x4 *= null : number
 >x4 : void
->null : null
 
 x4 *= undefined;
 >x4 *= undefined : number

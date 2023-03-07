@@ -106,7 +106,6 @@ var x11: (s: Base[]) => any = n => { var n: Base[]; return null; };
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x12: Genric<Base> = { func: n => { return [d1, d2]; } };
 >x12 : Genric<Base>
@@ -207,7 +206,6 @@ class x23 { member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x24 { member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x24 : x24
@@ -309,7 +307,6 @@ class x35 { private member: (s: Base[]) => any = n => { var n: Base[]; return nu
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x36 { private member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x36 : x36
@@ -411,7 +408,6 @@ class x47 { public member: (s: Base[]) => any = n => { var n: Base[]; return nul
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x48 { public member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x48 : x48
@@ -513,7 +509,6 @@ class x59 { static member: (s: Base[]) => any = n => { var n: Base[]; return nul
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x60 { static member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x60 : x60
@@ -615,7 +610,6 @@ class x71 { private static member: (s: Base[]) => any = n => { var n: Base[]; re
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x72 { private static member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x72 : x72
@@ -717,7 +711,6 @@ class x83 { public static member: (s: Base[]) => any = n => { var n: Base[]; ret
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x84 { public static member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x84 : x84
@@ -819,7 +812,6 @@ class x95 { constructor(parm: (s: Base[]) => any = n => { var n: Base[]; return 
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x96 { constructor(parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { } }
 >x96 : x96
@@ -921,7 +913,6 @@ class x107 { constructor(public parm: (s: Base[]) => any = n => { var n: Base[];
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x108 { constructor(public parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { } }
 >x108 : x108
@@ -1023,7 +1014,6 @@ class x119 { constructor(private parm: (s: Base[]) => any = n => { var n: Base[]
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 class x120 { constructor(private parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { } }
 >x120 : x120
@@ -1125,7 +1115,6 @@ function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) {
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 function x132(parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { }
 >x132 : (parm?: Genric<Base>) => void
@@ -1216,7 +1205,6 @@ function x143(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 function x144(): Genric<Base> { return { func: n => { return [d1, d2]; } }; }
 >x144 : () => Genric<Base>
@@ -1346,11 +1334,9 @@ function x155(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 function x156(): Genric<Base> { return { func: n => { return [d1, d2]; } }; return { func: n => { return [d1, d2]; } }; }
 >x156 : () => Genric<Base>
@@ -1458,7 +1444,6 @@ var x167: () => (s: Base[]) => any = () => { return n => { var n: Base[]; return
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x168: () => Genric<Base> = () => { return { func: n => { return [d1, d2]; } }; };
 >x168 : () => Genric<Base>
@@ -1560,7 +1545,6 @@ var x179: () => (s: Base[]) => any = function() { return n => { var n: Base[]; r
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x180: () => Genric<Base> = function() { return { func: n => { return [d1, d2]; } }; };
 >x180 : () => Genric<Base>
@@ -1662,7 +1646,6 @@ module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; 
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 module x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
 >x192 : typeof x192
@@ -1764,7 +1747,6 @@ module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return nu
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 module x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
 >x204 : typeof x204
@@ -2044,7 +2026,6 @@ var x235: (s: Base[]) => any; x235 = n => { var n: Base[]; return null; };
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x236: Genric<Base>; x236 = { func: n => { return [d1, d2]; } };
 >x236 : Genric<Base>
@@ -2169,7 +2150,6 @@ var x247: { n: (s: Base[]) => any; } = { n: n => { var n: Base[]; return null; }
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x248: { n: Genric<Base>; } = { n: { func: n => { return [d1, d2]; } } };
 >x248 : { n: Genric<Base>; }
@@ -2638,11 +2618,9 @@ var x295: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : n =
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x296: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : { func: n => { return [d1, d2]; } };
 >x296 : Genric<Base>
@@ -2774,7 +2752,6 @@ var x307: (s: Base[]) => any = true ? undefined : n => { var n: Base[]; return n
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x308: Genric<Base> = true ? undefined : { func: n => { return [d1, d2]; } };
 >x308 : Genric<Base>
@@ -2899,7 +2876,6 @@ var x319: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : und
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 >undefined : undefined
 
 var x320: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : undefined;
@@ -3026,7 +3002,6 @@ function x331(n: (s: Base[]) => any) { }; x331(n => { var n: Base[]; return null
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 function x332(n: Genric<Base>) { }; x332({ func: n => { return [d1, d2]; } });
 >x332 : (n: Genric<Base>) => void
@@ -3174,7 +3149,6 @@ var x343 = (n: (s: Base[]) => any) => n; x343(n => { var n: Base[]; return null;
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x344 = (n: Genric<Base>) => n; x344({ func: n => { return [d1, d2]; } });
 >x344 : (n: Genric<Base>) => Genric<Base>
@@ -3313,7 +3287,6 @@ var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; retur
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
->null : null
 
 var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; } });
 >x356 : (n: Genric<Base>) => void
