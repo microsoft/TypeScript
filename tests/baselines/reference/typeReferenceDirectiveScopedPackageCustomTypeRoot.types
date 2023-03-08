@@ -1,0 +1,31 @@
+=== /a.ts ===
+typesCache;
+>typesCache : number
+
+mangledAtTypesCache;
+>mangledAtTypesCache : any
+
+nodeModulesCache;
+>nodeModulesCache : number
+
+mangledNodeModules;
+>mangledNodeModules : any
+
+atTypesCache;
+>atTypesCache : number
+
+mangledAtTypesCache;
+>mangledAtTypesCache : any
+
+=== /types/@scoped/typescache/index.d.ts ===
+declare const typesCache: number;
+>typesCache : number
+
+=== /node_modules/@scoped/nodemodulescache/index.d.ts ===
+declare const nodeModulesCache: number;
+>nodeModulesCache : number
+
+=== /node_modules/@types/@scoped/attypescache/index.d.ts ===
+declare const atTypesCache: number;
+>atTypesCache : number
+
