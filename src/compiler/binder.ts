@@ -3213,7 +3213,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
                 break;
-
+            // Namespaces are not allowed in javascript files, so do nothing here
+            case SyntaxKind.ModuleDeclaration:
+                break;
             default:
                 Debug.failBadSyntaxKind(thisContainer);
         }
