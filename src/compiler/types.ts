@@ -129,6 +129,11 @@ export const enum SyntaxKind {
     // Identifiers and PrivateIdentifiers
     Identifier,
     PrivateIdentifier,
+    /**
+     * Only the special JSDoc comment text scanner produces JSDocCommentTextTokes. One of these tokens spans all text after a tag comment's start and before the next @
+     * @internal
+     */
+    JSDocCommentTextToken,
     // Reserved words
     BreakKeyword,
     CaseKeyword,

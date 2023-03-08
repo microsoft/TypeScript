@@ -364,6 +364,7 @@ import {
     tracing,
     TransformFlags,
     trimString,
+    trimStringEnd,
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
@@ -2163,6 +2164,10 @@ namespace Parser {
 
     function nextTokenJSDoc(): JSDocSyntaxKind {
         return currentToken = scanner.scanJsDocToken();
+    }
+
+    function nextJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
+        return currentToken = scanner.scanJSDocCommentTextToken(inBackticks);
     }
 
     function reScanGreaterToken(): SyntaxKind {
@@ -8602,19 +8607,14 @@ namespace Parser {
                 loop: while (true) {
                     switch (token()) {
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                removeTrailingWhitespace(comments);
-                                if (!commentsPos) commentsPos = getNodePos();
-                                addTag(parseTag(indent));
-                                // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
-                                // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
-                                // for malformed examples like `/** @param {string} x @returns {number} the length */`
-                                state = JSDocState.BeginningOfLine;
-                                margin = undefined;
-                            }
-                            else {
-                                pushComment(scanner.getTokenText());
-                            }
+                            removeTrailingWhitespace(comments);
+                            if (!commentsPos) commentsPos = getNodePos();
+                            addTag(parseTag(indent));
+                            // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
+                            // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
+                            // for malformed examples like `/** @param {string} x @returns {number} the length */`
+                            state = JSDocState.BeginningOfLine;
+                            margin = undefined;
                             break;
                         case SyntaxKind.NewLineTrivia:
                             comments.push(scanner.getTokenText());
@@ -8623,30 +8623,33 @@ namespace Parser {
                             break;
                         case SyntaxKind.AsteriskToken:
                             const asterisk = scanner.getTokenText();
-                            if (state === JSDocState.SawAsterisk || state === JSDocState.SavingComments) {
+                            if (state === JSDocState.SawAsterisk) {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
                                 pushComment(asterisk);
                             }
                             else {
+                                Debug.assert(state === JSDocState.BeginningOfLine);
                                 // Ignore the first asterisk on a line
                                 state = JSDocState.SawAsterisk;
                                 indent += asterisk.length;
                             }
                             break;
                         case SyntaxKind.WhitespaceTrivia:
+                            Debug.assert(state !== JSDocState.SavingComments, "whitespace shouldn't come from the scanner while saving top-level comment text");
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                             const whitespace = scanner.getTokenText();
-                            if (state === JSDocState.SavingComments) {
-                                comments.push(whitespace);
-                            }
-                            else if (margin !== undefined && indent + whitespace.length > margin) {
+                            if (margin !== undefined && indent + whitespace.length > margin) {
                                 comments.push(whitespace.slice(margin - indent));
                             }
                             indent += whitespace.length;
                             break;
                         case SyntaxKind.EndOfFileToken:
                             break loop;
+                        case SyntaxKind.JSDocCommentTextToken:
+                            state = JSDocState.SavingComments;
+                            pushComment(scanner.getTokenValue());
+                            break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
                             const commentEnd = scanner.getTokenFullStart();
@@ -8671,15 +8674,20 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    nextTokenJSDoc();
+                    if (state === JSDocState.SavingComments) {
+                        nextJSDocCommentTextToken(/*inBackticks*/ false);
+                    }
+                    else {
+                        nextTokenJSDoc();
+                    }
                 }
-                removeTrailingWhitespace(comments);
-                if (parts.length && comments.length) {
-                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentsPos));
+                const trimmedComments = trimStringEnd(comments.join(""));
+                if (parts.length && trimmedComments.length) {
+                    parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? start, commentsPos));
                 }
                 if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                 const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
-                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : comments.length ? comments.join("") : undefined, tagsArray), start, end);
+                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : trimmedComments.length ? trimmedComments : undefined, tagsArray), start, end);
             });
 
             function removeLeadingNewlines(comments: string[]) {
@@ -8689,8 +8697,18 @@ namespace Parser {
             }
 
             function removeTrailingWhitespace(comments: string[]) {
-                while (comments.length && comments[comments.length - 1].trim() === "") {
-                    comments.pop();
+                while (comments.length) {
+                    const trimmed = trimStringEnd(comments[comments.length - 1]);
+                    if (trimmed === "") {
+                        comments.pop();
+                    }
+                    else if (trimmed.length < comments[comments.length - 1].length) {
+                        comments[comments.length - 1] = trimmed;
+                        break;
+                    }
+                    else {
+                        break;
+                    }
                 }
             }
 
@@ -8846,7 +8864,6 @@ namespace Parser {
                 const parts: JSDocComment[] = [];
                 let linkEnd;
                 let state = JSDocState.BeginningOfLine;
-                let previousWhitespace = true;
                 let margin: number | undefined;
                 function pushComment(text: string) {
                     if (!margin) {
@@ -8862,7 +8879,7 @@ namespace Parser {
                     }
                     state = JSDocState.SawAsterisk;
                 }
-                let tok = token() as JSDocSyntaxKind;
+                let tok = token() as JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
                 loop: while (true) {
                     switch (tok) {
                         case SyntaxKind.NewLineTrivia:
@@ -8872,29 +8889,20 @@ namespace Parser {
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.SavingBackticks
-                                || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
-                                // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
-                                comments.push(scanner.getTokenText());
-                                break;
-                            }
                             scanner.resetTokenState(scanner.getTokenEnd() - 1);
-                            // falls through
+                            break loop;
                         case SyntaxKind.EndOfFileToken:
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
-                            if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
-                                pushComment(scanner.getTokenText());
+                            Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text");
+                            const whitespace = scanner.getTokenText();
+                            // if the whitespace crosses the margin, take only the whitespace that passes the margin
+                            if (margin !== undefined && indent + whitespace.length > margin) {
+                                comments.push(whitespace.slice(margin - indent));
+                                state = JSDocState.SavingComments;
                             }
-                            else {
-                                const whitespace = scanner.getTokenText();
-                                // if the whitespace crosses the margin, take only the whitespace that passes the margin
-                                if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments.push(whitespace.slice(margin - indent));
-                                }
-                                indent += whitespace.length;
-                            }
+                            indent += whitespace.length;
                             break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
@@ -8920,6 +8928,12 @@ namespace Parser {
                             }
                             pushComment(scanner.getTokenText());
                             break;
+                        case SyntaxKind.JSDocCommentTextToken:
+                            if (state !== JSDocState.SavingBackticks) {
+                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                            }
+                            pushComment(scanner.getTokenValue());
+                            break;
                         case SyntaxKind.AsteriskToken:
                             if (state === JSDocState.BeginningOfLine) {
                                 // leading asterisks start recording on the *next* (non-whitespace) token
@@ -8936,26 +8950,25 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
-                    tok = nextTokenJSDoc();
+                    if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
+                        tok = nextJSDocCommentTextToken(state === JSDocState.SavingBackticks);
+                    }
+                    else {
+                        tok = nextTokenJSDoc();
+                    }
                 }
 
                 removeLeadingNewlines(comments);
-                removeTrailingWhitespace(comments);
+                const trimmedComments = trimStringEnd(comments.join(""));
                 if (parts.length) {
-                    if (comments.length) {
-                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
+                    if (trimmedComments.length) {
+                        parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? commentsPos));
                     }
                     return createNodeArray(parts, commentsPos, scanner.getTokenEnd());
                 }
-                else if (comments.length) {
-                    return comments.join("");
+                else if (trimmedComments.length) {
+                    return trimmedComments;
                 }
-            }
-
-            function isNextJSDocTokenWhitespace() {
-                const next = nextTokenJSDoc();
-                return next === SyntaxKind.WhitespaceTrivia || next === SyntaxKind.NewLineTrivia;
             }
 
             function parseJSDocLink(start: number) {
