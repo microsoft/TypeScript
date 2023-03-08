@@ -347,7 +347,6 @@ import {
     TypeChecker,
     TypeElement,
     TypeFlags,
-    typeHasCallOrConstructSignatures,
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
@@ -2928,7 +2927,10 @@ function getCompletionData(
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
     const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
 
-    const literals = mapDefined(
+    // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
+    // for strings getStringLiteralCompletions handles completions
+    const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
+    const literals = !isLiteralExpected ? [] : mapDefined(
         contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
 
@@ -4498,6 +4500,8 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+            case SyntaxKind.AsyncKeyword:
+                return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
@@ -4774,7 +4778,7 @@ function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAt
         !(memberType.flags & TypeFlags.Primitive
             || checker.isArrayLikeType(memberType)
             || checker.isTypeInvalidDueToUnionDiscriminant(memberType, node)
-            || typeHasCallOrConstructSignatures(memberType, checker)
+            || checker.typeHasCallOrConstructSignatures(memberType)
             || memberType.isClass() && containsNonPublicProperties(memberType.getApparentProperties()))));
 }
 

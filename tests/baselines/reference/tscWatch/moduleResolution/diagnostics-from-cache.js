@@ -37,7 +37,7 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'default'.
@@ -73,23 +73,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
-/user/username/projects/myproject/index2.ts:
+/user/username/projects/myproject/index2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/package.json:
+/user/username/projects/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -143,7 +143,7 @@ Reusing resolution of module '@this/package' from '/user/username/projects/mypro
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './index.js' from '/user/username/projects/myproject/index2.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/index.js', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
@@ -169,26 +169,6 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index2.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-/user/username/projects/myproject/index2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

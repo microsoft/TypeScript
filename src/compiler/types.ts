@@ -14,7 +14,6 @@ import {
     PackageJsonInfoCache,
     Pattern,
     ProgramBuildInfo,
-    Push,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts";
@@ -4723,7 +4722,7 @@ export interface Program extends ScriptReferenceHost {
      */
     emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     /** @internal */
-    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
+    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult;
 
     getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -5100,17 +5099,46 @@ export interface TypeChecker {
     getBaseConstraintOfType(type: Type): Type | undefined;
     getDefaultFromTypeParameter(type: Type): Type | undefined;
 
-    /** @internal */ getAnyType(): Type;
-    /** @internal */ getStringType(): Type;
-    /** @internal */ getNumberType(): Type;
-    /** @internal */ getBooleanType(): Type;
-    /** @internal */ getFalseType(fresh?: boolean): Type;
-    /** @internal */ getTrueType(fresh?: boolean): Type;
-    /** @internal */ getVoidType(): Type;
-    /** @internal */ getUndefinedType(): Type;
-    /** @internal */ getNullType(): Type;
-    /** @internal */ getESSymbolType(): Type;
-    /** @internal */ getNeverType(): Type;
+    /**
+     * Gets the intrinsic `any` type. There are multiple types that act as `any` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `any`. Instead, use `type.flags & TypeFlags.Any`.
+     */
+    getAnyType(): Type;
+    getStringType(): Type;
+    getStringLiteralType(value: string): StringLiteralType;
+    getNumberType(): Type;
+    getNumberLiteralType(value: number): NumberLiteralType;
+    getBigIntType(): Type;
+    getBooleanType(): Type;
+    /* eslint-disable @typescript-eslint/unified-signatures */
+    /** @internal */
+    getFalseType(fresh?: boolean): Type;
+    getFalseType(): Type;
+    /** @internal */
+    getTrueType(fresh?: boolean): Type;
+    getTrueType(): Type;
+    /* eslint-enable @typescript-eslint/unified-signatures */
+    getVoidType(): Type;
+    /**
+     * Gets the intrinsic `undefined` type. There are multiple types that act as `undefined` used internally in the compiler
+     * depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+     * if another type is `undefined`. Instead, use `type.flags & TypeFlags.Undefined`.
+     */
+    getUndefinedType(): Type;
+    /**
+     * Gets the intrinsic `null` type. There are multiple types that act as `null` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `null`. Instead, use `type.flags & TypeFlags.Null`.
+     */
+    getNullType(): Type;
+    getESSymbolType(): Type;
+    /**
+     * Gets the intrinsic `never` type. There are multiple types that act as `never` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `never`. Instead, use `type.flags & TypeFlags.Never`.
+     */
+    getNeverType(): Type;
     /** @internal */ getOptionalType(): Type;
     /** @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
     /** @internal */ createArrayType(elementType: Type): Type;
@@ -5240,6 +5268,7 @@ export interface TypeChecker {
     /** @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
     /** @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, memberSymbol: Symbol): MemberOverrideStatus;
     /** @internal */ isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node): boolean;
+    /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
 }
 
 /** @internal */
@@ -5810,7 +5839,7 @@ export interface SymbolLinks {
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    typeOnlyExportStarMap?: UnderscoreEscapedMap<ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
     typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
     isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
@@ -5914,18 +5943,16 @@ export const enum InternalSymbolName {
  * with a normal string (which is good, it cannot be misused on assignment or on usage),
  * while still being comparable with a normal string via === (also good) and castable from a string.
  */
-export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName; // eslint-disable-line @typescript-eslint/naming-convention
+export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
-/** ReadonlyMap where keys are `__String`s. */
-export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-}
+/** @deprecated Use ReadonlyMap<__String, T> instead. */
+export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
 
-/** Map where keys are `__String`s. */
-export interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-}
+/** @deprecated Use Map<__String, T> instead. */
+export type UnderscoreEscapedMap<T> = Map<__String, T>;
 
 /** SymbolTable based on ES6 Map interface. */
-export type SymbolTable = UnderscoreEscapedMap<Symbol>;
+export type SymbolTable = Map<__String, Symbol>;
 
 /**
  * Used to track a `declare module "foo*"`-like declaration.
@@ -8892,7 +8919,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node | undefined>): number;
+    copyPrologue(source: readonly Statement[], target: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node | undefined>): number;
     /**
      * Copies only the standard (string-expression) prologue-directives into the target statement-array.
      * @param source origin statements array
@@ -8902,7 +8929,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, ensureUseStrict?: boolean): number;
+    copyStandardPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, ensureUseStrict?: boolean): number;
     /**
      * Copies only the custom prologue-directives into target statement-array.
      * @param source origin statements array
@@ -8912,8 +8939,8 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
-    /** @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number | undefined;
+    copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
+    /** @internal */ copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number | undefined;
     /** @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
     /** @internal */ liftToBlock(nodes: readonly Node[]): Statement;
     /**
@@ -9475,7 +9502,6 @@ export interface EmitTextWriter extends SymbolWriter {
 }
 
 export interface GetEffectiveTypeRootsHost {
-    directoryExists?(directoryName: string): boolean;
     getCurrentDirectory?(): string;
 }
 
@@ -9872,13 +9898,4 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
-}
-
-/** @internal */
-export const enum DeprecationVersion {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    v5_0 = "5.0",
-    v5_5 = "5.5",
-    v6_0 = "6.0",
-    /* eslint-enable @typescript-eslint/naming-convention */
 }

@@ -1,4 +1,5 @@
 // @moduleResolution: bundler
+// @module: esnext
 // @traceResolution: true
 
 // @Filename: /dir/index.ts

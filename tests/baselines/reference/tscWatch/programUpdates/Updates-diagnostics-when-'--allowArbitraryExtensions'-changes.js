@@ -54,19 +54,15 @@ Shape signatures in builder refreshed for::
 /b.d.css.ts (used version)
 /a.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/a.ts:
+/a.ts: *new*
   {}
-/b.d.css.ts:
+/b.d.css.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -109,8 +105,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /tsconfig.json:
   {}
@@ -119,7 +113,9 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/b.d.css.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -162,8 +158,6 @@ Shape signatures in builder refreshed for::
 /b.d.css.ts (used version)
 /a.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /tsconfig.json:
   {}
@@ -171,10 +165,8 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/b.d.css.ts:
+/b.d.css.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

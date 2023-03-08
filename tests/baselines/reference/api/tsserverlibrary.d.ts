@@ -117,8 +117,6 @@ declare namespace ts {
                 Navto = "navto",
                 NavTree = "navtree",
                 NavTreeFull = "navtree-full",
-                /** @deprecated */
-                Occurrences = "occurrences",
                 DocumentHighlights = "documentHighlights",
                 Open = "open",
                 Quickinfo = "quickinfo",
@@ -878,30 +876,6 @@ declare namespace ts {
             }
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
-            }
-            /**
-             * @deprecated
-             * Get occurrences request; value of command field is
-             * "occurrences". Return response giving spans that are relevant
-             * in the file at a given line and column.
-             */
-            interface OccurrencesRequest extends FileLocationRequest {
-                command: CommandTypes.Occurrences;
-            }
-            /** @deprecated */
-            interface OccurrencesResponseItem extends FileSpanWithContext {
-                /**
-                 * True if the occurrence is a write location, false otherwise.
-                 */
-                isWriteAccess: boolean;
-                /**
-                 * True if the occurrence is in a string, undefined otherwise;
-                 */
-                isInString?: true;
-            }
-            /** @deprecated */
-            interface OccurrencesResponse extends Response {
-                body?: OccurrencesResponseItem[];
             }
             /**
              * Get document highlights request; value of command field is
@@ -3065,10 +3039,6 @@ declare namespace ts {
             remove(path: NormalizedPath): void;
         }
         function isDynamicFileName(fileName: NormalizedPath): boolean;
-        interface ScriptInfoVersion {
-            svc: number;
-            text: number;
-        }
         class ScriptInfo {
             private readonly host;
             readonly fileName: NormalizedPath;
@@ -3081,10 +3051,9 @@ declare namespace ts {
             readonly containingProjects: Project[];
             private formatSettings;
             private preferences;
-            private textStorage;
-            constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+            constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
-            open(newText: string): void;
+            open(newText: string | undefined): void;
             close(fileExists?: boolean): void;
             getSnapshot(): IScriptSnapshot;
             private ensureRealPath;
@@ -3874,7 +3843,6 @@ declare namespace ts {
             private getTypeDefinition;
             private mapImplementationLocations;
             private getImplementation;
-            private getOccurrences;
             private getSyntacticDiagnosticsSync;
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
@@ -3989,7 +3957,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.0";
+    const versionMajorMinor = "5.1";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6402,6 +6370,40 @@ declare namespace ts {
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
         /**
+         * Gets the intrinsic `any` type. There are multiple types that act as `any` used internally in the compiler,
+         * so the type returned by this function should not be used in equality checks to determine if another type
+         * is `any`. Instead, use `type.flags & TypeFlags.Any`.
+         */
+        getAnyType(): Type;
+        getStringType(): Type;
+        getStringLiteralType(value: string): StringLiteralType;
+        getNumberType(): Type;
+        getNumberLiteralType(value: number): NumberLiteralType;
+        getBigIntType(): Type;
+        getBooleanType(): Type;
+        getFalseType(): Type;
+        getTrueType(): Type;
+        getVoidType(): Type;
+        /**
+         * Gets the intrinsic `undefined` type. There are multiple types that act as `undefined` used internally in the compiler
+         * depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+         * if another type is `undefined`. Instead, use `type.flags & TypeFlags.Undefined`.
+         */
+        getUndefinedType(): Type;
+        /**
+         * Gets the intrinsic `null` type. There are multiple types that act as `null` used internally in the compiler,
+         * so the type returned by this function should not be used in equality checks to determine if another type
+         * is `null`. Instead, use `type.flags & TypeFlags.Null`.
+         */
+        getNullType(): Type;
+        getESSymbolType(): Type;
+        /**
+         * Gets the intrinsic `never` type. There are multiple types that act as `never` used internally in the compiler,
+         * so the type returned by this function should not be used in equality checks to determine if another type
+         * is `never`. Instead, use `type.flags & TypeFlags.Never`.
+         */
+        getNeverType(): Type;
+        /**
          * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
          * This function will _not_ return true if passed a type which
          * extends `Array` (for example, the TypeScript AST's `NodeArray` type).
@@ -6636,14 +6638,12 @@ declare namespace ts {
     }) | (void & {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
-    /** ReadonlyMap where keys are `__String`s. */
-    interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-    }
-    /** Map where keys are `__String`s. */
-    interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-    }
+    /** @deprecated Use ReadonlyMap<__String, T> instead. */
+    type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
+    /** @deprecated Use Map<__String, T> instead. */
+    type UnderscoreEscapedMap<T> = Map<__String, T>;
     /** SymbolTable based on ES6 Map interface. */
-    type SymbolTable = UnderscoreEscapedMap<Symbol>;
+    type SymbolTable = Map<__String, Symbol>;
     enum TypeFlags {
         Any = 1,
         Unknown = 2,
@@ -8153,7 +8153,6 @@ declare namespace ts {
         noEmitHelpers?: boolean;
     }
     interface GetEffectiveTypeRootsHost {
-        directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
     interface TextSpan {
@@ -9991,8 +9990,6 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;

@@ -312,6 +312,7 @@ import {
     singleOrUndefined,
     skipAlias,
     skipOuterExpressions,
+    skipParentheses,
     some,
     SortKind,
     SourceFile,
@@ -360,6 +361,7 @@ import {
     VariableDeclaration,
     visitEachChild,
     VoidExpression,
+    walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
 
@@ -3298,7 +3300,7 @@ export function needsParentheses(expression: Expression): boolean {
 
 /** @internal */
 export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
-    const { parent } = node;
+    const parent = walkUpParenthesizedExpressions(node.parent);
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
             return checker.getContextualType(parent as NewExpression, contextFlags);
@@ -3309,7 +3311,7 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
                 : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
-            return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
+            return getSwitchedType(parent as CaseClause, checker);
         default:
             return checker.getContextualType(node, contextFlags);
     }
@@ -4098,8 +4100,8 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
 
     for (const clause of clauses) {
         if (!isDefaultClause(clause)) {
-            if (isLiteralExpression(clause.expression)) {
-                const expression = clause.expression;
+            const expression = skipParentheses(clause.expression);
+            if (isLiteralExpression(expression)) {
                 switch (expression.kind) {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                     case SyntaxKind.StringLiteral:
