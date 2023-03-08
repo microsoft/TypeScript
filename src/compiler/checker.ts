@@ -2078,7 +2078,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var anyArrayType: Type;
     var autoArrayType: Type;
     var anyReadonlyArrayType: Type;
-    var anyIterable: Type;
     var deferredGlobalNonNullableTypeAlias: Symbol;
 
     // The library files are only loaded when the feature is used.
@@ -23067,10 +23066,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isAssignableToAvailableAnyIterable(type: Type): boolean {
-        if (!anyIterable) {
-            anyIterable = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType ? createIterableType(anyType) : emptyGenericType;
-        }
-        return anyIterable !== emptyGenericType ? isTypeAssignableTo(type, anyIterable) : isArrayOrTupleLikeType(type);
+        const anyIterable = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType && createIterableType(anyType);
+        return anyIterable ? isTypeAssignableTo(type, anyIterable) : isArrayOrTupleLikeType(type);
     }
 
     function getTupleElementType(type: Type, index: number) {
