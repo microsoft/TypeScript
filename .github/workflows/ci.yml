@@ -109,8 +109,8 @@ jobs:
           npx hereby lkg
           mkdir /tmp/lkg
           mv lib /tmp/lkg/
-          git restore lib
-          git clean -fdx lib
+          git restore lib || true
+          git clean -fdx lib || true
           git checkout ${{ github.sha }}
           rm -rf lib
           mv /tmp/lkg/lib .
