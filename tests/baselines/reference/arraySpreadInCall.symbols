@@ -53,3 +53,21 @@ const x32 = f3(true, ...[1, 'foo'])
 >x32 : Symbol(x32, Decl(arraySpreadInCall.ts, 13, 5))
 >f3 : Symbol(f3, Decl(arraySpreadInCall.ts, 9, 35))
 
+// dicovered in #52845#issuecomment-1459132562
+interface IAction {
+>IAction : Symbol(IAction, Decl(arraySpreadInCall.ts, 13, 35))
+
+    run(event?: unknown): unknown;
+>run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 16, 19))
+>event : Symbol(event, Decl(arraySpreadInCall.ts, 17, 8))
+}
+declare const action: IAction
+>action : Symbol(action, Decl(arraySpreadInCall.ts, 19, 13))
+>IAction : Symbol(IAction, Decl(arraySpreadInCall.ts, 13, 35))
+
+action.run(...[100, 'foo']) // error
+>action.run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 16, 19))
+>action : Symbol(action, Decl(arraySpreadInCall.ts, 19, 13))
+>run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 16, 19))
+
+

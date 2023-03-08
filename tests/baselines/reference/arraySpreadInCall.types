@@ -120,3 +120,23 @@ const x32 = f3(true, ...[1, 'foo'])
 >1 : 1
 >'foo' : "foo"
 
+// dicovered in #52845#issuecomment-1459132562
+interface IAction {
+    run(event?: unknown): unknown;
+>run : (event?: unknown) => unknown
+>event : unknown
+}
+declare const action: IAction
+>action : IAction
+
+action.run(...[100, 'foo']) // error
+>action.run(...[100, 'foo']) : unknown
+>action.run : (event?: unknown) => unknown
+>action : IAction
+>run : (event?: unknown) => unknown
+>...[100, 'foo'] : string | number
+>[100, 'foo'] : readonly [number, string]
+>100 : 100
+>'foo' : "foo"
+
+

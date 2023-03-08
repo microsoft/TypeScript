@@ -15,3 +15,11 @@ const x22 = f2(true, ...[1, 'foo'])
 declare function f3<T extends readonly unknown[]>(...args: T): T;
 const x31 = f3(...[1, 'foo'])
 const x32 = f3(true, ...[1, 'foo'])
+
+// dicovered in #52845#issuecomment-1459132562
+interface IAction {
+    run(event?: unknown): unknown;
+}
+declare const action: IAction
+action.run(...[100, 'foo']) // error
+
