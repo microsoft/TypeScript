@@ -3,7 +3,7 @@ typesCache;
 >typesCache : number
 
 mangledAtTypesCache;
->mangledAtTypesCache : any
+>mangledAtTypesCache : number
 
 nodeModulesCache;
 >nodeModulesCache : number
@@ -12,10 +12,10 @@ mangledNodeModules;
 >mangledNodeModules : any
 
 atTypesCache;
->atTypesCache : number
+>atTypesCache : any
 
 mangledAtTypesCache;
->mangledAtTypesCache : any
+>mangledAtTypesCache : number
 
 === /types/@scoped/typescache/index.d.ts ===
 declare const typesCache: number;
@@ -25,7 +25,7 @@ declare const typesCache: number;
 declare const nodeModulesCache: number;
 >nodeModulesCache : number
 
-=== /node_modules/@types/@scoped/attypescache/index.d.ts ===
-declare const atTypesCache: number;
->atTypesCache : number
+=== /node_modules/@types/mangled__attypescache/index.d.ts ===
+declare const mangledAtTypesCache: number;
+>mangledAtTypesCache : number
 

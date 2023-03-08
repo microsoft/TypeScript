@@ -29,7 +29,8 @@ export const typesCache: number;
 export const nodeModulesCache: number;
 >nodeModulesCache : Symbol(nodeModulesCache, Decl(index.d.ts, 0, 12))
 
-=== /a/node_modules/@types/@scoped/attypescache/index.d.ts ===
-export const atTypesCache: number;
->atTypesCache : Symbol(atTypesCache, Decl(index.d.ts, 0, 12))
+=== /a/node_modules/@types/mangled__attypescache/index.d.ts ===
+export const mangledAtTypesCache: number;
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(index.d.ts, 0, 12))
+
 

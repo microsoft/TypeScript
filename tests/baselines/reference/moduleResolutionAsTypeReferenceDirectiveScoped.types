@@ -12,10 +12,10 @@ import { mangledNodeModules } from "@mangled/nodemodulescache";
 >mangledNodeModules : any
 
 import { atTypesCache } from "@scoped/attypescache";
->atTypesCache : number
+>atTypesCache : any
 
 import { mangledAtTypesCache } from "@mangled/attypescache";
->mangledAtTypesCache : any
+>mangledAtTypesCache : number
 
 === /a/types/dummy/index.d.ts ===
 export const dummy: number;
@@ -29,7 +29,8 @@ export const typesCache: number;
 export const nodeModulesCache: number;
 >nodeModulesCache : number
 
-=== /a/node_modules/@types/@scoped/attypescache/index.d.ts ===
-export const atTypesCache: number;
->atTypesCache : number
+=== /a/node_modules/@types/mangled__attypescache/index.d.ts ===
+export const mangledAtTypesCache: number;
+>mangledAtTypesCache : number
+
 
