@@ -372,7 +372,6 @@ import {
     pseudoBigIntToString,
     PunctuationSyntaxKind,
     PunctuationToken,
-    Push,
     QualifiedName,
     QuestionDotToken,
     QuestionToken,
@@ -6439,7 +6438,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return createGlobalMethodCall("Reflect", "set", receiver ? [target, propertyKey, value, receiver] : [target, propertyKey, value]);
     }
 
-    function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
+    function tryAddPropertyAssignment(properties: PropertyAssignment[], propertyName: string, expression: Expression | undefined) {
         if (expression) {
             properties.push(createPropertyAssignment(propertyName, expression));
             return true;
@@ -6760,7 +6759,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
      * @param visitor Optional callback used to visit any custom prologue directives.
      */
-    function copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+    function copyPrologue(source: readonly Statement[], target: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
         const offset = copyStandardPrologue(source, target, 0, ensureUseStrict);
         return copyCustomPrologue(source, target, offset, visitor);
     }
@@ -6781,7 +6780,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
      * @returns Count of how many directive statements were copied.
      */
-    function copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset = 0, ensureUseStrict?: boolean): number {
+    function copyStandardPrologue(source: readonly Statement[], target: Statement[], statementOffset = 0, ensureUseStrict?: boolean): number {
         Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         const numStatements = source.length;
@@ -6811,9 +6810,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param statementOffset The offset at which to begin the copy.
      * @param visitor Optional callback used to visit any custom prologue directives.
      */
-    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
-    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number | undefined;
-    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Statement) => boolean = returnTrue): number | undefined {
+    function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
+    function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number | undefined;
+    function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Statement) => boolean = returnTrue): number | undefined {
         const numStatements = source.length;
         while (statementOffset !== undefined && statementOffset < numStatements) {
             const statement = source[statementOffset];

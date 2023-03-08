@@ -20,12 +20,10 @@ function foo<T, U>(f: (v: T) => U) {
 >r3 : U
 >f<any>(null) : U
 >f : (v: T) => U
->null : null
 
    var r4 = f(null);
 >r4 : U
 >f(null) : U
 >f : (v: T) => U
->null : null
 }
 

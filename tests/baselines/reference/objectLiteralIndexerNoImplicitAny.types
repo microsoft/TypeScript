@@ -10,5 +10,4 @@ var x: I = {
 
     p: null
 >p : null
->null : null
 }

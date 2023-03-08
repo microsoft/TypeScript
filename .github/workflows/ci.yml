@@ -96,6 +96,26 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
+    
+    # Pre-build the base branch so we can check lib folder size changes.
+    # Note that github.sha points to a merge commit, meaning we're testing
+    # the base branch versus the base branch with the PR applied.
+    - if: github.event_name == 'pull_request'
+      run: |
+        if [ ! -d lib ]; then
+          git fetch origin ${{ github.base_ref }}
+          git checkout ${{ github.base_ref }}
+          npm ci
+          npx hereby lkg
+          mkdir /tmp/lkg
+          mv lib /tmp/lkg/
+          git restore lib
+          git clean -fdx lib
+          git checkout ${{ github.sha }}
+          rm -rf lib
+          mv /tmp/lkg/lib .
+        fi
+
     - run:  npm ci
 
     - run: npx hereby lkg

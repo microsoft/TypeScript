@@ -20,7 +20,6 @@ class C<T> {
 >y(null as T) : any
 >y : (...args: any[]) => any
 >null as T : T
->null : null
 
     method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
 >method : (x: any, y: any) => void

@@ -7,7 +7,6 @@ class A {
     foo(x: string): string { return null; }
 >foo : (x: string) => string
 >x : string
->null : null
 }
 
 class B {
@@ -17,7 +16,6 @@ class B {
 >foo : (x: string, y: string) => string
 >x : string
 >y : string
->null : null
 }
 
 class C<T> {
@@ -27,7 +25,6 @@ class C<T> {
 >foo : (x: T, y: T) => T
 >x : T
 >y : T
->null : null
 }
 
 interface I {

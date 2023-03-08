@@ -42,5 +42,4 @@ function f6(x: string, y) {
 >y : any
 
     return null;
->null : null
 }
