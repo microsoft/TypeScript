@@ -2078,7 +2078,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var anyArrayType: Type;
     var autoArrayType: Type;
     var anyReadonlyArrayType: Type;
-    let anyIterable: Type;
+    var anyIterable: Type;
     var deferredGlobalNonNullableTypeAlias: Symbol;
 
     // The library files are only loaded when the feature is used.
