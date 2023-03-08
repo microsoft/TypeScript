@@ -38763,8 +38763,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // both are private identifiers
                         isPrivateIdentifier(node.name) && isPrivateIdentifier(subsequentName) && node.name.escapedText === subsequentName.escapedText ||
                         // Both are computed property names
-                        // TODO: GH#17345: These are methods, so handle computed name case. (`Always allowing computed property names is *not* the correct behavior!)
-                        isComputedPropertyName(node.name) && isComputedPropertyName(subsequentName) ||
+                        isComputedPropertyName(node.name) && isComputedPropertyName(subsequentName) && isTypeIdenticalTo(checkComputedPropertyName(node.name), checkComputedPropertyName(subsequentName)) ||
                         // Both are literal property names that are the same.
                         isPropertyNameLiteral(node.name) && isPropertyNameLiteral(subsequentName) &&
                         getEscapedTextOfIdentifierOrLiteral(node.name) === getEscapedTextOfIdentifierOrLiteral(subsequentName)
