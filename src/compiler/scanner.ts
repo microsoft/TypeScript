@@ -1871,7 +1871,7 @@ export function createScanner(languageVersion: ScriptTarget,
                             }
                         }
 
-                        if (isJSDoc && (!skipJSDoc || semanticJSDocTagRegEx.test(text.slice(tokenPos, pos)))) {
+                        if (isJSDoc && (!skipJSDoc || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos)))) {
                             tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
@@ -2676,10 +2676,6 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function setLanguageVariant(variant: LanguageVariant) {
         languageVariant = variant;
-    }
-
-    function setSkipJSDoc(skip: boolean) {
-        skipJSDoc = skip;
     }
 
     function setSkipJSDoc(skip: boolean) {
