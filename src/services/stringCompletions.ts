@@ -551,7 +551,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
     const scriptDirectory = getDirectoryPath(scriptPath);
     const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, typeChecker, preferences, mode);
 
-    return isPathRelativeToScript(literalValue) || (!compilerOptions.baseUrl || !compilerOptions.paths) && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && !compilerOptions.paths && (isRootedDiskPath(literalValue) || isUrl(literalValue))
         ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
         : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, extensionOptions, typeChecker);
 }
