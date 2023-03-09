@@ -4342,7 +4342,6 @@ declare namespace ts {
         negative: boolean;
         base10Value: string;
     }
-    function getNodeMajorVersion(): number | undefined;
     enum FileWatcherEventKind {
         Created = 0,
         Changed = 1,
