@@ -515,15 +515,13 @@ export function getPathFromPathComponents(pathComponents: readonly string[]) {
  *
  * @internal
  */
-export function normalizeSlashes(path: string): string {
-    if (typeof process === undefined || process.platform !== "win32") {
-        return path;
-    }
-
-    return path.indexOf("\\") !== -1
-        ? path.replace(backslashRegExp, directorySeparator)
-        : path;
-}
+export const normalizeSlashes: (path: string) => string = typeof process === undefined || process.platform !== "win32"
+    ? path => path
+    : path => {
+        return path.indexOf("\\") !== -1
+            ? path.replace(backslashRegExp, directorySeparator)
+            : path;
+    };
 
 /**
  * Reduce an array of path components to a more simplified path by navigating any
