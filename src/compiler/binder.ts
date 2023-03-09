@@ -547,11 +547,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
     var reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
     var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    var alreadyBound: Set<Node>;
     /* eslint-enable no-var */
 
     return bindSourceFile;
-
-    let alreadyBound: Set<Node>;
 
     /**
      * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
