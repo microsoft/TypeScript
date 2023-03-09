@@ -1492,8 +1492,6 @@ export let sys: System = (() => {
             from?(input: string, encoding?: string): any;
         } = require("buffer").Buffer;
 
-        const nodeVersion = getNodeMajorVersion();
-        const isNode4OrLater = nodeVersion! >= 4;
         const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
         const platform: string = _os.platform();
@@ -1507,7 +1505,7 @@ export let sys: System = (() => {
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
-        const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
+        const fsSupportsRecursiveFsWatch = process.platform === "win32" || process.platform === "darwin";
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,
