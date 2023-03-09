@@ -18,7 +18,7 @@
 ////}
 ////export class A2 {}
 ////
-////type T3 = Pick<I, "m3">
+////type T3 = { "m3": I["m3"] };
 ////export interface A3 extends T3 {
 ////    m1(): void;
 ////}
