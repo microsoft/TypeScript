@@ -55,32 +55,32 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
-/users/username/projects/project/index.tsx:
+/users/username/projects/project/index.tsx: *new*
   {}
-/users/username/projects/project/node_modules/tslib/index.d.ts:
+/users/username/projects/project/node_modules/tslib/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/node_modules/tslib/package.json:
+/users/username/projects/project/node_modules/tslib/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
+/users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var tslib_1 = require("tslib");
 exports.x = tslib_1.__assign({});
@@ -92,6 +92,28 @@ Change::
 Input::
 //// [/users/username/projects/project/node_modules/tslib/index.d.ts] deleted
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
+
+PolledWatches *deleted*::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches *deleted*::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/index.tsx:
+  {}
+/users/username/projects/project/node_modules/tslib/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects/project/node_modules:
+  {}
+/users/username/projects/project:
+  {}
 
 Output::
 >> Screen clear
@@ -122,21 +144,21 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
-/users/username/projects/project/index.tsx:
+/users/username/projects/project/index.tsx: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
+/users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined

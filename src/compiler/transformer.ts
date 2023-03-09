@@ -1,14 +1,77 @@
 import {
-    addRange, append, Bundle, chainBundle, CompilerOptions, createEmitHelperFactory, CustomTransformer,
-    CustomTransformerFactory, CustomTransformers, Debug, DiagnosticWithLocation, disposeEmitNodes, EmitFlags,
-    EmitHelper, EmitHint, EmitHost, EmitOnly, EmitResolver, EmitTransformers, emptyArray, factory, FunctionDeclaration,
-    getEmitFlags, getEmitModuleKind, getEmitScriptTarget, getJSXTransformEnabled, getParseTreeNode, getSourceFileOfNode,
-    Identifier, isBundle, isSourceFile, LexicalEnvironmentFlags, map, memoize, ModuleKind, Node, NodeFactory, NodeFlags,
-    noop, notImplemented, returnUndefined, ScriptTarget, setEmitFlags, some, SourceFile, Statement, SyntaxKind, tracing,
-    TransformationContext, TransformationResult, transformClassFields, transformDeclarations, transformECMAScriptModule,
-    Transformer, TransformerFactory, transformES2015, transformES2016, transformES2017, transformES2018,
-    transformES2019, transformES2020, transformES2021, transformES5, transformESNext, transformGenerators, transformJsx,
-    transformLegacyDecorators, transformModule, transformNodeModule, transformSystemModule, transformTypeScript,
+    addRange,
+    append,
+    Bundle,
+    chainBundle,
+    CompilerOptions,
+    createEmitHelperFactory,
+    CustomTransformer,
+    CustomTransformerFactory,
+    CustomTransformers,
+    Debug,
+    DiagnosticWithLocation,
+    disposeEmitNodes,
+    EmitFlags,
+    EmitHelper,
+    EmitHint,
+    EmitHost,
+    EmitOnly,
+    EmitResolver,
+    EmitTransformers,
+    emptyArray,
+    factory,
+    FunctionDeclaration,
+    getEmitFlags,
+    getEmitModuleKind,
+    getEmitScriptTarget,
+    getJSXTransformEnabled,
+    getParseTreeNode,
+    getSourceFileOfNode,
+    getUseDefineForClassFields,
+    Identifier,
+    isBundle,
+    isSourceFile,
+    LexicalEnvironmentFlags,
+    map,
+    memoize,
+    ModuleKind,
+    Node,
+    NodeFactory,
+    NodeFlags,
+    noop,
+    notImplemented,
+    returnUndefined,
+    ScriptTarget,
+    setEmitFlags,
+    some,
+    SourceFile,
+    Statement,
+    SyntaxKind,
+    tracing,
+    TransformationContext,
+    TransformationResult,
+    transformClassFields,
+    transformDeclarations,
+    transformECMAScriptModule,
+    Transformer,
+    TransformerFactory,
+    transformES5,
+    transformES2015,
+    transformES2016,
+    transformES2017,
+    transformES2018,
+    transformES2019,
+    transformES2020,
+    transformES2021,
+    transformESDecorators,
+    transformESNext,
+    transformGenerators,
+    transformJsx,
+    transformLegacyDecorators,
+    transformModule,
+    transformNodeModule,
+    transformSystemModule,
+    transformTypeScript,
     VariableDeclaration,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
@@ -58,12 +121,20 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
 
     const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
+    const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
     const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
     addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
     transformers.push(transformTypeScript);
-    transformers.push(transformLegacyDecorators);
+
+    if (compilerOptions.experimentalDecorators) {
+        transformers.push(transformLegacyDecorators);
+    }
+    else if (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields) {
+        transformers.push(transformESDecorators);
+    }
+
     transformers.push(transformClassFields);
 
     if (getJSXTransformEnabled(compilerOptions)) {

@@ -101,15 +101,15 @@ var i11Ori21 = {
     commonMethodDifferentReturnType: function (a, b) {
         var z = a.charAt(b);
         return z;
-    }
+    },
 };
 var i11Ori21 = {
     commonMethodDifferentReturnType: function (a, b) {
         var z = a.charCodeAt(b);
         return z;
-    }
+    },
 };
 var strOrNumber;
 var i11Ori21 = {
-    commonMethodDifferentReturnType: function (a, b) { return strOrNumber; }
+    commonMethodDifferentReturnType: function (a, b) { return strOrNumber; },
 };

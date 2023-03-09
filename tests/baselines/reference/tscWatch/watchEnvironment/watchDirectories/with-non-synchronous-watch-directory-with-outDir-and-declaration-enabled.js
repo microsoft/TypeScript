@@ -50,36 +50,34 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/src/file1.ts:
+/user/username/projects/myproject/src/file1.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules/file2:
+/user/username/projects/myproject/node_modules/file2: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/dist:
+/user/username/projects/myproject/dist: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/dist/file1.d.ts]
@@ -93,32 +91,6 @@ Input::
 
 Output::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/file2:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/dist:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -130,32 +102,6 @@ export const y = 10;
 
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/file2:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/dist:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -210,16 +156,14 @@ FsWatches::
   {}
 /user/username/projects/myproject/dist:
   {}
-/user/username/projects/myproject/src/file3.ts:
+/user/username/projects/myproject/src/file3.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
@@ -235,34 +179,6 @@ Input::
 
 Output::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/file2:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/dist:
-  {}
-/user/username/projects/myproject/src/file3.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -271,34 +187,6 @@ Change:: No change
 Input::
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/file2:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/dist:
-  {}
-/user/username/projects/myproject/src/file3.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

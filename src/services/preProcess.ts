@@ -1,6 +1,16 @@
 import {
-    FileReference, isKeyword, lastOrUndefined, length, noop, PragmaContext, PreProcessedFileInfo, processCommentPragmas,
-    processPragmasIntoFields, scanner, ScriptTarget, SyntaxKind,
+    FileReference,
+    isKeyword,
+    lastOrUndefined,
+    length,
+    noop,
+    PragmaContext,
+    PreProcessedFileInfo,
+    processCommentPragmas,
+    processPragmasIntoFields,
+    scanner,
+    ScriptTarget,
+    SyntaxKind,
 } from "./_namespaces/ts";
 
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
@@ -38,7 +48,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
 
     function getFileReference() {
         const fileName = scanner.getTokenValue();
-        const pos = scanner.getTokenPos();
+        const pos = scanner.getTokenStart();
         return { fileName, pos, end: pos + fileName.length };
     }
 

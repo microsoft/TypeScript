@@ -1,10 +1,14 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
+import * as fakes from "./_namespaces/fakes";
+import {
+    Compiler,
+    mockHash,
+    virtualFileSystemRoot,
+} from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import { getNewLineCharacter } from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import * as Utils from "./_namespaces/Utils";
-import { Compiler, harnessNewLine, mockHash, virtualFileSystemRoot } from "./_namespaces/Harness";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -132,7 +136,7 @@ export interface LanguageServiceAdapter {
 
 export abstract class LanguageServiceAdapterHost {
     public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
-    public typesRegistry: ts.ESMap<string, void> | undefined;
+    public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
     constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
@@ -145,7 +149,7 @@ export abstract class LanguageServiceAdapterHost {
     }
 
     public getNewLine(): string {
-        return harnessNewLine;
+        return getNewLineCharacter(this.settings);
     }
 
     public getFilenames(): string[] {
@@ -291,11 +295,11 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return script ? script.version.toString() : undefined!; // TODO: GH#18217
     }
 
-    directoryExists(dirName: string): boolean {
+    override directoryExists(dirName: string): boolean {
         return this.sys.directoryExists(dirName);
     }
 
-    fileExists(fileName: string): boolean {
+    override fileExists(fileName: string): boolean {
         return this.sys.fileExists(fileName);
     }
 
@@ -303,11 +307,11 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
-    readFile(path: string): string | undefined {
+    override readFile(path: string): string | undefined {
         return this.sys.readFile(path);
     }
 
-    realpath(path: string): string {
+    override realpath(path: string): string {
         return this.sys.realpath(path);
     }
 
@@ -385,11 +389,11 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
         }
     }
 
-    getFilenames(): string[] { return this.nativeHost.getFilenames(); }
-    getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
-    addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
-    editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
-    positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
+    override getFilenames(): string[] { return this.nativeHost.getFilenames(); }
+    override getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
+    override addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
+    override editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
+    override positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
     getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
     getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
@@ -408,15 +412,15 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
     readDirectory = ts.notImplemented;
     readDirectoryNames = ts.notImplemented;
     readFileNames = ts.notImplemented;
-    fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
-    readFile(fileName: string) {
+    override fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+    override readFile(fileName: string) {
         const snapshot = this.nativeHost.getScriptSnapshot(fileName);
         return snapshot && ts.getSnapshotText(snapshot);
     }
     log(s: string): void { this.nativeHost.log(s); }
     trace(s: string): void { this.nativeHost.trace(s); }
     error(s: string): void { this.nativeHost.error(s); }
-    directoryExists(): boolean {
+    override directoryExists(): boolean {
         // for tests pessimistically assume that directory always exists
         return true;
     }
@@ -547,9 +551,6 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getFileReferences(fileName: string): ts.ReferenceEntry[] {
         return unwrapJSONCallResult(this.shim.getFileReferences(fileName));
     }
-    getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
-        return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
-    }
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): ts.DocumentHighlights[] {
         return unwrapJSONCallResult(this.shim.getDocumentHighlights(fileName, position, JSON.stringify(filesToSearch)));
     }
@@ -583,8 +584,8 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
         return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
     }
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions): ts.TextInsertion {
-        return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options));
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions, formatOptions?: ts.FormatCodeSettings): ts.TextInsertion {
+        return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions));
     }
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
         return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
@@ -594,6 +595,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
+    }
+    getSupportedCodeFixes(): never {
+        throw new Error("Not supported on the shim.");
     }
     getCodeFixesAtPosition(): never {
         throw new Error("Not supported on the shim.");
@@ -639,7 +643,7 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getAutoImportProvider(): ts.Program | undefined {
         throw new Error("Program can not be marshaled across the shim layer.");
     }
-    updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ts.ReferencedSymbol[], _knownSymbolSpans: ts.Set<ts.DocumentSpan>): boolean {
+    updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ts.ReferencedSymbol[], _knownSymbolSpans: Set<ts.DocumentSpan>): boolean {
         return ts.notImplemented();
     }
     getNonBoundSourceFile(): ts.SourceFile {
@@ -739,12 +743,12 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         this.client = client;
     }
 
-    openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+    override openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
         super.openFile(fileName, content, scriptKindName);
         this.client.openFile(fileName, content, scriptKindName);
     }
 
-    editScript(fileName: string, start: number, end: number, newText: string) {
+    override editScript(fileName: string, start: number, end: number, newText: string) {
         const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
         super.editScript(fileName, start, end, newText);
         this.client.changeFile(fileName, changeArgs);
@@ -859,22 +863,18 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-        // eslint-disable-next-line no-restricted-globals
         return setTimeout(callback, ms, ...args);
     }
 
     clearTimeout(timeoutId: any): void {
-        // eslint-disable-next-line no-restricted-globals
         clearTimeout(timeoutId);
     }
 
     setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
-        // eslint-disable-next-line no-restricted-globals
         return setImmediate(callback, args);
     }
 
     clearImmediate(timeoutId: any): void {
-        // eslint-disable-next-line no-restricted-globals
         clearImmediate(timeoutId);
     }
 
@@ -1007,7 +1007,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
             typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
-            byteLength: Utils.byteLength,
+            byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: serverHost,
             canUseEvents: true

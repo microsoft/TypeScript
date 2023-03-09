@@ -1,7 +1,18 @@
 import {
-    Debug, Diagnostics, factory, getTokenAtPosition, Identifier, isParameter, SourceFile, textChanges,
+    Debug,
+    Diagnostics,
+    factory,
+    getTokenAtPosition,
+    Identifier,
+    isParameter,
+    SourceFile,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "addNameToNamelessParameter";
 const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];

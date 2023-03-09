@@ -22,7 +22,7 @@ var a = {
     left: "align-left",
     center: "align-center",
     right: "align-right",
-    other: "align-other"
+    other: "align-other",
 };
 a.left.length;
 a.other.length; // Error expected here

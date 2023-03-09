@@ -1,14 +1,52 @@
 import {
-    clearMap, closeFileWatcher, combinePaths, compareStringsCaseInsensitive, Comparison, containsPath, copyEntries,
-    createGetCanonicalFileName, directorySeparator, ESMap, Extension, fileExtensionIs, FileWatcher, getBaseFileName,
-    GetCanonicalFileName, getDirectoryPath, getProperty, getWatchFactory, hasProperty, JsTyping,
-    mangleScopedPackageName, Map, mapDefined, MapLike, ModuleResolutionKind, noop, Path, PollingInterval,
-    resolveModuleName, Set, version, Version, versionMajorMinor, WatchDirectoryFlags, WatchFactory, WatchFactoryHost,
-    WatchLogLevel, WatchOptions,
+    clearMap,
+    closeFileWatcher,
+    combinePaths,
+    compareStringsCaseInsensitive,
+    Comparison,
+    containsPath,
+    copyEntries,
+    createGetCanonicalFileName,
+    directorySeparator,
+    Extension,
+    fileExtensionIs,
+    FileWatcher,
+    getBaseFileName,
+    GetCanonicalFileName,
+    getDirectoryPath,
+    getProperty,
+    getWatchFactory,
+    hasProperty,
+    JsTyping,
+    mangleScopedPackageName,
+    mapDefined,
+    MapLike,
+    ModuleResolutionKind,
+    noop,
+    Path,
+    PollingInterval,
+    resolveModuleName,
+    Version,
+    version,
+    versionMajorMinor,
+    WatchDirectoryFlags,
+    WatchFactory,
+    WatchFactoryHost,
+    WatchLogLevel,
+    WatchOptions,
 } from "./_namespaces/ts";
 import {
-    ActionInvalidate, ActionSet, BeginInstallTypes, CloseProject, DiscoverTypings, EndInstallTypes,
-    EventBeginInstallTypes, EventEndInstallTypes, InstallTypingHost, InvalidateCachedTypings, SetTypings,
+    ActionInvalidate,
+    ActionSet,
+    BeginInstallTypes,
+    CloseProject,
+    DiscoverTypings,
+    EndInstallTypes,
+    EventBeginInstallTypes,
+    EventEndInstallTypes,
+    InstallTypingHost,
+    InvalidateCachedTypings,
+    SetTypings,
 } from "./_namespaces/ts.server";
 
 interface NpmConfig {
@@ -31,7 +69,7 @@ const nullLog: Log = {
 
 function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
     try {
-        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
+        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.Node10 }, installTypingHost);
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
     catch (e) {
@@ -96,10 +134,10 @@ const enum ProjectWatcherType {
     DirectoryWatcher = "DirectoryWatcher"
 }
 
-type ProjectWatchers = ESMap<string, FileWatcher> & { isInvoked?: boolean; };
+type ProjectWatchers = Map<string, FileWatcher> & { isInvoked?: boolean; };
 
-function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers) {
-    return `Project: ${projectName} watcher already invoked: ${watchers.isInvoked}`;
+function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers | undefined) {
+    return `Project: ${projectName} watcher already invoked: ${watchers?.isInvoked}`;
 }
 
 export abstract class TypingsInstaller {
@@ -115,7 +153,7 @@ export abstract class TypingsInstaller {
     private installRunCount = 1;
     private inFlightRequestCount = 0;
 
-    abstract readonly typesRegistry: ESMap<string, MapLike<string>>;
+    abstract readonly typesRegistry: Map<string, MapLike<string>>;
     /** @internal */
     private readonly watchFactory: WatchFactory<string, ProjectWatchers>;
 
@@ -350,8 +388,6 @@ export abstract class TypingsInstaller {
         this.sendResponse({
             kind: EventBeginInstallTypes,
             eventId: requestId,
-            // qualified explicitly to prevent occasional shadowing
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
             typingsInstallerVersion: version,
             projectName: req.projectName
         } as BeginInstallTypes);
@@ -401,8 +437,6 @@ export abstract class TypingsInstaller {
                     projectName: req.projectName,
                     packagesToInstall: scopedTypings,
                     installSuccess: ok,
-                    // qualified explicitly to prevent occasional shadowing
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
                     typingsInstallerVersion: version
                 };
                 this.sendResponse(response);

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/typeCheckExportsVariable.ts ===
+let exports: number;
+>exports : Symbol(exports, Decl(typeCheckExportsVariable.ts, 0, 3))
+
+exports = '';
+>exports : Symbol(exports, Decl(typeCheckExportsVariable.ts, 0, 3))
+

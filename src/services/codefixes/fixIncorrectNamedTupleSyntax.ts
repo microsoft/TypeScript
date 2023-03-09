@@ -1,8 +1,20 @@
 import {
-    Diagnostics, factory, findAncestor, getTokenAtPosition, NamedTupleMember, OptionalTypeNode, ParenthesizedTypeNode,
-    RestTypeNode, SourceFile, SyntaxKind, textChanges,
+    Diagnostics,
+    factory,
+    findAncestor,
+    getTokenAtPosition,
+    NamedTupleMember,
+    OptionalTypeNode,
+    ParenthesizedTypeNode,
+    RestTypeNode,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
 } from "../_namespaces/ts";
-import { createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixIncorrectNamedTupleSyntax";
 const errorCodes = [

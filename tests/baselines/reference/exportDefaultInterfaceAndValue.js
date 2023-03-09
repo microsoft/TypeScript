@@ -6,6 +6,6 @@ declare var x: A;
 
 //// [exportDefaultInterfaceAndValue.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function default_1() { return 1; }
-exports["default"] = default_1;
+exports.default = default_1;

@@ -1,8 +1,20 @@
 import {
-    cast, Diagnostics, findChildOfKind, getTokenAtPosition, isLabeledStatement, positionsAreOnSameLine, skipTrivia,
-    SourceFile, SyntaxKind, textChanges,
+    cast,
+    Diagnostics,
+    findChildOfKind,
+    getTokenAtPosition,
+    isLabeledStatement,
+    positionsAreOnSameLine,
+    skipTrivia,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixUnusedLabel";
 const errorCodes = [Diagnostics.Unused_label.code];

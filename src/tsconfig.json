@@ -19,6 +19,5 @@
         { "path": "./typingsInstaller" },
         { "path": "./typingsInstallerCore" },
         { "path": "./watchGuard" },
-        { "path": "./webServer" },
     ]
 }

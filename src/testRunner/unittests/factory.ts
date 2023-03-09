@@ -83,38 +83,4 @@ describe("unittests:: FactoryAPI", () => {
         });
     });
 
-    describe("deprecations", () => {
-        beforeEach(() => {
-            ts.Debug.enableDeprecationWarnings = false;
-        });
-
-        afterEach(() => {
-            ts.Debug.enableDeprecationWarnings = true;
-        });
-
-        // https://github.com/microsoft/TypeScript/issues/50259
-        it("deprecated createConstructorDeclaration overload does not throw", () => {
-            const body = ts.factory.createBlock([]);
-            assert.doesNotThrow(() => ts.factory.createConstructorDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*parameters*/ [],
-                body,
-            ));
-        });
-
-        // https://github.com/microsoft/TypeScript/issues/50259
-        it("deprecated updateConstructorDeclaration overload does not throw", () => {
-            const body = ts.factory.createBlock([]);
-            const ctor = ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [], body);
-            assert.doesNotThrow(() => ts.factory.updateConstructorDeclaration(
-                ctor,
-                ctor.decorators,
-                ctor.modifiers,
-                ctor.parameters,
-                ctor.body,
-            ));
-        });
-    });
-
 });

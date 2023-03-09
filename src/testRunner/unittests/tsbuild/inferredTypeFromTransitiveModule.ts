@@ -1,33 +1,38 @@
-import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    appendText,
+    loadProjectFromDisk,
+    replaceText,
+    verifyTsc,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = ts.loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
+        projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
     });
     after(() => {
         projFs = undefined!;
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "inferred type from transitive module",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src", "--verbose"],
         edits: [
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam,
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParamBack,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParamBack,
             },
         ],
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         subScenario: "inferred type from transitive module with isolatedModules",
         fs: () => projFs,
         scenario: "inferredTypeFromTransitiveModule",
@@ -35,56 +40,56 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         modifyFs: changeToIsolatedModules,
         edits: [
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParamBack,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParamBack,
             },
         ]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "reports errors in files affected by change in signature with isolatedModules",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src", "--verbose"],
         modifyFs: fs => {
             changeToIsolatedModules(fs);
-            ts.appendText(fs, "/src/lazyIndex.ts", `
+            appendText(fs, "/src/lazyIndex.ts", `
 import { default as bar } from './bar';
 bar("hello");`);
         },
         edits: [
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParamBack,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParamBack,
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam
             },
             {
-                subScenario: "Fix Error",
-                modifyFs: fs => ts.replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
+                caption: "Fix Error",
+                edit: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
             },
         ]
     });
 });
 
 function changeToIsolatedModules(fs: vfs.FileSystem) {
-    ts.replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
+    replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
 }
 
 function changeBarParam(fs: vfs.FileSystem) {
-    ts.replaceText(fs, "/src/bar.ts", "param: string", "");
+    replaceText(fs, "/src/bar.ts", "param: string", "");
 }
 
 function changeBarParamBack(fs: vfs.FileSystem) {
-    ts.replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
+    replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
 }

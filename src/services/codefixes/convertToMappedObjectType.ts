@@ -1,10 +1,32 @@
 import {
-    cast, Diagnostics, emptyArray, factory, first, getAllSuperTypeNodes, getTokenAtPosition,
-    hasEffectiveReadonlyModifier, idText, IndexSignatureDeclaration, InterfaceDeclaration, isIdentifier,
-    isIndexSignatureDeclaration, isInterfaceDeclaration, isTypeAliasDeclaration, SourceFile, SyntaxKind, textChanges,
-    tryCast, TypeAliasDeclaration, TypeLiteralNode, TypeNode,
+    cast,
+    Diagnostics,
+    emptyArray,
+    factory,
+    first,
+    getAllSuperTypeNodes,
+    getTokenAtPosition,
+    hasEffectiveReadonlyModifier,
+    idText,
+    IndexSignatureDeclaration,
+    InterfaceDeclaration,
+    isIdentifier,
+    isIndexSignatureDeclaration,
+    isInterfaceDeclaration,
+    isTypeAliasDeclaration,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
+    tryCast,
+    TypeAliasDeclaration,
+    TypeLiteralNode,
+    TypeNode,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixConvertToMappedObjectType";
 const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];

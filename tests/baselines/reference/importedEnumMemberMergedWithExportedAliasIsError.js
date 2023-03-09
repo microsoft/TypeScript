@@ -15,7 +15,7 @@ export type EnumA = [string] | [string, number];
 
 //// [enum.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Enum = void 0;
 var Enum;
 (function (Enum) {
@@ -24,4 +24,4 @@ var Enum;
 })(Enum = exports.Enum || (exports.Enum = {}));
 //// [alias.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

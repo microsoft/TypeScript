@@ -1,25 +1,133 @@
+import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
-    AnyImportOrRequireStatement, append, ApplicableRefactorInfo, AssignmentDeclarationKind, BinaryExpression,
-    BindingElement, BindingName, CallExpression, canHaveDecorators, canHaveModifiers, cast, ClassDeclaration, codefix,
-    combinePaths, concatenate, contains, copyEntries, createTextRangeFromSpan, Debug, Declaration, DeclarationStatement,
-    Diagnostics, emptyArray, ensurePathIsNonModuleName, EnumDeclaration, escapeLeadingUnderscores, Expression,
-    ExpressionStatement, extensionFromPath, ExternalModuleReference, factory, find, FindAllReferences, findIndex,
-    firstDefined, flatMap, forEachEntry, FunctionDeclaration, getAssignmentDeclarationKind, getBaseFileName,
-    GetCanonicalFileName, getDecorators, getDirectoryPath, getLocaleSpecificMessage, getModifiers,
-    getPropertySymbolFromBindingElement, getQuotePreference, getRangesWhere, getRefactorContextSpan,
-    getRelativePathFromFile, getSymbolId, getUniqueName, hasSyntacticModifier, hostGetCanonicalFileName, Identifier,
-    ImportDeclaration, ImportEqualsDeclaration, insertImports, InterfaceDeclaration, InternalSymbolName,
-    isArrayLiteralExpression, isBinaryExpression, isBindingElement, isDeclarationName, isExpressionStatement,
-    isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration,
-    isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression,
-    isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableDeclaration,
-    isVariableDeclarationList, isVariableStatement, LanguageServiceHost, last, length, makeImportIfNecessary, Map,
-    mapDefined, ModifierFlags, ModifierLike, ModuleDeclaration, NamedImportBindings, Node, NodeFlags, nodeSeenTracker,
-    normalizePath, ObjectBindingElementWithoutPropertyName, Program, PropertyAccessExpression, PropertyAssignment,
-    QuotePreference, rangeContainsRange, RefactorContext, RefactorEditInfo, removeFileExtension, RequireOrImportCall,
-    RequireVariableStatement, ScriptTarget, skipAlias, some, SourceFile, Statement, StringLiteralLike, Symbol,
-    SymbolFlags, symbolNameNoDefault, SyntaxKind, takeWhile, textChanges, TransformFlags, tryCast, TypeAliasDeclaration,
-    TypeChecker, TypeNode, UserPreferences, VariableDeclaration, VariableDeclarationList, VariableStatement,
+    AnyImportOrRequireStatement,
+    append,
+    ApplicableRefactorInfo,
+    AssignmentDeclarationKind,
+    BinaryExpression,
+    BindingElement,
+    BindingName,
+    CallExpression,
+    canHaveDecorators,
+    canHaveModifiers,
+    canHaveSymbol, cast,
+    ClassDeclaration,
+    codefix,
+    combinePaths,
+    concatenate,
+    contains,
+    copyEntries,
+    createModuleSpecifierResolutionHost,
+    createTextRangeFromSpan,
+    Debug,
+    Declaration,
+    DeclarationStatement,
+    Diagnostics,
+    emptyArray,
+    EnumDeclaration,
+    escapeLeadingUnderscores,
+    Expression,
+    ExpressionStatement,
+    extensionFromPath,
+    ExternalModuleReference,
+    factory,
+    find,
+    FindAllReferences,
+    findIndex,
+    firstDefined,
+    flatMap,
+    forEachEntry,
+    FunctionDeclaration,
+    getAssignmentDeclarationKind,
+    getBaseFileName,
+    GetCanonicalFileName,
+    getDecorators,
+    getDirectoryPath,
+    getLocaleSpecificMessage,
+    getModifiers,
+    getPropertySymbolFromBindingElement,
+    getQuotePreference,
+    getRangesWhere,
+    getRefactorContextSpan,
+    getRelativePathFromFile,
+    getSymbolId,
+    getUniqueName,
+    hasSyntacticModifier,
+    hostGetCanonicalFileName,
+    Identifier,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    insertImports,
+    InterfaceDeclaration,
+    InternalSymbolName,
+    isArrayLiteralExpression,
+    isBinaryExpression,
+    isBindingElement,
+    isDeclarationName,
+    isExpressionStatement,
+    isExternalModuleReference,
+    isIdentifier,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
+    isNamedDeclaration,
+    isObjectLiteralExpression,
+    isOmittedExpression,
+    isPrologueDirective,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isRequireCall,
+    isSourceFile,
+    isStringLiteral,
+    isStringLiteralLike,
+    isVariableDeclaration,
+    isVariableDeclarationList,
+    isVariableStatement,
+    LanguageServiceHost,
+    last,
+    length,
+    makeImportIfNecessary,
+    makeStringLiteral,
+    mapDefined,
+    ModifierFlags,
+    ModifierLike,
+    ModuleDeclaration,
+    NamedImportBindings,
+    Node,
+    NodeFlags,
+    nodeSeenTracker,
+    normalizePath,
+    ObjectBindingElementWithoutPropertyName,
+    Program,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    QuotePreference,
+    rangeContainsRange,
+    RefactorContext,
+    RefactorEditInfo,
+    RequireOrImportCall,
+    RequireVariableStatement,
+    resolvePath,
+    ScriptTarget,
+    skipAlias,
+    some,
+    SourceFile,
+    Statement,
+    StringLiteralLike,
+    Symbol,
+    SymbolFlags,
+    symbolNameNoDefault,
+    SyntaxKind,
+    takeWhile,
+    textChanges,
+    TransformFlags,
+    tryCast,
+    TypeAliasDeclaration,
+    TypeChecker,
+    TypeNode,
+    UserPreferences,
+    VariableDeclaration,
+    VariableDeclarationList,
+    VariableStatement,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
@@ -85,13 +193,23 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
 
     const currentDirectory = getDirectoryPath(oldFile.fileName);
     const extension = extensionFromPath(oldFile.fileName);
-    const newModuleName = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
-    const newFileNameWithExtension = newModuleName + extension;
+    const newFilename = combinePaths(
+        // new file is always placed in the same directory as the old file
+        currentDirectory,
+        // ensures the filename computed below isn't already taken
+        makeUniqueFilename(
+            // infers a name for the new file from the symbols being moved
+            inferNewFilename(usage.oldFileImportsFromNewFile, usage.movedSymbols),
+            extension,
+            currentDirectory,
+            host))
+        // new file has same extension as old file
+        + extension;
 
     // If previous file was global, this is easy.
-    changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, newModuleName, preferences));
+    changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences));
 
-    addNewFileToTsconfig(program, changes, oldFile.fileName, newFileNameWithExtension, hostGetCanonicalFileName(host));
+    addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
 }
 
 interface StatementRange {
@@ -152,7 +270,7 @@ function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTrack
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
+    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -163,16 +281,16 @@ function getNewStatementsAndRemoveFromOldFile(
 
     const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEsModuleSyntax, quotePreference);
+    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
-        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
+        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
     }
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
-    updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
+    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename, quotePreference);
 
-    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEsModuleSyntax, quotePreference);
+    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
     if (imports.length && body.length) {
         return [
@@ -203,7 +321,9 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
     }
 }
 
-function updateImportsInOtherFiles(changes: textChanges.ChangeTracker, program: Program, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newModuleName: string): void {
+function updateImportsInOtherFiles(
+    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newFilename: string, quotePreference: QuotePreference
+): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
         if (sourceFile === oldFile) continue;
@@ -218,12 +338,14 @@ function updateImportsInOtherFiles(changes: textChanges.ChangeTracker, program: 
                     return !!symbol && movedSymbols.has(symbol);
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
-                const newModuleSpecifier = combinePaths(getDirectoryPath(moduleSpecifierFromImport(importNode).text), newModuleName);
-                const newImportDeclaration = filterImport(importNode, factory.createStringLiteral(newModuleSpecifier), shouldMove);
+
+                const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newFilename);
+                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
                 const ns = getNamespaceLikeImport(importNode);
-                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleName, newModuleSpecifier, ns, importNode);
+                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode, quotePreference);
             });
         }
     }
@@ -248,12 +370,12 @@ function updateNamespaceLikeImport(
     sourceFile: SourceFile,
     checker: TypeChecker,
     movedSymbols: ReadonlySymbolSet,
-    newModuleName: string,
     newModuleSpecifier: string,
     oldImportId: Identifier,
     oldImportNode: SupportedImport,
+    quotePreference: QuotePreference
 ): void {
-    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleName, ScriptTarget.ESNext);
+    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
     let needUniqueName = false;
     const toChange: Identifier[] = [];
     FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
@@ -269,13 +391,13 @@ function updateNamespaceLikeImport(
         for (const ref of toChange) {
             changes.replaceNode(sourceFile, ref, factory.createIdentifier(newNamespaceName));
         }
-        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, newModuleName, newModuleSpecifier));
+        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier, quotePreference));
     }
 }
 
-function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string): Node {
+function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string, quotePreference: QuotePreference): Node {
     const newNamespaceId = factory.createIdentifier(newNamespaceName);
-    const newModuleString = factory.createStringLiteral(newModuleSpecifier);
+    const newModuleString = makeStringLiteral(newModuleSpecifier, quotePreference);
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             return factory.createImportDeclaration(
@@ -325,7 +447,15 @@ type SupportedImportStatement =
     | ImportEqualsDeclaration
     | VariableStatement;
 
-function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, quotePreference: QuotePreference): AnyImportOrRequireStatement | undefined {
+function createOldFileImportsFromNewFile(
+    sourceFile: SourceFile,
+    newFileNeedExport: ReadonlySymbolSet,
+    newFileNameWithExtension: string,
+    program: Program,
+    host: LanguageServiceHost,
+    useEs6Imports: boolean,
+    quotePreference: QuotePreference
+): AnyImportOrRequireStatement | undefined {
     let defaultImport: Identifier | undefined;
     const imports: string[] = [];
     newFileNeedExport.forEach(symbol => {
@@ -336,20 +466,31 @@ function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, n
             imports.push(symbol.name);
         }
     });
-    return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, quotePreference);
+    return makeImportOrRequire(sourceFile, defaultImport, imports, newFileNameWithExtension, program, host, useEs6Imports, quotePreference);
 }
 
-function makeImportOrRequire(defaultImport: Identifier | undefined, imports: readonly string[], path: string, useEs6Imports: boolean, quotePreference: QuotePreference): AnyImportOrRequireStatement | undefined {
-    path = ensurePathIsNonModuleName(path);
+function makeImportOrRequire(
+    sourceFile: SourceFile,
+    defaultImport: Identifier | undefined,
+    imports: readonly string[],
+    newFileNameWithExtension: string,
+    program: Program,
+    host: LanguageServiceHost,
+    useEs6Imports: boolean,
+    quotePreference: QuotePreference
+): AnyImportOrRequireStatement | undefined {
+    const pathToNewFile = resolvePath(getDirectoryPath(sourceFile.path), newFileNameWithExtension);
+    const pathToNewFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFile, createModuleSpecifierResolutionHost(program, host));
+
     if (useEs6Imports) {
         const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
-        return makeImportIfNecessary(defaultImport, specifiers, path, quotePreference);
+        return makeImportIfNecessary(defaultImport, specifiers, pathToNewFileWithCorrectExtension, quotePreference);
     }
     else {
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
         const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
         return bindingElements.length
-            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(factory.createStringLiteral(path))) as RequireVariableStatement
+            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToNewFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
             : undefined;
     }
 }
@@ -366,7 +507,7 @@ function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needEx
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
-            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
+            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))) {
             const exports = addExport(statement, useEs6Exports);
             if (exports) return exports;
         }
@@ -458,6 +599,8 @@ function getNewFileImportsAndAddExportInOldFile(
     newFileImportsFromOldFile: ReadonlySymbolSet,
     changes: textChanges.ChangeTracker,
     checker: TypeChecker,
+    program: Program,
+    host: LanguageServiceHost,
     useEsModuleSyntax: boolean,
     quotePreference: QuotePreference,
 ): readonly SupportedImportStatement[] {
@@ -494,20 +637,20 @@ function getNewFileImportsAndAddExportInOldFile(
         }
     });
 
-    append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEsModuleSyntax, quotePreference));
+    append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, getBaseFileName(oldFile.fileName), program, host, useEsModuleSyntax, quotePreference));
     return copiedOldImports;
 }
 
-function makeUniqueModuleName(moduleName: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
-    let newModuleName = moduleName;
+function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
+    let newFilename = proposedFilename;
     for (let i = 1; ; i++) {
-        const name = combinePaths(inDirectory, newModuleName + extension);
-        if (!host.fileExists(name)) return newModuleName;
-        newModuleName = `${moduleName}.${i}`;
+        const name = combinePaths(inDirectory, newFilename + extension);
+        if (!host.fileExists(name)) return newFilename;
+        newFilename = `${proposedFilename}.${i}`;
     }
 }
 
-function getNewModuleName(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
+function inferNewFilename(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
     return importsFromNewFile.forEachEntry(symbolNameNoDefault) || movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
 }
 
@@ -621,7 +764,7 @@ function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, ke
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
+                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:

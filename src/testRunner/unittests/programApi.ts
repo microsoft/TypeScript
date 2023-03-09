@@ -1,12 +1,12 @@
-import * as ts from "../_namespaces/ts";
 import * as documents from "../_namespaces/documents";
 import * as fakes from "../_namespaces/fakes";
-import * as vfs from "../_namespaces/vfs";
 import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: readonly string[]) {
     assert.isDefined(missingPaths);
-    const map = new ts.Set(expected);
+    const map = new Set(expected);
     for (const missing of missingPaths) {
         const value = map.has(missing);
         assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);

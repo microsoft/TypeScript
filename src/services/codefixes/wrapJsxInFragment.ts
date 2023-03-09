@@ -1,8 +1,22 @@
 import {
-    BinaryExpression, Diagnostics, factory, getTokenAtPosition, isBinaryExpression, isJsxChild, JsxChild, Node,
-    nodeIsMissing, SourceFile, SyntaxKind, textChanges,
+    BinaryExpression,
+    Diagnostics,
+    factory,
+    getTokenAtPosition,
+    isBinaryExpression,
+    isJsxChild,
+    JsxChild,
+    Node,
+    nodeIsMissing,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixID = "wrapJsxInFragment";
 const errorCodes = [Diagnostics.JSX_expressions_must_have_one_parent_element.code];

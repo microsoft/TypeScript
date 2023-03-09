@@ -44,24 +44,24 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/out/copy1/node_modules/target/import.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/out/copy1/node_modules/target/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
 
 
 //// [/src/project/out/copy2/node_modules/target/import.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/out/copy2/node_modules/target/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
 

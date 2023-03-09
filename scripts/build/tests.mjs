@@ -1,24 +1,29 @@
+import { CancelError } from "@esfx/canceltoken";
+import chalk from "chalk";
 import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
+
+import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
 import { exec } from "./utils.mjs";
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
 export const localRwcBaseline = "internal/baselines/rwc/local";
 export const refRwcBaseline = "internal/baselines/rwc/reference";
-export const localTest262Baseline = "internal/baselines/test262/local";
 
 /**
  * @param {string} runJs
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
+ * @param {object} options
+ * @param {import("@esfx/canceltoken").CancelToken} [options.token]
+ * @param {boolean} [options.watching]
  */
-export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
+export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
     let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -31,7 +36,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
+        if (options.watching) {
+            console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
+        }
         await cleanTestDirs();
+
+        if (options.token?.signaled) {
+            return;
+        }
     }
 
     if (fs.existsSync(testConfigFile)) {
@@ -54,6 +66,10 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
         testTimeout = 400000;
+    }
+
+    if (options.watching) {
+        console.log(chalk.yellowBright(`[watch] running tests...`));
     }
 
     if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
@@ -114,7 +130,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec(process.execPath, args);
+
+        const { exitCode } = await exec(process.execPath, args, { token: options.token });
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
@@ -132,8 +149,17 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
-        process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
-        throw error;
+        if (error instanceof CancelError) {
+            throw error;
+        }
+
+        if (options.watching) {
+            console.error(`${chalk.redBright(error.name)}: ${error.message}`);
+        }
+        else {
+            process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
+            throw error;
+        }
     }
 }
 
@@ -149,9 +175,9 @@ export async function cleanTestDirs() {
  * @param {string} runners
  * @param {boolean} light
  * @param {string} [taskConfigsFolder]
- * @param {string | number} [workerCount]
+ * @param {number} [workerCount]
  * @param {string} [stackTraceLimit]
- * @param {string | number} [timeout]
+ * @param {number} [timeout]
  * @param {boolean} [keepFailed]
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]

@@ -1,59 +1,32 @@
 // @ts-check
-import path from "path";
-import fs from "fs";
-import del from "del";
-import { task } from "hereby";
-import _glob from "glob";
-import util from "util";
+import { CancelToken } from "@esfx/canceltoken";
 import chalk from "chalk";
-import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate } from "./scripts/build/utils.mjs";
-import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
-import { buildProject as realBuildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import chokidar from "chokidar";
+import del from "del";
+import esbuild from "esbuild";
+import { EventEmitter } from "events";
+import fs from "fs";
+import _glob from "glob";
+import { task } from "hereby";
+import path from "path";
+import util from "util";
+
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import esbuild from "esbuild";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
-const copyrightFilename = "CopyrightNotice.txt";
+const copyrightFilename = "./scripts/CopyrightNotice.txt";
 const copyright = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
-
-
-// TODO(jakebailey): This is really gross. If the build is cancelled (i.e. Ctrl+C), the modification will persist.
-// Waiting on: https://github.com/microsoft/TypeScript/issues/51164
-let currentlyBuilding = 0;
-let oldTsconfigBase;
-
-/** @type {typeof realBuildProject} */
-const buildProjectWithEmit = async (...args) => {
-    const tsconfigBasePath = "./src/tsconfig-base.json";
-
-    // Not using fs.promises here, to ensure we are synchronous until running the real build.
-
-    if (currentlyBuilding === 0) {
-        oldTsconfigBase = fs.readFileSync(tsconfigBasePath, "utf-8");
-        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase.replace(`"emitDeclarationOnly": true,`, `"emitDeclarationOnly": false, // DO NOT COMMIT`));
-    }
-
-    currentlyBuilding++;
-
-    await realBuildProject(...args);
-
-    currentlyBuilding--;
-
-    if (currentlyBuilding === 0) {
-        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase);
-    }
-};
-
-
-const buildProject = cmdLineOptions.bundle ? realBuildProject : buildProjectWithEmit;
 
 
 export const buildScripts = task({
@@ -86,10 +59,7 @@ export const generateLibs = task({
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
-                // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
-                // are sensitive to the positions of things in the lib files. Eventually remove this,
-                // or remove lib.d.ts line numbers from our baselines.
-                output += "\n\n" + contents.replace(/\r\n/g, "\n");
+                output += "\n" + contents.replace(/\r\n/g, "\n");
             }
 
             await fs.promises.writeFile(lib.target, output);
@@ -141,7 +111,7 @@ const localize = task({
     dependencies: [generateDiagnostics],
     run: async () => {
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+            await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
         }
     }
 });
@@ -188,9 +158,9 @@ async function runDtsBundler(entrypoint, output) {
  * @param {BundlerTaskOptions} [taskOptions]
  *
  * @typedef BundlerTaskOptions
- * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
@@ -206,53 +176,9 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             sourcemap: "linked",
             sourcesContent: false,
             treeShaking: taskOptions.treeShaking,
-            external: [
-                ...(taskOptions.external ?? []),
-                "source-map-support",
-            ],
+            packages: "external",
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-            plugins: [
-                {
-                    name: "no-node-modules",
-                    setup: (build) => {
-                        build.onLoad({ filter: /[\\/]node_modules[\\/]/ }, () => {
-                            // Ideally, we'd use "--external:./node_modules/*" here, but that doesn't work; we
-                            // will instead end up with paths to node_modules rather than the package names.
-                            // Instead, we'll return a load error when we see that we're trying to bundle from
-                            // node_modules, then explicitly declare which external dependencies we rely on, which
-                            // ensures that the correct module specifier is kept in the output (the non-wildcard
-                            // form works properly). It also helps us keep tabs on what external dependencies we
-                            // may be importing, which is handy.
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1958
-                            return {
-                                errors: [{ text: 'Attempted to bundle from node_modules; ensure "external" is set correctly.' }]
-                            };
-                        });
-                    }
-                },
-                {
-                    name: "fix-require",
-                    setup: (build) => {
-                        build.onEnd(async () => {
-                            // esbuild converts calls to "require" to "__require"; this function
-                            // calls the real require if it exists, or throws if it does not (rather than
-                            // throwing an error like "require not defined"). But, since we want typescript
-                            // to be consumable by other bundlers, we need to convert these calls back to
-                            // require so our imports are visible again.
-                            //
-                            // The leading spaces are to keep the offsets the same within the files to keep
-                            // source maps working (though this only really matters for the line the require is on).
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1905
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/__require\(/g, "  require(");
-                            await fs.promises.writeFile(outfile, contents);
-                        });
-                    },
-                }
-            ]
         };
 
         if (taskOptions.exportIsTsObject) {
@@ -262,6 +188,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
             options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+
+            // esbuild converts calls to "require" to "__require"; this function
+            // calls the real require if it exists, or throws if it does not (rather than
+            // throwing an error like "require not defined"). But, since we want typescript
+            // to be consumable by other bundlers, we need to convert these calls back to
+            // require so our imports are visible again.
+            //
+            // The leading spaces are to keep the offsets the same within the files to keep
+            // source maps working (though this only really matters for the line the require is on).
+            //
+            // See: https://github.com/evanw/esbuild/issues/1905
+            options.define = { require: "$$require" };
+            options.plugins = [
+                {
+                    name: "fix-require",
+                    setup: (build) => {
+                        build.onEnd(async () => {
+                            let contents = await fs.promises.readFile(outfile, "utf-8");
+                            contents = contents.replace(/\$\$require/g, "  require");
+                            await fs.promises.writeFile(outfile, contents);
+                        });
+                    },
+                }
+            ];
         }
 
         return options;
@@ -269,7 +219,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
     return {
         build: async () => esbuild.build(await getOptions()),
-        watch: async () => esbuild.build({ ...await getOptions(), watch: true, logLevel: "info" }),
+        watch: async () => {
+            /** @type {esbuild.BuildOptions} */
+            const options = { ...await getOptions(), logLevel: "info" };
+            if (taskOptions.onWatchRebuild) {
+                const onRebuild = taskOptions.onWatchRebuild;
+                options.plugins = (options.plugins?.slice(0) ?? []).concat([{
+                    name: "watch",
+                    setup: (build) => {
+                        let firstBuild = true;
+                        build.onEnd(() => {
+                            if (firstBuild) {
+                                firstBuild = false;
+                            }
+                            else {
+                                onRebuild();
+                            }
+                        });
+                    }
+                }]);
+            }
+
+            const ctx = await esbuild.context(options);
+            ctx.watch();
+        },
     };
 }
 
@@ -324,10 +297,21 @@ function entrypointBuildTask(options) {
         },
     });
 
+    const mainDeps = options.mainDeps?.slice(0) ?? [];
+    if (cmdLineOptions.bundle) {
+        mainDeps.push(bundle);
+        if (cmdLineOptions.typecheck) {
+            mainDeps.push(build);
+        }
+    }
+    else {
+        mainDeps.push(build, shim);
+    }
+
     const main = task({
         name: options.name,
         description: options.description,
-        dependencies: (options.mainDeps ?? []).concat(cmdLineOptions.bundle ? [bundle] : [build, shim]),
+        dependencies: mainDeps,
     });
 
     const watch = task({
@@ -354,7 +338,7 @@ function entrypointBuildTask(options) {
 }
 
 
-const { main: tsc, build: buildTsc, watch: watchTsc } = entrypointBuildTask({
+const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
     description: "Builds the command-line compiler",
     buildDeps: [generateDiagnostics],
@@ -386,13 +370,13 @@ export const dtsServices = task({
     dependencies: [buildServices],
     run: async () => {
         if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
-            runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
+            await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
 });
 
 
-const { main: tsserver, build: buildTsserver, watch: watchTsserver } = entrypointBuildTask({
+const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
     description: "Builds the language server",
     buildDeps: [generateDiagnostics],
@@ -401,24 +385,14 @@ const { main: tsserver, build: buildTsserver, watch: watchTsserver } = entrypoin
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs],
-    // Even though this seems like an exectuable, so could be the default CJS,
-    // this is used in the browser too. Do the same thing that we do for our
-    // libraries and generate an IIFE with name `ts`, as to not pollute the global
-    // scope.
-    bundlerOptions: { exportIsTsObject: true },
 });
 export { tsserver, watchTsserver };
 
 
-const buildMin = task({
-    name: "build-min",
-    dependencies: [buildTsc, buildTsserver],
-});
-
 export const min = task({
     name: "min",
     description: "Builds only tsc and tsserver",
-    dependencies: [tsc, tsserver].concat(cmdLineOptions.typecheck ? [buildMin] : []),
+    dependencies: [tsc, tsserver],
 });
 
 export const watchMin = task({
@@ -461,7 +435,7 @@ export const dts = task({
 
 
 const testRunner = "./built/local/run.js";
-
+const watchTestsEmitter = new EventEmitter();
 const { main: tests, watch: watchTests } = entrypointBuildTask({
     name: "tests",
     description: "Builds the test infrastructure",
@@ -474,14 +448,9 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     bundlerOptions: {
         // Ensure we never drop any dead code, which might be helpful while debugging.
         treeShaking: false,
-        // These are directly imported via import statements and should not be bundled.
-        external: [
-            "chai",
-            "del",
-            "diff",
-            "mocha",
-            "ms",
-        ],
+        onWatchRebuild() {
+            watchTestsEmitter.emit("rebuild");
+        }
     },
 });
 export { tests, watchTests };
@@ -545,6 +514,7 @@ const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
 export const generateTypesMap = task({
     name: "generate-types-map",
     run: async () => {
+        await fs.promises.mkdir("./built/local", { recursive: true });
         const source = "src/server/typesMap.json";
         const target = "built/local/typesMap.json";
         const contents = await fs.promises.readFile(source, "utf-8");
@@ -582,15 +552,10 @@ export const watchOtherOutputs = task({
     dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
-const buildLocal = task({
-    name: "build-local",
-    dependencies: [buildTsc, buildTsserver, buildServices, buildLssl]
-});
-
 export const local = task({
     name: "local",
     description: "Builds the full compiler and services",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts].concat(cmdLineOptions.typecheck ? [buildLocal] : []),
+    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts],
 });
 export default local;
 
@@ -601,7 +566,7 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
 });
 
-const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts, buildSrc] : []);
+const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
 
 export const runTests = task({
     name: "runtests",
@@ -625,12 +590,130 @@ export const runTests = task({
 //     "   --shardId": "1-based ID of this shard (default: 1)",
 // };
 
-export const runTestsParallel = task({
-    name: "runtests-parallel",
+export const runTestsAndWatch = task({
+    name: "runtests-watch",
+    dependencies: [watchTests],
+    run: async () => {
+        if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
+            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            return;
+        }
+
+        let watching = true;
+        let running = true;
+        let lastTestChangeTimeMs = Date.now();
+        let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        let testsChangedCancelSource = CancelToken.source();
+
+        const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
+        const testCaseWatcher = chokidar.watch([
+            "tests/cases/**/*.*",
+            "tests/lib/**/*.*",
+            "tests/projects/**/*.*",
+        ], {
+            ignorePermissionErrors: true,
+            alwaysStat: true
+        });
+
+        process.on("SIGINT", endWatchMode);
+        process.on("SIGKILL", endWatchMode);
+        process.on("beforeExit", endWatchMode);
+        watchTestsEmitter.on("rebuild", onRebuild);
+        testCaseWatcher.on("all", onChange);
+
+        while (watching) {
+            const promise = testsChangedDeferred.promise;
+            const token = testsChangedCancelSource.token;
+            if (!token.signaled) {
+                running = true;
+                try {
+                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, { token, watching: true });
+                }
+                catch {
+                    // ignore
+                }
+                running = false;
+            }
+            if (watching) {
+                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
+                await promise;
+            }
+        }
+
+        function onRebuild() {
+            beginRunTests(testRunner);
+        }
+
+        /**
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {string} path
+         * @param {fs.Stats | undefined} stats
+         */
+        function onChange(eventName, path, stats) {
+            switch (eventName) {
+                case "change":
+                case "unlink":
+                case "unlinkDir":
+                    break;
+                case "add":
+                case "addDir":
+                    // skip files that are detected as 'add' but haven't actually changed since the last time tests were
+                    // run.
+                    if (stats && stats.mtimeMs <= lastTestChangeTimeMs) {
+                        return;
+                    }
+                    break;
+            }
+            beginRunTests(path);
+        }
+
+        /**
+         * @param {string} path
+         */
+        function beginRunTests(path) {
+            if (testsChangedDebouncer.empty) {
+                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                if (running) {
+                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                }
+                testsChangedCancelSource.cancel();
+                testsChangedCancelSource = CancelToken.source();
+            }
+
+            testsChangedDebouncer.enqueue();
+        }
+
+        function endRunTests() {
+            lastTestChangeTimeMs = Date.now();
+            testsChangedDeferred.resolve();
+            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        }
+
+        function endWatchMode() {
+            if (watching) {
+                watching = false;
+                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+                testsChangedCancelSource.cancel();
+                testCaseWatcher.close();
+                watchTestsEmitter.off("rebuild", onRebuild);
+            }
+        }
+    },
+});
+
+const doRunTestsParallel = task({
+    name: "do-runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
+
+export const runTestsParallel = task({
+    name: "runtests-parallel",
+    description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [doRunTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests-parallel").flags = {
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
@@ -684,7 +767,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         }
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
-            const out = localPathToRefPath(p);
+            const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await fs.promises.rm(out);
         }
     };
@@ -726,7 +809,7 @@ export const importDefinitelyTypedTests = task({
 export const produceLKG = task({
     name: "LKG",
     description: "Makes a new LKG out of the built js files",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts],
+    dependencies: [local],
     run: async () => {
         if (!cmdLineOptions.bundle) {
             throw new Error("LKG cannot be created when --bundle=false");
@@ -749,11 +832,19 @@ export const produceLKG = task({
         if (missingFiles.length > 0) {
             throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
         }
-        const sizeBefore = getDirSize("lib");
+
+        /** @type {number | undefined} */
+        let sizeBefore;
+        if (fs.existsSync("lib")) {
+            sizeBefore = getDirSize("lib");
+        }
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-        const sizeAfter = getDirSize("lib");
-        if (sizeAfter > (sizeBefore * 1.10)) {
-            throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+
+        if (sizeBefore !== undefined) {
+            const sizeAfter = getDirSize("lib");
+            if (sizeAfter > (sizeBefore * 1.10)) {
+                throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+            }
         }
     }
 });
@@ -762,13 +853,6 @@ export const lkg = task({
     name: "lkg",
     hiddenFromTaskList: true,
     dependencies: [produceLKG],
-});
-
-export const generateSpec = task({
-    name: "generate-spec",
-    description: "Generates a Markdown version of the Language Specification",
-    hiddenFromTaskList: true,
-    run: () => exec("cscript", ["//nologo", "scripts/word2md.mjs", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]),
 });
 
 export const cleanBuilt = task({

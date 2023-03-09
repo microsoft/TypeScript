@@ -1,53 +1,255 @@
 import {
-    __String, addToSeen, append, AssignmentDeclarationKind, BinaryExpression, BindingElement, Block, CallExpression,
-    CancellationToken, cast, CheckFlags, ClassLikeDeclaration, climbPastPropertyAccess, compareValues,
-    ConstructorDeclaration, contains, createQueue, createTextSpan, createTextSpanFromBounds, createTextSpanFromRange,
-    Debug, Declaration, displayPart, DocumentSpan, emptyArray, emptyOptions, escapeLeadingUnderscores, ESMap,
-    ExportSpecifier, Expression, FileIncludeReason, FileReference, filter, find, findAncestor, findChildOfKind,
-    findIndex, first, firstDefined, firstOrUndefined, flatMap, forEachChild, forEachReturnStatement, ForInOrOfStatement,
-    FunctionDeclaration, FunctionExpression, FunctionLikeDeclaration, GetAccessorDeclaration,
-    getAdjustedReferenceLocation, getAdjustedRenameLocation, getAllSuperTypeNodes, getAncestor,
-    getAssignmentDeclarationKind, getCheckFlags, getContainerNode, getContainingObjectLiteralElement,
-    getContextualTypeFromParentOrAncestorTypeNode, getDeclarationFromName, getDeclarationOfKind,
-    getEffectiveModifierFlags, getLocalSymbolForExportDefault, getMeaningFromDeclaration, getMeaningFromLocation,
-    getModeForUsageLocation, getNameOfDeclaration, getNameTable, getNextJSDocCommentLocation, getNodeId, getNodeKind,
-    getPropertySymbolFromBindingElement, getPropertySymbolsFromContextualType, getReferencedFileLocation,
-    getSuperContainer, getSymbolId, getSyntacticModifierFlags, getTargetLabel, getTextOfNode, getThisContainer,
-    getTouchingPropertyName, GoToDefinition, hasEffectiveModifier, hasInitializer, hasSyntacticModifier, hasType,
-    HighlightSpan, HighlightSpanKind, Identifier, ImplementationLocation, InterfaceDeclaration, InternalSymbolName,
-    isAccessExpression, isArrayLiteralOrObjectLiteralDestructuringPattern, isAssertionExpression, isBinaryExpression,
-    isBindableObjectDefinePropertyCall, isBindingElement, isBreakOrContinueStatement, isCallExpression,
-    isCallExpressionTarget, isCatchClause, isClassLike, isClassStaticBlockDeclaration, isComputedPropertyName,
-    isConstructorDeclaration, isDeclaration, isDeclarationName, isExportAssignment, isExportSpecifier,
-    isExpressionOfExternalModuleImportEqualsDeclaration, isExpressionStatement, isExpressionWithTypeArguments,
-    isExternalModule, isExternalModuleSymbol, isExternalOrCommonJsModule, isForInOrOfStatement, isFunctionExpression,
-    isFunctionLike, isFunctionLikeDeclaration, isIdentifier, isIdentifierPart, isImportMeta, isImportOrExportSpecifier,
-    isImportSpecifier, isImportTypeNode, isInJSFile, isInNonReferenceComment, isInString, isInterfaceDeclaration,
-    isJSDocMemberName, isJSDocTag, isJsxClosingElement, isJsxOpeningElement, isJsxSelfClosingElement,
-    isJumpStatementTarget, isLabeledStatement, isLabelOfLabeledStatement, isLiteralComputedPropertyDeclarationName,
-    isLiteralNameOfPropertyDeclarationOrIndexAccess, isLiteralTypeNode, isMethodOrAccessor, isModuleDeclaration,
-    isModuleExportsAccessExpression, isModuleOrEnumDeclaration, isModuleSpecifierLike, isNameOfModuleDeclaration,
-    isNamespaceExportDeclaration, isNewExpressionTarget, isNoSubstitutionTemplateLiteral,
-    isObjectBindingElementWithoutPropertyName, isObjectLiteralExpression, isObjectLiteralMethod, isParameter,
-    isParameterPropertyDeclaration, isPrivateIdentifierClassElementDeclaration, isPropertyAccessExpression,
-    isQualifiedName, isReferencedFile, isReferenceFileLocation, isRightSideOfPropertyAccess,
-    isShorthandPropertyAssignment, isSourceFile, isStatement, isStatic, isStaticModifier, isStringLiteralLike,
-    isSuperProperty, isThis, isTypeAliasDeclaration, isTypeElement, isTypeKeyword, isTypeLiteralNode, isTypeNode,
-    isTypeOperatorNode, isUnionTypeNode, isVariableDeclarationInitializedToBareOrAccessedRequire,
-    isVariableDeclarationList, isVariableLike, isVariableStatement, isVoidExpression, isWriteAccess, JSDocTag, map, Map,
-    mapDefined, MethodDeclaration, ModifierFlags, ModuleDeclaration, MultiMap, NamedDeclaration, Node, NodeFlags,
-    nodeSeenTracker, NumericLiteral, ParameterDeclaration, ParenthesizedExpression, Path, PrivateIdentifier, Program,
-    PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, punctuationPart, Push, rangeIsOnSingleLine,
-    ReadonlySet, ReferencedSymbol, ReferencedSymbolDefinitionInfo, ReferencedSymbolEntry, ReferenceEntry,
-    RenameLocation, ScriptElementKind, ScriptTarget, SemanticMeaning, Set, SetAccessorDeclaration, SignatureDeclaration,
-    skipAlias, some, SourceFile, Statement, StringLiteral, StringLiteralLike, stripQuotes, Symbol, SymbolDisplay,
-    SymbolDisplayPart, SymbolDisplayPartKind, SymbolFlags, SymbolId, symbolName, SyntaxKind, textPart, TextSpan,
-    tokenToString, tryAddToSet, tryCast, tryGetClassExtendingExpressionWithTypeArguments,
-    tryGetImportFromModuleSpecifier, TypeChecker, VariableDeclaration,
+    __String,
+    addToSeen,
+    append,
+    AssignmentDeclarationKind,
+    BinaryExpression,
+    BindingElement,
+    Block,
+    CallExpression,
+    CancellationToken,
+    canHaveSymbol,
+    cast,
+    CheckFlags,
+    ClassLikeDeclaration,
+    climbPastPropertyAccess,
+    compareValues,
+    ConstructorDeclaration,
+    contains,
+    createQueue,
+    createTextSpan,
+    createTextSpanFromBounds,
+    createTextSpanFromRange,
+    Debug,
+    Declaration,
+    displayPart,
+    DocumentSpan,
+    emptyArray,
+    emptyOptions,
+    escapeLeadingUnderscores,
+    ExportSpecifier,
+    Expression,
+    FileIncludeReason,
+    FileReference,
+    filter,
+    find,
+    findAncestor,
+    findChildOfKind,
+    findIndex,
+    first,
+    firstDefined,
+    firstOrUndefined,
+    flatMap,
+    forEachChild,
+    forEachReturnStatement,
+    ForInOrOfStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    GetAccessorDeclaration,
+    getAdjustedReferenceLocation,
+    getAdjustedRenameLocation,
+    getAllSuperTypeNodes,
+    getAncestor,
+    getAssignmentDeclarationKind,
+    getCheckFlags,
+    getContainerNode,
+    getContainingObjectLiteralElement,
+    getContextualTypeFromParentOrAncestorTypeNode,
+    getDeclarationFromName,
+    getDeclarationOfKind,
+    getEffectiveModifierFlags,
+    getLocalSymbolForExportDefault,
+    getMeaningFromDeclaration,
+    getMeaningFromLocation,
+    getModeForUsageLocation,
+    getNameOfDeclaration,
+    getNameTable,
+    getNextJSDocCommentLocation,
+    getNodeId,
+    getNodeKind,
+    getPropertySymbolFromBindingElement,
+    getPropertySymbolsFromContextualType,
+    getReferencedFileLocation,
+    getSuperContainer,
+    getSymbolId,
+    getSyntacticModifierFlags,
+    getTargetLabel,
+    getTextOfNode,
+    getThisContainer,
+    getTouchingPropertyName,
+    GoToDefinition,
+    hasEffectiveModifier,
+    hasInitializer,
+    hasSyntacticModifier,
+    hasType,
+    HighlightSpan,
+    HighlightSpanKind,
+    Identifier,
+    ImplementationLocation,
+    InterfaceDeclaration,
+    InternalSymbolName,
+    isAccessExpression,
+    isArrayLiteralOrObjectLiteralDestructuringPattern,
+    isAssertionExpression,
+    isBinaryExpression,
+    isBindableObjectDefinePropertyCall,
+    isBindingElement,
+    isBreakOrContinueStatement,
+    isCallExpression,
+    isCallExpressionTarget,
+    isCatchClause,
+    isClassLike,
+    isClassStaticBlockDeclaration,
+    isComputedPropertyName,
+    isConstructorDeclaration,
+    isDeclaration,
+    isDeclarationName,
+    isExportAssignment,
+    isExportSpecifier,
+    isExpressionOfExternalModuleImportEqualsDeclaration,
+    isExpressionStatement,
+    isExpressionWithTypeArguments,
+    isExternalModule,
+    isExternalModuleSymbol,
+    isExternalOrCommonJsModule,
+    isForInOrOfStatement,
+    isFunctionExpression,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+    isIdentifier,
+    isIdentifierPart,
+    isImportMeta,
+    isImportOrExportSpecifier,
+    isImportSpecifier,
+    isImportTypeNode,
+    isInJSFile,
+    isInNonReferenceComment,
+    isInString,
+    isInterfaceDeclaration,
+    isJSDocMemberName,
+    isJSDocTag,
+    isJsxClosingElement,
+    isJsxOpeningElement,
+    isJsxSelfClosingElement,
+    isJumpStatementTarget,
+    isLabeledStatement,
+    isLabelOfLabeledStatement,
+    isLiteralComputedPropertyDeclarationName,
+    isLiteralNameOfPropertyDeclarationOrIndexAccess,
+    isLiteralTypeNode,
+    isMethodOrAccessor,
+    isModuleDeclaration,
+    isModuleExportsAccessExpression,
+    isModuleOrEnumDeclaration,
+    isModuleSpecifierLike,
+    isNameOfModuleDeclaration,
+    isNamespaceExportDeclaration,
+    isNewExpressionTarget,
+    isNoSubstitutionTemplateLiteral,
+    isObjectBindingElementWithoutPropertyName,
+    isObjectLiteralExpression,
+    isObjectLiteralMethod,
+    isParameter,
+    isParameterPropertyDeclaration,
+    isPrivateIdentifierClassElementDeclaration,
+    isPropertyAccessExpression,
+    isQualifiedName,
+    isReferencedFile,
+    isReferenceFileLocation,
+    isRightSideOfPropertyAccess,
+    isShorthandPropertyAssignment,
+    isSourceFile,
+    isStatement,
+    isStatic,
+    isStaticModifier,
+    isStringLiteralLike,
+    isSuperProperty,
+    isThis,
+    isTypeAliasDeclaration,
+    isTypeElement,
+    isTypeKeyword,
+    isTypeLiteralNode,
+    isTypeNode,
+    isTypeOperatorNode,
+    isUnionTypeNode,
+    isVariableDeclarationInitializedToBareOrAccessedRequire,
+    isVariableDeclarationList,
+    isVariableLike,
+    isVariableStatement,
+    isVoidExpression,
+    isWriteAccess,
+    JSDocTag,
+    map,
+    mapDefined,
+    MethodDeclaration,
+    ModifierFlags,
+    ModuleDeclaration,
+    MultiMap,
+    NamedDeclaration,
+    Node,
+    NodeFlags,
+    nodeSeenTracker,
+    NumericLiteral,
+    ObjectLiteralExpression,
+    ParameterDeclaration,
+    ParenthesizedExpression,
+    Path,
+    PrivateIdentifier,
+    Program,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    punctuationPart,
+    rangeIsOnSingleLine,
+    ReferencedSymbol,
+    ReferencedSymbolDefinitionInfo,
+    ReferencedSymbolEntry,
+    ReferenceEntry,
+    RenameLocation,
+    ScriptElementKind,
+    ScriptTarget,
+    SemanticMeaning,
+    SetAccessorDeclaration,
+    SignatureDeclaration,
+    skipAlias,
+    some,
+    SourceFile,
+    Statement,
+    StringLiteral,
+    StringLiteralLike,
+    stripQuotes,
+    SuperContainer,
+    Symbol,
+    SymbolDisplay,
+    SymbolDisplayPart,
+    SymbolDisplayPartKind,
+    SymbolFlags,
+    SymbolId,
+    symbolName,
+    SyntaxKind,
+    textPart,
+    TextSpan,
+    tokenToString,
+    tryAddToSet,
+    tryCast,
+    tryGetClassExtendingExpressionWithTypeArguments,
+    tryGetImportFromModuleSpecifier,
+    TypeChecker,
+    TypeLiteralNode,
+    VariableDeclaration,
 } from "./_namespaces/ts";
 import {
-    createImportTracker, ExportInfo, ExportKind, findModuleReferences, getExportInfo, getImportOrExportSymbol,
-    ImportExport, ImportsResult, ImportTracker, ModuleReference,
+    createImportTracker,
+    ExportInfo,
+    ExportKind,
+    findModuleReferences,
+    getExportInfo,
+    getImportOrExportSymbol,
+    ImportExport,
+    ImportsResult,
+    ImportTracker,
+    ModuleReference,
 } from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
@@ -760,7 +962,7 @@ export namespace Core {
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
                     const fileIncludeReasons = program.getFileIncludeReasons();
-                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedFileName;
+                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
                     const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                     if (referencedFile) {
                         return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
@@ -1177,7 +1379,7 @@ export namespace Core {
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
-            private readonly result: Push<SymbolAndEntries>) {
+            private readonly result: SymbolAndEntries[]) {
         }
 
         includesSourceFile(sourceFile: SourceFile): boolean {
@@ -1683,7 +1885,7 @@ export namespace Core {
 
         // Use the parent symbol if the location is commonjs require syntax on javascript files only.
         if (isInJSFile(referenceLocation)
-            && referenceLocation.parent.kind === SyntaxKind.BindingElement
+            && isBindingElement(referenceLocation.parent)
             && isVariableDeclarationInitializedToBareOrAccessedRequire(referenceLocation.parent.parent.parent)) {
             referenceSymbol = referenceLocation.parent.symbol;
             // The parent will not have a symbol if it's an ObjectBindingPattern (when destructuring is used).  In
@@ -1737,8 +1939,8 @@ export namespace Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences) {
-            const isDefaultExport = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword
-                || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
+            const isDefaultExport = referenceLocation.escapedText === "default"
+                || exportSpecifier.name.escapedText === "default";
             const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.checkDefined(exportSpecifier.symbol);
             const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
@@ -2030,7 +2232,7 @@ export namespace Core {
      * @param parent        Another class or interface Symbol
      * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
      */
-    function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: ESMap<string, boolean>, checker: TypeChecker): boolean {
+    function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: Map<string, boolean>, checker: TypeChecker): boolean {
         if (symbol === parent) {
             return true;
         }
@@ -2054,7 +2256,7 @@ export namespace Core {
     }
 
     function getReferencesForSuperKeyword(superKeyword: Node): SymbolAndEntries[] | undefined {
-        let searchSpaceNode = getSuperContainer(superKeyword, /*stopOnFunctions*/ false);
+        let searchSpaceNode: SuperContainer | ClassLikeDeclaration | TypeLiteralNode | InterfaceDeclaration | ObjectLiteralExpression | undefined = getSuperContainer(superKeyword, /*stopOnFunctions*/ false);
         if (!searchSpaceNode) {
             return undefined;
         }
@@ -2087,7 +2289,7 @@ export namespace Core {
             // If we have a 'super' container, we must have an enclosing class.
             // Now make sure the owning class is the same as the search-space
             // and has the same static qualifier as the original 'super's owner.
-            return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
+            return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode!.symbol ? nodeEntry(node) : undefined;
         });
 
         return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
@@ -2098,7 +2300,7 @@ export namespace Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
-        let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
+        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;
@@ -2140,11 +2342,12 @@ export namespace Core {
                 if (!isThis(node)) {
                     return false;
                 }
-                const container = getThisContainer(node, /* includeArrowFunctions */ false);
+                const container = getThisContainer(node, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+                if (!canHaveSymbol(container)) return false;
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
-                        return searchSpaceNode.symbol === container.symbol;
+                        return (searchSpaceNode as FunctionExpression | FunctionDeclaration).symbol === container.symbol;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;
@@ -2153,9 +2356,9 @@ export namespace Core {
                     case SyntaxKind.ObjectLiteralExpression:
                         // Make sure the container belongs to the same class/object literals
                         // and has the appropriate static modifier from the original container.
-                        return container.parent && searchSpaceNode.symbol === container.parent.symbol && isStatic(container) === !!staticFlag;
+                        return container.parent && canHaveSymbol(container.parent) && (searchSpaceNode as ClassLikeDeclaration | ObjectLiteralExpression).symbol === container.parent.symbol && isStatic(container) === !!staticFlag;
                     case SyntaxKind.SourceFile:
-                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(container as SourceFile) && !isParameterName(node);
+                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(container) && !isParameterName(node);
                 }
             });
         }).map(n => nodeEntry(n));

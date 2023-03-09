@@ -683,7 +683,7 @@ export declare module eaM {
 //// [giant.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.eM = exports.eC = exports.eF = exports.eV = void 0;
     /*
         Prefixes

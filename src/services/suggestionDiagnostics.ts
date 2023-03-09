@@ -1,14 +1,64 @@
 import {
-    addRange, AnyValidImportOrReExport, ArrowFunction, AssignmentDeclarationKind, Block, CallExpression,
-    CancellationToken, codefix, compilerOptionsIndicateEsModules, createDiagnosticForNode, Diagnostics,
-    DiagnosticWithLocation, Expression, ExpressionStatement, Extension, fileExtensionIsOneOf, forEachReturnStatement,
-    FunctionDeclaration, FunctionExpression, FunctionFlags, FunctionLikeDeclaration, getAllowSyntheticDefaultImports,
-    getAssignmentDeclarationKind, getFunctionFlags, getModeForUsageLocation, getResolvedModule, hasInitializer,
-    hasPropertyAccessExpressionWithName, Identifier, importFromModuleSpecifier, isAsyncFunction, isBinaryExpression,
-    isBlock, isCallExpression, isExportAssignment, isFunctionLike, isIdentifier, isPropertyAccessExpression,
-    isRequireCall, isReturnStatement, isSourceFileJS, isStringLiteral, isVariableDeclaration, isVariableStatement, Map,
-    MethodDeclaration, ModuleKind, Node, NodeFlags, Program, programContainsEsModules, PropertyAccessExpression, Push,
-    ReturnStatement, skipAlias, some, SourceFile, SyntaxKind, TypeChecker, VariableStatement,
+    addRange,
+    AnyValidImportOrReExport,
+    ArrowFunction,
+    AssignmentDeclarationKind,
+    Block,
+    CallExpression,
+    CancellationToken,
+    codefix,
+    compilerOptionsIndicateEsModules,
+    createDiagnosticForNode,
+    Diagnostics,
+    DiagnosticWithLocation,
+    Expression,
+    ExpressionStatement,
+    Extension,
+    fileExtensionIsOneOf,
+    forEachReturnStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionFlags,
+    FunctionLikeDeclaration,
+    getAllowSyntheticDefaultImports,
+    getAssignmentDeclarationKind,
+    getFunctionFlags,
+    getModeForUsageLocation,
+    getResolvedModule,
+    hasInitializer,
+    hasPropertyAccessExpressionWithName,
+    Identifier,
+    importFromModuleSpecifier,
+    isAsyncFunction,
+    isBinaryExpression,
+    isBlock,
+    isCallExpression,
+    isExportAssignment,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isFunctionLike,
+    isIdentifier,
+    isPropertyAccessExpression,
+    isRequireCall,
+    isReturnStatement,
+    isSourceFileJS,
+    isStringLiteral,
+    isVariableDeclaration,
+    isVariableStatement,
+    MethodDeclaration,
+    ModuleKind,
+    Node,
+    NodeFlags,
+    Program,
+    programContainsEsModules,
+    PropertyAccessExpression,
+    ReturnStatement,
+    skipAlias,
+    some,
+    SourceFile,
+    SyntaxKind,
+    TypeChecker,
+    VariableStatement,
 } from "./_namespaces/ts";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
@@ -66,6 +116,11 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
+            const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+            if (jsdocTypedefNode) {
+                diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
+            }
+
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
                 diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
@@ -115,7 +170,7 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
-function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(
@@ -227,7 +282,7 @@ function getKeyFromNode(exp: FunctionLikeDeclaration) {
 }
 
 function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
-    if (node.kind === SyntaxKind.FunctionExpression) {
+    if (isFunctionExpression(node)) {
         if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
             return true;
         }
@@ -236,7 +291,7 @@ function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
         return !!(symbol && (symbol.exports?.size || symbol.members?.size));
     }
 
-    if (node.kind === SyntaxKind.FunctionDeclaration) {
+    if (isFunctionDeclaration(node)) {
         return !!node.symbol.members?.size;
     }
 

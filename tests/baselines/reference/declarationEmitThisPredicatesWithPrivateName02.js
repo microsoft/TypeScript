@@ -14,7 +14,7 @@ export const obj = {
 
 //// [declarationEmitThisPredicatesWithPrivateName02.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 exports.obj = {
     m: function () {

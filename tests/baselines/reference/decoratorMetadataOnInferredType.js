@@ -28,7 +28,7 @@ var A = /** @class */ (function () {
 }());
 function decorator(target, propertyKey) {
 }
-var B = /** @class */ (function () {
+var B = exports.B = /** @class */ (function () {
     function B() {
         this.x = new A();
     }
@@ -38,4 +38,3 @@ var B = /** @class */ (function () {
     ], B.prototype, "x", void 0);
     return B;
 }());
-exports.B = B;

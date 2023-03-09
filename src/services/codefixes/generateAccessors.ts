@@ -1,14 +1,60 @@
 import {
-    AccessorDeclaration, canHaveDecorators, cast, ClassLikeDeclaration, concatenate, ConstructorDeclaration,
-    DeclarationName, Diagnostics, factory, FileTextChanges, find, findAncestor, getClassExtendsHeritageElement,
-    getDecorators, getEffectiveModifierFlags, getFirstConstructorWithBody, getLocaleSpecificMessage, getTokenAtPosition,
-    getTypeAnnotationNode, getUniqueName, hasEffectiveReadonlyModifier, hasStaticModifier, Identifier,
-    InterfaceDeclaration, isClassLike, isElementAccessExpression, isFunctionLike, isIdentifier,
-    isParameterPropertyDeclaration, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration,
-    isSourceFileJS, isStringLiteral, isUnionTypeNode, isWriteAccess, ModifierFlags, ModifierLike, Node,
-    nodeOverlapsWithStartEnd, ObjectLiteralExpression, ParameterPropertyDeclaration, Program, PropertyAssignment,
-    PropertyDeclaration, refactor, SourceFile, startsWithUnderscore, StringLiteral, suppressLeadingAndTrailingTrivia,
-    SymbolFlags, SyntaxKind, textChanges, TypeChecker, TypeNode,
+    AccessorDeclaration,
+    canHaveDecorators,
+    cast,
+    ClassLikeDeclaration,
+    concatenate,
+    ConstructorDeclaration,
+    DeclarationName,
+    Diagnostics,
+    factory,
+    FileTextChanges,
+    find,
+    findAncestor,
+    getClassExtendsHeritageElement,
+    getDecorators,
+    getEffectiveModifierFlags,
+    getFirstConstructorWithBody,
+    getLocaleSpecificMessage,
+    getTokenAtPosition,
+    getTypeAnnotationNode,
+    getUniqueName,
+    hasEffectiveReadonlyModifier,
+    hasStaticModifier,
+    Identifier,
+    InterfaceDeclaration,
+    isClassLike,
+    isElementAccessExpression,
+    isFunctionLike,
+    isIdentifier,
+    isParameterPropertyDeclaration,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isPropertyDeclaration,
+    isSourceFileJS,
+    isStringLiteral,
+    isUnionTypeNode,
+    isWriteAccess,
+    ModifierFlags,
+    ModifierLike,
+    Mutable,
+    Node,
+    nodeOverlapsWithStartEnd,
+    ObjectLiteralExpression,
+    ParameterPropertyDeclaration,
+    Program,
+    PropertyAssignment,
+    PropertyDeclaration,
+    refactor,
+    SourceFile,
+    startsWithUnderscore,
+    StringLiteral,
+    suppressLeadingAndTrailingTrivia,
+    SymbolFlags,
+    SyntaxKind,
+    textChanges,
+    TypeChecker,
+    TypeNode,
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -168,7 +214,7 @@ function generateGetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
     return factory.createGetAccessorDeclaration(
         modifiers,
         accessorName,
-        /*parameters*/ undefined!, // TODO: GH#18217
+        [],
         type,
         factory.createBlock([
             factory.createReturnStatement(
@@ -213,7 +259,14 @@ function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, fil
 }
 
 function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
-    const assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
+    let assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
+    // Remove grammar errors from assignment
+    if (assignment.modifiers || assignment.questionToken || assignment.exclamationToken) {
+        if (assignment === declaration) assignment = factory.cloneNode(assignment);
+        (assignment as Mutable<PropertyAssignment>).modifiers = undefined;
+        (assignment as Mutable<PropertyAssignment>).questionToken = undefined;
+        (assignment as Mutable<PropertyAssignment>).exclamationToken = undefined;
+    }
     changeTracker.replacePropertyAssignment(file, declaration, assignment);
 }
 

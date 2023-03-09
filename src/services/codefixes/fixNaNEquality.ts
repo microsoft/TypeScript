@@ -1,9 +1,26 @@
 import {
-    BinaryExpression, createTextSpan, DiagnosticMessageChain, Diagnostics, Expression, factory, find,
-    flattenDiagnosticMessageText, isBinaryExpression, isExpression, Program, SourceFile, SyntaxKind, textChanges,
+    BinaryExpression,
+    createTextSpan,
+    DiagnosticMessageChain,
+    Diagnostics,
+    Expression,
+    factory,
+    find,
+    flattenDiagnosticMessageText,
+    isBinaryExpression,
+    isExpression,
+    Program,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
     TextSpan,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, findAncestorMatchingSpan, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    findAncestorMatchingSpan,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixNaNEquality";
 const errorCodes = [

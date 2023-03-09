@@ -1,9 +1,20 @@
-import * as ts from "../_namespaces/ts";
 import {
-    ErrorInfo, ParallelClientMessage, ParallelHostMessage, RunnerTask, shimNoopTestInterface, Task, TaskResult,
-    TestInfo, UnitTestTask,
+    createRunner,
+    globalTimeout,
+    RunnerBase,
+    runUnitTests,
+} from "../_namespaces/Harness";
+import {
+    ErrorInfo,
+    ParallelClientMessage,
+    ParallelHostMessage,
+    RunnerTask,
+    shimNoopTestInterface,
+    Task,
+    TaskResult,
+    TestInfo,
+    UnitTestTask,
 } from "../_namespaces/Harness.Parallel";
-import { createRunner, globalTimeout, RunnerBase, runUnitTests } from "../_namespaces/Harness";
 
 export function start() {
     function hookUncaughtExceptions() {
@@ -45,14 +56,14 @@ export function start() {
      */
     function Timeout<T extends typeof Mocha.Runnable>(base: T) {
         return class extends (base as typeof Mocha.Runnable) {
-            resetTimeout() {
+            override resetTimeout() {
                 this.clearTimeout();
                 if (this.timeout() > 0) {
                     sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
                     this.timer = true;
                 }
             }
-            clearTimeout() {
+            override clearTimeout() {
                 if (this.timer) {
                     sendMessage({ type: "timeout", payload: { duration: "reset" } });
                     this.timer = false;
@@ -66,7 +77,7 @@ export function start() {
      */
     function Clone<T extends typeof Mocha.Suite | typeof Mocha.Test>(base: T) {
         return class extends (base as new (...args: any[]) => { clone(): any; }) {
-            clone() {
+            override clone() {
                 const cloned = super.clone();
                 Object.setPrototypeOf(cloned, this.constructor.prototype);
                 return cloned;
@@ -78,7 +89,7 @@ export function start() {
      * A `Mocha.Suite` subclass to support parallel test execution in a worker.
      */
     class Suite extends mixin(Mocha.Suite, Clone) {
-        _createHook(title: string, fn?: Mocha.Func | Mocha.AsyncFunc) {
+        override _createHook(title: string, fn?: Mocha.Func | Mocha.AsyncFunc) {
             const hook = super._createHook(title, fn);
             Object.setPrototypeOf(hook, Hook.prototype);
             return hook;
@@ -152,13 +163,13 @@ export function start() {
 
     function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
         if (!unitTestSuiteMap && unitTestSuite.suites.length) {
-            unitTestSuiteMap = new ts.Map<string, Mocha.Suite>();
+            unitTestSuiteMap = new Map<string, Mocha.Suite>();
             for (const suite of unitTestSuite.suites) {
                 unitTestSuiteMap.set(suite.title, suite);
             }
         }
         if (!unitTestTestMap && unitTestSuite.tests.length) {
-            unitTestTestMap = new ts.Map<string, Mocha.Test>();
+            unitTestTestMap = new Map<string, Mocha.Test>();
             for (const test of unitTestSuite.tests) {
                 unitTestTestMap.set(test.title, test);
             }
@@ -301,13 +312,13 @@ export function start() {
     }
 
     // A cache of test harness Runner instances.
-    const runners = new ts.Map<string, RunnerBase>();
+    const runners = new Map<string, RunnerBase>();
 
     // The root suite for all unit tests.
     let unitTestSuite: Suite;
-    let unitTestSuiteMap: ts.ESMap<string, Mocha.Suite>;
+    let unitTestSuiteMap: Map<string, Mocha.Suite>;
     // (Unit) Tests directly within the root suite
-    let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
+    let unitTestTestMap: Map<string, Mocha.Test>;
 
     if (runUnitTests) {
         unitTestSuite = new Suite("", new Mocha.Context());

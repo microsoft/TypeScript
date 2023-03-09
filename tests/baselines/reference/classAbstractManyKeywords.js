@@ -6,14 +6,14 @@ import abstract class D {}
 
 //// [classAbstractManyKeywords.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-exports["default"] = A;
+exports.default = A;
 var B = /** @class */ (function () {
     function B() {
     }

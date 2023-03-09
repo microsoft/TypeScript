@@ -1,5 +1,14 @@
 import {
-    compareStringsCaseSensitive, compareValues, Comparison, Debug, emptyArray, every, isArray, map, some, trimString,
+    compareStringsCaseSensitive,
+    compareValues,
+    Comparison,
+    Debug,
+    emptyArray,
+    every,
+    isArray,
+    map,
+    some,
+    trimString,
 } from "./_namespaces/ts";
 
 // https://semver.org/#spec-item-2

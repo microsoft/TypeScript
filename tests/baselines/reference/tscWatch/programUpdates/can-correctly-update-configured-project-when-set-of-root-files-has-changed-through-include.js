@@ -44,28 +44,28 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project/file1.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/project/node_modules/@types:
+/user/username/projects/myproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/project/tsconfig.json:
+/user/username/projects/myproject/project/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/project/file1.ts:
+/user/username/projects/myproject/project/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/project:
+/user/username/projects/myproject/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/Project/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -113,7 +113,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/project/file2.ts:
+/user/username/projects/myproject/project/file2.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -124,7 +124,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/Project/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 

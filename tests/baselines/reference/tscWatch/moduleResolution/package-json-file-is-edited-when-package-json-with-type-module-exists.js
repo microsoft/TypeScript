@@ -41,18 +41,14 @@ CreatingProgramWith::
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/user/username/projects/myproject/src/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 250 undefined Source file
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
@@ -100,27 +96,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
+/user/username/projects/myproject/src/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
+/user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
+/user/username/projects/myproject/src/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/filea.ts: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
-/a/lib/lib.es2016.full.d.ts:
+/a/lib/lib.es2016.full.d.ts: *new*
   {}
-/user/username/projects/myproject/package.json:
+/user/username/projects/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -154,25 +150,21 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
@@ -214,7 +206,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileb.mjs: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -266,19 +258,15 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
@@ -320,6 +308,10 @@ PolledWatches::
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/src/fileb.mjs:
   {"pollingInterval":500}
 
 FsWatches::
@@ -379,20 +371,17 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
@@ -435,9 +424,9 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileb.mjs: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json:
+/user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -489,7 +478,6 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was not resolved.
@@ -531,6 +519,10 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
   {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/src/tsconfig.json:
@@ -621,7 +613,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
   {"pollingInterval":500}
-/user/username/projects/package.json:
+/user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::

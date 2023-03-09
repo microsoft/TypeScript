@@ -18,5 +18,5 @@ import * as http from 'intern/dojo/node!http';
 /// <reference path="a.d.ts"/>
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

@@ -1,14 +1,61 @@
 import {
-    ApplicableRefactorInfo, CancellationToken, ClassDeclaration, Debug, Diagnostics, emptyArray, EnumDeclaration,
-    ExportAssignment, ExportSpecifier, factory, FindAllReferences, findModifier, first, FunctionDeclaration,
-    getLocaleSpecificMessage, getParentNodeInSpan, getRefactorContextSpan, getSyntacticModifierFlags,
-    getTokenAtPosition, Identifier, ImportClause, ImportSpecifier, ImportTypeNode, InterfaceDeclaration,
-    InternalSymbolName, isAmbientModule, isExportAssignment, isExternalModuleAugmentation, isIdentifier, isModuleBlock,
-    isSourceFile, isStringLiteral, makeImport, ModifierFlags, NamespaceDeclaration, Node, NodeFlags, Program,
-    PropertyAccessExpression, QuotePreference, quotePreferenceFromString, RefactorContext, RefactorEditInfo, SourceFile,
-    Symbol, SyntaxKind, textChanges, TypeAliasDeclaration, TypeChecker, VariableStatement,
+    ApplicableRefactorInfo,
+    CancellationToken,
+    ClassDeclaration,
+    Debug,
+    Diagnostics,
+    emptyArray,
+    EnumDeclaration,
+    ExportAssignment,
+    ExportSpecifier,
+    factory,
+    FindAllReferences,
+    findModifier,
+    first,
+    FunctionDeclaration,
+    getLocaleSpecificMessage,
+    getParentNodeInSpan,
+    getRefactorContextSpan,
+    getSyntacticModifierFlags,
+    getTokenAtPosition,
+    Identifier,
+    ImportClause,
+    ImportSpecifier,
+    ImportTypeNode,
+    InterfaceDeclaration,
+    InternalSymbolName,
+    isAmbientModule,
+    isExportAssignment,
+    isExternalModuleAugmentation,
+    isIdentifier,
+    isModuleBlock,
+    isSourceFile,
+    isStringLiteral,
+    makeImport,
+    ModifierFlags,
+    ModuleBlock,
+    NamespaceDeclaration,
+    Node,
+    NodeFlags,
+    Program,
+    PropertyAccessExpression,
+    QuotePreference,
+    quotePreferenceFromString,
+    RefactorContext,
+    RefactorEditInfo,
+    SourceFile,
+    Symbol,
+    SyntaxKind,
+    textChanges,
+    TypeAliasDeclaration,
+    TypeChecker,
+    VariableStatement,
 } from "../_namespaces/ts";
-import { isRefactorErrorInfo, RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    isRefactorErrorInfo,
+    RefactorErrorInfo,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert export";
 
@@ -76,7 +123,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     }
 
     const checker = program.getTypeChecker();
-    const exportingModuleSymbol = getExportingModuleSymbol(exportNode, checker);
+    const exportingModuleSymbol = getExportingModuleSymbol(exportNode.parent, checker);
     const flags = getSyntacticModifierFlags(exportNode) || ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
 
     const wasDefault = !!(flags & ModifierFlags.Default);
@@ -273,8 +320,7 @@ function makeExportSpecifier(propertyName: string, name: string): ExportSpecifie
     return factory.createExportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
 }
 
-function getExportingModuleSymbol(node: Node, checker: TypeChecker) {
-    const parent = node.parent;
+function getExportingModuleSymbol(parent: SourceFile | ModuleBlock, checker: TypeChecker) {
     if (isSourceFile(parent)) {
         return parent.symbol;
     }

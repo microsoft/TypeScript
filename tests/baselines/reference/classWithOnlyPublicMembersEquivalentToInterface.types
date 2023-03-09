@@ -10,7 +10,6 @@ class C {
     public y(a: number): number { return null; }
 >y : (a: number) => number
 >a : number
->null : null
 
     public get z() { return 1; }
 >z : number

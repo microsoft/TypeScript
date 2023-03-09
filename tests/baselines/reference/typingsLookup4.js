@@ -34,7 +34,7 @@ j + k + l + m;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var jquery_1 = require("jquery");
 var kquery_1 = require("kquery");
 var lquery_1 = require("lquery");

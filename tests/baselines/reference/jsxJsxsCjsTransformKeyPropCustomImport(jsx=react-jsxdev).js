@@ -20,7 +20,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = require("preact");
 var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyPropCustomImport.tsx";

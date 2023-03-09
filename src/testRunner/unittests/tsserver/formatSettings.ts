@@ -1,4 +1,6 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost } from "../virtualFileSystemWithWatch";
+import { createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: format settings", () => {
     it("can be set globally", () => {
@@ -6,8 +8,8 @@ describe("unittests:: tsserver:: format settings", () => {
             path: "/a/b/app.ts",
             content: "let x;"
         };
-        const host = ts.projectSystem.createServerHost([f1]);
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([f1]);
+        const projectService = createProjectService(host);
         projectService.openClientFile(f1.path);
 
         const defaultSettings = projectService.getFormatCodeOptions(f1.path as ts.server.NormalizedPath);

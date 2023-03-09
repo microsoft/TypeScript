@@ -2,10 +2,6 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": [
-        ],
-        "lib": [
-            "es6",
-            "scripthost"
         ]
     },
     "references": [

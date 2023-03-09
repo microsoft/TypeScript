@@ -6,7 +6,7 @@ export class C {}
 import {C} from './a'; import * as A from './A';
 
 //// [/tsconfig.json]
-{"compilerOptions":{}}
+{"compilerOptions":{"forceConsistentCasingInFileNames":false}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,7 +32,7 @@ Output::
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":false,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -49,27 +49,25 @@ Shape signatures in builder refreshed for::
 /b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/a.ts:
+/a.ts: *new*
   {}
-/b.ts:
+/b.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -81,7 +79,7 @@ exports.C = C;
 
 //// [/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -125,22 +123,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 exitCode:: ExitStatus.undefined
 

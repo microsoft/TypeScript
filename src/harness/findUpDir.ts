@@ -1,5 +1,9 @@
 import { existsSync } from "fs";
-import { dirname, join, resolve } from "path";
+import {
+    dirname,
+    join,
+    resolve,
+} from "path";
 
 // search directories upward to avoid hard-wired paths based on the
 // build tree (same as scripts/build/findUpDir.js)

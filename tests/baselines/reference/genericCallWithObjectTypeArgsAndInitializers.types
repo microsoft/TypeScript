@@ -4,7 +4,6 @@
 function foo<T>(x: T = null) { return x; } // ok
 >foo : <T>(x?: T) => T
 >x : T
->null : null
 >x : T
 
 function foo2<T>(x: T = undefined) { return x; } // ok

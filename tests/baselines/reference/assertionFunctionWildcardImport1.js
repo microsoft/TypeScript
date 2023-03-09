@@ -30,16 +30,16 @@ Debug.assert(true);
 
 //// [debug.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [ts.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Debug = void 0;
 var Debug = require("../debug");
 exports.Debug = Debug;
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("./_namespaces/ts");
 var ts_1 = require("./_namespaces/ts");
 ts.Debug.assert(true);
@@ -60,11 +60,11 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../../core/_namespaces/ts"), exports);
 //// [bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("./_namespaces/ts");
 var ts_1 = require("./_namespaces/ts");
 ts.Debug.assert(true);

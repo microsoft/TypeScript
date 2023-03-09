@@ -440,7 +440,7 @@ module privateModule {
 
 //// [privacyTypeParameterOfFunctionDeclFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicFunctionWithPrivateMopduleTypeParameters = exports.publicClassWithWithPrivateModuleTypeParameters = exports.publicFunctionWithPublicTypeParametersWithoutExtends = exports.publicClassWithWithPublicTypeParametersWithoutExtends = exports.publicFunctionWithPublicTypeParameters = exports.publicFunctionWithPrivateTypeParameters = exports.publicClassWithWithPublicTypeParameters = exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {

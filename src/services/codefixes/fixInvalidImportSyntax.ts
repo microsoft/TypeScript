@@ -1,10 +1,34 @@
 import {
-    addRange, CallExpression, CodeFixAction, CodeFixContext, Diagnostics, factory, findAncestor, getEmitModuleKind,
-    getNamespaceDeclarationNode, getQuotePreference, getSourceFileOfNode, getTokenAtPosition, ImportDeclaration,
-    isExpression, isImportCall, isNamedDeclaration, makeImport, ModuleKind, NamespaceImport, NewExpression, Node,
-    SourceFile, SyntaxKind, textChanges, TransientSymbol,
+    addRange,
+    CallExpression,
+    CodeFixAction,
+    CodeFixContext,
+    Diagnostics,
+    factory,
+    findAncestor,
+    getEmitModuleKind,
+    getNamespaceDeclarationNode,
+    getQuotePreference,
+    getSourceFileOfNode,
+    getTokenAtPosition,
+    ImportDeclaration,
+    isExpression,
+    isImportCall,
+    isNamedDeclaration,
+    isTransientSymbol,
+    makeImport,
+    ModuleKind,
+    NamespaceImport,
+    NewExpression,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
 } from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixName = "invalidImportSyntax";
 
@@ -83,11 +107,11 @@ function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAct
 
 function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
     const type = context.program.getTypeChecker().getTypeAtLocation(expr);
-    if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
+    if (!(type.symbol && isTransientSymbol(type.symbol) && type.symbol.links.originatingImport)) {
         return [];
     }
     const fixes: CodeFixAction[] = [];
-    const relatedImport = (type.symbol as TransientSymbol).originatingImport!; // TODO: GH#18217
+    const relatedImport = type.symbol.links.originatingImport;
     if (!isImportCall(relatedImport)) {
         addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
     }

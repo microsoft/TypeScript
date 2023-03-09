@@ -2,10 +2,9 @@
     "extends": "../.eslintrc.json",
     "parserOptions": {
         "tsconfigRootDir": "src",
-        "project": "./tsconfig-base.json"
+        "project": "./tsconfig-eslint.json"
     },
     "rules": {
-        "@typescript-eslint/no-unnecessary-qualifier": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "no-restricted-globals": ["error",
             { "name": "setTimeout" },
@@ -14,12 +13,7 @@
             { "name": "clearInterval" },
             { "name": "setImmediate" },
             { "name": "clearImmediate" },
-            { "name": "performance" },
-            { "name": "Iterator" },
-            { "name": "Map" },
-            { "name": "ReadonlyMap" },
-            { "name": "Set" },
-            { "name": "ReadonlySet" }
+            { "name": "performance" }
         ]
     },
     "overrides": [

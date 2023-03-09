@@ -1,8 +1,21 @@
 import {
-    CodeFixContextBase, Debug, Diagnostics, factory, findAncestor, getTokenAtPosition, ImportDeclaration,
-    isImportDeclaration, SourceFile, textChanges, TextSpan,
+    CodeFixContextBase,
+    Debug,
+    Diagnostics,
+    factory,
+    findAncestor,
+    getTokenAtPosition,
+    ImportDeclaration,
+    isImportDeclaration,
+    SourceFile,
+    textChanges,
+    TextSpan,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const errorCodes = [Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
 const fixId = "splitTypeOnlyImport";

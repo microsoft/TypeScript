@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
 import * as Utils from "../_namespaces/Utils";
 
 describe("unittests:: JSDocParsing", () => {
@@ -177,6 +177,10 @@ describe("unittests:: JSDocParsing", () => {
   * @type {number}
   */`);
 
+            parsesCorrectly("satisfiesTag",
+                `/**
+  * @satisfies {number}
+  */`);
 
             parsesCorrectly("returnTag1",
                 `/**
@@ -295,6 +299,35 @@ describe("unittests:: JSDocParsing", () => {
                 `/**
   * @param foo
   */`);
+            parsesCorrectly("throwsTag1",
+                `/**
+  * @throws {Error}
+  */`);
+
+            parsesCorrectly("throwsTag2",
+                `/**
+  * @throws free-form description
+  */`);
+
+            parsesCorrectly("throwsTag3",
+                `/**
+  * @throws {Error} description
+  */`);
+
+            parsesCorrectly("exceptionTag1",
+                `/**
+  * @exception {Error}
+  */`);
+
+            parsesCorrectly("exceptionTag2",
+                `/**
+  * @exception free-form description
+  */`);
+
+            parsesCorrectly("exceptionTag3",
+                `/**
+  * @exception {Error} description
+  */`);
             parsesCorrectly("typedefTagWithChildrenTags",
                 `/**
   * @typedef People
@@ -360,6 +393,7 @@ oh.no
  * Some\n\n * text\r\n * with newlines.
  */`);
             parsesCorrectly("Chained tags, no leading whitespace", `/**@a @b @c@d*/`);
+            parsesCorrectly("Single trailing whitespace", `/** trailing whitespace */`);
             parsesCorrectly("Initial star is not a tag", `/***@a*/`);
             parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
             parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);

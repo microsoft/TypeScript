@@ -158,7 +158,7 @@ namespace n2 {
 
 //// [strictFunctionTypesErrors.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 f1 = f2; // Ok
 f1 = f3; // Error
 f1 = f4; // Error

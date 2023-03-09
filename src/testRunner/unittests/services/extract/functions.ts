@@ -1,4 +1,5 @@
 import * as ts from "../../../_namespaces/ts";
+import { testExtractSymbol } from "./helpers";
 
 describe("unittests:: services:: extract:: extractFunctions", () => {
     testExtractFunction("extractFunction1",
@@ -565,5 +566,5 @@ function F() {
 });
 
 function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
-    ts.testExtractSymbol(caption, text, "extractFunction", ts.Diagnostics.Extract_function, includeLib);
+    testExtractSymbol(caption, text, "extractFunction", ts.Diagnostics.Extract_function, includeLib);
 }

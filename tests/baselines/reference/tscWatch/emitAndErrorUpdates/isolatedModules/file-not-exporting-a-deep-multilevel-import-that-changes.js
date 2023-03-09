@@ -59,7 +59,7 @@ Output::
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
 [7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
+[7m [0m [91m            ~[0m
 
   [96ma.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     c: Coords;
@@ -103,44 +103,44 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/e.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/user/username/projects/myproject/b.ts:
+/user/username/projects/myproject/b.ts: *new*
   {}
-/user/username/projects/myproject/c.ts:
+/user/username/projects/myproject/c.ts: *new*
   {}
-/user/username/projects/myproject/d.ts:
+/user/username/projects/myproject/d.ts: *new*
   {}
-/user/username/projects/myproject/e.ts:
+/user/username/projects/myproject/e.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoint = void 0;
 function getPoint() {
     return {
@@ -157,14 +157,14 @@ exports.getPoint = getPoint;
 
 //// [/user/username/projects/myproject/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
 
 //// [/user/username/projects/myproject/e.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./d");
 
 
@@ -216,30 +216,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/d.ts (used version)
 /user/username/projects/myproject/e.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/user/username/projects/myproject/d.ts:
-  {}
-/user/username/projects/myproject/e.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
@@ -266,7 +242,7 @@ Output::
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
 [7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
+[7m [0m [91m            ~[0m
 
   [96ma.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     c: Coords;
@@ -306,30 +282,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.ts (used version)
 /user/username/projects/myproject/d.ts (used version)
 /user/username/projects/myproject/e.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/user/username/projects/myproject/d.ts:
-  {}
-/user/username/projects/myproject/e.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -381,30 +333,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.ts (used version)
 /user/username/projects/myproject/d.ts (used version)
 /user/username/projects/myproject/e.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/user/username/projects/myproject/d.ts:
-  {}
-/user/username/projects/myproject/e.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

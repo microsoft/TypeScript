@@ -53,7 +53,7 @@ class LocalThing {
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {string | number | symbol} PropName
  */
@@ -95,7 +95,7 @@ var ExportedThing = /** @class */ (function () {
 }());
 module.exports = {
     doTheThing: doTheThing,
-    ExportedThing: ExportedThing
+    ExportedThing: ExportedThing,
 };
 var LocalThing = /** @class */ (function () {
     function LocalThing() {

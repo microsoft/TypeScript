@@ -51,7 +51,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Monitor = void 0;
 var DisposableMixin = /** @class */ (function () {
     function class_1() {
@@ -64,7 +64,7 @@ var DisposableMixin = /** @class */ (function () {
     return class_1;
 }());
 // No error, but definition is wrong. 
-exports["default"] = mix(DisposableMixin);
+exports.default = mix(DisposableMixin);
 var Monitor = /** @class */ (function (_super) {
     __extends(Monitor, _super);
     function Monitor() {
@@ -92,7 +92,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var DisposableMixin = /** @class */ (function () {
     function class_1() {
     }
@@ -112,4 +112,4 @@ var default_1 = /** @class */ (function (_super) {
     };
     return default_1;
 }(mix(DisposableMixin)));
-exports["default"] = default_1;
+exports.default = default_1;

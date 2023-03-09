@@ -1,18 +1,24 @@
-import * as ts from "../../_namespaces/ts";
+import {
+    loadProjectFromDisk,
+    loadProjectFromFiles,
+    noChangeOnlyRuns,
+    replaceText,
+    verifyTsc,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "verify that subsequent builds after initial build doesnt build anything",
-        fs: () => ts.loadProjectFromDisk("tests/projects/containerOnlyReferenced"),
+        fs: () => loadProjectFromDisk("tests/projects/containerOnlyReferenced"),
         commandLineArgs: ["--b", "/src", "--verbose"],
-        edits: ts.noChangeOnlyRuns
+        edits: noChangeOnlyRuns
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "when solution is referenced indirectly",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project1/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
                 references: [],
@@ -35,8 +41,8 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         }),
         commandLineArgs: ["--b", "/src/project4", "--verbose", "--explainFiles"],
         edits: [{
-            subScenario: "modify project3 file",
-            modifyFs: fs => ts.replaceText(fs, "/src/project3/src/c.ts", "c = ", "cc = "),
+            caption: "modify project3 file",
+            edit: fs => replaceText(fs, "/src/project3/src/c.ts", "c = ", "cc = "),
         }],
     });
 });

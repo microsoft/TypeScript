@@ -1,9 +1,23 @@
 import {
-    CodeFixAllContext, CodeFixContext, Debug, Diagnostics, getSourceFileOfNode, getTextOfPropertyName,
-    getTokenAtPosition, isAccessor, isClassLike, singleOrUndefined, SourceFile, unescapeLeadingUnderscores,
+    CodeFixAllContext,
+    CodeFixContext,
+    Debug,
+    Diagnostics,
+    getSourceFileOfNode,
+    getTextOfPropertyName,
+    getTokenAtPosition,
+    isAccessor,
+    isClassLike,
+    singleOrUndefined,
+    SourceFile,
+    unescapeLeadingUnderscores,
 } from "../_namespaces/ts";
 import {
-    codeFixAll, createCodeFixAction, generateAccessorFromProperty, getAllSupers, registerCodeFix,
+    codeFixAll,
+    createCodeFixAction,
+    generateAccessorFromProperty,
+    getAllSupers,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [

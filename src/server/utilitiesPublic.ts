@@ -1,8 +1,16 @@
 import {
-    getNormalizedAbsolutePath, isRootedDiskPath, Map, normalizePath, Path, SortedArray, SortedReadonlyArray,
+    getNormalizedAbsolutePath,
+    isRootedDiskPath,
+    normalizePath,
+    Path,
+    SortedArray,
+    SortedReadonlyArray,
     TypeAcquisition,
 } from "./_namespaces/ts";
-import { DiscoverTypings, Project } from "./_namespaces/ts.server";
+import {
+    DiscoverTypings,
+    Project,
+} from "./_namespaces/ts.server";
 
 export enum LogLevel {
     terse,
@@ -23,6 +31,7 @@ export interface Logger {
     endGroup(): void;
     msg(s: string, type?: Msg): void;
     getLogFileName(): string | undefined;
+    /** @internal*/ isTestLogger?: boolean;
 }
 
 // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
@@ -30,10 +39,6 @@ export enum Msg {
     Err = "Err",
     Info = "Info",
     Perf = "Perf",
-}
-export namespace Msg {
-    /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
-    export type Types = Msg;
 }
 
 export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {

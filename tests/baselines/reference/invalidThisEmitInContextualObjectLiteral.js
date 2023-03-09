@@ -19,7 +19,7 @@ var TestController = /** @class */ (function () {
         var _this = this;
         this.p = this.m({
             p1: function (e) { },
-            p2: function () { return function (vvvvvvvvv) { return _this; }; }
+            p2: function () { return function (vvvvvvvvv) { return _this; }; },
         });
     }
     TestController.prototype.m = function (def) { };

@@ -1,6 +1,19 @@
 import {
-    BinaryExpression, Bundle, chainBundle, Expression, isElementAccessExpression, isExpression, isPropertyAccessExpression,
-    Node, setTextRange, SourceFile, SyntaxKind, TransformationContext, TransformFlags, visitEachChild, visitNode,
+    BinaryExpression,
+    Bundle,
+    chainBundle,
+    Expression,
+    isElementAccessExpression,
+    isExpression,
+    isPropertyAccessExpression,
+    Node,
+    setTextRange,
+    SourceFile,
+    SyntaxKind,
+    TransformationContext,
+    TransformFlags,
+    visitEachChild,
+    visitNode,
     VisitResult,
 } from "../_namespaces/ts";
 

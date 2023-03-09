@@ -19,7 +19,7 @@ export var d = new m2.m3.c();
 
 //// [internalAliasClassInsideLocalModuleWithExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = exports.m2 = exports.x = void 0;
 var x;
 (function (x) {

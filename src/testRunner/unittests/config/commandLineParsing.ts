@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
@@ -103,7 +103,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         interface VerifyNullNonIncludedOption {
             subScenario: string,
-            type: () => "string" | "number" | ts.ESMap<string, number | string>;
+            type: () => "string" | "number" | Map<string, number | string>;
             nonNullValue?: string;
         }
         function verifyNullNonIncludedOption({ subScenario, type, nonNullValue }: VerifyNullNonIncludedOption) {
@@ -169,8 +169,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         verifyNullNonIncludedOption({
             subScenario: "option of type custom map",
-            type: () => new ts.Map(ts.getEntries({
-                node: ts.ModuleResolutionKind.NodeJs,
+            type: () => new Map(Object.entries({
+                node: ts.ModuleResolutionKind.Node10,
                 classic: ts.ModuleResolutionKind.Classic,
             })),
             nonNullValue: "node"

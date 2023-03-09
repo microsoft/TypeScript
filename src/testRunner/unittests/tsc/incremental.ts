@@ -1,12 +1,25 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    appendText,
+    compilerOptionsToConfigJson,
+    libContent,
+    loadProjectFromDisk,
+    loadProjectFromFiles,
+    noChangeOnlyRuns,
+    noChangeRun,
+    prependText,
+    replaceText,
+    TestTscEdit,
+    verifyTsc,
+} from "./helpers";
 
 describe("unittests:: tsc:: incremental::", () => {
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "when passing filename for buildinfo on commandline",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -20,13 +33,13 @@ describe("unittests:: tsc:: incremental::", () => {
                     }`,
         }),
         commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
-        edits: ts.noChangeOnlyRuns
+        edits: noChangeOnlyRuns
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "when passing rootDir from commandline",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -37,31 +50,31 @@ describe("unittests:: tsc:: incremental::", () => {
                     }`,
         }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
-        edits: ts.noChangeOnlyRuns
+        edits: noChangeOnlyRuns
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "with only dts files",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.d.ts": "export const x = 10;",
             "/src/project/src/another.d.ts": "export const y = 10;",
             "/src/project/tsconfig.json": "{}",
         }),
         commandLineArgs: ["--incremental", "--p", "src/project"],
         edits: [
-            ts.noChangeRun,
+            noChangeRun,
             {
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => ts.appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;")
+                caption: "incremental-declaration-doesnt-change",
+                edit: fs => appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;")
             }
         ]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "when passing rootDir is in the tsconfig",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -73,47 +86,47 @@ describe("unittests:: tsc:: incremental::", () => {
                     }`,
         }),
         commandLineArgs: ["--p", "src/project"],
-        edits: ts.noChangeOnlyRuns
+        edits: noChangeOnlyRuns
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "tsbuildinfo has error",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": "{}",
             "/src/project/tsconfig.tsbuildinfo": "Some random string",
         }),
         commandLineArgs: ["--p", "src/project", "-i"],
         edits: [{
-            subScenario: "tsbuildinfo written has error",
-            modifyFs: fs => ts.prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+            caption: "tsbuildinfo written has error",
+            edit: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
         }]
     });
 
     describe("with noEmitOnError", () => {
         let projFs: vfs.FileSystem;
         before(() => {
-            projFs = ts.loadProjectFromDisk("tests/projects/noEmitOnError");
+            projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
         });
         after(() => {
             projFs = undefined!;
         });
 
-        function verifyNoEmitOnError(subScenario: string, fixModifyFs: ts.TestTscEdit["modifyFs"], modifyFs?: ts.TestTscEdit["modifyFs"]) {
-            ts.verifyTscWithEdits({
+        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["edit"], modifyFs?: TestTscEdit["edit"]) {
+            verifyTsc({
                 scenario: "incremental",
                 subScenario,
                 fs: () => projFs,
                 commandLineArgs: ["--incremental", "-p", "src"],
                 modifyFs,
                 edits: [
-                    ts.noChangeWithExportsDiscrepancyRun,
+                    noChangeRun,
                     {
-                        subScenario: "incremental-declaration-doesnt-change",
-                        modifyFs: fixModifyFs
+                        caption: "incremental-declaration-doesnt-change",
+                        edit: fixModifyFs
                     },
-                    ts.noChangeRun,
+                    noChangeRun,
                 ],
                 baselinePrograms: true
             });
@@ -142,28 +155,21 @@ const a: string = 10;`, "utf-8"),
 
         function verifyNoEmitChanges(compilerOptions: ts.CompilerOptions) {
             const discrepancyExplanation = () => [
-                ...ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
                 "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
                 "Incremental will store the past latestChangedDtsFile and emitSignatures",
             ];
-            const discrepancyIfNoDtsEmit = ts.getEmitDeclarations(compilerOptions) ?
-                undefined :
-                ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation;
-            const noChangeRunWithNoEmit: ts.TestTscEdit = {
-                ...ts.noChangeRun,
-                subScenario: "No Change run with noEmit",
+            const noChangeRunWithNoEmit: TestTscEdit = {
+                ...noChangeRun,
+                caption: "No Change run with noEmit",
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
                 discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
-                    !compilerOptions.declaration ?
-                        ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
-                        undefined,
+                    undefined,
             };
-            const noChangeRunWithEmit: ts.TestTscEdit = {
-                ...ts.noChangeRun,
-                subScenario: "No Change run with emit",
+            const noChangeRunWithEmit: TestTscEdit = {
+                ...noChangeRun,
+                caption: "No Change run with emit",
                 commandLineArgs: ["--p", "src/project"],
-                discrepancyExplanation: discrepancyIfNoDtsEmit,
             };
             let optionsString = "";
             for (const key in compilerOptions) {
@@ -172,7 +178,7 @@ const a: string = 10;`, "utf-8"),
                 }
             }
 
-            ts.verifyTscWithEdits({
+            verifyTsc({
                 scenario: "incremental",
                 subScenario: `noEmit changes${optionsString}`,
                 commandLineArgs: ["--p", "src/project"],
@@ -181,40 +187,36 @@ const a: string = 10;`, "utf-8"),
                     noChangeRunWithNoEmit,
                     noChangeRunWithNoEmit,
                     {
-                        subScenario: "Introduce error but still noEmit",
+                        caption: "Introduce error but still noEmit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
-                        modifyFs: fs => ts.replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
                         discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
-                            compilerOptions.declaration ?
-                                ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
-                                undefined,
+                            undefined,
                     },
                     {
-                        subScenario: "Fix error and emit",
-                        modifyFs: fs => ts.replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: discrepancyIfNoDtsEmit,
+                        caption: "Fix error and emit",
+                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
                     noChangeRunWithNoEmit,
                     noChangeRunWithEmit,
                     {
-                        subScenario: "Introduce error and emit",
-                        modifyFs: fs => ts.replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                        discrepancyExplanation: discrepancyIfNoDtsEmit,
+                        caption: "Introduce error and emit",
+                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
                     noChangeRunWithNoEmit,
                     noChangeRunWithEmit,
                     {
-                        subScenario: "Fix error and no emit",
+                        caption: "Fix error and no emit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
-                        modifyFs: fs => ts.replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
                         discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
-                            ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                            undefined,
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
@@ -223,7 +225,7 @@ const a: string = 10;`, "utf-8"),
                 ],
             });
 
-            ts.verifyTscWithEdits({
+            verifyTsc({
                 scenario: "incremental",
                 subScenario: `noEmit changes with initial noEmit${optionsString}`,
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
@@ -231,23 +233,23 @@ const a: string = 10;`, "utf-8"),
                 edits: [
                     noChangeRunWithEmit,
                     {
-                        subScenario: "Introduce error with emit",
+                        caption: "Introduce error with emit",
                         commandLineArgs: ["--p", "src/project"],
-                        modifyFs: fs => ts.replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
                     },
                     {
-                        subScenario: "Fix error and no emit",
-                        modifyFs: fs => ts.replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                        caption: "Fix error and no emit",
+                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
                         discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
-                            ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                            undefined,
                     },
                     noChangeRunWithEmit,
                 ],
             });
 
             function fs() {
-                return ts.loadProjectFromFiles({
+                return loadProjectFromFiles({
                     "/src/project/src/class.ts": Utils.dedent`
                             export class classC {
                                 prop = 1;
@@ -275,10 +277,10 @@ const a: string = 10;`, "utf-8"),
         }
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: `when global file is added, the signatures are updated`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": Utils.dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
@@ -297,31 +299,31 @@ const a: string = 10;`, "utf-8"),
         }),
         commandLineArgs: ["--p", "src/project"],
         edits: [
-            ts.noChangeRun,
+            noChangeRun,
             {
-                subScenario: "Modify main file",
-                modifyFs: fs => ts.appendText(fs, `/src/project/src/main.ts`, `something();`),
+                caption: "Modify main file",
+                edit: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
             },
             {
-                subScenario: "Modify main file again",
-                modifyFs: fs => ts.appendText(fs, `/src/project/src/main.ts`, `something();`),
+                caption: "Modify main file again",
+                edit: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
             },
             {
-                subScenario: "Add new file and update main file",
-                modifyFs: fs => {
+                caption: "Add new file and update main file",
+                edit: fs => {
                     fs.writeFileSync(`/src/project/src/newFile.ts`, "function foo() { return 20; }");
-                    ts.prependText(fs, `/src/project/src/main.ts`, `/// <reference path="./newFile.ts"/>
+                    prependText(fs, `/src/project/src/main.ts`, `/// <reference path="./newFile.ts"/>
 `);
-                    ts.appendText(fs, `/src/project/src/main.ts`, `foo();`);
+                    appendText(fs, `/src/project/src/main.ts`, `foo();`);
                 },
             },
             {
-                subScenario: "Write file that could not be resolved",
-                modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
+                caption: "Write file that could not be resolved",
+                edit: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
             },
             {
-                subScenario: "Modify main file",
-                modifyFs: fs => ts.appendText(fs, `/src/project/src/main.ts`, `something();`),
+                caption: "Modify main file",
+                edit: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
             },
         ],
         baselinePrograms: true,
@@ -343,10 +345,10 @@ declare global {
 }`;
         }
 
-        ts.verifyTsc({
+        verifyTsc({
             scenario: "react-jsx-emit-mode",
             subScenario: "with no backing types found doesn't crash",
-            fs: () => ts.loadProjectFromFiles({
+            fs: () => loadProjectFromFiles({
                 "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                 "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                 "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
@@ -355,10 +357,10 @@ declare global {
             commandLineArgs: ["--p", "src/project"]
         });
 
-        ts.verifyTsc({
+        verifyTsc({
             scenario: "react-jsx-emit-mode",
             subScenario: "with no backing types found doesn't crash under --strict",
-            fs: () => ts.loadProjectFromFiles({
+            fs: () => loadProjectFromFiles({
                 "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                 "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                 "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
@@ -368,11 +370,11 @@ declare global {
         });
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "when new file is added to the referenced project",
         commandLineArgs: ["-i", "-p", `src/projects/project2`],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/projects/project1/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     module: "none",
@@ -395,44 +397,44 @@ declare global {
         }),
         edits: [
             {
-                subScenario: "Add class3 to project1 and build it",
-                modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
+                caption: "Add class3 to project1 and build it",
+                edit: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
                 discrepancyExplanation: () => [
                     "Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build",
                     "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
                 ],
             },
             {
-                subScenario: "Add output of class3",
-                modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
+                caption: "Add output of class3",
+                edit: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
             },
             {
-                subScenario: "Add excluded file to project1",
-                modifyFs: fs => {
+                caption: "Add excluded file to project1",
+                edit: fs => {
                     fs.mkdirSync("/src/projects/project1/temp");
                     fs.writeFileSync("/src/projects/project1/temp/file.d.ts", `declare class file {}`, "utf-8");
                 },
             },
             {
-                subScenario: "Delete output for class3",
-                modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
+                caption: "Delete output for class3",
+                edit: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
                 discrepancyExplanation: () => [
                     "Ts buildinfo will be updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache",
                     "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
                 ],
             },
             {
-                subScenario: "Create output for class3",
-                modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
+                caption: "Create output for class3",
+                edit: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
             },
         ]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "when project has strict true",
         commandLineArgs: ["-noEmit", "-p", `src/project`],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     incremental: true,
@@ -441,15 +443,15 @@ declare global {
             }),
             "/src/project/class1.ts": `export class class1 {}`,
         }),
-        edits: ts.noChangeOnlyRuns,
+        edits: noChangeOnlyRuns,
         baselinePrograms: true
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "serializing error chains",
         commandLineArgs: ["-p", `src/project`],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     incremental: true,
@@ -473,13 +475,13 @@ declare global {
                         <div />
                     </Component>)`
         }, `\ninterface ReadonlyArray<T> { readonly length: number }`),
-        edits: ts.noChangeOnlyRuns,
+        edits: noChangeOnlyRuns,
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "ts file with no-default-lib that augments the global scope",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": Utils.dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="esnext" />
@@ -503,15 +505,15 @@ declare global {
         }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
         modifyFs: (fs) => {
-            fs.writeFileSync("/lib/lib.esnext.d.ts", ts.libContent);
+            fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
         }
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file",
         commandLineArgs: ["-p", `src/project`],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
             "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
@@ -519,16 +521,16 @@ console.log(a);`,
             "/src/project/types.d.ts": `type MagicNumber = typeof import('./constants').default`,
         }),
         edits: [{
-            subScenario: "Modify imports used in global file",
-            modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            caption: "Modify imports used in global file",
+            edit: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
         }],
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file through indirect import",
         commandLineArgs: ["-p", `src/project`],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
             "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
@@ -537,17 +539,17 @@ console.log(a);`,
             "/src/project/types.d.ts": `type MagicNumber = typeof import('./reexport').ConstantNumber`,
         }),
         edits: [{
-            subScenario: "Modify imports used in global file",
-            modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            caption: "Modify imports used in global file",
+            edit: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
         }],
     });
 
     function verifyModifierChange(declaration: boolean) {
-        ts.verifyTscWithEdits({
+        verifyTsc({
             scenario: "incremental",
             subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
             commandLineArgs: ["-p", "src/project", "--incremental"],
-            fs: () => ts.loadProjectFromFiles({
+            fs: () => loadProjectFromFiles({
                 "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { declaration } }),
                 "/src/project/main.ts": Utils.dedent`
                         import MessageablePerson from './MessageablePerson.js';
@@ -564,18 +566,18 @@ console.log(a);`,
                         type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
                         export default MessageablePerson;`,
             }),
-            modifyFs: fs => ts.appendText(fs, "/lib/lib.d.ts", Utils.dedent`
+            modifyFs: fs => appendText(fs, "/lib/lib.d.ts", Utils.dedent`
                     type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`
             ),
             edits: [
                 {
-                    subScenario: "modify public to protected",
-                    modifyFs: fs => ts.replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
+                    caption: "modify public to protected",
+                    edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
                 },
                 {
-                    subScenario: "modify protected to public",
-                    modifyFs: fs => ts.replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
+                    caption: "modify protected to public",
+                    edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
                 },
             ],
         });
@@ -583,10 +585,10 @@ console.log(a);`,
     verifyModifierChange(/*declaration*/ false);
     verifyModifierChange(/*declaration*/ true);
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: `when declarationMap changes`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     noEmitOnError: true,
@@ -600,8 +602,8 @@ console.log(a);`,
         commandLineArgs: ["--p", "/src/project"],
         edits: [
             {
-                subScenario: "error and enable declarationMap",
-                modifyFs: fs => ts.replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
+                caption: "error and enable declarationMap",
+                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
                 discrepancyExplanation: () => [
                     `Clean build does not emit any file so will have emitSignatures with all files since they are not emitted`,
@@ -610,17 +612,17 @@ console.log(a);`,
                 ]
             },
             {
-                subScenario: "fix error declarationMap",
-                modifyFs: fs => ts.replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
+                caption: "fix error declarationMap",
+                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
         ]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "incremental",
         subScenario: `when declarationMap changes with outFile`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     noEmitOnError: true,
@@ -635,40 +637,40 @@ console.log(a);`,
         commandLineArgs: ["--p", "/src/project"],
         edits: [
             {
-                subScenario: "error and enable declarationMap",
-                modifyFs: fs => ts.replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
+                caption: "error and enable declarationMap",
+                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
             {
-                subScenario: "fix error declarationMap",
-                modifyFs: fs => ts.replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
+                caption: "fix error declarationMap",
+                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
         ]
     });
 
     describe("different options::", () => {
-        function withOptionChange(subScenario: string, ...options: readonly string[]): ts.TestTscEdit {
+        function withOptionChange(caption: string, ...options: readonly string[]): TestTscEdit {
             return {
-                subScenario,
-                modifyFs: ts.noop,
+                caption,
+                edit: ts.noop,
                 commandLineArgs: ["--p", "/src/project", ...options],
             };
         }
-        function noChangeWithSubscenario(subScenario: string): ts.TestTscEdit {
-            return { ...ts.noChangeRun, subScenario };
+        function noChangeWithSubscenario(caption: string): TestTscEdit {
+            return { ...noChangeRun, caption };
         }
-        function withOptionChangeAndDiscrepancyExplanation(subScenario: string, option: string): ts.TestTscEdit {
+        function withOptionChangeAndDiscrepancyExplanation(caption: string, option: string): TestTscEdit {
             return {
-                ...withOptionChange(subScenario, option),
+                ...withOptionChange(caption, option),
                 discrepancyExplanation: () => [
                     `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/\-/g, "")}`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only`,
                 ]
             };
         }
-        function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(subScenario: string): ts.TestTscEdit {
-            const edit = withOptionChangeAndDiscrepancyExplanation(subScenario, "--emitDeclarationOnly");
+        function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(caption: string): TestTscEdit {
+            const edit = withOptionChangeAndDiscrepancyExplanation(caption, "--emitDeclarationOnly");
             const discrepancyExplanation = edit.discrepancyExplanation!;
             edit.discrepancyExplanation = () => [
                 ...discrepancyExplanation(),
@@ -677,22 +679,16 @@ console.log(a);`,
             ];
             return edit;
         }
-        function withOptionChangeAndExportExplanation(subScenario: string, ...options: readonly string[]): ts.TestTscEdit {
+        function nochangeWithIncrementalDeclarationFromBeforeExplaination(): TestTscEdit {
             return {
-                ...withOptionChange(subScenario, ...options),
-                discrepancyExplanation: ts.noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
-            };
-        }
-        function nochangeWithIncrementalDeclarationFromBeforeExplaination(): ts.TestTscEdit {
-            return {
-                ...ts.noChangeRun,
+                ...noChangeRun,
                 discrepancyExplanation: () => [
                     `Clean build tsbuildinfo will have compilerOptions {}`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option declaration and declarationMap`,
                 ],
             };
         }
-        function nochangeWithIncrementalOutDeclarationFromBeforeExplaination(): ts.TestTscEdit {
+        function nochangeWithIncrementalOutDeclarationFromBeforeExplaination(): TestTscEdit {
             const edit = nochangeWithIncrementalDeclarationFromBeforeExplaination();
             const discrepancyExplanation = edit.discrepancyExplanation!;
             edit.discrepancyExplanation = () => [
@@ -702,32 +698,32 @@ console.log(a);`,
             ];
             return edit;
         }
-        function localChange(): ts.TestTscEdit {
+        function localChange(): TestTscEdit {
             return {
-                subScenario: "local change",
-                modifyFs: fs => ts.replaceText(fs, "/src/project/a.ts", "Local = 1", "Local = 10"),
+                caption: "local change",
+                edit: fs => replaceText(fs, "/src/project/a.ts", "Local = 1", "Local = 10"),
             };
         }
         function fs(options: ts.CompilerOptions) {
-            return ts.loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: ts.compilerOptionsToConfigJson(options) }),
+            return loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
                 "/src/project/d.ts": `import { b } from "./b";export const d = b;`,
             });
         }
-        function enableDeclarationMap(): ts.TestTscEdit {
+        function enableDeclarationMap(): TestTscEdit {
             return {
-                subScenario: "declarationMap enabling",
-                modifyFs: fs => {
+                caption: "declarationMap enabling",
+                edit: fs => {
                     const config = JSON.parse(fs.readFileSync("/src/project/tsconfig.json", "utf-8"));
                     config.compilerOptions.declarationMap = true;
                     fs.writeFileSync("/src/project/tsconfig.json", JSON.stringify(config));
                 },
             };
         }
-        ts.verifyTscWithEdits({
+        verifyTsc({
             scenario: "incremental",
             subScenario: "different options",
             fs: () => fs({ composite: true }),
@@ -736,11 +732,11 @@ console.log(a);`,
                 withOptionChange("with sourceMap", "--sourceMap"),
                 noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                ts.noChangeRun,
+                noChangeRun,
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
                 withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
-                ts.noChangeRun,
+                noChangeRun,
                 localChange(),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
                 withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
@@ -750,7 +746,7 @@ console.log(a);`,
             ],
             baselinePrograms: true,
         });
-        ts.verifyTscWithEdits({
+        verifyTsc({
             scenario: "incremental",
             subScenario: "different options with outFile",
             fs: () => fs({ composite: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
@@ -759,11 +755,11 @@ console.log(a);`,
                 withOptionChange("with sourceMap", "--sourceMap"),
                 noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                ts.noChangeRun,
+                noChangeRun,
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
                 withEmitDeclarationOnlyChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything"),
-                ts.noChangeRun,
+                noChangeRun,
                 localChange(),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
                 withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
@@ -773,14 +769,14 @@ console.log(a);`,
             ],
             baselinePrograms: true,
         });
-        ts.verifyTscWithEdits({
+        verifyTsc({
             scenario: "incremental",
             subScenario: "different options with incremental",
             fs: () => fs({ incremental: true }),
             commandLineArgs: ["--p", "/src/project"],
             edits: [
-                withOptionChangeAndExportExplanation("with sourceMap", "--sourceMap"),
-                withOptionChangeAndExportExplanation("should re-emit only js so they dont contain sourcemap"),
+                withOptionChange("with sourceMap", "--sourceMap"),
+                withOptionChange("should re-emit only js so they dont contain sourcemap"),
                 withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 nochangeWithIncrementalDeclarationFromBeforeExplaination(),
@@ -795,7 +791,7 @@ console.log(a);`,
             ],
             baselinePrograms: true,
         });
-        ts.verifyTscWithEdits({
+        verifyTsc({
             scenario: "incremental",
             subScenario: "different options with incremental with outFile",
             fs: () => fs({ incremental: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
@@ -817,5 +813,48 @@ console.log(a);`,
             ],
             baselinePrograms: true,
         });
+    });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "when file is deleted",
+        commandLineArgs: ["-p", `/src/project`],
+        fs: () => loadProjectFromFiles({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    outDir: "outDir",
+                },
+            }),
+            "/src/project/file1.ts": `export class  C { }`,
+            "/src/project/file2.ts": `export class D { }`,
+        }),
+        edits: [
+            {
+                caption: "delete file with imports",
+                edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+            },
+        ]
+    });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "file deleted before fixing error with noEmitOnError",
+        fs: () => loadProjectFromFiles({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    outDir: "outDir",
+                    noEmitOnError: true,
+                },
+            }),
+            "/src/project/file1.ts": `export const x: 30 = "hello";`,
+            "/src/project/file2.ts": `export class D { }`,
+        }),
+        commandLineArgs: ["--p", "/src/project", "-i"],
+        edits: [{
+            caption: "delete file without error",
+            edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+        }],
+        baselinePrograms: true,
     });
 });

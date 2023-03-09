@@ -1,4 +1,7 @@
-import { Diagnostic, WriteFileCallbackData } from "./_namespaces/ts";
+import {
+    Diagnostic,
+    WriteFileCallbackData,
+} from "./_namespaces/ts";
 
 export interface EmitOutput {
     outputFiles: OutputFile[];

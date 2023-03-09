@@ -1,22 +1,111 @@
 import {
-    addRange, arrayFrom, BinaryExpression, CallExpression, CheckFlags, contains, createPrinter, Debug, displayPart,
-    EmitHint, emptyArray, EnumMember, ExportAssignment, find, first, firstDefined, forEach, GetAccessorDeclaration,
-    getCombinedLocalAndExportSymbolFlags, getDeclarationOfKind, getExternalModuleImportEqualsDeclarationExpression,
-    getMeaningFromLocation, getNameOfDeclaration, getNodeModifiers, getObjectFlags, getParseTreeNode,
-    getSourceFileOfNode, getTextOfConstantValue, getTextOfIdentifierOrLiteral, getTextOfNode, hasSyntacticModifier,
-    idText, ImportEqualsDeclaration, isArrowFunction, isBindingElement, isCallExpression, isCallExpressionTarget,
-    isCallOrNewExpression, isClassExpression, isConstTypeReference, isDeprecatedDeclaration, isEnumConst,
-    isEnumDeclaration, isExpression, isExternalModuleImportEqualsDeclaration, isFirstDeclarationOfSymbolParameter,
-    isFunctionBlock, isFunctionExpression, isFunctionLike, isFunctionLikeKind, isIdentifier, isInExpressionContext,
-    isJsxOpeningLikeElement, isLet, isModuleWithStringLiteralName, isNameOfFunctionDeclaration, isNewExpressionTarget,
-    isObjectBindingPattern, isTaggedTemplateExpression, isThisInTypeQuery, isVarConst, JSDocTagInfo,
-    JsxOpeningLikeElement, keywordPart, length, lineBreakPart, ListFormat, mapToDisplayParts, ModifierFlags,
-    ModuleDeclaration, NewExpression, Node, NodeBuilderFlags, ObjectFlags, operatorPart, Printer,
-    PropertyAccessExpression, PropertyDeclaration, punctuationPart, ScriptElementKind, ScriptElementKindModifier,
-    SemanticMeaning, Set, SetAccessorDeclaration, Signature, SignatureDeclaration, SignatureFlags,
-    signatureToDisplayParts, some, SourceFile, spacePart, Symbol, SymbolDisplayPart, SymbolDisplayPartKind, SymbolFlags,
-    SymbolFormatFlags, symbolToDisplayParts, SyntaxKind, TaggedTemplateExpression, textOrKeywordPart, textPart,
-    TransientSymbol, Type, TypeChecker, TypeFormatFlags, TypeParameter, typeToDisplayParts, VariableDeclaration,
+    addRange,
+    arrayFrom,
+    BinaryExpression,
+    CallExpression,
+    CheckFlags,
+    contains,
+    createPrinterWithRemoveComments,
+    Debug,
+    displayPart,
+    EmitHint,
+    emptyArray,
+    EnumMember,
+    ExportAssignment,
+    find,
+    first,
+    firstDefined,
+    forEach,
+    GetAccessorDeclaration,
+    getCombinedLocalAndExportSymbolFlags,
+    getDeclarationOfKind,
+    getExternalModuleImportEqualsDeclarationExpression,
+    getMeaningFromLocation,
+    getNameOfDeclaration,
+    getNodeModifiers,
+    getObjectFlags,
+    getParseTreeNode,
+    getSourceFileOfNode,
+    getTextOfConstantValue,
+    getTextOfIdentifierOrLiteral,
+    getTextOfNode,
+    hasSyntacticModifier,
+    idText,
+    ImportEqualsDeclaration,
+    isArrowFunction,
+    isBindingElement,
+    isCallExpression,
+    isCallExpressionTarget,
+    isCallOrNewExpression,
+    isClassExpression,
+    isConstTypeReference,
+    isDeprecatedDeclaration,
+    isEnumConst,
+    isEnumDeclaration,
+    isExpression,
+    isExternalModuleImportEqualsDeclaration,
+    isFirstDeclarationOfSymbolParameter,
+    isFunctionBlock,
+    isFunctionExpression,
+    isFunctionLike,
+    isIdentifier,
+    isInExpressionContext,
+    isJsxOpeningLikeElement,
+    isLet,
+    isModuleWithStringLiteralName,
+    isNameOfFunctionDeclaration,
+    isNewExpressionTarget,
+    isObjectBindingPattern,
+    isTaggedTemplateExpression,
+    isThisInTypeQuery,
+    isTransientSymbol,
+    isTypeAliasDeclaration,
+    isVarConst,
+    JSDocTagInfo,
+    JsxOpeningLikeElement,
+    keywordPart,
+    length,
+    lineBreakPart,
+    ListFormat,
+    mapToDisplayParts,
+    ModifierFlags,
+    ModuleDeclaration,
+    NewExpression,
+    Node,
+    NodeBuilderFlags,
+    ObjectFlags,
+    operatorPart,
+    PropertyAccessExpression,
+    PropertyDeclaration,
+    punctuationPart,
+    ScriptElementKind,
+    ScriptElementKindModifier,
+    SemanticMeaning,
+    SetAccessorDeclaration,
+    Signature,
+    SignatureDeclaration,
+    SignatureFlags,
+    signatureToDisplayParts,
+    some,
+    SourceFile,
+    spacePart,
+    Symbol,
+    SymbolDisplayPart,
+    SymbolDisplayPartKind,
+    SymbolFlags,
+    SymbolFormatFlags,
+    symbolToDisplayParts,
+    SyntaxKind,
+    TaggedTemplateExpression,
+    textOrKeywordPart,
+    textPart,
+    TransientSymbol,
+    Type,
+    TypeChecker,
+    TypeFormatFlags,
+    TypeParameter,
+    typeToDisplayParts,
+    VariableDeclaration,
 } from "./_namespaces/ts";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
@@ -87,7 +176,7 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
     if (flags & SymbolFlags.Signature) return ScriptElementKind.indexSignatureElement;
 
     if (flags & SymbolFlags.Property) {
-        if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).checkFlags & CheckFlags.Synthetic) {
+        if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).links.checkFlags & CheckFlags.Synthetic) {
             // If union property is result of union of non method (property/accessors/variables), it is labeled as property
             const unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                 const rootSymbolFlags = rootSymbol.getFlags();
@@ -169,7 +258,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let hasAddedSymbolInfo = false;
     const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
     let type: Type | undefined;
-    let printer: Printer;
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
@@ -404,19 +492,19 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             const declaration = decl.parent;
 
             if (declaration) {
-                if (isFunctionLikeKind(declaration.kind)) {
+                if (isFunctionLike(declaration)) {
                     addInPrefix();
-                    const signature = typeChecker.getSignatureFromDeclaration(declaration as SignatureDeclaration)!; // TODO: GH#18217
+                    const signature = typeChecker.getSignatureFromDeclaration(declaration)!; // TODO: GH#18217
                     if (declaration.kind === SyntaxKind.ConstructSignature) {
                         displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                         displayParts.push(spacePart());
                     }
-                    else if (declaration.kind !== SyntaxKind.CallSignature && (declaration as SignatureDeclaration).name) {
+                    else if (declaration.kind !== SyntaxKind.CallSignature && declaration.name) {
                         addFullSymbolName(declaration.symbol);
                     }
                     addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
-                else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
+                else if (isTypeAliasDeclaration(declaration)) {
                     // Type alias type parameter
                     // For example
                     //      type list<T> = T[]; // Both T will go through same code path
@@ -556,8 +644,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                     else {
                         addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                     }
-                    if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                        const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                    if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
+                        const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         displayParts.push(spacePart());
                         displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -640,10 +728,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
     function getPrinter() {
-        if (!printer) {
-            printer = createPrinter({ removeComments: true });
-        }
-        return printer;
+        return createPrinterWithRemoveComments();
     }
 
     function prefixNextMeaning() {

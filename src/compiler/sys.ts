@@ -1,11 +1,51 @@
 import {
-    AssertionLevel, closeFileWatcher, closeFileWatcherOf, combinePaths, Comparison, contains, containsPath,
-    createGetCanonicalFileName, createMultiMap, Debug, directorySeparator, emptyArray, emptyFileSystemEntries, endsWith,
-    enumerateInsertsAndDeletes, ESMap, FileSystemEntries, getDirectoryPath, getFallbackOptions,
-    getNormalizedAbsolutePath, getRelativePathToDirectoryOrUrl, getRootLength, getStringComparer, isArray, isNodeLikeSystem, isString,
-    Map, mapDefined, matchesExclude, matchFiles, memoize, noop, normalizePath, normalizeSlashes, orderedRemoveItem,
-    Path, perfLogger, PollingWatchKind, RequireResult, resolveJSModule, some, startsWith, stringContains, timestamp,
-    unorderedRemoveItem, WatchDirectoryKind, WatchFileKind, WatchOptions, writeFileEnsuringDirectories,
+    AssertionLevel,
+    closeFileWatcher,
+    closeFileWatcherOf,
+    combinePaths,
+    Comparison,
+    contains,
+    containsPath,
+    createGetCanonicalFileName,
+    createMultiMap,
+    Debug,
+    directorySeparator,
+    emptyArray,
+    emptyFileSystemEntries,
+    endsWith,
+    enumerateInsertsAndDeletes,
+    FileSystemEntries,
+    getDirectoryPath,
+    getFallbackOptions,
+    getNormalizedAbsolutePath,
+    getRelativePathToDirectoryOrUrl,
+    getRootLength,
+    getStringComparer,
+    isArray,
+    isNodeLikeSystem,
+    isString,
+    mapDefined,
+    matchesExclude,
+    matchFiles,
+    memoize,
+    noop,
+    normalizePath,
+    normalizeSlashes,
+    orderedRemoveItem,
+    Path,
+    perfLogger,
+    PollingWatchKind,
+    RequireResult,
+    resolveJSModule,
+    some,
+    startsWith,
+    stringContains,
+    timestamp,
+    unorderedRemoveItem,
+    WatchDirectoryKind,
+    WatchFileKind,
+    WatchOptions,
+    writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
@@ -340,7 +380,7 @@ function createDynamicPriorityPollingWatchFile(host: {
 
 function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSensitiveFileNames: boolean): HostWatchFile {
     // One file can have multiple watchers
-    const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
+    const fileWatcherCallbacks = createMultiMap<string, FileWatcherCallback>();
     const dirWatchers = new Map<string, DirectoryWatcher>();
     const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return nonPollingWatchFile;
@@ -434,7 +474,7 @@ interface SingleFileWatcher<T extends FileWatcherCallback | FsWatchCallback>{
     callbacks: T[];
 }
 function createSingleWatcherPerName<T extends FileWatcherCallback | FsWatchCallback>(
-    cache: Map<SingleFileWatcher<T>>,
+    cache: Map<string, SingleFileWatcher<T>>,
     useCaseSensitiveFileNames: boolean,
     name: string,
     callback: T,
@@ -497,7 +537,7 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
 /** @internal */
 export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
-let curSysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+let curSysLog: (s: string) => void = noop;
 
 /** @internal */
 export function sysLog(s: string) {
@@ -610,7 +650,7 @@ function createDirectoryWatcherSupportingRecursive({
         };
     }
 
-    type InvokeMap = ESMap<Path, string[] | true>;
+    type InvokeMap = Map<Path, string[] | true>;
     function invokeCallbacks(dirPath: Path, fileName: string): void;
     function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
     function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {
@@ -1256,7 +1296,6 @@ export function patchWriteFileEnsuringDirectory(sys: System) {
             path => sys.directoryExists(path));
 }
 
-/** @internal */
 export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
 
 /** @internal */
@@ -1393,7 +1432,6 @@ export interface System {
 
     // For testing
     /** @internal */ now?(): Date;
-    /** @internal */ disableUseFileVersionAsSignature?: boolean;
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
 }
 
@@ -1411,23 +1449,7 @@ declare const global: any;
 declare const __filename: string;
 declare const __dirname: string;
 
-export function getNodeMajorVersion(): number | undefined {
-    if (typeof process === "undefined") {
-        return undefined;
-    }
-    const version: string = process.version;
-    if (!version) {
-        return undefined;
-    }
-    const dot = version.indexOf(".");
-    if (dot === -1) {
-        return undefined;
-    }
-    return parseInt(version.substring(1, dot));
-}
-
 // TODO: GH#18217 this is used as if it's certainly defined in many places.
-// eslint-disable-next-line prefer-const
 export let sys: System = (() => {
     // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
     // byte order mark from the specified encoding. Using any other byte order mark does
@@ -1455,8 +1477,6 @@ export let sys: System = (() => {
             from?(input: string, encoding?: string): any;
         } = require("buffer").Buffer;
 
-        const nodeVersion = getNodeMajorVersion();
-        const isNode4OrLater = nodeVersion! >= 4;
         const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
         const platform: string = _os.platform();
@@ -1470,7 +1490,7 @@ export let sys: System = (() => {
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
-        const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
+        const fsSupportsRecursiveFsWatch = process.platform === "win32" || process.platform === "darwin";
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,

@@ -1,7 +1,29 @@
 import {
-    clear, EntityNameOrEntityNameExpression, forEach, getOwnValues, getSymbolId, Identifier, IndexedAccessType,
-    IndexType, InterfaceType, MappedType, Node, ObjectFlags, ObjectType, ResolvedType, Signature, Symbol, SymbolWalker,
-    SyntaxKind, Type, TypeFlags, TypeParameter, TypePredicate, TypeQueryNode, TypeReference, UnionOrIntersectionType,
+    BaseType,
+    clear,
+    EntityNameOrEntityNameExpression,
+    forEach,
+    getOwnValues,
+    getSymbolId,
+    Identifier,
+    IndexedAccessType,
+    IndexType,
+    InterfaceType,
+    MappedType,
+    ObjectFlags,
+    ObjectType,
+    ResolvedType,
+    Signature,
+    Symbol,
+    SymbolWalker,
+    SyntaxKind,
+    Type,
+    TypeFlags,
+    TypeParameter,
+    TypePredicate,
+    TypeQueryNode,
+    TypeReference,
+    UnionOrIntersectionType,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -9,10 +31,10 @@ export function createGetSymbolWalker(
     getRestTypeOfSignature: (sig: Signature) => Type,
     getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
     getReturnTypeOfSignature: (sig: Signature) => Type,
-    getBaseTypes: (type: Type) => Type[],
+    getBaseTypes: (type: InterfaceType) => BaseType[],
     resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
     getTypeOfSymbol: (sym: Symbol) => Type,
-    getResolvedSymbol: (node: Node) => Symbol,
+    getResolvedSymbol: (node: Identifier) => Symbol,
     getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
     getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
     getTypeArguments: (type: TypeReference) => readonly Type[]) {
@@ -192,3 +214,4 @@ export function createGetSymbolWalker(
         }
     }
 }
+

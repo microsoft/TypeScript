@@ -129,15 +129,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-const cjs = __importStar(require("package/cjs"));
-const mjs = __importStar(require("package/mjs"));
-const type = __importStar(require("package"));
+var cjs = __importStar(require("package/cjs"));
+var mjs = __importStar(require("package/mjs"));
+var type = __importStar(require("package"));
 cjs;
 mjs;
 type;
-const cjsi = __importStar(require("inner/cjs"));
-const mjsi = __importStar(require("inner/mjs"));
-const typei = __importStar(require("inner"));
+var cjsi = __importStar(require("inner/cjs"));
+var mjsi = __importStar(require("inner/mjs"));
+var typei = __importStar(require("inner"));
 cjsi;
 mjsi;
 typei;

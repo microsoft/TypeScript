@@ -39,7 +39,6 @@ interface A {
 function foo(x: A): string { return "abc"; }
 
 class C {
-    // Error expected
     s = foo(this);
 }
 

@@ -1,9 +1,31 @@
 import {
-    CancellationToken, compareStringsCaseSensitiveUI, compareValues, createPatternMatcher, createTextSpanFromNode,
-    Declaration, emptyArray, Expression, getContainerNode, getNameOfDeclaration, getNodeKind, getNodeModifiers,
-    getTextOfIdentifierOrLiteral, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier,
-    isPropertyAccessExpression, isPropertyNameLiteral, NavigateToItem, Node, PatternMatcher, PatternMatchKind, Push,
-    ScriptElementKind, SourceFile, SyntaxKind, TypeChecker,
+    CancellationToken,
+    compareStringsCaseSensitiveUI,
+    compareValues,
+    createPatternMatcher,
+    createTextSpanFromNode,
+    Declaration,
+    emptyArray,
+    Expression,
+    getContainerNode,
+    getNameOfDeclaration,
+    getNodeKind,
+    getNodeModifiers,
+    getTextOfIdentifierOrLiteral,
+    Identifier,
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
+    isPropertyAccessExpression,
+    isPropertyNameLiteral,
+    NavigateToItem,
+    Node,
+    PatternMatcher,
+    PatternMatchKind,
+    ScriptElementKind,
+    SourceFile,
+    SyntaxKind,
+    TypeChecker,
 } from "./_namespaces/ts";
 
 interface RawNavigateToItem {
@@ -37,7 +59,7 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
     return (maxResultCount === undefined ? rawItems : rawItems.slice(0, maxResultCount)).map(createNavigateToItem);
 }
 
-function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
+function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, rawItems: RawNavigateToItem[]): void {
     // First do a quick check to see if the name of the declaration matches the
     // last portion of the (possibly) dotted name they're searching for.
     const match = patternMatcher.getMatchForLastSegmentOfPattern(name);
@@ -74,7 +96,7 @@ function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean
     }
 }
 
-function tryAddSingleDeclarationName(declaration: Declaration, containers: Push<string>): boolean {
+function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
     const name = getNameOfDeclaration(declaration);
     return !!name && (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
 }
@@ -82,12 +104,12 @@ function tryAddSingleDeclarationName(declaration: Declaration, containers: Push<
 // Only added the names of computed properties if they're simple dotted expressions, like:
 //
 //      [X.Y.Z]() { }
-function tryAddComputedPropertyName(expression: Expression, containers: Push<string>): boolean {
+function tryAddComputedPropertyName(expression: Expression, containers: string[]): boolean {
     return pushLiteral(expression, containers)
         || isPropertyAccessExpression(expression) && (containers.push(expression.name.text), true) && tryAddComputedPropertyName(expression.expression, containers);
 }
 
-function pushLiteral(node: Node, containers: Push<string>): boolean {
+function pushLiteral(node: Node, containers: string[]): boolean {
     return isPropertyNameLiteral(node) && (containers.push(getTextOfIdentifierOrLiteral(node)), true);
 }
 

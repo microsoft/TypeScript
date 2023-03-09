@@ -1,13 +1,60 @@
 import {
-    ArrowFunction, Block, CallExpression, CancellationToken, CaseClause, createTextSpanFromBounds,
-    createTextSpanFromNode, createTextSpanFromRange, Debug, DefaultClause, findChildOfKind, getLeadingCommentRanges,
-    isAnyImportSyntax, isArrayLiteralExpression, isBinaryExpression, isBindingElement, isBlock, isCallExpression,
-    isCallOrNewExpression, isClassLike, isDeclaration, isFunctionLike, isIfStatement, isInComment,
-    isInterfaceDeclaration, isJsxText, isModuleBlock, isNodeArrayMultiLine, isParenthesizedExpression,
-    isPropertyAccessExpression, isReturnStatement, isTupleTypeNode, isVariableStatement, JsxAttributes, JsxElement,
-    JsxFragment, JsxOpeningLikeElement, Node, NodeArray, NoSubstitutionTemplateLiteral, OutliningSpan,
-    OutliningSpanKind, ParenthesizedExpression, positionsAreOnSameLine, Push, SignatureDeclaration, SourceFile,
-    startsWith, SyntaxKind, TemplateExpression, TextSpan, trimString, trimStringStart, TryStatement,
+    ArrowFunction,
+    AssertClause,
+    Block,
+    CallExpression,
+    CancellationToken,
+    CaseClause,
+    createTextSpanFromBounds,
+    createTextSpanFromNode,
+    createTextSpanFromRange,
+    Debug,
+    DefaultClause,
+    findChildOfKind,
+    getLeadingCommentRanges,
+    isAnyImportSyntax,
+    isArrayLiteralExpression,
+    isBinaryExpression,
+    isBindingElement,
+    isBlock,
+    isCallExpression,
+    isCallOrNewExpression,
+    isClassLike,
+    isDeclaration,
+    isFunctionLike,
+    isIfStatement,
+    isInComment,
+    isInterfaceDeclaration,
+    isJsxText,
+    isModuleBlock,
+    isNodeArrayMultiLine,
+    isParenthesizedExpression,
+    isPropertyAccessExpression,
+    isReturnStatement,
+    isTupleTypeNode,
+    isVariableStatement,
+    JsxAttributes,
+    JsxElement,
+    JsxFragment,
+    JsxOpeningLikeElement,
+    NamedExports,
+    NamedImports,
+    Node,
+    NodeArray,
+    NoSubstitutionTemplateLiteral,
+    OutliningSpan,
+    OutliningSpanKind,
+    ParenthesizedExpression,
+    positionsAreOnSameLine,
+    SignatureDeclaration,
+    SourceFile,
+    startsWith,
+    SyntaxKind,
+    TemplateExpression,
+    TextSpan,
+    trimString,
+    trimStringStart,
+    TryStatement,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -18,7 +65,7 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
     return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
 }
 
-function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     let depthRemaining = 40;
     let current = 0;
     // Includes the EOF Token so that comments which aren't attached to statements are included
@@ -26,13 +73,13 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
     const n = statements.length;
     while (current < n) {
         while (current < n && !isAnyImportSyntax(statements[current])) {
-            visitNonImportNode(statements[current]);
+            visitNode(statements[current]);
             current++;
         }
         if (current === n) break;
         const firstImport = current;
         while (current < n && isAnyImportSyntax(statements[current])) {
-            addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
+            visitNode(statements[current]);
             current++;
         }
         const lastImport = current - 1;
@@ -41,7 +88,7 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         }
     }
 
-    function visitNonImportNode(n: Node) {
+    function visitNode(n: Node) {
         if (depthRemaining === 0) return;
         cancellationToken.throwIfCancellationRequested();
 
@@ -67,27 +114,27 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         depthRemaining--;
         if (isCallExpression(n)) {
             depthRemaining++;
-            visitNonImportNode(n.expression);
+            visitNode(n.expression);
             depthRemaining--;
-            n.arguments.forEach(visitNonImportNode);
-            n.typeArguments?.forEach(visitNonImportNode);
+            n.arguments.forEach(visitNode);
+            n.typeArguments?.forEach(visitNode);
         }
         else if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
             // Consider an 'else if' to be on the same depth as the 'if'.
-            visitNonImportNode(n.expression);
-            visitNonImportNode(n.thenStatement);
+            visitNode(n.expression);
+            visitNode(n.thenStatement);
             depthRemaining++;
-            visitNonImportNode(n.elseStatement);
+            visitNode(n.elseStatement);
             depthRemaining--;
         }
         else {
-            n.forEachChild(visitNonImportNode);
+            n.forEachChild(visitNode);
         }
         depthRemaining++;
     }
 }
 
-function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
+function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): void {
     const regions: OutliningSpan[] = [];
     const lineStarts = sourceFile.getLineStarts();
     for (const currentLineStart of lineStarts) {
@@ -125,7 +172,7 @@ function isRegionDelimiter(lineText: string) {
     return regionDelimiterRegExp.exec(lineText);
 }
 
-function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     const comments = getLeadingCommentRanges(sourceFile.text, pos);
     if (!comments) return;
 
@@ -172,7 +219,7 @@ function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFil
     }
 }
 
-function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     if (isJsxText(n)) return;
     addOutliningForLeadingCommentsForPos(n.pos, sourceFile, cancellationToken, out);
 }
@@ -253,6 +300,23 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return spanForCallExpression(n as CallExpression);
         case SyntaxKind.ParenthesizedExpression:
             return spanForParenthesizedExpression(n as ParenthesizedExpression);
+        case SyntaxKind.NamedImports:
+        case SyntaxKind.NamedExports:
+        case SyntaxKind.AssertClause:
+            return spanForNamedImportsOrExportsOrAssertClause(n as NamedImports | NamedExports | AssertClause);
+    }
+
+    function spanForNamedImportsOrExportsOrAssertClause(node: NamedImports | NamedExports | AssertClause) {
+        if (!node.elements.length) {
+            return undefined;
+        }
+        const openToken = findChildOfKind(node, SyntaxKind.OpenBraceToken, sourceFile);
+        const closeToken = findChildOfKind(node, SyntaxKind.CloseBraceToken, sourceFile);
+        if (!openToken || !closeToken || positionsAreOnSameLine(openToken.pos, closeToken.pos, sourceFile)) {
+            return undefined;
+        }
+
+        return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ false);
     }
 
     function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {

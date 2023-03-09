@@ -19,3 +19,14 @@ function f(m: M3) {
 >value : any
 }
 
+// Repro from #32581
+
+type X<T> = { [K in keyof T]: string } & { b: string };
+>X : X<T>
+>b : string
+
+interface Y extends X<Y> {
+  a: "";
+>a : ""
+}
+

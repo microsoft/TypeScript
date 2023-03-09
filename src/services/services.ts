@@ -1,61 +1,320 @@
 import * as ts from "./_namespaces/ts";
+import {
+    __String,
+    ApplicableRefactorInfo,
+    ApplyCodeActionCommandResult,
+    AssignmentDeclarationKind,
+    BaseType,
+    BinaryExpression,
+    BreakpointResolver,
+    CallHierarchy,
+    CallHierarchyIncomingCall,
+    CallHierarchyItem,
+    CallHierarchyOutgoingCall,
+    CancellationToken,
+    changeCompilerHostLikeToUseCache,
+    CharacterCodes,
+    CheckJsDirective,
+    Classifications,
+    ClassifiedSpan,
+    ClassifiedSpan2020,
+    classifier,
+    CodeActionCommand,
+    codefix,
+    CodeFixAction,
+    CombinedCodeActions,
+    CombinedCodeFixScope,
+    combinePaths,
+    compareValues,
+    CompilerHost,
+    CompilerOptions,
+    CompletionEntryData,
+    CompletionEntryDetails,
+    CompletionInfo,
+    Completions,
+    computePositionOfLineAndCharacter,
+    computeSuggestionDiagnostics,
+    createDocumentRegistry,
+    createGetCanonicalFileName,
+    createMultiMap,
+    createProgram,
+    CreateProgramOptions,
+    createSourceFile,
+    CreateSourceFileOptions,
+    createTextSpanFromBounds,
+    createTextSpanFromNode,
+    createTextSpanFromRange,
+    Debug,
+    Declaration,
+    deduplicate,
+    DefinitionInfo,
+    DefinitionInfoAndBoundSpan,
+    Diagnostic,
+    DiagnosticWithLocation,
+    directoryProbablyExists,
+    DocCommentTemplateOptions,
+    DocumentHighlights,
+    DocumentRegistry,
+    DocumentSpan,
+    EditorOptions,
+    EditorSettings,
+    ElementAccessExpression,
+    EmitTextWriter,
+    emptyArray,
+    emptyOptions,
+    EndOfFileToken,
+    EntityName,
+    equateValues,
+    ExportDeclaration,
+    FileReference,
+    FileTextChanges,
+    filter,
+    find,
+    FindAllReferences,
+    findChildOfKind,
+    findPrecedingToken,
+    first,
+    firstDefined,
+    firstOrOnly,
+    flatMap,
+    forEach,
+    forEachChild,
+    FormatCodeOptions,
+    FormatCodeSettings,
+    formatting,
+    FunctionLikeDeclaration,
+    getAdjustedRenameLocation,
+    getAllSuperTypeNodes,
+    getAssignmentDeclarationKind,
+    GetCompletionsAtPositionOptions,
+    getContainerNode,
+    getDefaultLibFileName,
+    getDirectoryPath,
+    getEmitDeclarations,
+    getEscapedTextOfIdentifierOrLiteral,
+    getFileEmitOutput,
+    getImpliedNodeFormatForFile,
+    getJSDocTags,
+    getLineAndCharacterOfPosition,
+    getLineStarts,
+    getMappedDocumentSpan,
+    getNameFromPropertyName,
+    getNewLineCharacter,
+    getNewLineOrDefaultFromHost,
+    getNonAssignedNameOfDeclaration,
+    getNormalizedAbsolutePath,
+    getObjectFlags,
+    getScriptKind,
+    getSetExternalModuleIndicator,
+    getSnapshotText,
+    getSourceFileOfNode,
+    getSourceMapper,
+    getTokenPosOfNode,
+    getTouchingPropertyName,
+    getTouchingToken,
+    GoToDefinition,
+    HasInvalidatedResolutions,
+    hasJSDocNodes,
+    hasProperty,
+    hasStaticModifier,
+    hasSyntacticModifier,
+    hasTabstop,
+    HostCancellationToken,
+    hostGetCanonicalFileName,
+    hostUsesCaseSensitiveFileNames,
+    Identifier,
+    identity,
+    idText,
+    ImplementationLocation,
+    ImportDeclaration,
+    IndexKind,
+    IndexType,
+    InlayHint,
+    InlayHints,
+    InlayHintsContext,
+    insertSorted,
+    InterfaceType,
+    IntersectionType,
+    isArray,
+    isBindingPattern,
+    isComputedPropertyName,
+    isConstTypeReference,
+    IScriptSnapshot,
+    isDeclarationName,
+    isGetAccessor,
+    isIdentifier,
+    isImportMeta,
+    isInComment,
+    isInsideJsxElement,
+    isInsideJsxElementOrAttribute,
+    isInString,
+    isInTemplateString,
+    isIntrinsicJsxName,
+    isJSDocCommentContainingNode,
+    isJsxAttributes,
+    isJsxClosingElement,
+    isJsxElement,
+    isJsxFragment,
+    isJsxOpeningElement,
+    isJsxOpeningFragment,
+    isJsxText,
+    isLabelName,
+    isLiteralComputedPropertyDeclarationName,
+    isNamedExports,
+    isNamedTupleMember,
+    isNameOfModuleDeclaration,
+    isNewExpression,
+    isNodeKind,
+    isObjectLiteralElement,
+    isObjectLiteralExpression,
+    isPrivateIdentifier,
+    isProgramUptoDate,
+    isPropertyAccessExpression,
+    isPropertyName,
+    isRightSideOfPropertyAccess,
+    isRightSideOfQualifiedName,
+    isSetAccessor,
+    isStringOrNumericLiteralLike,
+    isTagName,
+    isTextWhiteSpaceLike,
+    isThisTypeParameter,
+    isTransientSymbol,
+    JSDoc,
+    JsDoc,
+    JSDocContainer,
+    JSDocTagInfo,
+    JsonSourceFile,
+    JsxAttributes,
+    JsxClosingTagInfo,
+    JsxElement,
+    JsxEmit,
+    JsxFragment,
+    LanguageService,
+    LanguageServiceHost,
+    LanguageServiceMode,
+    LanguageVariant,
+    lastOrUndefined,
+    length,
+    LineAndCharacter,
+    lineBreakPart,
+    LiteralType,
+    map,
+    mapDefined,
+    MapLike,
+    mapOneOrMany,
+    maybeBind,
+    maybeSetLocalizedDiagnosticMessages,
+    ModeAwareCache,
+    ModifierFlags,
+    ModuleDeclaration,
+    NavigateToItem,
+    NavigationBarItem,
+    NavigationTree,
+    Node,
+    NodeArray,
+    NodeFlags,
+    noop,
+    normalizePath,
+    NumberLiteralType,
+    NumericLiteral,
+    ObjectAllocator,
+    ObjectFlags,
+    ObjectLiteralElement,
+    ObjectLiteralExpression,
+    OperationCanceledException,
+    OrganizeImports,
+    OrganizeImportsArgs,
+    OrganizeImportsMode,
+    OutliningElementsCollector,
+    OutliningSpan,
+    ParseConfigFileHost,
+    ParsedCommandLine,
+    parseJsonSourceFileConfigFileContent,
+    Path,
+    positionIsSynthesized,
+    PossibleProgramFileInfo,
+    PragmaMap,
+    PrivateIdentifier,
+    Program,
+    PropertyName,
+    QuickInfo,
+    refactor,
+    RefactorContext,
+    RefactorEditInfo,
+    RefactorTriggerReason,
+    ReferencedSymbol,
+    ReferenceEntry,
+    Rename,
+    RenameInfo,
+    RenameInfoOptions,
+    RenameLocation,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    returnFalse,
+    scanner,
+    ScriptElementKind,
+    ScriptElementKindModifier,
+    ScriptKind,
+    ScriptTarget,
+    SelectionRange,
+    SemanticClassificationFormat,
+    setObjectAllocator,
+    Signature,
+    SignatureDeclaration,
+    SignatureFlags,
+    SignatureHelp,
+    SignatureHelpItems,
+    SignatureHelpItemsOptions,
+    SignatureKind,
+    singleElementArray,
+    SmartSelectionRange,
+    SortedArray,
+    SourceFile,
+    SourceFileLike,
+    SourceMapSource,
+    Statement,
+    stringContains,
+    StringLiteral,
+    StringLiteralLike,
+    StringLiteralType,
+    Symbol,
+    SymbolDisplay,
+    SymbolDisplayPart,
+    SymbolFlags,
+    symbolName,
+    SyntaxKind,
+    SyntaxList,
+    tagNamesAreEquivalent,
+    TextChange,
+    TextChangeRange,
+    TextInsertion,
+    TextRange,
+    TextSpan,
+    textSpanEnd,
+    timestamp,
+    TodoComment,
+    TodoCommentDescriptor,
+    Token,
+    toPath,
+    tracing,
+    TransformFlags,
+    Type,
+    TypeChecker,
+    TypeFlags,
+    TypeNode,
+    TypeParameter,
+    TypePredicate,
+    TypeReference,
+    typeToDisplayParts,
+    UnionOrIntersectionType,
+    UnionType,
+    updateSourceFile,
+    UserPreferences,
+    VariableDeclaration,
+} from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
-import {
-    __String, ApplicableRefactorInfo, ApplyCodeActionCommandResult, AssignmentDeclarationKind, BaseType,
-    BinaryExpression, BreakpointResolver, CallHierarchy, CallHierarchyIncomingCall, CallHierarchyItem,
-    CallHierarchyOutgoingCall, CancellationToken, changeCompilerHostLikeToUseCache, CharacterCodes, CheckJsDirective,
-    Classifications, ClassifiedSpan, ClassifiedSpan2020, classifier, CodeActionCommand, codefix, CodeFixAction,
-    CombinedCodeActions, CombinedCodeFixScope, combinePaths, compareValues, CompilerHost, CompilerOptions,
-    CompletionEntryData, CompletionEntryDetails, CompletionInfo, Completions, computePositionOfLineAndCharacter,
-    computeSuggestionDiagnostics, createDocumentRegistry, createGetCanonicalFileName, createMultiMap, createProgram,
-    CreateProgramOptions, createSourceFile, CreateSourceFileOptions, createTextSpanFromBounds, createTextSpanFromNode,
-    createTextSpanFromRange, Debug, Declaration, deduplicate, DefinitionInfo, DefinitionInfoAndBoundSpan, Diagnostic,
-    DiagnosticWithLocation, directoryProbablyExists, DocCommentTemplateOptions, DocumentHighlights, DocumentRegistry,
-    DocumentSpan, EditorOptions, EditorSettings, ElementAccessExpression, EmitTextWriter, emptyArray, emptyOptions,
-    EndOfFileToken, EntityName, equateValues, ESMap, ExportDeclaration, FileReference, FileTextChanges, filter, find,
-    FindAllReferences, findChildOfKind, findPrecedingToken, first, firstDefined, firstOrOnly, flatMap, forEach,
-    forEachChild, FormatCodeOptions, FormatCodeSettings, formatting, FunctionLikeDeclaration, GeneratedIdentifierFlags,
-    getAdjustedRenameLocation, getAllSuperTypeNodes, getAssignmentDeclarationKind, GetCompletionsAtPositionOptions,
-    getContainerNode, getDefaultLibFileName, getDirectoryPath, getEmitDeclarations, getEntries,
-    getEscapedTextOfIdentifierOrLiteral, getFileEmitOutput, getImpliedNodeFormatForFile, getJSDocTags,
-    getLineAndCharacterOfPosition, getLineStarts, getMappedDocumentSpan, getNameFromPropertyName, getNewLineCharacter,
-    getNewLineOrDefaultFromHost, getNonAssignedNameOfDeclaration, getNormalizedAbsolutePath, getObjectFlags,
-    getScriptKind, getSetExternalModuleIndicator, getSnapshotText, getSourceFileOfNode, getSourceMapper,
-    getTokenPosOfNode, getTouchingPropertyName, getTouchingToken, GoToDefinition, HasInvalidatedResolutions,
-    hasJSDocNodes, hasProperty, hasStaticModifier, hasSyntacticModifier, HighlightSpanKind, HostCancellationToken,
-    hostGetCanonicalFileName, hostUsesCaseSensitiveFileNames, Identifier, identity, idText, ImplementationLocation,
-    ImportDeclaration, IndexKind, IndexType, InlayHint, InlayHints, InlayHintsContext, insertSorted, InterfaceType,
-    IntersectionType, isArray, isBindingPattern, isComputedPropertyName, isConstTypeReference, IScriptSnapshot,
-    isDeclarationName, isGetAccessor, isIdentifier, isImportMeta, isInComment, isInsideJsxElement,
-    isInsideJsxElementOrAttribute, isInString, isInTemplateString, isIntrinsicJsxName, isJSDocCommentContainingNode,
-    isJsxAttributes, isJsxClosingElement, isJsxElement, isJsxFragment, isJsxOpeningElement, isJsxOpeningFragment,
-    isJsxText, isLabelName, isLiteralComputedPropertyDeclarationName, isNamedExports, isNamedTupleMember,
-    isNameOfModuleDeclaration, isNewExpression, isNodeKind, isObjectLiteralElement, isObjectLiteralExpression,
-    isPrivateIdentifier, isProgramUptoDate, isPropertyAccessExpression, isPropertyName, isRightSideOfPropertyAccess,
-    isRightSideOfQualifiedName, isSetAccessor, isStringOrNumericLiteralLike, isTagName, isTextWhiteSpaceLike,
-    isThisTypeParameter, JsDoc, JSDoc, JSDocContainer, JSDocTagInfo, JsonSourceFile, JsxAttributes, JsxClosingTagInfo,
-    JsxElement, JsxEmit, JsxFragment, LanguageService, LanguageServiceHost, LanguageServiceMode, LanguageVariant,
-    lastOrUndefined, length, LineAndCharacter, lineBreakPart, LiteralType, map, Map, mapDefined, MapLike, mapOneOrMany,
-    maybeBind, maybeSetLocalizedDiagnosticMessages, ModeAwareCache, ModifierFlags, ModuleDeclaration, NavigateToItem,
-    NavigationBarItem, NavigationTree, Node, NodeArray, NodeFlags, noop, normalizePath, NumberLiteralType,
-    NumericLiteral, ObjectAllocator, ObjectFlags, ObjectLiteralElement, ObjectLiteralExpression,
-    OperationCanceledException, OrganizeImports, OrganizeImportsArgs, OrganizeImportsMode, OutliningElementsCollector,
-    OutliningSpan, ParseConfigFileHost, ParsedCommandLine, parseJsonSourceFileConfigFileContent, Path,
-    positionIsSynthesized, PossibleProgramFileInfo, PragmaMap, PrivateIdentifier, Program, PropertyName, Push,
-    QuickInfo, refactor, RefactorContext, RefactorEditInfo, RefactorTriggerReason, ReferencedSymbol, ReferenceEntry,
-    Rename, RenameInfo, RenameInfoOptions, RenameLocation, ResolvedModuleFull, ResolvedProjectReference,
-    ResolvedTypeReferenceDirective, returnFalse, scanner, ScriptElementKind, ScriptElementKindModifier, ScriptKind,
-    ScriptTarget, SelectionRange, SemanticClassificationFormat, Set, setObjectAllocator, Signature,
-    SignatureDeclaration, SignatureFlags, SignatureHelp, SignatureHelpItems, SignatureHelpItemsOptions, SignatureKind,
-    singleElementArray, SmartSelectionRange, SortedArray, SourceFile, SourceFileLike, SourceMapSource, Statement,
-    stringContains, StringLiteral, StringLiteralLike, StringLiteralType, Symbol, SymbolDisplay, SymbolDisplayPart,
-    SymbolFlags, symbolName, SyntaxKind, SyntaxList, tagNamesAreEquivalent, TextChange, TextChangeRange, TextInsertion,
-    TextRange, TextSpan, textSpanEnd, timestamp, TodoComment, TodoCommentDescriptor, Token, toPath, tracing,
-    TransformFlags, TransientSymbol, Type, TypeChecker, TypeFlags, TypeNode, TypeParameter, TypePredicate,
-    TypeReference, typeToDisplayParts, UnderscoreEscapedMap, UnionOrIntersectionType, UnionType, updateSourceFile,
-    UserPreferences, VariableDeclaration,
-} from "./_namespaces/ts";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -227,13 +486,16 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
     return children;
 }
 
-function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
-    scanner.setTextPos(pos);
+function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
+    scanner.resetTokenState(pos);
     while (pos < end) {
         const token = scanner.scan();
-        const textPos = scanner.getTextPos();
+        const textPos = scanner.getTokenEnd();
         if (textPos <= end) {
             if (token === SyntaxKind.Identifier) {
+                if (hasTabstop(parent)) {
+                    continue;
+                }
                 Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
             }
             nodes.push(createNode(token, pos, textPos, parent));
@@ -327,7 +589,7 @@ class TokenOrIdentifierObject implements Node {
     }
 
     public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
     }
 
     public getFirstToken(): Node | undefined {
@@ -348,6 +610,9 @@ class SymbolObject implements Symbol {
     escapedName: __String;
     declarations!: Declaration[];
     valueDeclaration!: Declaration;
+    id = 0;
+    mergeId = 0;
+    constEnumOnlyModule: boolean | undefined;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -389,8 +654,8 @@ class SymbolObject implements Symbol {
         if (!this.documentationComment) {
             this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-            if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+                const labelDecl = this.links.target.links.tupleLabelDeclaration;
                 this.documentationComment = getDocumentationComment([labelDecl], checker);
             }
             else {
@@ -454,7 +719,7 @@ class SymbolObject implements Symbol {
 }
 
 class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public kind: TKind;
+    public override kind: TKind;
 
     constructor(kind: TKind, pos: number, end: number) {
         super(pos, end);
@@ -463,16 +728,17 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject impl
 }
 
 class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
+    public override kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
-    public autoGenerateFlags!: GeneratedIdentifierFlags;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
-    _declarationBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
     /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
@@ -484,15 +750,14 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
 }
 IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
+    public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    // public symbol!: Symbol;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
     constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
         super(pos, end);
     }
@@ -724,8 +989,9 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 }
 
 class SourceFileObject extends NodeObject implements SourceFile {
-    public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
-    public _declarationBrand: any;
+    public override kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
     public fileName!: string;
     public path!: Path;
     public resolvedPath!: Path;
@@ -760,13 +1026,13 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public scriptKind!: ScriptKind;
     public languageVersion!: ScriptTarget;
     public languageVariant!: LanguageVariant;
-    public identifiers!: ESMap<string, string>;
-    public nameTable: UnderscoreEscapedMap<number> | undefined;
-    public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
-    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
+    public identifiers!: Map<string, string>;
+    public nameTable: Map<__String, number> | undefined;
+    public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
+    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: ESMap<string, Declaration[]> | undefined;
+    private namedDeclarations: Map<string, Declaration[]> | undefined;
     public ambientModuleNames!: string[];
     public checkJsDirective: CheckJsDirective | undefined;
     public errorExpectations: TextRange[] | undefined;
@@ -812,7 +1078,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
         return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
     }
 
-    public getNamedDeclarations(): ESMap<string, Declaration[]> {
+    public getNamedDeclarations(): Map<string, Declaration[]> {
         if (!this.namedDeclarations) {
             this.namedDeclarations = this.computeNamedDeclarations();
         }
@@ -820,8 +1086,8 @@ class SourceFileObject extends NodeObject implements SourceFile {
         return this.namedDeclarations;
     }
 
-    private computeNamedDeclarations(): ESMap<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
+    private computeNamedDeclarations(): Map<string, Declaration[]> {
+        const result = createMultiMap<string, Declaration>();
 
         this.forEachChild(visit);
 
@@ -1245,7 +1511,8 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "prepareCallHierarchy",
     "provideCallHierarchyIncomingCalls",
     "provideCallHierarchyOutgoingCalls",
-    "provideInlayHints"
+    "provideInlayHints",
+    "getSupportedCodeFixes",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1261,7 +1528,6 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getTypeDefinitionAtPosition",
     "getReferencesAtPosition",
     "findReferences",
-    "getOccurrencesAtPosition",
     "getDocumentHighlights",
     "getNavigateToItems",
     "getRenameInfo",
@@ -1364,7 +1630,7 @@ export function createLanguageService(
         const hasInvalidatedResolutions: HasInvalidatedResolutions = host.hasInvalidatedResolutions || returnFalse;
         const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
         const projectReferences = host.getProjectReferences?.();
-        let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
+        let parsedCommandLines: Map<Path, ParsedCommandLine | false> | undefined;
 
         // Now create a new compiler
         let compilerHost: CompilerHost | undefined = {
@@ -1373,7 +1639,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,
@@ -1398,7 +1664,10 @@ export function createLanguageService(
             trace: maybeBind(host, host.trace),
             resolveModuleNames: maybeBind(host, host.resolveModuleNames),
             getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
+            createHash: maybeBind(host, host.createHash),
             resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
+            resolveModuleNameLiterals: maybeBind(host, host.resolveModuleNameLiterals),
+            resolveTypeReferenceDirectiveReferences: maybeBind(host, host.resolveTypeReferenceDirectiveReferences),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
         };
@@ -1717,7 +1986,8 @@ export function createLanguageService(
             options.triggerCharacter,
             options.triggerKind,
             cancellationToken,
-            formattingSettings && formatting.getFormatContext(formattingSettings, host));
+            formattingSettings && formatting.getFormatContext(formattingSettings, host),
+            options.includeSymbol);
     }
 
     function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -1836,18 +2106,6 @@ export function createLanguageService(
     }
 
     /// References and Occurrences
-    function getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined {
-        return flatMap(
-            getDocumentHighlights(fileName, position, [fileName]),
-            entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                ...highlightSpan.isInString && { isInString: true },
-                ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
-            }))
-        );
-    }
 
     function getDocumentHighlights(fileName: string, position: number, filesToSearch: readonly string[]): DocumentHighlights[] | undefined {
         const normalizedFileName = normalizePath(fileName);
@@ -2050,7 +2308,7 @@ export function createLanguageService(
         return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
     }
 
-    const braceMatching = new Map(getEntries({
+    const braceMatching = new Map(Object.entries({
         [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
         [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
         [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
@@ -2163,8 +2421,9 @@ export function createLanguageService(
             : Promise.reject("Host does not implement `installPackage`");
     }
 
-    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined {
+        const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -2731,7 +2990,6 @@ export function createLanguageService(
         getReferencesAtPosition,
         findReferences,
         getFileReferences,
-        getOccurrencesAtPosition,
         getDocumentHighlights,
         getNameOrDottedNameSpan,
         getBreakpointStatementAtPosition,
@@ -2776,6 +3034,7 @@ export function createLanguageService(
         commentSelection,
         uncommentSelection,
         provideInlayHints,
+        getSupportedCodeFixes,
     };
 
     switch (languageServiceMode) {
@@ -2806,7 +3065,7 @@ export function createLanguageService(
  *
  * @internal
  */
-export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
+export function getNameTable(sourceFile: SourceFile): Map<__String, number> {
     if (!sourceFile.nameTable) {
         initializeNameTable(sourceFile);
     }

@@ -94,12 +94,6 @@ Program files::
 /user/username/projects/myproject/pkg3/src/keys.ts
 /user/username/projects/myproject/pkg3/src/index.ts
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 //// [/user/username/projects/myproject/pkg3/dist/keys.js]

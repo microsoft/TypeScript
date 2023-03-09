@@ -1,15 +1,62 @@
 import {
-    ApplicableRefactorInfo, ArrowFunction, Block, ConciseBody, copyComments, copyTrailingAsLeadingComments, Debug,
-    Diagnostics, emptyArray, factory, FileTextChanges, FindAllReferences, first, forEachChild, FunctionExpression,
-    getCombinedModifierFlags, getContainingFunction, getEffectiveModifierFlags, getLocaleSpecificMessage,
-    getTokenAtPosition, Identifier, isArrowFunction, isClassLike, isExpression, isFunctionDeclaration,
-    isFunctionExpression, isIdentifier, isReturnStatement, isThis, isVariableDeclaration,
-    isVariableDeclarationInVariableStatement, isVariableDeclarationList, isVariableStatement, length, ModifierFlags,
-    Node, Program, rangeContainsRange, RefactorActionInfo, RefactorContext, RefactorEditInfo, ReturnStatement,
-    SourceFile, Statement, suppressLeadingAndTrailingTrivia, suppressLeadingTrivia, SyntaxKind, textChanges,
-    TypeChecker, VariableDeclaration, VariableDeclarationList, VariableStatement,
+    ApplicableRefactorInfo,
+    ArrowFunction,
+    Block,
+    ConciseBody,
+    copyComments,
+    copyTrailingAsLeadingComments,
+    Debug,
+    Diagnostics,
+    emptyArray,
+    factory,
+    FileTextChanges,
+    FindAllReferences,
+    first,
+    forEachChild,
+    FunctionExpression,
+    getCombinedModifierFlags,
+    getContainingFunction,
+    getEffectiveModifierFlags,
+    getLocaleSpecificMessage,
+    getTokenAtPosition,
+    Identifier,
+    isArrowFunction,
+    isClassLike,
+    isExpression,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isIdentifier,
+    isReturnStatement,
+    isThis,
+    isVariableDeclaration,
+    isVariableDeclarationInVariableStatement,
+    isVariableDeclarationList,
+    isVariableStatement,
+    length,
+    ModifierFlags,
+    Node,
+    Program,
+    rangeContainsRange,
+    RefactorActionInfo,
+    RefactorContext,
+    RefactorEditInfo,
+    ReturnStatement,
+    setTextRange,
+    SourceFile,
+    Statement,
+    suppressLeadingAndTrailingTrivia,
+    suppressLeadingTrivia,
+    SyntaxKind,
+    textChanges,
+    TypeChecker,
+    VariableDeclaration,
+    VariableDeclarationList,
+    VariableStatement,
 } from "../_namespaces/ts";
-import { refactorKindBeginsWith, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    refactorKindBeginsWith,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert arrow function or function expression";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
@@ -191,6 +238,7 @@ function convertToBlock(body: ConciseBody): Block {
     if (isExpression(body)) {
         const returnStatement = factory.createReturnStatement(body);
         const file = body.getSourceFile();
+        setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
         copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
         return factory.createBlock([returnStatement], /* multiLine */ true);

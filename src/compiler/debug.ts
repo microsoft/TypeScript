@@ -1,20 +1,96 @@
 import * as ts from "./_namespaces/ts";
 import {
-    AnyFunction, AssertionLevel, BigIntLiteralType, CheckMode, compareValues, EmitFlags, every, FlowFlags, FlowLabel, FlowNode,
-    FlowNodeBase, FlowSwitchClause, formatStringFromArgs, getEffectiveModifierFlagsNoCache, getEmitFlags, getOwnKeys,
-    getParseTreeNode, getSourceFileOfNode, getSourceTextOfNodeFromSourceFile, hasProperty, idText, IntrinsicType,
-    isArrayTypeNode, isBigIntLiteral, isCallSignatureDeclaration, isConditionalTypeNode, isConstructorDeclaration,
-    isConstructorTypeNode, isConstructSignatureDeclaration, isDefaultClause, isFunctionTypeNode, isGeneratedIdentifier,
-    isGetAccessorDeclaration, isIdentifier, isImportTypeNode, isIndexedAccessTypeNode, isIndexSignatureDeclaration,
-    isInferTypeNode, isIntersectionTypeNode, isLiteralTypeNode, isMappedTypeNode, isNamedTupleMember, isNumericLiteral,
-    isOptionalTypeNode, isParameter, isParenthesizedTypeNode, isParseTreeNode, isPrivateIdentifier, isRestTypeNode,
-    isSetAccessorDeclaration, isStringLiteral, isThisTypeNode, isTupleTypeNode, isTypeLiteralNode, isTypeOperatorNode,
-    isTypeParameterDeclaration, isTypePredicateNode, isTypeQueryNode, isTypeReferenceNode, isUnionTypeNode, LiteralType,
-    map, Map, MatchingKeys, ModifierFlags, Node, NodeArray, NodeFlags, nodeIsSynthesized, noop, objectAllocator,
-    ObjectFlags, ObjectType, RelationComparisonResult, Set, Signature, SignatureCheckMode,
-    SignatureFlags, SnippetKind, SortedReadonlyArray, stableSort, Symbol, SymbolFlags, symbolName, SyntaxKind,
-    TransformFlags, Type, TypeFacts, TypeFlags, TypeMapKind, TypeMapper, unescapeLeadingUnderscores, VarianceFlags,
-    version, Version, zipWith,
+    AnyFunction,
+    AssertionLevel,
+    BigIntLiteralType,
+    CheckMode,
+    compareValues,
+    EmitFlags,
+    every,
+    FlowFlags,
+    FlowLabel,
+    FlowNode,
+    FlowNodeBase,
+    FlowSwitchClause,
+    getEffectiveModifierFlagsNoCache,
+    getEmitFlags,
+    getOwnKeys,
+    getParseTreeNode,
+    getSourceFileOfNode,
+    getSourceTextOfNodeFromSourceFile,
+    hasProperty,
+    idText,
+    IntrinsicType,
+    isArrayTypeNode,
+    isBigIntLiteral,
+    isCallSignatureDeclaration,
+    isConditionalTypeNode,
+    isConstructorDeclaration,
+    isConstructorTypeNode,
+    isConstructSignatureDeclaration,
+    isDefaultClause,
+    isFunctionTypeNode,
+    isGeneratedIdentifier,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isImportTypeNode,
+    isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
+    isIntersectionTypeNode,
+    isLiteralTypeNode,
+    isMappedTypeNode,
+    isNamedTupleMember,
+    isNumericLiteral,
+    isOptionalTypeNode,
+    isParameter,
+    isParenthesizedTypeNode,
+    isParseTreeNode,
+    isPrivateIdentifier,
+    isRestTypeNode,
+    isSetAccessorDeclaration,
+    isStringLiteral,
+    isThisTypeNode,
+    isTupleTypeNode,
+    isTypeLiteralNode,
+    isTypeOperatorNode,
+    isTypeParameterDeclaration,
+    isTypePredicateNode,
+    isTypeQueryNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    LiteralType,
+    map,
+    MatchingKeys,
+    ModifierFlags,
+    Node,
+    NodeArray,
+    NodeFlags,
+    nodeIsSynthesized,
+    noop,
+    objectAllocator,
+    ObjectFlags,
+    ObjectType,
+    RelationComparisonResult,
+    Signature,
+    SignatureCheckMode,
+    SignatureFlags,
+    SnippetKind,
+    SortedReadonlyArray,
+    stableSort,
+    Symbol,
+    SymbolFlags,
+    symbolName,
+    SyntaxKind,
+    TransformFlags,
+    Type,
+    TypeFacts,
+    TypeFlags,
+    TypeMapKind,
+    TypeMapper,
+    unescapeLeadingUnderscores,
+    VarianceFlags,
+    zipWith,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -32,32 +108,15 @@ export interface LoggingHost {
 }
 
 /** @internal */
-export interface DeprecationOptions {
-    message?: string;
-    error?: boolean;
-    since?: Version | string;
-    warnAfter?: Version | string;
-    errorAfter?: Version | string;
-    typeScriptVersion?: Version | string;
-    name?: string;
-}
-
-/** @internal */
 export namespace Debug {
-    let typeScriptVersion: Version | undefined;
-
     /* eslint-disable prefer-const */
     let currentAssertionLevel = AssertionLevel.None;
     export let currentLogLevel = LogLevel.Warning;
     export let isDebugging = false;
     export let loggingHost: LoggingHost | undefined;
-    export let enableDeprecationWarnings = true;
     /* eslint-enable prefer-const */
 
     type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
-    export function getTypeScriptVersion() {
-        return typeScriptVersion ?? (typeScriptVersion = new Version(version));
-    }
 
     export function shouldLog(level: LogLevel): boolean {
         return currentLogLevel <= level;
@@ -216,13 +275,13 @@ export namespace Debug {
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
     export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
-    export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
             assert(
                 test === undefined || every(nodes, test),
                 message || "Unexpected node.",
-                () => `Node array did not pass test '${getFunctionName(test)}'.`,
+                () => `Node array did not pass test '${getFunctionName(test!)}'.`,
                 stackCrawlMark || assertEachNode);
         }
     }
@@ -529,23 +588,8 @@ export namespace Debug {
         if (isDebugInfoEnabled) return;
 
         // avoid recomputing
-        let weakTypeTextMap: WeakMap<Type, string> | undefined;
-        let weakNodeTextMap: WeakMap<Node, string> | undefined;
-
-        function getWeakTypeTextMap() {
-            if (weakTypeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakTypeTextMap = new WeakMap();
-            }
-            return weakTypeTextMap;
-        }
-
-        function getWeakNodeTextMap() {
-            if (weakNodeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakNodeTextMap = new WeakMap();
-            }
-            return weakNodeTextMap;
-        }
-
+        const weakTypeTextMap = new WeakMap<Type, string>();
+        const weakNodeTextMap = new WeakMap<Node, string>();
 
         // Add additional properties in debug mode to assist with debugging.
         Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
@@ -599,11 +643,10 @@ export namespace Debug {
             __debugTypeToString: {
                 value(this: Type) {
                     // avoid recomputing
-                    const map = getWeakTypeTextMap();
-                    let text = map?.get(this);
+                    let text = weakTypeTextMap.get(this);
                     if (text === undefined) {
                         text = this.checker.typeToString(this);
-                        map?.set(this, text);
+                        weakTypeTextMap.set(this, text);
                     }
                     return text;
                 }
@@ -679,13 +722,12 @@ export namespace Debug {
                         value(this: Node, includeTrivia?: boolean) {
                             if (nodeIsSynthesized(this)) return "";
                             // avoid recomputing
-                            const map = getWeakNodeTextMap();
-                            let text = map?.get(this);
+                            let text = weakNodeTextMap.get(this);
                             if (text === undefined) {
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
                                 text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                                map?.set(this, text);
+                                weakNodeTextMap.set(this, text);
                             }
                             return text;
                         }
@@ -695,58 +737,6 @@ export namespace Debug {
         }
 
         isDebugInfoEnabled = true;
-    }
-
-    function formatDeprecationMessage(name: string, error: boolean | undefined, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
-        let deprecationMessage = error ? "DeprecationError: " : "DeprecationWarning: ";
-        deprecationMessage += `'${name}' `;
-        deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
-        deprecationMessage += error ? " and can no longer be used." : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
-        deprecationMessage += message ? ` ${formatStringFromArgs(message, [name], 0)}` : "";
-        return deprecationMessage;
-    }
-
-    function createErrorDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
-        const deprecationMessage = formatDeprecationMessage(name, /*error*/ true, errorAfter, since, message);
-        return () => {
-            throw new TypeError(deprecationMessage);
-        };
-    }
-
-    function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
-        let hasWrittenDeprecation = false;
-        return () => {
-            if (enableDeprecationWarnings && !hasWrittenDeprecation) {
-                log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
-                hasWrittenDeprecation = true;
-            }
-        };
-    }
-
-    export function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
-    export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
-    export function createDeprecation(name: string, options: DeprecationOptions = {}) {
-        const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
-        const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
-        const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;
-        const since = typeof options.since === "string" ? new Version(options.since) : options.since ?? warnAfter;
-        const error = options.error || errorAfter && version.compareTo(errorAfter) <= 0;
-        const warn = !warnAfter || version.compareTo(warnAfter) >= 0;
-        return error ? createErrorDeprecation(name, errorAfter, since, options.message) :
-            warn ? createWarningDeprecation(name, errorAfter, since, options.message) :
-            noop;
-    }
-
-    function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
-        return function (this: unknown) {
-            deprecation();
-            return func.apply(this, arguments);
-        } as F;
-    }
-
-    export function deprecate<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
-        const deprecation = createDeprecation(options?.name ?? getFunctionName(func), options);
-        return wrapFunction(deprecation, func);
     }
 
     export function formatVariance(varianceFlags: VarianceFlags) {

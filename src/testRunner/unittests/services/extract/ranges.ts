@@ -1,8 +1,9 @@
 import * as ts from "../../../_namespaces/ts";
+import { extractTest } from "./helpers";
 
 function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
     return it(caption, () => {
-        const t = ts.extractTest(s);
+        const t = extractTest(s);
         const file = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
@@ -17,7 +18,7 @@ function testExtractRangeFailed(caption: string, s: string, expectedErrors: stri
 
 function testExtractRange(caption: string, s: string) {
     return it(caption, () => {
-        const t = ts.extractTest(s);
+        const t = extractTest(s);
         const f = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {

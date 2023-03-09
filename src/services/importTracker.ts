@@ -1,18 +1,85 @@
 import {
-    __String, AnyImportOrReExport, AssignmentDeclarationKind, BinaryExpression, BindingElement, CallExpression,
-    CancellationToken, canHaveModifiers, cast, Debug, ESMap, ExportAssignment, ExportDeclaration, FileReference,
-    findAncestor, forEach, getAssignmentDeclarationKind, getFirstIdentifier, getNameOfAccessExpression,
-    getSourceFileOfNode, getSymbolId, hasSyntacticModifier, Identifier, ImportCall, ImportClause, ImportDeclaration,
-    ImportEqualsDeclaration, importFromModuleSpecifier, ImportSpecifier, InternalSymbolName, isAccessExpression,
-    isBinaryExpression, isBindingElement, isCatchClause, isDefaultImport, isExportAssignment, isExportDeclaration,
-    isExportModifier, isExportSpecifier, isExternalModuleAugmentation, isExternalModuleSymbol, isImportCall,
-    isImportEqualsDeclaration, isImportTypeNode, isInJSFile, isJSDocTypedefTag, isModuleExportsAccessExpression,
-    isNamedExports, isNamespaceExport, isPrivateIdentifier, isPropertyAccessExpression, isShorthandPropertyAssignment,
-    isSourceFile, isStringLiteral, isVariableDeclaration, isVariableDeclarationInitializedToBareOrAccessedRequire,
-    isVariableStatement, Map, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedImportsOrExports, NamespaceImport,
-    Node, nodeSeenTracker, Program, ReadonlySet, some, SourceFile, Statement, StringLiteral, StringLiteralLike, Symbol,
-    symbolEscapedNameNoDefault, SymbolFlags, symbolName, SyntaxKind, TypeChecker, ValidImportTypeNode,
-    VariableDeclaration, walkUpBindingElementsAndPatterns,
+    __String,
+    AnyImportOrReExport,
+    AssignmentDeclarationKind,
+    BinaryExpression,
+    BindingElement,
+    CallExpression,
+    CancellationToken,
+    canHaveModifiers,
+    canHaveSymbol,
+    cast,
+    Debug,
+    ExportAssignment,
+    ExportDeclaration,
+    FileReference,
+    findAncestor,
+    forEach,
+    getAssignmentDeclarationKind,
+    getFirstIdentifier,
+    getNameOfAccessExpression,
+    getSourceFileOfNode,
+    getSymbolId,
+    hasSyntacticModifier,
+    Identifier,
+    ImportCall,
+    ImportClause,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    importFromModuleSpecifier,
+    ImportSpecifier,
+    InternalSymbolName,
+    isAccessExpression,
+    isBinaryExpression,
+    isBindingElement,
+    isCatchClause,
+    isDefaultImport,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportModifier,
+    isExportSpecifier,
+    isExternalModuleAugmentation,
+    isExternalModuleSymbol,
+    isImportCall,
+    isImportEqualsDeclaration,
+    isImportTypeNode,
+    isInJSFile,
+    isJSDocCallbackTag,
+    isJSDocTypedefTag,
+    isModuleExportsAccessExpression,
+    isNamedExports,
+    isNamespaceExport,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    isShorthandPropertyAssignment,
+    isSourceFile,
+    isStringLiteral,
+    isVariableDeclaration,
+    isVariableDeclarationInitializedToBareOrAccessedRequire,
+    isVariableStatement,
+    ModifierFlags,
+    ModuleBlock,
+    ModuleDeclaration,
+    NamedImportsOrExports,
+    NamespaceImport,
+    Node,
+    nodeSeenTracker,
+    Program,
+    some,
+    SourceFile,
+    Statement,
+    StringLiteral,
+    StringLiteralLike,
+    Symbol,
+    symbolEscapedNameNoDefault,
+    SymbolFlags,
+    symbolName,
+    SyntaxKind,
+    tryCast,
+    TypeChecker,
+    ValidImportTypeNode,
+    VariableDeclaration,
+    walkUpBindingElementsAndPatterns,
 } from "./_namespaces/ts";
 
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
@@ -68,7 +135,7 @@ type ImporterOrCallExpression = Importer | CallExpression;
 function getImportersForExport(
     sourceFiles: readonly SourceFile[],
     sourceFilesSet: ReadonlySet<string>,
-    allDirectImports: ESMap<string, ImporterOrCallExpression[]>,
+    allDirectImports: Map<string, ImporterOrCallExpression[]>,
     { exportingModuleSymbol, exportKind }: ExportInfo,
     checker: TypeChecker,
     cancellationToken: CancellationToken | undefined,
@@ -397,7 +464,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat);
+                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }
@@ -415,7 +482,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
 }
 
 /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): ESMap<string, ImporterOrCallExpression[]> {
+function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<string, ImporterOrCallExpression[]> {
     const map = new Map<string, ImporterOrCallExpression[]>();
 
     for (const sourceFile of sourceFiles) {
@@ -546,7 +613,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             else if (isBinaryExpression(grandparent)) {
                 return getSpecialPropertyExport(grandparent, /*useLhsSymbol*/ true);
             }
-            else if (isJSDocTypedefTag(parent)) {
+            else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
             }
         }
@@ -586,6 +653,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
 
         // Search on the local symbol in the exporting module, not the exported symbol.
         importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
+
         // Similarly, skip past the symbol for 'export ='
         if (importedSymbol.escapedName === "export=") {
             importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
@@ -619,10 +687,10 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
     const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
     if (isExportAssignment(decl)) { // `export = class {}`
-        return decl.expression.symbol;
+        return tryCast(decl.expression, canHaveSymbol)?.symbol;
     }
     else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-        return decl.right.symbol;
+        return tryCast(decl.right, canHaveSymbol)?.symbol;
     }
     else if (isSourceFile(decl)) { // json module
         return decl.symbol;
@@ -677,7 +745,7 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
     if (symbol.declarations) {
         for (const declaration of symbol.declarations) {
             if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
-                return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
+                return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
             else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
                 // Export of form 'module.exports.propName = expr';

@@ -20,7 +20,7 @@ b = {} // fine
 
 //// [mappedTypeUnionConstraintInferences.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = exports.doSomething_Actual = void 0;
 function doSomething_Actual(a) {
     var x = null;

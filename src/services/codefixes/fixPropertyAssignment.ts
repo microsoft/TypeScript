@@ -1,8 +1,19 @@
 import {
-    cast, Diagnostics, Expression, factory, getTokenAtPosition, isShorthandPropertyAssignment,
-    ShorthandPropertyAssignment, SourceFile, textChanges,
+    cast,
+    Diagnostics,
+    Expression,
+    factory,
+    getTokenAtPosition,
+    isShorthandPropertyAssignment,
+    ShorthandPropertyAssignment,
+    SourceFile,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixPropertyAssignment";
 const errorCodes = [

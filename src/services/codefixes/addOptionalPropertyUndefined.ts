@@ -1,11 +1,36 @@
 import {
-    Diagnostics, emptyArray, factory, getFixableErrorSpanExpression, getSourceFileOfNode, Identifier,
-    isBinaryExpression, isCallExpression, isExpression, isFunctionLikeKind, isIdentifier, isPropertyAccessExpression,
-    isPropertyAssignment, isPropertyDeclaration, isPropertySignature, isShorthandPropertyAssignment,
-    isVariableDeclaration, Node, PropertyAccessExpression, SignatureDeclaration, SourceFile, Symbol, SyntaxKind,
-    textChanges, TextSpan, TypeChecker, UnionTypeNode,
+    Diagnostics,
+    emptyArray,
+    factory,
+    getFixableErrorSpanExpression,
+    getSourceFileOfNode,
+    Identifier,
+    isBinaryExpression,
+    isCallExpression,
+    isExpression,
+    isFunctionLikeKind,
+    isIdentifier,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isPropertyDeclaration,
+    isPropertySignature,
+    isShorthandPropertyAssignment,
+    isVariableDeclaration,
+    Node,
+    PropertyAccessExpression,
+    SignatureDeclaration,
+    SourceFile,
+    Symbol,
+    SyntaxKind,
+    textChanges,
+    TextSpan,
+    TypeChecker,
+    UnionTypeNode,
 } from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 

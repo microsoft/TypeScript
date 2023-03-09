@@ -20,7 +20,7 @@ let obj = {
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var obj = {
     x: 10,
     y: [1],
@@ -35,5 +35,5 @@ var obj = {
     f3: (function () {
         this.x = 1;
         this; /*3*/
-    })
+    }),
 };

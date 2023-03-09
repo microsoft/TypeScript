@@ -52,10 +52,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 function foo() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            var _b;
             switch (_a.label) {
                 case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require("./foo"); })];
-                case 1: return [4 /*yield*/, (_b = (_a.sent()).default, Promise.resolve().then(function () { return require(_b); }))];
+                case 1: return [4 /*yield*/, Promise.resolve("".concat((_a.sent()).default)).then(function (s) { return require(s); })];
                 case 2: return [2 /*return*/, _a.sent()];
             }
         });

@@ -1,12 +1,42 @@
 import {
-    CodeFixAllContext, CodeFixContext, ConstructorDeclaration, Debug, DiagnosticMessage, Diagnostics, emptyArray,
-    factory, find, findAncestor, findLast, GetAccessorDeclaration, getTokenAtPosition, isAbstractModifier,
-    isAccessibilityModifier, isClassLike, isDecorator, isJSDocOverrideTag, isOverrideModifier,
-    isParameterPropertyDeclaration, isSourceFileJS, isStaticModifier, MethodDeclaration, Node, not,
-    ParameterPropertyDeclaration, PropertyDeclaration, SetAccessorDeclaration, skipTrivia, SourceFile, SyntaxKind,
+    CodeFixAllContext,
+    CodeFixContext,
+    ConstructorDeclaration,
+    Debug,
+    DiagnosticMessage,
+    Diagnostics,
+    emptyArray,
+    factory,
+    find,
+    findAncestor,
+    findLast,
+    GetAccessorDeclaration,
+    getTokenAtPosition,
+    isAbstractModifier,
+    isAccessibilityModifier,
+    isClassLike,
+    isDecorator,
+    isJSDocOverrideTag,
+    isOverrideModifier,
+    isParameterPropertyDeclaration,
+    isSourceFileJS,
+    isStaticModifier,
+    MethodDeclaration,
+    Node,
+    not,
+    ParameterPropertyDeclaration,
+    PropertyDeclaration,
+    SetAccessorDeclaration,
+    skipTrivia,
+    SourceFile,
+    SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixActionMaybeFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixActionMaybeFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixName = "fixOverrideModifier";
 const fixAddOverrideId = "fixAddOverrideModifier";

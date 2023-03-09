@@ -33,25 +33,45 @@ let y = 1
 //// [/a/b/other.ts]
 let z = 0;
 
+//// [/a/b/other2.ts]
+let k = 0;
 
-/a/lib/tsc.js -b -w -v project1.tsconfig.json project2.tsconfig.json
+//// [/a/b/extendsConfig1.tsconfig.json]
+{"compilerOptions":{"composite":true}}
+
+//// [/a/b/extendsConfig2.tsconfig.json]
+{"compilerOptions":{"strictNullChecks":false}}
+
+//// [/a/b/extendsConfig3.tsconfig.json]
+{"compilerOptions":{"noImplicitAny":true}}
+
+//// [/a/b/project3.tsconfig.json]
+{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json","./extendsConfig3.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
+
+
+/a/lib/tsc.js -b -w -v project1.tsconfig.json project2.tsconfig.json project3.tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Projects in this build: 
+[[90m12:00:36 AM[0m] Projects in this build: 
     * project1.tsconfig.json
     * project2.tsconfig.json
+    * project3.tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'project1.tsconfig.tsbuildinfo' does not exist
+[[90m12:00:37 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'project1.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:00:38 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:42 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
+[[90m12:00:52 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:43 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:53 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:03 AM[0m] Project 'project3.tsconfig.json' is out of date because output file 'other2.js' does not exist
+
+[[90m12:01:04 AM[0m] Building project '/a/b/project3.tsconfig.json'...
+
+[[90m12:01:08 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -88,25 +108,46 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other.ts (computed .d.ts during emit)
 
-PolledWatches::
+Program root files: ["/a/b/other2.ts"]
+Program options: {"composite":false,"strictNullChecks":false,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/other2.ts (used version)
 
 FsWatches::
-/a/b/project1.tsconfig.json:
+/a/b/project1.tsconfig.json: *new*
   {}
-/a/b/alpha.tsconfig.json:
+/a/b/alpha.tsconfig.json: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/b/project2.tsconfig.json:
+/a/b/project2.tsconfig.json: *new*
   {}
-/a/b/bravo.tsconfig.json:
+/a/b/bravo.tsconfig.json: *new*
   {}
-/a/b/other.ts:
+/a/b/other.ts: *new*
   {}
-
-FsWatchesRecursive::
+/a/b/project3.tsconfig.json: *new*
+  {}
+/a/b/extendsconfig1.tsconfig.json: *new*
+  {}
+/a/b/extendsconfig2.tsconfig.json: *new*
+  {}
+/a/b/extendsconfig3.tsconfig.json: *new*
+  {}
+/a/b/other2.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -127,7 +168,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -168,6 +209,16 @@ declare let y: number;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./commonfile1.ts"
+      ],
+      [
+        3,
+        "./commonfile2.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -181,7 +232,7 @@ declare let y: number;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 896
+  "size": 909
 }
 
 //// [/a/b/other.js]
@@ -193,7 +244,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -223,6 +274,12 @@ declare let z: number;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./other.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -235,8 +292,12 @@ declare let z: number;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 755
+  "size": 766
 }
+
+//// [/a/b/other2.js]
+var k = 0;
+
 
 
 Change:: Modify alpha config
@@ -248,11 +309,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:58 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
+[[90m12:01:13 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
-[[90m12:00:59 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:01:14 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -271,26 +332,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
@@ -304,7 +345,7 @@ var y = 1;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -345,6 +386,16 @@ var y = 1;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./commonfile1.ts"
+      ],
+      [
+        3,
+        "./commonfile2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "strict": true
@@ -359,7 +410,7 @@ var y = 1;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 910
+  "size": 923
 }
 
 
@@ -368,11 +419,11 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:01:13 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
+[[90m12:01:28 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
-[[90m12:01:14 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:29 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -389,26 +440,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other.js]
@@ -417,7 +448,7 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -447,6 +478,12 @@ var z = 0;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./other.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "strict": true
@@ -460,7 +497,7 @@ var z = 0;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 769
+  "size": 780
 }
 
 
@@ -473,13 +510,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:30 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
+[[90m12:01:45 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
 
-[[90m12:01:31 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:46 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -496,26 +533,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other.js]
@@ -523,7 +540,7 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":false},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":false},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -553,6 +570,12 @@ var z = 0;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./other.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "strict": false
@@ -566,7 +589,7 @@ var z = 0;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 770
+  "size": 781
 }
 
 
@@ -579,17 +602,17 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:47 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'project2.tsconfig.json'
+[[90m12:02:02 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'other2.js' is older than input 'project2.tsconfig.json'
 
-[[90m12:01:48 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:02:03 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts"]
+Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts","/a/b/other2.ts"]
 Program options: {"strict":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
@@ -597,19 +620,20 @@ Program files::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+/a/b/other2.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+/a/b/other2.ts
 
 Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts)
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/other.ts (computed .d.ts)
-
-PolledWatches::
+/a/b/other2.ts (computed .d.ts)
 
 FsWatches::
 /a/b/project1.tsconfig.json:
@@ -624,9 +648,23 @@ FsWatches::
   {}
 /a/b/other.ts:
   {}
+/a/b/project3.tsconfig.json:
+  {}
+/a/b/extendsconfig1.tsconfig.json:
+  {}
+/a/b/extendsconfig2.tsconfig.json:
+  {}
+/a/b/extendsconfig3.tsconfig.json:
+  {}
+/a/b/other2.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/bravo.tsconfig.json:
+  {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -636,6 +674,11 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/other.js]
 "use strict";
 var z = 0;
+
+
+//// [/a/b/other2.js]
+"use strict";
+var k = 0;
 
 
 
@@ -648,11 +691,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:04 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:05 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
+[[90m12:02:23 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
-[[90m12:02:06 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:02:24 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -671,26 +714,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
@@ -702,7 +725,7 @@ var y = 1;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -743,6 +766,16 @@ var y = 1;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./commonfile1.ts"
+      ],
+      [
+        3,
+        "./commonfile2.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -756,7 +789,7 @@ var y = 1;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 896
+  "size": 909
 }
 
 
@@ -765,15 +798,15 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:02:20 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
+[[90m12:02:38 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
 
-[[90m12:02:21 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:02:39 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:02:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts"]
+Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts","/a/b/other2.ts"]
 Program options: {"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
@@ -781,16 +814,101 @@ Program files::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+/a/b/other2.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+/a/b/other2.ts
 
 No shapes updated in the builder::
 
-PolledWatches::
+exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js] file written with same contents
+//// [/a/b/other.js]
+var z = 0;
+
+
+//// [/a/b/other2.js]
+var k = 0;
+
+
+
+Change:: Modify extendsConfigFile2
+
+Input::
+//// [/a/b/extendsConfig2.tsconfig.json]
+{"compilerOptions":{"strictNullChecks":true}}
+
+
+Output::
+>> Screen clear
+[[90m12:02:57 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:02:58 AM[0m] Project 'project3.tsconfig.json' is out of date because output 'other2.js' is older than input 'extendsConfig2.tsconfig.json'
+
+[[90m12:02:59 AM[0m] Building project '/a/b/project3.tsconfig.json'...
+
+[[90m12:03:00 AM[0m] Updating unchanged output timestamps of project '/a/b/project3.tsconfig.json'...
+
+[[90m12:03:02 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/other2.ts"]
+Program options: {"composite":false,"strictNullChecks":true,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+//// [/a/b/other2.js] file changed its modified time
+
+Change:: Modify project 3
+
+Input::
+//// [/a/b/project3.tsconfig.json]
+{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
+
+
+Output::
+>> Screen clear
+[[90m12:03:06 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:03:07 AM[0m] Project 'project3.tsconfig.json' is out of date because output 'other2.js' is older than input 'project3.tsconfig.json'
+
+[[90m12:03:08 AM[0m] Building project '/a/b/project3.tsconfig.json'...
+
+[[90m12:03:09 AM[0m] Updating unchanged output timestamps of project '/a/b/project3.tsconfig.json'...
+
+[[90m12:03:11 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/other2.ts"]
+Program options: {"composite":false,"strictNullChecks":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+No shapes updated in the builder::
 
 FsWatches::
 /a/b/project1.tsconfig.json:
@@ -805,6 +923,18 @@ FsWatches::
   {}
 /a/b/other.ts:
   {}
+/a/b/project3.tsconfig.json:
+  {}
+/a/b/extendsconfig1.tsconfig.json:
+  {}
+/a/b/extendsconfig2.tsconfig.json:
+  {}
+/a/b/other2.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/extendsconfig3.tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /a/b:
@@ -812,9 +942,24 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js] file written with same contents
-//// [/a/b/other.js]
-var z = 0;
+//// [/a/b/other2.js] file changed its modified time
 
+Change:: Delete extendedConfigFile2 and report error
+
+Input::
+//// [/a/b/extendsConfig2.tsconfig.json] deleted
+
+Output::
+>> Screen clear
+[[90m12:03:13 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:03:14 AM[0m] Project 'project3.tsconfig.json' is up to date because newest input 'other2.ts' is older than output 'other2.js'
+
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsConfig2.tsconfig.json'.
+
+[[90m12:03:15 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+exitCode:: ExitStatus.undefined
 

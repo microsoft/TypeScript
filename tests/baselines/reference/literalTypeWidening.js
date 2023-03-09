@@ -169,7 +169,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.langCodes = exports.keys = exports.Set = void 0;
 function f1() {
     var c1 = "hello"; // Widening type "hello"
