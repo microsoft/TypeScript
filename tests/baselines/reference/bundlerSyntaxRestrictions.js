@@ -32,16 +32,11 @@ export const a = "a";
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "a";
+export var a = "a";
 //// [mainJs.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-Promise.resolve().then(function () { return require("./a"); });
+import("./a");
 var _ = require("./a"); // No resolution
 _.a; // any
+export {};
 //// [main.js]
-"use strict";
-module.exports = {};
+export {};

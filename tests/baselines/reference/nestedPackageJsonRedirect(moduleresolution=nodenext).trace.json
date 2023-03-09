@@ -4,7 +4,7 @@
     "File '/package.json' does not exist.",
     "======== Resolving module '@restart/hooks/useMergedRefs' from '/main.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeNext'.",
-    "Resolving in CJS mode with conditions 'node', 'require', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types', 'node'.",
     "File '/package.json' does not exist according to earlier cached lookups.",
     "Loading module '@restart/hooks/useMergedRefs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.",
     "Found 'package.json' at '/node_modules/@restart/hooks/useMergedRefs/package.json'.",

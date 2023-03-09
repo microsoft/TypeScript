@@ -1,4 +1,5 @@
 // @moduleResolution: bundler
+// @module: esnext
 // @allowJs: true
 // @noEmit: true
 // @traceResolution: true
