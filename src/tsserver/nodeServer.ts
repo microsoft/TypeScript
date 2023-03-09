@@ -11,7 +11,6 @@ import {
     DirectoryWatcherCallback,
     FileWatcher,
     getDirectoryPath,
-    getNodeMajorVersion,
     getRootLength,
     JsTyping,
     LanguageServiceMode,
@@ -299,9 +298,7 @@ export function initializeNodeSystem(): StartInput {
 
     const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
 
-    const nodeVersion = getNodeMajorVersion();
-    // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
+    const useWatchGuard = process.platform === "win32";
     const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const logger = createLogger();
 
