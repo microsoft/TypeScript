@@ -516,6 +516,10 @@ export function getPathFromPathComponents(pathComponents: readonly string[]) {
  * @internal
  */
 export function normalizeSlashes(path: string): string {
+    if (typeof process === undefined || process.platform !== "win32") {
+        return path;
+    }
+
     return path.indexOf("\\") !== -1
         ? path.replace(backslashRegExp, directorySeparator)
         : path;
