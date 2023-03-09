@@ -189,6 +189,7 @@ import {
     JsxElement,
     JsxEmit,
     JsxFragment,
+    JsxMirrorCursorInfo,
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
@@ -2478,6 +2479,11 @@ export function createLanguageService(
         }
     }
 
+    function getJsxMirrorCursorAtPosition(fileName: string, position: number): JsxMirrorCursorInfo[] | undefined {
+        return undefined;
+        // ISABEL unimplemented
+    }
+
     function getLinesForRange(sourceFile: SourceFile, textRange: TextRange) {
         return {
             lineStarts: sourceFile.getLineStarts(),
@@ -3009,6 +3015,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
+        getJsxMirrorCursorAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,

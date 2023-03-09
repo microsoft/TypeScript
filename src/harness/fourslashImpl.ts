@@ -3444,6 +3444,15 @@ export class TestState {
         }
     }
 
+    public verifyJsxMirrorCursor(map: {[markerName:string]:ts.JsxMirrorCursorInfo | undefined}):void {
+        for (const markerName in map) {
+            this.goToMarker(markerName);
+            // const actual = {};
+            const actual = this.languageService.getJsxMirrorCursorAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            assert.deepEqual(actual, map[markerName], markerName);
+        }
+    }
+
     public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
         const actual = this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, bracePosition);
 

@@ -189,6 +189,11 @@ export class VerifyNegatable {
         this.state.verifyJsxClosingTag(map);
     }
 
+    public jsxMirrorCursor(map: { [markerName: string]: ts.JsxMirrorCursorInfo | undefined }): void {
+        this.state.verifyJsxMirrorCursor(map);
+    }
+
+
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }

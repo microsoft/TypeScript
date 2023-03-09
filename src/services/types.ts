@@ -607,6 +607,8 @@ export interface LanguageService {
      * Editors should call this after `>` is typed.
      */
     getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
+    getJsxMirrorCursorAtPosition(fileName: string, currentCaretPosition: number): JsxMirrorCursorInfo | unknown;
+    //ISABEL incorrect return type
 
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
 
@@ -659,6 +661,13 @@ export interface LanguageService {
 
 export interface JsxClosingTagInfo {
     readonly newText: string;
+}
+
+export interface JsxMirrorCursorInfo {
+    readonly startLine : number;
+    readonly startCharacter : number;
+    readonly endLine : number;
+    readonly endCharacter : number;
 }
 
 export interface CombinedCodeFixScope { type: "file"; fileName: string; }
