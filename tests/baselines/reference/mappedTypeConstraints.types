@@ -6,9 +6,9 @@ function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b
 >obj : Pick<T, Extract<keyof T, "b">>
 
     obj.b;
->obj.b : T["b"]
+>obj.b : any
 >obj : Pick<T, Extract<keyof T, "b">>
->b : T["b"]
+>b : any
 }
 
 function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a'>>) {
@@ -18,9 +18,9 @@ function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a
 >obj : Pick<T, Exclude<keyof T, "a">>
 
     obj.b;
->obj.b : T["b"]
+>obj.b : any
 >obj : Pick<T, Exclude<keyof T, "a">>
->b : T["b"]
+>b : any
 }
 
 function f2<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T | U, keyof (T | U)>) {
@@ -32,9 +32,9 @@ function f2<T extends { a: string, b: string }, U extends { b: string, c: string
 >obj : Pick<T | U, keyof T & keyof U>
 
     obj.b;
->obj.b : (T | U)["b"]
+>obj.b : any
 >obj : Pick<T | U, keyof T & keyof U>
->b : (T | U)["b"]
+>b : any
 }
 
 function f3<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T & U, keyof (T & U)>) {
@@ -46,19 +46,19 @@ function f3<T extends { a: string, b: string }, U extends { b: string, c: string
 >obj : Pick<T & U, keyof T | keyof U>
 
     obj.a;
->obj.a : (T & U)["a"]
+>obj.a : any
 >obj : Pick<T & U, keyof T | keyof U>
->a : (T & U)["a"]
+>a : any
 
     obj.b;
->obj.b : (T & U)["b"]
+>obj.b : any
 >obj : Pick<T & U, keyof T | keyof U>
->b : (T & U)["b"]
+>b : any
 
     obj.c;
->obj.c : (T & U)["c"]
+>obj.c : any
 >obj : Pick<T & U, keyof T | keyof U>
->c : (T & U)["c"]
+>c : any
 }
 
 function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) {

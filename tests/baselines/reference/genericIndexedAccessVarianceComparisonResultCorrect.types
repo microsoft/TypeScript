@@ -24,14 +24,14 @@ class B {
 }
 
 type T<X extends { x: any }> = Pick<X, 'x'>;
->T : T<X>
+>T : Pick<X, "x">
 >x : any
 
 type C = T<A>;
->C : { x: string; }
+>C : Pick<A, "x">
 
 type D = T<B>;
->D : { x: string; }
+>D : Pick<B, "x">
 
 type C_extends_D = C extends D ? true : false;                                  // true
 >C_extends_D : true
@@ -49,24 +49,24 @@ type TA_extends_TB = T<A> extends T<B> ? true : false;                          
 >false : false
 
 declare let a: T<A>;
->a : T<A>
+>a : Pick<A, "x">
 
 declare let b: T<B>;
->b : T<B>
+>b : Pick<B, "x">
 
 declare let c: C;
->c : C
+>c : Pick<A, "x">
 
 declare let d: D;
->d : D
+>d : Pick<B, "x">
 
 b = a;      // should be no error
->b = a : T<A>
->b : T<B>
->a : T<A>
+>b = a : Pick<A, "x">
+>b : Pick<B, "x">
+>a : Pick<A, "x">
 
 c = d;
->c = d : D
->c : C
->d : D
+>c = d : Pick<B, "x">
+>c : Pick<A, "x">
+>d : Pick<B, "x">
 

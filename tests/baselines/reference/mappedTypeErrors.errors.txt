@@ -21,9 +21,17 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(77,59): error TS2345: A
   Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(83,58): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
   Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(102,15): error TS2345: Argument of type '{ b: undefined; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+  Property 'a' is missing in type '{ b: undefined; }' but required in type 'Pick<Foo, keyof Foo>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(103,15): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+  Property 'a' is missing in type '{}' but required in type 'Pick<Foo, keyof Foo>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(106,17): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(120,12): error TS2345: Argument of type '{ b: undefined; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+  Property 'a' is missing in type '{ b: undefined; }' but required in type 'Pick<Foo, keyof Foo>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(121,12): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+  Property 'a' is missing in type '{}' but required in type 'Pick<Foo, keyof Foo>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(123,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,14): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
@@ -36,7 +44,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(148,17): error TS2339: 
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (27 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (31 errors) ====
     interface Shape {
         name: string;
         width: number;
@@ -184,12 +192,17 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     setState(foo, { a: "test", b: 43 })
     setState(foo, { a: "hi" });
     setState(foo, { b: undefined });
+                  ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ b: undefined; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+!!! error TS2345:   Property 'a' is missing in type '{ b: undefined; }' but required in type 'Pick<Foo, keyof Foo>'.
     setState(foo, { });
+                  ~~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+!!! error TS2345:   Property 'a' is missing in type '{}' but required in type 'Pick<Foo, keyof Foo>'.
     setState(foo, foo);
     setState(foo, { a: undefined });  // Error
                     ~
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     setState(foo, { c: true });  // Error
                     ~
 !!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
@@ -208,12 +221,17 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     c.setState({ a: "test", b: 43 });
     c.setState({ a: "hi" });
     c.setState({ b: undefined });
+               ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ b: undefined; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+!!! error TS2345:   Property 'a' is missing in type '{ b: undefined; }' but required in type 'Pick<Foo, keyof Foo>'.
     c.setState({ });
+               ~~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+!!! error TS2345:   Property 'a' is missing in type '{}' but required in type 'Pick<Foo, keyof Foo>'.
     c.setState(foo);
     c.setState({ a: undefined });  // Error
                  ~
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     c.setState({ c: true });  // Error
                  ~
 !!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.

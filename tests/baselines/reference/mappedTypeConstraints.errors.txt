@@ -1,0 +1,58 @@
+tests/cases/conformance/types/mapped/mappedTypeConstraints.ts(2,9): error TS2339: Property 'b' does not exist on type 'Pick<T, Extract<keyof T, "b">>'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints.ts(6,9): error TS2339: Property 'b' does not exist on type 'Pick<T, Exclude<keyof T, "a">>'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints.ts(10,9): error TS2339: Property 'b' does not exist on type 'Pick<T | U, keyof T & keyof U>'.
+  Property 'b' does not exist on type 'Pick<T, keyof T & keyof U>'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints.ts(14,9): error TS2339: Property 'a' does not exist on type 'Pick<T & U, keyof T | keyof U>'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints.ts(15,9): error TS2339: Property 'b' does not exist on type 'Pick<T & U, keyof T | keyof U>'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints.ts(16,9): error TS2339: Property 'c' does not exist on type 'Pick<T & U, keyof T | keyof U>'.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeConstraints.ts (6 errors) ====
+    function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {
+        obj.b;
+            ~
+!!! error TS2339: Property 'b' does not exist on type 'Pick<T, Extract<keyof T, "b">>'.
+    }
+    
+    function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a'>>) {
+        obj.b;
+            ~
+!!! error TS2339: Property 'b' does not exist on type 'Pick<T, Exclude<keyof T, "a">>'.
+    }
+    
+    function f2<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T | U, keyof (T | U)>) {
+        obj.b;
+            ~
+!!! error TS2339: Property 'b' does not exist on type 'Pick<T | U, keyof T & keyof U>'.
+!!! error TS2339:   Property 'b' does not exist on type 'Pick<T, keyof T & keyof U>'.
+    }
+    
+    function f3<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T & U, keyof (T & U)>) {
+        obj.a;
+            ~
+!!! error TS2339: Property 'a' does not exist on type 'Pick<T & U, keyof T | keyof U>'.
+        obj.b;
+            ~
+!!! error TS2339: Property 'b' does not exist on type 'Pick<T & U, keyof T | keyof U>'.
+        obj.c;
+            ~
+!!! error TS2339: Property 'c' does not exist on type 'Pick<T & U, keyof T | keyof U>'.
+    }
+    
+    function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) {
+        obj.a;
+        obj.c;
+    }
+    
+    // Repro from #28821
+    
+    type TargetProps = {
+        foo: string,
+        bar: string
+    };
+    
+    const modifier = <T extends TargetProps>(targetProps: T) => {
+        let {bar, ...rest} = targetProps;
+        rest.foo;
+    };
+    

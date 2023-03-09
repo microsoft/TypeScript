@@ -119,7 +119,7 @@ type Matching<InjectedProps, DecorationTargetProps> = {
 };
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
->Omit : Omit<T, K>
+>Omit : Pick<T, Exclude<keyof T, K>>
 
 type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 >InferableComponentEnhancerWithProps : InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps>
@@ -262,8 +262,8 @@ type Q = HandleThunkActionCreator<typeof simpleAction>;
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
 
 const Test1 = connect(
->Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
->connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
+>Test1 : ConnectedComponentClass<typeof TestComponent, Pick<TestComponentProps, "foo">>
+>connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Pick<TestComponentProps, "foo">>
 >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
 

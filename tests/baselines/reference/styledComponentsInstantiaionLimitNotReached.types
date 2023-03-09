@@ -264,7 +264,7 @@ type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
 };
 
 type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>;
->ForwardRefExoticBase : ForwardRefExoticBase<P>
+>ForwardRefExoticBase : Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>
 >React : any
 >React : any
 

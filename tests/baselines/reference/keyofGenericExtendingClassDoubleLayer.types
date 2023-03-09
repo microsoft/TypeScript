@@ -7,11 +7,11 @@ class Model<Attributes = any> {
 }
 
 type ModelAttributes<T> = Omit<T, keyof Model>;
->ModelAttributes : ModelAttributes<T>
+>ModelAttributes : Omit<T, "createdAt">
 
 class AutoModel<T> extends Model<ModelAttributes<T>> {}
 >AutoModel : AutoModel<T>
->Model : Model<ModelAttributes<T>>
+>Model : Model<Omit<T, "createdAt">>
 
 class PersonModel extends AutoModel<PersonModel> {
 >PersonModel : PersonModel

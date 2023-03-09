@@ -16,7 +16,7 @@ type test = KeysWithoutStringIndex<{ [index: string]: string; foo: string; bar: 
 
 // KeysWithoutStringIndex<T> will always be a subset of keyof T, but is reported as unassignable
 export type RemoveIdxSgn<T> = Pick<T, KeysWithoutStringIndex<T>>
->RemoveIdxSgn : RemoveIdxSgn<T>
+>RemoveIdxSgn : Pick<T, KeysWithoutStringIndex<T>>
 
   // ERROR:
   // Type 'KeysWithoutStringIndex<T>' does not satisfy the constraint 'keyof T'.

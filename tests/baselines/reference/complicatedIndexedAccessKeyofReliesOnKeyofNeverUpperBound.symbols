@@ -112,9 +112,9 @@ const newTextChannel = makeNewChannel('text');
 
 // This should work
 newTextChannel.phoneNumber = '613-555-1234';
->newTextChannel.phoneNumber : Symbol(phoneNumber, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 2, 17))
+>newTextChannel.phoneNumber : Symbol(phoneNumber)
 >newTextChannel : Symbol(newTextChannel, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 35, 5))
->phoneNumber : Symbol(phoneNumber, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 2, 17))
+>phoneNumber : Symbol(phoneNumber)
 
 const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 >newTextChannel2 : Symbol(newTextChannel2, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 39, 5))
@@ -124,7 +124,7 @@ const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 
 // Compare with this, which ofc works.
 newTextChannel2.phoneNumber = '613-555-1234';
->newTextChannel2.phoneNumber : Symbol(phoneNumber, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 2, 17))
+>newTextChannel2.phoneNumber : Symbol(phoneNumber)
 >newTextChannel2 : Symbol(newTextChannel2, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 39, 5))
->phoneNumber : Symbol(phoneNumber, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 2, 17))
+>phoneNumber : Symbol(phoneNumber)
 

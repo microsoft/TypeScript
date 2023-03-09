@@ -227,15 +227,15 @@ a3 = a2;
 >a2 : [number, number]
 
 type B = Pick<[number], 'length'>;
->B : { length: 1; }
+>B : Pick<[number], "length">
 
 declare const b: B;
->b : B
+>b : Pick<[number], "length">
 
 b.length = 0; // Error
 >b.length = 0 : 0
 >b.length : 1
->b : B
+>b : Pick<[number], "length">
 >length : 1
 >0 : 0
 

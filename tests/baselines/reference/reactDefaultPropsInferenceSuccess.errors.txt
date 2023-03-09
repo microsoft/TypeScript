@@ -56,8 +56,6 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
 !!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
 !!! error TS2769:     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
     
     class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
       static defaultProps: BaseProps = {
@@ -82,8 +80,6 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
 !!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
 !!! error TS2769:     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, keyof Props>> & Partial<Pick<BaseProps, never>>'
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, keyof Props>> & Partial<Pick<BaseProps, never>>'
     
     interface MyPropsProps extends Props {
       when: (value: string) => boolean;
@@ -112,8 +108,6 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
 !!! error TS2769:       Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: MyPropsProps, context?: any): FieldFeedback2<MyPropsProps>', gave the following error.
 !!! error TS2769:     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:46:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:46:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
     
     // OK
     const Test5 = () => <FieldFeedback2 />;

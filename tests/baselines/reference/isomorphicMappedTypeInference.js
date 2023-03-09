@@ -370,26 +370,11 @@ declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
 declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
 declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
-declare let x0: {
-    foo: number;
-    bar: string;
-};
-declare let x1: "foo" | "bar";
-declare let x2: {
-    foo: number;
-    bar: string;
-};
-declare let x3: {
-    foo: number;
-    bar: string;
-};
-declare let x4: {
-    foo: number;
-    bar: string;
-} & {
-    foo: number;
-    bar: string;
-};
+declare let x0: unknown;
+declare let x1: never;
+declare let x2: unknown;
+declare let x3: unknown;
+declare let x4: unknown;
 declare function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K>;
 declare const myAny: any;
 declare const o1: Pick<any, "foo" | "bar">;
