@@ -1449,21 +1449,6 @@ declare const global: any;
 declare const __filename: string;
 declare const __dirname: string;
 
-export function getNodeMajorVersion(): number | undefined {
-    if (typeof process === "undefined") {
-        return undefined;
-    }
-    const version: string = process.version;
-    if (!version) {
-        return undefined;
-    }
-    const dot = version.indexOf(".");
-    if (dot === -1) {
-        return undefined;
-    }
-    return parseInt(version.substring(1, dot));
-}
-
 // TODO: GH#18217 this is used as if it's certainly defined in many places.
 export let sys: System = (() => {
     // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
