@@ -4034,6 +4034,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
+        programDiagnostics.add(createCompilerDiagnostic(Diagnostics._0_expected, "Good code"));
+
         verifyDeprecatedCompilerOptions();
         verifyProjectReferences();
 
