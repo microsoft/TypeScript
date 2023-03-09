@@ -1443,12 +1443,6 @@ interface DirectoryWatcher extends FileWatcher {
     referenceCount: number;
 }
 
-declare const require: any;
-declare const process: any;
-declare const global: any;
-declare const __filename: string;
-declare const __dirname: string;
-
 export function getNodeMajorVersion(): number | undefined {
     if (typeof process === "undefined") {
         return undefined;
@@ -1524,7 +1518,7 @@ export let sys: System = (() => {
             getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
             realpath,
             tscWatchFile: process.env.TSC_WATCHFILE,
-            useNonPollingWatchers: process.env.TSC_NONPOLLING_WATCHER,
+            useNonPollingWatchers: !!process.env.TSC_NONPOLLING_WATCHER,
             tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
             inodeWatching: isLinuxOrMacOs,
             sysLog,
@@ -1601,7 +1595,7 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
             tryEnableSourceMapsForHost() {
                 try {
                     (require("source-map-support") as typeof import("source-map-support")).install();
@@ -1616,8 +1610,9 @@ export let sys: System = (() => {
                 process.stdout.write("\x1Bc");
             },
             setBlocking: () => {
-                if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
-                    process.stdout._handle.setBlocking(true);
+                const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void };
+                if (handle && handle.setBlocking) {
+                    handle.setBlocking(true);
                 }
             },
             bufferFrom,
