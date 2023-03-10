@@ -182,7 +182,6 @@ new someGenerics4(4, () => null);
 >someGenerics4 : someGenerics4
 >4 : 4
 >() => null : () => any
->null : null
 
 new someGenerics4<string, number>('', () => 3);
 >new someGenerics4<string, number>('', () => 3) : any
@@ -202,8 +201,6 @@ new someGenerics4<string, number>('', (x: string) => ''); // Error
 new someGenerics4<string, number>(null, null);
 >new someGenerics4<string, number>(null, null) : any
 >someGenerics4 : someGenerics4
->null : null
->null : null
 
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 interface someGenerics5 {
@@ -220,7 +217,6 @@ new someGenerics5(4, () => null);
 >someGenerics5 : someGenerics5
 >4 : 4
 >() => null : () => any
->null : null
 
 new someGenerics5<number, string>('', () => 3);
 >new someGenerics5<number, string>('', () => 3) : any
@@ -240,8 +236,6 @@ new someGenerics5<number, string>('', (x: string) => ''); // Error
 new someGenerics5<string, number>(null, null);
 >new someGenerics5<string, number>(null, null) : any
 >someGenerics5 : someGenerics5
->null : null
->null : null
 
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 interface someGenerics6 {
@@ -377,9 +371,6 @@ var x = new someGenerics8(someGenerics7);
 new x<string, string, string>(null, null, null);
 >new x<string, string, string>(null, null, null) : any
 >x : someGenerics7
->null : null
->null : null
->null : null
 
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 interface someGenerics9 {
@@ -414,7 +405,6 @@ var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, nu
 >{ b: '' } : { b: string; }
 >b : string
 >'' : ""
->null : null
 
 var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
@@ -514,7 +504,6 @@ var arr = new someGenerics9([], null, undefined);
 >new someGenerics9([], null, undefined) : any[]
 >someGenerics9 : someGenerics9
 >[] : undefined[]
->null : null
 >undefined : undefined
 
 var arr: any[];

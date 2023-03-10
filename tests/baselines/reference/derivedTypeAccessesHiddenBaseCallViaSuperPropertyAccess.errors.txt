@@ -17,7 +17,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclara
         bar() {
             var r = super.foo({ a: 1 }); // { a: number }
             var r2 = super.foo({ a: 1, b: 2 }); // { a: number }
-                                       ~~~~
+                                       ~
 !!! error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
             var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }

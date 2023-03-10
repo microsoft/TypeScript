@@ -27,7 +27,7 @@ tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts(25,9): error TS23
         [G.A]() { }
         get [G.B]() {
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
         }
         set [G.B](x: number) { }

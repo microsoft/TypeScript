@@ -56,7 +56,6 @@ function diddy() {
 >diddy : () => any
 
     return null;
->null : null
 }
 
 var donkey = <div>
