@@ -2517,10 +2517,9 @@ export class Session<TMessage = string> implements EventSender {
         if (random == 0) {
             throw new Error('This is error 0');
         }
-        else {
+        else if (random == 1) {
             throw new Error('This is error 1');
         }
-
 
         const full = this.getFullNavigateToItems(args);
         return !simplifiedResult ?
