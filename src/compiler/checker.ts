@@ -133,6 +133,7 @@ import {
     DeferredTypeReference,
     DeleteExpression,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCategory,
     DiagnosticMessage,
     DiagnosticMessageChain,
@@ -2296,7 +2297,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return emitResolver;
     }
 
-    function lookupOrIssueError(location: Node | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic {
+    function lookupOrIssueError(location: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
         const diagnostic = location
             ? createDiagnosticForNode(location, message, ...args)
             : createCompilerDiagnostic(message, ...args);
@@ -2310,19 +2311,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function errorSkippedOn(key: keyof CompilerOptions, location: Node | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic {
+    function errorSkippedOn(key: keyof CompilerOptions, location: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
         const diagnostic = error(location, message, ...args);
         diagnostic.skippedOn = key;
         return diagnostic;
     }
 
-    function createError(location: Node | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic {
+    function createError(location: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
         return location
             ? createDiagnosticForNode(location, message, ...args)
             : createCompilerDiagnostic(message, ...args);
     }
 
-    function error(location: Node | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic {
+    function error(location: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
         const diagnostic = createError(location, message, ...args);
         diagnostics.add(diagnostic);
         return diagnostic;
@@ -2336,7 +2337,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             suggestionDiagnostics.add({ ...diagnostic, category: DiagnosticCategory.Suggestion });
         }
     }
-    function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number | undefined)[]): void {
+    function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void {
          // Pseudo-synthesized input node
         if (location.pos < 0 || location.end < 0) {
             if (!isError) {
@@ -2354,7 +2355,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         location: Node,
         maybeMissingAwait: boolean,
         message: DiagnosticMessage,
-        ...args: (string | number | undefined)[]): Diagnostic {
+        ...args: DiagnosticArguments): Diagnostic {
         const diagnostic = error(location, message, ...args);
         if (maybeMissingAwait) {
             const related = createDiagnosticForNode(location, Diagnostics.Did_you_forget_to_use_await);
@@ -19738,7 +19739,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
     }
 
-    type ErrorReporter = (message: DiagnosticMessage, ...args: (string | number | undefined)[]) => void;
+    type ErrorReporter = (message: DiagnosticMessage, ...args: DiagnosticArguments) => void;
 
     /**
      * Returns true if `s` is `(...args: A) => R` where `A` is `any`, `any[]`, `never`, or `never[]`, and `R` is `any` or `unknown`.
@@ -20166,7 +20167,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let overflow = false;
         let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
-        let incompatibleStack: [message: DiagnosticMessage, ...args: (string | number | undefined)[]][] | undefined;
+        let incompatibleStack: [message: DiagnosticMessage, ...args: DiagnosticArguments][] | undefined;
 
         Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -20239,7 +20240,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             };
         }
 
-        function reportIncompatibleError(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+        function reportIncompatibleError(message: DiagnosticMessage, ...args: DiagnosticArguments) {
             overrideNextErrorInfo++; // Suppress the next relation error
             lastSkippedInfo = undefined; // Reset skipped info cache
             (incompatibleStack ||= []).push([message, ...args]);
@@ -20353,7 +20354,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function reportError(message: DiagnosticMessage, ...args: (string | number | undefined)[]): void {
+        function reportError(message: DiagnosticMessage, ...args: DiagnosticArguments): void {
             Debug.assert(!!errorNode);
             if (incompatibleStack) reportIncompatibleStack();
             if (message.elidedInCompatabilityPyramid) return;
@@ -32672,7 +32673,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return { start, length, sourceFile };
     }
 
-    function getDiagnosticForCallNode(node: CallLikeExpression, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number | undefined)[]): DiagnosticWithLocation {
+    function getDiagnosticForCallNode(node: CallLikeExpression, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): DiagnosticWithLocation {
         if (isCallExpression(node)) {
             const { sourceFile, start, length } = getDiagnosticSpanForCallNode(node);
             if ("message" in message) { // eslint-disable-line local/no-in-operator
@@ -39084,7 +39085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getAwaitedTypeOfPromise(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: (string | number | undefined)[]): Type | undefined {
+    function getAwaitedTypeOfPromise(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
         const promisedType = getPromisedTypeOfPromise(type, errorNode);
         return promisedType && getAwaitedType(promisedType, errorNode, diagnosticMessage, ...args);
     }
@@ -39183,7 +39184,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
      * The runtime behavior of the `await` keyword.
      */
-    function checkAwaitedType(type: Type, withAlias: boolean, errorNode: Node, diagnosticMessage: DiagnosticMessage, ...args: (string | number | undefined)[]): Type {
+    function checkAwaitedType(type: Type, withAlias: boolean, errorNode: Node, diagnosticMessage: DiagnosticMessage, ...args: DiagnosticArguments): Type {
         const awaitedType = withAlias ?
             getAwaitedType(type, errorNode, diagnosticMessage, ...args) :
             getAwaitedTypeNoAlias(type, errorNode, diagnosticMessage, ...args);
@@ -39289,7 +39290,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      *
      * This is used to reflect the runtime behavior of the `await` keyword.
      */
-    function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: (string | number | undefined)[]): Type | undefined {
+    function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
         const awaitedType = getAwaitedTypeNoAlias(type, errorNode, diagnosticMessage, ...args);
         return awaitedType && createAwaitedTypeIfNeeded(awaitedType);
     }
@@ -39299,7 +39300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      *
      * @see {@link getAwaitedType}
      */
-    function getAwaitedTypeNoAlias(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: (string | number | undefined)[]): Type | undefined {
+    function getAwaitedTypeNoAlias(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
         if (isTypeAny(type)) {
             return type;
         }
@@ -48160,7 +48161,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return sourceFile.parseDiagnostics.length > 0;
     }
 
-    function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, ...args: (string | number | undefined)[]): boolean {
+    function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
             const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
@@ -48170,7 +48171,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function grammarErrorAtPos(nodeForSourceFile: Node, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): boolean {
+    function grammarErrorAtPos(nodeForSourceFile: Node, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(nodeForSourceFile);
         if (!hasParseDiagnostics(sourceFile)) {
             diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, ...args));
@@ -48179,7 +48180,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function grammarErrorOnNodeSkippedOn(key: keyof CompilerOptions, node: Node, message: DiagnosticMessage, ...args: (string | number | undefined)[]): boolean {
+    function grammarErrorOnNodeSkippedOn(key: keyof CompilerOptions, node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
             errorSkippedOn(key, node, message, ...args);
@@ -48188,7 +48189,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function grammarErrorOnNode(node: Node, message: DiagnosticMessage, ...args: (string | number | undefined)[]): boolean {
+    function grammarErrorOnNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
             diagnostics.add(createDiagnosticForNode(node, message, ...args));
@@ -48406,7 +48407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, ...args: (string | number | undefined)[]): boolean {
+    function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
             const span = getSpanOfTokenAtPosition(sourceFile, node.pos);

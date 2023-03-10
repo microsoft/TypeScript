@@ -22,6 +22,7 @@ import {
     createGetCanonicalFileName,
     Debug,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticMessage,
     Diagnostics,
     DidYouMeanOptionsDiagnostics,
@@ -3094,7 +3095,7 @@ function parseJsonConfigFileContentWorker(
         return "no-prop";
     }
 
-    function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+    function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, ...args: DiagnosticArguments) {
         if (!sourceFile) {
             errors.push(createCompilerDiagnostic(message, ...args));
         }

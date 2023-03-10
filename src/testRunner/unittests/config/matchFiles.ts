@@ -1,5 +1,6 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
+import { DiagnosticArguments } from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 
 const caseInsensitiveBasePath = "c:/dev/";
@@ -137,7 +138,7 @@ function validateMatches(expected: ts.ParsedCommandLine, json: any, host: ts.Par
     }
 }
 
-function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: ts.DiagnosticMessage, ...args: (string | number | undefined)[]) {
+function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: ts.DiagnosticMessage, ...args: DiagnosticArguments) {
     const text = JSON.stringify(json);
     const file = {
         fileName: caseInsensitiveTsconfigPath,
