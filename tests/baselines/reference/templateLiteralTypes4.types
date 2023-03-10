@@ -65,11 +65,9 @@ type TBoolean2 = "abcd" extends `${infer T extends boolean}` ? T : never; // nev
 // infer from null
 type TNull0 = "null" extends `${infer T extends null}` ? T : never; // null
 >TNull0 : null
->null : null
 
 type TNull1 = "abcd" extends `${infer T extends null}` ? T : never; // never
 >TNull1 : never
->null : null
 
 // infer from undefined
 type TUndefined0 = "undefined" extends `${infer T extends undefined}` ? T : never; // undefined
@@ -173,7 +171,6 @@ type PString11 = "undefined" extends `${infer T extends string | undefined}` ? T
 
 type PString12 = "null" extends `${infer T extends string | null}` ? T : never; // "null"
 >PString12 : "null"
->null : null
 
 // #endregion string
 
@@ -222,7 +219,6 @@ type PTemplate10 = "undefined" extends `${infer T extends `${"u"}${string}` | un
 
 type PTemplate11 = "null" extends `${infer T extends `${"n"}${string}` | null}` ? T : never; // "null"
 >PTemplate11 : "null"
->null : null
 
 // #endregion template-literal
 
@@ -271,7 +267,6 @@ type PStringLiteral10 = "undefined" extends `${infer T extends "undefined" | und
 
 type PStringLiteral11 = "null" extends `${infer T extends "null" | null}` ? T : never; // "null"
 >PStringLiteral11 : "null"
->null : null
 
 // #endregion string-literal
 
@@ -320,7 +315,6 @@ type PStringLiteralEnum10 = "undefined" extends `${infer T extends StringLiteral
 
 type PStringLiteralEnum11 = "null" extends `${infer T extends StringLiteralEnum | null}` ? T : never; // StringLiteralEnum.Null
 >PStringLiteralEnum11 : StringLiteralEnum.Null
->null : null
 
 // #endregion string-literal-enum
 
@@ -415,8 +409,6 @@ type ExtractPrimitives<T extends string> =
     | (T extends `${infer U extends number}` ? U : never)
     | (T extends `${infer U extends bigint}` ? U : never)
     | (T extends `${infer U extends boolean | null | undefined}` ? U : never)
->null : null
-
     ;
 
 type TExtract0 = ExtractPrimitives<"100">; // "100" | 100 | 100n

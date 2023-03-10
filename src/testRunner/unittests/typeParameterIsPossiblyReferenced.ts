@@ -1,8 +1,8 @@
-import * as fakes from "../_namespaces/fakes";
-import * as vfs from "../_namespaces/vfs";
-import * as Harness from "../_namespaces/Harness";
 import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => {
         it("with type parameter aliasing", () => {

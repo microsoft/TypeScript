@@ -378,7 +378,7 @@ interface B<T> { variant: 'b', value: Array<T> }
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 148, 12))
 >variant : Symbol(B.variant, Decl(dependentDestructuredVariables.ts, 148, 16))
 >value : Symbol(B.value, Decl(dependentDestructuredVariables.ts, 148, 30))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 148, 12))
 
 type AB<T> = A<T> | B<T>;
@@ -399,7 +399,7 @@ declare function printValueList<T>(t: Array<T>): void;
 >printValueList : Symbol(printValueList, Decl(dependentDestructuredVariables.ts, 152, 43))
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 154, 32))
 >t : Symbol(t, Decl(dependentDestructuredVariables.ts, 154, 35))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 154, 32))
 
 function unrefined1<T>(ab: AB<T>): void {
@@ -964,4 +964,74 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
         }
     }
 }
+
+// Repro from #52152
+
+interface ClientEvents {
+>ClientEvents : Symbol(ClientEvents, Decl(dependentDestructuredVariables.ts, 386, 1))
+
+    warn: [message: string];
+>warn : Symbol(ClientEvents.warn, Decl(dependentDestructuredVariables.ts, 390, 24))
+
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+>shardDisconnect : Symbol(ClientEvents.shardDisconnect, Decl(dependentDestructuredVariables.ts, 391, 28))
+>CloseEvent : Symbol(CloseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+  
+declare class Client {
+>Client : Symbol(Client, Decl(dependentDestructuredVariables.ts, 393, 1))
+
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+>on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
+>K : Symbol(K, Decl(dependentDestructuredVariables.ts, 396, 14))
+>ClientEvents : Symbol(ClientEvents, Decl(dependentDestructuredVariables.ts, 386, 1))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 396, 44))
+>K : Symbol(K, Decl(dependentDestructuredVariables.ts, 396, 14))
+>listener : Symbol(listener, Decl(dependentDestructuredVariables.ts, 396, 53))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 396, 65))
+>ClientEvents : Symbol(ClientEvents, Decl(dependentDestructuredVariables.ts, 386, 1))
+>K : Symbol(K, Decl(dependentDestructuredVariables.ts, 396, 14))
+}
+
+const bot = new Client();
+>bot : Symbol(bot, Decl(dependentDestructuredVariables.ts, 399, 5))
+>Client : Symbol(Client, Decl(dependentDestructuredVariables.ts, 393, 1))
+
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+>bot.on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
+>bot : Symbol(bot, Decl(dependentDestructuredVariables.ts, 399, 5))
+>on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+>shard : Symbol(shard, Decl(dependentDestructuredVariables.ts, 400, 33))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>shard : Symbol(shard, Decl(dependentDestructuredVariables.ts, 400, 33))
+>event.code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+>code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
+>event.wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+>wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
+>event.reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+>reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
+
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+>bot.on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
+>bot : Symbol(bot, Decl(dependentDestructuredVariables.ts, 399, 5))
+>on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>event.code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+>code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
+>event.wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+>wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
+>event.reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+>reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
 

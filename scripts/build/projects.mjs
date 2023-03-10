@@ -1,7 +1,8 @@
-import { Debouncer, exec } from "./utils.mjs";
 import { resolve } from "path";
+
 import { findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
+import { Debouncer, exec } from "./utils.mjs";
 
 class ProjectQueue {
     /**
@@ -29,13 +30,16 @@ class ProjectQueue {
     }
 }
 
-const execTsc = (/** @type {string[]} */ ...args) =>
-    exec(process.execPath,
-         [resolve(findUpRoot(), cmdLineOptions.lkg ? "./lib/tsc.js" : "./built/local/tsc.js"),
-          "-b", ...args],
-         { hidePrompt: true });
+const tscPath = resolve(
+    findUpRoot(),
+    cmdLineOptions.lkg ? "./lib/tsc.js" :
+    cmdLineOptions.built ? "./built/local/tsc.js" :
+    "./node_modules/typescript/lib/tsc.js",
+);
 
-const projectBuilder = new ProjectQueue((projects) => execTsc(...projects));
+const execTsc = (/** @type {string[]} */ ...args) => exec(process.execPath, [tscPath, "-b", ...args], { hidePrompt: true });
+
+const projectBuilder = new ProjectQueue((projects) => execTsc(...(cmdLineOptions.bundle ? [] : ["--emitDeclarationOnly", "false"]), ...projects));
 
 /**
  * @param {string} project
@@ -47,7 +51,7 @@ const projectCleaner = new ProjectQueue((projects) => execTsc("--clean", ...proj
 /**
  * @param {string} project
  */
- export const cleanProject = (project) => projectCleaner.enqueue(project);
+export const cleanProject = (project) => projectCleaner.enqueue(project);
 
 const projectWatcher = new ProjectQueue((projects) => execTsc("--watch", "--preserveWatchOutput", ...projects));
 

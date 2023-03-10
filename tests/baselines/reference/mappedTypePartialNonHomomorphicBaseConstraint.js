@@ -10,7 +10,7 @@ class Model<D> {
 
 //// [mappedTypePartialNonHomomorphicBaseConstraint.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Model = /** @class */ (function () {
     function Model() {
     }

@@ -12,6 +12,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -21,9 +22,7 @@ Resolution:: {
     "/root/src/node_modules/@types/lib.d.ts",
     "/root/src/node_modules/@types/lib/index.d.ts",
     "/root/node_modules/lib/package.json"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/src/app.ts]
@@ -40,6 +39,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -50,9 +50,7 @@ Resolution:: {
     "/root/src/node_modules/@types/lib/index.d.ts",
     "/root/node_modules/lib/package.json",
     "/root/node_modules/lib.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/src/app.ts]
@@ -72,6 +70,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -84,8 +83,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/node_modules/lib/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/src/app.ts]
@@ -102,6 +100,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -115,9 +114,7 @@ Resolution:: {
     "/root/node_modules/lib/index.d.ts",
     "/root/node_modules/@types/lib/package.json",
     "/root/node_modules/@types/lib.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/src/app.ts]
@@ -137,6 +134,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -152,6 +150,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/node_modules/@types/lib/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }

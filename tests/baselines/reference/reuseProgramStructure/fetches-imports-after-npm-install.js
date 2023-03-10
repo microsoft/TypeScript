@@ -4,7 +4,25 @@ File: file1.ts
 import * as a from "a";
 const myX: number = a.x;
 resolvedModules: 
-a: undefined
+a: {
+  "failedLookupLocations": [
+    "node_modules/a/package.json",
+    "node_modules/a.ts",
+    "node_modules/a.tsx",
+    "node_modules/a.d.ts",
+    "node_modules/a/index.ts",
+    "node_modules/a/index.tsx",
+    "node_modules/a/index.d.ts",
+    "node_modules/@types/a/package.json",
+    "node_modules/@types/a.d.ts",
+    "node_modules/@types/a/index.d.ts",
+    "node_modules/a/package.json",
+    "node_modules/a.js",
+    "node_modules/a.jsx",
+    "node_modules/a/index.js",
+    "node_modules/a/index.jsx"
+  ]
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: file2.ts
@@ -15,7 +33,7 @@ resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
-Explicitly specified module resolution kind: 'NodeJs'.
+Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
@@ -55,9 +73,20 @@ import * as a from "a";
 const myX: number = a.x;
 resolvedModules: 
 a: {
-  "resolvedFileName": "node_modules/a/index.d.ts",
-  "extension": ".d.ts",
-  "isExternalLibraryImport": true
+  "resolvedModule": {
+    "resolvedFileName": "node_modules/a/index.d.ts",
+    "extension": ".d.ts",
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
+  },
+  "failedLookupLocations": [
+    "node_modules/a/package.json",
+    "node_modules/a.ts",
+    "node_modules/a.tsx",
+    "node_modules/a.d.ts",
+    "node_modules/a/index.ts",
+    "node_modules/a/index.tsx"
+  ]
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -69,7 +98,7 @@ resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
-Explicitly specified module resolution kind: 'NodeJs'.
+Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
@@ -77,7 +106,7 @@ File 'node_modules/a.tsx' does not exist.
 File 'node_modules/a.d.ts' does not exist.
 File 'node_modules/a/index.ts' does not exist.
 File 'node_modules/a/index.tsx' does not exist.
-File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.
+File 'node_modules/a/index.d.ts' exists - use it as a name resolution result.
 ======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========
 
 MissingPaths:: []

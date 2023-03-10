@@ -75,29 +75,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
 PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
+/user/username/projects/noemitonerror/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
+/user/username/projects/noemitonerror/tsconfig.json: *new*
   {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
+/user/username/projects/noemitonerror/shared/types/db.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/main.ts:
+/user/username/projects/noemitonerror/src/main.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/other.ts:
+/user/username/projects/noemitonerror/src/other.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror:
+/user/username/projects/noemitonerror: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9621097780-export interface A {\r\n    name: string;\r\n}","2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","11373096570-console.log(\"hi\");\r\nexport { }"],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"affectedFilesPendingEmit":[2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9621097780-export interface A {\r\n    name: string;\r\n}","2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","11373096570-console.log(\"hi\");\r\nexport { }"],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"affectedFilesPendingEmit":[2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -136,6 +136,19 @@ exitCode:: ExitStatus.undefined
         "signature": "11373096570-console.log(\"hi\");\r\nexport { }"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "noEmitOnError": true,
@@ -173,7 +186,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1059
+  "size": 1074
 }
 
 
@@ -183,26 +196,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -240,30 +233,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -314,6 +287,19 @@ exitCode:: ExitStatus.undefined
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "noEmitOnError": true,
@@ -333,12 +319,12 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1200
+  "size": 1215
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
@@ -349,7 +335,7 @@ export interface A {
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = {
     lastName: 'sdsd'
 };
@@ -361,7 +347,7 @@ export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
 
 
@@ -406,30 +392,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -480,6 +446,19 @@ exitCode:: ExitStatus.undefined
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "noEmitOnError": true,
@@ -517,7 +496,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1359
+  "size": 1374
 }
 
 
@@ -527,26 +506,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -582,30 +541,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -656,6 +595,19 @@ exitCode:: ExitStatus.undefined
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "noEmitOnError": true,
@@ -675,12 +627,12 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1191
+  "size": 1206
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = "hello";
 
 
@@ -692,26 +644,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -15,10 +15,10 @@ let b: B;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var B = /** @class */ (function () {
     function B() {
@@ -28,7 +28,7 @@ var B = /** @class */ (function () {
 exports.B = B;
 //// [c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./a");
 require("./b");
 var b;

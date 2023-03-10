@@ -3,7 +3,7 @@ export const f = (<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}); /
 
 //// [declarationEmitMappedTypePropertyFromNumericStringKey.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
 exports.f = (function (arg) { return arg; })({ '0': 0 }); // Original prop uses string syntax
 

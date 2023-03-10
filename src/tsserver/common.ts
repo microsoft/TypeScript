@@ -1,10 +1,10 @@
+import { LanguageServiceMode } from "./_namespaces/ts";
 import {
     Logger,
     LogLevel,
     ServerCancellationToken,
-    StartSessionOptions,
+    SessionOptions,
 } from "./_namespaces/ts.server";
-import { LanguageServiceMode } from "./_namespaces/ts";
 
 /** @internal */
 export function getLogLevel(level: string | undefined) {
@@ -17,6 +17,18 @@ export function getLogLevel(level: string | undefined) {
         }
     }
     return undefined;
+}
+
+/** @internal */
+export interface StartSessionOptions {
+    globalPlugins: SessionOptions["globalPlugins"];
+    pluginProbeLocations: SessionOptions["pluginProbeLocations"];
+    allowLocalPluginLoads: SessionOptions["allowLocalPluginLoads"];
+    useSingleInferredProject: SessionOptions["useSingleInferredProject"];
+    useInferredProjectPerProjectRoot: SessionOptions["useInferredProjectPerProjectRoot"];
+    suppressDiagnosticEvents: SessionOptions["suppressDiagnosticEvents"];
+    noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
+    serverMode: SessionOptions["serverMode"];
 }
 
 /** @internal */

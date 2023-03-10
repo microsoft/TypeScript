@@ -28,7 +28,6 @@ export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode
 >(null as any as import("pkg", { assert: { : any
 >null as any as import("pkg", { assert: { : any
 >null as any : any
->null : null
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234
 >"resolution-mode" : "resolution-mode"
@@ -40,7 +39,6 @@ export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode
 >(null as any as import("pkg", { assert: { : any
 >null as any as import("pkg", { assert: { : any
 >null as any : any
->null : null
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234
 >"resolution-mode" : "resolution-mode"

@@ -1,13 +1,4 @@
 Info 0    [00:01:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:12.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/app/src/program/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":[],"references":[{"path":"shared/src/library"},{"path":"app/src/program"}]}
@@ -46,7 +37,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/shared/bld/library/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
@@ -57,7 +48,7 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n"}],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -85,6 +76,12 @@ export declare function foo(): void;
         "signature": "-5677608893-export declare function foo(): void;\n"
       }
     },
+    "root": [
+      [
+        2,
+        "../../src/library/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -98,11 +95,11 @@ export declare function foo(): void;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 807
+  "size": 818
 }
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-9677035610-import {foo} from \"shared\";",{"version":"193491849-foo","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,[4,[{"file":"../../src/program/index.ts","start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]],2],"affectedFilesPendingEmit":[3,4],"emitSignatures":[3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-9677035610-import {foo} from \"shared\";",{"version":"193491849-foo","affectsGlobalScope":true}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,[4,[{"file":"../../src/program/index.ts","start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]],2],"affectedFilesPendingEmit":[3,4],"emitSignatures":[3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,6 +143,16 @@ export declare function foo(): void;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        3,
+        "../../src/program/bar.ts"
+      ],
+      [
+        4,
+        "../../src/program/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -194,16 +201,19 @@ export declare function foo(): void;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1091
+  "size": 1104
 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:01:12.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app/src/program/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:13.000] Search path: /user/username/projects/myproject/app/src/program
 Info 3    [00:01:14.000] For info: /user/username/projects/myproject/app/src/program/index.ts :: Config file name: /user/username/projects/myproject/app/src/program/tsconfig.json
 Info 4    [00:01:15.000] Creating configuration project /user/username/projects/myproject/app/src/program/tsconfig.json
@@ -264,14 +274,14 @@ Info 33   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 34   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app/src/program/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 35   [00:01:46.000] Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Configured)
 Info 36   [00:01:47.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/shared/src/library/index.ts
-	/user/username/projects/myproject/app/src/program/bar.ts
-	/user/username/projects/myproject/app/src/program/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/shared/src/library/index.ts Text-1 "export function foo() {}"
+	/user/username/projects/myproject/app/src/program/bar.ts Text-1 "import {foo} from \"shared\";"
+	/user/username/projects/myproject/app/src/program/index.ts SVC-1-0 "foo"
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../../../shared/src/library/index.ts
 	  Imported via "shared" from file 'bar.ts' with packageId 'shared/bld/library/index.d.ts@1.0.0'
 	bar.ts
@@ -297,52 +307,54 @@ Info 44   [00:02:00.000] -----------------------------------------------
 Info 44   [00:02:01.000] Open files: 
 Info 44   [00:02:02.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
 Info 44   [00:02:03.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json:
-  {}
-/user/username/projects/myproject/app/src/program/bar.ts:
-  {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/src/library/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/shared/package.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/app/src/program:
-  {}
-/user/username/projects/myproject/shared/src/library:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 44   [00:02:04.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts: *new*
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/shared/package.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program: *new*
+  {}
+/user/username/projects/myproject/shared/src/library: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+
+Before request
+
 Info 45   [00:02:05.000] request:
     {
       "command": "getCodeFixes",
@@ -359,92 +371,8 @@ Info 45   [00:02:05.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json:
-  {}
-/user/username/projects/myproject/app/src/program/bar.ts:
-  {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/src/library/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/shared/package.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/app/src/program:
-  {}
-/user/username/projects/myproject/shared/src/library:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 46   [00:02:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 47   [00:02:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-After request
-
-PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json:
-  {}
-/user/username/projects/myproject/app/src/program/bar.ts:
-  {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/src/library/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/shared/package.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/app/src/program:
-  {}
-/user/username/projects/myproject/shared/src/library:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 48   [00:02:08.000] response:
     {
       "response": [
@@ -473,3 +401,4 @@ Info 48   [00:02:08.000] response:
       ],
       "responseRequired": true
     }
+After request

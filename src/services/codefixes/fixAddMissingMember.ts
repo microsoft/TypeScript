@@ -24,6 +24,7 @@ import {
     findIndex,
     firstDefined,
     firstOrUndefined,
+    firstOrUndefinedIterator,
     FunctionExpression,
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
@@ -316,7 +317,8 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+        const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
         if (!length(properties)) return undefined;
 
         return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
@@ -330,7 +332,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     }
 
     if (isIdentifier(token)) {
-        const type = checker.getContextualType(token);
+        const type = checker.getContextualType(token)?.getNonNullableType();
         if (type && getObjectFlags(type) & ObjectFlags.Anonymous) {
             const signature = firstOrUndefined(checker.getSignaturesOfType(type, SignatureKind.Call));
             if (signature === undefined) return undefined;
@@ -665,7 +667,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         return factory.createFalse();
     }
     if (type.flags & TypeFlags.EnumLike) {
-        const enumMember = type.symbol.exports ? firstOrUndefined(arrayFrom(type.symbol.exports.values())) : type.symbol;
+        const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
         const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
@@ -693,7 +695,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (isObjectLiteralType(type)) {
         const props = map(checker.getPropertiesOfType(type), prop => {
-            const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration), enclosingDeclaration) : createUndefined();
+            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), enclosingDeclaration);
             return factory.createPropertyAssignment(prop.name, initializer);
         });
         return factory.createObjectLiteralExpression(props, /*multiLine*/ true);

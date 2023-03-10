@@ -39,7 +39,7 @@ export * from '@emotion/core';
 
 //// [get-comp.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getComp = void 0;
 function getComp() {
     return {};
@@ -47,7 +47,7 @@ function getComp() {
 exports.getComp = getComp;
 //// [inferred-comp-export.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 var get_comp_1 = require("./get-comp");
 // this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
@@ -71,7 +71,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("@emotion/core"), exports);
 
 

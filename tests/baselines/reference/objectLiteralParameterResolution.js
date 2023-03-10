@@ -25,5 +25,5 @@ var s = $.extend({
     dataType: "json",
     converters: { "text json": "" },
     traditional: true,
-    timeout: 12
+    timeout: 12,
 }, "");

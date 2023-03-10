@@ -14,7 +14,7 @@ var x = 1;
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [file2.js]
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -33,7 +33,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 define(["require", "exports", "file1"], function (require, exports, file1_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     __exportStar(file1_1, exports);
     var x = 1;
 });
@@ -54,7 +54,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 define(["require", "exports", "file2"], function (require, exports, file2_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     __exportStar(file2_1, exports);
     var x = 1;
 });

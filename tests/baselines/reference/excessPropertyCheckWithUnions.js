@@ -193,21 +193,21 @@ var abab = {
     kind: "A",
     n: {
         a: "a",
-        b: "b"
+        b: "b", // excess -- kind: "A"
     }
 };
 var abac = {
     kind: "A",
     n: {
         a: "a",
-        c: "c"
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
     }
 };
 var obj = {
     tag: 'button',
     type: 'submit',
     // should have error here
-    href: 'foo'
+    href: 'foo',
 };
 ;
 var dataSpecification = {
@@ -220,11 +220,11 @@ function F1(_arg) { }
 F1({
     props: {
         prop1: prop1,
-        prop2: prop2
-    }
+        prop2: prop2,
+    },
 });
 function F2(_props) { }
 F2({
     prop1: prop1,
-    prop2: prop2
+    prop2: prop2,
 });

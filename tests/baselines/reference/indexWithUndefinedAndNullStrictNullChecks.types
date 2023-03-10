@@ -24,7 +24,6 @@ str = n[null];
 >str : string
 >n[null] : any
 >n : N
->null : null
 
 let num: number = s[undefined];
 >num : number
@@ -37,5 +36,4 @@ num = s[null];
 >num : number
 >s[null] : any
 >s : S
->null : null
 

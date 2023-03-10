@@ -1,7 +1,7 @@
 tests/cases/conformance/types/tuple/restTupleElements1.ts(3,22): error TS1257: A required element cannot follow an optional element.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
 tests/cases/conformance/types/tuple/restTupleElements1.ts(23,31): error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
   Source provides no match for required element at position 0 in target.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(24,31): error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
@@ -44,7 +44,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
                 ~~~~~~~~~~
 !!! error TS2574: A rest element type must be an array type.
                    ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
     type T10 = [string, ...[...string[]]];
     type T11 = [string, ...[...[...string[]]]];
     

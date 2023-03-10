@@ -41,3 +41,43 @@ function f() {
     }
 }
 
+// Repro from #51688
+
+declare function functionB(key: string): string;
+>functionB : (key: string) => string
+>key : string
+
+function functionC(): void {
+>functionC : () => void
+
+    let unionVal: "A" | "B" = "A";
+>unionVal : "A" | "B"
+>"A" : "A"
+
+    while (true) {
+>true : true
+
+        let key: string;
+>key : string
+
+        switch (unionVal) {
+>unionVal : "A"
+
+            case "A": {
+>"A" : "A"
+
+                key = "AA";
+>key = "AA" : "AA"
+>key : string
+>"AA" : "AA"
+
+                break;
+            }
+        }
+        functionB(key);
+>functionB(key) : string
+>functionB : (key: string) => string
+>key : string
+    }
+}
+

@@ -6,6 +6,7 @@ Info 3    [00:01:13.000] Config: /user/username/projects/container/compositeExec
   "/user/username/projects/container/compositeExec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/compositeExec.js",
   "composite": true,
   "declarationMap": true,
@@ -42,13 +43,13 @@ Info 13   [00:01:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:01:24.000] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:01:25.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 16   [00:01:26.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/compositeExec/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/compositeExec/index.ts Text-1 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -62,6 +63,7 @@ Info 20   [00:01:30.000] Config: /user/username/projects/container/exec/tsconfig
   "/user/username/projects/container/exec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/exec.js",
   "configFilePath": "/user/username/projects/container/exec/tsconfig.json"
  },
@@ -82,13 +84,13 @@ Info 26   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 27   [00:01:37.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:01:38.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 Info 29   [00:01:39.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/exec/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/exec/index.ts Text-1 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -104,12 +106,12 @@ Info 36   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 37   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 38   [00:01:48.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 Info 39   [00:01:49.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -136,16 +138,10 @@ Info 44   [00:01:54.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 45   [00:01:55.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 46   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 47   [00:01:57.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 48   [00:01:58.000] Different program with same set of files
-Info 49   [00:01:59.000] request:
-    {
-      "command": "syntacticDiagnosticsSync",
-      "arguments": {
-        "file": "/a/lib/lib.d.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
+Info 48   [00:01:58.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 49   [00:01:59.000] 	Files (0)
+
+Info 50   [00:02:00.000] -----------------------------------------------
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -182,6 +178,7 @@ namespace container {
 //// [/user/username/projects/container/exec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/exec.js",
     },
     "files": [
@@ -203,6 +200,7 @@ namespace container {
 //// [/user/username/projects/container/compositeExec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/compositeExec.js",
         "composite": true,
         "declarationMap": true,
@@ -250,7 +248,7 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../../lib","sourceFiles":["../../lib/index.ts"],"js":{"sections":[{"pos":0,"end":102,"kind":"text"}],"hash":"-5780640416-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\n"},"dts":{"sections":[{"pos":0,"end":56,"kind":"text"}],"mapHash":"-12950023432-{\"version\":3,\"file\":\"lib.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B\"}","hash":"-3233313694-declare namespace container {\n    const myConst = 30;\n}\n//# sourceMappingURL=lib.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-7311945748-namespace container {\r\n    export const myConst = 30;\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../../lib","sourceFiles":["../../lib/index.ts"],"js":{"sections":[{"pos":0,"end":102,"kind":"text"}],"hash":"-5780640416-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\n"},"dts":{"sections":[{"pos":0,"end":56,"kind":"text"}],"mapHash":"-12950023432-{\"version\":3,\"file\":\"lib.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B\"}","hash":"-3233313694-declare namespace container {\n    const myConst = 30;\n}\n//# sourceMappingURL=lib.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-7311945748-namespace container {\r\n    export const myConst = 30;\r\n}"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
@@ -290,6 +288,12 @@ declare namespace container {
       "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
       "../../lib/index.ts": "-7311945748-namespace container {\r\n    export const myConst = 30;\r\n}"
     },
+    "root": [
+      [
+        2,
+        "../../lib/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -299,7 +303,7 @@ declare namespace container {
     "latestChangedDtsFile": "./lib.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1391
+  "size": 1402
 }
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.baseline.txt]
@@ -364,7 +368,7 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../../compositeExec","sourceFiles":["../../compositeExec/index.ts"],"js":{"sections":[{"pos":0,"end":102,"kind":"prepend","data":"./lib.js","texts":[{"pos":0,"end":102,"kind":"text"}]},{"pos":102,"end":283,"kind":"text"}],"hash":"-2184050024-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\nvar container;\n(function (container) {\n    function getMyConst() {\n        return container.myConst;\n    }\n    container.getMyConst = getMyConst;\n})(container || (container = {}));\n"},"dts":{"sections":[{"pos":0,"end":56,"kind":"prepend","data":"./lib.d.ts","texts":[{"pos":0,"end":56,"kind":"text"}]},{"pos":56,"end":123,"kind":"text"}],"mapHash":"25748245913-{\"version\":3,\"file\":\"compositeExec.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\",\"../../compositeExec/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B;ACFD,kBAAU,SAAS,CAAC;IAChB,SAAgB,UAAU,WAEzB;CACJ\"}","hash":"862035579-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n//# sourceMappingURL=compositeExec.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-6143734929-namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"5987946274-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../../compositeExec","sourceFiles":["../../compositeExec/index.ts"],"js":{"sections":[{"pos":0,"end":102,"kind":"prepend","data":"./lib.js","texts":[{"pos":0,"end":102,"kind":"text"}]},{"pos":102,"end":283,"kind":"text"}],"hash":"-2184050024-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\nvar container;\n(function (container) {\n    function getMyConst() {\n        return container.myConst;\n    }\n    container.getMyConst = getMyConst;\n})(container || (container = {}));\n"},"dts":{"sections":[{"pos":0,"end":56,"kind":"prepend","data":"./lib.d.ts","texts":[{"pos":0,"end":56,"kind":"text"}]},{"pos":56,"end":123,"kind":"text"}],"mapHash":"25748245913-{\"version\":3,\"file\":\"compositeExec.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\",\"../../compositeExec/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B;ACFD,kBAAU,SAAS,CAAC;IAChB,SAAgB,UAAU,WAEzB;CACJ\"}","hash":"862035579-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n//# sourceMappingURL=compositeExec.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-6143734929-namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"5987946274-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
@@ -432,6 +436,12 @@ declare namespace container {
       "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
       "../../compositeexec/index.ts": "-6143734929-namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
     },
+    "root": [
+      [
+        3,
+        "../../compositeexec/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -441,7 +451,7 @@ declare namespace container {
     "latestChangedDtsFile": "./compositeExec.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2196
+  "size": 2207
 }
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.baseline.txt]
@@ -487,73 +497,52 @@ declare namespace container {
 
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeexec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
+/user/username/projects/container/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
+/user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
+/user/username/projects/container/lib/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
   {}
-/user/username/projects/container/compositeexec/index.ts:
+/user/username/projects/container/compositeexec/index.ts: *new*
   {}
-/user/username/projects/container/lib/tsconfig.json:
+/user/username/projects/container/lib/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/index.ts:
+/user/username/projects/container/lib/index.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/exec/tsconfig.json:
+/user/username/projects/container/exec/tsconfig.json: *new*
   {}
-/user/username/projects/container/exec/index.ts:
+/user/username/projects/container/exec/index.ts: *new*
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/tsconfig.json: *new*
   {}
 
-FsWatchesRecursive::
-
-Info 50   [00:02:00.000] response:
+Info 51   [00:02:01.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/lib/lib.d.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info 52   [00:02:02.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 51   [00:02:01.000] request:
+After request
+
+Before request
+
+Info 53   [00:02:03.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -562,76 +551,16 @@ Info 51   [00:02:01.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 52   [00:02:02.000] response:
+Info 54   [00:02:04.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 53   [00:02:03.000] request:
+After request
+
+Before request
+
+Info 55   [00:02:05.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -641,76 +570,16 @@ Info 53   [00:02:03.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 54   [00:02:04.000] response:
+Info 56   [00:02:06.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 55   [00:02:05.000] request:
+After request
+
+Before request
+
+Info 57   [00:02:07.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -720,76 +589,16 @@ Info 55   [00:02:05.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 56   [00:02:06.000] response:
+Info 58   [00:02:08.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 57   [00:02:07.000] request:
+After request
+
+Before request
+
+Info 59   [00:02:09.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -798,76 +607,16 @@ Info 57   [00:02:07.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 58   [00:02:08.000] response:
+Info 60   [00:02:10.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 59   [00:02:09.000] request:
+After request
+
+Before request
+
+Info 61   [00:02:11.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -876,76 +625,16 @@ Info 59   [00:02:09.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 60   [00:02:10.000] response:
+Info 62   [00:02:12.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 61   [00:02:11.000] request:
+After request
+
+Before request
+
+Info 63   [00:02:13.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -955,76 +644,16 @@ Info 61   [00:02:11.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 62   [00:02:12.000] response:
+Info 64   [00:02:14.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 63   [00:02:13.000] request:
+After request
+
+Before request
+
+Info 65   [00:02:15.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -1034,76 +663,16 @@ Info 63   [00:02:13.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 64   [00:02:14.000] response:
+Info 66   [00:02:16.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 65   [00:02:15.000] request:
+After request
+
+Before request
+
+Info 67   [00:02:17.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -1112,76 +681,16 @@ Info 65   [00:02:15.000] request:
       "seq": 9,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 66   [00:02:16.000] response:
+Info 68   [00:02:18.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 67   [00:02:17.000] request:
+After request
+
+Before request
+
+Info 69   [00:02:19.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -1190,76 +699,16 @@ Info 67   [00:02:17.000] request:
       "seq": 10,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 68   [00:02:18.000] response:
+Info 70   [00:02:20.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 69   [00:02:19.000] request:
+After request
+
+Before request
+
+Info 71   [00:02:21.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -1269,76 +718,16 @@ Info 69   [00:02:19.000] request:
       "seq": 11,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 70   [00:02:20.000] response:
+Info 72   [00:02:22.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 71   [00:02:21.000] request:
+After request
+
+Before request
+
+Info 73   [00:02:23.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -1348,76 +737,16 @@ Info 71   [00:02:21.000] request:
       "seq": 12,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 72   [00:02:22.000] response:
+Info 74   [00:02:24.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 73   [00:02:23.000] request:
+After request
+
+Before request
+
+Info 75   [00:02:25.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -1426,76 +755,16 @@ Info 73   [00:02:23.000] request:
       "seq": 13,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 74   [00:02:24.000] response:
+Info 76   [00:02:26.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 75   [00:02:25.000] request:
+After request
+
+Before request
+
+Info 77   [00:02:27.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -1504,76 +773,16 @@ Info 75   [00:02:25.000] request:
       "seq": 14,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 76   [00:02:26.000] response:
+Info 78   [00:02:28.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 77   [00:02:27.000] request:
+After request
+
+Before request
+
+Info 79   [00:02:29.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -1583,76 +792,16 @@ Info 77   [00:02:27.000] request:
       "seq": 15,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 78   [00:02:28.000] response:
+Info 80   [00:02:30.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 79   [00:02:29.000] request:
+After request
+
+Before request
+
+Info 81   [00:02:31.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -1662,76 +811,16 @@ Info 79   [00:02:29.000] request:
       "seq": 16,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 80   [00:02:30.000] response:
+Info 82   [00:02:32.000] response:
     {
       "response": [],
       "responseRequired": true
     }
-Info 81   [00:02:31.000] request:
+After request
+
+Before request
+
+Info 83   [00:02:33.000] request:
     {
       "command": "compilerOptionsDiagnostics-full",
       "arguments": {
@@ -1740,72 +829,9 @@ Info 81   [00:02:31.000] request:
       "seq": 17,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 82   [00:02:32.000] response:
+Info 84   [00:02:34.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

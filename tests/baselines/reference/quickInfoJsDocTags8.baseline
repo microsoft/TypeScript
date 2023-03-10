@@ -1,3 +1,20 @@
+=== /tests/cases/fourslash/quickInfoJsDocTags8.js ===
+// /**
+//  * @typedef {{ [x: string]: any, y: number }} Foo
+//  */
+// 
+// /**
+//  * @type {(t: T) => number}
+//  * @template {Foo} T
+//  */
+// const foo = t => t.y;
+//       ^^^
+// | ----------------------------------------------------------------------
+// | const foo: (t: T) => number
+// | @type {(t: T) => number}
+// | @template {Foo} T
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +22,7 @@
       "position": 122,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {

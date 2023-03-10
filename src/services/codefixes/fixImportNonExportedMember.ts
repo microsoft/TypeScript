@@ -1,5 +1,6 @@
 import {
     canHaveExportModifier,
+    canHaveLocals,
     Declaration,
     Diagnostics,
     ExportDeclaration,
@@ -8,6 +9,7 @@ import {
     findAncestor,
     findLast,
     firstOrUndefined,
+    getIsolatedModules,
     getResolvedModule,
     getTokenAtPosition,
     Identifier,
@@ -125,7 +127,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         if (moduleSourceFile === undefined || isSourceFileFromLibrary(program, moduleSourceFile)) return undefined;
 
         const moduleSymbol = moduleSourceFile.symbol;
-        const locals = moduleSymbol.valueDeclaration?.locals;
+        const locals = tryCast(moduleSymbol.valueDeclaration, canHaveLocals)?.locals;
         if (locals === undefined) return undefined;
 
         const localSymbol = locals.get(token.escapedText);
@@ -172,7 +174,7 @@ function tryGetExportDeclaration(sourceFile: SourceFile, isTypeOnly: boolean) {
 
 function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
     const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
-    const allowTypeModifier = !node.isTypeOnly && !!(program.getCompilerOptions().isolatedModules || find(namedExports, e => e.isTypeOnly));
+    const allowTypeModifier = !node.isTypeOnly && !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
     changes.replaceNode(sourceFile, node,
         factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
             factory.createNamedExports(
@@ -182,7 +184,7 @@ function updateExport(changes: textChanges.ChangeTracker, program: Program, sour
 function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
     changes.insertNodeAtEndOfScope(sourceFile, sourceFile,
         factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false,
-            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ !!program.getCompilerOptions().isolatedModules)), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
+            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
 }
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {

@@ -78,7 +78,7 @@ var a = <Blah3>
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Blah3 = exports.Blah2 = exports.Blah = void 0;
 /// <reference path="react16.d.ts" />
 var React = require("react");

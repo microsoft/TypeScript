@@ -19,7 +19,7 @@ export const nsDebuggerFoo = ns.getFoo();
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.nsDebuggerFoo = exports.NsExportedAlias = void 0;
 exports.NsExportedAlias = ns.ExportedAlias;
 exports.nsDebuggerFoo = ns.getFoo();

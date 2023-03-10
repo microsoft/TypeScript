@@ -47,10 +47,10 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
             };
             return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
         },
-        changes: [
+        edits: [
             {
                 caption: "Modify typescript file",
-                change: sys => sys.modifyFile(
+                edit: sys => sys.modifyFile(
                     "/project/src/index.ts",
                     Utils.dedent`
                             import * as Thing from "thing";

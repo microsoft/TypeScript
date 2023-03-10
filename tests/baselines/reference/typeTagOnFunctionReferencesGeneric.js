@@ -21,7 +21,7 @@ inJsArrow(2); // no error gets linted as expected
 /**
  * @typedef {<T>(m : T) => T} IFn
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.inJs = void 0;
 /**@type {IFn}*/
 function inJs(l) {

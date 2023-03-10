@@ -30,11 +30,11 @@ export let y: number;
 
 //// [module2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var module1_1 = require("module1");
 var module2_1 = require("templates/module2");
@@ -42,7 +42,7 @@ var file3_1 = require("../file3");
 exports.x = module1_1.a + module2_1.b + file3_1.x;
 //// [file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var file2_1 = require("./project/file2");
 var module3_1 = require("module3");
 use(file2_1.x.toFixed());

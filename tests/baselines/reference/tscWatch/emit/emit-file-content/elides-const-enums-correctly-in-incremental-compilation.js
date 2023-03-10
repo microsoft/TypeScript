@@ -52,35 +52,31 @@ Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file2.ts (used version)
 /user/someone/projects/myproject/file3.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/someone/projects/myproject/file3.ts:
+/user/someone/projects/myproject/file3.ts: *new*
   {}
-/user/someone/projects/myproject/file2.ts:
+/user/someone/projects/myproject/file2.ts: *new*
   {}
-/user/someone/projects/myproject/file1.ts:
+/user/someone/projects/myproject/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/someone/projects/myproject/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/someone/projects/myproject/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var v = 1 /* E2.V */;
 
 
@@ -115,25 +111,11 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file3.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/someone/projects/myproject/file3.ts:
-  {}
-/user/someone/projects/myproject/file2.ts:
-  {}
-/user/someone/projects/myproject/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var v = 1 /* E2.V */;
 function foo2() { return 2; }
 

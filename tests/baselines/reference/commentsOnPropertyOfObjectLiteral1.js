@@ -25,5 +25,5 @@ var resolve = {
     id4: 
     /*! @ngInject */
     /* C2 */
-    function (details) { return details.id; }
+    function (details) { return details.id; },
 };

@@ -47,6 +47,7 @@ import {
     JSDocSeeTag,
     JSDocTemplateTag,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeTag,
     JsxAttribute,
@@ -60,7 +61,6 @@ import {
     nodeIsMissing,
     ParameterDeclaration,
     parseIsolatedJSDocComment,
-    Push,
     Scanner,
     ScriptTarget,
     SemanticMeaning,
@@ -152,8 +152,8 @@ export function createClassifier(): Classifier {
                 handleToken();
                 lastNonTriviaToken = token;
             }
-            const end = scanner.getTextPos();
-            pushEncodedClassification(scanner.getTokenPos(), end, offset, classFromKind(token), spans);
+            const end = scanner.getTokenEnd();
+            pushEncodedClassification(scanner.getTokenStart(), end, offset, classFromKind(token), spans);
             if (end >= text.length) {
                 const end = getNewEndOfLineState(scanner, token, lastOrUndefined(templateStack));
                 if (end !== undefined) {
@@ -311,7 +311,7 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
     }
 }
 
-function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: Push<number>): void {
+function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: number[]): void {
     if (classification === ClassificationType.whiteSpace) {
         // Don't bother with whitespace classifications.  They're not needed.
         return;
@@ -700,16 +700,16 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
     }
 
     function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
-        triviaScanner.setTextPos(token.pos);
+        triviaScanner.resetTokenState(token.pos);
         while (true) {
-            const start = triviaScanner.getTextPos();
+            const start = triviaScanner.getTokenEnd();
             // only bother scanning if we have something that could be trivia.
             if (!couldStartTrivia(sourceFile.text, start)) {
                 return start;
             }
 
             const kind = triviaScanner.scan();
-            const end = triviaScanner.getTextPos();
+            const end = triviaScanner.getTokenEnd();
             const width = end - start;
 
             // The moment we get something that isn't trivia, then stop processing.
@@ -731,7 +731,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     // Classifying a comment might cause us to reuse the trivia scanner
                     // (because of jsdoc comments).  So after we classify the comment make
                     // sure we set the scanner position back to where it needs to be.
-                    triviaScanner.setTextPos(end);
+                    triviaScanner.resetTokenState(end);
                     continue;
 
                 case SyntaxKind.ConflictMarkerTrivia:
@@ -846,6 +846,11 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:
                         commentStart = (tag as JSDocImplementsTag | JSDocAugmentsTag).class.end;
+                        break;
+                    case SyntaxKind.JSDocThrowsTag:
+                        processElement((tag as JSDocThrowsTag).typeExpression);
+                        pos = tag.end;
+                        commentStart = (tag as JSDocThrowsTag).typeExpression?.end || commentStart;
                         break;
                 }
                 if (typeof tag.comment === "object") {
@@ -984,17 +989,17 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             }
         }
         pushClassification(start, i - start, ClassificationType.comment);
-        mergeConflictScanner.setTextPos(i);
+        mergeConflictScanner.resetTokenState(i);
 
-        while (mergeConflictScanner.getTextPos() < end) {
+        while (mergeConflictScanner.getTokenEnd() < end) {
             classifyDisabledCodeToken();
         }
     }
 
     function classifyDisabledCodeToken() {
-        const start = mergeConflictScanner.getTextPos();
+        const start = mergeConflictScanner.getTokenEnd();
         const tokenKind = mergeConflictScanner.scan();
-        const end = mergeConflictScanner.getTextPos();
+        const end = mergeConflictScanner.getTokenEnd();
 
         const type = classifyTokenType(tokenKind);
         if (type) {

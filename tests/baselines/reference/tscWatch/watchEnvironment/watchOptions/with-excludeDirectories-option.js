@@ -61,31 +61,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/src/main.ts:
+/user/username/projects/myproject/src/main.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
 (0, bar_1.foo)();
 
@@ -97,26 +95,6 @@ Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

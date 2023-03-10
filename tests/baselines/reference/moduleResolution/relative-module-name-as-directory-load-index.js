@@ -12,7 +12,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/foo/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/foo.ts",
@@ -30,8 +31,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/foo/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./foo" from /a/b/c.ts with host that doesnt have directoryExists
@@ -48,7 +48,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/foo/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/foo.ts",
@@ -66,6 +67,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/foo/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
