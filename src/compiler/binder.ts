@@ -556,8 +556,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
      * If so, the node _must_ be in the current file (as that's the only way anything could have traversed to it to yield it as the error node)
      * This version of `createDiagnosticForNode` uses the binder's context to account for this, and always yields correct diagnostics even in these situations.
      */
-    function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
-        return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, arg0, arg1, arg2);
+    function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation {
+        return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, ...args);
     }
 
     function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
@@ -2613,9 +2613,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+    function errorOnFirstToken(node: Node, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
         const span = getSpanOfTokenAtPosition(file, node.pos);
-        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
+        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, ...args));
     }
 
     function errorOrSuggestionOnNode(isError: boolean, node: Node, message: DiagnosticMessage): void {

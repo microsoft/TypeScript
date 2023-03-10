@@ -137,14 +137,14 @@ function validateMatches(expected: ts.ParsedCommandLine, json: any, host: ts.Par
     }
 }
 
-function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: ts.DiagnosticMessage, arg0: string) {
+function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: ts.DiagnosticMessage, ...args: (string | number | undefined)[]) {
     const text = JSON.stringify(json);
     const file = {
         fileName: caseInsensitiveTsconfigPath,
         kind: ts.SyntaxKind.SourceFile,
         text
     } as ts.SourceFile;
-    return ts.createFileDiagnostic(file, start, length, diagnosticMessage, arg0);
+    return ts.createFileDiagnostic(file, start, length, diagnosticMessage, ...args);
 }
 
 describe("unittests:: config:: matchFiles", () => {

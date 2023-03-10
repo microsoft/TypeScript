@@ -3094,9 +3094,9 @@ function parseJsonConfigFileContentWorker(
         return "no-prop";
     }
 
-    function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
+    function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
         if (!sourceFile) {
-            errors.push(createCompilerDiagnostic(message, arg0, arg1));
+            errors.push(createCompilerDiagnostic(message, ...args));
         }
     }
 }
