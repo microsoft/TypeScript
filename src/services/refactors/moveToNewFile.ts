@@ -510,7 +510,7 @@ function createRequireCall(moduleSpecifier: StringLiteralLike): CallExpression {
 function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: ReadonlySymbolSet, useEs6Exports: boolean): readonly Statement[] {
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
-            !hasExport(sourceFile, statement, useEs6Exports) &&
+            !isExported(sourceFile, statement, useEs6Exports) &&
             forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))) {
             const exports = addExport(statement, useEs6Exports);
             if (exports) return exports;
@@ -978,15 +978,6 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
 }
 
-function hasExport(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
-    if (useEs6Exports) {
-        return isExported(sourceFile, decl, useEs6Exports, name)
-    }
-    if (!isExpressionStatement(decl)) return false
-    const { expression } = decl;
-    return isBinaryExpression(expression) && getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
-}
-
 function getDefaultExportName(sourceFile: SourceFile) {
     return tryCast((sourceFile.symbol.exports?.get("default" as __String)?.declarations?.[0] as undefined | ExportAssignment)?.expression, isIdentifier);
 }
@@ -1000,7 +991,7 @@ function isExportedLaterInOldFile(sourceFile: SourceFile, decl: TopLevelDeclarat
                 (isExportDeclaration(node) && tryCast(node.exportClause, isNamedExports)?.elements.some(el => el.name.text === name.text))
                 || (isExportAssignment(node) && tryCast(node.expression, isIdentifier)?.text === name.text));
     }
-    return false
+    return false;
 }
 
 function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): readonly Statement[] | undefined {
