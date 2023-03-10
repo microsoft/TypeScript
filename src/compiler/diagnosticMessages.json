@@ -4281,11 +4281,11 @@
         "category": "Error",
         "code": 5098
     },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
+    "Option '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
-    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
+    "Option '{0}' has been removed. Please remove it from your configuration.": {
         "category": "Error",
         "code": 5102
     },
@@ -4304,6 +4304,14 @@
     "Use '{0}' instead.": {
         "category": "Message",
         "code": 5106
+    },
+    "Option '{0}={1}' is deprecated and will stop functioning in TypeScript {2}. Specify compilerOption '\"ignoreDeprecations\": \"{3}\"' to silence this error.": {
+        "category": "Error",
+        "code": 5107
+    },
+    "Option '{0}={1}' has been removed. Please remove it from your configuration.": {
+        "category": "Error",
+        "code": 5108
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

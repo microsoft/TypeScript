@@ -9874,12 +9874,3 @@ export interface Queue<T> {
     dequeue(): T;
     isEmpty(): boolean;
 }
-
-/** @internal */
-export const enum DeprecationVersion {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    v5_0 = "5.0",
-    v5_5 = "5.5",
-    v6_0 = "6.0",
-    /* eslint-enable @typescript-eslint/naming-convention */
-}
