@@ -6914,6 +6914,12 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowe
 
 export enum ModuleResolutionKind {
     Classic  = 1,
+    /**
+     * @deprecated
+     * `NodeJs` was renamed to `Node10` to better reflect the version of Node that it targets.
+     * Use the new name or consider switching to a modern module resolution target.
+     */
+    NodeJs   = 2,
     Node10   = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
     // to better support ecmascript modules and their use within node - however more features are still being added.
@@ -6922,7 +6928,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
-    Bundler   = 100,
+    Bundler  = 100,
 }
 
 export enum ModuleDetectionKind {
