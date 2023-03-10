@@ -2,12 +2,10 @@
 // this should be errors
 var arg0 = null;  // error at "arg0"
 >arg0 : any
->null : null
 
 var anyArray = [null, undefined];  // error at array literal
 >anyArray : any[]
 >[null, undefined] : null[]
->null : null
 >undefined : undefined
 
 var objL: { v; w; }             // error at "y,z"
@@ -69,7 +67,6 @@ var k = temp1(null);
 >k : void
 >temp1(null) : void
 >temp1 : (arg1: any) => void
->null : null
 
 var result = temp1(arg0);
 >result : void
@@ -91,7 +88,6 @@ function noError(variable: any, array?: any) { }
 noError(null, []);
 >noError(null, []) : void
 >noError : (variable: any, array?: any) => void
->null : null
 >[] : undefined[]
 
 noError(undefined, <any>[]);
@@ -104,9 +100,7 @@ noError(undefined, <any>[]);
 noError(null, [null, undefined]);
 >noError(null, [null, undefined]) : void
 >noError : (variable: any, array?: any) => void
->null : null
 >[null, undefined] : null[]
->null : null
 >undefined : undefined
 
 noError(undefined, anyArray);
@@ -144,5 +138,4 @@ var newC2 = new C(<any>[], null)
 >C : typeof C
 ><any>[] : any
 >[] : undefined[]
->null : null
 

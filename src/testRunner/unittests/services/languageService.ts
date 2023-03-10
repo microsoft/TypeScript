@@ -82,7 +82,7 @@ export function Component(x: Config): any;`
                 diagnostics: ts.emptyArray,
                 outputFiles: [{
                     name: "foo.d.ts",
-                    text: "export {};\r\n",
+                    text: "export {};\n",
                     writeByteOrderMark: false
                 }],
             }

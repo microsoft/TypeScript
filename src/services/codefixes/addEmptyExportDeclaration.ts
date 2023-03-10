@@ -1,12 +1,12 @@
 import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
-import {
     Diagnostics,
     factory,
     textChanges,
 } from "../_namespaces/ts";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 registerCodeFix({
     errorCodes: [

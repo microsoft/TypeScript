@@ -114,6 +114,7 @@ import {
     HasLocals,
     hasSyntacticModifier,
     Identifier,
+    identifierToKeywordKind,
     idText,
     IfStatement,
     ImportClause,
@@ -171,7 +172,10 @@ import {
     isJSDocTypeAlias,
     isJsonSourceFile,
     isLeftHandSideExpression,
+    isLogicalOrCoalescingAssignmentExpression,
     isLogicalOrCoalescingAssignmentOperator,
+    isLogicalOrCoalescingBinaryExpression,
+    isLogicalOrCoalescingBinaryOperator,
     isModuleAugmentationExternal,
     isModuleBlock,
     isModuleDeclaration,
@@ -413,7 +417,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
         case SyntaxKind.Identifier:
             // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
             // be considered the same as type alias
-            if ((node as Identifier).isInJSDocNamespace) {
+            if (node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
                 return ModuleInstanceState.NonInstantiated;
             }
     }
@@ -484,7 +488,7 @@ function initFlowNode<T extends FlowNode>(node: T) {
     return node;
 }
 
-const binder = createBinder();
+const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
@@ -497,49 +501,55 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
 }
 
 function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
-    let file: SourceFile;
-    let options: CompilerOptions;
-    let languageVersion: ScriptTarget;
-    let parent: Node;
-    let container: IsContainer | EntityNameExpression;
-    let thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
-    let blockScopeContainer: IsBlockScopedContainer;
-    let lastContainer: HasLocals;
-    let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
-    let seenThisKeyword: boolean;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var file: SourceFile;
+    var options: CompilerOptions;
+    var languageVersion: ScriptTarget;
+    var parent: Node;
+    var container: IsContainer | EntityNameExpression;
+    var thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
+    var blockScopeContainer: IsBlockScopedContainer;
+    var lastContainer: HasLocals;
+    var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
+    var seenThisKeyword: boolean;
 
     // state used by control flow analysis
-    let currentFlow: FlowNode;
-    let currentBreakTarget: FlowLabel | undefined;
-    let currentContinueTarget: FlowLabel | undefined;
-    let currentReturnTarget: FlowLabel | undefined;
-    let currentTrueTarget: FlowLabel | undefined;
-    let currentFalseTarget: FlowLabel | undefined;
-    let currentExceptionTarget: FlowLabel | undefined;
-    let preSwitchCaseFlow: FlowNode | undefined;
-    let activeLabelList: ActiveLabel | undefined;
-    let hasExplicitReturn: boolean;
+    var currentFlow: FlowNode;
+    var currentBreakTarget: FlowLabel | undefined;
+    var currentContinueTarget: FlowLabel | undefined;
+    var currentReturnTarget: FlowLabel | undefined;
+    var currentTrueTarget: FlowLabel | undefined;
+    var currentFalseTarget: FlowLabel | undefined;
+    var currentExceptionTarget: FlowLabel | undefined;
+    var preSwitchCaseFlow: FlowNode | undefined;
+    var activeLabelList: ActiveLabel | undefined;
+    var hasExplicitReturn: boolean;
 
     // state used for emit helpers
-    let emitFlags: NodeFlags;
+    var emitFlags: NodeFlags;
 
     // If this file is an external module, then it is automatically in strict-mode according to
     // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
     // not depending on if we see "use strict" in certain places or if we hit a class/namespace
     // or if compiler options contain alwaysStrict.
-    let inStrictMode: boolean;
+    var inStrictMode: boolean;
 
     // If we are binding an assignment pattern, we will bind certain expressions differently.
-    let inAssignmentPattern = false;
+    var inAssignmentPattern = false;
 
-    let symbolCount = 0;
+    var symbolCount = 0;
 
-    let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
-    let classifiableNames: Set<__String>;
+    var Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
+    var classifiableNames: Set<__String>;
 
-    const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    var unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    /* eslint-enable no-var */
+
+    return bindSourceFile;
 
     /**
      * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
@@ -595,8 +605,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
-
-    return bindSourceFile;
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
         if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
@@ -1030,6 +1038,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         else if (containerFlags & ContainerFlags.IsInterface) {
             seenThisKeyword = false;
             bindChildren(node);
+            Debug.assertNotNode(node, isIdentifier); // ContainsThis cannot overlap with HasExtendedUnicodeEscape on Identifier
             node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
         }
         else {
@@ -1375,17 +1384,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 node = (node as PrefixUnaryExpression).operand;
             }
             else {
-                return node.kind === SyntaxKind.BinaryExpression && (
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken ||
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken);
+                return isLogicalOrCoalescingBinaryExpression(node);
             }
         }
     }
 
     function isLogicalAssignmentExpression(node: Node) {
-        node = skipParentheses(node);
-        return isBinaryExpression(node) && isLogicalOrCoalescingAssignmentOperator(node.operatorToken.kind);
+        return isLogicalOrCoalescingAssignmentExpression(skipParentheses(node));
     }
 
     function isTopLevelLogicalExpression(node: Node): boolean {
@@ -1857,10 +1862,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
             // For now, though, since the common cases are chained `+`, leaving it recursive is fine
             const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken ||
-                operator === SyntaxKind.BarBarToken ||
-                operator === SyntaxKind.QuestionQuestionToken ||
-                isLogicalOrCoalescingAssignmentOperator(operator)) {
+            if (isLogicalOrCoalescingBinaryOperator(operator) || isLogicalOrCoalescingAssignmentOperator(operator)) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
                     bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
@@ -2420,13 +2422,18 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             !isIdentifierName(node)) {
 
             // strict mode identifiers
+            const originalKeywordKind = identifierToKeywordKind(node);
+            if (originalKeywordKind === undefined) {
+                return;
+            }
+
             if (inStrictMode &&
-                node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
+                originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
+                originalKeywordKind <= SyntaxKind.LastFutureReservedWord) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     getStrictModeIdentifierMessage(node), declarationNameToString(node)));
             }
-            else if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+            else if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 if (isExternalModule(file) && isInTopLevelContext(node)) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node,
                         Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
@@ -2438,7 +2445,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         declarationNameToString(node)));
                 }
             }
-            else if (node.originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
+            else if (originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
                     declarationNameToString(node)));
@@ -2731,7 +2738,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // for typedef type names with namespaces, bind the new jsdoc type symbol here
                 // because it requires all containing namespaces to be in effect, namely the
                 // current "blockScopeContainer" needs to be set to its immediate namespace parent.
-                if ((node as Identifier).isInJSDocNamespace) {
+                if (node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
                     let parentNode = node.parent;
                     while (parentNode && !isJSDocTypeAlias(parentNode)) {
                         parentNode = parentNode.parent;
@@ -3206,7 +3213,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
                 break;
-
+            // Namespaces are not allowed in javascript files, so do nothing here
+            case SyntaxKind.ModuleDeclaration:
+                break;
             default:
                 Debug.failBadSyntaxKind(thisContainer);
         }

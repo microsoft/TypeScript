@@ -5,7 +5,6 @@ class C {
     get x(): <T>(a: T) => T { return null; }
 >x : <T>(a: T) => T
 >a : T
->null : null
 
     set x(p: <U>(a: U) => U) {}
 >x : <T>(a: T) => T

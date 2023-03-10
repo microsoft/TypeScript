@@ -62,6 +62,7 @@ import {
     isYieldExpression,
     IterationStatement,
     mapDefined,
+    mapDefinedIterator,
     MethodDeclaration,
     Modifier,
     ModifierFlags,
@@ -71,7 +72,6 @@ import {
     ObjectLiteralExpression,
     ObjectTypeDeclaration,
     Program,
-    Push,
     ReturnStatement,
     SourceFile,
     SwitchStatement,
@@ -117,7 +117,7 @@ export namespace DocumentHighlights {
         if (!referenceEntries) return undefined;
         const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
         const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-        return mapDefined(arrayFrom(map.entries()), ([fileName, highlightSpans]) => {
+        return arrayFrom(mapDefinedIterator(map.entries(), ([fileName, highlightSpans]) => {
             if (!sourceFilesSet.has(fileName)) {
                 if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
                     return undefined;
@@ -128,7 +128,7 @@ export namespace DocumentHighlights {
                 Debug.assert(sourceFilesSet.has(fileName));
             }
             return { fileName, highlightSpans };
-        });
+        }));
     }
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] | undefined {
@@ -339,7 +339,7 @@ export namespace DocumentHighlights {
         }
     }
 
-    function pushKeywordIf(keywordList: Push<Node>, token: Node | undefined, ...expected: SyntaxKind[]): boolean {
+    function pushKeywordIf(keywordList: Node[], token: Node | undefined, ...expected: SyntaxKind[]): boolean {
         if (token && contains(expected, token.kind)) {
             keywordList.push(token);
             return true;

@@ -500,6 +500,10 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                 diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                 break;
 
+            case SyntaxKind.InferType:
+                diagnosticMessage = Diagnostics.Extends_clause_for_inferred_type_0_has_or_is_using_private_name_1;
+                break;
+
             case SyntaxKind.TypeAliasDeclaration:
                 diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_type_alias_has_or_is_using_private_name_1;
                 break;

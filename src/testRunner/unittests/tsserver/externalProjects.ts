@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     File,
@@ -244,7 +244,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         verifyDynamic(projectService, "/^scriptdocument1 file1.ts");
 
         externalFiles[0].content = "let x =1;";
-        projectService.applyChangesInOpenFiles(ts.arrayIterator(externalFiles));
+        projectService.applyChangesInOpenFiles(externalFiles);
     });
 
     it("when file name starts with ^", () => {

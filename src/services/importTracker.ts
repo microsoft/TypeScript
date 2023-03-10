@@ -44,6 +44,7 @@ import {
     isImportEqualsDeclaration,
     isImportTypeNode,
     isInJSFile,
+    isJSDocCallbackTag,
     isJSDocTypedefTag,
     isModuleExportsAccessExpression,
     isNamedExports,
@@ -612,7 +613,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             else if (isBinaryExpression(grandparent)) {
                 return getSpecialPropertyExport(grandparent, /*useLhsSymbol*/ true);
             }
-            else if (isJSDocTypedefTag(parent)) {
+            else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
             }
         }
@@ -652,6 +653,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
 
         // Search on the local symbol in the exporting module, not the exported symbol.
         importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
+
         // Similarly, skip past the symbol for 'export ='
         if (importedSymbol.escapedName === "export=") {
             importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
@@ -743,7 +745,7 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
     if (symbol.declarations) {
         for (const declaration of symbol.declarations) {
             if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
-                return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
+                return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
             else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
                 // Export of form 'module.exports.propName = expr';

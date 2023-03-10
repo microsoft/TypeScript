@@ -1,12 +1,30 @@
+import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import * as fakes from "../../_namespaces/fakes";
 
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
     return new vfs.FileSystem(ignoreCase, {
         cwd,
         files: {
             [root]: {
+                "dev/node_modules/@foo/tsconfig/package.json": JSON.stringify({
+                    name: "@foo/tsconfig",
+                    version: "1.0.0",
+                    exports: {
+                        ".": "./src/tsconfig.json"
+                    }
+                }),
+                "dev/node_modules/@foo/tsconfig/src/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        strict: true,
+                    }
+                }),
+                "dev/tsconfig.extendsFoo.json": JSON.stringify({
+                    extends: "@foo/tsconfig",
+                    files: [
+                        "main.ts",
+                    ]
+                }),
                 "dev/node_modules/config-box/package.json": JSON.stringify({
                     name: "config-box",
                     version: "1.0.0",
@@ -181,6 +199,8 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 }),
                 "dev/extends.json": JSON.stringify({ extends: 42 }),
                 "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
+                "dev/extends3.json": JSON.stringify({ extends: "" }),
+                "dev/extends4.json": JSON.stringify({ extends: [""] }),
                 "dev/main.ts": "",
                 "dev/supplemental.ts": "",
                 "dev/tests/unit/spec.ts": "",
@@ -340,6 +360,16 @@ describe("unittests:: config:: configurationExtension", () => {
                 messageText: `Compiler option 'extends' requires a value of type string or Array.`
             }]);
 
+            testFailure("can error when 'extends' is given an empty string", "extends3.json", [{
+                code: 18051,
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
+            }]);
+
+            testFailure("can error when 'extends' is given an empty string in an array", "extends4.json", [{
+                code: 18051,
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
+            }]);
+
             testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {
                 allowJs: true,
                 noImplicitAny: true,
@@ -376,6 +406,7 @@ describe("unittests:: config:: configurationExtension", () => {
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an package.json exports", "tsconfig.extendsFoo.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
             });
 
             it("adds extendedSourceFiles only once", () => {

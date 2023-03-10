@@ -59,6 +59,11 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             subScenario: "modules and globals mixed in amd",
         });
 
+        verifyOutFileScenario({
+            subScenario: "prepend reports deprecation error",
+            modifyFs: fs => replaceText(fs, "/src/app/tsconfig.json", `"ignoreDeprecations": "5.0",`, ""),
+        });
+
         // Prologues
         describe("Prologues", () => {
             verifyOutFileScenario({

@@ -246,7 +246,6 @@ function goo(x: X) {
 
 declare const x: (() => void)|null;
 >x : (() => void) | null
->null : null
 
 declare const ctor: Function;
 >ctor : Function
