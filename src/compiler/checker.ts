@@ -5474,7 +5474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
                     return getSymbolOfDeclaration(d.parent as Declaration);
                 }
-                // export ='d member of an ambient module
+                // members of ambient modules
                 if (isModuleBlock(d.parent) && d.parent.parent && !isGlobalScopeAugmentation(d.parent.parent)) {
                     return getSymbolOfDeclaration(d.parent.parent);
                 }
