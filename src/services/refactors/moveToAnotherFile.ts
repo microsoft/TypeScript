@@ -145,8 +145,9 @@ registerRefactor(refactorNameForAnotherFile, {
     getEditsForAction: function getRefactorEditsToMoveToAnotherFile(context, actionName, newFile): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForAnotherFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
+        const newFileImportAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
         if (newFile) {
-            const edits = textChanges.ChangeTracker.with(context, t => doChangeToAnotherFile(context.file, newFile, context.program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(context, t => doChangeToAnotherFile(context.file, newFile, newFileImportAdder, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return undefined;
@@ -179,10 +180,10 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     };
 }
 
-function doChangeToAnotherFile(oldFile: SourceFile, newFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChangeToAnotherFile(oldFile: SourceFile, newFile: SourceFile, newFileImportAdder: codefix.ImportAdder, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    changes.addStatementsToNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile.fileName, preferences));
+    changes.addStatementsToNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, newFileImportAdder, usage, changes, toMove, program, host, newFile.fileName, preferences));
 }
 
 interface StatementRange {
@@ -296,7 +297,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, _newFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
+    oldFile: SourceFile, newFile: SourceFile,_newFileImportAdder: codefix.ImportAdder, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -317,9 +318,10 @@ function getNewStatementsAndRemoveFromOldFile(
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename);
 
     const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
-    //insertImports(changes, newFile, imports, /*blankLineBetween*/ true, preferences);
+    insertImports(changes, newFile, imports, /*blankLineBetween*/ true, preferences);
+    //newFileImportAdder.writeFixes(changes);  //insert import statements in new file
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
-    //insert import statements in new file
+    changes.insertNodeAfter(newFile, newFile.statements[newFile.statements.length-1], body[0]); //needs to be changed
 
     if (imports.length && body.length) {
         return [

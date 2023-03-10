@@ -3175,7 +3175,7 @@ export class TestState {
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
                 //ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
-                const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
+                const newContent = ts.textChanges.applyChanges(oldText!, change.textChanges);
                 this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
             }
             for (const newFileName in newFileContent) {
