@@ -2507,6 +2507,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): readonly protocol.NavtoItem[] | readonly NavigateToItem[] {
+
+        function getRandomInt(max: number) {
+            return Math.floor(Math.random() * max);
+        }
+
+        const random = getRandomInt(2);
+
+        if (random == 0) {
+            throw new Error('This is error 0');
+        }
+        else {
+            throw new Error('This is error 1');
+        }
+
+
         const full = this.getFullNavigateToItems(args);
         return !simplifiedResult ?
             flatMap(full, ({ navigateToItems }) => navigateToItems) :
