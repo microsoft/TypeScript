@@ -159,7 +159,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >1 : 1
 >foo : (x: number, y: number, ...z: string[]) => any
 >...[1, 2, "abc"] : string | number
->[1, 2, "abc"] : (string | number)[]
+>[1, 2, "abc"] : readonly [number, number, string]
 >1 : 1
 >2 : 2
 >"abc" : "abc"

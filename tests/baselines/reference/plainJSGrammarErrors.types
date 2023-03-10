@@ -620,8 +620,8 @@ const trinaryDynamicImport = import('1', '2', '3')
 const spreadDynamicImport = import(...[])
 >spreadDynamicImport : Promise<any>
 >import(...[]) : Promise<any>
->...[] : undefined
->[] : undefined[]
+>...[] : never
+>[] : readonly []
 
 return
 

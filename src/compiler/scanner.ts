@@ -81,6 +81,8 @@ export interface Scanner {
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
+    /** @internal */
+    scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
     scan(): SyntaxKind;
 
     getText(): string;
@@ -1031,6 +1033,7 @@ export function createScanner(languageVersion: ScriptTarget,
         reScanInvalidIdentifier,
         scanJsxToken,
         scanJsDocToken,
+        scanJSDocCommentTextToken,
         scan,
         getText,
         clearCommentDirectives,
@@ -2465,6 +2468,34 @@ export function createScanner(languageVersion: ScriptTarget,
     function reScanJsxAttributeValue(): SyntaxKind {
         pos = tokenStart = fullStartPos;
         return scanJsxAttributeValue();
+    }
+
+    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
+        fullStartPos = tokenStart = pos;
+        tokenFlags = TokenFlags.None;
+        if (pos >= end) {
+            return token = SyntaxKind.EndOfFileToken;
+        }
+        for (let ch = text.charCodeAt(pos);
+             pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick);
+             ch = codePointAt(text, ++pos)) {
+            if (!inBackticks) {
+                if (ch === CharacterCodes.openBrace) {
+                    break;
+                }
+                else if (ch === CharacterCodes.at
+                    && pos - 1 >= 0 && isWhiteSpaceSingleLine(text.charCodeAt(pos - 1))
+                    && !(pos + 1 < end && isWhiteSpaceLike(text.charCodeAt(pos + 1)))) {
+                    // @ doesn't start a new tag inside ``, and elsewhere, only after whitespace and before non-whitespace
+                    break;
+                }
+            }
+        }
+        if (pos === tokenStart) {
+            return scanJsDocToken();
+        }
+        tokenValue = text.substring(tokenStart, pos);
+        return token = SyntaxKind.JSDocCommentTextToken;
     }
 
     function scanJsDocToken(): JSDocSyntaxKind {
