@@ -96,13 +96,8 @@ do { }while(true)
 >true : true
 
 if (null) { }
->null : null
-
 while (null) { }
->null : null
-
 do { }while(null)
->null : null
 
 if (undefined) { }
 >undefined : undefined
@@ -255,7 +250,6 @@ do { }while(a)
 
 var b = null;
 >b : any
->null : null
 
 if (b) { }
 >b : any
@@ -392,7 +386,6 @@ do { }while(k)
 function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
 >x : string
->null : null
 
 if (fn()) { }
 >fn() : I

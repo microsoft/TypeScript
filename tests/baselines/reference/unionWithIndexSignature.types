@@ -55,7 +55,7 @@ export function flatten<T extends number|TypedArray>(arr: T) {
 
       arr[1];
 >arr[1] : number
->arr : Int32Array | Uint8Array
+>arr : TypedArray
 >1 : 1
   }
 }

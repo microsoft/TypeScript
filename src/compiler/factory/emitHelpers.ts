@@ -25,6 +25,7 @@ import {
     isComputedPropertyName,
     isIdentifier,
     memoize,
+    ObjectLiteralElementLike,
     PrivateIdentifier,
     ScriptTarget,
     setEmitFlags,
@@ -250,155 +251,97 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         ]);
     }
 
-    // Per https://github.com/tc39/proposal-decorators/issues/494, we may need to change the emit for the `access` object
-    // so that it does not need to be used via `.call`. The following two sections represent the options presented in
-    // tc39/proposal-decorators#494
-    //
-    // === Current approach (`access.get.call(obj)`, `access.set.call(obj, value)`) ===
-    //
-    // function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
-    //     const accessor = elementName.computed ?
-    //         factory.createElementAccessExpression(factory.createThis(), elementName.name) :
-    //         factory.createPropertyAccessExpression(factory.createThis(), elementName.name);
-    //
-    //     return factory.createMethodDeclaration(
-    //         /*modifiers*/ undefined,
-    //         /*asteriskToken*/ undefined,
-    //         "get",
-    //         /*questionToken*/ undefined,
-    //         /*typeParameters*/ undefined,
-    //         [],
-    //         /*type*/ undefined,
-    //         factory.createBlock([factory.createReturnStatement(accessor)])
-    //     );
-    // }
-    //
-    // function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
-    //     const accessor = elementName.computed ?
-    //         factory.createElementAccessExpression(factory.createThis(), elementName.name) :
-    //         factory.createPropertyAccessExpression(factory.createThis(), elementName.name);
-    //
-    //     return factory.createMethodDeclaration(
-    //         /*modifiers*/ undefined,
-    //         /*asteriskToken*/ undefined,
-    //         "set",
-    //         /*questionToken*/ undefined,
-    //         /*typeParameters*/ undefined,
-    //         [factory.createParameterDeclaration(
-    //             /*modifiers*/ undefined,
-    //             /*dotDotDotToken*/ undefined,
-    //             factory.createIdentifier("value")
-    //         )],
-    //         /*type*/ undefined,
-    //         factory.createBlock([
-    //             factory.createExpressionStatement(
-    //                 factory.createAssignment(
-    //                     accessor,
-    //                     factory.createIdentifier("value")
-    //                 )
-    //             )
-    //         ])
-    //     );
-    // }
-    //
-    // function createESDecorateClassElementAccessObject(name: ESDecorateName, access: ESDecorateClassElementAccess) {
-    //     const properties: ObjectLiteralElementLike[] = [];
-    //     if (access.get) properties.push(createESDecorateClassElementAccessGetMethod(name));
-    //     if (access.set) properties.push(createESDecorateClassElementAccessSetMethod(name));
-    //     return factory.createObjectLiteralExpression(properties);
-    // }
-    //
-    // === Suggested approach (`access.get(obj)`, `access.set(obj, value)`, `access.has(obj)`) ===
-    //
-    // function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
-    //     const accessor = elementName.computed ?
-    //         factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
-    //         factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
-    //
-    //     return factory.createMethodDeclaration(
-    //         /*modifiers*/ undefined,
-    //         /*asteriskToken*/ undefined,
-    //         "get",
-    //         /*questionToken*/ undefined,
-    //         /*typeParameters*/ undefined,
-    //         [factory.createParameterDeclaration(
-    //             /*modifiers*/ undefined,
-    //             /*dotDotDotToken*/ undefined,
-    //             factory.createIdentifier("obj")
-    //         )],
-    //         /*type*/ undefined,
-    //         factory.createBlock([factory.createReturnStatement(accessor)])
-    //     );
-    // }
-    //
-    // function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
-    //     const accessor = elementName.computed ?
-    //         factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
-    //         factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
-    //
-    //     return factory.createMethodDeclaration(
-    //         /*modifiers*/ undefined,
-    //         /*asteriskToken*/ undefined,
-    //         "set",
-    //         /*questionToken*/ undefined,
-    //         /*typeParameters*/ undefined,
-    //         [factory.createParameterDeclaration(
-    //             /*modifiers*/ undefined,
-    //             /*dotDotDotToken*/ undefined,
-    //             factory.createIdentifier("obj")
-    //         ),
-    //         factory.createParameterDeclaration(
-    //             /*modifiers*/ undefined,
-    //             /*dotDotDotToken*/ undefined,
-    //             factory.createIdentifier("value")
-    //         )],
-    //         /*type*/ undefined,
-    //         factory.createBlock([
-    //             factory.createExpressionStatement(
-    //                 factory.createAssignment(
-    //                     accessor,
-    //                     factory.createIdentifier("value")
-    //                 )
-    //             )
-    //         ])
-    //     );
-    // }
-    //
-    // function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
-    //     const propertyName =
-    //         elementName.computed ? elementName.name :
-    //         isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
-    //         elementName.name;
-    //
-    //     return factory.createMethodDeclaration(
-    //         /*modifiers*/ undefined,
-    //         /*asteriskToken*/ undefined,
-    //         "has",
-    //         /*questionToken*/ undefined,
-    //         /*typeParameters*/ undefined,
-    //         [factory.createParameterDeclaration(
-    //             /*modifiers*/ undefined,
-    //             /*dotDotDotToken*/ undefined,
-    //             factory.createIdentifier("obj")
-    //         )],
-    //         /*type*/ undefined,
-    //         factory.createBlock([factory.createReturnStatement(
-    //             factory.createBinaryExpression(
-    //                 propertyName,
-    //                 SyntaxKind.InKeyword,
-    //                 factory.createIdentifier("obj")
-    //             )
-    //         )])
-    //     );
-    // }
-    //
-    // function createESDecorateClassElementAccessObject(name: ESDecorateName, access: ESDecorateClassElementAccess) {
-    //     const properties: ObjectLiteralElementLike[] = [];
-    //     if (access.get) properties.push(createESDecorateClassElementAccessGetMethod(name));
-    //     if (access.set) properties.push(createESDecorateClassElementAccessSetMethod(name));
-    //     property.push(createESDecorateClassElementAccessHasMethod(name));
-    //     return factory.createObjectLiteralExpression(properties);
-    // }
+
+    function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
+        const accessor = elementName.computed ?
+            factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
+            factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
+
+        return factory.createPropertyAssignment(
+            "get",
+            factory.createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                [factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    factory.createIdentifier("obj")
+                )],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                accessor
+            )
+        );
+    }
+
+    function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
+        const accessor = elementName.computed ?
+            factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
+            factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
+
+        return factory.createPropertyAssignment(
+            "set",
+            factory.createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                [factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    factory.createIdentifier("obj")
+                ),
+                factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    factory.createIdentifier("value")
+                )],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                factory.createBlock([
+                    factory.createExpressionStatement(
+                        factory.createAssignment(
+                            accessor,
+                            factory.createIdentifier("value")
+                        )
+                    )
+                ])
+            )
+        );
+    }
+
+    function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
+        const propertyName =
+            elementName.computed ? elementName.name :
+            isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
+            elementName.name;
+
+        return factory.createPropertyAssignment(
+            "has",
+            factory.createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                [factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    factory.createIdentifier("obj")
+                )],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                factory.createBinaryExpression(
+                    propertyName,
+                    SyntaxKind.InKeyword,
+                    factory.createIdentifier("obj")
+                )
+            )
+        );
+    }
+
+    function createESDecorateClassElementAccessObject(name: ESDecorateName, access: ESDecorateClassElementAccess) {
+        const properties: ObjectLiteralElementLike[] = [];
+        properties.push(createESDecorateClassElementAccessHasMethod(name));
+        if (access.get) properties.push(createESDecorateClassElementAccessGetMethod(name));
+        if (access.set) properties.push(createESDecorateClassElementAccessSetMethod(name));
+        return factory.createObjectLiteralExpression(properties);
+    }
 
     function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
         return factory.createObjectLiteralExpression([
@@ -406,9 +349,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
-
-            // Disabled, pending resolution of https://github.com/tc39/proposal-decorators/issues/494
-            // factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access))
+            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access))
         ]);
     }
 

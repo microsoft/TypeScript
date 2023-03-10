@@ -1,6 +1,6 @@
+import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import * as fakes from "../../_namespaces/fakes";
 
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
     return new vfs.FileSystem(ignoreCase, {

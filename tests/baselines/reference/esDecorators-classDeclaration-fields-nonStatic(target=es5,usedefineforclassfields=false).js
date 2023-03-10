@@ -35,9 +35,9 @@ var C = function () {
         _member_decorators_1 = [dec(3)],
         _b = __propKey(field3),
         (function () {
-            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { has: function (obj) { return "field1" in obj; }, get: function (obj) { return obj.field1; }, set: function (obj, value) { obj.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { has: function (obj) { return "field2" in obj; }, get: function (obj) { return obj["field2"]; }, set: function (obj, value) { obj["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; }, set: function (obj, value) { obj[_b] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
         })(),
         _a;
 }();

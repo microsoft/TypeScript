@@ -77,7 +77,6 @@ class C2 {
 >this.x : string
 >this : this
 >x : string
->null : null
 
     protected set y(x) { () => { this.y = this.x; } }
 >y : any
@@ -107,7 +106,6 @@ class C2 {
 >this.x : string
 >this : typeof C2
 >x : string
->null : null
 
     protected static set y(x) {
 >y : any

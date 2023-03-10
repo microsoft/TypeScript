@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 
 describe("unittests:: services:: hostNewLineSupport", () => {
     function testLSWithFiles(settings: ts.CompilerOptions, files: Harness.Compiler.TestFile[]) {

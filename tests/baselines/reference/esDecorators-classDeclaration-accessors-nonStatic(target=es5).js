@@ -55,12 +55,12 @@ var C = function () {
             return C;
         }()),
         (function () {
-            __esDecorate(_a, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _get_member_decorators_1, { kind: "getter", name: _b, static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _set_member_decorators_1, { kind: "setter", name: _c, static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false, access: { has: function (obj) { return "method1" in obj; }, get: function (obj) { return obj.method1; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false, access: { has: function (obj) { return "method1" in obj; }, set: function (obj, value) { obj.method1 = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false, access: { has: function (obj) { return "method2" in obj; }, get: function (obj) { return obj["method2"]; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false, access: { has: function (obj) { return "method2" in obj; }, set: function (obj, value) { obj["method2"] = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_member_decorators_1, { kind: "getter", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _set_member_decorators_1, { kind: "setter", name: _c, static: false, private: false, access: { has: function (obj) { return _c in obj; }, set: function (obj, value) { obj[_c] = value; } } }, null, _instanceExtraInitializers);
         })(),
         _a;
 }();

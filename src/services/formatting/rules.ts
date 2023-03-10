@@ -1,15 +1,4 @@
 import {
-    anyContext,
-    ContextPredicate,
-    FormattingContext,
-    FormattingRequestKind,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    TextRangeWithKind,
-    TokenRange,
-} from "../_namespaces/ts.formatting";
-import {
     BinaryExpression,
     contains,
     findAncestor,
@@ -32,6 +21,17 @@ import {
     typeKeywords,
     YieldExpression,
 } from "../_namespaces/ts";
+import {
+    anyContext,
+    ContextPredicate,
+    FormattingContext,
+    FormattingRequestKind,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    TextRangeWithKind,
+    TokenRange,
+} from "../_namespaces/ts.formatting";
 
 /** @internal */
 export interface RuleSpec {

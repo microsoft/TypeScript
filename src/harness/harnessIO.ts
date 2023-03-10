@@ -1,7 +1,3 @@
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vpath from "./_namespaces/vpath";
-import * as vfs from "./_namespaces/vfs";
 import * as compiler from "./_namespaces/compiler";
 import * as documents from "./_namespaces/documents";
 import * as fakes from "./_namespaces/fakes";
@@ -10,6 +6,10 @@ import {
     TypeWriterResult,
     TypeWriterWalker,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 export interface IO {
     newLine(): string;
@@ -567,7 +567,7 @@ export namespace Compiler {
         diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
         let outputLines = "";
         // Count up all errors that were found in files other than lib.d.ts so we don't miss any
-        let totalErrorsReportedInNonLibraryFiles = 0;
+        let totalErrorsReportedInNonLibraryNonTsconfigFiles = 0;
 
         let errorsReported = 0;
 
@@ -609,14 +609,19 @@ export namespace Compiler {
             // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
             // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
             // then they will be added twice thus triggering 'total errors' assertion with condition
-            // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
+            // Similarly for tsconfig, which may be in the input files and contain errors.
+            // 'totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length
 
-            if (!error.file || !isDefaultLibraryFile(error.file.fileName)) {
-                totalErrorsReportedInNonLibraryFiles++;
+            if (!error.file || !isDefaultLibraryFile(error.file.fileName) && !vpath.isTsConfigFile(error.file.fileName)) {
+                totalErrorsReportedInNonLibraryNonTsconfigFiles++;
             }
         }
 
-        yield [diagnosticSummaryMarker, Utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+        let topDiagnostics = minimalDiagnosticsToString(diagnostics, options && options.pretty);
+        topDiagnostics = Utils.removeTestPathPrefixes(topDiagnostics);
+        topDiagnostics = topDiagnostics.replace(/^(lib(?:.*)\.d\.ts)\(\d+,\d+\)/igm, "$1(--,--)");
+
+        yield [diagnosticSummaryMarker, topDiagnostics + IO.newLine() + IO.newLine(), diagnostics.length];
 
         // Report global errors
         const globalErrors = diagnostics.filter(err => !err.file);
@@ -700,7 +705,7 @@ export namespace Compiler {
                 // Case-duplicated files on a case-insensitive build will have errors reported in both the dupe and the original
                 // thanks to the canse-insensitive path comparison on the error file path - We only want to count those errors once
                 // for the assert below, so we subtract them here.
-                totalErrorsReportedInNonLibraryFiles -= errorsReported;
+                totalErrorsReportedInNonLibraryNonTsconfigFiles -= errorsReported;
             }
             outputLines = "";
             errorsReported = 0;
@@ -710,13 +715,12 @@ export namespace Compiler {
             return !!diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
         });
 
-        const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-            // Count an error generated from tests262-harness folder.This should only apply for test262
-            return !!diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
+        const numTsconfigDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+            return !!diagnostic.file && (vpath.isTsConfigFile(diagnostic.file.fileName));
         });
 
         // Verify we didn't miss any errors in total
-        assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
+        assert.equal(totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length, "total number of errors");
     }
 
     export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {

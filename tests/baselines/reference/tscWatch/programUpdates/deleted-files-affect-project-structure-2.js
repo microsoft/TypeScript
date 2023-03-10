@@ -52,19 +52,15 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/f1.ts:
+/a/b/f1.ts: *new*
   {}
-/a/b/f2.ts:
+/a/b/f2.ts: *new*
   {}
-/a/c/f3.ts:
+/a/c/f3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -148,8 +144,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/f1.ts:
   {}
@@ -158,8 +152,12 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/f2.ts:
+  {}
+
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
