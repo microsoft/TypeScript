@@ -485,10 +485,10 @@ function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolution
 }
 
 function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: string, moduleResolutionState: ModuleResolutionState) {
-    return combinePaths(typeRoot, endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/") ?
+    const nameForLookup = endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/") ?
         mangleScopedPackageNameWithTrace(typeReferenceDirectiveName, moduleResolutionState) :
-        typeReferenceDirectiveName
-    );
+        typeReferenceDirectiveName;
+    return combinePaths(typeRoot, nameForLookup);
 }
 
 /**
