@@ -41,7 +41,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
         await cleanTestDirs();
 
-        if (options.token?.signaled) {
+        if (options.token && options.token.signaled) {
             return;
         }
     }

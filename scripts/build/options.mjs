@@ -1,7 +1,7 @@
 import minimist from "minimist";
 import os from "os";
 
-const ci = ["1", "true"].includes(process.env.CI ?? "");
+const ci = ["1", "true"].includes(process.env.CI || "");
 
 const parsed = minimist(process.argv.slice(2), {
     boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle", "typecheck", "lint"],
@@ -26,13 +26,13 @@ const parsed = minimist(process.argv.slice(2), {
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || (os.platform() === "win32" ? "edge" : "chrome"),
-        timeout: +(process.env.timeout ?? 0) || 40000,
+        timeout: +(process.env.timeout || 0) || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         fix: process.env.fix || process.env.f,
-        workers: +(process.env.workerCount ?? 0) || ((os.cpus().length - (ci ? 0 : 1)) || 1),
+        workers: +(process.env.workerCount || 0) || ((os.cpus().length - (ci ? 0 : 1)) || 1),
         failed: false,
         keepFailed: false,
         lkg: false,

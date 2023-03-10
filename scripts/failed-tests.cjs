@@ -29,7 +29,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
         super(runner, options);
         if (!runner) return;
 
-        const reporterOptions = this.reporterOptions = options?.reporterOptions || {};
+        const reporterOptions = this.reporterOptions = options && options.reporterOptions || {};
         if (reporterOptions.file === undefined) reporterOptions.file = ".failed-tests";
         if (reporterOptions.keepFailed === undefined) reporterOptions.keepFailed = false;
         if (reporterOptions.reporter) {

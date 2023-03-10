@@ -161,7 +161,7 @@ function containsPublicAPI(symbol) {
     return result;
 
     function containsPublicAPIWorker() {
-        if (!symbol.declarations?.length) {
+        if (!symbol.declarations || !symbol.declarations.length) {
             return false;
         }
 
@@ -171,7 +171,7 @@ function containsPublicAPI(symbol) {
         }
 
         // Namespace barrel; actual namespaces are checked below.
-        if (symbol.flags & ts.SymbolFlags.ValueModule && symbol.valueDeclaration?.kind === ts.SyntaxKind.SourceFile) {
+        if (symbol.flags & ts.SymbolFlags.ValueModule && symbol.valueDeclaration !== undefined && symbol.valueDeclaration.kind === ts.SyntaxKind.SourceFile) {
             for (const me of typeChecker.getExportsOfModule(symbol)) {
                 if (containsPublicAPI(me)) {
                     return true;
@@ -354,7 +354,7 @@ function emitAsNamespace(name, moduleSymbol) {
     }
 
     for (const me of moduleExports) {
-        assert(me.declarations?.length);
+        assert(me.declarations && me.declarations.length);
 
         if (me.flags & ts.SymbolFlags.Alias) {
             const resolved = typeChecker.getAliasedSymbol(me);

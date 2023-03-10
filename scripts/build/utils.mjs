@@ -29,21 +29,26 @@ export async function exec(cmd, args, options = {}) {
             const onCanceled = () => {
                 proc.kill();
             };
-            const subscription = options.token?.subscribe(onCanceled);
+            const subscription = options.token ? options.token.subscribe(onCanceled) : undefined;
             proc.on("exit", exitCode => {
                 if (exitCode === 0 || ignoreExitCode) {
-                    resolve({ exitCode: exitCode ?? undefined });
+                    // eslint-disable-next-line no-null/no-null
+                    resolve({ exitCode: exitCode !== undefined && exitCode !== null ? exitCode : undefined });
                 }
                 else {
-                    const reason = options.token?.signaled ? options.token.reason ?? new CancelError() :
+                    const reason = (options.token && options.token.signaled) ? (options.token.reason !== undefined ? options.token.reason : new CancelError()) :
                         new Error(`Process exited with code: ${exitCode}`);
                     reject(reason);
                 }
-                subscription?.unsubscribe();
+                if (subscription) {
+                    subscription.unsubscribe();
+                }
             });
             proc.on("error", error => {
                 reject(error);
-                subscription?.unsubscribe();
+                if (subscription) {
+                    subscription.unsubscribe();
+                }
             });
         }
         else {

@@ -1863,13 +1863,14 @@ describe("unittests:: evaluation:: esDecorators", () => {
         });
     });
 
-    const nodeVersion = ts.Version.tryParse(process.version);
-    const supportsClassStaticBlock = nodeVersion && nodeVersion.major >= 16;
+    const nodeVersion = new ts.Version(process.versions.node);
+    const node16 = nodeVersion.major >= 16;
+    const node14 = nodeVersion.major >= 14;
 
     const targets = [
         // NOTE: Class static blocks weren't supported in Node v14
-        ...(supportsClassStaticBlock ? [ScriptTarget.ES2022] : []),
-        ScriptTarget.ES2021,
+        ...(node16 ? [ScriptTarget.ES2022] : []),
+        ...(node14 ? [ScriptTarget.ES2021] : []),
         ScriptTarget.ES2015,
     ];
 

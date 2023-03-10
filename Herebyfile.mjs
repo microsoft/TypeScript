@@ -224,7 +224,8 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const options = { ...await getOptions(), logLevel: "info" };
             if (taskOptions.onWatchRebuild) {
                 const onRebuild = taskOptions.onWatchRebuild;
-                options.plugins = (options.plugins?.slice(0) ?? []).concat([{
+                options.plugins = options.plugins ? options.plugins.slice() : [];
+                options.plugins.push({
                     name: "watch",
                     setup: (build) => {
                         let firstBuild = true;
@@ -237,7 +238,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                             }
                         });
                     }
-                }]);
+                });
             }
 
             const ctx = await esbuild.context(options);
@@ -297,7 +298,7 @@ function entrypointBuildTask(options) {
         },
     });
 
-    const mainDeps = options.mainDeps?.slice(0) ?? [];
+    const mainDeps = options.mainDeps ? options.mainDeps.slice() : [];
     if (cmdLineOptions.bundle) {
         mainDeps.push(bundle);
         if (cmdLineOptions.typecheck) {
@@ -317,7 +318,7 @@ function entrypointBuildTask(options) {
     const watch = task({
         name: `watch-${options.name}`,
         hiddenFromTaskList: true, // This is best effort.
-        dependencies: (options.buildDeps ?? []).concat(options.mainDeps ?? []).concat(cmdLineOptions.bundle ? [] : [shim]),
+        dependencies: (options.buildDeps || []).concat(options.mainDeps || []).concat(cmdLineOptions.bundle ? [] : [shim]),
         run: () => {
             // These watch functions return promises that resolve once watch mode has started,
             // allowing them to operate as regular tasks, while creating unresolved promises
