@@ -154,7 +154,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             it("verify that state is read correctly", () => {
                 const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
                 const reportDiagnostic = ts.createDiagnosticReporter(system);
-                const parsedConfig = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
+                const parsedConfig = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic, /*checkAllowPlugins*/ true)!;
                 ts.performIncrementalCompilation({
                     rootNames: parsedConfig.fileNames,
                     options: parsedConfig.options,
@@ -164,7 +164,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     system
                 });
 
-                const command = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.noop)!;
+                const command = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.noop, /*checkAllowPlugins*/ true)!;
                 const builderProgram = ts.createIncrementalProgram({
                     rootNames: command.fileNames,
                     options: command.options,

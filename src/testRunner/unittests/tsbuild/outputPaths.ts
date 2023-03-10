@@ -32,7 +32,7 @@ describe("unittests:: tsbuild - output file paths", () => {
 
             assert.deepEqual(
                 ts.getOutputFileNames(
-                    ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop)!,
+                    ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop, /*checkAllowPlugins*/ true)!,
                     "/src/src/index.ts",
                     /*ignoreCase*/ false
                 ),

@@ -61,10 +61,11 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             const parsedConfig = ts.parseConfigFileWithSystem(
                 "tsconfig.json",
                 {},
-             /*extendedConfigCache*/ undefined,
-              /*watchOptionsToExtend*/ undefined,
+                /*extendedConfigCache*/ undefined,
+                /*watchOptionsToExtend*/ undefined,
                 sys,
-                reportDiagnostic
+                reportDiagnostic,
+                /*checkAllowPlugins*/ true,
             )!;
             const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
             let programs: CommandLineProgram[] = ts.emptyArray;

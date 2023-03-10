@@ -161,6 +161,7 @@ export interface BuildOptions {
     /** @internal */ locale?: string;
     /** @internal */ generateCpuProfile?: string;
     /** @internal */ generateTrace?: string;
+    /** @internal */ allowPlugins?: boolean;
 
     [option: string]: CompilerOptionsValue | undefined;
 }
@@ -567,7 +568,7 @@ function parseConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T
     }
     else {
         parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-        parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache, baseWatchOptions);
+        parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache, baseWatchOptions, /*extraFileExtensions*/ undefined, state.hostWithWatch.checkAllowPlugins);
         parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
     }
     configFileCache.set(configFilePath, parsed || diagnostic!);

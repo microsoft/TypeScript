@@ -23,7 +23,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -w --extendedDiagnostics
+/a/lib/tsc.js -w --extendedDiagnostics --allowPlugins
 Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
@@ -36,7 +36,7 @@ Require:: Module myplugin created with config: {"name":"myplugin"} and options: 
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFactory":"myplugin"} Source file
@@ -51,7 +51,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -134,13 +134,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [[90m12:00:35 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -203,14 +203,14 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c.ts 250 {"watchFactory":"myplugin"} Source file
 [[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

@@ -586,7 +586,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 configFileName,
                 system
             })).getCurrentProgram().getProgram();
-            const { fileNames, options } = ts.parseConfigFileWithSystem(configFileName, {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.notImplemented)!; // TODO: GH#18217
+            const { fileNames, options } = ts.parseConfigFileWithSystem(configFileName, {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.notImplemented, /*checkAllowPlugins*/ true)!; // TODO: GH#18217
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 

@@ -7,7 +7,7 @@ export class a { prop = "hello"; foo() { return this.prop; } }
 export class b { prop = "hello"; foo() { return this.prop; } }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"watchOptions":{"watchFactory":"myplugin/../malicious"}}
+{"watchOptions":{"watchFactory":"myplugin"}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -23,14 +23,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -b -w --extendedDiagnostics --allowPlugins
+/a/lib/tsc.js -b -w --extendedDiagnostics
 Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+[96mtsconfig.json[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS5110: [0mOption 'watchFactory' cannot be specified without passing '--allowPlugins' on command line.
 
-[7m1[0m {"watchOptions":{"watchFactory":"myplugin/../malicious"}}
-[7m [0m [91m                                ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"watchOptions":{"watchFactory":"myplugin"}}
+[7m [0m [91m                 ~~~~~~~~~~~~~~[0m
 
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
@@ -42,7 +42,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {} S
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -83,17 +83,17 @@ FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInf
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {} Source file /user/username/projects/myproject/tsconfig.json
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+[96mtsconfig.json[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS5110: [0mOption 'watchFactory' cannot be specified without passing '--allowPlugins' on command line.
 
-[7m1[0m {"watchOptions":{"watchFactory":"myplugin/../malicious"}}
-[7m [0m [91m                                ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"watchOptions":{"watchFactory":"myplugin"}}
+[7m [0m [91m                 ~~~~~~~~~~~~~~[0m
 
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

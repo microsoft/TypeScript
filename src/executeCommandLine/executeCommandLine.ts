@@ -645,7 +645,7 @@ function executeCommandLineWorker(
     );
     if (configFileName) {
         const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
-        const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+        const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic, /*checkAllowPlugins*/ true)!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
             if (configParseResult.errors.length !== 0) {
                 reportDiagnostic = updateReportDiagnostic(
@@ -847,6 +847,7 @@ function performBuild(
         );
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
+        buildHost.checkAllowPlugins = true;
         const onWatchStatusChange = buildHost.onWatchStatusChange;
         let reportBuildStatistics = false;
         buildHost.onWatchStatusChange = (d, newLine, options, errorCount) => {
@@ -979,6 +980,7 @@ function updateWatchCompilationHost(
     cb: ExecuteCommandLineCallbacks,
     watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
+    watchCompilerHost.checkAllowPlugins = true;
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {

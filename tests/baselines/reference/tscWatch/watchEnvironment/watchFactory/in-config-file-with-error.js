@@ -23,7 +23,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -w --extendedDiagnostics
+/a/lib/tsc.js -w --extendedDiagnostics --allowPlugins
 Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
@@ -32,7 +32,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {} Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {} Source file
@@ -50,7 +50,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -135,7 +135,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [96mtsconfig.json[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
 
 [7m1[0m {"watchOptions":{"watchFactory":"myplugin/../malicious"}}
@@ -146,7 +146,7 @@ CreatingProgramWith::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

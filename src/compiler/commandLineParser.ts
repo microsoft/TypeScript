@@ -62,9 +62,11 @@ import {
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfPropertyName,
+    getTsConfigObjectLiteralExpression,
     getTsConfigPropArrayElementValue,
     hasExtension,
     hasProperty,
+    identity,
     ImportsNotUsedAsValues,
     isArray,
     isArrayLiteralExpression,
@@ -526,6 +528,14 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         isCommandLineOnly: true,
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific
+    },
+    {
+        name: "allowPlugins",
+        type: "boolean",
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: true,
+        description: Diagnostics.Allow_running_plugins,
+        defaultValueDescription: false,
     },
 ];
 
@@ -1821,6 +1831,10 @@ export function parseCommandLineWorker(
     const errors: Diagnostic[] = [];
 
     parseStrings(commandLine);
+    if (options.watch && watchOptions?.watchFactory && !options.allowPlugins) {
+        errors.push(createCompilerDiagnostic(Diagnostics.Option_watchFactory_cannot_be_specified_without_passing_allowPlugins_on_command_line));
+        watchOptions.watchFactory = undefined;
+    }
     return {
         options,
         watchOptions,
@@ -2098,6 +2112,7 @@ export function getParsedCommandLineOfConfigFile(
     extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
     watchOptionsToExtend?: WatchOptions,
     extraFileExtensions?: readonly FileExtensionInfo[],
+    checkAllowPlugins?: boolean,
 ): ParsedCommandLine | undefined {
     const configFileText = tryReadFile(configFileName, fileName => host.readFile(fileName));
     if (!isString(configFileText)) {
@@ -2119,7 +2134,8 @@ export function getParsedCommandLineOfConfigFile(
         /*resolutionStack*/ undefined,
         extraFileExtensions,
         extendedConfigCache,
-        watchOptionsToExtend
+        watchOptionsToExtend,
+        checkAllowPlugins,
     );
 }
 
@@ -2854,9 +2870,20 @@ export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, bas
  * @param basePath A root directory to resolve relative path entries in the config
  *    file to. e.g. outDir
  */
-export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+export function parseJsonSourceFileConfigFileContent(
+    sourceFile: TsConfigSourceFile,
+    host: ParseConfigHost,
+    basePath: string,
+    existingOptions?: CompilerOptions,
+    configFileName?: string,
+    resolutionStack?: Path[],
+    extraFileExtensions?: readonly FileExtensionInfo[],
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
+    existingWatchOptions?: WatchOptions,
+    checkAllowPlugins?: boolean,
+): ParsedCommandLine {
     tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
-    const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+    const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache, checkAllowPlugins);
     tracing?.pop();
     return result;
 }
@@ -2900,7 +2927,8 @@ function parseJsonConfigFileContentWorker(
     configFileName?: string,
     resolutionStack: Path[] = [],
     extraFileExtensions: readonly FileExtensionInfo[] = [],
-    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
+    checkAllowPlugins?: boolean,
 ): ParsedCommandLine {
     Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
     const errors: Diagnostic[] = [];
@@ -2911,6 +2939,21 @@ function parseJsonConfigFileContentWorker(
     const watchOptions = existingWatchOptions || parsedConfig.watchOptions ?
         extend(existingWatchOptions || {}, parsedConfig.watchOptions || {}) :
         undefined;
+
+    if (options.watch && watchOptions?.watchFactory && checkAllowPlugins && !options.allowPlugins) {
+        const watchFactoryNameProp = forEachPropertyAssignment(
+            getTsConfigObjectLiteralExpression(sourceFile),
+            "watchOptions",
+            prop => isObjectLiteralExpression(prop.initializer) ?
+                forEachPropertyAssignment(prop.initializer, "watchFactory", watchFactoryProp => isObjectLiteralExpression(watchFactoryProp.initializer) ?
+                    forEachPropertyAssignment(watchFactoryProp.initializer, "name", identity) || watchFactoryProp :
+                    watchFactoryProp
+                ) :
+                undefined
+        );
+        errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, watchFactoryNameProp?.name, Diagnostics.Option_watchFactory_cannot_be_specified_without_passing_allowPlugins_on_command_line));
+        watchOptions.watchFactory = undefined;
+    }
 
     options.configFilePath = configFileName && normalizeSlashes(configFileName);
     const configFileSpecs = getConfigFileSpecs();
@@ -3535,7 +3578,11 @@ export function convertJsonOption(
                 convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile) :
                 convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
-        else if (!isString(opt.type)) {
+        if (opt.isCommandLineOnly) {
+            errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.Option_0_can_only_be_specified_on_command_line, opt.name));
+            return;
+        }
+        if (!isString(opt.type)) {
             return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
         const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);

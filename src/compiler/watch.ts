@@ -213,10 +213,18 @@ export function createWatchStatusReporter(system: System, pretty?: boolean): Wat
  *
  * @internal
  */
-export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter): ParsedCommandLine | undefined {
+export function parseConfigFileWithSystem(
+    configFileName: string,
+    optionsToExtend: CompilerOptions,
+    extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined,
+    watchOptionsToExtend: WatchOptions | undefined,
+    system: System,
+    reportDiagnostic: DiagnosticReporter,
+    checkAllowPlugins: boolean,
+): ParsedCommandLine | undefined {
     const host: ParseConfigFileHost = system as any;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
-    const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
+    const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend, /*extraFileExtensions*/ undefined, checkAllowPlugins);
     host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
     return result;
 }

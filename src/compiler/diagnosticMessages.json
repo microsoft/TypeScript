@@ -4337,6 +4337,10 @@
         "category": "Error",
         "code": 5109
     },
+    "Option 'watchFactory' cannot be specified without passing '--allowPlugins' on command line.": {
+        "category": "Error",
+        "code": 5110
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -6106,6 +6110,10 @@
     "Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting.": {
         "category": "Message",
         "code": 6804
+    },
+    "Allow running plugins.": {
+        "category": "Message",
+        "code": 6805
     },
 
     "one of:": {

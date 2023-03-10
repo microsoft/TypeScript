@@ -161,6 +161,7 @@ export interface WatchHost {
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     /** If provided, will be used to reset existing delayed compilation */
     clearTimeout?(timeoutId: any): void;
+    /** @internal */ checkAllowPlugins?: boolean;
 }
 export interface ProgramHost<T extends BuilderProgram> {
     /**
@@ -902,7 +903,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             parseConfigFileHost,
             extendedConfigCache ||= new Map(),
             watchOptionsToExtend,
-            extraFileExtensions
+            extraFileExtensions,
+            host.checkAllowPlugins,
         )!); // TODO: GH#18217
     }
 
@@ -962,7 +964,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             /*optionsToExtend*/ undefined,
             parseConfigFileHost,
             extendedConfigCache ||= new Map(),
-            watchOptionsToExtend
+            watchOptionsToExtend,
+            host.extraFileExtensions,
+            host.checkAllowPlugins,
         );
         parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
         return parsedCommandLine;

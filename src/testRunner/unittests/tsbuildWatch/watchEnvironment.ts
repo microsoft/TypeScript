@@ -128,7 +128,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
     describe("watchFactory", () => {
         verifyWatchFactory({
             subScenario: `watchFactory/in config file`,
-            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--allowPlugins"],
             sys: createSystemWithFactory,
             edits: [
                 {
@@ -146,7 +146,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
 
         verifyWatchFactory({
             subScenario: `watchFactory/in config file with error`,
-            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--allowPlugins"],
             sys: createSystemWithFactory,
             edits: [
                 {
@@ -186,7 +186,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
 
         verifyWatchFactory({
             subScenario: `watchFactory/when plugin not found`,
-            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--allowPlugins"],
             sys: watchOptions => {
                 const system = createSystem(watchOptions);
                 system.require = (initialPath, moduleName) => {
@@ -209,8 +209,8 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
 
         verifyWatchFactory({
             subScenario: `watchFactory/when plugin does not implements watchFile`,
-            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
-            sys: watchOptions => createSystemWithFactory(watchOptions, /*excludeWatchFile*/ true),
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--allowPlugins"],
+            sys: watchOptions => createSystemWithFactory(watchOptions, /*compilerOptions*/ undefined, /*excludeWatchFile*/ true),
             edits: [
                 {
                     caption: "Change file",
@@ -232,7 +232,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
 
         verifyWatchFactory({
             subScenario: `watchFactory/when plugin doesnt return factory function`,
-            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--allowPlugins"],
             sys: watchOptions => {
                 const system = createSystem(watchOptions);
                 system.require = (initialPath, moduleName) => {
@@ -255,7 +255,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
 
         verifyWatchFactory({
             subScenario: `watchFactory/when host does not implement require`,
-            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--allowPlugins"],
             sys: createSystem,
             edits: [
                 {
@@ -266,10 +266,36 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             ]
         }, "myplugin");
 
-        function createSystem(watchOptions?: ts.WatchOptions) {
+        verifyWatchFactory({
+            subScenario: `watchFactory/without allowPlugins`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: () => createSystemWithFactory({ watchFactory: "myplugin" }),
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        verifyWatchFactory({
+            subScenario: `watchFactory/allowPlugins is in tsconfig`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: watchOptions => createSystemWithFactory(watchOptions, { allowPlugins: true }),
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        function createSystem(watchOptions?: ts.WatchOptions, compilerOptions?: ts.CompilerOptions) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ watchOptions })
+                content: JSON.stringify({ watchOptions, compilerOptions })
             };
             const aTs: File = {
                 path: `/user/username/projects/myproject/a.ts`,
@@ -283,8 +309,8 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             return createWatchFactorySystem(createWatchedSystem([aTs, bTs, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" }));
         }
 
-        function createSystemWithFactory(watchOptions?: ts.WatchOptions, excludeWatchFile?: boolean) {
-            return implementRequireForWatchFactorySystem(createSystem(watchOptions), !!excludeWatchFile);
+        function createSystemWithFactory(watchOptions?: ts.WatchOptions, compilerOptions?: ts.CompilerOptions, excludeWatchFile?: boolean) {
+            return implementRequireForWatchFactorySystem(createSystem(watchOptions, compilerOptions), !!excludeWatchFile);
         }
 
         function verifyWatchFactory(
@@ -311,13 +337,13 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             verifyTscWatch({
                 scenario: "watchEnvironment",
                 ...input,
-                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", watchFactory],
+                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", watchFactory, "--allowPlugins"],
             });
             verifyTscWatch({
                 scenario: "watchEnvironment",
                 ...input,
                 subScenario: `${input.subScenario} object`,
-                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" })],
+                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" }), "--allowPlugins"],
             });
         }
     });

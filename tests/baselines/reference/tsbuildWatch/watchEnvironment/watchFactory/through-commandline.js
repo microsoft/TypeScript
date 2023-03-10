@@ -23,7 +23,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -b -w --extendedDiagnostics --watchFactory myplugin
+/a/lib/tsc.js -b -w --extendedDiagnostics --watchFactory myplugin --allowPlugins
 Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
@@ -45,7 +45,7 @@ Custom watchFile: /user/username/projects/myproject/b.ts 250 {"watchFactory":"my
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -136,7 +136,7 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.t
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
