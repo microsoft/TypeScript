@@ -284,25 +284,19 @@ export function getErrorSummaryText(
 
     const firstFileReference = nonNilFiles[0] && prettyPathForFileError(nonNilFiles[0], host.getCurrentDirectory());
 
-    const d = errorCount === 1 ?
-        // TODO(jakebailey): this code has to be wrong; neither message take a second argument. Simpify.
-        createCompilerDiagnostic(
-            filesInError[0] !== undefined ?
-                Diagnostics.Found_1_error_in_1 :
-                Diagnostics.Found_1_error,
-            errorCount,
-            // @ts-ignore-error TODO(jakebailey)
-            firstFileReference) :
-        createCompilerDiagnostic(
-            distinctFileNamesWithLines.length === 0 ?
-                Diagnostics.Found_0_errors :
-                distinctFileNamesWithLines.length === 1 ?
-                    Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1 :
-                    Diagnostics.Found_0_errors_in_1_files,
-            errorCount,
-            // @ts-ignore-error TODO(jakebailey)
-            distinctFileNamesWithLines.length === 1 ? firstFileReference : distinctFileNamesWithLines.length);
+    let messageAndArgs: DiagnosticAndArguments;
+    if (errorCount === 1) {
+        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!] : [Diagnostics.Found_1_error];
+    }
+    else {
+        messageAndArgs =
+            distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
+            // TODO(jakebailey): grammer of "Found 1 errors"
+            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
+            [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
+    }
 
+    const d = createCompilerDiagnostic(...messageAndArgs);
     const suffix = distinctFileNamesWithLines.length > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : "";
     return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${suffix}`;
 }
