@@ -10,7 +10,6 @@ class A {
 >foo : <T extends U, U extends Date>(x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 class B<T extends U, U extends Array<number>> {
@@ -20,7 +19,6 @@ class B<T extends U, U extends Array<number>> {
 >foo : (x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 class C<T extends U, U extends String> {
@@ -30,7 +28,6 @@ class C<T extends U, U extends String> {
 >foo : (x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 class D<T extends U, U extends Number> {
@@ -40,7 +37,6 @@ class D<T extends U, U extends Number> {
 >foo : (x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 interface I<T extends U, U extends Number> {

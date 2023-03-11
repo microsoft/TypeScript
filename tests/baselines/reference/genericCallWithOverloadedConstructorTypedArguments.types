@@ -23,7 +23,6 @@ module NonGenericParameter {
         return new cb(null);
 >new cb(null) : boolean
 >cb : { new (x: boolean): boolean; new (x: string): string; }
->null : null
     }
 
     var r = foo4(a);

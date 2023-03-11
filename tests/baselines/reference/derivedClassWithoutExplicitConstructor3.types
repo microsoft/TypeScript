@@ -95,7 +95,6 @@ class D<T> extends Base {
 
     b: T = null;
 >b : T
->null : null
 
     constructor(y: T, z: T) {
 >y : T
@@ -126,7 +125,6 @@ class D2<T extends Date> extends D<T> {
 
     y: T = null;
 >y : T
->null : null
 }
 
 var d = new D2(); // error
