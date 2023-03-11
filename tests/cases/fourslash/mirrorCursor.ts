@@ -61,18 +61,18 @@
 ////);
 
 verify.jsxMirrorCursor( {
-    // "0": {ranges: {start: 28, end: 31}, wordPattern : 'div'},
+    "0": {ranges: {start: 28, end: 31}, wordPattern : 'div'},
     // [{startLine: 1, startCharacter: 5, endLine: 1, endCharacter: 8},
     //         {startLine: 2, startCharacter: 6, endLine: 2, endCharacter: 9}],
-    // "1": {ranges: {start: 91, end: 94}, wordPattern : 'div'},
+    "1": {ranges: {start: 91, end: 94}, wordPattern : 'div'},
     // [{startLine: 1, startCharacter: 5, endLine: 1, endCharacter: 8},
     //         {startLine: 5, startCharacter: 6, endLine: 5, endCharacter: 9}],
-    // "2": undefined,
-    // "3": {ranges: {start: 0, end: 0}, wordPattern : 'div'}, // FAILS
+    "2": undefined,
+    "3": {ranges: {start: 0, end: 0}, wordPattern : 'div'}, // FAILS
     //  [{startLine: 1, startCharacter: 5, endLine: 1, endCharacter: 25},
     //         {startLine: 2, startCharacter: 6, endLine: 2, endCharacter: 26}],
-    // "4": undefined,
-    // "5": {ranges: {start: 44, end: 47}, wordPattern : 'div'},
+    "4": undefined,
+    "5": {ranges: {start: 44, end: 47}, wordPattern : 'div'},
     //  [{startLine: 2, startCharacter: 9, endLine: 2, endCharacter: 12},
     //         {startLine: 3, startCharacter: 6, endLine: 3, endCharacter: 9}],
     "6": {ranges: {start: 42, end: 42}, wordPattern : undefined}, // if you dont define wordpattern in 6, it has issues 
