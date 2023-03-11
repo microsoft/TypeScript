@@ -1,4 +1,3 @@
-import { findArgument } from "../jsTyping/shared";
 import * as ts from "./_namespaces/ts";
 import {
     __String,
@@ -154,6 +153,7 @@ import {
     isJSDocCommentContainingNode,
     isJsxAttributes,
     isJsxClosingElement,
+    isJsxClosingFragment,
     isJsxElement,
     isJsxFragment,
     isJsxOpeningElement,
@@ -2486,33 +2486,62 @@ export function createLanguageService(
         const token = findPrecedingToken(position, sourceFile);
         if (!token) return undefined;
 
-        // if it is not in a jsx element
-        if (token.parent.parent.kind !== SyntaxKind.JsxElement && token.parent.parent.kind !== SyntaxKind.JsxFragment) return undefined;
+        let wordPattern : string | undefined;
+        // if it is not in a jsx element/fragment, or if the tags do not match
+        if (isJsxElement(token.parent.parent)){
+            if (token.parent.parent.openingElement.tagName.getText() !== token.parent.parent.closingElement.tagName.getText()) {
+                return undefined;
+            }
+            wordPattern = token.parent.parent.openingElement.tagName.getText();
+        }
+        else if (isJsxFragment(token.parent.parent)) {
+            wordPattern = undefined;
+        }
+        else return undefined;
 
+        let ranges : {start: number, end: number};
         //opening element
-        if (token.parent.kind === SyntaxKind.JsxOpeningElement){
-            const nameSpan = {start : token.pos, length : token.pos - token.end};
-            const name = "";
-            return {ranges:nameSpan, wordPattern : name};
+        if (isJsxOpeningElement(token.parent)){
+            ranges = {start : token.parent.parent.closingElement.tagName.pos, end : token.parent.parent.closingElement.tagName.end};
         }
-        //losing element
-        if (token.parent.kind === SyntaxKind.JsxClosingElement){
+        else if (isJsxClosingElement(token.parent)){
+            ranges = {start : token.parent.parent.openingElement.tagName.pos, end : token.parent.parent.openingElement.tagName.end};
+        }
+        else if (isJsxOpeningFragment(token.parent)){
+            const pos = token.parent.parent.closingFragment.pos + 1;
+            ranges = {start : pos, end : pos};
+        }
+        else if (isJsxClosingFragment(token.parent)){
+            const pos = token.parent.parent.openingFragment.pos + 1;
+            ranges = {start : pos, end : pos};
+        }
+        else {
             return undefined;
         }
 
-        //opening fragment
-        if (token.parent.kind === SyntaxKind.JsxOpeningFragment){
-            return undefined;
-        }
-        //losing element
-        if (token.parent.kind === SyntaxKind.JsxClosingFragment){
-            return undefined;
-        }
+        return {ranges, wordPattern};
 
-        
-        //neither
-        return undefined
-        // ISABEL unimplemented
+        // is this cursed?
+        // it doesnt even work -> it errors types
+        // switch (true) {
+        //     case isJsxOpeningElement(token.parent):
+        //         // const nameSpan = {start : token.parent.parent.closingElement.pos, end : token.parent.parent.closingElement.end};
+        //     case isJsxClosingElement(token.parent):
+        //     case isJsxOpeningFragment(token.parent):
+        //     case isJsxClosingFragment(token.parent):
+        //         return undefined
+        // }
+
+        // switch (token.parent.kind) {
+        //     case SyntaxKind.JsxOpeningElement:
+        //         // const nameSpan = {start : token.parent.parent.closingElement.pos, end : token.parent.parent.closingElement.end};
+        //     case SyntaxKind.JsxClosingElement:
+        //     case SyntaxKind.JsxOpeningFragment:
+        //     case SyntaxKind.JsxClosingFragment:
+        //         return undefined
+        // }
+    
+        // ISABEL delete extras
     }
 
     function getLinesForRange(sourceFile: SourceFile, textRange: TextRange) {

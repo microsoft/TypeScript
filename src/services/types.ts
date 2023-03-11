@@ -671,7 +671,7 @@ export interface JsxMirrorCursorInfo {
 }
 
 export interface JsxLinkedEditInfo {
-    readonly ranges : TextSpan;
+    readonly ranges : {start: number, end: number};
     wordPattern? : string;
 }
 
