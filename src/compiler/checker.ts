@@ -13174,8 +13174,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // and T as the template type.
         const typeParameter = getTypeParameterFromMappedType(type);
         const constraintType = getConstraintTypeFromMappedType(type);
-        const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
-        const isFilteringMappedType = nameType && isTypeAssignableTo(nameType, typeParameter);
+        const mappedType = (type.target as MappedType) || type;
+        const nameType = getNameTypeFromMappedType(mappedType);
+        const shouldLinkPropDeclarations = !nameType || isFilteringMappedType(mappedType);
         const templateType = getTemplateTypeFromMappedType(type.target as MappedType || type);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
@@ -13222,7 +13223,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop.links.keyType = keyType;
                     if (modifiersProp) {
                         prop.links.syntheticOrigin = modifiersProp;
-                        prop.declarations = !nameType || isFilteringMappedType ? modifiersProp.declarations : undefined;
+                        prop.declarations = shouldLinkPropDeclarations ? modifiersProp.declarations : undefined;
                     }
                     members.set(propName, prop);
                 }
@@ -13353,6 +13354,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
+    }
+
+    function isFilteringMappedType(type: MappedType): boolean {
+        const nameType = getNameTypeFromMappedType(type);
+        return !!nameType && isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type));
     }
 
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -17473,8 +17479,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // K is generic and N is assignable to P, instantiate E using a mapper that substitutes the index type for P.
         // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
         if (isGenericMappedType(objectType)) {
-            const nameType = getNameTypeFromMappedType(objectType);
-            if (!nameType || isTypeAssignableTo(nameType, getTypeParameterFromMappedType(objectType))) {
+            if (!getNameTypeFromMappedType(objectType) || isFilteringMappedType(objectType)) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
         }
