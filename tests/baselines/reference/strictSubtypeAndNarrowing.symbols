@@ -311,3 +311,293 @@ function fx11(): { x?: number } {
 >y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 128, 24))
 }
 
+// Repros from #52827
+
+declare function isArrayLike(value: any): value is { length: number };
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 133, 29))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 133, 29))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 133, 52))
+
+function ff1(value: { [index: number]: boolean, length: number } | undefined) {
+>ff1 : Symbol(ff1, Decl(strictSubtypeAndNarrowing.ts, 133, 70))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+>index : Symbol(index, Decl(strictSubtypeAndNarrowing.ts, 135, 23))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 135, 47))
+
+    if (isArrayLike(value)) {
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+
+    } else {
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+    }
+    value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+}
+
+function ff2(value: { [index: number]: boolean, length: number } | string) {
+>ff2 : Symbol(ff2, Decl(strictSubtypeAndNarrowing.ts, 142, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+>index : Symbol(index, Decl(strictSubtypeAndNarrowing.ts, 144, 23))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 144, 47))
+
+    if (isArrayLike(value)) {
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+
+    } else {
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+    }
+    value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+}
+
+function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
+>ff3 : Symbol(ff3, Decl(strictSubtypeAndNarrowing.ts, 151, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+>index : Symbol(index, Decl(strictSubtypeAndNarrowing.ts, 153, 43))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 153, 67))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 153, 117))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 153, 138))
+
+    if (isArrayLike(value)) {
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+
+    } else {
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+    }
+    value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+}
+
+// Repro from comment in #52984
+
+type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
+>DistributedKeyOf : Symbol(DistributedKeyOf, Decl(strictSubtypeAndNarrowing.ts, 160, 1))
+>T : Symbol(T, Decl(strictSubtypeAndNarrowing.ts, 164, 22))
+>T : Symbol(T, Decl(strictSubtypeAndNarrowing.ts, 164, 22))
+>T : Symbol(T, Decl(strictSubtypeAndNarrowing.ts, 164, 22))
+
+type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
+>NarrowByKeyValue : Symbol(NarrowByKeyValue, Decl(strictSubtypeAndNarrowing.ts, 164, 63))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 166, 22))
+>KeyT : Symbol(KeyT, Decl(strictSubtypeAndNarrowing.ts, 166, 27))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 166, 53))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 166, 22))
+
+    ? KeyT extends keyof ObjT
+>KeyT : Symbol(KeyT, Decl(strictSubtypeAndNarrowing.ts, 166, 27))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 166, 22))
+
+        ? ValueT extends ObjT[KeyT]
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 166, 53))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 166, 22))
+>KeyT : Symbol(KeyT, Decl(strictSubtypeAndNarrowing.ts, 166, 27))
+
+            ? ObjT & Readonly<Record<KeyT, ValueT>>
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 166, 22))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>KeyT : Symbol(KeyT, Decl(strictSubtypeAndNarrowing.ts, 166, 27))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 166, 53))
+
+            : never
+        : never
+    : never;
+
+type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
+>NarrowByDeepValue : Symbol(NarrowByDeepValue, Decl(strictSubtypeAndNarrowing.ts, 172, 12))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 174, 23))
+>DeepPathT : Symbol(DeepPathT, Decl(strictSubtypeAndNarrowing.ts, 174, 28))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 174, 39))
+>DeepPathT : Symbol(DeepPathT, Decl(strictSubtypeAndNarrowing.ts, 174, 28))
+
+    infer Head extends DistributedKeyOf<ObjT>,
+>Head : Symbol(Head, Decl(strictSubtypeAndNarrowing.ts, 175, 9))
+>DistributedKeyOf : Symbol(DistributedKeyOf, Decl(strictSubtypeAndNarrowing.ts, 160, 1))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 174, 23))
+
+]
+    ? NarrowByKeyValue<ObjT, Head, ValueT>
+>NarrowByKeyValue : Symbol(NarrowByKeyValue, Decl(strictSubtypeAndNarrowing.ts, 164, 63))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 174, 23))
+>Head : Symbol(Head, Decl(strictSubtypeAndNarrowing.ts, 175, 9))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 174, 39))
+
+    : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
+>DeepPathT : Symbol(DeepPathT, Decl(strictSubtypeAndNarrowing.ts, 174, 28))
+>Head : Symbol(Head, Decl(strictSubtypeAndNarrowing.ts, 178, 39))
+>DistributedKeyOf : Symbol(DistributedKeyOf, Decl(strictSubtypeAndNarrowing.ts, 160, 1))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 174, 23))
+>Rest : Symbol(Rest, Decl(strictSubtypeAndNarrowing.ts, 178, 85))
+
+    ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
+>NarrowByKeyValue : Symbol(NarrowByKeyValue, Decl(strictSubtypeAndNarrowing.ts, 164, 63))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 174, 23))
+>Head : Symbol(Head, Decl(strictSubtypeAndNarrowing.ts, 178, 39))
+>NarrowByDeepValue : Symbol(NarrowByDeepValue, Decl(strictSubtypeAndNarrowing.ts, 172, 12))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 174, 23))
+>Head : Symbol(Head, Decl(strictSubtypeAndNarrowing.ts, 178, 39))
+>Rest : Symbol(Rest, Decl(strictSubtypeAndNarrowing.ts, 178, 85))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 174, 39))
+
+    : never;
+
+
+declare function doesValueAtDeepPathSatisfy<
+>doesValueAtDeepPathSatisfy : Symbol(doesValueAtDeepPathSatisfy, Decl(strictSubtypeAndNarrowing.ts, 180, 12))
+
+    ObjT extends object,
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 183, 44))
+
+    const DeepPathT extends ReadonlyArray<number | string>,
+>DeepPathT : Symbol(DeepPathT, Decl(strictSubtypeAndNarrowing.ts, 184, 24))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+    ValueT,
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 185, 59))
+
+>(
+    obj: ObjT,
+>obj : Symbol(obj, Decl(strictSubtypeAndNarrowing.ts, 187, 2))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 183, 44))
+
+    deepPath: DeepPathT,
+>deepPath : Symbol(deepPath, Decl(strictSubtypeAndNarrowing.ts, 188, 14))
+>DeepPathT : Symbol(DeepPathT, Decl(strictSubtypeAndNarrowing.ts, 184, 24))
+
+    predicate: (arg: unknown) => arg is ValueT,
+>predicate : Symbol(predicate, Decl(strictSubtypeAndNarrowing.ts, 189, 24))
+>arg : Symbol(arg, Decl(strictSubtypeAndNarrowing.ts, 190, 16))
+>arg : Symbol(arg, Decl(strictSubtypeAndNarrowing.ts, 190, 16))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 185, 59))
+
+): obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>;
+>obj : Symbol(obj, Decl(strictSubtypeAndNarrowing.ts, 187, 2))
+>NarrowByDeepValue : Symbol(NarrowByDeepValue, Decl(strictSubtypeAndNarrowing.ts, 172, 12))
+>ObjT : Symbol(ObjT, Decl(strictSubtypeAndNarrowing.ts, 183, 44))
+>DeepPathT : Symbol(DeepPathT, Decl(strictSubtypeAndNarrowing.ts, 184, 24))
+>ValueT : Symbol(ValueT, Decl(strictSubtypeAndNarrowing.ts, 185, 59))
+
+
+type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
+>Foo : Symbol(Foo, Decl(strictSubtypeAndNarrowing.ts, 191, 53))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 194, 12))
+>type : Symbol(type, Decl(strictSubtypeAndNarrowing.ts, 194, 20))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 194, 31))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 194, 47))
+>type : Symbol(type, Decl(strictSubtypeAndNarrowing.ts, 194, 55))
+>b : Symbol(b, Decl(strictSubtypeAndNarrowing.ts, 194, 66))
+
+declare function isA(arg: unknown): arg is 'A';
+>isA : Symbol(isA, Decl(strictSubtypeAndNarrowing.ts, 194, 79))
+>arg : Symbol(arg, Decl(strictSubtypeAndNarrowing.ts, 196, 21))
+>arg : Symbol(arg, Decl(strictSubtypeAndNarrowing.ts, 196, 21))
+
+declare function isB(arg: unknown): arg is 'B';
+>isB : Symbol(isB, Decl(strictSubtypeAndNarrowing.ts, 196, 47))
+>arg : Symbol(arg, Decl(strictSubtypeAndNarrowing.ts, 197, 21))
+>arg : Symbol(arg, Decl(strictSubtypeAndNarrowing.ts, 197, 21))
+
+declare function assert(condition: boolean): asserts condition;
+>assert : Symbol(assert, Decl(strictSubtypeAndNarrowing.ts, 197, 47))
+>condition : Symbol(condition, Decl(strictSubtypeAndNarrowing.ts, 199, 24))
+>condition : Symbol(condition, Decl(strictSubtypeAndNarrowing.ts, 199, 24))
+
+function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
+>test1 : Symbol(test1, Decl(strictSubtypeAndNarrowing.ts, 199, 63))
+>foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 201, 15))
+>Foo : Symbol(Foo, Decl(strictSubtypeAndNarrowing.ts, 191, 53))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 201, 27))
+>type : Symbol(type, Decl(strictSubtypeAndNarrowing.ts, 201, 35))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 201, 46))
+
+    assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA));
+>assert : Symbol(assert, Decl(strictSubtypeAndNarrowing.ts, 197, 47))
+>doesValueAtDeepPathSatisfy : Symbol(doesValueAtDeepPathSatisfy, Decl(strictSubtypeAndNarrowing.ts, 180, 12))
+>foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 201, 15))
+>isA : Symbol(isA, Decl(strictSubtypeAndNarrowing.ts, 194, 79))
+
+    return foo;
+>foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 201, 15))
+}
+
+function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
+>test2 : Symbol(test2, Decl(strictSubtypeAndNarrowing.ts, 204, 1))
+>foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 206, 15))
+>Foo : Symbol(Foo, Decl(strictSubtypeAndNarrowing.ts, 191, 53))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 206, 27))
+>type : Symbol(type, Decl(strictSubtypeAndNarrowing.ts, 206, 35))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 206, 46))
+
+    assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
+>assert : Symbol(assert, Decl(strictSubtypeAndNarrowing.ts, 197, 47))
+>doesValueAtDeepPathSatisfy : Symbol(doesValueAtDeepPathSatisfy, Decl(strictSubtypeAndNarrowing.ts, 180, 12))
+>foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 206, 15))
+>isB : Symbol(isB, Decl(strictSubtypeAndNarrowing.ts, 196, 47))
+
+    return foo;
+>foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 206, 15))
+}
+
+// Repro from #53063
+
+interface Free {
+>Free : Symbol(Free, Decl(strictSubtypeAndNarrowing.ts, 209, 1))
+
+    premium: false;
+>premium : Symbol(Free.premium, Decl(strictSubtypeAndNarrowing.ts, 213, 16))
+}
+
+interface Premium {
+>Premium : Symbol(Premium, Decl(strictSubtypeAndNarrowing.ts, 215, 1))
+
+    premium: true;
+>premium : Symbol(Premium.premium, Decl(strictSubtypeAndNarrowing.ts, 217, 19))
+}
+
+type Union = { premium: false } | { premium: true };
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 14))
+>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 35))
+
+declare const checkIsPremium: (a: Union) => a is Union & Premium;
+>checkIsPremium : Symbol(checkIsPremium, Decl(strictSubtypeAndNarrowing.ts, 223, 13))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 223, 31))
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 223, 31))
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+>Premium : Symbol(Premium, Decl(strictSubtypeAndNarrowing.ts, 215, 1))
+
+const f = (value: Union) => {
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 225, 5))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 225, 11))
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+
+    if (!checkIsPremium(value)) {
+>checkIsPremium : Symbol(checkIsPremium, Decl(strictSubtypeAndNarrowing.ts, 223, 13))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 225, 11))
+
+        value.premium;
+>value.premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 14))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 225, 11))
+>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 14))
+    }
+};
+

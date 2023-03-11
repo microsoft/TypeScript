@@ -23,7 +23,7 @@ const o2 = Object.fromEntries(new URLSearchParams());
 >Object : ObjectConstructor
 >fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >new URLSearchParams() : URLSearchParams
->URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; toString(): string; }
+>URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; }
 
 const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >o3 : { [k: string]: string; }

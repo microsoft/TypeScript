@@ -4281,11 +4281,11 @@
         "category": "Error",
         "code": 5098
     },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
+    "Option '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
-    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
+    "Option '{0}' has been removed. Please remove it from your configuration.": {
         "category": "Error",
         "code": 5102
     },
@@ -4304,6 +4304,14 @@
     "Use '{0}' instead.": {
         "category": "Message",
         "code": 5106
+    },
+    "Option '{0}={1}' is deprecated and will stop functioning in TypeScript {2}. Specify compilerOption '\"ignoreDeprecations\": \"{3}\"' to silence this error.": {
+        "category": "Error",
+        "code": 5107
+    },
+    "Option '{0}={1}' has been removed. Please remove it from your configuration.": {
+        "category": "Error",
+        "code": 5108
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5245,6 +5253,10 @@
     "Enable importing files with any extension, provided a declaration file is present.": {
         "category": "Message",
         "code": 6264
+    },
+    "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6265
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
@@ -6694,7 +6706,15 @@
         "category": "Suggestion",
         "code": 80008
     },
-
+    "JSDoc typedef may be converted to TypeScript type.": {
+        "category": "Suggestion",
+        "code": 80009
+    },
+    "JSDoc typedefs may be converted to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80010
+    },
+    
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -7551,6 +7571,14 @@
     "Use `Number.isNaN` in all conditions.": {
         "category": "Message",
         "code": 95175
+    },
+    "Convert typedef to TypeScript type.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Convert all typedef to TypeScript types.": {
+        "category": "Message",
+        "code": 95177
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

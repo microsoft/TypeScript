@@ -16,7 +16,6 @@ function Installer () {
 >this.unknown : any
 >this : this
 >unknown : any
->null : null
 
     // twice: string | undefined
     this.twice = undefined
@@ -46,7 +45,6 @@ function Installer () {
 >this.twices : any
 >this : this
 >twices : any
->null : null
 }
 Installer.prototype.first = function () {
 >Installer.prototype.first = function () {    this.arg = 'hi' // error    this.unknown = 'hi' // ok    this.newProperty = 1 // ok: number | boolean    this.twice = undefined // ok    this.twice = 'hi' // ok} : () => void
@@ -127,7 +125,6 @@ Installer.prototype.second = function () {
 >this.twice : string
 >this : this
 >twice : string
->null : null
 
     this.twice = false // error
 >this.twice = false : false
@@ -150,7 +147,6 @@ Installer.prototype.second = function () {
 >this.twices : any[] | null
 >this : this
 >twices : any[] | null
->null : null
 
         this.twices.push('hi')
 >this.twices.push('hi') : number

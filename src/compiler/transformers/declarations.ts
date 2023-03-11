@@ -166,6 +166,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    NodeFactory,
     NodeFlags,
     NodeId,
     normalizeSlashes,
@@ -724,7 +725,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         const newParam = factory.updateParameterDeclaration(
             p,
-            maskModifiers(p, modifierMask),
+            maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
             filterBindingPatternInitializersAndRenamings(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
@@ -1856,7 +1857,7 @@ function isAlwaysType(node: Node) {
 }
 
 // Elide "public" modifier, as it is the default
-function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
+function maskModifiers(factory: NodeFactory, node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
     return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
 }
 

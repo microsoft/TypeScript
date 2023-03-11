@@ -10,7 +10,6 @@ function foo<T>(x: new(a: T) => T) {
     return new x(null);
 >new x(null) : T
 >x : new (a: T) => T
->null : null
 }
 
 interface I {
@@ -115,7 +114,6 @@ var r7 = foo3(null, i, ''); // any
 >r7 : any
 >foo3(null, i, '') : any
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
->null : null
 >i : I
 >'' : ""
 
@@ -123,7 +121,6 @@ var r7b = foo3(null, a, ''); // any
 >r7b : any
 >foo3(null, a, '') : any
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
->null : null
 >a : new <T>(x: T) => T
 >'' : ""
 
