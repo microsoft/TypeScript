@@ -988,7 +988,6 @@ export class ChangeTracker {
     public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
         if (!containingList) {
             Debug.fail("node is not a list element");
-            return;
         }
         const index = indexOfNode(containingList, after);
         if (index < 0) {
@@ -1301,13 +1300,16 @@ namespace changesToText {
     export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
         const writer = createWriter(newLineCharacter);
         const newLine = getNewLineKind(newLineCharacter);
+        // workaround as text emitted below by printer doesn't include leading whitespaces, but includes newline
+        const leadingWhitespaces = sourceFile ? node.getFullText(sourceFile).match(/^(\s*)\n/)?.[1] ?? "" : ""
         createPrinter({
             newLine,
             neverAsciiEscape: true,
             preserveSourceNewlines: true,
             terminateUnterminatedLiterals: true
         }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
-        return { text: writer.getText(), node: assignPositionsToNode(node) };
+        const text = leadingWhitespaces + writer.getText();
+        return { text, node: assignPositionsToNode(node) };
     }
 }
 
