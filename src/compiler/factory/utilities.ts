@@ -7,6 +7,7 @@ import {
     AssertionLevel,
     AssignmentExpression,
     AssignmentOperatorOrHigher,
+    AssignmentPattern,
     BinaryExpression,
     BinaryOperator,
     BinaryOperatorToken,
@@ -76,6 +77,7 @@ import {
     InternalEmitFlags,
     isAssignmentExpression,
     isAssignmentOperator,
+    isAssignmentPattern,
     isBlock,
     isCommaListExpression,
     isComputedPropertyName,
@@ -174,6 +176,7 @@ import {
     TextRange,
     ThisTypeNode,
     Token,
+    TransformFlags,
     TypeNode,
 } from "../_namespaces/ts";
 
@@ -1741,4 +1744,32 @@ export function flattenCommaList(node: Expression) {
     const expressions: Expression[] = [];
     flattenCommaListWorker(node, expressions);
     return expressions;
+}
+
+/**
+ * Walk an AssignmentPattern to determine if it contains object rest (`...`) syntax. We cannot rely on
+ * propagation of `TransformFlags.ContainsObjectRestOrSpread` since it isn't propagated by default in
+ * ObjectLiteralExpression and ArrayLiteralExpression since we do not know whether they belong to an
+ * AssignmentPattern at the time the nodes are parsed.
+ *
+ * @internal
+ */
+export function containsObjectRestOrSpread(node: AssignmentPattern): boolean {
+    if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return true;
+    if (node.transformFlags & TransformFlags.ContainsES2018) {
+        // check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
+        // will not be correctly interpreted by the ES2018 transformer
+        for (const element of getElementsOfBindingOrAssignmentPattern(node)) {
+            const target = getTargetOfBindingOrAssignmentElement(element);
+            if (target && isAssignmentPattern(target)) {
+                if (target.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                    return true;
+                }
+                if (target.transformFlags & TransformFlags.ContainsES2018) {
+                    if (containsObjectRestOrSpread(target)) return true;
+                }
+            }
+        }
+    }
+    return false;
 }

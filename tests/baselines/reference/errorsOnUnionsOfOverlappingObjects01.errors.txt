@@ -47,7 +47,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
     
     g(x);
     g({ a: '', b: '' })
-        ~~~~~
+        ~
 !!! error TS2345: Argument of type '{ a: string; b: string; }' is not assignable to parameter of type 'Bar | Other'.
 !!! error TS2345:   Object literal may only specify known properties, and 'a' does not exist in type 'Bar | Other'.
     
@@ -80,7 +80,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
     
     const manBeer = { man: "Manny", beer: "Coffee" };
     addToZoo({ man: "Manny", beer: "Coffee" });
-                             ~~~~~~~~~~~~~~
+                             ~~~~
 !!! error TS2345: Argument of type '{ man: string; beer: string; }' is not assignable to parameter of type 'ExoticAnimal'.
 !!! error TS2345:   Object literal may only specify known properties, and 'beer' does not exist in type 'ExoticAnimal'.
     addToZoo(manBeer);

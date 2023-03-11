@@ -44,7 +44,6 @@ function fn3(): any {
 >fn3 : { (x: string): string; (y: string): number; }
 
     return null;
->null : null
 }
 
 //Function overload with rest param and another with only an optional parameter
