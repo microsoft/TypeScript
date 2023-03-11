@@ -150,6 +150,7 @@ import {
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isKeyword,
+    isKeywordOrPunctuation,
     isLeftHandSideExpression,
     isLiteralKind,
     isMetaProperty,
@@ -306,6 +307,8 @@ import {
     PropertyDeclaration,
     PropertyName,
     PropertySignature,
+    PunctuationOrKeywordSyntaxKind,
+    PunctuationSyntaxKind,
     QualifiedName,
     QuestionDotToken,
     QuestionToken,
@@ -2290,7 +2293,7 @@ namespace Parser {
         return token() > SyntaxKind.LastReservedWord;
     }
 
-    function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
+    function parseExpected(kind: PunctuationOrKeywordSyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
         if (token() === kind) {
             if (shouldAdvance) {
                 nextToken();
@@ -2445,11 +2448,12 @@ namespace Parser {
             nextTokenJSDoc();
             return true;
         }
+        Debug.assert(isKeywordOrPunctuation(kind));
         parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
         return false;
     }
 
-    function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openParsed: boolean, openPosition: number) {
+    function parseExpectedMatchingBrackets(openKind: PunctuationSyntaxKind, closeKind: PunctuationSyntaxKind, openParsed: boolean, openPosition: number) {
         if (token() === closeKind) {
             nextToken();
             return;
@@ -2498,8 +2502,10 @@ namespace Parser {
 
     function parseExpectedTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
     function parseExpectedTokenJSDoc(t: JSDocSyntaxKind): Node {
-        return parseOptionalTokenJSDoc(t) ||
-            createMissingNode(t, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(t));
+        const optional = parseOptionalTokenJSDoc(t);
+        if (optional) return optional;
+        Debug.assert(isKeywordOrPunctuation(t));
+        return createMissingNode(t, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(t));
     }
 
     function parseTokenNode<T extends Node>(): T {
@@ -3357,7 +3363,7 @@ namespace Parser {
             case ParsingContext.HeritageClauseElement: return parseErrorAtCurrentToken(Diagnostics.Expression_expected);
             case ParsingContext.VariableDeclarations:
                 return isKeyword(token())
-                    ? parseErrorAtCurrentToken(Diagnostics._0_is_not_allowed_as_a_variable_declaration_name, tokenToString(token()))
+                    ? parseErrorAtCurrentToken(Diagnostics._0_is_not_allowed_as_a_variable_declaration_name, tokenToString(token())!)
                     : parseErrorAtCurrentToken(Diagnostics.Variable_declaration_expected);
             case ParsingContext.ObjectBindingElements: return parseErrorAtCurrentToken(Diagnostics.Property_destructuring_pattern_expected);
             case ParsingContext.ArrayBindingElements: return parseErrorAtCurrentToken(Diagnostics.Array_element_destructuring_pattern_expected);
@@ -3367,7 +3373,7 @@ namespace Parser {
             case ParsingContext.JSDocParameters: return parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
             case ParsingContext.Parameters:
                 return isKeyword(token())
-                    ? parseErrorAtCurrentToken(Diagnostics._0_is_not_allowed_as_a_parameter_name, tokenToString(token()))
+                    ? parseErrorAtCurrentToken(Diagnostics._0_is_not_allowed_as_a_parameter_name, tokenToString(token())!)
                     : parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
             case ParsingContext.TypeParameters: return parseErrorAtCurrentToken(Diagnostics.Type_parameter_declaration_expected);
             case ParsingContext.TypeArguments: return parseErrorAtCurrentToken(Diagnostics.Type_argument_expected);
@@ -3472,7 +3478,7 @@ namespace Parser {
         return !!(arr as MissingList<Node>).isMissingList;
     }
 
-    function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
+    function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: PunctuationSyntaxKind, close: PunctuationSyntaxKind): NodeArray<T> {
         if (parseExpected(open)) {
             const result = parseDelimitedList(kind, parseElement);
             parseExpected(close);
@@ -5654,6 +5660,7 @@ namespace Parser {
                 parseErrorAt(pos, end, Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
             }
             else {
+                Debug.assert(isKeywordOrPunctuation(unaryOperator));
                 parseErrorAt(pos, end, Diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
             }
         }

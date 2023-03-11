@@ -579,6 +579,9 @@ export type PunctuationSyntaxKind =
     | SyntaxKind.CaretEqualsToken
     ;
 
+/** @internal */
+export type PunctuationOrKeywordSyntaxKind = PunctuationSyntaxKind | KeywordSyntaxKind;
+
 export type KeywordSyntaxKind =
     | SyntaxKind.AbstractKeyword
     | SyntaxKind.AccessorKeyword
@@ -6909,7 +6912,10 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
 }
 
 /** @internal */
-export type DiagnosticArguments = (string | number | undefined)[];
+export type DiagnosticArguments = (string | number)[];
+
+/** @internal */
+export type DiagnosticAndArguments = [message: DiagnosticMessage, ...args: DiagnosticArguments];
 
 export interface DiagnosticRelatedInformation {
     category: DiagnosticCategory;

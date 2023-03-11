@@ -42,6 +42,7 @@ import {
     defaultMaximumTruncationLength,
     DeleteExpression,
     Diagnostic,
+    DiagnosticAndArguments,
     DiagnosticMessage,
     DiagnosticWithLocation,
     directoryProbablyExists,
@@ -2181,11 +2182,6 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
 }
 
 /** @internal */
-export function isPunctuation(kind: SyntaxKind): boolean {
-    return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
-}
-
-/** @internal */
 export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: number, sourceFile: SourceFile): boolean {
     return isTemplateLiteralKind(node.kind)
         && (node.getStart(sourceFile) < position && position < node.end) || (!!node.isUnterminated && position === node.end);
@@ -4058,9 +4054,9 @@ export function getNewLineKind(newLineCharacter: string): NewLineKind {
 }
 
 /** @internal */
-export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+export type DiagnosticOrDiagnosticAndArguments = DiagnosticMessage | DiagnosticAndArguments;
 /** @internal */
-export function diagnosticToString(diag: DiagnosticAndArguments): string {
+export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): string {
     return isArray(diag)
         ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
         : getLocaleSpecificMessage(diag);

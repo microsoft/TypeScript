@@ -2009,7 +2009,7 @@ function updateOutputTimestampsWorker<T extends BuilderProgram>(
         // For incremental projects, only buildinfo needs to be upto date with timestamp check
         // as we dont check output files for up-to-date ness
         if (!skipOutputs?.has(toPath(state, buildInfoPath))) {
-            if (!!state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath);
+            if (!!state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath!);
             state.host.setModifiedTime(buildInfoPath, now = getCurrentTime(state.host));
             getBuildInfoCacheEntry(state, buildInfoPath, projectPath)!.modifiedTime = now;
         }
@@ -2028,7 +2028,7 @@ function updateOutputTimestampsWorker<T extends BuilderProgram>(
             if (skipOutputs?.has(path)) continue;
             if (reportVerbose) {
                 reportVerbose = false;
-                reportStatus(state, verboseMessage, proj.options.configFilePath);
+                reportStatus(state, verboseMessage, proj.options.configFilePath!);
             }
             host.setModifiedTime(file, now ||= getCurrentTime(state.host));
             // Store output timestamps in a map because non incremental build will need to check them to determine up-to-dateness
@@ -2058,7 +2058,7 @@ function getLatestChangedDtsTime<T extends BuilderProgram>(state: SolutionBuilde
 
 function updateOutputTimestamps<T extends BuilderProgram>(state: SolutionBuilderState<T>, proj: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath) {
     if (state.options.dry) {
-        return reportStatus(state, Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath);
+        return reportStatus(state, Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath!);
     }
     updateOutputTimestampsWorker(state, proj, resolvedPath, Diagnostics.Updating_output_timestamps_of_project_0);
     state.projectStatus.set(resolvedPath, {

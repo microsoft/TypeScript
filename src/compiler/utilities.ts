@@ -441,6 +441,8 @@ import {
     PropertyNameLiteral,
     PropertySignature,
     PseudoBigInt,
+    PunctuationOrKeywordSyntaxKind,
+    PunctuationSyntaxKind,
     QualifiedName,
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
@@ -4770,6 +4772,16 @@ export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | un
 /** @internal */
 export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
     return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+}
+
+/** @internal */
+export function isPunctuation(token: SyntaxKind): token is PunctuationSyntaxKind {
+    return SyntaxKind.FirstPunctuation <= token && token <= SyntaxKind.LastPunctuation;
+}
+
+/** @internal */
+export function isKeywordOrPunctuation(token: SyntaxKind): token is PunctuationOrKeywordSyntaxKind {
+    return isKeyword(token) || isPunctuation(token);
 }
 
 /** @internal */

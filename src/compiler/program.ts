@@ -3782,7 +3782,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                                 existingFile,
                                 reason,
                                 Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName, previousResolution.resolvedFileName]
+                                [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName!, previousResolution.resolvedFileName!]
                             );
                         }
                     }
@@ -3837,11 +3837,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
                 const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
                 const diagnostic = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
+                const args = suggestion ? [libName, suggestion] : [libName];
                 (fileProcessingDiagnostics ||= []).push({
                     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic,
                     reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, },
                     diagnostic,
-                    args: [libName, suggestion]
+                    args,
                 });
             }
         });
@@ -4659,7 +4660,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string, option3?: string) {
-        createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
+        // TODO(jakebailey): this code makes assumptions about the format of the diagnostic messages.
+        createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2!, option3!);
     }
 
     function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, ...args: DiagnosticArguments) {

@@ -841,7 +841,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     const declarationName = getNameOfDeclaration(node) || node;
                     forEach(symbol.declarations, (declaration, index) => {
                         const decl = getNameOfDeclaration(declaration) || declaration;
-                        const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
+                        const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
                             multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
                         );
@@ -850,7 +850,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         }
                     });
 
-                    const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined);
+                    const diag = messageNeedsName ? createDiagnosticForNode(declarationName, message, getDisplayName(node)) : createDiagnosticForNode(declarationName, message);
                     file.bindDiagnostics.push(addRelatedInfo(diag, ...relatedInformation));
 
                     symbol = createSymbol(SymbolFlags.None, name);

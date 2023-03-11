@@ -33,7 +33,6 @@ import {
     BigIntLiteral,
     BigIntLiteralType,
     BinaryExpression,
-    BinaryOperator,
     BinaryOperatorToken,
     binarySearch,
     BindableObjectDefinePropertyCall,
@@ -133,6 +132,7 @@ import {
     DeferredTypeReference,
     DeleteExpression,
     Diagnostic,
+    DiagnosticAndArguments,
     DiagnosticArguments,
     DiagnosticCategory,
     DiagnosticMessage,
@@ -896,6 +896,7 @@ import {
     PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
+    PunctuationSyntaxKind,
     pushIfUnique,
     QualifiedName,
     QuestionToken,
@@ -9802,7 +9803,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result || types;
     }
 
-    function visibilityToString(flags: ModifierFlags): string | undefined {
+    function visibilityToString(flags: ModifierFlags): string {
         if (flags === ModifierFlags.Private) {
             return "private";
         }
@@ -20167,7 +20168,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let overflow = false;
         let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
-        let incompatibleStack: [message: DiagnosticMessage, ...args: DiagnosticArguments][] | undefined;
+        let incompatibleStack: DiagnosticAndArguments[] | undefined;
 
         Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -20262,7 +20263,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // The first error will be the innermost, while the last will be the outermost - so by popping off the end,
             // we can build from left to right
             let path = "";
-            const secondaryRootErrors: [DiagnosticMessage, (string | number)?, (string | number)?, (string | number)?, (string | number)?][] = [];
+            const secondaryRootErrors: DiagnosticAndArguments[] = [];
             while (stack.length) {
                 const [msg, ...args] = stack.pop()!;
                 switch (msg.code) {
@@ -32767,13 +32768,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? args.length + 1 : args.length];
             if (parameter) {
-                const parameterError = createDiagnosticForNode(
-                    parameter,
-                    isBindingPattern(parameter.name) ? Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided
-                        : isRestParameter(parameter) ? Diagnostics.Arguments_for_the_rest_parameter_0_were_not_provided
-                        : Diagnostics.An_argument_for_0_was_not_provided,
-                    !parameter.name ? args.length : !isBindingPattern(parameter.name) ? idText(getFirstIdentifier(parameter.name)) : undefined
-                );
+                const messageAndArgs: DiagnosticAndArguments =
+                    isBindingPattern(parameter.name) ? [Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided]
+                        : isRestParameter(parameter) ? [Diagnostics.Arguments_for_the_rest_parameter_0_were_not_provided, idText(getFirstIdentifier(parameter.name))]
+                        : [Diagnostics.An_argument_for_0_was_not_provided, !parameter.name ? args.length : idText(getFirstIdentifier(parameter.name))];
+                const parameterError = createDiagnosticForNode(parameter, ...messageAndArgs);
                 return addRelatedInfo(diagnostic, parameterError);
             }
             return diagnostic;
@@ -36509,7 +36508,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Note that this and `checkBinaryExpression` above should behave mostly the same, except this elides some
     // expression-wide checks and does not use a work stack to fold nested binary expressions into the same callstack frame
-    function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {
+    function checkBinaryLikeExpression(left: Expression, operatorToken: BinaryOperatorToken, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {
         const operator = operatorToken.kind;
         if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
             return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
@@ -36528,7 +36527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkBinaryLikeExpressionWorker(
         left: Expression,
-        operatorToken: Node,
+        operatorToken: BinaryOperatorToken,
         right: Expression,
         leftType: Type,
         rightType: Type,
@@ -36565,7 +36564,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 leftType = checkNonNullType(leftType, left);
                 rightType = checkNonNullType(rightType, right);
 
-                let suggestedOperator: SyntaxKind | undefined;
+                let suggestedOperator: PunctuationSyntaxKind | undefined;
                 // if a user tries to apply a bitwise operator to 2 boolean operands
                 // try and return them a helpful suggestion
                 if ((leftType.flags & TypeFlags.BooleanLike) &&
@@ -36794,7 +36793,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // Return true if there was no error, false if there was an error.
-        function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
+        function checkForDisallowedESSymbolOperand(operator: PunctuationSyntaxKind): boolean {
             const offendingSymbolOperand =
                 maybeTypeOfKindConsideringBaseConstraint(leftType, TypeFlags.ESSymbolLike) ? left :
                 maybeTypeOfKindConsideringBaseConstraint(rightType, TypeFlags.ESSymbolLike) ? right :
@@ -36808,7 +36807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind | undefined {
+        function getSuggestedBooleanOperator(operator: SyntaxKind): PunctuationSyntaxKind | undefined {
             switch (operator) {
                 case SyntaxKind.BarToken:
                 case SyntaxKind.BarEqualsToken:
@@ -36833,7 +36832,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let assigneeType = leftType;
 
                 // getters can be a subtype of setters, so to check for assignability we use the setter's type instead
-                if (isCompoundAssignment(operatorToken.kind as BinaryOperator) && left.kind === SyntaxKind.PropertyAccessExpression) {
+                if (isCompoundAssignment(operatorToken.kind) && left.kind === SyntaxKind.PropertyAccessExpression) {
                     assigneeType = checkPropertyAccessExpression(left as PropertyAccessExpression, /*checkMode*/ undefined, /*writeOnly*/ true);
                 }
 
@@ -40158,9 +40157,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         : rangeOfTypeParameters(sourceFile, parent.typeParameters!);
                     const only = parent.typeParameters!.length === 1;
                     //TODO: following line is possible reason for bug #41974, unusedTypeParameters_TemplateTag
-                    const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
-                    const arg0 = only ? name : undefined;
-                    addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, message, arg0));
+                    const messageAndArg: DiagnosticAndArguments = only
+                        ? [Diagnostics._0_is_declared_but_its_value_is_never_read, name]
+                        : [Diagnostics.All_type_parameters_are_unused];
+                    addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, ...messageAndArg));
                 }
             }
             else {

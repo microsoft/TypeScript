@@ -1747,7 +1747,7 @@ function getOptionName(option: CommandLineOption) {
 function createUnknownOptionError(
     unknownOption: string,
     diagnostics: DidYouMeanOptionsDiagnostics,
-    createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
+    createDiagnostics: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic,
     unknownOptionErrorText?: string
 ) {
     if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
@@ -3377,7 +3377,7 @@ function getExtendsConfigPath(
     host: ParseConfigHost,
     basePath: string,
     errors: Diagnostic[],
-    createDiagnostic: (message: DiagnosticMessage, arg1?: string) => Diagnostic) {
+    createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic) {
     extendedConfig = normalizeSlashes(extendedConfig);
     if (isRootedDiskPath(extendedConfig) || startsWith(extendedConfig, "./") || startsWith(extendedConfig, "../")) {
         let extendedConfigPath = getNormalizedAbsolutePath(extendedConfig, basePath);
