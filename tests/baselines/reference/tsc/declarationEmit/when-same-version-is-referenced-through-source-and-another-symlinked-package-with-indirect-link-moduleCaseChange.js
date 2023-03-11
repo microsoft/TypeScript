@@ -165,12 +165,6 @@ Program files::
 /user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
 /user/username/projects/myproject/plugin-one/index.ts
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.Success
 
 //// [/user/username/projects/myproject/plugin-one/index.js]

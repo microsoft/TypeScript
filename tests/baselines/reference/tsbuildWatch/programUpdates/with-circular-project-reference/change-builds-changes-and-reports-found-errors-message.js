@@ -148,28 +148,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/logic/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/core/anothermodule.ts:
+/user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
-/user/username/projects/sample1/core/index.ts:
+/user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/logic/index.ts:
+/user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/tests/index.ts:
+/user/username/projects/sample1/tests/index.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
+/user/username/projects/sample1/core: *new*
   {}
-/user/username/projects/sample1/logic:
+/user/username/projects/sample1/logic: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -517,30 +515,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -677,30 +651,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -917,30 +867,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -1069,30 +995,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1311,30 +1213,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -1479,30 +1357,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 

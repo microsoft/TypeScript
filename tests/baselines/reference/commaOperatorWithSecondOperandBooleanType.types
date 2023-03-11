@@ -79,7 +79,6 @@ var resultIsBoolean5 = (OBJECT, BOOLEAN);
 //Literal and expression
 null, BOOLEAN;
 >null, BOOLEAN : boolean
->null : null
 >BOOLEAN : boolean
 
 ANY = undefined, BOOLEAN;
@@ -125,7 +124,6 @@ var resultIsBoolean6 = (null, BOOLEAN);
 >resultIsBoolean6 : boolean
 >(null, BOOLEAN) : false
 >null, BOOLEAN : false
->null : null
 >BOOLEAN : false
 
 var resultIsBoolean7 = (ANY = undefined, BOOLEAN);

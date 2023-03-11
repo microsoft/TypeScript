@@ -21,7 +21,6 @@ module consumer {
                 var g:provider.UsefulClass= null;
 >g : provider.UsefulClass
 >provider : any
->null : null
                 
                 function use():provider.UsefulClass { 
 >use : () => provider.UsefulClass

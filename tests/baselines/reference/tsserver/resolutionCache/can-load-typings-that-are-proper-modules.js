@@ -7,12 +7,6 @@ var x = require("lib")
 export let x = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:20.000] Search path: /a/b
 Info 2    [00:00:21.000] For info: /a/b/app.js :: No config files found.
 Info 3    [00:00:22.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -40,8 +34,8 @@ Info 24   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 25   [00:00:44.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 26   [00:00:45.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 27   [00:00:46.000] 	Files (2)
-	/a/cache/node_modules/@types/lib/index.d.ts
-	/a/b/app.js
+	/a/cache/node_modules/@types/lib/index.d.ts Text-1 "export let x = 1"
+	/a/b/app.js SVC-1-0 "var x = require(\"lib\")"
 
 
 	../cache/node_modules/@types/lib/index.d.ts
@@ -50,10 +44,57 @@ Info 27   [00:00:46.000] 	Files (2)
 	  Root file specified for compilation
 
 Info 28   [00:00:47.000] -----------------------------------------------
-Info 29   [00:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 29   [00:00:49.000] 	Files (2)
+TI:: Creating typing installer
 
-Info 29   [00:00:50.000] -----------------------------------------------
-Info 29   [00:00:51.000] Open files: 
-Info 29   [00:00:52.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
-Info 29   [00:00:53.000] 		Projects: /dev/null/inferredProject1*
+PolledWatches::
+/a/b/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+TI:: [00:00:48.000] Global cache location '/a/cache', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:49.000] Processing cache location '/a/cache'
+TI:: [00:00:50.000] Trying to find '/a/cache/package.json'...
+TI:: [00:00:51.000] Finished processing cache location '/a/cache'
+TI:: [00:00:52.000] Npm config file: /a/cache/package.json
+TI:: [00:00:53.000] Npm config file: '/a/cache/package.json' is missing, creating new one...
+TI:: [00:00:56.000] Updating types-registry npm package...
+TI:: [00:00:57.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:01:02.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/cache/package.json]
+{ "private": true }
+
+//// [/a/cache/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
+TI:: [00:01:03.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js"],"compilerOptions":{"traceResolution":true,"allowJs":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/b","cachePath":"/a/cache","kind":"discover"}
+TI:: [00:01:04.000] Request specifies cache path '/a/cache', loading cached information...
+TI:: [00:01:05.000] Processing cache location '/a/cache'
+TI:: [00:01:06.000] Cache location was already processed...
+TI:: [00:01:07.000] Failed to load safelist from types map file '/typesMap.json'
+TI:: [00:01:08.000] Explicitly included types: []
+TI:: [00:01:09.000] Inferred typings from unresolved imports: []
+TI:: [00:01:10.000] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [00:01:11.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [00:01:12.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components
+TI:: [00:01:13.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:15.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules
+TI:: [00:01:16.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:18.000] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"traceResolution":true,"allowJs":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+TI:: [00:01:19.000] No new typings were requested as a result of typings discovery
+Info 29   [00:01:20.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 29   [00:01:21.000] 	Files (2)
+
+Info 29   [00:01:22.000] -----------------------------------------------
+Info 29   [00:01:23.000] Open files: 
+Info 29   [00:01:24.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
+Info 29   [00:01:25.000] 		Projects: /dev/null/inferredProject1*

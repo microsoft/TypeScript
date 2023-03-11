@@ -78,7 +78,6 @@ type State = {
 
     [key: string]: string | boolean | number | null;
 >key : string
->null : null
 
 };
 
@@ -113,7 +112,6 @@ function doit<T extends State>() {
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
 
     let current: Partial<T> = Object.create(null);
 >current : Partial<T>
@@ -121,7 +119,6 @@ function doit<T extends State>() {
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
 
     let args1: Args1<T> = { previous, current };
 >args1 : Args1<T>
@@ -172,7 +169,6 @@ function doit2() {
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
 
     let current: Partial<State2> = Object.create(null);
 >current : Partial<State2>
@@ -180,7 +176,6 @@ function doit2() {
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
 
     let args1: Args3 = { previous, current };
 >args1 : Args3

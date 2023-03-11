@@ -1,13 +1,4 @@
 Info 0    [00:01:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:54.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/main/src/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -95,12 +86,15 @@ export const noCoreRef2Const = 10;
 {"compilerOptions":{"composite":true}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:01:54.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/src/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:55.000] Search path: /user/username/projects/myproject/main/src
 Info 3    [00:01:56.000] For info: /user/username/projects/myproject/main/src/file1.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
 Info 4    [00:01:57.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
@@ -337,8 +331,8 @@ Info 58   [00:02:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 59   [00:02:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 60   [00:02:53.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 61   [00:02:54.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/main/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/main/src/file1.ts SVC-1-0 "export const mainConst = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -356,72 +350,74 @@ Info 65   [00:03:00.000] -----------------------------------------------
 Info 65   [00:03:01.000] Open files: 
 Info 65   [00:03:02.000] 	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
 Info 65   [00:03:03.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirect/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef2/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/refToCoreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef2/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/core:
-  {}
-/user/username/projects/myproject/indirect:
-  {}
-/user/username/projects/myproject/coreRef1:
-  {}
-/user/username/projects/myproject/noCoreRef1:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1:
-  {}
-/user/username/projects/myproject/coreRef2:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2:
-  {}
-/user/username/projects/myproject/coreRef3:
-  {}
-/user/username/projects/myproject/refToCoreRef3:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef:
-  {}
-/user/username/projects/myproject/noCoreRef2:
-  {}
-
 Info 65   [00:03:04.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/core/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/indirect/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/coreRef1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/noCoreRef1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/coreRef2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/coreRef3/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/refToCoreRef3/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/noCoreRef2/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main: *new*
+  {}
+/user/username/projects/myproject/core: *new*
+  {}
+/user/username/projects/myproject/indirect: *new*
+  {}
+/user/username/projects/myproject/coreRef1: *new*
+  {}
+/user/username/projects/myproject/noCoreRef1: *new*
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad1: *new*
+  {}
+/user/username/projects/myproject/coreRef2: *new*
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad2: *new*
+  {}
+/user/username/projects/myproject/coreRef3: *new*
+  {}
+/user/username/projects/myproject/refToCoreRef3: *new*
+  {}
+/user/username/projects/myproject/indirectNoCoreRef: *new*
+  {}
+/user/username/projects/myproject/noCoreRef2: *new*
+  {}
+
+Before request
+
 Info 66   [00:03:05.000] request:
     {
       "command": "open",
@@ -431,68 +427,6 @@ Info 66   [00:03:05.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirect/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef2/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/refToCoreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef2/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/core:
-  {}
-/user/username/projects/myproject/indirect:
-  {}
-/user/username/projects/myproject/coreRef1:
-  {}
-/user/username/projects/myproject/noCoreRef1:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1:
-  {}
-/user/username/projects/myproject/coreRef2:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2:
-  {}
-/user/username/projects/myproject/coreRef3:
-  {}
-/user/username/projects/myproject/refToCoreRef3:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef:
-  {}
-/user/username/projects/myproject/noCoreRef2:
-  {}
-
 Info 67   [00:03:06.000] Search path: /user/username/projects/myproject/core/src
 Info 68   [00:03:07.000] For info: /user/username/projects/myproject/core/src/file1.ts :: Config file name: /user/username/projects/myproject/core/tsconfig.json
 Info 69   [00:03:08.000] Creating configuration project /user/username/projects/myproject/core/tsconfig.json
@@ -504,8 +438,8 @@ Info 74   [00:03:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 75   [00:03:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 76   [00:03:15.000] Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
 Info 77   [00:03:16.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/core/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/core/src/file1.ts SVC-1-0 "export const coreConst = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -529,6 +463,10 @@ Info 81   [00:03:27.000] 	FileName: /user/username/projects/myproject/main/src/f
 Info 81   [00:03:28.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 81   [00:03:29.000] 	FileName: /user/username/projects/myproject/core/src/file1.ts ProjectRootPath: undefined
 Info 81   [00:03:30.000] 		Projects: /user/username/projects/myproject/core/tsconfig.json
+Info 81   [00:03:31.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -536,7 +474,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/core/node_modules/@types:
+/user/username/projects/myproject/core/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -593,10 +531,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/noCoreRef2:
   {}
 
-Info 81   [00:03:31.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 82   [00:03:32.000] request:
     {
       "command": "references",
@@ -608,70 +544,6 @@ Info 82   [00:03:32.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/core/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirect/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef2/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/refToCoreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef2/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/core:
-  {}
-/user/username/projects/myproject/indirect:
-  {}
-/user/username/projects/myproject/coreRef1:
-  {}
-/user/username/projects/myproject/noCoreRef1:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1:
-  {}
-/user/username/projects/myproject/coreRef2:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2:
-  {}
-/user/username/projects/myproject/coreRef3:
-  {}
-/user/username/projects/myproject/refToCoreRef3:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef:
-  {}
-/user/username/projects/myproject/noCoreRef2:
-  {}
-
 Info 83   [00:03:33.000] Finding references to /user/username/projects/myproject/core/src/file1.ts position 13 in project /user/username/projects/myproject/core/tsconfig.json
 Info 84   [00:03:34.000] Creating configuration project /user/username/projects/myproject/indirect/tsconfig.json
 Info 85   [00:03:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/src/file1.ts 500 undefined WatchType: Closed Script info
@@ -683,8 +555,8 @@ Info 90   [00:03:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 91   [00:03:41.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirect/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 92   [00:03:42.000] Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
 Info 93   [00:03:43.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/indirect/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/indirect/src/file1.ts Text-1 "export const indirectConst = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -703,8 +575,8 @@ Info 101  [00:03:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 102  [00:03:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 103  [00:03:53.000] Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
 Info 104  [00:03:54.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/coreRef1/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/coreRef1/src/file1.ts Text-1 "export const coreRef1Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -723,8 +595,8 @@ Info 112  [00:04:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 113  [00:04:03.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 114  [00:04:04.000] Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json' (Configured)
 Info 115  [00:04:05.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts Text-1 "export const indirectDisabledChildLoad1Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -743,8 +615,8 @@ Info 123  [00:04:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 124  [00:04:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 125  [00:04:15.000] Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json' (Configured)
 Info 126  [00:04:16.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts Text-1 "export const indirectDisabledChildLoad2Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -763,8 +635,8 @@ Info 134  [00:04:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 135  [00:04:25.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 136  [00:04:26.000] Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configured)
 Info 137  [00:04:27.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/refToCoreRef3/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/refToCoreRef3/src/file1.ts Text-1 "export const refToCoreRef3Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -783,8 +655,8 @@ Info 145  [00:04:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 146  [00:04:36.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 147  [00:04:37.000] Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
 Info 148  [00:04:38.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/coreRef3/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/coreRef3/src/file1.ts Text-1 "export const coreRef3Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -794,96 +666,6 @@ Info 148  [00:04:38.000] 	Files (2)
 
 Info 149  [00:04:39.000] -----------------------------------------------
 Info 150  [00:04:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file
-After request
-
-PolledWatches::
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/core/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/indirect/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/coreRef1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/indirectDisabledChildLoad1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/indirectDisabledChildLoad2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/refToCoreRef3/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/coreRef3/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/core/src/file1.d.ts:
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirect/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef1/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef2/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json:
-  {}
-/user/username/projects/myproject/coreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/refToCoreRef3/tsconfig.json:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json:
-  {}
-/user/username/projects/myproject/noCoreRef2/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/indirect/src/file1.ts:
-  {}
-/user/username/projects/myproject/coreRef1/src/file1.ts:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts:
-  {}
-/user/username/projects/myproject/refToCoreRef3/src/file1.ts:
-  {}
-/user/username/projects/myproject/coreRef3/src/file1.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/core:
-  {}
-/user/username/projects/myproject/indirect:
-  {}
-/user/username/projects/myproject/coreRef1:
-  {}
-/user/username/projects/myproject/noCoreRef1:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad1:
-  {}
-/user/username/projects/myproject/coreRef2:
-  {}
-/user/username/projects/myproject/indirectDisabledChildLoad2:
-  {}
-/user/username/projects/myproject/coreRef3:
-  {}
-/user/username/projects/myproject/refToCoreRef3:
-  {}
-/user/username/projects/myproject/indirectNoCoreRef:
-  {}
-/user/username/projects/myproject/noCoreRef2:
-  {}
-
 Info 151  [00:04:41.000] response:
     {
       "response": {
@@ -917,3 +699,92 @@ Info 151  [00:04:41.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/core/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/indirect/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/coreRef1/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/indirectDisabledChildLoad1/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/indirectDisabledChildLoad2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/refToCoreRef3/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/coreRef3/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/core/src/file1.d.ts: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/core/tsconfig.json:
+  {}
+/user/username/projects/myproject/indirect/tsconfig.json:
+  {}
+/user/username/projects/myproject/coreRef1/tsconfig.json:
+  {}
+/user/username/projects/myproject/noCoreRef1/tsconfig.json:
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json:
+  {}
+/user/username/projects/myproject/coreRef2/tsconfig.json:
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json:
+  {}
+/user/username/projects/myproject/coreRef3/tsconfig.json:
+  {}
+/user/username/projects/myproject/refToCoreRef3/tsconfig.json:
+  {}
+/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json:
+  {}
+/user/username/projects/myproject/noCoreRef2/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/indirect/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/coreRef1/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/refToCoreRef3/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/coreRef3/src/file1.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/core:
+  {}
+/user/username/projects/myproject/indirect:
+  {}
+/user/username/projects/myproject/coreRef1:
+  {}
+/user/username/projects/myproject/noCoreRef1:
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad1:
+  {}
+/user/username/projects/myproject/coreRef2:
+  {}
+/user/username/projects/myproject/indirectDisabledChildLoad2:
+  {}
+/user/username/projects/myproject/coreRef3:
+  {}
+/user/username/projects/myproject/refToCoreRef3:
+  {}
+/user/username/projects/myproject/indirectNoCoreRef:
+  {}
+/user/username/projects/myproject/noCoreRef2:
+  {}

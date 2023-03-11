@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/unknown/unknownControlFlow.ts ===
-type T01 = {} & string;  // string
->T01 : string
+type T01 = {} & string;  // {} & string
+>T01 : {} & string
 
 type T02 = {} & 'a';  // 'a'
 >T02 : "a"
@@ -14,7 +14,6 @@ type T04 = {} & { x: number };  // { x: number }
 
 type T05 = {} & null;  // never
 >T05 : never
->null : null
 
 type T06 = {} & undefined;  // never
 >T06 : never
@@ -50,18 +49,15 @@ function f01(u: unknown) {
 
     let x2: {} | null | undefined = u;
 >x2 : {} | null | undefined
->null : null
 >u : unknown
 
     let x3: {} | { x: string } | null | undefined = u;
 >x3 : {} | { x: string; } | null | undefined
 >x : string
->null : null
 >u : unknown
 
     let x4: ThisOrThatNode | null | undefined = u;
 >x4 : ThisOrThatNode | null | undefined
->null : null
 >u : unknown
 }
 
@@ -154,7 +150,6 @@ function f20(x: unknown) {
     if (x !== null) {
 >x !== null : boolean
 >x : unknown
->null : null
 
         x;  // {} | undefined
 >x : {} | undefined
@@ -170,7 +165,6 @@ function f20(x: unknown) {
 >undefined : undefined
 >x !== null : boolean
 >x : {} | null
->null : null
 
         x;  // {}
 >x : {}
@@ -194,7 +188,6 @@ function f20(x: unknown) {
     if (x != null) {
 >x != null : boolean
 >x : unknown
->null : null
 
         x;  // {}
 >x : {}
@@ -224,7 +217,6 @@ function f21<T>(x: T) {
     if (x !== null) {
 >x !== null : boolean
 >x : T
->null : null
 
         x;  // T & ({} | undefined)
 >x : T & ({} | undefined)
@@ -240,7 +232,6 @@ function f21<T>(x: T) {
 >undefined : undefined
 >x !== null : boolean
 >x : T & ({} | null)
->null : null
 
         x;  // T & {}
 >x : T & {}
@@ -264,7 +255,6 @@ function f21<T>(x: T) {
     if (x != null) {
 >x != null : boolean
 >x : T
->null : null
 
         x;  // T & {}
 >x : NonNullable<T>
@@ -294,7 +284,6 @@ function f22<T extends {} | undefined>(x: T) {
     if (x !== null) {
 >x !== null : boolean
 >x : T
->null : null
 
         x;  // T
 >x : T
@@ -310,7 +299,6 @@ function f22<T extends {} | undefined>(x: T) {
 >undefined : undefined
 >x !== null : boolean
 >x : T & {}
->null : null
 
         x;  // T & {}
 >x : T & {}
@@ -334,7 +322,6 @@ function f22<T extends {} | undefined>(x: T) {
     if (x != null) {
 >x != null : boolean
 >x : T
->null : null
 
         x;  // T & {}
 >x : NonNullable<T>
@@ -348,7 +335,6 @@ function f22<T extends {} | undefined>(x: T) {
 function f23<T>(x: T | undefined | null) {
 >f23 : <T>(x: T | undefined | null) => void
 >x : T | null | undefined
->null : null
 
     if (x !== undefined) {
 >x !== undefined : boolean
@@ -361,7 +347,6 @@ function f23<T>(x: T | undefined | null) {
     if (x !== null) {
 >x !== null : boolean
 >x : T | null | undefined
->null : null
 
         x;  // T & {} | undefined
 >x : (T & {}) | undefined
@@ -377,7 +362,6 @@ function f23<T>(x: T | undefined | null) {
     if (x != null) {
 >x != null : boolean
 >x : T | null | undefined
->null : null
 
         x;  // T & {}
 >x : NonNullable<T>
@@ -461,7 +445,6 @@ function possiblyNull<T>(x: T) {
 >!true : false
 >true : true
 >x : T
->null : null
 }
 
 function possiblyUndefined<T>(x: T) {
@@ -496,7 +479,6 @@ function ensureNotNull<T>(x: T) {
     if (x === null) throw Error();
 >x === null : boolean
 >x : T
->null : null
 >Error() : Error
 >Error : ErrorConstructor
 
@@ -535,7 +517,6 @@ function f40(a: string | undefined, b: number | null | undefined) {
 >f40 : (a: string | undefined, b: number | null | undefined) => void
 >a : string | undefined
 >b : number | null | undefined
->null : null
 
     let a1 = ensureNotNullOrUndefined(a);  // string
 >a1 : string
@@ -702,7 +683,6 @@ function deepEquals<T>(a: T, b: T): boolean {
 function foo<T>(x: T | null) {
 >foo : <T>(x: T | null) => void
 >x : T | null
->null : null
 
     let y = x;
 >y : T | null
@@ -711,7 +691,6 @@ function foo<T>(x: T | null) {
     if (y !== null) {
 >y !== null : boolean
 >y : T | null
->null : null
 
         y;
 >y : T & ({} | undefined)
@@ -769,25 +748,21 @@ function ff4<T>(t: T & {}, k: keyof (T & {})) {
 ff1(null, 'foo');  // Error
 >ff1(null, 'foo') : void
 >ff1 : <T>(t: T, k: keyof T) => void
->null : null
 >'foo' : "foo"
 
 ff2(null, 'foo');  // Error
 >ff2(null, 'foo') : void
 >ff2 : <T>(t: T & {}, k: keyof T) => void
->null : null
 >'foo' : "foo"
 
 ff3(null, 'foo');
 >ff3(null, 'foo') : void
 >ff3 : <T>(t: T, k: keyof (T & {})) => void
->null : null
 >'foo' : "foo"
 
 ff4(null, 'foo');  // Error
 >ff4(null, 'foo') : void
 >ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
->null : null
 >'foo' : "foo"
 
 // Repro from #49681
@@ -807,7 +782,6 @@ type Bar<T extends NullableFoo> = NonNullable<T>[string];
 function fx0<T>(value: T & ({} | null)) {
 >fx0 : <T>(value: T & ({} | null)) => void
 >value : T & ({} | null)
->null : null
 
     if (value === 42) {
 >value === 42 : boolean
@@ -826,7 +800,6 @@ function fx0<T>(value: T & ({} | null)) {
 function fx1<T extends unknown>(value: T & ({} | null)) {
 >fx1 : <T extends unknown>(value: T & ({} | null)) => void
 >value : T & ({} | null)
->null : null
 
     if (value === 42) {
 >value === 42 : boolean
@@ -845,7 +818,6 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
 function fx2<T extends {}>(value: T & ({} | null)) {
 >fx2 : <T extends {}>(value: T & ({} | null)) => void
 >value : T & ({} | null)
->null : null
 
     if (value === 42) {
 >value === 42 : boolean
@@ -864,7 +836,6 @@ function fx2<T extends {}>(value: T & ({} | null)) {
 function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
 >value : T & ({} | null)
->null : null
 
     if (value === 42) {
 >value === 42 : boolean
@@ -882,9 +853,7 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 
 function fx4<T extends {} | null>(value: T & ({} | null)) {
 >fx4 : <T extends {} | null>(value: T & ({} | null)) => void
->null : null
 >value : T & ({} | null)
->null : null
 
     if (value === 42) {
 >value === 42 : boolean
@@ -902,9 +871,7 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
 
 function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
 >fx5 : <T extends {} | null | undefined>(value: T & ({} | null)) => void
->null : null
 >value : T & ({} | null)
->null : null
 
     if (value === 42) {
 >value === 42 : boolean
