@@ -16,7 +16,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport08.ts",
       "kind": "class",
-      "name": "class DefaultExportedClass\nnamespace DefaultExportedClass",
+      "name": "class DefaultExportedClass\nmodule DefaultExportedClass",
       "textSpan": {
         "start": 21,
         "length": 20
@@ -32,14 +32,14 @@
         },
         {
           "text": "DefaultExportedClass",
-          "kind": "moduleName"
+          "kind": "className"
         },
         {
           "text": "\n",
           "kind": "lineBreak"
         },
         {
-          "text": "namespace",
+          "text": "module",
           "kind": "keyword"
         },
         {
@@ -48,7 +48,7 @@
         },
         {
           "text": "DefaultExportedClass",
-          "kind": "moduleName"
+          "kind": "className"
         }
       ],
       "contextSpan": {

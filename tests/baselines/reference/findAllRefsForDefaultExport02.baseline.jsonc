@@ -685,14 +685,14 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
       "kind": "function",
-      "name": "namespace DefaultExportedFunction",
+      "name": "module DefaultExportedFunction",
       "textSpan": {
         "start": 24,
         "length": 23
       },
       "displayParts": [
         {
-          "text": "namespace",
+          "text": "module",
           "kind": "keyword"
         },
         {
@@ -701,7 +701,7 @@
         },
         {
           "text": "DefaultExportedFunction",
-          "kind": "moduleName"
+          "kind": "functionName"
         }
       ],
       "contextSpan": {
@@ -746,14 +746,14 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
       "kind": "function",
-      "name": "namespace DefaultExportedFunction",
+      "name": "module DefaultExportedFunction",
       "textSpan": {
         "start": 24,
         "length": 23
       },
       "displayParts": [
         {
-          "text": "namespace",
+          "text": "module",
           "kind": "keyword"
         },
         {
@@ -762,7 +762,7 @@
         },
         {
           "text": "DefaultExportedFunction",
-          "kind": "moduleName"
+          "kind": "functionName"
         }
       ],
       "contextSpan": {

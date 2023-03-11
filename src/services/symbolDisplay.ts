@@ -261,6 +261,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
+    symbol = typeChecker.getExportSymbolOfSymbol(symbol);
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -452,6 +453,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
+
         addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
