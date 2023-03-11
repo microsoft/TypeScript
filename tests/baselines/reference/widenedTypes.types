@@ -1,7 +1,6 @@
 === tests/cases/compiler/widenedTypes.ts ===
 null instanceof (() => { });
 >null instanceof (() => { }) : boolean
->null : null
 >(() => { }) : () => void
 >() => { } : () => void
 
@@ -9,21 +8,17 @@ null instanceof (() => { });
 >({}) instanceof null : boolean
 >({}) : {}
 >{} : {}
->null : null
 
 null in {};
 >null in {} : boolean
->null : null
 >{} : {}
 
 "" in null;
 >"" in null : boolean
 >"" : ""
->null : null
 
 for (var a in null) { }
 >a : string
->null : null
 
 var t = [3, (3, null)];
 >t : number[]
@@ -32,7 +27,6 @@ var t = [3, (3, null)];
 >(3, null) : null
 >3, null : null
 >3 : 3
->null : null
 
 t[3] = "";
 >t[3] = "" : ""
@@ -61,7 +55,6 @@ var u = [3, (y = null)];
 >(y = null) : null
 >y = null : null
 >y : any
->null : null
 
 u[3] = "";
 >u[3] = "" : ""
@@ -83,7 +76,6 @@ var arr: string[] = [3, null]; // not assignable because null is not widened. BC
 >arr : string[]
 >[3, null] : number[]
 >3 : 3
->null : null
 
 var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
 >obj : { [x: string]: string; }
@@ -92,5 +84,4 @@ var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because nul
 >x : number
 >3 : 3
 >y : null
->null : null
 

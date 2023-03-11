@@ -1,5 +1,3 @@
-declare const process: any;
-
 /** @internal */
 export function isNodeLikeSystem(): boolean {
     // This is defined here rather than in sys.ts to prevent a cycle from its
@@ -9,7 +7,7 @@ export function isNodeLikeSystem(): boolean {
     // when bundled using esbuild, this function will be rewritten to `__require`
     // and definitely exist.
     return typeof process !== "undefined"
-        && process.nextTick
-        && !process.browser
+        && !!process.nextTick
+        && !(process as any).browser
         && typeof module === "object";
 }

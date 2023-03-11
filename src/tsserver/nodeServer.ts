@@ -20,10 +20,7 @@ import {
     normalizeSlashes,
 } from "../compiler/path";
 import { perfLogger } from "../compiler/perfLogger";
-import {
-    getNodeMajorVersion,
-    sys as system,
-} from "../compiler/sys";
+import { sys as system } from "../compiler/sys";
 import {
     startTracing,
     tracing,
@@ -327,9 +324,7 @@ export function initializeNodeSystem(): StartInput {
 
     const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
 
-    const nodeVersion = getNodeMajorVersion();
-    // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
+    const useWatchGuard = process.platform === "win32";
     const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const logger = createLogger();
 

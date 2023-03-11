@@ -6,7 +6,6 @@ import del from "del";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
 import fs from "fs";
-import fsExtra from "fs-extra";
 import _glob from "glob";
 import { task } from "hereby";
 import path from "path";
@@ -833,11 +832,19 @@ export const produceLKG = task({
         if (missingFiles.length > 0) {
             throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
         }
-        const sizeBefore = getDirSize("lib");
+
+        /** @type {number | undefined} */
+        let sizeBefore;
+        if (fs.existsSync("lib")) {
+            sizeBefore = getDirSize("lib");
+        }
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-        const sizeAfter = getDirSize("lib");
-        if (sizeAfter > (sizeBefore * 1.10)) {
-            throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+
+        if (sizeBefore !== undefined) {
+            const sizeAfter = getDirSize("lib");
+            if (sizeAfter > (sizeBefore * 1.10)) {
+                throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+            }
         }
     }
 });
@@ -883,15 +890,4 @@ export const help = task({
     description: "Prints the top-level tasks.",
     hiddenFromTaskList: true,
     run: () => exec("hereby", ["--tasks"], { hidePrompt: true }),
-});
-
-export const bumpLkgToNightly = task({
-    name: "bump-lkg-to-nightly",
-    description: "Bumps typescript in package.json to the latest nightly and copies it to LKG.",
-    run: async () => {
-        await exec("npm", ["install", "--save-dev", "--save-exact", "typescript@next"]);
-        await fs.promises.rm("lib", { recursive: true, force: true });
-        await fsExtra.copy("node_modules/typescript/lib", "lib");
-        await fs.promises.writeFile("lib/.gitattributes", "* text eol=lf");
-    }
 });

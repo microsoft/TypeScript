@@ -89,13 +89,38 @@ jobs:
 
   smoke:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./pr
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        path: pr
+
+    - uses: actions/checkout@v3
+      with:
+        path: base
+        ref: ${{ github.base_ref }}
+      if: github.event_name == 'pull_request'
+
     - uses: actions/setup-node@v3
       with:
         node-version: "*"
         check-latest: true
+    
+    # Pre-build the base branch so we can check lib folder size changes.
+    # Note that github.sha points to a merge commit, meaning we're testing
+    # the base branch versus the base branch with the PR applied.
+    - name: Build base LKG
+      if: github.event_name == 'pull_request'
+      run: |
+        npm ci
+        npx hereby lkg
+        rm -rf $GITHUB_WORKSPACE/pr/lib
+        mv ./lib $GITHUB_WORKSPACE/pr/
+      working-directory: ./base
+
     - run:  npm ci
 
     - run: npx hereby lkg

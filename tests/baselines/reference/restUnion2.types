@@ -15,7 +15,6 @@ var {...rest2 } = undefinedUnion;
 declare const nullUnion: { n: number } | null;
 >nullUnion : { n: number; } | null
 >n : number
->null : null
 
 var rest3: { n: number };
 >rest3 : { n: number; }

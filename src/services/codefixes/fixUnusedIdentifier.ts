@@ -2,6 +2,7 @@ import {
     cast,
     first,
     forEach,
+    length,
     map,
     tryCast,
 } from "../../compiler/core";
@@ -27,6 +28,7 @@ import {
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isSuperKeyword,
+    isVariableDeclaration,
     isVariableDeclarationList,
 } from "../../compiler/factory/nodeTests";
 import {
@@ -52,6 +54,7 @@ import {
 } from "../../compiler/utilities";
 import {
     getJSDocParameterTags,
+    isCallLikeExpression,
     isModifier,
 } from "../../compiler/utilitiesPublic";
 import {
@@ -63,12 +66,16 @@ import { Core as FindAllReferences } from "../findAllReferences";
 import { ChangeTracker } from "../textChanges";
 import {
     CodeFixAction,
+    CodeFixContext,
     EntryKind,
     FileTextChanges,
 } from "../types";
 import {
     DiagnosticAndArguments,
+    getNewLineOrDefaultFromHost,
+    getPrecedingNonSpaceCharacterPosition,
     getTokenAtPosition,
+    probablyUsesSemicolons,
 } from "../utilities";
 
 const fixName = "unusedIdentifier";
@@ -127,7 +134,7 @@ registerCodeFix({
             }
             return [
                 createDeleteFix(ChangeTracker.with(context, t =>
-                    t.delete(sourceFile, token.parent.parent)), Diagnostics.Remove_unused_destructuring_declaration)
+                    deleteDestructuring(context, t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), Diagnostics.Remove_unused_destructuring_declaration),
             ];
         }
 
@@ -254,6 +261,27 @@ function deleteEntireVariableStatement(changes: ChangeTracker, sourceFile: Sourc
 
 function deleteDestructuringElements(changes: ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern | ArrayBindingPattern) {
     forEach(node.elements, n => changes.delete(sourceFile, n));
+}
+
+function deleteDestructuring(context: CodeFixContext, changes: ChangeTracker, sourceFile: SourceFile, { parent }: ObjectBindingPattern | ArrayBindingPattern) {
+    if (isVariableDeclaration(parent) && parent.initializer && isCallLikeExpression(parent.initializer)) {
+        if (isVariableDeclarationList(parent.parent) && length(parent.parent.declarations) > 1) {
+            const varStatement = parent.parent.parent;
+            const pos = varStatement.getStart(sourceFile);
+            const end = varStatement.end;
+            changes.delete(sourceFile, parent);
+            changes.insertNodeAt(sourceFile, end, parent.initializer, {
+                prefix: getNewLineOrDefaultFromHost(context.host, context.formatContext.options) + sourceFile.text.slice(getPrecedingNonSpaceCharacterPosition(sourceFile.text, pos - 1), pos),
+                suffix: probablyUsesSemicolons(sourceFile) ? ";" : "",
+            });
+        }
+        else {
+            changes.replaceNode(sourceFile, parent.parent, parent.initializer);
+        }
+    }
+    else {
+        changes.delete(sourceFile, parent);
+    }
 }
 
 function tryPrefixDeclaration(changes: ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
