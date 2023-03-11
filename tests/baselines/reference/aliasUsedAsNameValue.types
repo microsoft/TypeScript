@@ -28,5 +28,4 @@ export var id: number;
 export function b(a: any): any { return null; }
 >b : (a: any) => any
 >a : any
->null : null
 

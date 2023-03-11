@@ -55,22 +55,18 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 PolledWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {"pollingInterval":250}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {"pollingInterval":250}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":250}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b:
+/a/b: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

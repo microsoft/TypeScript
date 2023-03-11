@@ -21,7 +21,7 @@ tests/cases/compiler/typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 !!! related TS2208 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:15: This type parameter might need an `extends T` constraint.
         return x;
-        ~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.
     }
     
@@ -33,7 +33,7 @@ tests/cases/compiler/typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type
             ~
 !!! error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
             return x;
-            ~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.
         }
     }

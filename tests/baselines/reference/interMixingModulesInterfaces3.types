@@ -9,7 +9,6 @@ module A {
 >createB : () => B
 
             return null;
->null : null
         }
     }
 
@@ -25,5 +24,4 @@ module A {
 var x: A.B = null;
 >x : A.B
 >A : any
->null : null
 

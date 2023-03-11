@@ -37,7 +37,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         type: "number",
         value: 10,
         multipleOf: 5, // excess property
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~
 !!! error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
 !!! error TS2322:   Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
         format: "what?"
@@ -51,7 +51,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         p1: 'left',
         p2: false,
         p3: 42,
-        ~~~~~~
+        ~~
 !!! error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
 !!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
         p4: "hello"
@@ -70,7 +70,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         p1: 'right',
         p2: false,
         p3: 42,
-        ~~~~~~
+        ~~
 !!! error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
 !!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
         p4: "hello"

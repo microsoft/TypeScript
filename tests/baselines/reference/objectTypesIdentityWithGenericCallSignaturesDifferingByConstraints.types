@@ -9,7 +9,6 @@ class A {
     foo<T extends Date>(x: T): string { return null; }
 >foo : <T extends Date>(x: T) => string
 >x : T
->null : null
 }
 
 class B<T extends Array<number>> {
@@ -18,7 +17,6 @@ class B<T extends Array<number>> {
     foo(x: T): string { return null; }
 >foo : (x: T) => string
 >x : T
->null : null
 }
 
 class C<T extends String> {
@@ -27,7 +25,6 @@ class C<T extends String> {
     foo(x: T): string { return null; }
 >foo : (x: T) => string
 >x : T
->null : null
 }
 
 interface I<T extends Number> {

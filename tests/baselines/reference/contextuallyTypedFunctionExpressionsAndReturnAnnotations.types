@@ -22,8 +22,6 @@ foo((y): (y2: number) => void => {
 >0 : 0
 
     return null;
->null : null
-
 });
 
 foo((y: string) => {

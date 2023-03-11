@@ -143,7 +143,6 @@ let render = (ctrl, model) =>
 >input : any
 
                                 : null
->null : null
                             }
                             <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>
 ><label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label> : error

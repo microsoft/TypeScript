@@ -1,0 +1,12 @@
+//// [constructorNameInObjectLiteralAccessor.ts]
+const c1 = {
+    get constructor() { return },
+    set constructor(value) {}
+}
+
+
+//// [constructorNameInObjectLiteralAccessor.js]
+const c1 = {
+    get constructor() { return; },
+    set constructor(value) { }
+};

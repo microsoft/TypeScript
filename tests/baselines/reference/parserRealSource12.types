@@ -246,7 +246,6 @@ module TypeScript {
 >state : any
 >walk : (ast: AST, parent: AST) => AST
 >ast : AST
->null : null
         }
 
         public getWalker(pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): IAstWalker {

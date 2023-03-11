@@ -20,5 +20,4 @@ Object.getOwnPropertyNamess(null);
 >Object.getOwnPropertyNamess : any
 >Object : ObjectConstructor
 >getOwnPropertyNamess : any
->null : null
 

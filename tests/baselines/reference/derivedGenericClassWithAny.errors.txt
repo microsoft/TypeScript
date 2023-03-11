@@ -38,12 +38,12 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     class E<T extends string> extends D {
         x: T;
         get X(): T { return ''; } // error
-                     ~~~~~~~~~~
+                     ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'T'.
 !!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
         foo(): T {
             return ''; // error
-            ~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'T'.
 !!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
         }

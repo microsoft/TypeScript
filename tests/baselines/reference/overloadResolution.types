@@ -42,7 +42,6 @@ function fn1(s: number): number;
 
 function fn1() { return null; }
 >fn1 : { (s: string): string; (s: number): number; }
->null : null
 
 var s = fn1(undefined);
 >s : string
@@ -126,7 +125,6 @@ function fn3<T, U, V>(v: V, u: U, t: T): number;
 
 function fn3() { return null; }
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->null : null
 
 var s = fn3(3);
 >s : string
@@ -242,26 +240,21 @@ fn4('', null);
 >fn4('', null) : any
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
 >'' : ""
->null : null
 
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
 fn4<boolean, Date>(null, null); // Error
 >fn4<boolean, Date>(null, null) : any
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->null : null
->null : null
 
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4(true, null); // Error
 >fn4(true, null) : any
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
 >true : true
->null : null
 
 fn4(null, true); // Error
 >fn4(null, true) : any
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->null : null
 >true : true
 
 // Non - generic overloads where contextual typing of function arguments has errors

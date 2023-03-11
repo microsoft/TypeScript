@@ -20,12 +20,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:22.000] Search path: /a/b/projects/project/src
 Info 2    [00:00:23.000] For info: /a/b/projects/project/src/index.ts :: Config file name: /a/b/projects/project/tsconfig.json
 Info 3    [00:00:24.000] Creating configuration project /a/b/projects/project/tsconfig.json
@@ -47,8 +41,8 @@ Info 11   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:33.000] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:34.000] Project '/a/b/projects/project/tsconfig.json' (Configured)
 Info 14   [00:00:35.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../lib/lib.d.ts
@@ -90,13 +84,9 @@ Info 29   [00:00:57.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/project
 Before running timeout callbacks
 //// [/a/b/projects/project/tsconfig.json] deleted
 
-PolledWatches::
-
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 30   [00:00:58.500] Running: *ensureProjectForOpenFiles*
 Info 31   [00:00:59.500] Before ensureProjectForOpenFiles:
@@ -115,8 +105,8 @@ Info 40   [00:01:11.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 41   [00:01:12.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:13.500] Project '/dev/null/inferredProject1*' (Inferred)
 Info 43   [00:01:14.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../../lib/lib.d.ts
@@ -136,24 +126,22 @@ Info 46   [00:01:22.500] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks
 
 PolledWatches::
-/a/b/projects/project/src/tsconfig.json:
+/a/b/projects/project/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/jsconfig.json:
+/a/b/projects/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/tsconfig.json:
+/a/b/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/jsconfig.json:
+/a/b/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/node_modules/@types:
+/a/b/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/project/node_modules/@types:
+/a/b/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-
-FsWatchesRecursive::
 
 Info 46   [00:01:25.500] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 47   [00:01:26.500] Search path: /a/b/projects/project/src
@@ -185,13 +173,15 @@ PolledWatches::
 /a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/a/b/projects/project/tsconfig.json:
+/a/b/projects/project/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 59   [00:01:38.500] Running: /a/b/projects/project/tsconfig.json
 Info 60   [00:01:39.500] Loading configured project /a/b/projects/project/tsconfig.json
@@ -214,8 +204,8 @@ Info 69   [00:01:48.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 70   [00:01:49.500] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 71   [00:01:50.500] Project '/a/b/projects/project/tsconfig.json' (Configured)
 Info 72   [00:01:51.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../lib/lib.d.ts
@@ -265,6 +255,14 @@ PolledWatches::
 /a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/projects/project/src/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/src/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/lib/lib.d.ts:
   {}
@@ -272,5 +270,5 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a/b/projects/project:
+/a/b/projects/project: *new*
   {}

@@ -32,7 +32,7 @@ tests/cases/compiler/matchReturnTypeInAllBranches.ts(30,13): error TS2322: Type 
             else
             {
                 return 12345;
-                ~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'boolean'.
             }
         }

@@ -7,7 +7,6 @@ function C() {
 >this.m : any
 >this : this
 >m : any
->null : null
 }
 C.prototype.m = function() {
 >C.prototype.m = function() {    this.nothing();} : () => void

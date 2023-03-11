@@ -175,7 +175,6 @@ false ? () => 41 : null;
 >false : false
 >() => 41 : () => number
 >41 : 41
->null : null
 
 false ? (arg) => 42 : null;
 >false ? (arg) => 42 : null : (arg: any) => number
@@ -183,7 +182,6 @@ false ? (arg) => 42 : null;
 >(arg) => 42 : (arg: any) => number
 >arg : any
 >42 : 42
->null : null
 
 false ? (arg = 1) => 43 : null;
 >false ? (arg = 1) => 43 : null : (arg?: number) => number
@@ -192,7 +190,6 @@ false ? (arg = 1) => 43 : null;
 >arg : number
 >1 : 1
 >43 : 43
->null : null
 
 false ? (arg?) => 44 : null;
 >false ? (arg?) => 44 : null : (arg?: any) => number
@@ -200,7 +197,6 @@ false ? (arg?) => 44 : null;
 >(arg?) => 44 : (arg?: any) => number
 >arg : any
 >44 : 44
->null : null
 
 false ? (arg: number) => 45 : null;
 >false ? (arg: number) => 45 : null : (arg: number) => number
@@ -208,7 +204,6 @@ false ? (arg: number) => 45 : null;
 >(arg: number) => 45 : (arg: number) => number
 >arg : number
 >45 : 45
->null : null
 
 false ? (arg?: number) => 46 : null;
 >false ? (arg?: number) => 46 : null : (arg?: number) => number
@@ -216,7 +211,6 @@ false ? (arg?: number) => 46 : null;
 >(arg?: number) => 46 : (arg?: number) => number
 >arg : number
 >46 : 46
->null : null
 
 false ? (arg?: number = 0) => 47 : null;
 >false ? (arg?: number = 0) => 47 : null : (arg?: number) => number
@@ -225,7 +219,6 @@ false ? (arg?: number = 0) => 47 : null;
 >arg : number
 >0 : 0
 >47 : 47
->null : null
 
 false ? (...arg: number[]) => 48 : null;
 >false ? (...arg: number[]) => 48 : null : (...arg: number[]) => number
@@ -233,7 +226,6 @@ false ? (...arg: number[]) => 48 : null;
 >(...arg: number[]) => 48 : (...arg: number[]) => number
 >arg : number[]
 >48 : 48
->null : null
 
 // in ternary exression within paren
 false ? (() => 51) : null;
@@ -242,7 +234,6 @@ false ? (() => 51) : null;
 >(() => 51) : () => number
 >() => 51 : () => number
 >51 : 51
->null : null
 
 false ? ((arg) => 52) : null;
 >false ? ((arg) => 52) : null : (arg: any) => number
@@ -251,7 +242,6 @@ false ? ((arg) => 52) : null;
 >(arg) => 52 : (arg: any) => number
 >arg : any
 >52 : 52
->null : null
 
 false ? ((arg = 1) => 53) : null;
 >false ? ((arg = 1) => 53) : null : (arg?: number) => number
@@ -261,7 +251,6 @@ false ? ((arg = 1) => 53) : null;
 >arg : number
 >1 : 1
 >53 : 53
->null : null
 
 false ? ((arg?) => 54) : null;
 >false ? ((arg?) => 54) : null : (arg?: any) => number
@@ -270,7 +259,6 @@ false ? ((arg?) => 54) : null;
 >(arg?) => 54 : (arg?: any) => number
 >arg : any
 >54 : 54
->null : null
 
 false ? ((arg: number) => 55) : null;
 >false ? ((arg: number) => 55) : null : (arg: number) => number
@@ -279,7 +267,6 @@ false ? ((arg: number) => 55) : null;
 >(arg: number) => 55 : (arg: number) => number
 >arg : number
 >55 : 55
->null : null
 
 false ? ((arg?: number) => 56) : null;
 >false ? ((arg?: number) => 56) : null : (arg?: number) => number
@@ -288,7 +275,6 @@ false ? ((arg?: number) => 56) : null;
 >(arg?: number) => 56 : (arg?: number) => number
 >arg : number
 >56 : 56
->null : null
 
 false ? ((arg?: number = 0) => 57) : null;
 >false ? ((arg?: number = 0) => 57) : null : (arg?: number) => number
@@ -298,7 +284,6 @@ false ? ((arg?: number = 0) => 57) : null;
 >arg : number
 >0 : 0
 >57 : 57
->null : null
 
 false ? ((...arg: number[]) => 58) : null;
 >false ? ((...arg: number[]) => 58) : null : (...arg: number[]) => number
@@ -307,20 +292,17 @@ false ? ((...arg: number[]) => 58) : null;
 >(...arg: number[]) => 58 : (...arg: number[]) => number
 >arg : number[]
 >58 : 58
->null : null
 
 // ternary exression's else clause
 false ? null : () => 61;
 >false ? null : () => 61 : () => number
 >false : false
->null : null
 >() => 61 : () => number
 >61 : 61
 
 false ? null : (arg) => 62;
 >false ? null : (arg) => 62 : (arg: any) => number
 >false : false
->null : null
 >(arg) => 62 : (arg: any) => number
 >arg : any
 >62 : 62
@@ -328,7 +310,6 @@ false ? null : (arg) => 62;
 false ? null : (arg = 1) => 63;
 >false ? null : (arg = 1) => 63 : (arg?: number) => number
 >false : false
->null : null
 >(arg = 1) => 63 : (arg?: number) => number
 >arg : number
 >1 : 1
@@ -337,7 +318,6 @@ false ? null : (arg = 1) => 63;
 false ? null : (arg?) => 64;
 >false ? null : (arg?) => 64 : (arg?: any) => number
 >false : false
->null : null
 >(arg?) => 64 : (arg?: any) => number
 >arg : any
 >64 : 64
@@ -345,7 +325,6 @@ false ? null : (arg?) => 64;
 false ? null : (arg: number) => 65;
 >false ? null : (arg: number) => 65 : (arg: number) => number
 >false : false
->null : null
 >(arg: number) => 65 : (arg: number) => number
 >arg : number
 >65 : 65
@@ -353,7 +332,6 @@ false ? null : (arg: number) => 65;
 false ? null : (arg?: number) => 66;
 >false ? null : (arg?: number) => 66 : (arg?: number) => number
 >false : false
->null : null
 >(arg?: number) => 66 : (arg?: number) => number
 >arg : number
 >66 : 66
@@ -361,7 +339,6 @@ false ? null : (arg?: number) => 66;
 false ? null : (arg?: number = 0) => 67;
 >false ? null : (arg?: number = 0) => 67 : (arg?: number) => number
 >false : false
->null : null
 >(arg?: number = 0) => 67 : (arg?: number) => number
 >arg : number
 >0 : 0
@@ -370,7 +347,6 @@ false ? null : (arg?: number = 0) => 67;
 false ? null : (...arg: number[]) => 68;
 >false ? null : (...arg: number[]) => 68 : (...arg: number[]) => number
 >false : false
->null : null
 >(...arg: number[]) => 68 : (...arg: number[]) => number
 >arg : number[]
 >68 : 68

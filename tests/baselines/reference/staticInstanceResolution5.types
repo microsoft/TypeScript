@@ -26,7 +26,6 @@ export class Promise {
 >delay : number
 
         return null;
->null : null
     }
 }
 

@@ -104,7 +104,6 @@ function of1(s: { c: { b: string; }; d: string; }): string;
 function of1(a: any) { return null; }
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
 >a : any
->null : null
 
 of1({ e: 0, f: 0 });
 >of1({ e: 0, f: 0 }) : never

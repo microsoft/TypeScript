@@ -366,5 +366,4 @@ Date.prototype.toJSON(null);
 >Date : DateConstructor
 >prototype : Date
 >toJSON : (key?: any) => string
->null : null
 

@@ -20,7 +20,6 @@ module Point {
 
     export function Origin() { return null; } //expected duplicate identifier error
 >Origin : () => any
->null : null
 }
 
 

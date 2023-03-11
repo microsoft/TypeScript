@@ -1,13 +1,4 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:10.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/main.ts]
 import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";
@@ -23,12 +14,15 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:10.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /main.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -50,8 +44,8 @@ Info 11   [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 12   [00:00:21.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:22.000] Project '/tsconfig.json' (Configured)
 Info 14   [00:00:23.000] 	Files (2)
-	/mod.ts
-	/main.ts
+	/mod.ts Text-1 "export const value = 0;\nexport const [valueA, valueB] = [0, 1];\nexport const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };\nexport const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };\n"
+	/main.ts SVC-1-0 "import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from \"./mod\";"
 
 
 	mod.ts
@@ -68,26 +62,28 @@ Info 16   [00:00:27.000] -----------------------------------------------
 Info 16   [00:00:28.000] Open files: 
 Info 16   [00:00:29.000] 	FileName: /main.ts ProjectRootPath: undefined
 Info 16   [00:00:30.000] 		Projects: /tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/mod.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 16   [00:00:31.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+/mod.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Before request
+
 Info 17   [00:00:32.000] request:
     {
       "command": "open",
@@ -97,22 +93,6 @@ Info 17   [00:00:32.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/mod.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 18   [00:00:33.000] FileWatcher:: Close:: WatchInfo: /mod.ts 500 undefined WatchType: Closed Script info
 Info 19   [00:00:34.000] Search path: /
 Info 20   [00:00:35.000] For info: /mod.ts :: Config file name: /tsconfig.json
@@ -125,6 +105,10 @@ Info 21   [00:00:40.000] 	FileName: /main.ts ProjectRootPath: undefined
 Info 21   [00:00:41.000] 		Projects: /tsconfig.json
 Info 21   [00:00:42.000] 	FileName: /mod.ts ProjectRootPath: undefined
 Info 21   [00:00:43.000] 		Projects: /tsconfig.json
+Info 21   [00:00:44.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -135,14 +119,16 @@ FsWatches::
 /tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/mod.ts:
+  {}
+
 FsWatchesRecursive::
 /:
   {}
 
-Info 21   [00:00:44.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 22   [00:00:45.000] request:
     {
       "command": "references",
@@ -154,35 +140,7 @@ Info 22   [00:00:45.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 23   [00:00:46.000] Finding references to /mod.ts position 38 in project /tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 24   [00:00:47.000] response:
     {
       "response": {
@@ -238,3 +196,4 @@ Info 24   [00:00:47.000] response:
       },
       "responseRequired": true
     }
+After request

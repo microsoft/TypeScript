@@ -32,7 +32,6 @@ interface FunctionComponent<P = {}> {
 >props : P & { children?: {} | undefined; }
 >children : {} | undefined
 >context : any
->null : null
 
     propTypes?: WeakValidationMap<P>;
 >propTypes : WeakValidationMap<P> | undefined
@@ -54,7 +53,6 @@ export interface Validator<T> {
 >componentName : string
 >location : string
 >propFullName : string
->null : null
 
     [nominalTypeHack]?: T;
 >[nominalTypeHack] : T | undefined
@@ -64,15 +62,9 @@ type WeakValidationMap<T> = {
 >WeakValidationMap : WeakValidationMap<T>
 
     [K in keyof T]?: null extends T[K]
->null : null
-
         ? Validator<T[K] | null | undefined>
->null : null
-
         : undefined extends T[K]
         ? Validator<T[K] | null | undefined>
->null : null
-
         : Validator<T[K]>
 };
 type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;

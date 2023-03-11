@@ -828,3 +828,73 @@ const getStringAndNumberFromOriginalAndMapped = <
 >nestedKey : N
 
 };
+
+// repro from #31675
+interface Config {
+  string: string;
+>string : string
+
+  number: number;
+>number : number
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+>getConfigOrDefault : <T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]) => Config[T]
+
+  userConfig: Partial<Config>,
+>userConfig : Partial<Config>
+
+  key: T,
+>key : T
+
+  defaultValue: Config[T]
+>defaultValue : Config[T]
+
+): Config[T] {
+  const userValue = userConfig[key]; 
+>userValue : Partial<Config>[T]
+>userConfig[key] : Partial<Config>[T]
+>userConfig : Partial<Config>
+>key : T
+
+  const assertedCheck = userValue ? userValue! : defaultValue;
+>assertedCheck : Config[T]
+>userValue ? userValue! : defaultValue : Config[T]
+>userValue : Partial<Config>[T]
+>userValue! : NonNullable<Partial<Config>[T]>
+>userValue : NonNullable<Partial<Config>[T]>
+>defaultValue : Config[T]
+
+  return assertedCheck;
+>assertedCheck : Config[T]
+}
+
+// repro from #47523
+
+type Foo1 = {
+>Foo1 : { x: number; y: string; }
+
+  x: number;
+>x : number
+
+  y: string;
+>y : string
+
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+>getValueConcrete : <K extends keyof Foo1>(o: Partial<Foo1>, k: K) => Foo1[K] | undefined
+
+  o: Partial<Foo1>,
+>o : Partial<Foo1>
+
+  k: K
+>k : K
+
+): Foo1[K] | undefined {
+  return o[k];
+>o[k] : Partial<Foo1>[K]
+>o : Partial<Foo1>
+>k : K
+}
+

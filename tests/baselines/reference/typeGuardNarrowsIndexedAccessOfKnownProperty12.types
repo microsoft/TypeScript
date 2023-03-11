@@ -13,7 +13,6 @@ enum E {
 
 declare const m: { [K in E]: string | null };
 >m : { A: string | null; B: string | null; }
->null : null
 
 if (m[E.A] !== null) {
 >m[E.A] !== null : boolean
@@ -22,7 +21,6 @@ if (m[E.A] !== null) {
 >E.A : E.A
 >E : typeof E
 >A : E.A
->null : null
 
     m[E.A].toString(); // string
 >m[E.A].toString() : string

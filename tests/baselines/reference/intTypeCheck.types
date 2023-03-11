@@ -206,7 +206,6 @@ var obj1: i1 = {
 
     p: null,
 >p : null
->null : null
 
     p3: function ():any { return 0; },
 >p3 : () => any
@@ -244,7 +243,6 @@ var obj4: i1 = new Base;
 
 var obj5: i1 = null;
 >obj5 : i1
->null : null
 
 var obj6: i1 = function () { };
 >obj6 : i1
@@ -297,7 +295,6 @@ var obj15: i2 = new Base;
 
 var obj16: i2 = null;
 >obj16 : i2
->null : null
 
 var obj17: i2 = function ():any { return 0; };
 >obj17 : i2
@@ -351,7 +348,6 @@ var obj26: i3 = new Base;
 
 var obj27: i3 = null;
 >obj27 : i3
->null : null
 
 var obj28: i3 = function () { };
 >obj28 : i3
@@ -404,7 +400,6 @@ var obj37: i4 = new Base;
 
 var obj38: i4 = null;
 >obj38 : i4
->null : null
 
 var obj39: i4 = function () { };
 >obj39 : i4
@@ -457,7 +452,6 @@ var obj48: i5 = new Base;
 
 var obj49: i5 = null;
 >obj49 : i5
->null : null
 
 var obj50: i5 = function () { };
 >obj50 : i5
@@ -510,7 +504,6 @@ var obj59: i6 = new Base;
 
 var obj60: i6 = null;
 >obj60 : i6
->null : null
 
 var obj61: i6 = function () { };
 >obj61 : i6
@@ -564,7 +557,6 @@ var obj70: i7 = <i7>new Base;
 
 var obj71: i7 = null;
 >obj71 : i7
->null : null
 
 var obj72: i7 = function () { };
 >obj72 : i7
@@ -617,7 +609,6 @@ var obj81: i8 = new Base;
 
 var obj82: i8 = null;
 >obj82 : i8
->null : null
 
 var obj83: i8 = function () { };
 >obj83 : i8

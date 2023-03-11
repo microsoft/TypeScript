@@ -203,7 +203,6 @@ module TypeScriptAllInOne {
 >local5 : fs.File
 ><fs.File>null : fs.File
 >fs : any
->null : null
 
             var local6 = local5 instanceof fs.File;
 >local6 : boolean
@@ -487,7 +486,6 @@ module TypeScriptAllInOne {
 > : any
 
                 throw null;
->null : null
             }
             catch (Exception)  ? 
 >Exception : any

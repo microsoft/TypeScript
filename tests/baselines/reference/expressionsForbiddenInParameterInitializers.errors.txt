@@ -9,7 +9,7 @@ tests/cases/compiler/bar.ts(4,31): error TS2523: 'yield' expressions cannot be u
     }
     
     export function* foo2({ foo = yield "a" }) {
-                                  ~~~~~~~~~
+                                  ~~~~~
 !!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.
     }
     

@@ -46,7 +46,6 @@ module Editor {
 >ListMakeHead : <U>() => List<U>
 
 		return null;
->null : null
     }
 
     export function ListMakeEntry<U>(data: U): List<U> {
@@ -54,7 +53,6 @@ module Editor {
 >data : U
 
 		return null;
->null : null
     }    
 
     class List<T> { 

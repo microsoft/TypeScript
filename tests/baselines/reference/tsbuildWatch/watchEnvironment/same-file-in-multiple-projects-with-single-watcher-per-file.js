@@ -147,38 +147,36 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg0/index.ts:
+/user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/typings/xterm.d.ts:
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
   {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg1/index.ts:
+/user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg2/index.ts:
+/user/username/projects/myproject/pkg2/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg3/index.ts:
+/user/username/projects/myproject/pkg3/index.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
+/user/username/projects/myproject/pkg0: *new*
   {}
-/user/username/projects/myproject/pkg1:
+/user/username/projects/myproject/pkg1: *new*
   {}
-/user/username/projects/myproject/pkg2:
+/user/username/projects/myproject/pkg2: *new*
   {}
-/user/username/projects/myproject/pkg3:
+/user/username/projects/myproject/pkg3: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -307,40 +305,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -363,8 +327,6 @@ Output::
 
 
 
-PolledWatches::
-
 FsWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {}
@@ -383,12 +345,22 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
+
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
   {}
 /user/username/projects/myproject/pkg1:
   {}
 /user/username/projects/myproject/pkg2:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg3:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -469,34 +441,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -523,13 +467,33 @@ Output::
 
 
 
-PolledWatches::
-
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg0:
+  {}
+/user/username/projects/myproject/pkg1:
+  {}
+/user/username/projects/myproject/pkg2:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -542,14 +506,6 @@ export const typing = 10;export const typing1 = 10;
 
 
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

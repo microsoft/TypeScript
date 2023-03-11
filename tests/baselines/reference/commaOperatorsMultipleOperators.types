@@ -100,7 +100,6 @@ var resultIsObject1 = (NUMBER, STRING, OBJECT);
 null, true, 1;
 >null, true, 1 : 1
 >null, true : true
->null : null
 >true : true
 >1 : 1
 
@@ -122,7 +121,6 @@ var resultIsNumber2 = (null, true, 1);
 >(null, true, 1) : 1
 >null, true, 1 : 1
 >null, true : true
->null : null
 >true : true
 >1 : 1
 

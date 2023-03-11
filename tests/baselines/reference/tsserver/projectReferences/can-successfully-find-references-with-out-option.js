@@ -1,13 +1,4 @@
 Info 0    [00:01:10.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:11.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -362,12 +353,15 @@ declare namespace container {
 ======================================================================
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:01:11.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:12.000] Search path: /user/username/projects/container/compositeExec
 Info 3    [00:01:13.000] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
 Info 4    [00:01:14.000] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
@@ -413,9 +407,9 @@ Info 15   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 16   [00:01:26.000] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:01:27.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 18   [00:01:28.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/compositeExec/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/compositeExec/index.ts SVC-1-0 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -443,32 +437,32 @@ Info 26   [00:01:41.000] -----------------------------------------------
 Info 26   [00:01:42.000] Open files: 
 Info 26   [00:01:43.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info 26   [00:01:44.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 26   [00:01:45.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/container/compositeexec/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
+  {}
+/user/username/projects/container/lib/tsconfig.json: *new*
+  {}
+/user/username/projects/container/lib/index.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/container/tsconfig.json: *new*
+  {}
+
+Before request
+
 Info 27   [00:01:46.000] request:
     {
       "command": "rename",
@@ -480,28 +474,6 @@ Info 27   [00:01:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 28   [00:01:47.000] Search path: /user/username/projects/container/lib
 Info 29   [00:01:48.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
 Info 30   [00:01:49.000] Creating configuration project /user/username/projects/container/lib/tsconfig.json
@@ -513,8 +485,8 @@ Info 35   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 36   [00:01:55.000] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:56.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 Info 38   [00:01:57.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -562,20 +534,23 @@ Info 44   [00:02:03.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 45   [00:02:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 46   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 47   [00:02:06.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 48   [00:02:07.000] Different program with same set of files
-Info 49   [00:02:08.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
-Info 50   [00:02:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
-Info 51   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
-Info 52   [00:02:11.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 53   [00:02:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 54   [00:02:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 55   [00:02:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 56   [00:02:15.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 57   [00:02:16.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
-Info 58   [00:02:17.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/exec/index.ts
+Info 48   [00:02:07.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 49   [00:02:08.000] 	Files (0)
+
+Info 50   [00:02:09.000] -----------------------------------------------
+Info 51   [00:02:10.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
+Info 52   [00:02:11.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
+Info 53   [00:02:12.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
+Info 54   [00:02:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 55   [00:02:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 56   [00:02:15.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 57   [00:02:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 58   [00:02:17.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 59   [00:02:18.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
+Info 60   [00:02:19.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/exec/index.ts Text-1 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -585,40 +560,10 @@ Info 58   [00:02:17.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 59   [00:02:18.000] -----------------------------------------------
-Info 60   [00:02:19.000] Search path: /user/username/projects/container/lib
-Info 61   [00:02:20.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-
-FsWatchesRecursive::
-
-Info 62   [00:02:21.000] response:
+Info 61   [00:02:20.000] -----------------------------------------------
+Info 62   [00:02:21.000] Search path: /user/username/projects/container/lib
+Info 63   [00:02:22.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info 64   [00:02:23.000] response:
     {
       "response": {
         "info": {
@@ -696,3 +641,30 @@ Info 62   [00:02:21.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/container/compositeexec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/container/tsconfig.json:
+  {}
+/user/username/projects/container/exec/tsconfig.json: *new*
+  {}
+/user/username/projects/container/exec/index.ts: *new*
+  {}

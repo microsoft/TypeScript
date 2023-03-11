@@ -33,15 +33,8 @@ import * as cjs from "./types/cjs";
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 0;
+export var x = 0;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 0;
+export var y = 0;
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -9,7 +9,6 @@ class C<T> {
 >bar : () => T
 
         return null;
->null : null
     }
 }
 class D extends C<string> implements C<number> {

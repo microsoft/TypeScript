@@ -6,7 +6,6 @@ function f(...args) {
 >args : any
 
     return null
->null : null
 }
 
 /** @type *= */

@@ -153,7 +153,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! related TS2728 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37: 'y' is declared here.
         let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
-                                                              ~~~~
+                                                              ~
 !!! error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
     }
@@ -162,7 +162,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
         let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
-                                                             ~~~~
+                                                             ~
 !!! error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
     }
@@ -191,7 +191,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     setState(foo, { c: true });  // Error
-                    ~~~~~~~
+                    ~
 !!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
     
@@ -215,7 +215,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     c.setState({ c: true });  // Error
-                 ~~~~~~~
+                 ~
 !!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
     

@@ -11,7 +11,7 @@ tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(14,34): error TS2322:
     
     // Excess property error expected here
     Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
-                                                             ~~~~~~~~~~~~~~~
+                                                             ~~~~~~~~
 !!! error TS2345: Argument of type '{ value: string; readonly: boolean; }' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'readonly' does not exist in type 'PropertyDescriptor & ThisType<any>'.
     
@@ -19,7 +19,7 @@ tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(14,34): error TS2322:
     
     // Excess property error expected here
     let a: A & ThisType<any> = { y: 10 };
-                                 ~~~~~
+                                 ~
 !!! error TS2322: Type '{ y: number; }' is not assignable to type 'A & ThisType<any>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'A & ThisType<any>'.
     
@@ -27,7 +27,7 @@ tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(14,34): error TS2322:
     
     // Excess property error expected here
     let x: Empty & { x: number } = { y: "hello" };
-                                     ~~~~~~~~~~
+                                     ~
 !!! error TS2322: Type '{ y: string; }' is not assignable to type 'Empty & { x: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'Empty & { x: number; }'.
     

@@ -301,13 +301,6 @@ export interface LanguageServiceShim extends Shim {
     getFileReferences(fileName: string): string;
 
     /**
-     * @deprecated
-     * Returns a JSON-encoded value of the type:
-     * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-     */
-    getOccurrencesAtPosition(fileName: string, position: number): string;
-
-    /**
      * Returns a JSON-encoded value of the type:
      * { fileName: string; highlights: { start: number; length: number }[] }[]
      *
@@ -1018,13 +1011,6 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
         return this.forwardJSONCall(
             `getFileReferences('${fileName})`,
             () => this.languageService.getFileReferences(fileName)
-        );
-    }
-
-    public getOccurrencesAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getOccurrencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getOccurrencesAtPosition(fileName, position)
         );
     }
 

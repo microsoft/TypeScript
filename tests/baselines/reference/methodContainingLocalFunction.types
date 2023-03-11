@@ -37,7 +37,6 @@ class BugExhibition2<T> {
 >localFunction : () => void
 
         return null;
->null : null
     }
 }
 

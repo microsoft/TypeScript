@@ -4,5 +4,4 @@ declare class foo{};
 
 function foo() { return null; }
 >foo : typeof foo
->null : null
 

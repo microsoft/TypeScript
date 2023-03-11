@@ -39,8 +39,6 @@ var x = {
 >b.apply : any
 >b : number
 >apply : any
->null : null
->null : null
    }
 };
 

@@ -24,5 +24,4 @@ module A {
 >right : Point
 
     } = null;
->null : null
 }

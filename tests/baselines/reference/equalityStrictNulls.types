@@ -26,22 +26,18 @@ function f1(x: string) {
     if (x == null) {
 >x == null : boolean
 >x : string
->null : null
     }
     if (x != null) {
 >x != null : boolean
 >x : string
->null : null
     }
     if (x === null) {
 >x === null : boolean
 >x : string
->null : null
     }
     if (x !== null) {
 >x !== null : boolean
 >x : string
->null : null
     }
     if (undefined == x) {
 >undefined == x : boolean
@@ -65,22 +61,18 @@ function f1(x: string) {
     }
     if (null == x) {
 >null == x : boolean
->null : null
 >x : string
     }
     if (null != x) {
 >null != x : boolean
->null : null
 >x : string
     }
     if (null === x) {
 >null === x : boolean
->null : null
 >x : string
     }
     if (null !== x) {
 >null !== x : boolean
->null : null
 >x : string
     }
 }
@@ -96,17 +88,13 @@ function f2() {
     if (undefined == null) {
 >undefined == null : boolean
 >undefined : undefined
->null : null
     }
     if (null == undefined) {
 >null == undefined : boolean
->null : null
 >undefined : undefined
     }
     if (null == null) {
 >null == null : boolean
->null : null
->null : null
     }
 }
 
@@ -121,22 +109,18 @@ function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
     if (a == null) {
 >a == null : boolean
 >a : number
->null : null
     }
     if (b == null) {
 >b == null : boolean
 >b : boolean
->null : null
     }
     if (c == null) {
 >c == null : boolean
 >c : { x: number; }
->null : null
     }
     if (d == null) {
 >d == null : boolean
 >d : string | number
->null : null
     }
 }
 
@@ -173,8 +157,6 @@ function f5(x: string) {
 >x : string
 
         case null:
->null : null
-
             break;
         case undefined:
 >undefined : undefined

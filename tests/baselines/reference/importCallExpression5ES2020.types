@@ -45,10 +45,8 @@ let myModule2 = import(bar() ? "./1" : null);
 >bar() : boolean
 >bar : () => boolean
 >"./1" : "./1"
->null : null
 
 let myModule3 = import(null);
 >myModule3 : Promise<any>
 >import(null) : Promise<any>
->null : null
 

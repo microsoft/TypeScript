@@ -36,14 +36,12 @@ interface Connect { // Then strictly compared with another signature in its cont
     <TDispatchProps, TOwnProps>(
         mapStateToProps: null | undefined,
 >mapStateToProps : null | undefined
->null : null
 
         mapDispatchToProps: unknown,
 >mapDispatchToProps : unknown
 
         mergeProps: null | undefined,
 >mergeProps : null | undefined
->null : null
 
         options: unknown
 >options : unknown

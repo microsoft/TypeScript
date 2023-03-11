@@ -107,7 +107,7 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
     function of1(a: any) { return null; }
     
     of1({ e: 0, f: 0 });
-          ~~~~
+          ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(n: { a: { a: string; }; b: string; }): number', gave the following error.
 !!! error TS2769:     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ a: { a: string; }; b: string; }'.
@@ -133,7 +133,7 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
     }
     
     var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
-                                                  ~~~~
+                                                  ~
 !!! error TS2322: Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
     

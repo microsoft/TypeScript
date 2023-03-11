@@ -26,7 +26,7 @@ tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34
     }
      
     TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
-                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
 !!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
 !!! related TS6500 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:14:3: The expected type comes from property 'props' which is declared here on type 'NestedProp<ITestProps>'
@@ -36,7 +36,7 @@ tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34
     }
     
     TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
 !!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
 !!! related TS6500 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:14:3: The expected type comes from property 'props' which is declared here on type 'NestedProp<ITestProps>'

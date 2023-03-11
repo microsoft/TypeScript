@@ -68,7 +68,6 @@ var ra7 = '' instanceof x;
 var ra8 = null instanceof x;
 >ra8 : boolean
 >null instanceof x : boolean
->null : null
 >x : any
 
 var ra9 = undefined instanceof x;

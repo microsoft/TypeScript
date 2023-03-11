@@ -4,7 +4,6 @@ class C<T> {
 
    foo(): T { return null }
 >foo : () => T
->null : null
 }
 interface I<T> {
    bar(): T;

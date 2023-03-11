@@ -213,12 +213,10 @@ unionNumberString = anyVar;
 unionDE = null;
 >unionDE = null : null
 >unionDE : D | E
->null : null
 
 unionNumberString = null;
 >unionNumberString = null : null
 >unionNumberString : string | number
->null : null
 
 // undefined
 unionDE = undefined;

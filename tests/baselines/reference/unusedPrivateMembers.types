@@ -149,12 +149,6 @@ class Test6 {
 >x.a : number
 >x : Test6
 >a : number
-
-        x.b++;
->x.b++ : number
->x.b : number
->x : Test6
->b : number
     }
 }
 

@@ -13,7 +13,7 @@ var a = ["./0"];
 import(...["PathModule"]);
 >import(...["PathModule"]) : Promise<any>
 >...["PathModule"] : string
->["PathModule"] : string[]
+>["PathModule"] : readonly [string]
 >"PathModule" : "PathModule"
 
 var p1 = import(...a);

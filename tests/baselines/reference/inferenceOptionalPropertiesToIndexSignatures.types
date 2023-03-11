@@ -60,7 +60,6 @@ const param2 = Math.random() < 0.5 ? 'value2' : null;
 >random : () => number
 >0.5 : 0.5
 >'value2' : "value2"
->null : null
 
 const obj = {
 >obj : { param2?: string | undefined; param1: string; }

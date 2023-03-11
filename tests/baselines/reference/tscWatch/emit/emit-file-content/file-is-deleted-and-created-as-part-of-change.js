@@ -44,19 +44,19 @@ Shape signatures in builder refreshed for::
 /home/username/project/app/file.ts (used version)
 
 PolledWatches::
-/home/username/project/node_modules/@types:
+/home/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json:
+/home/username/project/tsconfig.json: *new*
   {}
-/home/username/project/app/file.ts:
+/home/username/project/app/file.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/home/username/project/app:
+/home/username/project/app: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -95,22 +95,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/username/project/app/file.ts (computed .d.ts)
-
-PolledWatches::
-/home/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/username/project/tsconfig.json:
-  {}
-/home/username/project/app/file.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/username/project/app:
-  {}
 
 exitCode:: ExitStatus.undefined
 

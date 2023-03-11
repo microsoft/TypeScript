@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/username/project/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/username/project/src/index.ts]
 import {} from "./"
@@ -32,12 +23,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /a/username/project/src
 Info 3    [00:00:24.000] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/username/project/tsconfig.json
@@ -68,9 +62,9 @@ Info 17   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 18   [00:00:39.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:00:40.000] Project '/a/username/project/tsconfig.json' (Configured)
 Info 20   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/username/project/src/file1.ts
-	/a/username/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/username/project/src/file1.ts Text-1 ""
+	/a/username/project/src/index.ts SVC-1-0 "import {} from \"./\""
 
 
 	../../lib/lib.d.ts
@@ -89,30 +83,30 @@ Info 22   [00:00:45.000] -----------------------------------------------
 Info 22   [00:00:46.000] Open files: 
 Info 22   [00:00:47.000] 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 Info 22   [00:00:48.000] 		Projects: /a/username/project/tsconfig.json
-After request
-
-PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project:
-  {}
-/a/username/project/src:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 22   [00:00:49.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/username/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/username/project/tsconfig.json: *new*
+  {}
+/a/username/project: *new*
+  {}
+/a/username/project/src: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Before request
+
 Info 23   [00:00:50.000] request:
     {
       "command": "completionInfo",
@@ -124,46 +118,6 @@ Info 23   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project:
-  {}
-/a/username/project/src:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project:
-  {}
-/a/username/project/src:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 24   [00:00:51.000] response:
     {
       "response": {
@@ -181,6 +135,8 @@ Info 24   [00:00:51.000] response:
       },
       "responseRequired": true
     }
+After request
+
 Info 25   [00:00:54.000] DirectoryWatcher:: Triggered with /a/username/project/src/file2.ts :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info 26   [00:00:55.000] Scheduled: /a/username/project/tsconfig.json
 Info 27   [00:00:56.000] Scheduled: *ensureProjectForOpenFiles*
@@ -193,34 +149,16 @@ Before running timeout callbacks
 
 
 
-PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project:
-  {}
-/a/username/project/src:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 32   [00:01:01.000] Running: /a/username/project/tsconfig.json
 Info 33   [00:01:02.000] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file2.ts 500 undefined WatchType: Closed Script info
 Info 34   [00:01:03.000] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
 Info 35   [00:01:04.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:05.000] Project '/a/username/project/tsconfig.json' (Configured)
 Info 37   [00:01:06.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/a/username/project/src/file1.ts
-	/a/username/project/src/index.ts
-	/a/username/project/src/file2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/username/project/src/file1.ts Text-1 ""
+	/a/username/project/src/index.ts SVC-1-0 "import {} from \"./\""
+	/a/username/project/src/file2.ts Text-1 ""
 
 
 	../../lib/lib.d.ts
@@ -268,10 +206,10 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/username/project/src/file2.ts:
+/a/username/project/src/file2.ts: *new*
   {}
 
-FsWatchesRecursive::
+Before request
 
 Info 42   [00:01:23.000] request:
     {
@@ -284,50 +222,6 @@ Info 42   [00:01:23.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project:
-  {}
-/a/username/project/src:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project:
-  {}
-/a/username/project/src:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 43   [00:01:24.000] response:
     {
       "response": {
@@ -351,3 +245,4 @@ Info 43   [00:01:24.000] response:
       },
       "responseRequired": true
     }
+After request

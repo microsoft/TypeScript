@@ -36,6 +36,5 @@ function foo(name: any): Z {
 >name : any
 
     return null;
->null : null
 }
 

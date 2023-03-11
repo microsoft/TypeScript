@@ -61,7 +61,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var n: null;
 >n : null
->null : null
 
     var a: any;
 >a : any

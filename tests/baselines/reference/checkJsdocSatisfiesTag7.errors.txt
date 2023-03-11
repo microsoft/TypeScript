@@ -10,7 +10,7 @@
         a: 0,
         b: "hello",
         x: 8 // Should error, 'x' isn't in 'Keys'
-        ~~~~
+        ~
 !!! error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Record<Keys, unknown>'.
 !!! error TS1360:   Object literal may only specify known properties, and 'x' does not exist in type 'Record<Keys, unknown>'.
     })

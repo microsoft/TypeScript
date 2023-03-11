@@ -23,7 +23,6 @@ function f(p: Foo<number>) {
 
 var v: Bar<number> = null;
 >v : Bar<number>
->null : null
 
 f(v); // should not error
 >f(v) : void

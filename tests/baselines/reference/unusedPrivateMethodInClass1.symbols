@@ -7,8 +7,5 @@ class greeter {
 
         var y = 10;
 >y : Symbol(y, Decl(unusedPrivateMethodInClass1.ts, 2, 11))
-
-        y++;
->y : Symbol(y, Decl(unusedPrivateMethodInClass1.ts, 2, 11))
     }
 }

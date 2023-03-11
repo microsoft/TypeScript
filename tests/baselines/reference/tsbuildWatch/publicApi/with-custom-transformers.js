@@ -85,24 +85,22 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/webpack/index.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/shared/tsconfig.json:
+/user/username/projects/myproject/shared/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/shared/index.ts:
+/user/username/projects/myproject/shared/index.ts: *new*
   {}
-/user/username/projects/myproject/webpack/tsconfig.json:
+/user/username/projects/myproject/webpack/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/webpack/index.ts:
+/user/username/projects/myproject/webpack/index.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/shared:
+/user/username/projects/myproject/shared: *new*
   {}
-/user/username/projects/myproject/webpack:
+/user/username/projects/myproject/webpack: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -330,26 +328,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/index.ts:
-  {}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {}
-/user/username/projects/myproject/webpack/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/shared:
-  {}
-/user/username/projects/myproject/webpack:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -35,12 +35,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:50.000] Search path: /user/username/projects/myproject/product/src
 Info 2    [00:00:51.000] For info: /user/username/projects/myproject/product/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [00:00:52.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -139,13 +133,13 @@ Info 84   [00:02:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 85   [00:02:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 86   [00:02:15.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 87   [00:02:16.000] 	Files (7)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/product/node_modules/module1/index.ts
-	/user/username/projects/myproject/node_modules/module2/index.ts
-	/user/username/projects/myproject/product/src/file1.ts
-	/user/username/projects/myproject/product/src/feature/file2.ts
-	/user/username/projects/myproject/product/test/file4.ts
-	/user/username/projects/myproject/product/test/src/file3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/src/feature/file2.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/file4.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/src/file3.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
 
 	../../../../a/lib/lib.d.ts
@@ -204,29 +198,29 @@ import { module1 } from "module1";import { module2 } from "module2";import { mod
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/product/src/feature/file2.ts:
+/user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
-/user/username/projects/myproject/product/test/file4.ts:
+/user/username/projects/myproject/product/test/file4.ts: *new*
   {}
-/user/username/projects/myproject/product/test/src/file3.ts:
+/user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/product/node_modules:
+/user/username/projects/myproject/product/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/product:
+/user/username/projects/myproject/product: *new*
   {}
 
 Info 101  [00:02:48.000] Running: /user/username/projects/myproject/tsconfig.json
@@ -240,48 +234,32 @@ Info 108  [00:02:55.000] Reusing resolution of module 'module2' from '/user/user
 Info 109  [00:02:56.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info 110  [00:02:57.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info 111  [00:02:58.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 112  [00:02:59.000] Different program with same set of files
-Info 113  [00:03:00.000] Running: *ensureProjectForOpenFiles*
-Info 114  [00:03:01.000] Before ensureProjectForOpenFiles:
-Info 115  [00:03:02.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 115  [00:03:03.000] 	Files (7)
+Info 112  [00:02:59.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 113  [00:03:00.000] 	Files (7)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/src/feature/file2.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/file4.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/src/file3.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
-Info 115  [00:03:04.000] -----------------------------------------------
-Info 115  [00:03:05.000] Open files: 
-Info 115  [00:03:06.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 115  [00:03:07.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 115  [00:03:08.000] After ensureProjectForOpenFiles:
-Info 116  [00:03:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 116  [00:03:10.000] 	Files (7)
+Info 114  [00:03:01.000] -----------------------------------------------
+Info 115  [00:03:02.000] Running: *ensureProjectForOpenFiles*
+Info 116  [00:03:03.000] Before ensureProjectForOpenFiles:
+Info 117  [00:03:04.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 117  [00:03:05.000] 	Files (7)
 
-Info 116  [00:03:11.000] -----------------------------------------------
-Info 116  [00:03:12.000] Open files: 
-Info 116  [00:03:13.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 116  [00:03:14.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 117  [00:03:06.000] -----------------------------------------------
+Info 117  [00:03:07.000] Open files: 
+Info 117  [00:03:08.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 117  [00:03:09.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 117  [00:03:10.000] After ensureProjectForOpenFiles:
+Info 118  [00:03:11.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 118  [00:03:12.000] 	Files (7)
+
+Info 118  [00:03:13.000] -----------------------------------------------
+Info 118  [00:03:14.000] Open files: 
+Info 118  [00:03:15.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 118  [00:03:16.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running timeout callbacks
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/product/src/feature/file2.ts:
-  {}
-/user/username/projects/myproject/product/test/file4.ts:
-  {}
-/user/username/projects/myproject/product/test/src/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/product/node_modules:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/product:
-  {}

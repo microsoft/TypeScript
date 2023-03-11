@@ -52,7 +52,6 @@ function d(a, b) { return /** @type {*} */(null); }
 >a : number
 >b : number
 >(null) : any
->null : null
 
 Object.defineProperty(module.exports, "d", { value: d });
 >Object.defineProperty(module.exports, "d", { value: d }) : typeof module.exports
@@ -79,7 +78,6 @@ function e(a, b) { return /** @type {*} */(null); }
 >a : T
 >b : U
 >(null) : any
->null : null
 
 Object.defineProperty(module.exports, "e", { value: e });
 >Object.defineProperty(module.exports, "e", { value: e }) : typeof module.exports

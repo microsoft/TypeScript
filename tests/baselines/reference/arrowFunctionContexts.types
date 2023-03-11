@@ -37,7 +37,6 @@ window.setTimeout(() => null, 100);
 >window : Window & typeof globalThis
 >setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
->null : null
 >100 : 100
 
 // Arrow function as value in array literal
@@ -140,7 +139,6 @@ module M2 {
 >window : Window & typeof globalThis
 >setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
->null : null
 >100 : 100
 
     // Arrow function as value in array literal

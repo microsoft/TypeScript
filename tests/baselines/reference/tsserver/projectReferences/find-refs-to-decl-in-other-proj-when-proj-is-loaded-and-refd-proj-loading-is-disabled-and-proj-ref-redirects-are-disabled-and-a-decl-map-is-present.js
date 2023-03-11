@@ -1,13 +1,4 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:32.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
@@ -49,12 +40,15 @@ export declare class B {
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:32.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:33.000] Search path: /user/username/projects/myproject/a
 Info 3    [00:00:34.000] For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 4    [00:00:35.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
@@ -105,8 +99,8 @@ Info 21   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:54.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info 24   [00:00:55.000] 	Files (2)
-	/user/username/projects/myproject/b/lib/index.d.ts
-	/user/username/projects/myproject/a/index.ts
+	/user/username/projects/myproject/b/lib/index.d.ts Text-1 "export declare class B {\n    M(): void;\n}\n//# sourceMappingURL=index.d.ts.map"
+	/user/username/projects/myproject/a/index.ts SVC-1-0 "import { B } from \"../b/lib\";\n\nconst b: B = new B();"
 
 
 	../b/lib/index.d.ts
@@ -124,34 +118,36 @@ Info 28   [00:01:01.000] -----------------------------------------------
 Info 28   [00:01:02.000] Open files: 
 Info 28   [00:01:03.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
 Info 28   [00:01:04.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/b:
-  {}
-
 Info 28   [00:01:05.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/a/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/b/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/b/lib/index.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a: *new*
+  {}
+/user/username/projects/myproject/b: *new*
+  {}
+
+Before request
+
 Info 29   [00:01:06.000] request:
     {
       "command": "open",
@@ -161,30 +157,6 @@ Info 29   [00:01:06.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/b:
-  {}
-
 Info 30   [00:01:07.000] Search path: /user/username/projects/myproject/b
 Info 31   [00:01:08.000] For info: /user/username/projects/myproject/b/helper.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
 Info 32   [00:01:09.000] Creating configuration project /user/username/projects/myproject/b/tsconfig.json
@@ -200,8 +172,8 @@ Info 41   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 42   [00:01:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 43   [00:01:20.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 Info 44   [00:01:21.000] 	Files (2)
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/b/helper.ts
+	/user/username/projects/myproject/b/index.ts Text-1 "export class B {\n    M() {}\n}"
+	/user/username/projects/myproject/b/helper.ts SVC-1-0 "import { B } from \".\";\n\nconst b: B = new B();"
 
 
 	index.ts
@@ -226,6 +198,10 @@ Info 48   [00:01:32.000] 	FileName: /user/username/projects/myproject/a/index.ts
 Info 48   [00:01:33.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info 48   [00:01:34.000] 	FileName: /user/username/projects/myproject/b/helper.ts ProjectRootPath: undefined
 Info 48   [00:01:35.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
+Info 48   [00:01:36.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -235,7 +211,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
+/user/username/projects/myproject/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -245,9 +221,9 @@ FsWatches::
   {}
 /user/username/projects/myproject/b/lib/index.d.ts:
   {}
-/user/username/projects/myproject/b/index.ts:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
 
 FsWatchesRecursive::
@@ -256,10 +232,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 48   [00:01:36.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 49   [00:01:37.000] request:
     {
       "command": "references",
@@ -271,36 +245,6 @@ Info 49   [00:01:37.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts:
-  {}
-/user/username/projects/myproject/b/index.ts:
-  {}
-/user/username/projects/myproject/b:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/b:
-  {}
-
 Info 50   [00:01:38.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
 Info 51   [00:01:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 500 undefined WatchType: Closed Script info
 Info 52   [00:01:40.000] Search path: /user/username/projects/myproject/b
@@ -308,38 +252,6 @@ Info 53   [00:01:41.000] For info: /user/username/projects/myproject/b/index.ts 
 Info 54   [00:01:42.000] Search path: /user/username/projects/myproject/b
 Info 55   [00:01:43.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
 Info 56   [00:01:44.000] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts:
-  {}
-/user/username/projects/myproject/b/index.ts:
-  {}
-/user/username/projects/myproject/b:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts.map:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/b:
-  {}
-
 Info 57   [00:01:45.000] response:
     {
       "response": {
@@ -466,3 +378,34 @@ Info 57   [00:01:45.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/myproject/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/lib/index.d.ts:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/b/lib/index.d.ts.map: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
+  {}

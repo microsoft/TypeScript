@@ -67,24 +67,22 @@ Shape signatures in builder refreshed for::
 /a/b/project/src/main2.ts (used version)
 
 PolledWatches::
-/a/b/project/node_modules/@types:
+/a/b/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/project/tsconfig.json:
+/a/b/project/tsconfig.json: *new*
   {}
-/a/b/output/anotherdependency/file1.d.ts:
+/a/b/output/anotherdependency/file1.d.ts: *new*
   {}
-/a/b/dependencies/file2.d.ts:
+/a/b/dependencies/file2.d.ts: *new*
   {}
-/a/b/project/src/main.ts:
+/a/b/project/src/main.ts: *new*
   {}
-/a/b/project/src/main2.ts:
+/a/b/project/src/main2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

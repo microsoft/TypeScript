@@ -21,7 +21,7 @@ tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(14,5): error TS23
     
     b = {
         ___foo: 100,
-        ~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type '{ ___foo: number; }' is not assignable to type '{ __foo: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
     }

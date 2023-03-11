@@ -29,54 +29,42 @@ class Three<T, U, V>{
 
 function A1(): One { return null; }
 >A1 : () => any
->null : null
 
 function A2(): Two { return null; }
 >A2 : () => any
->null : null
 
 function A3(): Three { return null; }
 >A3 : () => any
->null : null
 
 function B1(): Two<number> { return null; }
 >B1 : () => any
->null : null
 
 function B2(): Three<string> { return null; }
 >B2 : () => any
->null : null
 
 function B3(): Three<string, number> { return null; }
 >B3 : () => any
->null : null
 
 class C {
 >C : C
 
     A1(): One { return null; }
 >A1 : () => any
->null : null
 
     A2(): Two { return null; }
 >A2 : () => any
->null : null
 
     A3(): Three { return null; }
 >A3 : () => any
->null : null
 
     B1(): Two<number> { return null; }
 >B1 : () => any
->null : null
 
     B2(): Three<string> { return null; }
 >B2 : () => any
->null : null
 
     B3(): Three<string, number> { return null; }
 >B3 : () => any
->null : null
 }
 
 class D<T> {
@@ -84,23 +72,18 @@ class D<T> {
 
     A2(): Two<T> { return null; }
 >A2 : () => any
->null : null
 
     A3(): Three<T> { return null; }
 >A3 : () => any
->null : null
 
     B1(): Two<T> { return null; }
 >B1 : () => any
->null : null
 
     B2(): Three<T> { return null; }
 >B2 : () => any
->null : null
 
     B3(): Three<string, T> { return null; }
 >B3 : () => any
->null : null
 }
 
 interface I<T> {

@@ -23,12 +23,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:18.000] Search path: /a/b
 Info 2    [00:00:19.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:20.000] Creating configuration project /a/b/tsconfig.json
@@ -52,9 +46,9 @@ Info 12   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:30.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:31.000] Project '/a/b/tsconfig.json' (Configured)
 Info 15   [00:00:32.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/file2.ts
-	/a/b/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/file2.ts Text-1 "export classc { method2a() { return 10; } }"
+	/a/b/file1.ts SVC-1-0 "import classc from \"file2\""
 
 
 	../lib/lib.d.ts
@@ -81,59 +75,25 @@ export classc { method2() { return 10; } }
 
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/file2.ts:
+/a/file2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/a/b:
+/a/b: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 20   [00:00:45.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 21   [00:00:46.000] Scheduled: /a/b/tsconfig.json
 Info 22   [00:00:47.000] Scheduled: *ensureProjectForOpenFiles*
 After running timeout callbacks
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b:
-  {}
-
-FsWatchesRecursive::
-
 Before running timeout callbacks
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b:
-  {}
-
-FsWatchesRecursive::
 
 Info 23   [00:00:48.000] Running: /a/b/tsconfig.json
 Info 24   [00:00:49.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -143,9 +103,9 @@ Info 27   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/
 Info 28   [00:00:53.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 29   [00:00:54.000] Project '/a/b/tsconfig.json' (Configured)
 Info 30   [00:00:55.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/file2.ts
-	/a/b/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/file2.ts Text-1 "export classc { method2() { return 10; } }"
+	/a/b/file1.ts SVC-1-0 "import classc from \"file2\""
 
 
 	../lib/lib.d.ts
@@ -186,10 +146,12 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/file2.ts:
+/a/b/file2.ts: *new*
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b:
+  {}
 
 Info 35   [00:01:12.000] FileWatcher:: Close:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
 Info 36   [00:01:13.000] Search path: /a/b

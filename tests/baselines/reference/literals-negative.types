@@ -5,13 +5,11 @@ var n = <number>(null);
 >n : number
 ><number>(null) : number
 >(null) : null
->null : null
 
 var s = <string>(null);
 >s : string
 ><string>(null) : string
 >(null) : null
->null : null
 
 var b = <boolean>(n);
 >b : boolean
@@ -25,7 +23,6 @@ function isVoid() : void { }
 // Expected error: Values of type null and void cannot be compared
 if(null === isVoid()) { }
 >null === isVoid() : boolean
->null : null
 >isVoid() : void
 >isVoid : () => void
 

@@ -4,10 +4,8 @@ export const nominalTypeHack: unique symbol;
 
 export type IsOptional<T> = undefined | null extends T ? true : undefined extends T ? true : null extends T ? true : false;
 >IsOptional : IsOptional<T>
->null : null
 >true : true
 >true : true
->null : null
 >true : true
 >false : false
 
@@ -28,7 +26,6 @@ export interface Validator<T> {
 >componentName : string
 >location : string
 >propFullName : string
->null : null
 
     [nominalTypeHack]?: T;
 >[nominalTypeHack] : T | undefined
@@ -295,5 +292,4 @@ const x: true = (null as any as ExtractPropsMatch);
 >(null as any as ExtractPropsMatch) : true
 >null as any as ExtractPropsMatch : true
 >null as any : any
->null : null
 

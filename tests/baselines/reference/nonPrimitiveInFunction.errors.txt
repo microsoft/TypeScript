@@ -25,7 +25,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts(17,5): erro
     function returnError(): object {
         var ret = 123;
         return ret; // expect error
-        ~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'object'.
     }
     

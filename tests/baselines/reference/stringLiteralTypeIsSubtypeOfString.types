@@ -117,93 +117,75 @@ class C implements String {
 
     toString(): string { return null; }
 >toString : () => string
->null : null
 
     charAt(pos: number): string { return null; }
 >charAt : (pos: number) => string
 >pos : number
->null : null
 
     charCodeAt(index: number): number { return null; }
 >charCodeAt : (index: number) => number
 >index : number
->null : null
 
     concat(...strings: string[]): string { return null; }
 >concat : (...strings: string[]) => string
 >strings : string[]
->null : null
 
     indexOf(searchString: string, position?: number): number { return null; }
 >indexOf : (searchString: string, position?: number) => number
 >searchString : string
 >position : number
->null : null
 
     lastIndexOf(searchString: string, position?: number): number { return null; }
 >lastIndexOf : (searchString: string, position?: number) => number
 >searchString : string
 >position : number
->null : null
 
     localeCompare(that: string): number { return null; }
 >localeCompare : (that: string) => number
 >that : string
->null : null
 
     match(regexp: any): RegExpMatchArray { return null; }
 >match : (regexp: any) => RegExpMatchArray
 >regexp : any
->null : null
 
     replace(searchValue: any, replaceValue: any): string { return null; }
 >replace : (searchValue: any, replaceValue: any) => string
 >searchValue : any
 >replaceValue : any
->null : null
 
     search(regexp: any): number { return null; }
 >search : (regexp: any) => number
 >regexp : any
->null : null
 
     slice(start?: number, end?: number): string { return null; }
 >slice : (start?: number, end?: number) => string
 >start : number
 >end : number
->null : null
 
     split(separator: any, limit?: number): string[] { return null; }
 >split : (separator: any, limit?: number) => string[]
 >separator : any
 >limit : number
->null : null
 
     substring(start: number, end?: number): string { return null; }
 >substring : (start: number, end?: number) => string
 >start : number
 >end : number
->null : null
 
     toLowerCase(): string { return null; }
 >toLowerCase : () => string
->null : null
 
     toLocaleLowerCase(): string { return null; }
 >toLocaleLowerCase : () => string
->null : null
 
     toUpperCase(): string { return null; }
 >toUpperCase : () => string
->null : null
 
     toLocaleUpperCase(): string { return null; }
 >toLocaleUpperCase : () => string
->null : null
 
     trim(): string { return null; }
 >trim : () => string
->null : null
 
     length: number;
 >length : number
@@ -212,11 +194,9 @@ class C implements String {
 >substr : (from: number, length?: number) => string
 >from : number
 >length : number
->null : null
 
     valueOf(): string { return null; }
 >valueOf : () => string
->null : null
 
     [index: number]: string;
 >index : number

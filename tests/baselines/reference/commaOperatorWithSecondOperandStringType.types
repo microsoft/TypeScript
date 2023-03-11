@@ -82,7 +82,6 @@ var resultIsString5 = (OBJECT, STRING);
 //Literal and expression
 null, STRING;
 >null, STRING : string
->null : null
 >STRING : string
 
 ANY = new Date(), STRING;
@@ -129,7 +128,6 @@ var resultIsString6 = (null, STRING);
 >resultIsString6 : string
 >(null, STRING) : string
 >null, STRING : string
->null : null
 >STRING : string
 
 var resultIsString7 = (ANY = new Date(), STRING);

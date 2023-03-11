@@ -18,7 +18,6 @@ function foo() {
 >(o == null) : boolean
 >o == null : boolean
 >o : any
->null : null
 >create(base) : error
 >create : error
 >base : error

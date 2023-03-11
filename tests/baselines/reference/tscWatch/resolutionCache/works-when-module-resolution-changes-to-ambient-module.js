@@ -46,18 +46,16 @@ Shape signatures in builder refreshed for::
 /a/b/foo.ts (used version)
 
 PolledWatches::
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.ts:
+/a/b/foo.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -86,6 +84,24 @@ declare module "fs" {
 }
 
 
+PolledWatches *deleted*::
+/a/b/node_modules:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/node_modules: *new*
+  {}
+/a/b/node_modules/@types: *new*
+  {}
+
 Output::
 sysLog:: /a/b/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
 sysLog:: /a/b/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
@@ -113,20 +129,22 @@ Shape signatures in builder refreshed for::
 /a/b/foo.ts (computed .d.ts)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
 /a/b/foo.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/node_modules/@types/node/index.d.ts:
+/a/b/node_modules/@types/node/index.d.ts: *new*
   {}
-/a/b/node_modules/@types/node/package.json:
+/a/b/node_modules/@types/node/package.json: *new*
   {}
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
+  {}
+
+FsWatchesRecursive *deleted*::
+/a/b/node_modules:
   {}
 
 exitCode:: ExitStatus.undefined

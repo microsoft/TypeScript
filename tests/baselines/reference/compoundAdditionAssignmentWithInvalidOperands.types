@@ -40,7 +40,6 @@ x1 += {};
 x1 += null;
 >x1 += null : any
 >x1 : boolean
->null : null
 
 x1 += undefined;
 >x1 += undefined : any
@@ -80,7 +79,6 @@ x2 += {};
 x2 += null;
 >x2 += null : any
 >x2 : {}
->null : null
 
 x2 += undefined;
 >x2 += undefined : any
@@ -120,7 +118,6 @@ x3 += {};
 x3 += null;
 >x3 += null : any
 >x3 : void
->null : null
 
 x3 += undefined;
 >x3 += undefined : any

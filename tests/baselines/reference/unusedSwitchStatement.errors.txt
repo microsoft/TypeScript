@@ -38,5 +38,5 @@ tests/cases/compiler/unusedSwitchStatement.ts(16,10): error TS2678: Type '1' is 
         case 1:
              ~
 !!! error TS2678: Type '1' is not comparable to type '2'.
-            x++;
+            x=1;
     }

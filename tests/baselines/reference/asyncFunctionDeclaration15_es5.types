@@ -40,7 +40,6 @@ async function fn8() { return 1; } // valid: Promise<number>
 
 async function fn9() { return null; } // valid: Promise<any>
 >fn9 : () => Promise<any>
->null : null
 
 async function fn10() { return undefined; } // valid: Promise<any>
 >fn10 : () => Promise<any>
@@ -66,7 +65,6 @@ async function fn14() { await 1; } // valid: Promise<void>
 async function fn15() { await null; } // valid: Promise<void>
 >fn15 : () => Promise<void>
 >await null : null
->null : null
 
 async function fn16() { await undefined; } // valid: Promise<void>
 >fn16 : () => Promise<void>

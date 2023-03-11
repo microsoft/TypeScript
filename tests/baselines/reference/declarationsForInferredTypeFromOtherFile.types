@@ -8,7 +8,6 @@ export function foo(): import("./file1").Foo {
 
     return null as any;
 >null as any : any
->null : null
 }
 === tests/cases/compiler/file3.ts ===
 import {foo} from "./file2";

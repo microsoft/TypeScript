@@ -4,11 +4,9 @@ type A = {
 
     other: number | null;
 >other : number | null
->null : null
 
     [index: string]: number | null
 >index : string
->null : null
 
 };
 declare const value: A;
@@ -19,7 +17,6 @@ if (value.foo !== null) {
 >value.foo : number | null
 >value : A
 >foo : number | null
->null : null
 
     value.foo.toExponential()
 >value.foo.toExponential() : string

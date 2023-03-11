@@ -2,7 +2,7 @@
     "extends": "../.eslintrc.json",
     "parserOptions": {
         "tsconfigRootDir": "src",
-        "project": "./tsconfig-base.json"
+        "project": "./tsconfig-eslint.json"
     },
     "rules": {
         "@typescript-eslint/no-unnecessary-type-assertion": "error",

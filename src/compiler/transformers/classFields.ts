@@ -40,7 +40,6 @@ import {
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
-    factory,
     filter,
     find,
     findComputedPropertyNameCacheAssignment,
@@ -152,6 +151,7 @@ import {
     newPrivateEnvironment,
     Node,
     NodeCheckFlags,
+    NodeFactory,
     nodeIsSynthesized,
     ObjectLiteralElement,
     OmittedExpression,
@@ -2458,6 +2458,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 if (privateIdentifierInfo.kind === PrivateIdentifierKind.Field) {
                     if (!privateIdentifierInfo.isStatic) {
                         return createPrivateInstanceFieldInitializer(
+                            factory,
                             receiver,
                             visitNode(property.initializer, initializerVisitor, isExpression),
                             privateIdentifierInfo.brandCheckIdentifier
@@ -2465,6 +2466,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     }
                     else {
                         return createPrivateStaticFieldInitializer(
+                            factory,
                             privateIdentifierInfo.variableName,
                             visitNode(property.initializer, initializerVisitor, isExpression)
                         );
@@ -2576,7 +2578,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
         statements.push(
             factory.createExpressionStatement(
-                createPrivateInstanceMethodInitializer(receiver, weakSetName)
+                createPrivateInstanceMethodInitializer(factory, receiver, weakSetName)
             )
         );
     }
@@ -3214,7 +3216,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 }
 
-function createPrivateStaticFieldInitializer(variableName: Identifier, initializer: Expression | undefined) {
+function createPrivateStaticFieldInitializer(factory: NodeFactory, variableName: Identifier, initializer: Expression | undefined) {
     return factory.createAssignment(
         variableName,
         factory.createObjectLiteralExpression([
@@ -3223,7 +3225,7 @@ function createPrivateStaticFieldInitializer(variableName: Identifier, initializ
     );
 }
 
-function createPrivateInstanceFieldInitializer(receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
+function createPrivateInstanceFieldInitializer(factory: NodeFactory, receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakMapName, "set"),
         /*typeArguments*/ undefined,
@@ -3231,7 +3233,7 @@ function createPrivateInstanceFieldInitializer(receiver: LeftHandSideExpression,
     );
 }
 
-function createPrivateInstanceMethodInitializer(receiver: LeftHandSideExpression, weakSetName: Identifier) {
+function createPrivateInstanceMethodInitializer(factory: NodeFactory, receiver: LeftHandSideExpression, weakSetName: Identifier) {
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakSetName, "add"),
         /*typeArguments*/ undefined,

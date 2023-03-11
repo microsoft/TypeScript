@@ -120,11 +120,9 @@ var u: undefined;
 
 var Nl: null;
 >Nl : null
->null : null
 
 var nl: null;
 >nl : null
->null : null
 
 var A: any[];
 >A : any[]
@@ -140,7 +138,6 @@ var p: Promise<any>;
 
 var nullable: number | null;
 >nullable : number | null
->null : null
 
 var Obj: any;
 >Obj : any

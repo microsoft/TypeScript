@@ -242,29 +242,29 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/logic/node_modules/@types:
+/user/username/projects/sample1/logic/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
+/user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/core/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/logic/index.ts:
+/user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/core/index.d.ts:
+/user/username/projects/sample1/core/index.d.ts: *new*
   {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
+/user/username/projects/sample1/core/anothermodule.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
+/user/username/projects/sample1/core: *new*
   {}
-/user/username/projects/sample1/logic:
+/user/username/projects/sample1/logic: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -527,32 +527,6 @@ Dependencies for::
   /user/username/projects/sample1/logic/index.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/core/index.d.ts
-
-PolledWatches::
-/user/username/projects/sample1/logic/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/core/index.d.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 

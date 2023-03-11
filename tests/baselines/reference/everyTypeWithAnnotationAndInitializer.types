@@ -69,7 +69,6 @@ var anObject: Object = new Object();
 
 var anAny: any = null;
 >anAny : any
->null : null
 
 var aSecondAny: any = undefined;
 >aSecondAny : any

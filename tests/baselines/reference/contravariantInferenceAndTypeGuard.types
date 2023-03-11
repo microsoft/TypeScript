@@ -2,11 +2,9 @@
 interface ListItem<TData> {
     prev: ListItem<TData> | null;
 >prev : ListItem<TData> | null
->null : null
 
     next: ListItem<TData> | null;
 >next : ListItem<TData> | null
->null : null
 
     data: TData;
 >data : TData
@@ -54,7 +52,6 @@ const list2 = new List<Test | null>();
 >list2 : List<Test | null>
 >new List<Test | null>() : List<Test | null>
 >List : typeof List
->null : null
 
 const filter1 = list2.filter(function(item, node, list): item is Test {
 >filter1 : List<Test>

@@ -116,7 +116,6 @@ var ResultIsNumber11 = ++{};
 var ResultIsNumber12 = ++null;
 >ResultIsNumber12 : number
 >++null : number
->null : null
 
 var ResultIsNumber13 = ++undefined;
 >ResultIsNumber13 : number
@@ -126,7 +125,6 @@ var ResultIsNumber13 = ++undefined;
 var ResultIsNumber14 = null++;
 >ResultIsNumber14 : number
 >null++ : number
->null : null
 
 var ResultIsNumber15 = {}++;
 >ResultIsNumber15 : number
@@ -158,7 +156,6 @@ var ResultIsNumber19 = ++(null + undefined);
 >++(null + undefined) : number
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsNumber20 = ++(null + null);
@@ -166,8 +163,6 @@ var ResultIsNumber20 = ++(null + null);
 >++(null + null) : number
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsNumber21 = ++(undefined + undefined);
 >ResultIsNumber21 : number
@@ -210,7 +205,6 @@ var ResultIsNumber26 = (null + undefined)++;
 >(null + undefined)++ : number
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsNumber27 = (null + null)++;
@@ -218,8 +212,6 @@ var ResultIsNumber27 = (null + null)++;
 >(null + null)++ : number
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsNumber28 = (undefined + undefined)++;
 >ResultIsNumber28 : number

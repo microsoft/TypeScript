@@ -24,7 +24,6 @@ async function main() {
 
     const x: IAsyncEnumerator<number> = null;
 >x : IAsyncEnumerator<number>
->null : null
 
     let a = await x.next1();
 >a : number | AsyncEnumeratorDone

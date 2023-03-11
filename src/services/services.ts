@@ -118,7 +118,6 @@ import {
     hasStaticModifier,
     hasSyntacticModifier,
     hasTabstop,
-    HighlightSpanKind,
     HostCancellationToken,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -237,7 +236,6 @@ import {
     PrivateIdentifier,
     Program,
     PropertyName,
-    Push,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -308,7 +306,6 @@ import {
     TypePredicate,
     TypeReference,
     typeToDisplayParts,
-    UnderscoreEscapedMap,
     UnionOrIntersectionType,
     UnionType,
     updateSourceFile,
@@ -490,11 +487,11 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
     return children;
 }
 
-function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
-    scanner.setTextPos(pos);
+function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
+    scanner.resetTokenState(pos);
     while (pos < end) {
         const token = scanner.scan();
-        const textPos = scanner.getTextPos();
+        const textPos = scanner.getTokenEnd();
         if (textPos <= end) {
             if (token === SyntaxKind.Identifier) {
                 if (hasTabstop(parent)) {
@@ -1031,7 +1028,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVersion!: ScriptTarget;
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
-    public nameTable: UnderscoreEscapedMap<number> | undefined;
+    public nameTable: Map<__String, number> | undefined;
     public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
@@ -1091,7 +1088,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     }
 
     private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
+        const result = createMultiMap<string, Declaration>();
 
         this.forEachChild(visit);
 
@@ -1532,7 +1529,6 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getTypeDefinitionAtPosition",
     "getReferencesAtPosition",
     "findReferences",
-    "getOccurrencesAtPosition",
     "getDocumentHighlights",
     "getNavigateToItems",
     "getRenameInfo",
@@ -2111,18 +2107,6 @@ export function createLanguageService(
     }
 
     /// References and Occurrences
-    function getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined {
-        return flatMap(
-            getDocumentHighlights(fileName, position, [fileName]),
-            entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                ...highlightSpan.isInString && { isInString: true },
-                ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
-            }))
-        );
-    }
 
     function getDocumentHighlights(fileName: string, position: number, filesToSearch: readonly string[]): DocumentHighlights[] | undefined {
         const normalizedFileName = normalizePath(fileName);
@@ -3007,7 +2991,6 @@ export function createLanguageService(
         getReferencesAtPosition,
         findReferences,
         getFileReferences,
-        getOccurrencesAtPosition,
         getDocumentHighlights,
         getNameOrDottedNameSpan,
         getBreakpointStatementAtPosition,
@@ -3083,7 +3066,7 @@ export function createLanguageService(
  *
  * @internal
  */
-export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
+export function getNameTable(sourceFile: SourceFile): Map<__String, number> {
     if (!sourceFile.nameTable) {
         initializeNameTable(sourceFile);
     }

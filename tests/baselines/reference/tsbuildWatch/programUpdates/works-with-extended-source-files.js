@@ -123,35 +123,31 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other2.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/project1.tsconfig.json:
+/a/b/project1.tsconfig.json: *new*
   {}
-/a/b/alpha.tsconfig.json:
+/a/b/alpha.tsconfig.json: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/b/project2.tsconfig.json:
+/a/b/project2.tsconfig.json: *new*
   {}
-/a/b/bravo.tsconfig.json:
+/a/b/bravo.tsconfig.json: *new*
   {}
-/a/b/other.ts:
+/a/b/other.ts: *new*
   {}
-/a/b/project3.tsconfig.json:
+/a/b/project3.tsconfig.json: *new*
   {}
-/a/b/extendsconfig1.tsconfig.json:
+/a/b/extendsconfig1.tsconfig.json: *new*
   {}
-/a/b/extendsconfig2.tsconfig.json:
+/a/b/extendsconfig2.tsconfig.json: *new*
   {}
-/a/b/extendsconfig3.tsconfig.json:
+/a/b/extendsconfig3.tsconfig.json: *new*
   {}
-/a/b/other2.ts:
+/a/b/other2.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -336,36 +332,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
@@ -474,36 +440,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other.js]
@@ -596,36 +532,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/other.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -729,8 +635,6 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts)
 /a/b/other2.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/project1.tsconfig.json:
   {}
@@ -755,8 +659,12 @@ FsWatches::
 /a/b/other2.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/bravo.tsconfig.json:
+  {}
+
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -805,36 +713,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile2.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -947,36 +825,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js] file written with same contents
@@ -1024,36 +872,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other2.js] file changed its modified time
@@ -1092,8 +910,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
 FsWatches::
 /a/b/project1.tsconfig.json:
   {}
@@ -1114,6 +930,10 @@ FsWatches::
 /a/b/extendsconfig2.tsconfig.json:
   {}
 /a/b/other2.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/extendsconfig3.tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1140,34 +960,6 @@ Output::
 [[90m12:03:15 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -148,7 +148,6 @@ export type ComponentClass<P> = new (props: P) => Component<P>;
 export type FunctionComponent<P> = (props: P) => null;
 >FunctionComponent : FunctionComponent<P>
 >props : P
->null : null
 
 export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
 >ComponentType : ComponentType<P>

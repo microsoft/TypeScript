@@ -74,12 +74,10 @@ function b1(z = [undefined, null]) { };
 >z : any[]
 >[undefined, null] : null[]
 >undefined : undefined
->null : null
 
 function b2(z = null, o = { x: 0, y: undefined }) { }
 >b2 : (z?: any, o?: { x: number; y: any; }) => void
 >z : any
->null : null
 >o : { x: number; y: any; }
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
@@ -124,7 +122,6 @@ function b6([a, z, y] = [undefined, null, undefined]) { }
 >y : any
 >[undefined, null, undefined] : [undefined, null, undefined]
 >undefined : undefined
->null : null
 >undefined : undefined
 
 function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }

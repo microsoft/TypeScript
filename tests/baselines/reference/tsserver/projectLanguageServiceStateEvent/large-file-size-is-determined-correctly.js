@@ -26,12 +26,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:18.000] Search path: /a
 Info 2    [00:00:19.000] For info: /a/app.js :: Config file name: /a/jsconfig.json
 Info 3    [00:00:20.000] Creating configuration project /a/jsconfig.json
@@ -60,8 +54,8 @@ Info 10   [00:00:27.000] Starting updateGraphWorker: Project: /a/jsconfig.json
 Info 11   [00:00:28.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:29.000] Project '/a/jsconfig.json' (Configured)
 Info 13   [00:00:30.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/app.js SVC-1-0 "let x = 1;"
 
 
 	lib/lib.d.ts

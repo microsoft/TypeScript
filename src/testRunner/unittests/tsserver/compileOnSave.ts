@@ -13,13 +13,8 @@ import {
     openFilesForSession,
     protocolTextSpanFromSubstring,
     TestSession,
-    TestTypingsInstaller,
     toExternalFiles,
 } from "./helpers";
-
-function createTestTypingsInstaller(host: ts.server.ServerHost) {
-    return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
-}
 
 describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
     describe("for configured projects", () => {
@@ -61,8 +56,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
 
@@ -109,8 +103,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should be up-to-date with the reference map changes", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
 
@@ -183,8 +176,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should be up-to-date with changes made in non-open files", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1], session);
 
@@ -217,8 +209,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should be up-to-date with deleted files", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -249,8 +240,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should be up-to-date with newly created files", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -302,8 +292,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -350,8 +339,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should return all files if a global file changed shape", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([globalFile3], session);
 
@@ -382,8 +370,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
@@ -405,8 +392,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
@@ -432,8 +418,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -456,8 +441,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
 
             session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
@@ -492,8 +476,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
 
             session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
@@ -521,8 +504,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 content: `import {y} from "./file1Consumer1";`
             };
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -574,8 +556,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     export var t2 = 10;`
             };
             const host = createServerHost([file1, file2, configFile]);
-            const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1, file2], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -792,8 +773,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
             content: `{}`
         };
         const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
-        const typingsInstaller = createTestTypingsInstaller(host);
-        const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([file1, file2], session);
         session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
@@ -1044,8 +1024,8 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
     }
 
     function logDirtyOfProjects(session: TestSession) {
-        session.logger.logs.push(`Project1 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app1/tsconfig.json`)!.dirty}`);
-        session.logger.logs.push(`Project2 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app2/tsconfig.json`)!.dirty}`);
+        session.logger.log(`Project1 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app1/tsconfig.json`)!.dirty}`);
+        session.logger.log(`Project2 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app2/tsconfig.json`)!.dirty}`);
     }
 
     function verify(subScenario: string, commandArgs: ts.server.protocol.FileRequestArgs) {

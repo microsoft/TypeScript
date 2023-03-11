@@ -52,6 +52,5 @@ function ListItem(_data: IListItemData) {
 >_data : IListItemData
 
     return null; 
->null : null
 }
 

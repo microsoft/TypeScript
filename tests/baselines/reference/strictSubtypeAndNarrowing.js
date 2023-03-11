@@ -130,6 +130,106 @@ function fx11(): { x?: number } {
     return obj = { x: 1, y: 2 };
 }
 
+// Repros from #52827
+
+declare function isArrayLike(value: any): value is { length: number };
+
+function ff1(value: { [index: number]: boolean, length: number } | undefined) {
+    if (isArrayLike(value)) {
+        value;
+    } else {
+        value;
+    }
+    value;
+}
+
+function ff2(value: { [index: number]: boolean, length: number } | string) {
+    if (isArrayLike(value)) {
+        value;
+    } else {
+        value;
+    }
+    value;
+}
+
+function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
+    if (isArrayLike(value)) {
+        value;
+    } else {
+        value;
+    }
+    value;
+}
+
+// Repro from comment in #52984
+
+type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
+
+type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
+    ? KeyT extends keyof ObjT
+        ? ValueT extends ObjT[KeyT]
+            ? ObjT & Readonly<Record<KeyT, ValueT>>
+            : never
+        : never
+    : never;
+
+type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
+    infer Head extends DistributedKeyOf<ObjT>,
+]
+    ? NarrowByKeyValue<ObjT, Head, ValueT>
+    : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
+    ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
+    : never;
+
+
+declare function doesValueAtDeepPathSatisfy<
+    ObjT extends object,
+    const DeepPathT extends ReadonlyArray<number | string>,
+    ValueT,
+>(
+    obj: ObjT,
+    deepPath: DeepPathT,
+    predicate: (arg: unknown) => arg is ValueT,
+): obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>;
+
+
+type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
+
+declare function isA(arg: unknown): arg is 'A';
+declare function isB(arg: unknown): arg is 'B';
+
+declare function assert(condition: boolean): asserts condition;
+
+function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
+    assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA));
+    return foo;
+}
+
+function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
+    assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
+    return foo;
+}
+
+// Repro from #53063
+
+interface Free {
+    premium: false;
+}
+
+interface Premium {
+    premium: true;
+}
+
+type Union = { premium: false } | { premium: true };
+
+declare const checkIsPremium: (a: Union) => a is Union & Premium;
+
+const f = (value: Union) => {
+    if (!checkIsPremium(value)) {
+        value.premium;
+    }
+};
+
 
 //// [strictSubtypeAndNarrowing.js]
 "use strict";
@@ -226,3 +326,43 @@ function fx11() {
     var obj;
     return obj = { x: 1, y: 2 };
 }
+function ff1(value) {
+    if (isArrayLike(value)) {
+        value;
+    }
+    else {
+        value;
+    }
+    value;
+}
+function ff2(value) {
+    if (isArrayLike(value)) {
+        value;
+    }
+    else {
+        value;
+    }
+    value;
+}
+function ff3(value) {
+    if (isArrayLike(value)) {
+        value;
+    }
+    else {
+        value;
+    }
+    value;
+}
+function test1(foo) {
+    assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA));
+    return foo;
+}
+function test2(foo) {
+    assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
+    return foo;
+}
+var f = function (value) {
+    if (!checkIsPremium(value)) {
+        value.premium;
+    }
+};

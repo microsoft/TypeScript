@@ -7,8 +7,5 @@ function f1 () {
     {
         let x = 11;
 >x : Symbol(x, Decl(unusedVariablesinBlocks1.ts, 3, 11))
-
-        x++;
->x : Symbol(x, Decl(unusedVariablesinBlocks1.ts, 3, 11))
     }
 }

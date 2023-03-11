@@ -26,13 +26,11 @@ class Foo<T> {
 >x || undefined : any
 >x : T
 >undefined : undefined
->null : null
 
     static e = function (x: T) { return null; }
 >e : (x: T) => any
 >function (x: T) { return null; } : (x: T) => any
 >x : T
->null : null
 
     static f(xs: T[]): T[] {
 >f : (xs: T[]) => T[]

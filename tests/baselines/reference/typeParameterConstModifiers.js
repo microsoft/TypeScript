@@ -29,6 +29,8 @@ const x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
 declare function f6<const T extends readonly unknown[]>(...args: T): T;
 
 const x61 = f6(1, 'b', { a: 1, b: 'x' });
+const x62 = f6(...[1, 'b']);
+const x63 = f6(true, ...[1, 'b']);
 
 class C1<const T> {
     constructor(x: T) {}
@@ -85,6 +87,15 @@ const test2 = inners2([1,2,3,4,5]);
 
 //// [typeParameterConstModifiers.js]
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var x11 = f1('a');
 var x12 = f1(['a', ['b', 'c']]);
 var x13 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
@@ -98,6 +109,8 @@ var x42 = f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]);
 var x51 = f5({ x: [1, 'x'], y: [2, 'y'] });
 var x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
 var x61 = f6(1, 'b', { a: 1, b: 'x' });
+var x62 = f6.apply(void 0, [1, 'b']);
+var x63 = f6.apply(void 0, __spreadArray([true], [1, 'b'], false));
 var C1 = /** @class */ (function () {
     function C1(x) {
     }

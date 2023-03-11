@@ -58,7 +58,6 @@ function assertObject(x: object) {
 function assertObjectOrNull(x: object | null) {
 >assertObjectOrNull : (x: object | null) => object | null
 >x : object | null
->null : null
 
     return x;
 >x : object | null

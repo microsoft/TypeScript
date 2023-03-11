@@ -57,22 +57,20 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/core/index.ts:
+/user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/logic/index.ts:
+/user/username/projects/sample1/logic/index.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
+/user/username/projects/sample1/core: *new*
   {}
-/user/username/projects/sample1/logic:
+/user/username/projects/sample1/logic: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -311,24 +309,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -438,24 +418,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -615,24 +577,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -725,24 +669,6 @@ Output::
 [[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 

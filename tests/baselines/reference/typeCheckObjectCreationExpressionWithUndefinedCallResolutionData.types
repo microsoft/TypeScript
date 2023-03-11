@@ -19,6 +19,5 @@ var classes = undefined;
     return new classes(null);
 >new classes(null) : any
 >classes : any
->null : null
 }
 

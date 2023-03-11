@@ -13,7 +13,6 @@ var y = (null as string).length;
 >(null as string).length : number
 >(null as string) : string
 >null as string : string
->null : null
 >length : number
 
 var z = Date as any as string;

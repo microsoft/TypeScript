@@ -45,7 +45,6 @@ function funcTwo(arg: A | B | undefined) {
 function funcThree(arg: A | B | null) {
 >funcThree : (arg: A | B | null) => void
 >arg : A | B | null
->null : null
 
   if (arg?.type === 'B') {
 >arg?.type === 'B' : boolean
@@ -77,7 +76,6 @@ type U = { kind: undefined, u: 'u' }
 type N = { kind: null, n: 'n' }
 >N : { kind: null; n: 'n'; }
 >kind : null
->null : null
 >n : "n"
 
 type X = { kind: 'X', x: 'x' }
@@ -128,7 +126,6 @@ function f2(x: X | N | undefined) {
 function f3(x: X | U | null) {
 >f3 : (x: X | U | null) => void
 >x : U | X | null
->null : null
 
     if (x?.kind === undefined) {
 >x?.kind === undefined : boolean
@@ -149,7 +146,6 @@ function f3(x: X | U | null) {
 function f4(x: X | N | null) {
 >f4 : (x: X | N | null) => void
 >x : N | X | null
->null : null
 
     if (x?.kind === undefined) {
 >x?.kind === undefined : boolean
@@ -176,7 +172,6 @@ function f5(x: X | U | undefined) {
 >x?.kind : "X" | undefined
 >x : U | X | undefined
 >kind : "X" | undefined
->null : null
 
         x; // never
 >x : never
@@ -196,7 +191,6 @@ function f6(x: X | N | undefined) {
 >x?.kind : "X" | null | undefined
 >x : N | X | undefined
 >kind : "X" | null | undefined
->null : null
 
         x; // N
 >x : N
@@ -210,14 +204,12 @@ function f6(x: X | N | undefined) {
 function f7(x: X | U | null) {
 >f7 : (x: X | U | null) => void
 >x : U | X | null
->null : null
 
     if (x?.kind === null) {
 >x?.kind === null : boolean
 >x?.kind : "X" | undefined
 >x : U | X | null
 >kind : "X" | undefined
->null : null
 
         x; // never
 >x : never
@@ -231,14 +223,12 @@ function f7(x: X | U | null) {
 function f8(x: X | N | null) {
 >f8 : (x: X | N | null) => void
 >x : N | X | null
->null : null
 
     if (x?.kind === null) {
 >x?.kind === null : boolean
 >x?.kind : "X" | null | undefined
 >x : N | X | null
 >kind : "X" | null | undefined
->null : null
 
         x; // N
 >x : N

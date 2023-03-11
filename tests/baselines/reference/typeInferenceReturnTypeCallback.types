@@ -15,7 +15,6 @@ class Nil<C> implements IList<C>{
 >t : C
 
         return null;
->null : null
     }
 }
 
@@ -53,6 +52,5 @@ class Cons<T> implements IList<T>{
 >acc : E
 
         return null;
->null : null
     }
 }

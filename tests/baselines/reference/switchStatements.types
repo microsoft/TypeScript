@@ -27,8 +27,6 @@ switch (x) {
 >true : true
 
     case null:
->null : null
-
     case undefined:
 >undefined : undefined
 
@@ -130,8 +128,6 @@ switch (true) { }
 >true : true
 
 switch (null) { }
->null : null
-
 switch (undefined) { }
 >undefined : undefined
 

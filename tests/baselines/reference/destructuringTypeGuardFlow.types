@@ -4,7 +4,6 @@ type foo = {
 
   bar: number | null;
 >bar : number | null
->null : null
 
   baz: string;
 >baz : string
@@ -17,7 +16,6 @@ type foo = {
 
     b: string | null;
 >b : string | null
->null : null
   }
 };
 
@@ -83,11 +81,9 @@ type bar = {
 
   elem1: number | null;
 >elem1 : number | null
->null : null
 
   elem2: foo | null;
 >elem2 : foo | null
->null : null
 
 };
 

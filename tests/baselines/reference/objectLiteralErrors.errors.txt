@@ -271,7 +271,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(50,5):
                    ~
 !!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
     var g2 = { get a() { return 4; }, set a(n: string) { } };
-                         ~~~~~~~~~
+                         ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
                    ~

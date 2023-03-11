@@ -2,6 +2,27 @@
 /// Worker Iterable APIs
 /////////////////////////////
 
+interface CSSNumericArray {
+    [Symbol.iterator](): IterableIterator<CSSNumericValue>;
+    entries(): IterableIterator<[number, CSSNumericValue]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<CSSNumericValue>;
+}
+
+interface CSSTransformValue {
+    [Symbol.iterator](): IterableIterator<CSSTransformComponent>;
+    entries(): IterableIterator<[number, CSSTransformComponent]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<CSSTransformComponent>;
+}
+
+interface CSSUnparsedValue {
+    [Symbol.iterator](): IterableIterator<CSSUnparsedSegment>;
+    entries(): IterableIterator<[number, CSSUnparsedSegment]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<CSSUnparsedSegment>;
+}
+
 interface Cache {
     addAll(requests: Iterable<RequestInfo>): Promise<void>;
 }
@@ -62,6 +83,13 @@ interface IDBObjectStore {
 interface MessageEvent<T = any> {
     /** @deprecated */
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
+}
+
+interface StylePropertyMapReadOnly {
+    [Symbol.iterator](): IterableIterator<[string, Iterable<CSSStyleValue>]>;
+    entries(): IterableIterator<[string, Iterable<CSSStyleValue>]>;
+    keys(): IterableIterator<string>;
+    values(): IterableIterator<Iterable<CSSStyleValue>>;
 }
 
 interface SubtleCrypto {

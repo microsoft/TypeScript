@@ -136,7 +136,7 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
     
     dom = { data123: 'hello' };
     dom = { date123: 'hello' };  // Error
-            ~~~~~~~~~~~~~~~~
+            ~~~~~~~
 !!! error TS2322: Type '{ date123: string; }' is not assignable to type '{ [x: `data${string}`]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
     
@@ -466,7 +466,7 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
     type PseudoDeclaration = { [key in Pseudo]: string };
     
     const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
-                                      ~~~~~~~~~~~~~~~~~~~~~~~
+                                      ~~~~~~~~~
 !!! error TS2322: Type '{ someKey: string; }' is not assignable to type 'PseudoDeclaration'.
 !!! error TS2322:   Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
     
@@ -504,7 +504,7 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
     const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
     const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
     const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
-                                              ~~~~~~~~~~~~~~~
+                                              ~~~~~
 !!! error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
     

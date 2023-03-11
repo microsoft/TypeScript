@@ -15,7 +15,6 @@ class A {
     foo(x: any): any { return null; }
 >foo : { (x: number): number; (x: string): string; }
 >x : any
->null : null
 }
 
 class B {
@@ -32,7 +31,6 @@ class B {
     foo(x: any): any { return null; }
 >foo : { (x: number): number; (x: string): string; }
 >x : any
->null : null
 }
 
 class C<T> {
@@ -53,7 +51,6 @@ class C<T> {
     foo(x: any): any { return null; }
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
 >x : any
->null : null
 }
 
 interface I {

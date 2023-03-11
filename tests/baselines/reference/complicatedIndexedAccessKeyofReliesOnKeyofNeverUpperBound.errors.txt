@@ -53,7 +53,7 @@ tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.t
     export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {
         const localChannelId = `blahblahblah`;
         return { type, localChannelId };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type '{ type: T; localChannelId: string; }' is not assignable to type 'NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>'.
 !!! error TS2322:   Type '{ type: T; localChannelId: string; }' is not assignable to type 'Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">'.
 !!! error TS2322:     Types of property 'type' are incompatible.

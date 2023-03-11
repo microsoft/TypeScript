@@ -8,9 +8,6 @@ class A {
         let foge = used;
 >foge : Symbol(foge, Decl(unusedParameterProperty2.ts, 2, 11))
 >used : Symbol(used, Decl(unusedParameterProperty2.ts, 1, 16))
-
-        foge += "";
->foge : Symbol(foge, Decl(unusedParameterProperty2.ts, 2, 11))
     }
 }
 

@@ -121,7 +121,6 @@ b3 = {
 >k : (a: any) => any
 >(a) =>{ return null; } : (a: any) => any
 >a : any
->null : null
 
 }; // ok
 
@@ -150,6 +149,5 @@ b3 = {
 >k : (a: any) => any
 >(a) =>{ return null; } : (a: any) => any
 >a : any
->null : null
 
 }; // error

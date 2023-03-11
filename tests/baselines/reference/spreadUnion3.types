@@ -21,7 +21,6 @@ function g(t?: { a: number } | null): void {
 >g : (t?: {    a: number;} | null) => void
 >t : { a: number; } | null | undefined
 >a : number
->null : null
 
     let b = { ...t };
 >b : { a?: number | undefined; }
@@ -46,12 +45,10 @@ g(undefined)
 g(null)
 >g(null) : void
 >g : (t?: { a: number; } | null | undefined) => void
->null : null
 
 // spreading nothing but null and undefined is not allowed
 declare const nullAndUndefinedUnion: null | undefined;
 >nullAndUndefinedUnion : null | undefined
->null : null
 
 var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
 >x : any

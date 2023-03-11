@@ -1029,7 +1029,6 @@ function foo<A>(value: A) {
 >"object" : "object"
 >value !== null : boolean
 >value : A & object
->null : null
 >"prop" in value : boolean
 >"prop" : "prop"
 >value : A & object
@@ -1060,7 +1059,6 @@ const checkIsTouchDevice = () =>
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
 >isHTMLTable : <T extends object>(table: T) => boolean
->null : null
 >table : T
 
     return !!table && 'html' in table;

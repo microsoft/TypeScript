@@ -58,7 +58,6 @@ interface F1 {
 function b1(z = null, o = { x: 0, y: undefined }) { }
 >b1 : (z?: any, o?: { x: number; y: any; }) => void
 >z : any
->null : null
 >o : { x: number; y: any; }
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
@@ -73,7 +72,6 @@ function b2([a, z, y] = [undefined, null, undefined]) { }
 >y : any
 >[undefined, null, undefined] : [undefined, null, undefined]
 >undefined : undefined
->null : null
 >undefined : undefined
 
 function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }

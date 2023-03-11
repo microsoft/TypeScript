@@ -1,13 +1,4 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/file1.ts]
 const x = 1;
@@ -44,12 +35,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:29.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:30.000] For info: /user/username/projects/myproject/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -78,11 +72,11 @@ Info 15   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 16   [00:00:43.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:44.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 18   [00:00:45.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/file1.ts
-	/user/username/projects/myproject/file2.ts
-	/user/username/projects/myproject/file3.ts
-	/user/username/projects/myproject/module.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-0 "const x = 1;\nfunction foo() {\n    return \"hello\";\n}"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;\nfunction bar() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
+	/user/username/projects/myproject/module.ts Text-1 "export const xyz = 4;"
 
 
 	../../../../a/lib/lib.d.ts
@@ -104,32 +98,34 @@ Info 20   [00:00:49.000] -----------------------------------------------
 Info 20   [00:00:50.000] Open files: 
 Info 20   [00:00:51.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info 20   [00:00:52.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 20   [00:00:53.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/file2.ts: *new*
+  {}
+/user/username/projects/myproject/file3.ts: *new*
+  {}
+/user/username/projects/myproject/module.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Before request
+
 Info 21   [00:00:54.000] request:
     {
       "command": "open",
@@ -139,28 +135,6 @@ Info 21   [00:00:54.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 22   [00:00:55.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/file2.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:56.000] Search path: /user/username/projects/myproject
 Info 24   [00:00:57.000] For info: /user/username/projects/myproject/file2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -173,6 +147,10 @@ Info 25   [00:01:02.000] 	FileName: /user/username/projects/myproject/file1.ts P
 Info 25   [00:01:03.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 25   [00:01:04.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
 Info 25   [00:01:05.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:01:06.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -189,14 +167,16 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/user/username/projects/myproject/file2.ts:
+  {}
+
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 25   [00:01:06.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 26   [00:01:07.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -206,26 +186,6 @@ Info 26   [00:01:07.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 27   [00:01:08.000] Before ensureProjectForOpenFiles:
 Info 28   [00:01:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 28   [00:01:10.000] 	Files (5)
@@ -246,26 +206,6 @@ Info 29   [00:01:22.000] 	FileName: /user/username/projects/myproject/file1.ts P
 Info 29   [00:01:23.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 29   [00:01:24.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
 Info 29   [00:01:25.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 29   [00:01:26.000] response:
     {
       "response": [
@@ -282,6 +222,10 @@ Info 29   [00:01:26.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 30   [00:01:27.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -291,32 +235,17 @@ Info 30   [00:01:27.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 31   [00:01:30.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 32   [00:01:31.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file1.js
 Info 33   [00:01:32.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 34   [00:01:35.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 35   [00:01:36.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file1.d.ts
 Info 36   [00:01:37.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 37   [00:01:38.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/file1.js]
 var x = 1;
@@ -331,29 +260,8 @@ declare function foo(): string;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
+Before request
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 37   [00:01:38.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
 Info 38   [00:01:39.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -363,32 +271,17 @@ Info 38   [00:01:39.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 39   [00:01:42.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 40   [00:01:43.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file2.js
 Info 41   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 42   [00:01:47.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 43   [00:01:48.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file2.d.ts
 Info 44   [00:01:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 45   [00:01:50.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/file2.js]
 var y = 2;
@@ -403,29 +296,8 @@ declare function bar(): string;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
+Before request
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 45   [00:01:50.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
 Info 46   [00:01:51.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -435,32 +307,17 @@ Info 46   [00:01:51.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 47   [00:01:54.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 48   [00:01:55.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file3.js
 Info 49   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 50   [00:01:59.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 51   [00:02:00.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file3.d.ts
 Info 52   [00:02:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 53   [00:02:02.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/file3.js]
 var xy = 3;
@@ -471,29 +328,8 @@ declare const xy = 3;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
+Before request
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 53   [00:02:02.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
 Info 54   [00:02:03.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -503,32 +339,17 @@ Info 54   [00:02:03.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 55   [00:02:06.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 56   [00:02:07.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/module.js
 Info 57   [00:02:08.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 58   [00:02:11.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 59   [00:02:12.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/module.d.ts
 Info 60   [00:02:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 61   [00:02:14.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/module.js]
 "use strict";
@@ -542,29 +363,8 @@ export declare const xyz = 4;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
+Before request
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 61   [00:02:14.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
 Info 62   [00:02:15.000] request:
     {
       "command": "updateOpen",
@@ -591,51 +391,15 @@ Info 62   [00:02:15.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 63   [00:02:16.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 64   [00:02:17.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -645,70 +409,38 @@ Info 64   [00:02:17.000] request:
       "seq": 9,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 65   [00:02:18.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 66   [00:02:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 67   [00:02:20.000] Different program with same set of files
-Info 68   [00:02:21.000] Before ensureProjectForOpenFiles:
-Info 69   [00:02:22.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 69   [00:02:23.000] 	Files (5)
+Info 67   [00:02:20.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 68   [00:02:21.000] 	Files (5)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-1 "const x = 1;\nfunction foo() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;\nfunction bar() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
+	/user/username/projects/myproject/module.ts Text-1 "export const xyz = 4;"
 
-Info 69   [00:02:24.000] -----------------------------------------------
-Info 69   [00:02:25.000] Open files: 
-Info 69   [00:02:26.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 69   [00:02:27.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 69   [00:02:28.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 69   [00:02:29.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 69   [00:02:30.000] After ensureProjectForOpenFiles:
-Info 70   [00:02:31.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 70   [00:02:32.000] 	Files (5)
+Info 69   [00:02:22.000] -----------------------------------------------
+Info 70   [00:02:23.000] Before ensureProjectForOpenFiles:
+Info 71   [00:02:24.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 71   [00:02:25.000] 	Files (5)
 
-Info 70   [00:02:33.000] -----------------------------------------------
-Info 70   [00:02:34.000] Open files: 
-Info 70   [00:02:35.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 70   [00:02:36.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 70   [00:02:37.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 70   [00:02:38.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
+Info 71   [00:02:26.000] -----------------------------------------------
+Info 71   [00:02:27.000] Open files: 
+Info 71   [00:02:28.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 71   [00:02:29.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 71   [00:02:30.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 71   [00:02:31.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 71   [00:02:32.000] After ensureProjectForOpenFiles:
+Info 72   [00:02:33.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 72   [00:02:34.000] 	Files (5)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 70   [00:02:39.000] response:
+Info 72   [00:02:35.000] -----------------------------------------------
+Info 72   [00:02:36.000] Open files: 
+Info 72   [00:02:37.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 72   [00:02:38.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 72   [00:02:39.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 72   [00:02:40.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 72   [00:02:41.000] response:
     {
       "response": [
         {
@@ -721,7 +453,11 @@ Info 70   [00:02:39.000] response:
       ],
       "responseRequired": true
     }
-Info 71   [00:02:40.000] request:
+After request
+
+Before request
+
+Info 73   [00:02:42.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -730,26 +466,11 @@ Info 71   [00:02:40.000] request:
       "seq": 10,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
+Info 74   [00:02:49.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/file1.js]
 var x = 1;
@@ -760,30 +481,9 @@ function foo() {
 
 //// [/user/username/projects/myproject/file1.d.ts] file written with same contents
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
+Before request
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 72   [00:02:47.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
-Info 73   [00:02:48.000] request:
+Info 75   [00:02:50.000] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -809,52 +509,16 @@ Info 73   [00:02:48.000] request:
       "seq": 11,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 74   [00:02:49.000] response:
+Info 76   [00:02:51.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 75   [00:02:50.000] request:
+After request
+
+Before request
+
+Info 77   [00:02:52.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -863,70 +527,38 @@ Info 75   [00:02:50.000] request:
       "seq": 12,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 76   [00:02:51.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 77   [00:02:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 78   [00:02:53.000] Different program with same set of files
-Info 79   [00:02:54.000] Before ensureProjectForOpenFiles:
+Info 78   [00:02:53.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 79   [00:02:54.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 80   [00:02:55.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 80   [00:02:56.000] 	Files (5)
+Info 81   [00:02:56.000] 	Files (5)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-1 "const x = 1;\nfunction foo() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file2.ts SVC-2-1 "const y = 2;\nfunction bar() {\n    return \"hello\";\n}"
+	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
+	/user/username/projects/myproject/module.ts Text-1 "export const xyz = 4;"
 
-Info 80   [00:02:57.000] -----------------------------------------------
-Info 80   [00:02:58.000] Open files: 
-Info 80   [00:02:59.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 80   [00:03:00.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 80   [00:03:01.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 80   [00:03:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 80   [00:03:03.000] After ensureProjectForOpenFiles:
-Info 81   [00:03:04.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 81   [00:03:05.000] 	Files (5)
+Info 82   [00:02:57.000] -----------------------------------------------
+Info 83   [00:02:58.000] Before ensureProjectForOpenFiles:
+Info 84   [00:02:59.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 84   [00:03:00.000] 	Files (5)
 
-Info 81   [00:03:06.000] -----------------------------------------------
-Info 81   [00:03:07.000] Open files: 
-Info 81   [00:03:08.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 81   [00:03:09.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 81   [00:03:10.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 81   [00:03:11.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
+Info 84   [00:03:01.000] -----------------------------------------------
+Info 84   [00:03:02.000] Open files: 
+Info 84   [00:03:03.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 84   [00:03:04.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 84   [00:03:05.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 84   [00:03:06.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 84   [00:03:07.000] After ensureProjectForOpenFiles:
+Info 85   [00:03:08.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 85   [00:03:09.000] 	Files (5)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 81   [00:03:12.000] response:
+Info 85   [00:03:10.000] -----------------------------------------------
+Info 85   [00:03:11.000] Open files: 
+Info 85   [00:03:12.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 85   [00:03:13.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 85   [00:03:14.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 85   [00:03:15.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 85   [00:03:16.000] response:
     {
       "response": [
         {
@@ -939,7 +571,11 @@ Info 81   [00:03:12.000] response:
       ],
       "responseRequired": true
     }
-Info 82   [00:03:13.000] request:
+After request
+
+Before request
+
+Info 86   [00:03:17.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -948,26 +584,11 @@ Info 82   [00:03:13.000] request:
       "seq": 13,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
+Info 87   [00:03:24.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/file2.js]
 var y = 2;
@@ -977,27 +598,3 @@ function bar() {
 
 
 //// [/user/username/projects/myproject/file2.d.ts] file written with same contents
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file3.ts:
-  {}
-/user/username/projects/myproject/module.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-Info 83   [00:03:20.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }

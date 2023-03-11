@@ -1,13 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/globalFile3.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -43,12 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/globalFile3.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /a/b
 Info 3    [00:00:26.000] For info: /a/b/globalFile3.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -78,12 +72,12 @@ Info 16   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 17   [00:00:40.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:41.000] Project '/a/b/tsconfig.json' (Configured)
 Info 19   [00:00:42.000] 	Files (6)
-	/a/lib/lib.d.ts
-	/a/b/moduleFile1.ts
-	/a/b/file1Consumer1.ts
-	/a/b/file1Consumer2.ts
-	/a/b/globalFile3.ts
-	/a/b/moduleFile2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts Text-1 "export function Foo() { };"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
+	/a/b/file1Consumer2.ts Text-1 "import {Foo} from \"./moduleFile1\"; let z = 10;"
+	/a/b/globalFile3.ts SVC-1-0 "interface GlobalFoo { age: number }"
+	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
 
 
 	../lib/lib.d.ts
@@ -109,34 +103,36 @@ Info 21   [00:00:46.000] -----------------------------------------------
 Info 21   [00:00:47.000] Open files: 
 Info 21   [00:00:48.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
 Info 21   [00:00:49.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 21   [00:00:50.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Before request
+
 Info 22   [00:00:51.000] request:
     {
       "command": "change",
@@ -151,58 +147,14 @@ Info 22   [00:00:51.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 23   [00:00:52.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 24   [00:00:53.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -212,74 +164,35 @@ Info 24   [00:00:53.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 25   [00:00:54.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 26   [00:00:55.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 27   [00:00:56.000] Different program with same set of files
-Info 28   [00:00:57.000] Before ensureProjectForOpenFiles:
-Info 29   [00:00:58.000] Project '/a/b/tsconfig.json' (Configured)
-Info 29   [00:00:59.000] 	Files (6)
+Info 27   [00:00:56.000] Project '/a/b/tsconfig.json' (Configured)
+Info 28   [00:00:57.000] 	Files (6)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts Text-1 "export function Foo() { };"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
+	/a/b/file1Consumer2.ts Text-1 "import {Foo} from \"./moduleFile1\"; let z = 10;"
+	/a/b/globalFile3.ts SVC-1-1 "var T2: string;interface GlobalFoo { age: number }"
+	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
 
-Info 29   [00:01:00.000] -----------------------------------------------
-Info 29   [00:01:01.000] Open files: 
-Info 29   [00:01:02.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
-Info 29   [00:01:03.000] 		Projects: /a/b/tsconfig.json
-Info 29   [00:01:04.000] After ensureProjectForOpenFiles:
-Info 30   [00:01:05.000] Project '/a/b/tsconfig.json' (Configured)
-Info 30   [00:01:06.000] 	Files (6)
+Info 29   [00:00:58.000] -----------------------------------------------
+Info 30   [00:00:59.000] Before ensureProjectForOpenFiles:
+Info 31   [00:01:00.000] Project '/a/b/tsconfig.json' (Configured)
+Info 31   [00:01:01.000] 	Files (6)
 
-Info 30   [00:01:07.000] -----------------------------------------------
-Info 30   [00:01:08.000] Open files: 
-Info 30   [00:01:09.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
-Info 30   [00:01:10.000] 		Projects: /a/b/tsconfig.json
-After request
+Info 31   [00:01:02.000] -----------------------------------------------
+Info 31   [00:01:03.000] Open files: 
+Info 31   [00:01:04.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
+Info 31   [00:01:05.000] 		Projects: /a/b/tsconfig.json
+Info 31   [00:01:06.000] After ensureProjectForOpenFiles:
+Info 32   [00:01:07.000] Project '/a/b/tsconfig.json' (Configured)
+Info 32   [00:01:08.000] 	Files (6)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-Info 30   [00:01:11.000] response:
+Info 32   [00:01:09.000] -----------------------------------------------
+Info 32   [00:01:10.000] Open files: 
+Info 32   [00:01:11.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
+Info 32   [00:01:12.000] 		Projects: /a/b/tsconfig.json
+Info 32   [00:01:13.000] response:
     {
       "response": [
         {
@@ -296,3 +209,4 @@ Info 30   [00:01:11.000] response:
       ],
       "responseRequired": true
     }
+After request

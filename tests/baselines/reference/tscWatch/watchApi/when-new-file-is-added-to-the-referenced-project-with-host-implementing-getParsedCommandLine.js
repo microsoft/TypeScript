@@ -77,29 +77,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
+/user/username/projects/myproject/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/projects/project1/class1.ts:
+/user/username/projects/myproject/projects/project1/class1.ts: *new*
   {}
-/user/username/projects/myproject/projects/project2/class2.ts:
+/user/username/projects/myproject/projects/project2/class2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
+/user/username/projects/myproject/projects/project1: *new*
   {}
-/user/username/projects/myproject/projects/project2:
+/user/username/projects/myproject/projects/project2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -243,7 +243,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/projects/project1/class3.ts:
+/user/username/projects/myproject/projects/project1/class3.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -347,34 +347,6 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -390,34 +362,6 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
-
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
 
 exitCode:: ExitStatus.undefined
 

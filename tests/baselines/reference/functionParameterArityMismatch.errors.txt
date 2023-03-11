@@ -5,7 +5,7 @@ tests/cases/compiler/functionParameterArityMismatch.ts(11,1): error TS2575: No o
 tests/cases/compiler/functionParameterArityMismatch.ts(12,1): error TS2575: No overload expects 3 arguments, but overloads do exist that expect either 2 or 4 arguments.
 tests/cases/compiler/functionParameterArityMismatch.ts(13,1): error TS2575: No overload expects 5 arguments, but overloads do exist that expect either 4 or 6 arguments.
 tests/cases/compiler/functionParameterArityMismatch.ts(14,22): error TS2554: Expected 0-6 arguments, but got 7.
-tests/cases/compiler/functionParameterArityMismatch.ts(15,4): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/compiler/functionParameterArityMismatch.ts(15,19): error TS2554: Expected 0-6 arguments, but got 7.
 
 
 ==== tests/cases/compiler/functionParameterArityMismatch.ts (8 errors) ====
@@ -38,7 +38,7 @@ tests/cases/compiler/functionParameterArityMismatch.ts(15,4): error TS2556: A sp
     f2(1, 2, 3, 4, 5, 6, 7);
                          ~
 !!! error TS2554: Expected 0-6 arguments, but got 7.
-    f2(...[1], 2, 3, 4, 5, 6);
-       ~~~~~~
-!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    f2(1, 2, 3, 4, 5, ...[6, 7]);
+                      ~~~~~~~~~
+!!! error TS2554: Expected 0-6 arguments, but got 7.
     

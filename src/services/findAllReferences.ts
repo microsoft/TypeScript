@@ -200,7 +200,6 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     punctuationPart,
-    Push,
     rangeIsOnSingleLine,
     ReferencedSymbol,
     ReferencedSymbolDefinitionInfo,
@@ -1381,7 +1380,7 @@ export namespace Core {
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
-            private readonly result: Push<SymbolAndEntries>) {
+            private readonly result: SymbolAndEntries[]) {
         }
 
         includesSourceFile(sourceFile: SourceFile): boolean {

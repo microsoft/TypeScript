@@ -10,7 +10,6 @@ class A {
 >foo : <T>(x: T, y?: T) => T
 >x : T
 >y : T
->null : null
 }
 
 class B<T> {
@@ -20,7 +19,6 @@ class B<T> {
 >foo : (x: T, y?: T) => T
 >x : T
 >y : T
->null : null
 }
 
 class C<T> {
@@ -30,7 +28,6 @@ class C<T> {
 >foo : (x: T, y?: T) => T
 >x : T
 >y : T
->null : null
 }
 
 interface I<T> {

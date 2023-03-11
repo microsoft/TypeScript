@@ -134,10 +134,10 @@ describe("unittests:: tsserver:: plugins loading", () => {
 
         const host = createServerHost([aTs, tsconfig, libFile]);
         host.require = (_initialPath, moduleName) => {
-            session.logger.logs.push(`Require:: ${moduleName}`);
+            session.logger.log(`Require:: ${moduleName}`);
             return {
                 module: (): ts.server.PluginModule => {
-                    session.logger.logs.push(`PluginFactory Invoke`);
+                    session.logger.log(`PluginFactory Invoke`);
                     return {
                         create: Harness.LanguageService.makeDefaultProxy,
                         getExternalFiles: () => externalFiles[moduleName]
@@ -148,7 +148,7 @@ describe("unittests:: tsserver:: plugins loading", () => {
         };
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs], session);
-        session.logger.logs.push(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+        session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
         host.writeFile(tsconfig.path, JSON.stringify({
             compilerOptions: {
@@ -156,7 +156,7 @@ describe("unittests:: tsserver:: plugins loading", () => {
             }
         }));
         host.runQueuedTimeoutCallbacks();
-        session.logger.logs.push(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+        session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
         baselineTsserverLogs("plugins", "gets external files with config file reload", session);
     });
@@ -196,7 +196,7 @@ describe("unittests:: tsserver:: plugins overriding getSupportedCodeFixes", () =
                                     return ["b"];
                                 default:
                                     // Make this stable list of single item so we dont have to update the baseline for every additional error
-                                    return [info.languageService.getSupportedCodeFixes(fileName)[0]];
+                                    return info.languageService.getSupportedCodeFixes(fileName);
                             }
                         };
                         return proxy;

@@ -27,15 +27,12 @@ const isNotNull = <T,>(value: T | null): value is T => value !== null;
 >isNotNull : <T>(value: T | null) => value is T
 ><T,>(value: T | null): value is T => value !== null : <T>(value: T | null) => value is T
 >value : T | null
->null : null
 >value !== null : boolean
 >value : T | null
->null : null
 
 type Item = { value: string | null };
 >Item : { value: string | null; }
 >value : string | null
->null : null
 
 const item1 = satisfies<Item>()({ value: "1" });
 >item1 : { value: "1"; }
@@ -62,15 +59,12 @@ const item3 = satisfies<Item>()({ value: null });
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >{ value: null } : { value: null; }
 >value : null
->null : null
 
 const values2: Array<"1" | "2" | null> = ["1", "2", null];
 >values2 : ("1" | "2" | null)[]
->null : null
 >["1", "2", null] : ("1" | "2" | null)[]
 >"1" : "1"
 >"2" : "2"
->null : null
 
 const filteredValues2 = values2.filter(isNotNull);
 >filteredValues2 : ("1" | "2")[]

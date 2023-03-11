@@ -100,3 +100,56 @@ h(async v => v ? (def) => { } : Promise.reject());
 >Promise : PromiseConstructor
 >reject : <T = never>(reason?: any) => Promise<T>
 
+// repro from #29196
+const increment: (
+>increment : (num: number, str: string) => string | Promise<string | ((s: string) => any)>
+
+  num: number,
+>num : number
+
+  str: string
+>str : string
+
+) => Promise<((s: string) => any) | string> | string = async (num, str) => {
+>s : string
+>async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<(a: string) => number>
+>num : number
+>str : string
+
+  return a => {
+>a => {    return a.length  } : (a: string) => number
+>a : string
+
+    return a.length
+>a.length : number
+>a : string
+>length : number
+  }
+}
+
+const increment2: (
+>increment2 : (num: number, str: string) => Promise<string | ((s: string) => any)>
+
+  num: number,
+>num : number
+
+  str: string
+>str : string
+
+) => Promise<((s: string) => any) | string> = async (num, str) => {
+>s : string
+>async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<(a: string) => number>
+>num : number
+>str : string
+
+  return a => {
+>a => {    return a.length  } : (a: string) => number
+>a : string
+
+    return a.length
+>a.length : number
+>a : string
+>length : number
+  }
+}
+

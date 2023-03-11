@@ -7,12 +7,12 @@ tests/cases/compiler/setterWithReturn.ts(7,13): error TS2408: Setters cannot ret
         public set p1(arg1) {
             if (true) {
                 return arg1;
-                ~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS2408: Setters cannot return a value.
             }
             else {
                 return 0;
-                ~~~~~~~~~
+                ~~~~~~
 !!! error TS2408: Setters cannot return a value.
             }
        }

@@ -1,13 +1,4 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:34.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/projects/project2/class2.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
@@ -38,12 +29,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:34.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/projects/project2/class2.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:35.000] Search path: /user/username/projects/myproject/projects/project2
 Info 3    [00:00:36.000] For info: /user/username/projects/myproject/projects/project2/class2.ts :: Config file name: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 4    [00:00:37.000] Creating configuration project /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -91,9 +85,9 @@ Info 21   [00:00:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:55.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:56.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 24   [00:00:57.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -113,36 +107,36 @@ Info 28   [00:01:03.000] -----------------------------------------------
 Info 28   [00:01:04.000] Open files: 
 Info 28   [00:01:05.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 28   [00:01:06.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
-/user/username/projects/myproject/projects/project1:
-  {}
-
 Info 28   [00:01:07.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2: *new*
+  {}
+/user/username/projects/myproject/projects/project1: *new*
+  {}
+
 Info 29   [00:01:10.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 30   [00:01:11.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 31   [00:01:12.000] Scheduled: *ensureProjectForOpenFiles*
@@ -152,40 +146,16 @@ Before checking timeout queue length (2) and running
 class class3 {}
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
-/user/username/projects/myproject/projects/project1:
-  {}
-
 Info 33   [00:01:14.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 34   [00:01:15.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 35   [00:01:16.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.ts 500 undefined WatchType: Closed Script info
 Info 36   [00:01:17.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:18.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 38   [00:01:19.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project1/class3.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class3.ts Text-1 "class class3 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -234,7 +204,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/projects/project1/class3.ts:
+/user/username/projects/myproject/projects/project1/class3.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -254,59 +224,7 @@ Before checking timeout queue length (0) and running
 declare class file {}
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
-/user/username/projects/myproject/projects/project1:
-  {}
-
 After checking timeout queue length (0) and running
-
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
-/user/username/projects/myproject/projects/project1:
-  {}
 
 Info 49   [00:01:48.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 50   [00:01:49.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
@@ -316,56 +234,4 @@ Before checking timeout queue length (0) and running
 declare class class3 {}
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
-/user/username/projects/myproject/projects/project1:
-  {}
-
 After checking timeout queue length (0) and running
-
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
-/user/username/projects/myproject/projects/project1:
-  {}

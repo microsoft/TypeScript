@@ -18,13 +18,11 @@ const numIndexed: {[idx: number]: string} = null as any;
 >numIndexed : { [idx: number]: string; }
 >idx : number
 >null as any : any
->null : null
 
 const strIndexed: {[idx: string]: string} = null as any;
 >strIndexed : { [idx: string]: string; }
 >idx : string
 >null as any : any
->null : null
 
 let numed = 6;
 >numed : number

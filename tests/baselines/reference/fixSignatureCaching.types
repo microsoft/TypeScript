@@ -1164,10 +1164,8 @@ define(function () {
 >a != null && b != null : boolean
 >a != null : boolean
 >a : any
->null : null
 >b != null : boolean
 >b : any
->null : null
 >a.toLowerCase() === b.toLowerCase() : boolean
 >a.toLowerCase() : any
 >a.toLowerCase : any
@@ -1507,8 +1505,6 @@ define(function () {
             }
         }
         return null;
->null : null
-
     };
 
     /**
@@ -1641,7 +1637,6 @@ define(function () {
                 if (match !== null) {
 >match !== null : boolean
 >match : any
->null : null
 
                     return match[1];
 >match[1] : any
@@ -1651,8 +1646,6 @@ define(function () {
             }
         }
         return null;
->null : null
-
     };
 
     /**
@@ -1890,7 +1883,6 @@ define(function () {
 >cache.phone : any
 >cache : any
 >phone : any
->null : null
 
             return; // unambiguously identified as tablet
         }
@@ -1928,7 +1920,6 @@ define(function () {
 >cache.tablet : any
 >cache : any
 >tablet : any
->null : null
 
             return; // unambiguously identified as phone
         }
@@ -1973,7 +1964,6 @@ define(function () {
 >cache.phone : any
 >cache : any
 >phone : any
->null : null
 
             } else if (phoneSized) {
 >phoneSized : any
@@ -1996,7 +1986,6 @@ define(function () {
 >cache.tablet : any
 >cache : any
 >tablet : any
->null : null
 
             } else {
                 cache.mobile = cache.tablet = impl.FALLBACK_TABLET;
@@ -2017,7 +2006,6 @@ define(function () {
 >cache.phone : any
 >cache : any
 >phone : any
->null : null
             }
         } else if (impl.isTabletFallback(userAgent)) {
 >impl.isTabletFallback(userAgent) : any
@@ -2044,7 +2032,6 @@ define(function () {
 >cache.phone : any
 >cache : any
 >phone : any
->null : null
 
         } else {
             // not mobile at all!
@@ -2061,7 +2048,6 @@ define(function () {
 >cache.phone : any
 >cache : any
 >phone : any
->null : null
         }
     };
 
@@ -2089,7 +2075,6 @@ define(function () {
 >t.mobile : any
 >t : any
 >mobile : any
->null : null
 
         if (
             // Apple iOS 3.2-5.1 - Tested on the original iPad (4.3 / 5.0), iPad 2 (4.3), iPad 3 (5.1), original iPhone (3.1), iPhone 3 (3.2), 3GS (4.3), 4 (4.3 / 5.0), and 4S (5.1)

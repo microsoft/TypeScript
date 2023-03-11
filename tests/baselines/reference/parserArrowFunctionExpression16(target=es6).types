@@ -7,8 +7,6 @@ true ? false ? (param): string => param : null : null // Not legal JS; "Unexpect
 >(param): string => param : (param: any) => string
 >param : any
 >param : any
->null : null
->null : null
 
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
 true ? false ? (param): string => param : null : null
@@ -19,6 +17,4 @@ true ? false ? (param): string => param : null : null
 >(param): string => param : (param: any) => string
 >param : any
 >param : any
->null : null
->null : null
 

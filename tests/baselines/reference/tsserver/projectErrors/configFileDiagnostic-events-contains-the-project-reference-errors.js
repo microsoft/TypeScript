@@ -1,13 +1,4 @@
 Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:16.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/app.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/app.ts]
 let x = 10
@@ -32,12 +23,15 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/tsconfig.json
@@ -74,8 +68,8 @@ Info 13   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:29.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:30.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:31.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/app.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/app.ts SVC-1-0 "let x = 10"
 
 
 	../lib/lib.d.ts
@@ -97,23 +91,20 @@ Info 21   [00:00:38.000] -----------------------------------------------
 Info 21   [00:00:39.000] Open files: 
 Info 21   [00:00:40.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 21   [00:00:41.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/no-such-tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 21   [00:00:42.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/no-such-tsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}

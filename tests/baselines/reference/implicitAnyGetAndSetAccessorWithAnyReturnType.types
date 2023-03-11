@@ -5,7 +5,6 @@ class GetAndSet {
 
     getAndSet = null;             // error at "getAndSet"
 >getAndSet : any
->null : null
 
     public get haveGetAndSet() {  // this should not be an error
 >haveGetAndSet : any
@@ -46,6 +45,5 @@ class GetterOnly {
 >haveOnlyGet : any
 
         return null;
->null : null
     }
 }

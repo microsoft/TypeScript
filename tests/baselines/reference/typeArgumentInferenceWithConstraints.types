@@ -167,7 +167,6 @@ someGenerics4(4, () => null); // Valid
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
 >4 : 4
 >() => null : () => any
->null : null
 
 someGenerics4<string, number>('', () => 3);
 >someGenerics4<string, number>('', () => 3) : void
@@ -187,8 +186,6 @@ someGenerics4<string, number>('', (x: string) => ''); // Error
 someGenerics4<string, number>(null, null);
 >someGenerics4<string, number>(null, null) : void
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->null : null
->null : null
 
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5<U extends number, T>(n: T, f: (x: U) => void) { }
@@ -202,7 +199,6 @@ someGenerics5(4, () => null); // Valid
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
 >4 : 4
 >() => null : () => any
->null : null
 
 someGenerics5<number, string>('', () => 3);
 >someGenerics5<number, string>('', () => 3) : void
@@ -222,8 +218,6 @@ someGenerics5<number, string>('', (x: string) => ''); // Error
 someGenerics5<string, number>(null, null); // Error
 >someGenerics5<string, number>(null, null) : void
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->null : null
->null : null
 
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6<A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
@@ -351,9 +345,6 @@ var x = someGenerics8<string>(someGenerics7); // Error
 x<string, string, string>(null, null, null); // Error
 >x<string, string, string>(null, null, null) : any
 >x : string
->null : null
->null : null
->null : null
 
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9<T extends any>(a: T, b: T, c: T): T {
@@ -363,7 +354,6 @@ function someGenerics9<T extends any>(a: T, b: T, c: T): T {
 >c : T
 
     return null;
->null : null
 }
 var a9a = someGenerics9('', 0, []);
 >a9a : string
@@ -388,7 +378,6 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >{ b: '' } : { b: string; }
 >b : string
 >'' : ""
->null : null
 
 var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
@@ -488,7 +477,6 @@ var arr = someGenerics9([], null, undefined);
 >someGenerics9([], null, undefined) : any[]
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >[] : undefined[]
->null : null
 >undefined : undefined
 
 var arr: any[];

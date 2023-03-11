@@ -174,7 +174,6 @@ module Formatting {
 >nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition()) : string
 >nextToken == null : boolean
 >nextToken : TokenSpan
->null : null
 >"null" : "null"
 >(nextToken.Span.startPosition() + "," + nextToken.Span.endPosition()) : string
 >nextToken.Span.startPosition() + "," + nextToken.Span.endPosition() : string
@@ -294,7 +293,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : IndentationInfo
->null : null
 
             // This handles the case:
             //      return (
@@ -358,7 +356,6 @@ module Formatting {
             if (indentationInfo == null) {
 >indentationInfo == null : boolean
 >indentationInfo : IndentationInfo
->null : null
 
                 //// For anything else
 
@@ -376,7 +373,6 @@ module Formatting {
 >node.Parent : any
 >node : ParseNode
 >Parent : any
->null : null
 >token.Span.span.start() == node.Parent.AuthorNode.Details.StartOffset : boolean
 >token.Span.span.start() : any
 >token.Span.span.start : any
@@ -451,7 +447,6 @@ module Formatting {
 >atkIdentifier : any
 >nextToken != null : boolean
 >nextToken : TokenSpan
->null : null
 >nextToken.Token == AuthorTokenKind.atkColon : boolean
 >nextToken.Token : any
 >nextToken : TokenSpan
@@ -499,7 +494,6 @@ module Formatting {
             if (indentationInfo != null) {
 >indentationInfo != null : boolean
 >indentationInfo : IndentationInfo
->null : null
 
                 var edit = this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent);
 >edit : TextEditInfo
@@ -519,7 +513,6 @@ module Formatting {
                 if (edit != null) {
 >edit != null : boolean
 >edit : TextEditInfo
->null : null
 
                     this.RegisterIndentation(edit, sameLineIndent);
 >this.RegisterIndentation(edit, sameLineIndent) : void
@@ -637,7 +630,6 @@ module Formatting {
 >token : TokenSpan
 >Span : any
 >startPosition : any
->null : null
 
             if (commentFirstLineIndentationDelta != undefined) {
 >commentFirstLineIndentationDelta != undefined : boolean
@@ -691,7 +683,6 @@ module Formatting {
                     if (commentIndentationInfo != null) {
 >commentIndentationInfo != null : boolean
 >commentIndentationInfo : IndentationInfo
->null : null
 
                         var tokenStartPosition = lineStartPosition + lineIndent.length;
 >tokenStartPosition : any
@@ -714,7 +705,6 @@ module Formatting {
                         if (commentIndentationEdit != null) {
 >commentIndentationEdit != null : boolean
 >commentIndentationEdit : TextEditInfo
->null : null
 
                             result.add(commentIndentationEdit);
 >result.add(commentIndentationEdit) : any
@@ -832,7 +822,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : IndentationInfo
->null : null
 
             switch (token.Token) {
 >token.Token : any
@@ -958,7 +947,6 @@ module Formatting {
                     }
 
                     return null;
->null : null
 
                 case AuthorTokenKind.atkSColon:
 >AuthorTokenKind.atkSColon : any
@@ -998,7 +986,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : IndentationInfo
->null : null
 
             if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||                node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen || node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse : boolean
@@ -1069,7 +1056,6 @@ module Formatting {
 
                 // if the open curly belongs to a non-indented object, do nothing here.
                 return null;
->null : null
             }
 
             // effective identation of the block
@@ -1093,7 +1079,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : IndentationInfo
->null : null
 
             if (this.smartIndent) {
 >this.smartIndent : boolean
@@ -1168,7 +1153,6 @@ module Formatting {
             }
 
             return null;
->null : null
         }
 
         private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
@@ -1178,7 +1162,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : IndentationInfo
->null : null
 
             // Only indent line comment and the first line of block comment
             var twoCharSpan = token.Span.Intersection(new Span(token.Span.startPosition(), 2));
@@ -1203,7 +1186,6 @@ module Formatting {
 >twoCharSpan != null && (twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*") : boolean
 >twoCharSpan != null : boolean
 >twoCharSpan : any
->null : null
 >(twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*") : boolean
 >twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*" : boolean
 >twoCharSpan.GetText() == "//" : boolean
@@ -1225,12 +1207,10 @@ module Formatting {
 >node.ChildrenIndentationDelta : any
 >node : ParseNode
 >ChildrenIndentationDelta : any
->null : null
 >node.Parent != null : boolean
 >node.Parent : any
 >node : ParseNode
 >Parent : any
->null : null
 
                     node = node.Parent;
 >node = node.Parent : any
@@ -1423,12 +1403,10 @@ module Formatting {
 >languageHostIndentation == null || tree.StartNodeSelf == null : boolean
 >languageHostIndentation == null : boolean
 >languageHostIndentation : string
->null : null
 >tree.StartNodeSelf == null : boolean
 >tree.StartNodeSelf : any
 >tree : ParseTree
 >StartNodeSelf : any
->null : null
 
                 return;
 
@@ -1634,7 +1612,6 @@ module Formatting {
             }
 
             return null;
->null : null
         }
 
         private ApplyIndentationLevel(existingIndentation: string, level: number): string {
@@ -1732,7 +1709,6 @@ module Formatting {
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >this : this
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->null : null
 >totalIndent : number
 >tabSize : any
 >convertTabsToSpaces : any
@@ -1841,7 +1817,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : IndentationInfo
->null : null
 
             var indentableParent = node;
 >indentableParent : ParseNode
@@ -1851,7 +1826,6 @@ module Formatting {
 >indentableParent != null && !indentableParent.CanIndent() : boolean
 >indentableParent != null : boolean
 >indentableParent : ParseNode
->null : null
 >!indentableParent.CanIndent() : boolean
 >indentableParent.CanIndent() : any
 >indentableParent.CanIndent : any
@@ -1869,7 +1843,6 @@ module Formatting {
 >indentableParent != null && indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
 >indentableParent != null : boolean
 >indentableParent : ParseNode
->null : null
 >indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
 >indentableParent.AuthorNode.Details.Kind : any
 >indentableParent.AuthorNode.Details : any
@@ -1990,7 +1963,6 @@ module Formatting {
 >0 : 0
 
                 return null;
->null : null
 
             var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
 >currentIndentSize : number
@@ -2026,7 +1998,6 @@ module Formatting {
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >this : this
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->null : null
 >newIndentSize : number
 >this.editorOptions.TabSize : any
 >this.editorOptions : Services.EditorOptions
@@ -2042,7 +2013,6 @@ module Formatting {
             if (newIndent != null) {
 >newIndent != null : boolean
 >newIndent : string
->null : null
 
                 return new IndentationInfo(newIndent, 0);
 >new IndentationInfo(newIndent, 0) : any
@@ -2052,7 +2022,6 @@ module Formatting {
             }
 
             return null;
->null : null
         }
 
         private GetIndentationDelta(tokenStartPosition: number, childTokenStartPosition: number/*?*/): number/*?*/ {
@@ -2083,7 +2052,6 @@ module Formatting {
             if (indentationDeltaSize === null) {
 >indentationDeltaSize === null : boolean
 >indentationDeltaSize : any
->null : null
 
                 var indentEditInfo = this.indentationBag.FindIndent(tokenStartPosition);
 >indentEditInfo : any
@@ -2099,10 +2067,8 @@ module Formatting {
                 if (indentEditInfo == null)
 >indentEditInfo == null : boolean
 >indentEditInfo : any
->null : null
 
                     return null;
->null : null
 
                 var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
 >origIndentText : any
@@ -2169,7 +2135,6 @@ module Formatting {
                 if (childTokenStartPosition !== null) {
 >childTokenStartPosition !== null : boolean
 >childTokenStartPosition : number
->null : null
 
                     var childTokenLineStartPosition = this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition();
 >childTokenLineStartPosition : any
@@ -2261,14 +2226,12 @@ module Formatting {
 
             var indentNode: ParseNode = null;
 >indentNode : ParseNode
->null : null
 
             if (tree.StartNodeSelf != null) {
 >tree.StartNodeSelf != null : boolean
 >tree.StartNodeSelf : any
 >tree : ParseTree
 >StartNodeSelf : any
->null : null
 
                 if (!this.smartIndent && tree.StartNodePreviousSibling !== null && tree.StartNodeSelf.AuthorNode.Label == 0 && tree.StartNodePreviousSibling.Label == 0) {
 >!this.smartIndent && tree.StartNodePreviousSibling !== null && tree.StartNodeSelf.AuthorNode.Label == 0 && tree.StartNodePreviousSibling.Label == 0 : boolean
@@ -2282,7 +2245,6 @@ module Formatting {
 >tree.StartNodePreviousSibling : any
 >tree : ParseTree
 >StartNodePreviousSibling : any
->null : null
 >tree.StartNodeSelf.AuthorNode.Label == 0 : boolean
 >tree.StartNodeSelf.AuthorNode.Label : any
 >tree.StartNodeSelf.AuthorNode : any
@@ -2342,7 +2304,6 @@ module Formatting {
 >node.Parent : any
 >node : ParseNode
 >Parent : any
->null : null
 >this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) == lineNum : boolean
 >this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) : any
 >this.snapshot.GetLineNumberFromPosition : any
@@ -2411,7 +2372,6 @@ module Formatting {
 >parent != null && parent.AuthorNode.Details.StartOffset == this.firstToken.Span.startPosition() : boolean
 >parent != null : boolean
 >parent : ParseNode
->null : null
 >parent.AuthorNode.Details.StartOffset == this.firstToken.Span.startPosition() : boolean
 >parent.AuthorNode.Details.StartOffset : any
 >parent.AuthorNode.Details : any
@@ -2469,7 +2429,6 @@ module Formatting {
 >parent != null &&                                startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : boolean
 >parent != null : boolean
 >parent : ParseNode
->null : null
 
                                 startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset)) {
 >startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : boolean
@@ -2502,7 +2461,6 @@ module Formatting {
 >parent != null && !parent.CanIndent() : boolean
 >parent != null : boolean
 >parent : ParseNode
->null : null
 >!parent.CanIndent() : boolean
 >parent.CanIndent() : any
 >parent.CanIndent : any
@@ -2522,7 +2480,6 @@ module Formatting {
 >parent != null && parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
 >parent != null : boolean
 >parent : ParseNode
->null : null
 >parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
 >parent.AuthorNode.Details.Kind : any
 >parent.AuthorNode.Details : any
@@ -2557,7 +2514,6 @@ module Formatting {
             if (indentNode != null) {
 >indentNode != null : boolean
 >indentNode : ParseNode
->null : null
 
                 var indentOverride = this.GetLineIndentationForOffset(offset);
 >indentOverride : string
@@ -2579,12 +2535,10 @@ module Formatting {
 >tree.StartNodePreviousSibling : any
 >tree : ParseTree
 >StartNodePreviousSibling : any
->null : null
 >indentNode.Parent != null : boolean
 >indentNode.Parent : any
 >indentNode : ParseNode
 >Parent : any
->null : null
 
                     ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {
 >ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {                        if (sibling !== indentNode) {                            if (sibling.CanIndent())                                sibling.SetIndentationOverride(indentOverride);                        }                    }) : any
@@ -2717,7 +2671,6 @@ module Formatting {
                 while (indentNode != null);
 >indentNode != null : boolean
 >indentNode : ParseNode
->null : null
             }
         }
 
@@ -2743,7 +2696,6 @@ module Formatting {
             if (indentationEdit != null) {
 >indentationEdit != null : boolean
 >indentationEdit : IndentationEditInfo
->null : null
 
                 return indentationEdit.Indentation();
 >indentationEdit.Indentation() : any
@@ -2820,7 +2772,6 @@ module Formatting {
         {
             var indentationInfo: IndentationEditInfo = null;
 >indentationInfo : IndentationEditInfo
->null : null
 
             if (sameLineIndent) {
 >sameLineIndent : boolean
@@ -2910,7 +2861,6 @@ module Formatting {
             if (token == null)
 >token == null : boolean
 >token : TokenSpan
->null : null
 
                 return;
 

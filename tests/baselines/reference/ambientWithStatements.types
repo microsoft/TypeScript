@@ -13,7 +13,6 @@ declare module M {
 
     for (x in null) { }
 >x : any
->null : null
 
     if (true) { } else { }
 >true : true

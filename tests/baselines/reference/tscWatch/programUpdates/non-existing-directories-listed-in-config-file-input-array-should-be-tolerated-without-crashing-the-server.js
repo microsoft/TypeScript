@@ -43,20 +43,18 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/app:
+/a/b/app: *new*
   {"pollingInterval":500}
-/a/b/test:
+/a/b/test: *new*
   {"pollingInterval":500}
-/a/b/something:
+/a/b/something: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

@@ -42,8 +42,6 @@ export default React.createClass({
 >(      null    ) : null
 
       null
->null : null
-
     );
   }
 });

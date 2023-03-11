@@ -42,7 +42,6 @@ function testFn(input) {
 
     } else {
         return null;
->null : null
     }
 }
 

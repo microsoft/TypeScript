@@ -79,6 +79,5 @@ class D extends C {
         }
         else
             return null;
->null : null
     }
 }

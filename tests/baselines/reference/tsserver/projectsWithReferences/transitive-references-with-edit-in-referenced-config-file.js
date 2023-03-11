@@ -40,12 +40,6 @@ export class X {}
 export class A {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:40.000] Search path: /user/username/projects/myproject/c
 Info 2    [00:00:41.000] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
 Info 3    [00:00:42.000] Creating configuration project /user/username/projects/myproject/c/tsconfig.json
@@ -124,11 +118,11 @@ Info 26   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 27   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:01:07.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 29   [00:01:08.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -166,35 +160,35 @@ export class A {}
 
 
 PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
+/user/username/projects/myproject/c/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a/tsconfig.json:
+/user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/b/index.ts:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts:
+/user/username/projects/myproject/a/index.ts: *new*
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
-/user/username/projects/myproject/refs:
+/user/username/projects/myproject/refs: *new*
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/a: *new*
   {}
 
 Info 37   [00:01:29.000] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -229,11 +223,11 @@ Info 44   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 45   [00:01:37.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 46   [00:01:38.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 47   [00:01:39.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/nrefs/a.d.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/nrefs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -290,7 +284,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/nrefs/a.d.ts:
+/user/username/projects/myproject/nrefs/a.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -298,7 +292,11 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/refs:
   {}
-/user/username/projects/myproject/nrefs:
+/user/username/projects/myproject/nrefs: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/a:
   {}
 
 Info 52   [00:01:59.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
@@ -309,40 +307,6 @@ Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/b/tsconfig.json]
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
 
-
-PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/b/index.ts:
-  {}
-/user/username/projects/myproject/a/index.ts:
-  {}
-/user/username/projects/myproject/refs/a.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}
-/user/username/projects/myproject/refs:
-  {}
-/user/username/projects/myproject/nrefs:
-  {}
 
 Info 56   [00:02:03.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 57   [00:02:04.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
@@ -375,11 +339,11 @@ Info 62   [00:02:09.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 63   [00:02:10.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 64   [00:02:11.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 65   [00:02:12.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -444,5 +408,9 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/refs:
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/a: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/nrefs:
   {}

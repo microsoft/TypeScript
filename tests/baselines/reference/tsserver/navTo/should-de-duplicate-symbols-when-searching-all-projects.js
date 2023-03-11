@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/tsconfig.json]
 {
@@ -37,12 +28,15 @@ export const ghijkl = a.abcdef;
 {"references":[{"path":"./a"},{"path":"./b"}],"files":[]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a
 Info 3    [00:00:20.000] For info: /a/index.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/tsconfig.json
@@ -65,7 +59,7 @@ Info 12   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:30.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:31.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:32.000] 	Files (1)
-	/a/index.ts
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
 
 
 	index.ts
@@ -89,28 +83,30 @@ Info 23   [00:00:45.000] -----------------------------------------------
 Info 23   [00:00:46.000] Open files: 
 Info 23   [00:00:47.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 23   [00:00:48.000] 		Projects: /a/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 23   [00:00:49.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
+Before request
+
 Info 24   [00:00:50.000] request:
     {
       "command": "navto",
@@ -120,24 +116,6 @@ Info 24   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 25   [00:00:51.000] Loading configured project /tsconfig.json
 Info 26   [00:00:52.000] Config: /tsconfig.json : {
  "rootNames": [],
@@ -175,18 +153,21 @@ Info 29   [00:00:55.000] FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 
 Info 30   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info 31   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info 32   [00:00:58.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 33   [00:00:59.000] Different program with same set of files
-Info 34   [00:01:00.000] Creating configuration project /b/tsconfig.json
-Info 35   [00:01:01.000] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:01:02.000] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info 37   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-Info 38   [00:01:04.000] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Info 39   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Info 40   [00:01:06.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 41   [00:01:07.000] Project '/b/tsconfig.json' (Configured)
-Info 42   [00:01:08.000] 	Files (2)
-	/a/index.ts
-	/b/index.ts
+Info 33   [00:00:59.000] Project '/tsconfig.json' (Configured)
+Info 34   [00:01:00.000] 	Files (0)
+
+Info 35   [00:01:01.000] -----------------------------------------------
+Info 36   [00:01:02.000] Creating configuration project /b/tsconfig.json
+Info 37   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
+Info 38   [00:01:04.000] Starting updateGraphWorker: Project: /b/tsconfig.json
+Info 39   [00:01:05.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
+Info 40   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
+Info 41   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
+Info 42   [00:01:08.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 43   [00:01:09.000] Project '/b/tsconfig.json' (Configured)
+Info 44   [00:01:10.000] 	Files (2)
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
+	/b/index.ts Text-1 "import a = require(\"../a\");\nexport const ghijkl = a.abcdef;"
 
 
 	../a/index.ts
@@ -194,34 +175,8 @@ Info 42   [00:01:08.000] 	Files (2)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 43   [00:01:09.000] -----------------------------------------------
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-/b/tsconfig.json:
-  {}
-/b/index.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
-
-Info 44   [00:01:10.000] response:
+Info 45   [00:01:11.000] -----------------------------------------------
+Info 46   [00:01:12.000] response:
     {
       "response": [
         {
@@ -243,3 +198,28 @@ Info 44   [00:01:10.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json:
+  {}
+/tsconfig.json:
+  {}
+/b/tsconfig.json: *new*
+  {}
+/b/index.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a:
+  {}
+/b: *new*
+  {}

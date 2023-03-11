@@ -60,7 +60,6 @@ f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101
 >b : string
 >'hi' : "hi"
 >c : null
->null : null
 >undefined : undefined
 >{ c: false, d: 12, b: undefined } : { c: false; d: number; b: undefined; }
 >c : false

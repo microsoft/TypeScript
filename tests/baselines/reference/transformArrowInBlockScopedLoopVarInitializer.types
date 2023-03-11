@@ -5,7 +5,6 @@ while (true)
 {
     let local = null;
 >local : any
->null : null
 
     var a = () => local; // <-- Lambda should be converted to function()
 >a : () => any

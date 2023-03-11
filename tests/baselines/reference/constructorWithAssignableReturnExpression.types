@@ -61,6 +61,5 @@ class G<T> {
 >{ x: <T>null } : { x: T; }
 >x : T
 ><T>null : T
->null : null
     }
 }

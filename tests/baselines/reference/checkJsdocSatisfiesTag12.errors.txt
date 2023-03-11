@@ -30,7 +30,7 @@
      * @satisfies {T1}
      */
     const t2 = { a: 1, b: 1 };
-                       ~~~~
+                       ~
 !!! error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'T1'.
 !!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
     
@@ -53,7 +53,7 @@
      * @satisfies {T2}
      */
     const t6 = { a: 'test', b: 'test' };
-                            ~~~~~~~~~
+                            ~
 !!! error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T2'.
 !!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
     

@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"composite":true,"resolveJsonModule":true}}
@@ -29,12 +20,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:24.000] For info: /user/username/projects/myproject/index.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -63,9 +57,9 @@ Info 17   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 18   [00:00:39.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:00:40.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 20   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/tsconfig.json
-	/user/username/projects/myproject/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/tsconfig.json Text-1 "{\"compilerOptions\":{\"composite\":true,\"resolveJsonModule\":true}}"
+	/user/username/projects/myproject/index.ts SVC-1-0 "import * as tsconfig from \"./tsconfig.json\";"
 
 
 	../../../../a/lib/lib.d.ts
@@ -85,27 +79,26 @@ Info 24   [00:00:47.000] -----------------------------------------------
 Info 24   [00:00:48.000] Open files: 
 Info 24   [00:00:49.000] 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 Info 24   [00:00:50.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 24   [00:00:51.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}

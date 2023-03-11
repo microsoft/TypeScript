@@ -1,4 +1,12 @@
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.ts]
+export const a = 0;
+
+//// [/tsconfig.json]
+{ "files": ["./a.ts"] }
+
+
 Info 1    [00:00:08.000] request:
     {
       "command": "open",
@@ -8,20 +16,6 @@ Info 1    [00:00:08.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.ts]
-export const a = 0;
-
-//// [/tsconfig.json]
-{ "files": ["./a.ts"] }
-
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
@@ -39,7 +33,7 @@ Info 8    [00:00:15.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 9    [00:00:16.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:17.000] Project '/tsconfig.json' (Configured)
 Info 11   [00:00:18.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 "export const a = 0;"
 
 
 	a.ts
@@ -53,22 +47,22 @@ Info 13   [00:00:22.000] -----------------------------------------------
 Info 13   [00:00:23.000] Open files: 
 Info 13   [00:00:24.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 13   [00:00:25.000] 		Projects: /tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 13   [00:00:26.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+
+Before request
+
 Info 14   [00:00:27.000] request:
     {
       "command": "getEditsForRefactor",
@@ -84,30 +78,6 @@ Info 14   [00:00:27.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 15   [00:00:28.000] response:
     {
       "response": {
@@ -164,3 +134,4 @@ Info 15   [00:00:28.000] response:
       },
       "responseRequired": true
     }
+After request

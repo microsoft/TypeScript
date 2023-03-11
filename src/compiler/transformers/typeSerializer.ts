@@ -10,7 +10,6 @@ import {
     ConditionalTypeNode,
     EntityName,
     Expression,
-    factory,
     findAncestor,
     FunctionLikeDeclaration,
     getAllAccessorDeclarations,
@@ -138,6 +137,7 @@ export interface RuntimeTypeSerializer {
 /** @internal */
 export function createRuntimeTypeSerializer(context: TransformationContext): RuntimeTypeSerializer {
     const {
+        factory,
         hoistVariableDeclaration
     } = context;
 

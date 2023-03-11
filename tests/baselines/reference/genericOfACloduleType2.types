@@ -32,7 +32,6 @@ module M {
 >g1.bar : (x: C) => C
 >g1 : G<C>
 >bar : (x: C) => C
->null : null
 >foo : () => void
 }
 

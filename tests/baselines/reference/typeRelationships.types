@@ -62,7 +62,6 @@ class C {
 >this.self : this
 >this : this
 >self : this
->null : null
 >undefined : undefined
     }
     f3(b: boolean) {

@@ -53,7 +53,6 @@ for (var idx in {}) { throw idx; }
 >idx : string
 
 do { throw null; }while(true)
->null : null
 >true : true
 
 var j = 0;

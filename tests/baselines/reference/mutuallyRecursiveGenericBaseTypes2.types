@@ -4,7 +4,6 @@ class foo<T>
 {
     bar(): foo2<T[]> { return null; }
 >bar : () => foo2<T[]>
->null : null
 }
  
 class foo2<T> extends foo<T> {

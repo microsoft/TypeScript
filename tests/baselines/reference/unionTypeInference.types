@@ -209,7 +209,6 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
     const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
 >deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
 >name : string
->null : null
 >deepPromised : DeepPromised<T>
 
     for (const value of Object.values(deepPromisedWithIndexer)) {

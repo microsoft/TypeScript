@@ -7,7 +7,6 @@ var n;
 function f(a = null, b = n, l = []) {
 >f : (a?: any, b?: number, l?: any[]) => void
 >a : any
->null : null
 >b : number
 >n : number
 >l : any[]
@@ -22,7 +21,6 @@ function f(a = null, b = n, l = []) {
     a = null
 >a = null : null
 >a : any
->null : null
 
     a = 1
 >a = 1 : 1

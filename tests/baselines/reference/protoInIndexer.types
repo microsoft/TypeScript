@@ -8,6 +8,5 @@ class X {
 >this['__proto__'] : error
 >this : this
 >'__proto__' : "__proto__"
->null : null
     }
 }

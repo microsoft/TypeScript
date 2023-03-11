@@ -79,7 +79,6 @@ var resultIsNumber5 = (OBJECT, NUMBER);
 //Literal and expression
 null, NUMBER;
 >null, NUMBER : number
->null : null
 >NUMBER : number
 
 ANY = undefined, NUMBER;
@@ -122,7 +121,6 @@ var resultIsNumber6 = (null, NUMBER);
 >resultIsNumber6 : number
 >(null, NUMBER) : number
 >null, NUMBER : number
->null : null
 >NUMBER : number
 
 var resultIsNumber7 = (ANY = undefined, NUMBER);

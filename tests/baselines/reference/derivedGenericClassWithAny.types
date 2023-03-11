@@ -7,13 +7,11 @@ class C<T extends number> {
 
     get X(): T { return null; }
 >X : T
->null : null
 
     foo(): T {
 >foo : () => T
 
         return null;
->null : null
     }
 }
 
@@ -28,7 +26,6 @@ class D extends C<number> {
 >X : any
 
         return null;
->null : null
     }
     foo(): any {
 >foo : () => any
@@ -44,13 +41,11 @@ class D extends C<number> {
 >Y : any
 
         return null;
->null : null
     }
     static bar(): any {
 >bar : () => any
 
         return null;
->null : null
     }
 }
 

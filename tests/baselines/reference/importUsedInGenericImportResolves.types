@@ -14,5 +14,4 @@ export const a: import("./test1").T<typeof import("./test2").theme> = null as an
 >a : import("tests/cases/compiler/test1").T<{ a: string; }>
 >theme : error
 >null as any : any
->null : null
 

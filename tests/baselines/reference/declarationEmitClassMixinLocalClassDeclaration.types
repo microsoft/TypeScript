@@ -19,7 +19,6 @@ type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T
 export const Mixin: MixinHelperFunc = null as any
 >Mixin : MixinHelperFunc
 >null as any : any
->null : null
 
 
 export class Base {}

@@ -39,7 +39,6 @@ type I3 = & new () => boolean
 
 type I4 = & new () => boolean & null;
 >I4 : new () => boolean & null
->null : null
 
 type I5 = string & new (any: any, any2: any) => any & any;
 >I5 : string & (new (any: any, any2: any) => any & any)

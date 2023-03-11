@@ -100,7 +100,6 @@ var ResultIsAny7 = void undefined;
 var ResultIsAny8 = void null;
 >ResultIsAny8 : any
 >void null : undefined
->null : null
 
 // any type expressions
 var ResultIsAny9 = void ANY2[0]
@@ -165,7 +164,6 @@ var ResultIsAny17 = void (null + undefined);
 >void (null + undefined) : undefined
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsAny18 = void (null + null);
@@ -173,8 +171,6 @@ var ResultIsAny18 = void (null + null);
 >void (null + null) : undefined
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsAny19 = void (undefined + undefined);
 >ResultIsAny19 : any

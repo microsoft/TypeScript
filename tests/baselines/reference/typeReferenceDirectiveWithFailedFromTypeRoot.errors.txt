@@ -1,0 +1,22 @@
+error TS2688: Cannot find type definition file for 'phaser'.
+  The file is in the program because:
+    Entry point of type library 'phaser' specified in compilerOptions
+/a.ts(1,1): error TS2304: Cannot find name 'a'.
+
+
+!!! error TS2688: Cannot find type definition file for 'phaser'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library 'phaser' specified in compilerOptions
+==== /a.ts (1 errors) ====
+    a;
+    ~
+!!! error TS2304: Cannot find name 'a'.
+==== /typings/dummy.d.ts (0 errors) ====
+    declare const a2: number;
+    
+==== /node_modules/phaser/types/phaser.d.ts (0 errors) ====
+    declare const a: number;
+    
+==== /node_modules/phaser/package.json (0 errors) ====
+    { "name": "phaser", "version": "1.2.3", "types": "types/phaser.d.ts" }
+    

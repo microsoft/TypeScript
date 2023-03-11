@@ -10,7 +10,6 @@ declare const c2: number = 0;
 
 declare const c3 = null, c4 :string = "", c5: any = 0;
 >c3 : any
->null : null
 >c4 : string
 >"" : ""
 >c5 : any

@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-
 import { CancelError } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";

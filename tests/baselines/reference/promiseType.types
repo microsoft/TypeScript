@@ -207,7 +207,6 @@ const p11 = p.catch(null);
 >p.catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
 >p : Promise<boolean>
 >catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
->null : null
 
 const p12 = p.catch(() => 1);
 >p12 : Promise<number | boolean>
@@ -243,7 +242,6 @@ const p15 = p.catch(() => null);
 >p : Promise<boolean>
 >catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
 >() => null : () => any
->null : null
 
 const p16 = p.catch(() => {});
 >p16 : Promise<boolean | void>
@@ -302,7 +300,6 @@ const p21 = p.then(null);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 
 const p22 = p.then(() => 1);
 >p22 : Promise<number>
@@ -338,7 +335,6 @@ const p25 = p.then(() => null);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 
 const p26 = p.then(() => {});
 >p26 : Promise<void>
@@ -399,7 +395,6 @@ const p31 = p.then(undefined, null);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >undefined : undefined
->null : null
 
 const p32 = p.then(undefined, () => 1);
 >p32 : Promise<number | boolean>
@@ -439,7 +434,6 @@ const p35 = p.then(undefined, () => null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >undefined : undefined
 >() => null : () => any
->null : null
 
 const p36 = p.then(undefined, () => {});
 >p36 : Promise<boolean | void>
@@ -494,7 +488,6 @@ const p40 = p.then(null, undefined);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >undefined : undefined
 
 const p41 = p.then(null, null);
@@ -503,8 +496,6 @@ const p41 = p.then(null, null);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
->null : null
 
 const p42 = p.then(null, () => 1);
 >p42 : Promise<number | boolean>
@@ -512,7 +503,6 @@ const p42 = p.then(null, () => 1);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => 1 : () => number
 >1 : 1
 
@@ -522,7 +512,6 @@ const p43 = p.then(null, () => x);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => x : () => any
 >x : any
 
@@ -532,7 +521,6 @@ const p44 = p.then(null, () => undefined);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => undefined : () => any
 >undefined : undefined
 
@@ -542,9 +530,7 @@ const p45 = p.then(null, () => null);
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => null : () => any
->null : null
 
 const p46 = p.then(null, () => {});
 >p46 : Promise<boolean | void>
@@ -552,7 +538,6 @@ const p46 = p.then(null, () => {});
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => {} : () => void
 
 const p47 = p.then(null, () => {throw 1});
@@ -561,7 +546,6 @@ const p47 = p.then(null, () => {throw 1});
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => {throw 1} : () => never
 >1 : 1
 
@@ -571,7 +555,6 @@ const p48 = p.then(null, () => Promise.resolve(1));
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -585,7 +568,6 @@ const p49 = p.then(null, () => Promise.reject(1));
 >p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->null : null
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
@@ -611,7 +593,6 @@ const p51 = p.then(() => "1", null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => "1" : () => string
 >"1" : "1"
->null : null
 
 const p52 = p.then(() => "1", () => 1);
 >p52 : Promise<string | number>
@@ -655,7 +636,6 @@ const p55 = p.then(() => "1", () => null);
 >() => "1" : () => string
 >"1" : "1"
 >() => null : () => any
->null : null
 
 const p56 = p.then(() => "1", () => {});
 >p56 : Promise<string | void>
@@ -726,7 +706,6 @@ const p61 = p.then(() => x, null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => x : () => any
 >x : any
->null : null
 
 const p62 = p.then(() => x, () => 1);
 >p62 : Promise<any>
@@ -770,7 +749,6 @@ const p65 = p.then(() => x, () => null);
 >() => x : () => any
 >x : any
 >() => null : () => any
->null : null
 
 const p66 = p.then(() => x, () => {});
 >p66 : Promise<any>
@@ -841,7 +819,6 @@ const p71 = p.then(() => undefined, null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => undefined : () => any
 >undefined : undefined
->null : null
 
 const p72 = p.then(() => undefined, () => 1);
 >p72 : Promise<any>
@@ -885,7 +862,6 @@ const p75 = p.then(() => undefined, () => null);
 >() => undefined : () => any
 >undefined : undefined
 >() => null : () => any
->null : null
 
 const p76 = p.then(() => undefined, () => {});
 >p76 : Promise<any>
@@ -945,7 +921,6 @@ const p80 = p.then(() => null, undefined);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >undefined : undefined
 
 const p81 = p.then(() => null, null);
@@ -955,8 +930,6 @@ const p81 = p.then(() => null, null);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
->null : null
 
 const p82 = p.then(() => null, () => 1);
 >p82 : Promise<any>
@@ -965,7 +938,6 @@ const p82 = p.then(() => null, () => 1);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => 1 : () => number
 >1 : 1
 
@@ -976,7 +948,6 @@ const p83 = p.then(() => null, () => x);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => x : () => any
 >x : any
 
@@ -987,7 +958,6 @@ const p84 = p.then(() => null, () => undefined);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => undefined : () => any
 >undefined : undefined
 
@@ -998,9 +968,7 @@ const p85 = p.then(() => null, () => null);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => null : () => any
->null : null
 
 const p86 = p.then(() => null, () => {});
 >p86 : Promise<any>
@@ -1009,7 +977,6 @@ const p86 = p.then(() => null, () => {});
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => {} : () => void
 
 const p87 = p.then(() => null, () => {throw 1});
@@ -1019,7 +986,6 @@ const p87 = p.then(() => null, () => {throw 1});
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => {throw 1} : () => never
 >1 : 1
 
@@ -1030,7 +996,6 @@ const p88 = p.then(() => null, () => Promise.resolve(1));
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -1045,7 +1010,6 @@ const p89 = p.then(() => null, () => Promise.reject(1));
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => null : () => any
->null : null
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
@@ -1069,7 +1033,6 @@ const p91 = p.then(() => {}, null);
 >p : Promise<boolean>
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => {} : () => void
->null : null
 
 const p92 = p.then(() => {}, () => 1);
 >p92 : Promise<number | void>
@@ -1109,7 +1072,6 @@ const p95 = p.then(() => {}, () => null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => {} : () => void
 >() => null : () => any
->null : null
 
 const p96 = p.then(() => {}, () => {});
 >p96 : Promise<void>
@@ -1176,7 +1138,6 @@ const pa1 = p.then(() => {throw 1}, null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => {throw 1} : () => never
 >1 : 1
->null : null
 
 const pa2 = p.then(() => {throw 1}, () => 1);
 >pa2 : Promise<number>
@@ -1220,7 +1181,6 @@ const pa5 = p.then(() => {throw 1}, () => null);
 >() => {throw 1} : () => never
 >1 : 1
 >() => null : () => any
->null : null
 
 const pa6 = p.then(() => {throw 1}, () => {});
 >pa6 : Promise<void>
@@ -1299,7 +1259,6 @@ const pb1 = p.then(() => Promise.resolve("1"), null);
 >Promise : PromiseConstructor
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"1" : "1"
->null : null
 
 const pb2 = p.then(() => Promise.resolve("1"), () => 1);
 >pb2 : Promise<string | number>
@@ -1359,7 +1318,6 @@ const pb5 = p.then(() => Promise.resolve("1"), () => null);
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => null : () => any
->null : null
 
 const pb6 = p.then(() => Promise.resolve("1"), () => {});
 >pb6 : Promise<string | void>
@@ -1454,7 +1412,6 @@ const pc1 = p.then(() => Promise.reject("1"), null);
 >Promise : PromiseConstructor
 >reject : <T = never>(reason?: any) => Promise<T>
 >"1" : "1"
->null : null
 
 const pc2 = p.then(() => Promise.reject("1"), () => 1);
 >pc2 : Promise<number>
@@ -1514,7 +1471,6 @@ const pc5 = p.then(() => Promise.reject("1"), () => null);
 >reject : <T = never>(reason?: any) => Promise<T>
 >"1" : "1"
 >() => null : () => any
->null : null
 
 const pc6 = p.then(() => Promise.reject("1"), () => {});
 >pc6 : Promise<void>

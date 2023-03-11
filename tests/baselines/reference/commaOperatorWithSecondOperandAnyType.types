@@ -95,7 +95,6 @@ var x: any;
 >"string", [null, 1] : number[]
 >"string" : "string"
 >[null, 1] : number[]
->null : null
 >1 : 1
 
 "string".charAt(0), [null, 1];
@@ -106,7 +105,6 @@ var x: any;
 >charAt : (pos: number) => string
 >0 : 0
 >[null, 1] : number[]
->null : null
 >1 : 1
 
 true, x("any");
@@ -145,7 +143,6 @@ var resultIsAny8 = ("string", null);
 >("string", null) : null
 >"string", null : null
 >"string" : "string"
->null : null
 
 var resultIsAny9 = ("string".charAt(0), undefined);
 >resultIsAny9 : any

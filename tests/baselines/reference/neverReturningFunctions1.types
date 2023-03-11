@@ -718,12 +718,10 @@ function foo(services: Readonly<Services>, s: string | null): string {
 >foo : (services: Readonly<Services>, s: string | null) => string
 >services : Readonly<Services>
 >s : string | null
->null : null
 
     if (s === null) {
 >s === null : boolean
 >s : string | null
->null : null
 
         services.panic("ouch");
 >services.panic("ouch") : never

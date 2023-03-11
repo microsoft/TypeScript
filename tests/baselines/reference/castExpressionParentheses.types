@@ -71,7 +71,6 @@ declare var a;
 (<any>null); 
 >(<any>null) : any
 ><any>null : any
->null : null
 
 // names and dotted names
 (<any>this); 

@@ -13,7 +13,7 @@ tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS232
         [[{
             foo: 'asdf',
             jj: 1 // intentional error
-            ~~~~~
+            ~~
 !!! error TS2322: Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
 !!! error TS2322:   Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
         }]]

@@ -17,9 +17,9 @@
 
 goTo.file("imports.ts");
 verify.codeFix({
-  index: 0,
-  description: ts.Diagnostics.Convert_to_type_only_import.message,
-  newFileContent: `import type A from './exports';
+    index: 0,
+    description: ts.Diagnostics.Convert_to_type_only_import.message,
+    newFileContent: `import type A from './exports';
 import type { B, C } from './exports';
 
 declare const a: A;

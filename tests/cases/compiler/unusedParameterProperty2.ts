@@ -4,6 +4,5 @@
 class A {
     constructor(private used) {
         let foge = used;
-        foge += "";
     }
 }

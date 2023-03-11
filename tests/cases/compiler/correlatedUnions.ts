@@ -271,3 +271,33 @@ const getStringAndNumberFromOriginalAndMapped = <
 ): [Original[K][N], MappedFromOriginal[K][N]] => {
   return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
 };
+
+// repro from #31675
+interface Config {
+  string: string;
+  number: number;
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+  userConfig: Partial<Config>,
+  key: T,
+  defaultValue: Config[T]
+): Config[T] {
+  const userValue = userConfig[key]; 
+  const assertedCheck = userValue ? userValue! : defaultValue;
+  return assertedCheck;
+}
+
+// repro from #47523
+
+type Foo1 = {
+  x: number;
+  y: string;
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+  o: Partial<Foo1>,
+  k: K
+): Foo1[K] | undefined {
+  return o[k];
+}

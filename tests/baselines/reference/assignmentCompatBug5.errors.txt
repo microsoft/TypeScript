@@ -12,7 +12,7 @@ tests/cases/compiler/assignmentCompatBug5.ts(9,6): error TS2345: Argument of typ
 ==== tests/cases/compiler/assignmentCompatBug5.ts (5 errors) ====
     function foo1(x: { a: number; }) { }
     foo1({ b: 5 });
-           ~~~~
+           ~
 !!! error TS2345: Argument of type '{ b: number; }' is not assignable to parameter of type '{ a: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
     

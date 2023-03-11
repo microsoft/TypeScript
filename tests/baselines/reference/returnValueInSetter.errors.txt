@@ -5,7 +5,7 @@ tests/cases/compiler/returnValueInSetter.ts(3,9): error TS2408: Setters cannot r
     class f {
         set x(value) {
             return null; // Should be an error
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2408: Setters cannot return a value.
         }
     }

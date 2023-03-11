@@ -53,19 +53,19 @@ Shape signatures in builder refreshed for::
 /src/app.ts (used version)
 
 PolledWatches::
-/src/node_modules/@types:
+/src/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/tsconfig.json:
+/src/tsconfig.json: *new*
   {}
-/src/app.ts:
+/src/app.ts: *new*
   {}
-/compiler/lib.es5.d.ts:
+/compiler/lib.es5.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src:
+/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -118,7 +118,7 @@ FsWatches::
   {}
 /compiler/lib.es5.d.ts:
   {}
-/compiler/lib.es2015.promise.d.ts:
+/compiler/lib.es2015.promise.d.ts: *new*
   {}
 
 FsWatchesRecursive::

@@ -104,5 +104,4 @@ for await (const _ of []);
 
 await null;
 >await null : null
->null : null
 

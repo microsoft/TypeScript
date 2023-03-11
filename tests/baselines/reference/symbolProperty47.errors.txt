@@ -6,7 +6,7 @@ tests/cases/conformance/es6/Symbols/symbolProperty47.ts(11,1): error TS2322: Typ
     class C {
         get [Symbol.hasInstance]() {
             return "";
-            ~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
         }
         // Should take a string

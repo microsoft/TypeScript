@@ -242,7 +242,6 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
-    Push,
     QualifiedName,
     ScriptTarget,
     SetAccessorDeclaration,
@@ -642,7 +641,7 @@ export function validateLocaleAndSetLanguage(
     // Set the UI locale for string collation
     setUILocale(locale);
 
-    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Push<Diagnostic>): boolean {
+    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Diagnostic[]): boolean {
         const compilerFilePath = normalizePath(sys.getExecutingFilePath());
         const containingDirectoryPath = getDirectoryPath(compilerFilePath);
 

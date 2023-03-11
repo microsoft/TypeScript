@@ -64,21 +64,17 @@ var r4 = foo(null, null);
 >r4 : (x: any) => any
 >foo(null, null) : (x: any) => any
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->null : null
->null : null
 
 var r5 = foo({}, null);
 >r5 : (x: {}) => any
 >foo({}, null) : (x: {}) => any
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
 >{} : {}
->null : null
 
 var r6 = foo(null, {});
 >r6 : (x: any) => {}
 >foo(null, {}) : (x: any) => {}
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->null : null
 >{} : {}
 
 var r7 = foo({}, {});

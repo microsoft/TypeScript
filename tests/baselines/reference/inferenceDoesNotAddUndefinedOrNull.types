@@ -67,7 +67,6 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
 >node : Node
 >cb : (child: Node) => readonly T[] | T | null
 >child : Node
->null : null
 
     const result: T[] = [];
 >result : T[]
@@ -90,7 +89,6 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
         if (value !== null) {
 >value !== null : boolean
 >value : T | readonly T[] | null
->null : null
 
             result.push(...toArray(value));
 >result.push(...toArray(value)) : number

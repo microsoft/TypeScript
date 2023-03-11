@@ -10,7 +10,6 @@ function foo<T>(x: (a: T) => T) {
     return x(null);
 >x(null) : T
 >x : (a: T) => T
->null : null
 }
 
 var r = foo(<U>(x: U) => ''); // {}

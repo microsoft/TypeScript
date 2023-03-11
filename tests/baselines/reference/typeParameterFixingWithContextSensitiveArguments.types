@@ -43,7 +43,6 @@ var d2 = f(b, x => x.a, null); // type [B, A]
 >x.a : A
 >x : B
 >a : A
->null : null
 
 var d3 = f(b, x => x.b, null); // type [B, any]
 >d3 : [B, any]
@@ -55,5 +54,4 @@ var d3 = f(b, x => x.b, null); // type [B, any]
 >x.b : any
 >x : B
 >b : any
->null : null
 

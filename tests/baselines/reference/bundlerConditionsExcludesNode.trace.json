@@ -1,0 +1,20 @@
+[
+    "======== Resolving module 'conditions' from '/main.ts'. ========",
+    "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "File '/package.json' does not exist.",
+    "Loading module 'conditions' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
+    "Found 'package.json' at '/node_modules/conditions/package.json'.",
+    "Entering conditional exports.",
+    "Saw non-matching condition 'node'.",
+    "Matched 'exports' condition 'default'.",
+    "Using 'exports' subpath '.' with target './index.web.js'.",
+    "File name '/node_modules/conditions/index.web.js' has a '.js' extension - stripping it.",
+    "File '/node_modules/conditions/index.web.ts' does not exist.",
+    "File '/node_modules/conditions/index.web.tsx' does not exist.",
+    "File '/node_modules/conditions/index.web.d.ts' exists - use it as a name resolution result.",
+    "Resolved under condition 'default'.",
+    "Exiting conditional exports.",
+    "Resolving real path for '/node_modules/conditions/index.web.d.ts', result '/node_modules/conditions/index.web.d.ts'.",
+    "======== Module name 'conditions' was successfully resolved to '/node_modules/conditions/index.web.d.ts' with Package ID 'conditions/index.web.d.ts@1.0.0'. ========"
+]

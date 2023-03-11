@@ -31,7 +31,6 @@ function f1(obj: { a?: string }) {
 function f2(obj: [number, string] | null[]) {
 >f2 : (obj: [number, string] | null[]) => void
 >obj : [number, string] | null[]
->null : null
 
     let a0 = obj[0];  // number | null
 >a0 : number | null

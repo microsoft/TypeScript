@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/a.ts]
 function f() {}
@@ -29,12 +20,15 @@ declare function f(): void;
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a/a.ts"],"names":[],"mappings":"AAAA,iBAAS,CAAC,SAAK"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /a
 Info 3    [00:00:24.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/tsconfig.json
@@ -59,7 +53,7 @@ Info 12   [00:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:34.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:35.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:36.000] 	Files (1)
-	/a/a.ts
+	/a/a.ts SVC-1-0 "function f() {}"
 
 
 	a.ts
@@ -73,26 +67,26 @@ Info 17   [00:00:40.000] -----------------------------------------------
 Info 17   [00:00:41.000] Open files: 
 Info 17   [00:00:42.000] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info 17   [00:00:43.000] 		Projects: /a/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 17   [00:00:44.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
 ts.getFileEmitOutput: /a/a.ts: {
  "outputFiles": [
   {
@@ -109,6 +103,8 @@ ts.getFileEmitOutput: /a/a.ts: {
  "emitSkipped": false,
  "diagnostics": []
 }
+Before request
+
 Info 18   [00:00:45.000] request:
     {
       "command": "close",
@@ -118,28 +114,16 @@ Info 18   [00:00:45.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 19   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
 Info 20   [00:00:47.000] Project '/a/tsconfig.json' (Configured)
 Info 20   [00:00:48.000] 	Files (1)
 
 Info 20   [00:00:49.000] -----------------------------------------------
 Info 20   [00:00:50.000] Open files: 
+Info 20   [00:00:51.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -151,17 +135,15 @@ PolledWatches::
 FsWatches::
 /a/tsconfig.json:
   {}
-/a/a.ts:
+/a/a.ts: *new*
   {}
 
 FsWatchesRecursive::
 /a:
   {}
 
-Info 20   [00:00:51.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 21   [00:00:52.000] request:
     {
       "command": "open",
@@ -171,24 +153,6 @@ Info 21   [00:00:52.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 22   [00:00:53.000] Search path: /b
 Info 23   [00:00:54.000] For info: /b/b.ts :: Config file name: /b/tsconfig.json
 Info 24   [00:00:55.000] Creating configuration project /b/tsconfig.json
@@ -216,8 +180,8 @@ Info 32   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 33   [00:01:04.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 34   [00:01:05.000] Project '/b/tsconfig.json' (Configured)
 Info 35   [00:01:06.000] 	Files (2)
-	/a/a.ts
-	/b/b.ts
+	/a/a.ts SVC-1-0 "function f() {}"
+	/b/b.ts SVC-1-0 "f();"
 
 
 	../a/a.ts
@@ -237,6 +201,10 @@ Info 37   [00:01:13.000] -----------------------------------------------
 Info 37   [00:01:14.000] Open files: 
 Info 37   [00:01:15.000] 	FileName: /b/b.ts ProjectRootPath: undefined
 Info 37   [00:01:16.000] 		Projects: /b/tsconfig.json
+Info 37   [00:01:17.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -244,7 +212,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules/@types:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -252,19 +220,17 @@ FsWatches::
   {}
 /a/a.ts:
   {}
-/b/tsconfig.json:
+/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /a:
   {}
-/b:
+/b: *new*
   {}
 
-Info 37   [00:01:17.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 38   [00:01:18.000] request:
     {
       "command": "references-full",
@@ -276,60 +242,12 @@ Info 38   [00:01:18.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
-
 Info 39   [00:01:19.000] Finding references to /b/b.ts position 0 in project /b/tsconfig.json
 Info 40   [00:01:20.000] Search path: /a
 Info 41   [00:01:21.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 42   [00:01:22.000] Search path: /a
 Info 43   [00:01:23.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 44   [00:01:24.000] Finding references to /a/a.ts position 9 in project /a/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
-
 Info 45   [00:01:25.000] response:
     {
       "response": [
@@ -409,3 +327,4 @@ Info 45   [00:01:25.000] response:
       ],
       "responseRequired": true
     }
+After request

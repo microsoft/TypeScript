@@ -6,7 +6,6 @@ module M {
 M = null;
 >M = null : null
 >M : any
->null : null
 
 class C {
 >C : C
@@ -14,7 +13,6 @@ class C {
 C = null;
 >C = null : null
 >C : any
->null : null
 
 enum E {
 >E : E
@@ -22,7 +20,6 @@ enum E {
 E = null;
 >E = null : null
 >E : any
->null : null
 
 function f() { }
 >f : () => void
@@ -30,7 +27,6 @@ function f() { }
 f = null;
 >f = null : null
 >f : any
->null : null
 
 var x = 1;
 >x : number
@@ -39,7 +35,6 @@ var x = 1;
 x = null;
 >x = null : null
 >x : number
->null : null
 
 function g(x) {
 >g : (x: any) => void
@@ -48,5 +43,4 @@ function g(x) {
     x = null;
 >x = null : null
 >x : any
->null : null
 }

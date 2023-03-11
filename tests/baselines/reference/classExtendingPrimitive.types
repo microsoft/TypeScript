@@ -28,7 +28,6 @@ class C5 extends Null { }
 
 class C5a extends null { }
 >C5a : C5a
->null : null
 
 class C6 extends undefined { }
 >C6 : C6

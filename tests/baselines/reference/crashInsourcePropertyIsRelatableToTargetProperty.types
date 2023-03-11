@@ -23,7 +23,6 @@ function foo(x: string, items: string[]): typeof foo {
 >foo : (x: "hi", items: string[]) => typeof foo
 
     return null;
->null : null
 }
 var a: D = foo("hi", []);
 >a : D

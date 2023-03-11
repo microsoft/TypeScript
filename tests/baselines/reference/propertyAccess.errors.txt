@@ -19,7 +19,7 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     }
     
     var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
-                                                          ~~~~~~~~~~~~~~~~
+                                                          ~~~~~~~
 !!! error TS2322: Type '{ 3: string; three: string; }' is not assignable to type '{ [n: number]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
     var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };

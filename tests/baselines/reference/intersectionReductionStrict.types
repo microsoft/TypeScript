@@ -42,7 +42,6 @@ type N1 = 'a' & 'b';
 type N2 = { a: string } & null;
 >N2 : never
 >a : string
->null : null
 
 type N3 = { a: string } & undefined;
 >N3 : never
@@ -70,7 +69,6 @@ type X1 = X | 'a' & 'b';
 type X2 = X | { a: string } & null;
 >X2 : X
 >a : string
->null : null
 
 type X3 = X | { a: string } & undefined;
 >X3 : X

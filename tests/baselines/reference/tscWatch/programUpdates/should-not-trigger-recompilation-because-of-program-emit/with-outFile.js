@@ -44,23 +44,23 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/file1.ts:
+/user/username/projects/myproject/file1.ts: *new*
   {}
-/user/username/projects/myproject/src/file2.ts:
+/user/username/projects/myproject/src/file2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -86,26 +86,6 @@ Change:: No change
 Input::
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -151,7 +131,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/src/file3.ts:
+/user/username/projects/myproject/src/file3.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -189,28 +169,6 @@ Change:: No change
 Input::
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src/file3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

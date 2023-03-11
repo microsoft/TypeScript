@@ -59,7 +59,6 @@ module Bugs {
 >bracket : number
 >3 : 3
 >state : null
->null : null
 >length : number
 >10 : 10
                 }

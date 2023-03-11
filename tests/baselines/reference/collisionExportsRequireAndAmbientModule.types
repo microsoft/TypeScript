@@ -13,7 +13,6 @@ export function foo(): require.I {
 >require : any
 
     return null;
->null : null
 }
 export declare module exports {
 >exports : typeof exports
@@ -29,7 +28,6 @@ export function foo2(): exports.I {
 >exports : any
 
     return null;
->null : null
 }
 declare module m1 {
 >m1 : typeof m1

@@ -31,6 +31,7 @@ export interface Logger {
     endGroup(): void;
     msg(s: string, type?: Msg): void;
     getLogFileName(): string | undefined;
+    /** @internal*/ isTestLogger?: boolean;
 }
 
 // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)

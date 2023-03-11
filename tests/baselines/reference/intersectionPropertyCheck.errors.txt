@@ -11,7 +11,7 @@ tests/cases/compiler/intersectionPropertyCheck.ts(17,22): error TS2322: Type 'bo
 
 ==== tests/cases/compiler/intersectionPropertyCheck.ts (4 errors) ====
     let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
-                                                                       ~~~~
+                                                                       ~
 !!! error TS2322: Type '{ x: string; y: number; }' is not assignable to type '{ x: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
 !!! related TS6500 tests/cases/compiler/intersectionPropertyCheck.ts:1:12: The expected type comes from property 'a' which is declared here on type '{ a: { x: string; }; } & { c: number; }'

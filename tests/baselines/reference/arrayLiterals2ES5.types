@@ -67,7 +67,6 @@ var b0: [any, any, any] = [undefined, null, undefined];
 >b0 : [any, any, any]
 >[undefined, null, undefined] : [undefined, null, undefined]
 >undefined : undefined
->null : null
 >undefined : undefined
 
 var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
@@ -132,7 +131,6 @@ var temp3 = [undefined, null, undefined];
 >temp3 : any[]
 >[undefined, null, undefined] : null[]
 >undefined : undefined
->null : null
 >undefined : undefined
 
 var temp4 = [];

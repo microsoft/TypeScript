@@ -185,7 +185,6 @@ import {
     TextRange,
     TransformationContext,
     TransformFlags,
-    UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
     visitEachChild,
@@ -261,7 +260,7 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespace: ModuleDeclaration;
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
-    let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
+    let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
     let currentClassHasParameterProperties: boolean | undefined;
 
     /**

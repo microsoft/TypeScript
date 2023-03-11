@@ -29,7 +29,6 @@ const potentiallyNullIterable = [['1', 1], ['2', 2]] as Iterable<[string, number
 >['2', 2] : [string, number]
 >'2' : "2"
 >2 : 2
->null : null
 
 new Map(potentiallyNullIterable);
 >new Map(potentiallyNullIterable) : Map<string, number>

@@ -23,12 +23,6 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info 2    [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 3    [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -43,10 +37,10 @@ Info 11   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 12   [00:00:41.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:42.000] Project '/user/username/projects/myproject/project.csproj' (External)
 Info 14   [00:00:43.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/node_modules/bar/foo.d.ts
-	/user/username/projects/myproject/node_modules/bar/index.d.ts
-	/user/username/projects/myproject/src/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/node_modules/bar/foo.d.ts Text-1 "export function foo(): string;"
+	/user/username/projects/myproject/node_modules/bar/index.d.ts Text-1 "export { foo } from \"./foo\";"
+	/user/username/projects/myproject/src/main.ts Text-1 "import { foo } from \"bar\"; foo();"
 
 
 	../../../../a/lib/lib.d.ts

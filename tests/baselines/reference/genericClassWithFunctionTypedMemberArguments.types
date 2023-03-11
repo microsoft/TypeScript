@@ -16,7 +16,6 @@ module ImmediatelyFix {
             return x(null);
 >x(null) : T
 >x : (a: T) => T
->null : null
         }
     }
 
@@ -66,7 +65,6 @@ module ImmediatelyFix {
             return x(null);
 >x(null) : T
 >x : (a: T) => T
->null : null
         }
     }
 

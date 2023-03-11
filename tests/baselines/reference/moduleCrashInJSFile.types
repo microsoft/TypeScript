@@ -1,0 +1,38 @@
+=== tests/cases/compiler/a.js ===
+//// [thisKeyword.ts]
+module foo {
+>foo : typeof foo
+
+    this.bar = 4;
+>this.bar = 4 : 4
+>this.bar : any
+>this : any
+>bar : any
+>4 : 4
+}
+
+//// [thisKeyword.js]
+var foo;
+>foo : any
+
+(function (foo) {
+>(function (foo) {    this.bar = 4;})(foo || (foo = {})) : void
+>(function (foo) {    this.bar = 4;}) : typeof (Anonymous function)
+>function (foo) {    this.bar = 4;} : typeof (Anonymous function)
+>foo : typeof globalThis.foo
+
+    this.bar = 4;
+>this.bar = 4 : 4
+>this.bar : any
+>this : this
+>bar : any
+>4 : 4
+
+})(foo || (foo = {}));
+>foo || (foo = {}) : typeof foo
+>foo : typeof foo
+>(foo = {}) : {}
+>foo = {} : {}
+>foo : typeof foo
+>{} : {}
+

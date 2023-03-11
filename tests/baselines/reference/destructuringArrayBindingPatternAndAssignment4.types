@@ -4,7 +4,6 @@
 
 declare const data: number[] | null;
 >data : number[] | null
->null : null
 
 const [value] = data; // Error
 >value : any

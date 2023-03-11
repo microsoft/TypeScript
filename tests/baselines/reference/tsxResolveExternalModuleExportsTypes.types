@@ -21,7 +21,6 @@ declare module 'a' {
     interface Foo {
         Test: null;
 >Test : null
->null : null
     }
 }
 

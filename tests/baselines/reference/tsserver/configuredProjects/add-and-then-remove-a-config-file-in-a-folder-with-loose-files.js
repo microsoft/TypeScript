@@ -20,12 +20,6 @@ let x = 1
 let y = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:22.000] Search path: /user/username/projects/myproject
 Info 2    [00:00:23.000] For info: /user/username/projects/myproject/commonFile1.ts :: No config files found.
 Info 3    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -37,8 +31,8 @@ Info 8    [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 9    [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:32.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/commonFile1.ts SVC-1-0 "let x = 1"
 
 
 	../../../../a/lib/lib.d.ts
@@ -62,8 +56,8 @@ Info 17   [00:00:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 18   [00:00:45.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:00:46.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 20   [00:00:47.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/commonFile2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/commonFile2.ts SVC-1-0 "let y = 1"
 
 
 	../../../../a/lib/lib.d.ts
@@ -110,18 +104,16 @@ Before checking timeout queue length (2) and running
 
 
 PolledWatches::
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 39   [00:01:19.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 40   [00:01:20.000] Loading configured project /user/username/projects/myproject/tsconfig.json
@@ -139,8 +131,8 @@ Info 44   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 45   [00:01:25.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 46   [00:01:26.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 47   [00:01:27.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/commonFile1.ts SVC-1-0 "let x = 1"
 
 
 	../../../../a/lib/lib.d.ts
@@ -196,20 +188,6 @@ Info 57   [00:02:03.000] 	FileName: /user/username/projects/myproject/commonFile
 Info 57   [00:02:04.000] 		Projects: /dev/null/inferredProject2*
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 57   [00:02:06.000] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 58   [00:02:07.000] `remove Project::
 Info 59   [00:02:08.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -235,20 +213,6 @@ Info 69   [00:02:18.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before checking timeout queue length (1) and running
 //// [/user/username/projects/myproject/tsconfig.json] deleted
 
-PolledWatches::
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 70   [00:02:19.500] Running: *ensureProjectForOpenFiles*
 Info 71   [00:02:20.500] Before ensureProjectForOpenFiles:
 Info 72   [00:02:21.500] Project '/dev/null/inferredProject1*' (Inferred)
@@ -268,8 +232,8 @@ Info 72   [00:02:32.500] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 73   [00:02:33.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 74   [00:02:34.500] Project '/dev/null/inferredProject1*' (Inferred)
 Info 75   [00:02:35.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/commonFile1.ts SVC-1-0 "let x = 1"
 
 
 	../../../../a/lib/lib.d.ts
@@ -293,17 +257,3 @@ Info 78   [00:02:46.500] 		Projects: /dev/null/inferredProject1*
 Info 78   [00:02:47.500] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info 78   [00:02:48.500] 		Projects: /dev/null/inferredProject2*
 After checking timeout queue length (1) and running
-
-PolledWatches::
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::

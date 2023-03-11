@@ -10,11 +10,9 @@ interface Array<T> {
 
 declare const a: (string | number)[] | null[] | undefined[] | {}[];
 >a : (string | number)[] | null[] | undefined[] | {}[]
->null : null
 
 declare const b: (string | number)[] | null[] | undefined[] | {}[];
 >b : (string | number)[] | null[] | undefined[] | {}[]
->null : null
 
 let x = a.equalsShallow(b);
 >x : boolean

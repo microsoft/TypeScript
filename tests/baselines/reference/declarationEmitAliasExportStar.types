@@ -13,5 +13,4 @@ export const thing2 = (param: things.ThingB) => null;
 >(param: things.ThingB) => null : (param: things.ThingB) => any
 >param : things.ThingB
 >things : any
->null : null
 

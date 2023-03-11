@@ -35,7 +35,6 @@ module Test {
 
       var state:IState= null;
 >state : IState
->null : null
 
       return {
 >{       tokens: Gar[],//IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]       endState: state      } : { tokens: any; endState: IState; }

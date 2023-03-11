@@ -39,7 +39,7 @@ tests/cases/compiler/genericMappedTypeAsClause.ts(25,60): error TS2312: An inter
               ~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'MappedModel<T>'.
         const x5: MappedModel<T> = { a: 'bar', b: 42 };  // Error
-                                     ~~~~~~~~
+                                     ~
 !!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'MappedModel<T>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
         const x6: MappedModel<T> = undefined;  // Error

@@ -219,7 +219,6 @@ function f3(
     var x4: Lowercase<Uppercase<string>> = null as any;
 >x4 : Lowercase<Uppercase<string>>
 >null as any : any
->null : null
 
     x1 = x4;
 >x1 = x4 : Lowercase<Uppercase<string>>

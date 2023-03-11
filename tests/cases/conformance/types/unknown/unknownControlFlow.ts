@@ -1,7 +1,7 @@
 // @strict: true
 // @declaration: true
 
-type T01 = {} & string;  // string
+type T01 = {} & string;  // {} & string
 type T02 = {} & 'a';  // 'a'
 type T03 = {} & object;  // object
 type T04 = {} & { x: number };  // { x: number }

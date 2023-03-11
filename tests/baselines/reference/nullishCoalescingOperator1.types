@@ -1,70 +1,54 @@
 === tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator1.ts ===
 declare const a1: string | undefined | null
 >a1 : string | null | undefined
->null : null
 
 declare const a2: string | undefined | null
 >a2 : string | null | undefined
->null : null
 
 declare const a3: string | undefined | null
 >a3 : string | null | undefined
->null : null
 
 declare const a4: string | undefined | null
 >a4 : string | null | undefined
->null : null
 
 declare const b1: number | undefined | null
 >b1 : number | null | undefined
->null : null
 
 declare const b2: number | undefined | null
 >b2 : number | null | undefined
->null : null
 
 declare const b3: number | undefined | null
 >b3 : number | null | undefined
->null : null
 
 declare const b4: number | undefined | null
 >b4 : number | null | undefined
->null : null
 
 declare const c1: boolean | undefined | null
 >c1 : boolean | null | undefined
->null : null
 
 declare const c2: boolean | undefined | null
 >c2 : boolean | null | undefined
->null : null
 
 declare const c3: boolean | undefined | null
 >c3 : boolean | null | undefined
->null : null
 
 declare const c4: boolean | undefined | null
 >c4 : boolean | null | undefined
->null : null
 
 interface I { a: string }
 >a : string
 
 declare const d1: I | undefined | null
 >d1 : I | null | undefined
->null : null
 
 declare const d2: I | undefined | null
 >d2 : I | null | undefined
->null : null
 
 declare const d3: I | undefined | null
 >d3 : I | null | undefined
->null : null
 
 declare const d4: I | undefined | null
 >d4 : I | null | undefined
->null : null
 
 const aa1 = a1 ?? 'whatever';
 >aa1 : string

@@ -1,4 +1,5 @@
 // @moduleResolution: bundler
+// @module: esnext
 // @checkJs: true
 // @allowJs: true
 // @outDir: out

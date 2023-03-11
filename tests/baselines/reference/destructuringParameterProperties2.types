@@ -134,7 +134,6 @@ var z = new C1(10, [undefined, "", null]);
 >[undefined, "", null] : [undefined, string, null]
 >undefined : undefined
 >"" : ""
->null : null
 
 var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 >z_a : any

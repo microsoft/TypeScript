@@ -419,7 +419,6 @@ var b = {
     "0.1": <void>null,
 >"0.1" : void
 ><void>null : void
->null : null
 
     ".1": new Object(),
 >".1" : Object

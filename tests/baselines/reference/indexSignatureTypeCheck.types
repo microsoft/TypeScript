@@ -9,7 +9,6 @@ interface IPropertySet {
 
 var ps: IPropertySet = null;
 >ps : IPropertySet
->null : null
 
 var index: any = "hello";
 >index : any

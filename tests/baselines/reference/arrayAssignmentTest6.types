@@ -32,7 +32,6 @@ module Test {
 >includeStates : boolean
 
             return null;
->null : null
         }
     }    
 }

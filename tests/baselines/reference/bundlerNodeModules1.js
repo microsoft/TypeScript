@@ -38,11 +38,8 @@ import { esm, cjs } from "dual";
 
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [main.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [main.cjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

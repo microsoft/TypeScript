@@ -12,15 +12,6 @@ function f(x = 0, b = false) {
 >x : number
 >1 : 1
 
-    x++;
->x++ : number
->x : number
-
-    x /= 2;
->x /= 2 : number
->x : number
->2 : 2
-
     ([x] = [1]);
 >([x] = [1]) : [number]
 >[x] = [1] : [number]

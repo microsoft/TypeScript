@@ -137,7 +137,6 @@ function test(level: number | string):number {
 if (xUnknown == null) {
 >xUnknown == null : boolean
 >xUnknown : unknown
->null : null
 
     xUnknown;
 >xUnknown : null | undefined
@@ -150,7 +149,6 @@ if (xUnknown == null) {
 if (xUnknown != null) {
 >xUnknown != null : boolean
 >xUnknown : unknown
->null : null
 
     xUnknown;
 >xUnknown : {}

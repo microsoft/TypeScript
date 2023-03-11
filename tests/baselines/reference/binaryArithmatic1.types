@@ -3,5 +3,4 @@ var v = 4 | null;
 >v : number
 >4 | null : number
 >4 : 4
->null : null
 

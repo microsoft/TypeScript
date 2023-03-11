@@ -271,7 +271,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
                     projectRootPath: useProjectRoot ? folderPath : undefined
                 }
             });
-            appendAllScriptInfos(session.getProjectService(), session.logger.logs);
+            appendAllScriptInfos(session);
 
             // Since this is not js project so no typings are queued
             host.checkTimeoutQueueLength(0);

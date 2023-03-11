@@ -9,9 +9,8 @@ import assert, { fail } from "assert";
 import fs from "fs";
 import minimist from "minimist";
 import path from "path";
+import ts from "typescript";
 import url from "url";
-
-import ts from "../lib/typescript.js";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -198,7 +197,7 @@ function containsPublicAPI(symbol) {
 function nodeToLocation(node) {
     const sourceFile = node.getSourceFile();
     const lc = sourceFile.getLineAndCharacterOfPosition(node.pos);
-    return `${sourceFile.fileName}:${lc.line+1}:${lc.character+1}`;
+    return `${sourceFile.fileName}:${lc.line + 1}:${lc.character + 1}`;
 }
 
 /**
@@ -222,7 +221,7 @@ const scopeStack = [];
  * @param {string} name
  */
 function findInScope(name) {
-    for (let i = scopeStack.length-1; i >= 0; i--) {
+    for (let i = scopeStack.length - 1; i >= 0; i--) {
         const scope = scopeStack[i];
         const symbol = scope.get(name);
         if (symbol) {
@@ -335,7 +334,7 @@ function emitAsNamespace(name, moduleSymbol) {
     assert(moduleSymbol.flags & ts.SymbolFlags.ValueModule, "moduleSymbol is not a module");
 
     scopeStack.push(new Map());
-    const currentScope = scopeStack[scopeStack.length-1];
+    const currentScope = scopeStack[scopeStack.length - 1];
 
     const target = containsPublicAPI(moduleSymbol) ? WriteTarget.Both : WriteTarget.Internal;
 

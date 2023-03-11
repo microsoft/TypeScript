@@ -174,6 +174,7 @@ export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["base
     edit(sys);
     baseline.push("Input::");
     sys.diff(baseline, oldSnap);
+    sys.serializeWatches(baseline);
     return sys.snap();
 }
 
@@ -277,6 +278,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;
+    ts.Debug.assert(sys.writtenFiles === undefined);
     const solutionBuilder = createSolutionBuilder(changeToHostTrackingWrittenFiles(
         patchHostForBuildInfoReadWrite(sys)
     ), solutionRoots, originalRead);
@@ -284,6 +286,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     sys.readFile = originalReadFile;
     sys.write = originalWrite;
     sys.writeFile = originalWriteFile;
+    sys.writtenFiles = undefined;
     return sys;
 }
 

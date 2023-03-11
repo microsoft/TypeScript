@@ -11,17 +11,17 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
 
 ==== tests/cases/compiler/assignmentCompatBug2.ts (6 errors) ====
     var b2: { b: number;} = { a: 0 }; // error
-                              ~~~~
+                              ~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
     
     b2 = { a: 0 }; // error
-           ~~~~
+           ~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
     
     b2 = {b: 0, a: 0 };
-                ~~~~
+                ~
 !!! error TS2322: Type '{ b: number; a: number; }' is not assignable to type '{ b: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
     

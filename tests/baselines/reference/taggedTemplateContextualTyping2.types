@@ -62,7 +62,6 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >y : <S, T>(p: T) => T
 >y<string, number>(null) : number
 >y : <S, T>(p: T) => T
->null : null
 >y : <S, T>(p: T) => T
 >"hello" : "hello"
 

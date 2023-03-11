@@ -1,0 +1,44 @@
+error TS6504: File '/node_modules/conditions/index.node.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+error TS6504: File '/node_modules/conditions/index.web.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS6504: File '/node_modules/conditions/index.node.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+!!! error TS6504: File '/node_modules/conditions/index.web.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+==== /node_modules/conditions/package.json (0 errors) ====
+    {
+        "name": "conditions",
+        "version": "1.0.0",
+        "type": "module",
+        "main": "index.cjs",
+        "types": "index.d.cts",
+        "exports": {
+          ".": {
+            "node": "./index.node.js",
+            "default": "./index.web.js"
+          }
+        }
+      }
+      
+==== /node_modules/conditions/index.node.js (0 errors) ====
+    export const node = 0;
+    
+==== /node_modules/conditions/index.node.d.ts (0 errors) ====
+    export const node: number;
+    
+==== /node_modules/conditions/index.web.js (0 errors) ====
+    export const web = 0;
+    
+==== /node_modules/conditions/index.web.d.ts (0 errors) ====
+    export const web: number;
+    
+==== /main.ts (0 errors) ====
+    import { web } from "conditions";
+    

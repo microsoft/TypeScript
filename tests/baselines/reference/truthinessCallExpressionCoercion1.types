@@ -104,7 +104,6 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >[() => null] : (() => null)[]
 >() => null : () => null
->null : null
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >() => { test(); } : () => void
 >test() : boolean
@@ -123,7 +122,6 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >[() => null] : (() => null)[]
 >() => null : () => null
->null : null
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >test => { test() } : (test: () => null) => void
 >test : () => null
