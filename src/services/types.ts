@@ -670,6 +670,11 @@ export interface JsxMirrorCursorInfo {
     readonly endCharacter : number;
 }
 
+export interface JsxLinkedEditInfo {
+    readonly ranges : TextSpan;
+    wordPattern? : string;
+}
+
 export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
 export const enum OrganizeImportsMode {

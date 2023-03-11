@@ -23,6 +23,7 @@ import {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    JsxMirrorCursor = "jsxMirrorCursor",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -1099,6 +1100,15 @@ export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
 
 export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
+}
+
+export interface JsxMirrorCursorRequest extends FileLocationRequest {
+    readonly command: CommandTypes.JsxMirrorCursor;
+    // ISABEL?
+}
+
+export interface JsxMirrorCursorResponse extends Response {
+    // ISABEL?
 }
 
 

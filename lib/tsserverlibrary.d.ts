@@ -92,6 +92,7 @@ declare namespace ts {
              */
             enum CommandTypes {
                 JsxClosingTag = "jsxClosingTag",
+                JsxMirrorCursor = "jsxMirrorCursor",
                 Brace = "brace",
                 BraceCompletion = "braceCompletion",
                 GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -881,6 +882,14 @@ declare namespace ts {
             }
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
+            }
+            // ISABEL correct extends??
+            interface JsxMirrorCursorRequest extends FileLocationRequest {
+                readonly command: CommandTypes.JsxMirrorCursor;
+                //ISABEL arguments?
+            }
+            interface JsxMirrorCursorResponse extends Response {
+                readonly mirrorCursors: [JsxMirrorCursorInfo];
             }
             /**
              * @deprecated
@@ -3839,6 +3848,7 @@ declare namespace ts {
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
             private getJsxClosingTag;
+            private getJsxMirrorCursor
             private getDocumentHighlights;
             private provideInlayHints;
             private setCompilerOptionsForInferredProjects;
@@ -10083,6 +10093,12 @@ declare namespace ts {
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
+    }
+    interface JsxMirrorCursorInfo {
+        readonly startLine : number;
+        readonly startCharacter : number;
+        readonly endLine : number;
+        readonly endCharacter : number;
     }
     interface CombinedCodeFixScope {
         type: "file";

@@ -6111,6 +6111,8 @@ declare namespace ts {
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
+        // ISABEL change name?
+        getMirrorCursorPosition(fileName: string, position: number): JsxMirrorCursorInfo | undefined;
         applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -6136,6 +6138,12 @@ declare namespace ts {
     interface JsxClosingTagInfo {
         readonly newText: string;
     }
+    interface JsxMirrorCursorInfo {
+        readonly startLine : number;
+        readonly startCharacter : number;
+        readonly endLine : number;
+        readonly endCharacter : number;
+    } 
     interface CombinedCodeFixScope {
         type: "file";
         fileName: string;

@@ -260,6 +260,11 @@ declare namespace FourSlashInterface {
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
+        jsxMirrorCursor(map: { [markerName: string]: {
+            readonly startLine : number;
+            readonly startCharacter : number;
+            readonly endLine : number;
+            readonly endCharacter : number;}[] | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,

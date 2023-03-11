@@ -89,6 +89,7 @@ declare namespace ts {
         namespace protocol {
             enum CommandTypes {
                 JsxClosingTag = "jsxClosingTag",
+                JsxMirrorCursor = "jsxMirrorCursor",
                 Brace = "brace",
                 BraceCompletion = "braceCompletion",
                 GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -877,6 +878,8 @@ declare namespace ts {
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
             }
+            interface mirrror {}
+            // ISABEL
             /**
              * Get document highlights request; value of command field is
              * "documentHighlights". Return response giving spans that are relevant
@@ -3847,6 +3850,7 @@ declare namespace ts {
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
             private getJsxClosingTag;
+            private getJsxMirrorCursor;
             private getDocumentHighlights;
             private provideInlayHints;
             private setCompilerOptionsForInferredProjects;

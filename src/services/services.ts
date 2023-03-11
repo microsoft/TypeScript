@@ -1,3 +1,4 @@
+import { findArgument } from "../jsTyping/shared";
 import * as ts from "./_namespaces/ts";
 import {
     __String,
@@ -189,6 +190,7 @@ import {
     JsxElement,
     JsxEmit,
     JsxFragment,
+    JsxLinkedEditInfo,
     JsxMirrorCursorInfo,
     LanguageService,
     LanguageServiceHost,
@@ -2479,8 +2481,37 @@ export function createLanguageService(
         }
     }
 
-    function getJsxMirrorCursorAtPosition(fileName: string, position: number): JsxMirrorCursorInfo[] | undefined {
-        return undefined;
+    function getJsxMirrorCursorAtPosition(fileName: string, position: number): JsxLinkedEditInfo | undefined {
+        const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+        const token = findPrecedingToken(position, sourceFile);
+        if (!token) return undefined;
+
+        // if it is not in a jsx element
+        if (token.parent.parent.kind !== SyntaxKind.JsxElement && token.parent.parent.kind !== SyntaxKind.JsxFragment) return undefined;
+
+        //opening element
+        if (token.parent.kind === SyntaxKind.JsxOpeningElement){
+            const nameSpan = {start : token.pos, length : token.pos - token.end};
+            const name = "";
+            return {ranges:nameSpan, wordPattern : name};
+        }
+        //losing element
+        if (token.parent.kind === SyntaxKind.JsxClosingElement){
+            return undefined;
+        }
+
+        //opening fragment
+        if (token.parent.kind === SyntaxKind.JsxOpeningFragment){
+            return undefined;
+        }
+        //losing element
+        if (token.parent.kind === SyntaxKind.JsxClosingFragment){
+            return undefined;
+        }
+
+        
+        //neither
+        return undefined
         // ISABEL unimplemented
     }
 
