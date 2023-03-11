@@ -100,7 +100,6 @@ module Sample.Thing.Widgets {
 			
 		private domNode:any = null;
 >domNode : any
->null : null
 
 		constructor(private codeThing: Sample.Thing.ICodeThing) {
 >codeThing : ICodeThing
@@ -138,7 +137,6 @@ interface IMode { getInitialState(): IState;}
 class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
 >AbstractMode : AbstractMode
 >getInitialState : () => IState
->null : null
 
 interface IState {}
 

@@ -32,7 +32,7 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
     
     function f13(x: { a: null; b: string } | { a: string, c: number }) {
         x = { a: null, b: "foo", c: 4};  // Error
-                                 ~~~~
+                                 ~
 !!! error TS2322: Type '{ a: null; b: string; c: number; }' is not assignable to type '{ a: null; b: string; } | { a: string; c: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
     }

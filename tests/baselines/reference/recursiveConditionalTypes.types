@@ -5,8 +5,6 @@ type __Awaited<T> =
 >__Awaited : __Awaited<T>
 
     T extends null | undefined ? T :
->null : null
-
     T extends PromiseLike<infer U> ? __Awaited<U> :
     T;
 
@@ -17,7 +15,6 @@ type MyPromise<T> = {
 >then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
 >f : ((value: T) => U | PromiseLike<U>) | null | undefined
 >value : T
->null : null
 }
 
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
@@ -25,7 +22,6 @@ type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 
 type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 >P0 : string | number | null | undefined
->null : null
 
 type P1 = __Awaited<any>;
 >P1 : any
@@ -324,8 +320,6 @@ type ParseManyWhitespace<S extends string> =
 
     S extends ` ${infer R0}` ?
         ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
->null : null
-
         ParseSuccess<S>;
 
 type TP1 = ParseManyWhitespace<" foo">;
@@ -340,7 +334,6 @@ type ParseManyWhitespace2<S extends string> =
 
 type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
 >Helper : Helper<T>
->null : null
 
 type TP2 = ParseManyWhitespace2<" foo">;
 >TP2 : ParseSuccess<"foo">

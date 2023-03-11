@@ -6,5 +6,4 @@ function f1 () {
     {
         let x = 11;
     }
-    x++;
 }

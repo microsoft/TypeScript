@@ -14,7 +14,6 @@ export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
 export const localRwcBaseline = "internal/baselines/rwc/local";
 export const refRwcBaseline = "internal/baselines/rwc/reference";
-export const localTest262Baseline = "internal/baselines/test262/local";
 
 /**
  * @param {string} runJs

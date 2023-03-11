@@ -81,10 +81,7 @@ hereby tests             # Build the test infrastructure using the built compile
 hereby runtests          # Run tests using the built compiler and test infrastructure.
                          # You can override the specific suite runner used or specify a test for this command.
                          # Use --tests=<testPath> for a specific test and/or --runner=<runnerName> for a specific suite.
-                         # Valid runners include conformance, compiler, fourslash, project, user, and docker
-                         # The user and docker runners are extended test suite runners - the user runner
-                         # works on disk in the tests/cases/user directory, while the docker runner works in containers.
-                         # You'll need to have the docker executable in your system path for the docker runner to work.
+                         # Valid runners include conformance, compiler, fourslash, and project
 hereby runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
                          # core count by default. Use --workers=<number> to adjust this.
 hereby baseline-accept   # This replaces the baseline test results with the results obtained from hereby runtests.
