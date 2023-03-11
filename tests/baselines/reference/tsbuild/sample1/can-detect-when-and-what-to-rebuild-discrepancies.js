@@ -14,6 +14,12 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -44,6 +50,12 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -115,6 +127,12 @@ Incremental buildInfoText:: {
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -136,7 +154,7 @@ Incremental buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 927
+  "size": 938
 }
 Clean buildInfoText:: {
   "program": {
@@ -171,6 +189,12 @@ Clean buildInfoText:: {
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -192,7 +216,7 @@ Clean buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1029
+  "size": 1040
 }
 Incremental build contains ./index.ts file as pending emit, clean build does not have it: /src/tests/tsconfig.tsbuildinfo.readable.baseline.txt::
 Incremental buildInfoText:: {
@@ -222,6 +246,12 @@ Incremental buildInfoText:: {
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -243,7 +273,7 @@ Incremental buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 927
+  "size": 938
 }
 Clean buildInfoText:: {
   "program": {
@@ -278,6 +308,12 @@ Clean buildInfoText:: {
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -299,5 +335,5 @@ Clean buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1029
+  "size": 1040
 }

@@ -16,7 +16,6 @@ export type Handler<TEvent = any, TResult = any> = (
 export type Callback<TResult = any> = (error?: Error | string | null, result?: TResult) => void;
 >Callback : Callback<TResult>
 >error : string | Error
->null : null
 >result : TResult
 
 === tests/cases/compiler/node_modules/lambda-tester/index.d.ts ===

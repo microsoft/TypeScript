@@ -9,11 +9,9 @@ class C1 implements I1 {
 
 	IM1():void[] {return null;}
 >IM1 : () => void[]
->null : null
 
 	C1M1():C1[] {return null;}
 >C1M1 : () => C1[]
->null : null
  }
 class C2 extends C1 {
 >C2 : C2
@@ -21,7 +19,6 @@ class C2 extends C1 {
 
 	C2M1():C2[] { return null;}
 >C2M1 : () => C2[]
->null : null
 }
 
 class C3 {
@@ -46,7 +43,6 @@ Type 1 of any[]:
 */
 var a1 : any = null;
 >a1 : any
->null : null
 
 var c1 : C1 = new C1();
 >c1 : C1
@@ -136,7 +132,6 @@ arr_any = function () { return null;} // should be an error - is
 >arr_any = function () { return null;} : () => any
 >arr_any : any[]
 >function () { return null;} : () => any
->null : null
 
 arr_any = o1; // should be an error - is
 >arr_any = o1 : { one: number; }

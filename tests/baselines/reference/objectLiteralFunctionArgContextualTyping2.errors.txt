@@ -18,7 +18,7 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,17): error 
     function f2(args: I2) { }
     
     f2({ hello: 1 }) 
-         ~~~~~~~~
+         ~~~~~
 !!! error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I2'.
 !!! error TS2345:   Object literal may only specify known properties, and 'hello' does not exist in type 'I2'.
     f2({ value: '' })
@@ -27,7 +27,7 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,17): error 
 !!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; }' but required in type 'I2'.
 !!! related TS2728 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts:3:5: 'doStuff' is declared here.
     f2({ value: '', what: 1 }) 
-                    ~~~~~~~
+                    ~~~~
 !!! error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
 !!! error TS2345:   Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
     f2({ toString: (s) => s }) 

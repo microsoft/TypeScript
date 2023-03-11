@@ -1,3 +1,4 @@
+import * as performance from "../compiler/_namespaces/ts.performance";
 import * as ts from "./_namespaces/ts";
 import {
     arrayFrom,
@@ -19,8 +20,8 @@ import {
     createDiagnosticReporter,
     createGetCanonicalFileName,
     createIncrementalCompilerHost,
-    createProgram,
     CreateProgram,
+    createProgram,
     CreateProgramOptions,
     createSolutionBuilder,
     createSolutionBuilderHost,
@@ -87,7 +88,6 @@ import {
     WatchCompilerHost,
     WatchOptions,
 } from "./_namespaces/ts";
-import * as performance from "../compiler/_namespaces/ts.performance";
 
 interface Statistic {
     name: string;

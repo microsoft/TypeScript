@@ -51,17 +51,13 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/d/f3.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/c/f2.ts:
+/a/c/f2.ts: *new*
   {}
-/a/d/f3.ts:
+/a/d/f3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -110,8 +106,6 @@ Shape signatures in builder refreshed for::
 /a/d/f3.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
 /a/c/f2.ts:
   {}
@@ -119,10 +113,8 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/f1.ts:
+/a/b/f1.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

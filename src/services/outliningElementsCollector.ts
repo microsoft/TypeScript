@@ -46,7 +46,6 @@ import {
     OutliningSpanKind,
     ParenthesizedExpression,
     positionsAreOnSameLine,
-    Push,
     SignatureDeclaration,
     SourceFile,
     startsWith,
@@ -66,7 +65,7 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
     return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
 }
 
-function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     let depthRemaining = 40;
     let current = 0;
     // Includes the EOF Token so that comments which aren't attached to statements are included
@@ -135,7 +134,7 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
     }
 }
 
-function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
+function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): void {
     const regions: OutliningSpan[] = [];
     const lineStarts = sourceFile.getLineStarts();
     for (const currentLineStart of lineStarts) {
@@ -173,7 +172,7 @@ function isRegionDelimiter(lineText: string) {
     return regionDelimiterRegExp.exec(lineText);
 }
 
-function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     const comments = getLeadingCommentRanges(sourceFile.text, pos);
     if (!comments) return;
 
@@ -220,7 +219,7 @@ function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFil
     }
 }
 
-function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     if (isJsxText(n)) return;
     addOutliningForLeadingCommentsForPos(n.pos, sourceFile, cancellationToken, out);
 }

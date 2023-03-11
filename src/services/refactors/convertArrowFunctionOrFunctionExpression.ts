@@ -41,6 +41,7 @@ import {
     RefactorContext,
     RefactorEditInfo,
     ReturnStatement,
+    setTextRange,
     SourceFile,
     Statement,
     suppressLeadingAndTrailingTrivia,
@@ -237,6 +238,7 @@ function convertToBlock(body: ConciseBody): Block {
     if (isExpression(body)) {
         const returnStatement = factory.createReturnStatement(body);
         const file = body.getSourceFile();
+        setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
         copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
         return factory.createBlock([returnStatement], /* multiLine */ true);

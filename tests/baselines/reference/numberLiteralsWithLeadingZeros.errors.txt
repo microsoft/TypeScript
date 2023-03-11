@@ -2,8 +2,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(1,1): error TS1121: Octal
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(3,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(4,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(5,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(6,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(5,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(6,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(8,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(8,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(9,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
@@ -12,8 +12,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(10,1): error TS1121: Octa
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(10,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(11,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(11,4): error TS1005: ';' expected.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(12,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(13,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(12,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(13,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(15,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(15,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(15,3): error TS2304: Cannot find name 'e5'.
@@ -26,8 +26,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(17,3): error TS2304: Cann
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(18,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(18,4): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(18,4): error TS2304: Cannot find name 'e5'.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(19,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(20,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(19,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(20,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(22,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(22,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(23,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
@@ -36,8 +36,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(24,1): error TS1121: Octa
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(24,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(25,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(25,4): error TS1005: ';' expected.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(26,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(27,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(26,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(27,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(29,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(29,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(30,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
@@ -46,8 +46,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(31,1): error TS1121: Octa
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(31,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(32,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(32,4): error TS1005: ';' expected.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(33,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(34,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(33,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(34,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(36,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(36,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(36,3): error TS2304: Cannot find name 'e5_5'.
@@ -60,8 +60,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(38,3): error TS2304: Cann
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(39,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(39,4): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(39,4): error TS2304: Cannot find name 'e5_5'.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(40,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(41,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(40,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(41,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(43,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(43,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(44,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
@@ -70,8 +70,8 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(45,1): error TS1121: Octa
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(45,3): error TS1005: ';' expected.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(46,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(46,4): error TS1005: ';' expected.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(47,1): error TS1488: Decimals with leading zeros are not allowed.
-tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(48,1): error TS1488: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(47,1): error TS1489: Decimals with leading zeros are not allowed.
+tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(48,1): error TS1489: Decimals with leading zeros are not allowed.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(50,2): error TS6188: Numeric separators are not allowed here.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(51,2): error TS6188: Numeric separators are not allowed here.
 tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(52,2): error TS6188: Numeric separators are not allowed here.
@@ -116,10 +116,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     08;
     ~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008;
     ~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     00.5;
     ~~
@@ -143,10 +143,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS1005: ';' expected.
     08.5;
     ~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008.5;
     ~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     00e5;
     ~~
@@ -178,10 +178,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS2304: Cannot find name 'e5'.
     08e5;
     ~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008e5;
     ~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     00.5e5;
     ~~
@@ -205,10 +205,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS1005: ';' expected.
     08.5e5;
     ~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008.5e5;
     ~~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     00.5_5;
     ~~
@@ -232,10 +232,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS1005: ';' expected.
     08.5_5;
     ~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008.5_5;
     ~~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     00e5_5;
     ~~
@@ -267,10 +267,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS2304: Cannot find name 'e5_5'.
     08e5_5;
     ~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008e5_5;
     ~~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     00.5_5e5_5;
     ~~
@@ -294,10 +294,10 @@ tests/cases/compiler/numberLiteralsWithLeadingZeros.ts(78,2): error TS6188: Nume
 !!! error TS1005: ';' expected.
     08.5_5e5_5;
     ~~~~~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     008.5_5e5_5;
     ~~~~~~~~~~~
-!!! error TS1488: Decimals with leading zeros are not allowed.
+!!! error TS1489: Decimals with leading zeros are not allowed.
     
     0_0.5_5;
      ~

@@ -8,18 +8,15 @@ interface Foo {
 
     c: number | null
 >c : number
->null : null
 
     d?: number
 >d : number
 
     e: number | undefined | null
 >e : number
->null : null
 
     f?: number | undefined | null
 >f : number
->null : null
 
     g: unknown
 >g : unknown

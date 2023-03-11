@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
 
 export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");

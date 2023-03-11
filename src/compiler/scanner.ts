@@ -41,9 +41,15 @@ export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): bool
 }
 
 export interface Scanner {
+    /** @deprecated use {@link getTokenFullStart} */
     getStartPos(): number;
     getToken(): SyntaxKind;
+    getTokenFullStart(): number;
+    getTokenStart(): number;
+    getTokenEnd(): number;
+    /** @deprecated use {@link getTokenEnd} */
     getTextPos(): number;
+    /** @deprecated use {@link getTokenStart} */
     getTokenPos(): number;
     getTokenText(): string;
     getTokenValue(): string;
@@ -65,6 +71,7 @@ export interface Scanner {
     reScanSlashToken(): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+    /** @deprecated use {@link reScanTemplateToken}(false) */
     reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
     scanJsxIdentifier(): SyntaxKind;
     scanJsxAttributeValue(): SyntaxKind;
@@ -76,6 +83,8 @@ export interface Scanner {
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
+    /** @internal */
+    scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
     scan(): SyntaxKind;
 
     getText(): string;
@@ -87,7 +96,9 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
+    resetTokenState(pos: number): void;
     /** @internal */
     setInJSDocType(inType: boolean): void;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
@@ -962,36 +973,42 @@ export function createScanner(languageVersion: ScriptTarget,
     start?: number,
     length?: number): Scanner {
 
-    let text = textInitial!;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var text = textInitial!;
 
     // Current position (end position of text of current token)
-    let pos: number;
+    var pos: number;
 
 
     // end of text
-    let end: number;
+    var end: number;
 
     // Start position of whitespace before current token
-    let startPos: number;
+    var fullStartPos: number;
 
     // Start position of text of current token
-    let tokenPos: number;
+    var tokenStart: number;
 
-    let token: SyntaxKind;
-    let tokenValue!: string;
-    let tokenFlags: TokenFlags;
+    var token: SyntaxKind;
+    var tokenValue!: string;
+    var tokenFlags: TokenFlags;
 
-    let commentDirectives: CommentDirective[] | undefined;
-    let inJSDocType = 0;
+    var commentDirectives: CommentDirective[] | undefined;
+    var inJSDocType = 0;
 
     setText(text, start, length);
 
-    const scanner: Scanner = {
-        getStartPos: () => startPos,
+    var scanner: Scanner = {
+        getTokenFullStart: () => fullStartPos,
+        getStartPos: () => fullStartPos,
+        getTokenEnd: () => pos,
         getTextPos: () => pos,
         getToken: () => token,
-        getTokenPos: () => tokenPos,
-        getTokenText: () => text.substring(tokenPos, pos),
+        getTokenStart: () => tokenStart,
+        getTokenPos: () => tokenStart,
+        getTokenText: () => text.substring(tokenStart, pos),
         getTokenValue: () => tokenValue,
         hasUnicodeEscape: () => (tokenFlags & TokenFlags.UnicodeEscape) !== 0,
         hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
@@ -1018,6 +1035,7 @@ export function createScanner(languageVersion: ScriptTarget,
         reScanInvalidIdentifier,
         scanJsxToken,
         scanJsDocToken,
+        scanJSDocCommentTextToken,
         scan,
         getText,
         clearCommentDirectives,
@@ -1025,18 +1043,20 @@ export function createScanner(languageVersion: ScriptTarget,
         setScriptTarget,
         setLanguageVariant,
         setOnError,
-        setTextPos,
+        resetTokenState,
+        setTextPos: resetTokenState,
         setInJSDocType,
         tryScan,
         lookAhead,
         scanRange,
     };
+    /* eslint-enable no-var */
 
     if (Debug.isDebugging) {
         Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
             get: () => {
                 const text = scanner.getText();
-                return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
+                return text.slice(0, scanner.getTokenFullStart()) + "║" + text.slice(scanner.getTokenFullStart());
             },
         });
     }
@@ -1749,11 +1769,11 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function scan(): SyntaxKind {
-        startPos = pos;
+        fullStartPos = pos;
         tokenFlags = TokenFlags.None;
         let asteriskSeen = false;
         while (true) {
-            tokenPos = pos;
+            tokenStart = pos;
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
@@ -1921,9 +1941,9 @@ export function createScanner(languageVersion: ScriptTarget,
 
                         commentDirectives = appendIfCommentDirective(
                             commentDirectives,
-                            text.slice(tokenPos, pos),
+                            text.slice(tokenStart, pos),
                             commentDirectiveRegExSingleLine,
-                            tokenPos,
+                            tokenStart,
                         );
 
                         if (skipTrivia) {
@@ -1941,7 +1961,7 @@ export function createScanner(languageVersion: ScriptTarget,
                         }
 
                         let commentClosed = false;
-                        let lastLineStart = tokenPos;
+                        let lastLineStart = tokenStart;
                         while (pos < end) {
                             const ch = text.charCodeAt(pos);
 
@@ -2241,7 +2261,7 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function reScanInvalidIdentifier(): SyntaxKind {
         Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
-        pos = tokenPos = startPos;
+        pos = tokenStart = fullStartPos;
         tokenFlags = 0;
         const ch = codePointAt(text, pos);
         const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
@@ -2257,7 +2277,7 @@ export function createScanner(languageVersion: ScriptTarget,
         if (isIdentifierStart(ch, languageVersion)) {
             pos += charSize(ch);
             while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
-            tokenValue = text.substring(tokenPos, pos);
+            tokenValue = text.substring(tokenStart, pos);
             if (ch === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();
             }
@@ -2290,13 +2310,13 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function reScanAsteriskEqualsToken(): SyntaxKind {
         Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
-        pos = tokenPos + 1;
+        pos = tokenStart + 1;
         return token = SyntaxKind.EqualsToken;
     }
 
     function reScanSlashToken(): SyntaxKind {
         if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
-            let p = tokenPos + 1;
+            let p = tokenStart + 1;
             let inEscape = false;
             let inCharacterClass = false;
             while (true) {
@@ -2342,7 +2362,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 p++;
             }
             pos = p;
-            tokenValue = text.substring(tokenPos, pos);
+            tokenValue = text.substring(tokenStart, pos);
             token = SyntaxKind.RegularExpressionLiteral;
         }
         return token;
@@ -2389,23 +2409,23 @@ export function createScanner(languageVersion: ScriptTarget,
      * Unconditionally back up and scan a template expression portion.
      */
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
-        pos = tokenPos;
+        pos = tokenStart;
         return token = scanTemplateAndSetTokenValue(!isTaggedTemplate);
     }
 
     function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-        pos = tokenPos;
+        pos = tokenStart;
         return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ true);
     }
 
     function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
-        pos = tokenPos = startPos;
+        pos = tokenStart = fullStartPos;
         return token = scanJsxToken(allowMultilineJsxText);
     }
 
     function reScanLessThanToken(): SyntaxKind {
         if (token === SyntaxKind.LessThanLessThanToken) {
-            pos = tokenPos + 1;
+            pos = tokenStart + 1;
             return token = SyntaxKind.LessThanToken;
         }
         return token;
@@ -2413,7 +2433,7 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function reScanHashToken(): SyntaxKind {
         if (token === SyntaxKind.PrivateIdentifier) {
-            pos = tokenPos + 1;
+            pos = tokenStart + 1;
             return token = SyntaxKind.HashToken;
         }
         return token;
@@ -2421,12 +2441,12 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function reScanQuestionToken(): SyntaxKind {
         Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
-        pos = tokenPos + 1;
+        pos = tokenStart + 1;
         return token = SyntaxKind.QuestionToken;
     }
 
     function scanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
-        startPos = tokenPos = pos;
+        fullStartPos = tokenStart = pos;
 
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
@@ -2493,7 +2513,7 @@ export function createScanner(languageVersion: ScriptTarget,
             pos++;
         }
 
-        tokenValue = text.substring(startPos, pos);
+        tokenValue = text.substring(fullStartPos, pos);
 
         return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
     }
@@ -2538,7 +2558,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function scanJsxAttributeValue(): SyntaxKind {
-        startPos = pos;
+        fullStartPos = pos;
 
         switch (text.charCodeAt(pos)) {
             case CharacterCodes.doubleQuote:
@@ -2552,12 +2572,40 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanJsxAttributeValue(): SyntaxKind {
-        pos = tokenPos = startPos;
+        pos = tokenStart = fullStartPos;
         return scanJsxAttributeValue();
     }
 
+    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
+        fullStartPos = tokenStart = pos;
+        tokenFlags = TokenFlags.None;
+        if (pos >= end) {
+            return token = SyntaxKind.EndOfFileToken;
+        }
+        for (let ch = text.charCodeAt(pos);
+             pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick);
+             ch = codePointAt(text, ++pos)) {
+            if (!inBackticks) {
+                if (ch === CharacterCodes.openBrace) {
+                    break;
+                }
+                else if (ch === CharacterCodes.at
+                    && pos - 1 >= 0 && isWhiteSpaceSingleLine(text.charCodeAt(pos - 1))
+                    && !(pos + 1 < end && isWhiteSpaceLike(text.charCodeAt(pos + 1)))) {
+                    // @ doesn't start a new tag inside ``, and elsewhere, only after whitespace and before non-whitespace
+                    break;
+                }
+            }
+        }
+        if (pos === tokenStart) {
+            return scanJsDocToken();
+        }
+        tokenValue = text.substring(tokenStart, pos);
+        return token = SyntaxKind.JSDocCommentTextToken;
+    }
+
     function scanJsDocToken(): JSDocSyntaxKind {
-        startPos = tokenPos = pos;
+        fullStartPos = tokenStart = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
@@ -2632,7 +2680,7 @@ export function createScanner(languageVersion: ScriptTarget,
         if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
             while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus) pos += charSize(char);
-            tokenValue = text.substring(tokenPos, pos);
+            tokenValue = text.substring(tokenStart, pos);
             if (char === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();
             }
@@ -2645,8 +2693,8 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
         const savePos = pos;
-        const saveStartPos = startPos;
-        const saveTokenPos = tokenPos;
+        const saveStartPos = fullStartPos;
+        const saveTokenPos = tokenStart;
         const saveToken = token;
         const saveTokenValue = tokenValue;
         const saveTokenFlags = tokenFlags;
@@ -2656,8 +2704,8 @@ export function createScanner(languageVersion: ScriptTarget,
         // then unconditionally restore us to where we were.
         if (!result || isLookahead) {
             pos = savePos;
-            startPos = saveStartPos;
-            tokenPos = saveTokenPos;
+            fullStartPos = saveStartPos;
+            tokenStart = saveTokenPos;
             token = saveToken;
             tokenValue = saveTokenValue;
             tokenFlags = saveTokenFlags;
@@ -2668,8 +2716,8 @@ export function createScanner(languageVersion: ScriptTarget,
     function scanRange<T>(start: number, length: number, callback: () => T): T {
         const saveEnd = end;
         const savePos = pos;
-        const saveStartPos = startPos;
-        const saveTokenPos = tokenPos;
+        const saveStartPos = fullStartPos;
+        const saveTokenPos = tokenStart;
         const saveToken = token;
         const saveTokenValue = tokenValue;
         const saveTokenFlags = tokenFlags;
@@ -2680,8 +2728,8 @@ export function createScanner(languageVersion: ScriptTarget,
 
         end = saveEnd;
         pos = savePos;
-        startPos = saveStartPos;
-        tokenPos = saveTokenPos;
+        fullStartPos = saveStartPos;
+        tokenStart = saveTokenPos;
         token = saveToken;
         tokenValue = saveTokenValue;
         tokenFlags = saveTokenFlags;
@@ -2709,7 +2757,7 @@ export function createScanner(languageVersion: ScriptTarget,
     function setText(newText: string | undefined, start: number | undefined, length: number | undefined) {
         text = newText || "";
         end = length === undefined ? text.length : start! + length;
-        setTextPos(start || 0);
+        resetTokenState(start || 0);
     }
 
     function setOnError(errorCallback: ErrorCallback | undefined) {
@@ -2724,11 +2772,11 @@ export function createScanner(languageVersion: ScriptTarget,
         languageVariant = variant;
     }
 
-    function setTextPos(textPos: number) {
-        Debug.assert(textPos >= 0);
-        pos = textPos;
-        startPos = textPos;
-        tokenPos = textPos;
+    function resetTokenState(position: number) {
+        Debug.assert(position >= 0);
+        pos = position;
+        fullStartPos = position;
+        tokenStart = position;
         token = SyntaxKind.Unknown;
         tokenValue = undefined!;
         tokenFlags = TokenFlags.None;

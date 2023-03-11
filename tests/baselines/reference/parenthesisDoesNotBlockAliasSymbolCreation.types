@@ -22,24 +22,20 @@ export type A2<T> = (
 export const a = null as A<{ x : number }>;
 >a : A<{ x: number; }>
 >null as A<{ x : number }> : A<{ x: number; }>
->null : null
 >x : number
 
 export const a2 = null as A2<{ x : number }>;
 >a2 : A2<{ x: number; }>
 >null as A2<{ x : number }> : A2<{ x: number; }>
->null : null
 >x : number
 
 export const a3 = null as { x : number } & InvalidKeys<"a">;
 >a3 : { x: number; } & InvalidKeys<"a">
 >null as { x : number } & InvalidKeys<"a"> : { x: number; } & InvalidKeys<"a">
->null : null
 >x : number
 
 export const a4 = null as { x : number } & InvalidKeys2<"a">;
 >a4 : { x: number; } & InvalidKeys2<"a">
 >null as { x : number } & InvalidKeys2<"a"> : { x: number; } & InvalidKeys2<"a">
->null : null
 >x : number
 

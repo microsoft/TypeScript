@@ -29,11 +29,11 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts(24,101): erro
     
     // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
     var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
-                                                                                ~~~~~
+                                                                                ~
 !!! error TS2322: Type '{ a: string; b: number; c: string; }' is not assignable to type '{ a: string; b: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 !!! related TS6501 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:17: The expected type comes from this index signature.
-                                                                                                        ~~~~
+                                                                                                        ~
 !!! error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type '{ a: string; b: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 !!! related TS6501 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:17: The expected type comes from this index signature.

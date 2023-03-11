@@ -137,7 +137,7 @@ type Nominal<T, Name> = T & {
 
 
 //// [/src/common/common.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./nominal.js"],"js":{"sections":[{"pos":0,"end":80,"kind":"text"}],"hash":"-1932521178-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n"},"dts":{"sections":[{"pos":0,"end":61,"kind":"text"}],"hash":"-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./nominal.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-1932521178-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n"],"options":{"composite":true,"declaration":true,"outFile":"./common.js","rootDir":"..","skipLibCheck":true},"outSignature":"-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","latestChangedDtsFile":"./common.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./nominal.js"],"js":{"sections":[{"pos":0,"end":80,"kind":"text"}],"hash":"-1932521178-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n"},"dts":{"sections":[{"pos":0,"end":61,"kind":"text"}],"hash":"-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./nominal.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-1932521178-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./common.js","rootDir":"..","skipLibCheck":true},"outSignature":"-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","latestChangedDtsFile":"./common.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/common/common.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -197,6 +197,12 @@ type Nominal<T, Name> = T & {
       "../../lib/lib.d.ts": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
       "./nominal.js": "-1932521178-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n"
     },
+    "root": [
+      [
+        2,
+        "./nominal.js"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -208,7 +214,7 @@ type Nominal<T, Name> = T & {
     "latestChangedDtsFile": "./common.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1466
+  "size": 1477
 }
 
 //// [/src/sub-project/sub-project.d.ts]
@@ -234,7 +240,7 @@ var c = /** @type {*} */ (null);
 
 
 //// [/src/sub-project/sub-project.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":80,"kind":"prepend","data":"../common/common.js","texts":[{"pos":0,"end":80,"kind":"text"}]},{"pos":80,"end":174,"kind":"text"}],"hash":"-7871970258-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (null);\n"},"dts":{"sections":[{"pos":0,"end":61,"kind":"prepend","data":"../common/common.d.ts","texts":[{"pos":0,"end":61,"kind":"text"}]},{"pos":61,"end":191,"kind":"text"}],"hash":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../common/common.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","2691219051-/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nconst c = /** @type {*} */(null);\n"],"options":{"composite":true,"declaration":true,"outFile":"./sub-project.js","rootDir":"..","skipLibCheck":true},"outSignature":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","latestChangedDtsFile":"./sub-project.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":80,"kind":"prepend","data":"../common/common.js","texts":[{"pos":0,"end":80,"kind":"text"}]},{"pos":80,"end":174,"kind":"text"}],"hash":"-7871970258-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (null);\n"},"dts":{"sections":[{"pos":0,"end":61,"kind":"prepend","data":"../common/common.d.ts","texts":[{"pos":0,"end":61,"kind":"text"}]},{"pos":61,"end":191,"kind":"text"}],"hash":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../common/common.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","2691219051-/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nconst c = /** @type {*} */(null);\n"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./sub-project.js","rootDir":"..","skipLibCheck":true},"outSignature":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","latestChangedDtsFile":"./sub-project.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/sub-project/sub-project.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -341,6 +347,12 @@ type MyNominal = Nominal<string, 'MyNominal'>;
       "../common/common.d.ts": "-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n",
       "./index.js": "2691219051-/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nconst c = /** @type {*} */(null);\n"
     },
+    "root": [
+      [
+        3,
+        "./index.js"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -352,7 +364,7 @@ type MyNominal = Nominal<string, 'MyNominal'>;
     "latestChangedDtsFile": "./sub-project.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2178
+  "size": 2189
 }
 
 //// [/src/sub-project-2/sub-project-2.d.ts]
@@ -394,7 +406,7 @@ function getVar() {
 
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":174,"kind":"prepend","data":"../sub-project/sub-project.js","texts":[{"pos":0,"end":174,"kind":"text"}]},{"pos":174,"end":322,"kind":"text"}],"hash":"-4809651809-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (null);\nvar variable = {\n    key: /** @type {MyNominal} */ ('value'),\n};\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../sub-project/sub-project.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":341,"kind":"text"}],"hash":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../sub-project/sub-project.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","2078909278-const variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"],"options":{"composite":true,"declaration":true,"outFile":"./sub-project-2.js","rootDir":"..","skipLibCheck":true},"outSignature":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n","latestChangedDtsFile":"./sub-project-2.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":174,"kind":"prepend","data":"../sub-project/sub-project.js","texts":[{"pos":0,"end":174,"kind":"text"}]},{"pos":174,"end":322,"kind":"text"}],"hash":"-4809651809-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (null);\nvar variable = {\n    key: /** @type {MyNominal} */ ('value'),\n};\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../sub-project/sub-project.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":341,"kind":"text"}],"hash":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../sub-project/sub-project.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","2078909278-const variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./sub-project-2.js","rootDir":"..","skipLibCheck":true},"outSignature":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n","latestChangedDtsFile":"./sub-project-2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -517,6 +529,12 @@ declare namespace variable {
       "../sub-project/sub-project.d.ts": "-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n",
       "./index.js": "2078909278-const variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"
     },
+    "root": [
+      [
+        3,
+        "./index.js"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -528,7 +546,7 @@ declare namespace variable {
     "latestChangedDtsFile": "./sub-project-2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2882
+  "size": 2893
 }
 
 
@@ -561,7 +579,7 @@ var c = /** @type {*} */ (undefined);
 
 
 //// [/src/sub-project/sub-project.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":80,"kind":"prepend","data":"../common/common.js","texts":[{"pos":0,"end":80,"kind":"text"}]},{"pos":80,"end":179,"kind":"text"}],"hash":"-8079555643-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (undefined);\n"},"dts":{"sections":[{"pos":0,"end":61,"kind":"prepend","data":"../common/common.d.ts","texts":[{"pos":0,"end":61,"kind":"text"}]},{"pos":61,"end":191,"kind":"text"}],"hash":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../common/common.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","7546612770-/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nconst c = /** @type {*} */(undefined);\n"],"options":{"composite":true,"declaration":true,"outFile":"./sub-project.js","rootDir":"..","skipLibCheck":true},"outSignature":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","latestChangedDtsFile":"./sub-project.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":80,"kind":"prepend","data":"../common/common.js","texts":[{"pos":0,"end":80,"kind":"text"}]},{"pos":80,"end":179,"kind":"text"}],"hash":"-8079555643-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (undefined);\n"},"dts":{"sections":[{"pos":0,"end":61,"kind":"prepend","data":"../common/common.d.ts","texts":[{"pos":0,"end":61,"kind":"text"}]},{"pos":61,"end":191,"kind":"text"}],"hash":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../common/common.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","7546612770-/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nconst c = /** @type {*} */(undefined);\n"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./sub-project.js","rootDir":"..","skipLibCheck":true},"outSignature":"-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","latestChangedDtsFile":"./sub-project.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/sub-project/sub-project.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -668,6 +686,12 @@ type MyNominal = Nominal<string, 'MyNominal'>;
       "../common/common.d.ts": "-12106547178-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n",
       "./index.js": "7546612770-/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nconst c = /** @type {*} */(undefined);\n"
     },
+    "root": [
+      [
+        3,
+        "./index.js"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -679,7 +703,7 @@ type MyNominal = Nominal<string, 'MyNominal'>;
     "latestChangedDtsFile": "./sub-project.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2188
+  "size": 2199
 }
 
 //// [/src/sub-project-2/sub-project-2.js]
@@ -703,7 +727,7 @@ function getVar() {
 
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":179,"kind":"prepend","data":"../sub-project/sub-project.js","texts":[{"pos":0,"end":179,"kind":"text"}]},{"pos":179,"end":327,"kind":"text"}],"hash":"-26783073610-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (undefined);\nvar variable = {\n    key: /** @type {MyNominal} */ ('value'),\n};\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../sub-project/sub-project.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":341,"kind":"text"}],"hash":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../sub-project/sub-project.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","2078909278-const variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"],"options":{"composite":true,"declaration":true,"outFile":"./sub-project-2.js","rootDir":"..","skipLibCheck":true},"outSignature":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n","latestChangedDtsFile":"./sub-project-2.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":179,"kind":"prepend","data":"../sub-project/sub-project.js","texts":[{"pos":0,"end":179,"kind":"text"}]},{"pos":179,"end":327,"kind":"text"}],"hash":"-26783073610-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\nvar c = /** @type {*} */ (undefined);\nvar variable = {\n    key: /** @type {MyNominal} */ ('value'),\n};\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../sub-project/sub-project.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":341,"kind":"text"}],"hash":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","../sub-project/sub-project.d.ts","./index.js"],"fileInfos":["-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n","2078909278-const variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./sub-project-2.js","rootDir":"..","skipLibCheck":true},"outSignature":"4681612701-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @return {keyof typeof variable}\n */\ndeclare function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    const key: MyNominal;\n}\n","latestChangedDtsFile":"./sub-project-2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -826,6 +850,12 @@ declare namespace variable {
       "../sub-project/sub-project.d.ts": "-9550245654-type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\ndeclare const c: any;\ntype MyNominal = Nominal<string, 'MyNominal'>;\n",
       "./index.js": "2078909278-const variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nfunction getVar() {\n    return 'key';\n}\n"
     },
+    "root": [
+      [
+        3,
+        "./index.js"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -837,6 +867,6 @@ declare namespace variable {
     "latestChangedDtsFile": "./sub-project-2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2888
+  "size": 2899
 }
 
