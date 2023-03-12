@@ -1,55 +1,58 @@
-=== /tests/cases/fourslash/quickInfoJsDocTags12.ts ===
+=== /tests/cases/fourslash/quickInfoJsDocTags13.ts ===
 // /**
-//  * @param a - a parameter
-//  * @param b - b parameter
-//  * @param c - c parameter
-//  * @param f - f parameter
+//  * @param a - a param
+//  * @param bindingelement1 - for { b, c }
+//  * @param b - b param
+//  * @param bindingelement2 - for { e }
+//  * @param c - c param
+//  * @param d - d param
 //  */
-// function foo(a: string, { b, c, d, e: { f } } : { b: string, c: string, d: string, e: { f: string } }) {
+// function foo(a: string, { b, c }: { b: string, c: string }, d: string, { e }: { e: string }) {
 //     a
 //     ^
 // | ----------------------------------------------------------------------
 // | (parameter) a: string
-// | - a parameter
-// | @param a - a parameter
+// | - a param
+// | @param a - a param
 // | ----------------------------------------------------------------------
 //     b
 //     ^
 // | ----------------------------------------------------------------------
 // | (parameter) b: string
-// | - b parameter
+// | - b param
 // | ----------------------------------------------------------------------
 //     c
 //     ^
 // | ----------------------------------------------------------------------
 // | (parameter) c: string
-// | - c parameter
+// | - c param
 // | ----------------------------------------------------------------------
 //     d
 //     ^
 // | ----------------------------------------------------------------------
 // | (parameter) d: string
+// | - d param
+// | @param d - d param
 // | ----------------------------------------------------------------------
-//     f
+//     e
 //     ^
 // | ----------------------------------------------------------------------
-// | (parameter) f: string
-// | - f parameter
+// | (parameter) e: string
 // | ----------------------------------------------------------------------
 // }
 
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags12.ts",
-      "position": 222,
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags13.ts",
+      "position": 275,
       "name": "1"
     },
     "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 221,
+        "start": 274,
         "length": 1
       },
       "displayParts": [
@@ -88,7 +91,7 @@
       ],
       "documentation": [
         {
-          "text": "- a parameter",
+          "text": "- a param",
           "kind": "text"
         }
       ],
@@ -105,7 +108,7 @@
               "kind": "space"
             },
             {
-              "text": "- a parameter",
+              "text": "- a param",
               "kind": "text"
             }
           ]
@@ -115,15 +118,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags12.ts",
-      "position": 228,
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags13.ts",
+      "position": 281,
       "name": "2"
     },
     "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 227,
+        "start": 280,
         "length": 1
       },
       "displayParts": [
@@ -162,7 +165,7 @@
       ],
       "documentation": [
         {
-          "text": "- b parameter",
+          "text": "- b param",
           "kind": "text"
         }
       ]
@@ -170,15 +173,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags12.ts",
-      "position": 234,
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags13.ts",
+      "position": 287,
       "name": "3"
     },
     "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 233,
+        "start": 286,
         "length": 1
       },
       "displayParts": [
@@ -217,7 +220,7 @@
       ],
       "documentation": [
         {
-          "text": "- c parameter",
+          "text": "- c param",
           "kind": "text"
         }
       ]
@@ -225,15 +228,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags12.ts",
-      "position": 240,
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags13.ts",
+      "position": 293,
       "name": "4"
     },
     "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 239,
+        "start": 292,
         "length": 1
       },
       "displayParts": [
@@ -270,20 +273,44 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [
+        {
+          "text": "- d param",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "d",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- d param",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags12.ts",
-      "position": 246,
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags13.ts",
+      "position": 299,
       "name": "5"
     },
     "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 245,
+        "start": 298,
         "length": 1
       },
       "displayParts": [
@@ -304,7 +331,7 @@
           "kind": "space"
         },
         {
-          "text": "f",
+          "text": "e",
           "kind": "parameterName"
         },
         {
@@ -320,12 +347,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [
-        {
-          "text": "- f parameter",
-          "kind": "text"
-        }
-      ]
+      "documentation": []
     }
   }
 ]
