@@ -175,7 +175,6 @@ import {
     getJSDocReturnType,
     getJSDocSatisfiesTag,
     getJSDocTags,
-    getJSDocTagsNoCache,
     getJSDocType,
     getJSDocTypeParameterTags,
     getJSDocTypeParameterTagsNoCache,
@@ -311,7 +310,6 @@ import {
     isNonNullExpression,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
-    isObjectBindingPattern,
     isObjectLiteralExpression,
     isOmittedExpression,
     isParameter,
@@ -4191,22 +4189,13 @@ export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): read
             result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
         }
 
-        if (node.kind === SyntaxKind.Parameter) {
-            result = addRange(result, (noCache ? getJSDocParameterTagsNoCache : getJSDocParameterTags)(node as ParameterDeclaration));
+        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.BindingElement) {
+            result = addRange(result, (noCache ? getJSDocParameterTagsNoCache : getJSDocParameterTags)(node as ParameterDeclaration | BindingElement));
             break;
         }
         if (node.kind === SyntaxKind.TypeParameter) {
             result = addRange(result, (noCache ? getJSDocTypeParameterTagsNoCache : getJSDocTypeParameterTags)(node as TypeParameterDeclaration));
             break;
-        }
-        if (isBindingElement(node) && isIdentifier(node.name)) {
-            const root = getRootDeclaration(node);
-            if (isParameter(root) && isObjectBindingPattern(root.name)) {
-                const tags = (noCache ? getJSDocTags : getJSDocTagsNoCache)(root.parent);
-                const name = node.name.escapedText;
-                result = addRange(result, filter(tags, tag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name));
-                break;
-            }
         }
         node = getNextJSDocCommentLocation(node);
     }

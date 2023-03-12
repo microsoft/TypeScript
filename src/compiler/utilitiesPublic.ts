@@ -79,6 +79,7 @@ import {
     getJSDocCommentsAndTags,
     getJSDocRoot,
     getJSDocTypeParameterDeclarations,
+    getRootDeclaration,
     hasAccessorModifier,
     HasDecorators,
     hasDecorators,
@@ -956,19 +957,22 @@ export function getModifiers(node: HasModifiers): readonly Modifier[] | undefine
     }
 }
 
-function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
-    if (param.name) {
-        if (isIdentifier(param.name)) {
-            const name = param.name.escapedText;
-            return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+function getJSDocParameterTagsWorker(node: ParameterDeclaration | BindingElement, noCache?: boolean): readonly JSDocParameterTag[] {
+    const declaration = getRootDeclaration(node);
+    if (isParameter(declaration)) {
+        const name = node.name;
+        const signatureDeclaration = declaration.parent;
+        const jsDocParameterTags = filter(getJSDocTagsWorker(signatureDeclaration, noCache), isJSDocParameterTag);
+        if (length(jsDocParameterTags) === 0) {
+            return emptyArray;
         }
-        else {
-            const i = param.parent.parameters.indexOf(param);
-            Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
-            const paramTags = getJSDocTagsWorker(param.parent, noCache).filter(isJSDocParameterTag);
-            if (i < paramTags.length) {
-                return [paramTags[i]];
-            }
+        if (isIdentifier(name)) {
+            return filter(jsDocParameterTags, tag => isIdentifier(tag.name) && tag.name.escapedText === name.escapedText);
+        }
+        const i = signatureDeclaration.parameters.indexOf(declaration);
+        Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
+        if (i < length(jsDocParameterTags)) {
+            return [jsDocParameterTags[i]];
         }
     }
     // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
@@ -987,13 +991,13 @@ function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: bool
  *
  * For binding patterns, parameter tags are matched by position.
  */
-export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[] {
-    return getJSDocParameterTagsWorker(param, /*noCache*/ false);
+export function getJSDocParameterTags(node: ParameterDeclaration | BindingElement): readonly JSDocParameterTag[] {
+    return getJSDocParameterTagsWorker(node, /*noCache*/ false);
 }
 
 /** @internal */
-export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): readonly JSDocParameterTag[] {
-    return getJSDocParameterTagsWorker(param, /*noCache*/ true);
+export function getJSDocParameterTagsNoCache(node: BindingElement | ParameterDeclaration): readonly JSDocParameterTag[] {
+    return getJSDocParameterTagsWorker(node, /*noCache*/ true);
 }
 
 function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
