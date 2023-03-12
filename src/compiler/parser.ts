@@ -264,6 +264,7 @@ import {
     NewExpression,
     Node,
     NodeArray,
+    NodeFactory,
     NodeFactoryFlags,
     NodeFlags,
     nodeIsMissing,
@@ -427,7 +428,7 @@ export const parseBaseNodeFactory: BaseNodeFactory = {
 };
 
 /** @internal */
-export const parseNodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
+export const parseNodeFactory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
 
 function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
     return node && cbNode(node);

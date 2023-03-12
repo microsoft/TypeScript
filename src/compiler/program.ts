@@ -306,6 +306,7 @@ import {
     SymlinkCache,
     SyntaxKind,
     sys,
+    System,
     targetOptionDeclaration,
     toFileNameLowerCase,
     tokenToString,
@@ -451,7 +452,7 @@ export function createWriteFileMeasuringIO(
 }
 
 /** @internal */
-export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
+export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system: System = sys): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
     function directoryExists(directoryPath: string): boolean {
