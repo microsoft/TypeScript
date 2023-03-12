@@ -15,6 +15,7 @@ import {
     isExpression,
     isImportCall,
     isNamedDeclaration,
+    isTransientSymbol,
     makeImport,
     ModuleKind,
     NamespaceImport,
@@ -23,7 +24,6 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-    TransientSymbol,
 } from "../_namespaces/ts";
 import {
     createCodeFixActionWithoutFixAll,
@@ -107,11 +107,11 @@ function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAct
 
 function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
     const type = context.program.getTypeChecker().getTypeAtLocation(expr);
-    if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
+    if (!(type.symbol && isTransientSymbol(type.symbol) && type.symbol.links.originatingImport)) {
         return [];
     }
     const fixes: CodeFixAction[] = [];
-    const relatedImport = (type.symbol as TransientSymbol).originatingImport!; // TODO: GH#18217
+    const relatedImport = type.symbol.links.originatingImport;
     if (!isImportCall(relatedImport)) {
         addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
     }

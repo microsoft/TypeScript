@@ -5,6 +5,5 @@ const item: { foo?: undefined } | { foo: number } = null as any as { foo?: numbe
 >foo : number
 >null as any as { foo?: number | undefined } : { foo?: number | undefined; }
 >null as any : any
->null : null
 >foo : number | undefined
 

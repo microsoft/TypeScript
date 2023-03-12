@@ -1,11 +1,43 @@
+import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
+import {
+    ApplyCodeActionCommandResult,
+    assertType,
+    CharacterCodes,
+    combinePaths,
+    createQueue,
+    Debug,
+    directorySeparator,
+    DirectoryWatcherCallback,
+    FileWatcher,
+    getDirectoryPath,
+    getRootLength,
+    JsTyping,
+    LanguageServiceMode,
+    MapLike,
+    noop,
+    noopFileWatcher,
+    normalizePath,
+    normalizeSlashes,
+    perfLogger,
+    resolveJSModule,
+    SortedReadonlyArray,
+    startTracing,
+    stripQuotes,
+    sys,
+    toFileNameLowerCase,
+    tracing,
+    TypeAcquisition,
+    validateLocaleAndSetLanguage,
+    versionMajorMinor,
+    WatchOptions,
+} from "./_namespaces/ts";
 import * as server from "./_namespaces/ts.server";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
     ActionSet,
     Arguments,
-    BaseLogger,
     BeginInstallTypes,
     createInstallTypingsRequest,
     EndInstallTypes,
@@ -27,12 +59,12 @@ import {
     LogLevel,
     ModuleImportResult,
     Msg,
+    nowString,
     nullCancellationToken,
     nullTypingsInstaller,
     PackageInstalledResponse,
     Project,
     ProjectService,
-    protocol,
     ServerCancellationToken,
     ServerHost,
     Session,
@@ -44,39 +76,6 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "./_namespaces/ts.server";
-import {
-    ApplyCodeActionCommandResult,
-    assertType,
-    CharacterCodes,
-    combinePaths,
-    createQueue,
-    Debug,
-    directorySeparator,
-    DirectoryWatcherCallback,
-    FileWatcher,
-    getDirectoryPath,
-    getEntries,
-    getNodeMajorVersion,
-    getRootLength,
-    JsTyping,
-    LanguageServiceMode,
-    MapLike,
-    noop,
-    noopFileWatcher,
-    normalizePath,
-    normalizeSlashes,
-    resolveJSModule,
-    SortedReadonlyArray,
-    startTracing,
-    stripQuotes,
-    sys,
-    toFileNameLowerCase,
-    tracing,
-    TypeAcquisition,
-    validateLocaleAndSetLanguage,
-    versionMajorMinor,
-    WatchOptions,
-} from "./_namespaces/ts";
 
 interface LogOptions {
     file?: string;
@@ -205,14 +204,16 @@ export function initializeNodeSystem(): StartInput {
         stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
     } = require("fs");
 
-    class Logger extends BaseLogger {
+    class Logger implements Logger {
+        private seq = 0;
+        private inGroup = false;
+        private firstInGroup = true;
         private fd = -1;
         constructor(
             private readonly logFilename: string,
             private readonly traceToConsole: boolean,
-            level: LogLevel
+            private readonly level: LogLevel
         ) {
-            super(level);
             if (this.logFilename) {
                 try {
                     this.fd = fs.openSync(this.logFilename, "w");
@@ -222,25 +223,67 @@ export function initializeNodeSystem(): StartInput {
                 }
             }
         }
-
+        static padStringRight(str: string, padding: string) {
+            return (str + padding).slice(0, padding.length);
+        }
         close() {
             if (this.fd >= 0) {
                 fs.close(this.fd, noop);
             }
         }
-
-        getLogFileName() {
+        getLogFileName(): string | undefined {
             return this.logFilename;
         }
-
+        perftrc(s: string) {
+            this.msg(s, Msg.Perf);
+        }
+        info(s: string) {
+            this.msg(s, Msg.Info);
+        }
+        err(s: string) {
+            this.msg(s, Msg.Err);
+        }
+        startGroup() {
+            this.inGroup = true;
+            this.firstInGroup = true;
+        }
+        endGroup() {
+            this.inGroup = false;
+        }
         loggingEnabled() {
             return !!this.logFilename || this.traceToConsole;
         }
+        hasLevel(level: LogLevel) {
+            return this.loggingEnabled() && this.level >= level;
+        }
+        msg(s: string, type: Msg = Msg.Err) {
+            switch (type) {
+                case Msg.Info:
+                    perfLogger.logInfoEvent(s);
+                    break;
+                case Msg.Perf:
+                    perfLogger.logPerfEvent(s);
+                    break;
+                default: // Msg.Err
+                    perfLogger.logErrEvent(s);
+                    break;
+            }
 
+            if (!this.canWrite()) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!this.inGroup || this.firstInGroup) {
+                const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
+                s = prefix + s;
+            }
+            this.write(s, type);
+            if (!this.inGroup) {
+                this.seq++;
+            }
+        }
         protected canWrite() {
             return this.fd >= 0 || this.traceToConsole;
         }
-
         protected write(s: string, _type: Msg) {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
@@ -255,9 +298,7 @@ export function initializeNodeSystem(): StartInput {
 
     const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
 
-    const nodeVersion = getNodeMajorVersion();
-    // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
+    const useWatchGuard = process.platform === "win32";
     const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const logger = createLogger();
 
@@ -463,7 +504,6 @@ function parseEventPort(eventPortStr: string | undefined) {
     const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
     return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
 }
-
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
@@ -647,7 +687,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
+                    this.typesRegistryCache = new Map(Object.entries(response.typesRegistry));
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
@@ -797,7 +837,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             this.constructed = true;
         }
 
-        event<T extends object>(body: T, eventName: string): void {
+        override event<T extends object>(body: T, eventName: string): void {
             Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
@@ -822,7 +862,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
-        exit() {
+        override exit() {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
             tracing?.stopTracing();
@@ -843,7 +883,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
     class IpcIOSession extends IOSession {
 
-        protected writeMessage(msg: protocol.Message): void {
+        protected override writeMessage(msg: protocol.Message): void {
             const verboseLogging = logger.hasLevel(LogLevel.verbose);
             if (verboseLogging) {
                 const json = JSON.stringify(msg);
@@ -853,15 +893,15 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             process.send!(msg);
         }
 
-        protected parseMessage(message: any): protocol.Request {
+        protected override parseMessage(message: any): protocol.Request {
             return message as protocol.Request;
         }
 
-        protected toStringMessage(message: any) {
+        protected override toStringMessage(message: any) {
             return JSON.stringify(message, undefined, 2);
         }
 
-        public listen() {
+        public override listen() {
             process.on("message", (e: any) => {
                 this.onMessage(e);
             });

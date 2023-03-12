@@ -2,7 +2,7 @@ import {
     __String,
     ArrowFunction,
     CallExpression,
-    createPrinter,
+    createPrinterWithRemoveComments,
     Debug,
     EmitHint,
     EnumMember,
@@ -53,7 +53,6 @@ import {
     NodeBuilderFlags,
     ParameterDeclaration,
     PrefixUnaryExpression,
-    PrinterOptions,
     PropertyDeclaration,
     Signature,
     skipParentheses,
@@ -383,11 +382,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function printTypeInSingleLine(type: Type) {
         const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
-        const options: PrinterOptions = { removeComments: true };
-        const printer = createPrinter(options);
+        const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
-            const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags, writer);
+            const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
             Debug.assertIsDefined(typeNode, "should always get typenode");
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
         });

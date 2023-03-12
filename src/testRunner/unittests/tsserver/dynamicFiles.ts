@@ -5,13 +5,13 @@ import {
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
     checkNumberOfProjects,
     checkProjectActualFiles,
     checkProjectRootFiles,
+    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    executeSessionRequest,
-    executeSessionRequestNoResponse,
     openFilesForSession,
     verifyDynamic,
 } from "./helpers";
@@ -39,42 +39,33 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
     it("Can convert positions to locations", () => {
         const aTs: File = { path: "/proj/a.ts", content: "" };
         const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };
-        const session = createSession(createServerHost([aTs, tsconfig]), { useInferredProjectPerProjectRoot: true });
+        const host = createServerHost([aTs, tsconfig]);
+        const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([aTs], session);
 
-        executeSessionRequestNoResponse<ts.server.protocol.OpenRequest>(session, ts.server.protocol.CommandTypes.Open, {
-            file: untitledFile,
-            fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
-            scriptKindName: "TS",
-            projectRootPath: "/proj",
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
+            arguments: {
+                file: untitledFile,
+                fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
+                scriptKindName: "TS",
+                projectRootPath: "/proj",
+            },
         });
         verifyDynamic(session.getProjectService(), `/proj/untitled:^untitled-1`);
-        const response = executeSessionRequest<ts.server.protocol.CodeFixRequest, ts.server.protocol.CodeFixResponse>(session, ts.server.protocol.CommandTypes.GetCodeFixes, {
-            file: untitledFile,
-            startLine: 3,
-            startOffset: 1,
-            endLine: 3,
-            endOffset: 5,
-            errorCodes: [ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
+        session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
+            command: ts.server.protocol.CommandTypes.GetCodeFixes,
+            arguments: {
+                file: untitledFile,
+                startLine: 3,
+                startOffset: 1,
+                endLine: 3,
+                endOffset: 5,
+                errorCodes: [ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
+            }
         });
-        assert.deepEqual<readonly ts.server.protocol.CodeFixAction[] | undefined>(response, [
-            {
-                description: "Change spelling to 'foo'",
-                fixName: "spelling",
-                changes: [{
-                    fileName: untitledFile,
-                    textChanges: [{
-                        start: { line: 3, offset: 1 },
-                        end: { line: 3, offset: 5 },
-                        newText: "foo",
-                    }],
-                }],
-                commands: undefined,
-                fixId: undefined,
-                fixAllDescription: undefined
-            },
-        ]);
+        baselineTsserverLogs("dynamicFiles", "untitled can convert positions to locations", session);
     });
 
     it("opening untitled files", () => {

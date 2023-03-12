@@ -6,7 +6,6 @@ import {
 import {
     configuredProjectAt,
     createSession,
-    executeSessionRequest,
     openFilesForSession,
 } from "./helpers";
 
@@ -148,10 +147,13 @@ function setup() {
             line: 1,
             offset: 3,
         };
-        executeSessionRequest<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfoResponse>(session, ts.server.protocol.CommandTypes.CompletionInfo, {
-            ...requestLocation,
-            includeExternalModuleExports: true,
-            prefix: "foo",
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                ...requestLocation,
+                includeExternalModuleExports: true,
+                prefix: "foo",
+            }
         });
     }
 }

@@ -58,7 +58,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -66,18 +66,20 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
-'package.json' does not have a 'typesVersions' field.
+Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 ======== Resolving module 'pkg1' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -85,7 +87,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
-'package.json' does not have a 'typesVersions' field.
+Entering conditional exports.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'require'.
 Using 'exports' subpath '.' with target './require.js'.
@@ -93,18 +95,23 @@ File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a
 File '/user/username/projects/myproject/node_modules/pkg1/require.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
+Failed to resolve under condition 'require'.
+Exiting conditional exports.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'require'.
 Using 'exports' subpath '.' with target './require.js'.
 File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg1/require.js' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.jsx' does not exist.
+Failed to resolve under condition 'require'.
+Exiting conditional exports.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
@@ -112,9 +119,9 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module './a' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file types: TypeScript, JavaScript, Declaration.
-File '/user/username/projects/myproject/a.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/a.ts' exists - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
@@ -151,49 +158,49 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/package.json:
+/user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/package.json:
+/user/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
+/user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
+/user/username/projects/myproject/node_modules/pkg/package.json: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
+/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
 //// [/user/username/projects/myproject/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -230,7 +237,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -238,12 +245,15 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
@@ -283,38 +293,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/index.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -6,5 +6,5 @@ Boolean({
 
 //// [parseErrorDoubleCommaInCall.js]
 Boolean({
-    x: 0
+    x: 0,
 });

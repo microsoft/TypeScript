@@ -1,15 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    createBaseline,
+    createSolutionBuilderWithWatchHostForBaseline,
+    runWatchBaseline,
+} from "../tscWatch/helpers";
+import {
     createWatchedSystem,
     File,
     libFile,
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
-import {
-    createBaseline,
-    createSolutionBuilderWithWatchHostForBaseline,
-    runWatchBaseline,
-} from "../tscWatch/helpers";
 
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
     it("watchFile on same file multiple times because file is part of multiple projects", () => {
@@ -36,10 +36,10 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             baseline,
             oldSnap,
             getPrograms,
-            changes: [
+            edits: [
                 {
                     caption: "modify typing file",
-                    change: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
+                    edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1);
                         sys.checkTimeoutQueueLengthAndRun(1);
@@ -49,7 +49,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 {
                     // Make change
                     caption: "change pkg references",
-                    change: sys => {
+                    edit: sys => {
                         maxPkgs--;
                         writePkgReferences(sys);
                     },
@@ -57,7 +57,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 },
                 {
                     caption: "modify typing file",
-                    change: sys => sys.writeFile(typing.path, typing.content),
+                    edit: sys => sys.writeFile(typing.path, typing.content),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1);
                         sys.checkTimeoutQueueLengthAndRun(1);
@@ -67,7 +67,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 {
                     // Make change to remove all watches
                     caption: "change pkg references to remove all watches",
-                    change: sys => {
+                    edit: sys => {
                         maxPkgs = 0;
                         writePkgReferences(sys);
                     },
@@ -75,7 +75,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 },
                 {
                     caption: "modify typing file",
-                    change: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
+                    edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
                     timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
             ],

@@ -1,6 +1,6 @@
 define("m1", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.m1_f1 = exports.m1_instance1 = exports.m1_c1 = exports.m1_a1 = void 0;
     exports.m1_a1 = 10;
     var m1_c1 = /** @class */ (function () {
@@ -17,7 +17,7 @@ define("m1", ["require", "exports"], function (require, exports) {
 });
 define("test", ["require", "exports", "m1"], function (require, exports, m1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a2 = exports.f1 = exports.instance1 = exports.c1 = exports.a1 = void 0;
     exports.a1 = 10;
     var c1 = /** @class */ (function () {

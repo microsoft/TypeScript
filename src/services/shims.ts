@@ -301,13 +301,6 @@ export interface LanguageServiceShim extends Shim {
     getFileReferences(fileName: string): string;
 
     /**
-     * @deprecated
-     * Returns a JSON-encoded value of the type:
-     * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-     */
-    getOccurrencesAtPosition(fileName: string, position: number): string;
-
-    /**
      * Returns a JSON-encoded value of the type:
      * { fileName: string; highlights: { start: number; length: number }[] }[]
      *
@@ -349,7 +342,7 @@ export interface LanguageServiceShim extends Shim {
     /**
      * Returns JSON-encoded value of the type TextInsertion.
      */
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string;
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string;
 
     /**
      * Returns JSON-encoded boolean to indicate whether we should support brace location
@@ -459,7 +452,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
             this.resolveTypeReferenceDirectives = (typeDirectiveNames, containingFile) => {
                 const typeDirectivesForFile = JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)) as MapLike<ResolvedTypeReferenceDirective>; // TODO: GH#18217
-                return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : name.fileName.toLowerCase()));
+                return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : toFileNameLowerCase(name.fileName)));
             };
         }
     }
@@ -743,7 +736,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * Ensure (almost) deterministic release of internal Javascript resources when
      * some external native objects holds onto us (e.g. Com/Interop).
      */
-    public dispose(dummy: {}): void {
+    public override dispose(dummy: {}): void {
         this.logger.log("dispose()");
         this.languageService.dispose();
         this.languageService = null!; // eslint-disable-line no-null/no-null
@@ -781,7 +774,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     }
 
     private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
-        const newLine = getNewLineOrDefaultFromHost(this.host);
+        const newLine = getNewLineOrDefaultFromHost(this.host, /*formatSettings*/ undefined);
         return realizeDiagnostics(diagnostics, newLine);
     }
 
@@ -1021,13 +1014,6 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
         );
     }
 
-    public getOccurrencesAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getOccurrencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getOccurrencesAtPosition(fileName, position)
-        );
-    }
-
     public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
         return this.forwardJSONCall(
             `getDocumentHighlights('${fileName}', ${position})`,
@@ -1091,10 +1077,10 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             });
     }
 
-    public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
+    public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string {
         return this.forwardJSONCall(
             `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
+            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions)
         );
     }
 

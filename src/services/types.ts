@@ -16,7 +16,6 @@ import {
     LineAndCharacter,
     MinimalResolutionCacheHost,
     ModuleResolutionCache,
-    ModuleResolutionInfo,
     ModuleSpecifierCache,
     ParsedCommandLine,
     Path,
@@ -27,17 +26,18 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     ScriptKind,
     SourceFile,
     SourceFileLike,
     SourceMapper,
+    StringLiteralLike,
     Symbol,
     SymlinkCache,
     TextChangeRange,
     textChanges,
     TextRange,
     TextSpan,
-    TypeReferenceDirectiveResolutionInfo,
     UserPreferences,
 } from "./_namespaces/ts";
 
@@ -159,7 +159,7 @@ declare module "../compiler/types" {
     export interface SourceFile {
         /** @internal */ version: string;
         /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-        /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
+        /** @internal */ nameTable: Map<__String, number> | undefined;
 
         /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
 
@@ -357,9 +357,27 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      *
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
+    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
@@ -549,10 +567,8 @@ export interface LanguageService {
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
     /** @internal */
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
     /** @internal */
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
     getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
     getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
@@ -563,9 +579,6 @@ export interface LanguageService {
     findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
     getFileReferences(fileName: string): ReferenceEntry[];
-
-    /** @deprecated */
-    getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
 
     getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
     getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -586,7 +599,7 @@ export interface LanguageService {
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined;
 
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
     /**
@@ -639,6 +652,8 @@ export interface LanguageService {
     commentSelection(fileName: string, textRange: TextRange): TextChange[];
     uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
 
+    getSupportedCodeFixes(fileName?: string): readonly string[];
+
     dispose(): void;
 }
 
@@ -680,6 +695,13 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
      */
     triggerCharacter?: CompletionsTriggerCharacter;
     triggerKind?: CompletionTriggerKind;
+    /**
+     * Include a `symbol` property on each completion entry object.
+     * Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+     * so use caution when serializing or retaining completion entries retrieved with this option.
+     * @default false
+     */
+    includeSymbol?: boolean
     /** @deprecated Use includeCompletionsForModuleExports */
     includeExternalModuleExports?: boolean;
     /** @deprecated Use includeCompletionsWithInsertText */
@@ -1317,6 +1339,7 @@ export interface CompletionEntryDataAutoImport {
      * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
      */
     exportName: string;
+    exportMapKey?: string;
     moduleSpecifier?: string;
     /** The file name declaring the export's module symbol, if it was an external module */
     fileName?: string;
@@ -1327,7 +1350,6 @@ export interface CompletionEntryDataAutoImport {
 }
 
 export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-    /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
     exportMapKey: string;
 }
 
@@ -1359,6 +1381,12 @@ export interface CompletionEntry {
     isFromUncheckedFile?: true;
     isPackageJsonImport?: true;
     isImportStatementCompletion?: true;
+    /**
+     * For API purposes.
+     * Included for non-string completions only when `includeSymbol: true` option is passed to `getCompletionsAtPosition`.
+     * @example Get declaration of completion: `symbol.valueDeclaration`
+     */
+    symbol?: Symbol
     /**
      * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
      * that allows TS Server to look up the symbol represented by the completion item, disambiguating

@@ -46,7 +46,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /src/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg0/package.json' does not exist.
 File '/src/project/node_modules/pkg0.ts' does not exist.
@@ -54,11 +54,11 @@ File '/src/project/node_modules/pkg0.tsx' does not exist.
 File '/src/project/node_modules/pkg0.d.ts' does not exist.
 File '/src/project/node_modules/pkg0/index.ts' does not exist.
 File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1.ts' does not exist.
 File '/src/project/node_modules/pkg1.tsx' does not exist.
@@ -74,16 +74,22 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg0/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /src/project/fileWithTypeRefs.ts 250 undefined Source file
-======== Resolving type reference directive 'pkg2', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
+======== Resolving type reference directive 'pkg2', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg2/package.json' does not exist.
 File '/src/project/node_modules/pkg2.d.ts' does not exist.
-File '/src/project/node_modules/pkg2/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg2/index.d.ts', result '/src/project/node_modules/pkg2/index.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts', primary: false. ========
-======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
+======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg3.d.ts' does not exist.
 Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
@@ -112,7 +118,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@t
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 fileWithImports.ts
@@ -152,34 +158,34 @@ Shape signatures in builder refreshed for::
 /src/project/filewithtyperefs.ts (computed .d.ts during emit)
 
 PolledWatches::
-/src/project/node_modules/@types:
+/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/project/tsconfig.json:
+/src/project/tsconfig.json: *new*
   {}
-/src/project/filewithimports.ts:
+/src/project/filewithimports.ts: *new*
   {}
-/src/project/node_modules/pkg0/index.d.ts:
+/src/project/node_modules/pkg0/index.d.ts: *new*
   {}
-/src/project/filewithtyperefs.ts:
+/src/project/filewithtyperefs.ts: *new*
   {}
-/src/project/node_modules/pkg2/index.d.ts:
+/src/project/node_modules/pkg2/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/project/node_modules:
+/src/project/node_modules: *new*
   {}
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/src/project/outDir/fileWithImports.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/outDir/fileWithImports.d.ts]
@@ -188,7 +194,7 @@ export {};
 
 //// [/src/project/outDir/fileWithTypeRefs.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg2"/>
 /// <reference types="pkg3"/>
 
@@ -198,7 +204,7 @@ export {};
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2],[4]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"../filewithimports.ts","start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,4],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2],[4]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"../filewithimports.ts","start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,4],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -258,6 +264,16 @@ export {};
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        3,
+        "../filewithimports.ts"
+      ],
+      [
+        5,
+        "../filewithtyperefs.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -305,7 +321,7 @@ export {};
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1601
+  "size": 1614
 }
 
 
@@ -339,7 +355,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1/package.json' does not exist.
 File '/src/project/node_modules/pkg1.ts' does not exist.
@@ -347,7 +363,7 @@ File '/src/project/node_modules/pkg1.tsx' does not exist.
 File '/src/project/node_modules/pkg1.d.ts' does not exist.
 File '/src/project/node_modules/pkg1/index.ts' does not exist.
 File '/src/project/node_modules/pkg1/index.tsx' does not exist.
-File '/src/project/node_modules/pkg1/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg1/index.d.ts', result '/src/project/node_modules/pkg1/index.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/src/project/node_modules/pkg1/index.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg1/index.d.ts 250 undefined Source file
@@ -364,7 +380,7 @@ Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWit
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -415,7 +431,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/src/project/node_modules/pkg1/index.d.ts:
+/src/project/node_modules/pkg1/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -428,7 +444,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/src/project/outDir/fileWithImports.js] file written with same contents
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[6,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[6,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -494,6 +510,16 @@ exitCode:: ExitStatus.undefined
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        4,
+        "../filewithimports.ts"
+      ],
+      [
+        6,
+        "../filewithtyperefs.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -531,7 +557,7 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1515
+  "size": 1528
 }
 
 
@@ -566,12 +592,15 @@ CreatingProgramWith::
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg1/index.d.ts'.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
-======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
+======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg3/package.json' does not exist.
 File '/src/project/node_modules/pkg3.d.ts' does not exist.
-File '/src/project/node_modules/pkg3/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg3/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg3/index.d.ts', result '/src/project/node_modules/pkg3/index.d.ts'.
 ======== Type reference directive 'pkg3' was successfully resolved to '/src/project/node_modules/pkg3/index.d.ts', primary: false. ========
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/index.d.ts 250 undefined Source file
@@ -581,7 +610,7 @@ FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/index.d.ts 250 u
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -637,7 +666,7 @@ FsWatches::
   {}
 /src/project/node_modules/pkg1/index.d.ts:
   {}
-/src/project/node_modules/pkg3/index.d.ts:
+/src/project/node_modules/pkg3/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -650,7 +679,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/src/project/outDir/fileWithTypeRefs.js] file written with same contents
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},"-8124648610-export interface Import3 {}",{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5,6]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[7,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5,6],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},"-8124648610-export interface Import3 {}",{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5,6]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[7,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5,6],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -722,6 +751,16 @@ exitCode:: ExitStatus.undefined
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        4,
+        "../filewithimports.ts"
+      ],
+      [
+        7,
+        "../filewithtyperefs.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -761,6 +800,6 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1595
+  "size": 1608
 }
 

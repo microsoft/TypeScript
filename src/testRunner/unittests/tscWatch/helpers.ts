@@ -1,6 +1,14 @@
-import * as ts from "../../_namespaces/ts";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import { Baseline } from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    baselinePrograms,
+    CommandLineCallbacks,
+    commandLineCallbacks,
+    CommandLineProgram,
+    createSolutionBuilderHostForBaseline,
+    generateSourceMapBaselineFiles,
+} from "../tsc/helpers";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -11,14 +19,6 @@ import {
     TestServerHostCreationParameters,
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
-import {
-    baselinePrograms,
-    commandLineCallbacks,
-    CommandLineCallbacks,
-    CommandLineProgram,
-    createSolutionBuilderHostForBaseline,
-    generateSourceMapBaselineFiles,
-} from "../tsc/helpers";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -32,7 +32,7 @@ export const commonFile2: File = {
 export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
 export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     caption: string;
-    change: (sys: TestServerHostTrackingWrittenFiles) => void;
+    edit: (sys: TestServerHostTrackingWrittenFiles) => void;
     timeouts: (
         sys: TestServerHostTrackingWrittenFiles,
         programs: readonly CommandLineProgram[],
@@ -47,7 +47,7 @@ export interface TscWatchCompileBase<T extends ts.BuilderProgram = ts.EmitAndSem
     scenario: string;
     subScenario: string;
     commandLineArgs: readonly string[];
-    changes: readonly TscWatchCompileChange<T>[];
+    edits?: readonly TscWatchCompileChange<T>[];
 }
 export interface TscWatchCompile extends TscWatchCompileBase {
     sys: () => TestServerHost;
@@ -55,7 +55,7 @@ export interface TscWatchCompile extends TscWatchCompileBase {
 
 export const noopChange: TscWatchCompileChange = {
     caption: "No change",
-    change: ts.noop,
+    edit: ts.noop,
     timeouts: sys => sys.checkTimeoutQueueLength(0),
 };
 
@@ -65,7 +65,7 @@ function tscWatchCompile(input: TscWatchCompile) {
         const { sys, baseline, oldSnap } = createBaseline(input.sys());
         const {
             scenario, subScenario,
-            commandLineArgs, changes,
+            commandLineArgs, edits,
             baselineSourceMap, baselineDependencies
         } = input;
 
@@ -86,7 +86,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             getPrograms,
             baselineSourceMap,
             baselineDependencies,
-            changes,
+            edits,
             watchOrSolution
         });
     });
@@ -167,12 +167,13 @@ function updateWatchHostForBaseline<T extends ts.BuilderProgram>(host: ts.WatchC
     return host;
 }
 
-export function applyChange(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], change: TscWatchCompileChange["change"], caption?: TscWatchCompileChange["caption"]) {
+export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], edit: TscWatchCompileChange["edit"], caption?: TscWatchCompileChange["caption"]) {
     const oldSnap = sys.snap();
     baseline.push(`Change::${caption ? " " + caption : ""}`, "");
-    change(sys);
+    edit(sys);
     baseline.push("Input::");
     sys.diff(baseline, oldSnap);
+    sys.serializeWatches(baseline);
     return sys.snap();
 }
 
@@ -185,7 +186,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     scenario, subScenario, commandLineArgs,
     getPrograms, sys, baseline, oldSnap,
     baselineSourceMap, baselineDependencies,
-    changes, watchOrSolution
+    edits, watchOrSolution
 }: RunWatchBaseline<T>) {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
     let programs = watchBaseline({
@@ -198,18 +199,20 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
         baselineDependencies,
     });
 
-    for (const { caption, change, timeouts } of changes) {
-        oldSnap = applyChange(sys, baseline, change, caption);
-        timeouts(sys, programs, watchOrSolution);
-        programs = watchBaseline({
-            baseline,
-            getPrograms,
-            oldPrograms: programs,
-            sys,
-            oldSnap,
-            baselineSourceMap,
-            baselineDependencies,
-        });
+    if (edits) {
+        for (const { caption, edit, timeouts } of edits) {
+            oldSnap = applyEdit(sys, baseline, edit, caption);
+            timeouts(sys, programs, watchOrSolution);
+            programs = watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: programs,
+                sys,
+                oldSnap,
+                baselineSourceMap,
+                baselineDependencies,
+            });
+        }
     }
     Baseline.runBaseline(`${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 }
@@ -274,6 +277,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;
+    ts.Debug.assert(sys.writtenFiles === undefined);
     const solutionBuilder = createSolutionBuilder(changeToHostTrackingWrittenFiles(
         patchHostForBuildInfoReadWrite(sys)
     ), solutionRoots, originalRead);
@@ -281,6 +285,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     sys.readFile = originalReadFile;
     sys.write = originalWrite;
     sys.writeFile = originalWriteFile;
+    sys.writtenFiles = undefined;
     return sys;
 }
 

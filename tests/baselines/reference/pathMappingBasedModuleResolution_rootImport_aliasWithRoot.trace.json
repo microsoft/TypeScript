@@ -1,15 +1,15 @@
 [
     "======== Resolving module '/foo' from '/root/a.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'baseUrl' option is set to '/root', using this value to resolve non-relative module name '/foo'.",
     "'paths' option is specified, looking for a pattern to match module name '/foo'.",
     "Module name '/foo', matched pattern '/*'.",
     "Trying substitution './src/*', candidate module location: './src/foo'.",
     "Loading module as file / folder, candidate module location '/root/src/foo', target file types: TypeScript, Declaration.",
-    "File '/root/src/foo.ts' exist - use it as a name resolution result.",
+    "File '/root/src/foo.ts' exists - use it as a name resolution result.",
     "======== Module name '/foo' was successfully resolved to '/root/src/foo.ts'. ========",
     "======== Resolving module '/bar' from '/root/a.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'baseUrl' option is set to '/root', using this value to resolve non-relative module name '/bar'.",
     "'paths' option is specified, looking for a pattern to match module name '/bar'.",
     "Module name '/bar', matched pattern '/*'.",
@@ -29,6 +29,6 @@
     "Module name '/bar', matched pattern '/*'.",
     "Trying substitution './src/*', candidate module location: './src/bar'.",
     "Loading module as file / folder, candidate module location '/root/src/bar', target file types: JavaScript.",
-    "File '/root/src/bar.js' exist - use it as a name resolution result.",
+    "File '/root/src/bar.js' exists - use it as a name resolution result.",
     "======== Module name '/bar' was successfully resolved to '/root/src/bar.js'. ========"
 ]

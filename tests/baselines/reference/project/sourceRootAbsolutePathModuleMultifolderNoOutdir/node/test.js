@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a3 = exports.a2 = exports.f1 = exports.instance1 = exports.c1 = exports.a1 = void 0;
 var m1 = require("ref/m1");
 var m2 = require("../outputdir_module_multifolder_ref/m2");

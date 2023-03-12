@@ -13,11 +13,11 @@ var z = b.x;
 
 //// [declFileForExportedImport_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 //// [declFileForExportedImport_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 ///<reference path='declFileForExportedImport_0.ts'/>
 exports.a = require("./declFileForExportedImport_0");

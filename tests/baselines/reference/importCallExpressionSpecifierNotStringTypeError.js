@@ -14,13 +14,12 @@ var p3 = import(["path1", "path2"]);
 var p4 = import(()=>"PathToModule");
 
 //// [importCallExpressionSpecifierNotStringTypeError.js]
-var _a, _b, _c, _d, _e;
 // Error specifier is not assignable to string
-_a = getSpecifier(), Promise.resolve().then(() => require(_a));
-var p1 = (_b = getSpecifier(), Promise.resolve().then(() => require(_b)));
-const p2 = (_c = whatToLoad ? getSpecifier() : "defaulPath", Promise.resolve().then(() => require(_c)));
+Promise.resolve(`${getSpecifier()}`).then(s => require(s));
+var p1 = Promise.resolve(`${getSpecifier()}`).then(s => require(s));
+const p2 = Promise.resolve(`${whatToLoad ? getSpecifier() : "defaulPath"}`).then(s => require(s));
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
-var p3 = (_d = ["path1", "path2"], Promise.resolve().then(() => require(_d)));
-var p4 = (_e = () => "PathToModule", Promise.resolve().then(() => require(_e)));
+var p3 = Promise.resolve(`${["path1", "path2"]}`).then(s => require(s));
+var p4 = Promise.resolve(`${() => "PathToModule"}`).then(s => require(s));

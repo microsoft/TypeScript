@@ -3,7 +3,6 @@ import {
     loadProjectFromFiles,
     noChangeRun,
     verifyTsc,
-    verifyTscWithEdits,
 } from "./helpers";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
@@ -27,7 +26,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "combined with incremental",
         fs: () => loadProjectFromFiles({

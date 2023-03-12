@@ -56,28 +56,28 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (used version)
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {}
-/a/b/referencefile1.ts:
+/a/b/referencefile1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -86,7 +86,7 @@ exports.Foo = Foo;
 
 //// [/a/b/referenceFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference path="./moduleFile1.ts" />
 exports.x = Foo();
@@ -132,7 +132,7 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -141,6 +141,10 @@ FsWatches::
 /a/b/referencefile1.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile1.ts:
   {}
 
 FsWatchesRecursive::

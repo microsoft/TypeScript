@@ -1,12 +1,12 @@
 import {
     loadProjectFromFiles,
     noChangeRun,
-    verifyTscWithEdits,
+    verifyTsc,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "noEmit",
             subScenario,
             fs: () => loadProjectFromFiles({
@@ -19,8 +19,8 @@ describe("unittests:: tsbuild:: noEmit", () => {
             edits: [
                 noChangeRun,
                 {
-                    subScenario: "Fix error",
-                    modifyFs: fs => fs.writeFileSync("/src/a.ts", `const a = "hello"`),
+                    caption: "Fix error",
+                    edit: fs => fs.writeFileSync("/src/a.ts", `const a = "hello"`),
                 },
                 noChangeRun,
             ],

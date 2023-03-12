@@ -65,30 +65,30 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/client/folder1/module1.ts:
+/user/username/projects/myproject/client/folder1/module1.ts: *new*
   {}
-/user/username/projects/myproject/client/linktofolder2/module2.ts:
+/user/username/projects/myproject/client/linktofolder2/module2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/client:
+/user/username/projects/myproject/client: *new*
   {}
-/user/username/projects/myproject/folder2:
+/user/username/projects/myproject/folder2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/client/folder1/module1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Module1Class = void 0;
 var Module1Class = /** @class */ (function () {
     function Module1Class() {
@@ -100,7 +100,7 @@ exports.Module1Class = Module1Class;
 
 //// [/user/username/projects/myproject/folder2/module2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -158,7 +158,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/client/linktofolder2/module3.ts:
+/user/username/projects/myproject/client/linktofolder2/module3.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -171,6 +171,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/folder2/module3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

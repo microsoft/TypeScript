@@ -46,23 +46,19 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (used version)
 /a/b/file1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/file1.ts:
+/a/b/file1.ts: *new*
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -71,7 +67,7 @@ exports.bar = bar;
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var T = require("./moduleFile");
 T.bar();
 
@@ -112,16 +108,18 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/file1.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/file1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/modulefile.ts:
+  {}
+
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -160,24 +158,24 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (computed .d.ts)
 /a/b/file1.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/file1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
+/a:
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js] file written with same contents
 //// [/a/b/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;

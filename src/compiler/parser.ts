@@ -3,7 +3,6 @@ import {
     AccessorDeclaration,
     addRange,
     addRelatedInfo,
-    AmdDependency,
     append,
     ArrayBindingElement,
     ArrayBindingPattern,
@@ -29,13 +28,13 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveJSDoc,
     canHaveModifiers,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
     CatchClause,
     CharacterCodes,
-    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -85,10 +84,12 @@ import {
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
+    Extension,
     ExternalModuleReference,
+    fileExtensionIs,
     fileExtensionIsOneOf,
-    FileReference,
     findIndex,
+    firstOrUndefined,
     forEach,
     ForEachChildNodes,
     ForInOrOfStatement,
@@ -100,6 +101,7 @@ import {
     FunctionOrConstructorTypeNode,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    getBaseFileName,
     getBinaryOperatorPrecedence,
     getFullWidth,
     getJSDocCommentRanges,
@@ -166,7 +168,6 @@ import {
     JSDocCallbackTag,
     JSDocClassTag,
     JSDocComment,
-    JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
@@ -180,6 +181,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -189,6 +191,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocSyntaxKind,
@@ -196,6 +199,7 @@ import {
     JSDocTemplateTag,
     JSDocText,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -243,7 +247,6 @@ import {
     Modifier,
     ModifierFlags,
     ModifierLike,
-    ModifiersArray,
     modifiersToFlags,
     ModuleBlock,
     ModuleDeclaration,
@@ -286,6 +289,7 @@ import {
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
+    PragmaContext,
     PragmaDefinition,
     PragmaKindFlags,
     PragmaMap,
@@ -328,6 +332,7 @@ import {
     SpreadElement,
     startsWith,
     Statement,
+    stringContains,
     StringLiteral,
     supportedDeclarationExtensions,
     SwitchStatement,
@@ -359,6 +364,7 @@ import {
     tracing,
     TransformFlags,
     trimString,
+    trimStringEnd,
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
@@ -401,11 +407,11 @@ const enum SpeculationKind {
     Reparse
 }
 
-let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
+let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => Node;
+let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => Node;
 
 /**
  * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
@@ -498,8 +504,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.expression);
     },
     [SyntaxKind.ShorthandPropertyAssignment]: function forEachChildInShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
             visitNode(cbNode, node.exclamationToken) ||
@@ -533,8 +538,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.PropertyAssignment]: function forEachChildInPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
             visitNode(cbNode, node.exclamationToken) ||
@@ -553,8 +557,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.IndexSignature]: function forEachChildInIndexSignature<T>(node: IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
@@ -593,8 +596,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.type);
     },
     [SyntaxKind.Constructor]: function forEachChildInConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
@@ -618,8 +620,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.FunctionDeclaration]: function forEachChildInFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.asteriskToken) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -645,8 +646,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.ClassStaticBlockDeclaration]: function forEachChildInClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.TypeReference]: function forEachChildInTypeReference<T>(node: TypeReferenceNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -804,8 +804,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.endOfFileToken);
     },
     [SyntaxKind.VariableStatement]: function forEachChildInVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.declarationList);
     },
     [SyntaxKind.VariableDeclarationList]: function forEachChildInVariableDeclarationList<T>(node: VariableDeclarationList, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -889,23 +888,20 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
     [SyntaxKind.ClassExpression]: forEachChildInClassDeclarationOrExpression,
     [SyntaxKind.InterfaceDeclaration]: function forEachChildInInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.heritageClauses) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.TypeAliasDeclaration]: function forEachChildInTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNode(cbNode, node.type);
     },
     [SyntaxKind.EnumDeclaration]: function forEachChildInEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
@@ -914,20 +910,17 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.ModuleDeclaration]: function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.ImportEqualsDeclaration]: function forEachChildInImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.moduleReference);
     },
     [SyntaxKind.ImportDeclaration]: function forEachChildInImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.importClause) ||
             visitNode(cbNode, node.moduleSpecifier) ||
             visitNode(cbNode, node.assertClause);
@@ -944,7 +937,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.value);
     },
     [SyntaxKind.NamespaceExportDeclaration]: function forEachChildInNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name);
     },
     [SyntaxKind.NamespaceImport]: function forEachChildInNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -956,8 +949,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.NamedImports]: forEachChildInNamedImportsOrExports,
     [SyntaxKind.NamedExports]: forEachChildInNamedImportsOrExports,
     [SyntaxKind.ExportDeclaration]: function forEachChildInExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.exportClause) ||
             visitNode(cbNode, node.moduleSpecifier) ||
             visitNode(cbNode, node.assertClause);
@@ -965,8 +957,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ImportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportAssignment]: function forEachChildInExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.expression);
     },
     [SyntaxKind.TemplateExpression]: function forEachChildInTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -999,8 +990,7 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.MissingDeclaration]: function forEachChildInMissingDeclaration<T>(node: MissingDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers);
+        return visitNodes(cbNode, cbNodes, node.modifiers);
     },
     [SyntaxKind.CommaListExpression]: function forEachChildInCommaListExpression<T>(node: CommaListExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
@@ -1100,10 +1090,13 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
-    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocSatisfiesTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocOverloadTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1197,7 +1190,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocOverloadTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -1409,18 +1402,22 @@ export function parseJSDocTypeExpressionForTests(content: string, start?: number
 // parser instances can actually be expensive enough to impact us on projects with many source
 // files.
 namespace Parser {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+
     // Share a single scanner across all calls to parse a source file.  This helps speed things
     // up by avoiding the cost of creating/compiling scanners over and over again.
-    const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+    var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
-    const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
+    var disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
     // capture constructors in 'initializeState' to avoid null checks
-    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    var NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    var TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    var IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+    var PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+    var SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
 
     function countNode(node: Node) {
         nodeCount++;
@@ -1429,7 +1426,7 @@ namespace Parser {
 
     // Rather than using `createBaseNodeFactory` here, we establish a `BaseNodeFactory` that closes over the
     // constructors above, which are reset each time `initializeState` is called.
-    const baseNodeFactory: BaseNodeFactory = {
+    var baseNodeFactory: BaseNodeFactory = {
         createBaseSourceFileNode: kind => countNode(new SourceFileConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBaseIdentifierNode: kind => countNode(new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBasePrivateIdentifierNode: kind => countNode(new PrivateIdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
@@ -1437,27 +1434,55 @@ namespace Parser {
         createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
     };
 
-    const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
+    var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
-    let fileName: string;
-    let sourceFlags: NodeFlags;
-    let sourceText: string;
-    let languageVersion: ScriptTarget;
-    let scriptKind: ScriptKind;
-    let languageVariant: LanguageVariant;
-    let parseDiagnostics: DiagnosticWithDetachedLocation[];
-    let jsDocDiagnostics: DiagnosticWithDetachedLocation[];
-    let syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
+    var {
+        createNodeArray: factoryCreateNodeArray,
+        createNumericLiteral: factoryCreateNumericLiteral,
+        createStringLiteral: factoryCreateStringLiteral,
+        createLiteralLikeNode: factoryCreateLiteralLikeNode,
+        createIdentifier: factoryCreateIdentifier,
+        createPrivateIdentifier: factoryCreatePrivateIdentifier,
+        createToken: factoryCreateToken,
+        createArrayLiteralExpression: factoryCreateArrayLiteralExpression,
+        createObjectLiteralExpression: factoryCreateObjectLiteralExpression,
+        createPropertyAccessExpression: factoryCreatePropertyAccessExpression,
+        createPropertyAccessChain: factoryCreatePropertyAccessChain,
+        createElementAccessExpression: factoryCreateElementAccessExpression,
+        createElementAccessChain: factoryCreateElementAccessChain,
+        createCallExpression: factoryCreateCallExpression,
+        createCallChain: factoryCreateCallChain,
+        createNewExpression: factoryCreateNewExpression,
+        createParenthesizedExpression: factoryCreateParenthesizedExpression,
+        createBlock: factoryCreateBlock,
+        createVariableStatement: factoryCreateVariableStatement,
+        createExpressionStatement: factoryCreateExpressionStatement,
+        createIfStatement: factoryCreateIfStatement,
+        createWhileStatement: factoryCreateWhileStatement,
+        createForStatement: factoryCreateForStatement,
+        createForOfStatement: factoryCreateForOfStatement,
+        createVariableDeclaration: factoryCreateVariableDeclaration,
+        createVariableDeclarationList: factoryCreateVariableDeclarationList,
+    } = factory;
 
-    let currentToken: SyntaxKind;
-    let nodeCount: number;
-    let identifiers: Map<string, string>;
-    let privateIdentifiers: Map<string, string>;
-    let identifierCount: number;
+    var fileName: string;
+    var sourceFlags: NodeFlags;
+    var sourceText: string;
+    var languageVersion: ScriptTarget;
+    var scriptKind: ScriptKind;
+    var languageVariant: LanguageVariant;
+    var parseDiagnostics: DiagnosticWithDetachedLocation[];
+    var jsDocDiagnostics: DiagnosticWithDetachedLocation[];
+    var syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
 
-    let parsingContext: ParsingContext;
+    var currentToken: SyntaxKind;
+    var nodeCount: number;
+    var identifiers: Map<string, string>;
+    var identifierCount: number;
 
-    let notParenthesizedArrow: Set<number> | undefined;
+    var parsingContext: ParsingContext;
+
+    var notParenthesizedArrow: Set<number> | undefined;
 
     // Flags that dictate what parsing context we're in.  For example:
     // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -1505,10 +1530,10 @@ namespace Parser {
     // Note: it should not be necessary to save/restore these flags during speculative/lookahead
     // parsing.  These context flags are naturally stored and restored through normal recursive
     // descent parsing and unwinding.
-    let contextFlags: NodeFlags;
+    var contextFlags: NodeFlags;
 
     // Indicates whether we are currently parsing top-level statements.
-    let topLevel = true;
+    var topLevel = true;
 
     // Whether or not we've had a parse error since creating the last AST node.  If we have
     // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -1537,7 +1562,8 @@ namespace Parser {
     //
     // Note: any errors at the end of the file that do not precede a regular node, should get
     // attached to the EOF token.
-    let parseErrorBeforeNextFinishedNode = false;
+    var parseErrorBeforeNextFinishedNode = false;
+    /* eslint-enable no-var */
 
     export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
@@ -1635,11 +1661,11 @@ namespace Parser {
                 }
             }
 
-            const expression = isArray(expressions) ? finishNode(factory.createArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
-            const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
+            const expression = isArray(expressions) ? finishNode(factoryCreateArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
+            const statement = factoryCreateExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
-            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
         }
 
         // Set source file so that errors will be reported with this file name
@@ -1679,7 +1705,6 @@ namespace Parser {
         parseDiagnostics = [];
         parsingContext = 0;
         identifiers = new Map<string, string>();
-        privateIdentifiers = new Map<string, string>();
         identifierCount = 0;
         nodeCount = 0;
         sourceFlags = 0;
@@ -1814,14 +1839,14 @@ namespace Parser {
             speculationHelper(() => {
                 const savedContextFlags = contextFlags;
                 contextFlags |= NodeFlags.AwaitContext;
-                scanner.setTextPos(nextStatement.pos);
+                scanner.resetTokenState(nextStatement.pos);
                 nextToken();
 
                 while (token() !== SyntaxKind.EndOfFileToken) {
-                    const startPos = scanner.getStartPos();
+                    const startPos = scanner.getTokenFullStart();
                     const statement = parseListElement(ParsingContext.SourceElements, parseStatement);
                     statements.push(statement);
-                    if (startPos === scanner.getStartPos()) {
+                    if (startPos === scanner.getTokenFullStart()) {
                         nextToken();
                     }
 
@@ -1858,7 +1883,7 @@ namespace Parser {
         }
 
         syntaxCursor = savedSyntaxCursor;
-        return factory.updateSourceFile(sourceFile, setTextRange(factory.createNodeArray(statements), sourceFile.statements));
+        return factory.updateSourceFile(sourceFile, setTextRange(factoryCreateNodeArray(statements), sourceFile.statements));
 
         function containsPossibleTopLevelAwait(node: Node) {
             return !(node.flags & NodeFlags.AwaitContext)
@@ -2071,7 +2096,7 @@ namespace Parser {
     }
 
     function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
-        return parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
+        return parseErrorAt(scanner.getTokenStart(), scanner.getTokenEnd(), message, arg0);
     }
 
     function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
@@ -2098,11 +2123,11 @@ namespace Parser {
     }
 
     function scanError(message: DiagnosticMessage, length: number): void {
-        parseErrorAtPosition(scanner.getTextPos(), length, message);
+        parseErrorAtPosition(scanner.getTokenEnd(), length, message);
     }
 
     function getNodePos(): number {
-        return scanner.getStartPos();
+        return scanner.getTokenFullStart();
     }
 
     function hasPrecedingJSDocComment() {
@@ -2132,13 +2157,17 @@ namespace Parser {
         // if the keyword had an escape
         if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
             // issue a parse error for the escape
-            parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keywords_cannot_contain_escape_characters);
+            parseErrorAt(scanner.getTokenStart(), scanner.getTokenEnd(), Diagnostics.Keywords_cannot_contain_escape_characters);
         }
         return nextTokenWithoutCheck();
     }
 
     function nextTokenJSDoc(): JSDocSyntaxKind {
         return currentToken = scanner.scanJsDocToken();
+    }
+
+    function nextJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
+        return currentToken = scanner.scanJSDocCommentTextToken(inBackticks);
     }
 
     function reScanGreaterToken(): SyntaxKind {
@@ -2320,7 +2349,7 @@ namespace Parser {
                 return;
 
             case "is":
-                parseErrorAt(pos, scanner.getTextPos(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                parseErrorAt(pos, scanner.getTokenStart(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
                 return;
 
             case "module":
@@ -2475,14 +2504,14 @@ namespace Parser {
         const pos = getNodePos();
         const kind = token();
         nextToken();
-        return finishNode(factory.createToken(kind), pos) as T;
+        return finishNode(factoryCreateToken(kind), pos) as T;
     }
 
     function parseTokenNodeJSDoc<T extends Node>(): T {
         const pos = getNodePos();
         const kind = token();
         nextTokenJSDoc();
-        return finishNode(factory.createToken(kind), pos) as T;
+        return finishNode(factoryCreateToken(kind), pos) as T;
     }
 
     function canParseSemicolon() {
@@ -2513,13 +2542,13 @@ namespace Parser {
     }
 
     function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number, hasTrailingComma?: boolean): NodeArray<T> {
-        const array = factory.createNodeArray(elements, hasTrailingComma);
-        setTextRangePosEnd(array, pos, end ?? scanner.getStartPos());
+        const array = factoryCreateNodeArray(elements, hasTrailingComma);
+        setTextRangePosEnd(array, pos, end ?? scanner.getTokenFullStart());
         return array;
     }
 
     function finishNode<T extends Node>(node: T, pos: number, end?: number): T {
-        setTextRangePosEnd(node, pos, end ?? scanner.getStartPos());
+        setTextRangePosEnd(node, pos, end ?? scanner.getTokenFullStart());
         if (contextFlags) {
             (node as Mutable<T>).flags |= contextFlags;
         }
@@ -2537,9 +2566,9 @@ namespace Parser {
 
     function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: false, diagnosticMessage?: DiagnosticMessage, arg0?: any): T;
     function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T;
-    function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
+    function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage?: DiagnosticMessage, arg0?: any): T {
         if (reportAtCurrentPosition) {
-            parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
+            parseErrorAtPosition(scanner.getTokenFullStart(), 0, diagnosticMessage!, arg0);
         }
         else if (diagnosticMessage) {
             parseErrorAtCurrentToken(diagnosticMessage, arg0);
@@ -2547,12 +2576,12 @@ namespace Parser {
 
         const pos = getNodePos();
         const result =
-            kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined) :
+            kind === SyntaxKind.Identifier ? factoryCreateIdentifier("", /*originalKeywordKind*/ undefined) :
             isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined) :
-            kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
-            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
+            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral("", /*numericLiteralFlags*/ undefined) :
+            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral("", /*isSingleQuote*/ undefined) :
             kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration() :
-            factory.createToken(kind);
+            factoryCreateToken(kind);
         return finishNode(result, pos) as T;
     }
 
@@ -2576,7 +2605,7 @@ namespace Parser {
             const text = internIdentifier(scanner.getTokenValue());
             const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
             nextTokenWithoutCheck();
-            return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind, hasExtendedUnicodeEscape), pos);
+            return finishNode(factoryCreateIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
         }
 
         if (token() === SyntaxKind.PrivateIdentifier) {
@@ -2659,17 +2688,9 @@ namespace Parser {
         return finishNode(factory.createComputedPropertyName(expression), pos);
     }
 
-    function internPrivateIdentifier(text: string): string {
-        let privateIdentifier = privateIdentifiers.get(text);
-        if (privateIdentifier === undefined) {
-            privateIdentifiers.set(text, privateIdentifier = text);
-        }
-        return privateIdentifier;
-    }
-
     function parsePrivateIdentifier(): PrivateIdentifier {
         const pos = getNodePos();
-        const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenValue()));
+        const node = factoryCreatePrivateIdentifier(internIdentifier(scanner.getTokenValue()));
         nextToken();
         return finishNode(node, pos);
     }
@@ -2702,7 +2723,6 @@ namespace Parser {
                 return canFollowExportModifier();
             case SyntaxKind.DefaultKeyword:
                 return nextTokenCanFollowDefaultKeyword();
-            case SyntaxKind.AccessorKeyword:
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
@@ -2714,7 +2734,8 @@ namespace Parser {
     }
 
     function canFollowExportModifier(): boolean {
-        return token() !== SyntaxKind.AsteriskToken
+        return token() === SyntaxKind.AtToken
+            || token() !== SyntaxKind.AsteriskToken
             && token() !== SyntaxKind.AsKeyword
             && token() !== SyntaxKind.OpenBraceToken
             && canFollowModifier();
@@ -2739,10 +2760,12 @@ namespace Parser {
 
     function nextTokenCanFollowDefaultKeyword(): boolean {
         nextToken();
-        return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.FunctionKeyword ||
-            token() === SyntaxKind.InterfaceKeyword ||
-            (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine)) ||
-            (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
+        return token() === SyntaxKind.ClassKeyword
+            || token() === SyntaxKind.FunctionKeyword
+            || token() === SyntaxKind.InterfaceKeyword
+            || token() === SyntaxKind.AtToken
+            || (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine))
+            || (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
     }
 
     // True if positioned at the start of a list element
@@ -2814,7 +2837,7 @@ namespace Parser {
             case ParsingContext.ArrayBindingElements:
                 return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isBindingIdentifierOrPrivateIdentifierOrPattern();
             case ParsingContext.TypeParameters:
-                return token() === SyntaxKind.InKeyword || isIdentifier();
+                return token() === SyntaxKind.InKeyword || token() === SyntaxKind.ConstKeyword || isIdentifier();
             case ParsingContext.ArrayLiteralMembers:
                 switch (token()) {
                     case SyntaxKind.CommaToken:
@@ -3034,7 +3057,7 @@ namespace Parser {
             return undefined;
         }
 
-        const node = syntaxCursor.currentNode(pos ?? scanner.getStartPos());
+        const node = syntaxCursor.currentNode(pos ?? scanner.getTokenFullStart());
 
         // Can't reuse a missing node.
         // Can't reuse a node that intersected the change range.
@@ -3066,9 +3089,9 @@ namespace Parser {
             return undefined;
         }
 
-        if ((node as JSDocContainer).jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDoc?.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            (node as JSDocContainer).jsDocCache = undefined;
+            node.jsDoc.jsDocCache = undefined;
         }
 
         return node;
@@ -3076,7 +3099,7 @@ namespace Parser {
 
     function consumeNode(node: Node) {
         // Move the scanner so it is after the node we just consumed.
-        scanner.setTextPos(node.end);
+        scanner.resetTokenState(node.end);
         nextToken();
         return node;
     }
@@ -3193,7 +3216,7 @@ namespace Parser {
                     // into an actual .ConstructorDeclaration.
                     const methodDeclaration = node as MethodDeclaration;
                     const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                        methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                        methodDeclaration.name.escapedText === "constructor";
 
                     return !nameIsConstructor;
             }
@@ -3369,14 +3392,14 @@ namespace Parser {
         let commaStart = -1; // Meaning the previous token was not a comma
         while (true) {
             if (isListElement(kind, /*inErrorRecovery*/ false)) {
-                const startPos = scanner.getStartPos();
+                const startPos = scanner.getTokenFullStart();
                 const result = parseListElement(kind, parseElement);
                 if (!result) {
                     parsingContext = saveParsingContext;
                     return undefined;
                 }
                 list.push(result);
-                commaStart = scanner.getTokenPos();
+                commaStart = scanner.getTokenStart();
 
                 if (parseOptional(SyntaxKind.CommaToken)) {
                     // No need to check for a zero length node since we know we parsed a comma
@@ -3400,7 +3423,7 @@ namespace Parser {
                 if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
                     nextToken();
                 }
-                if (startPos === scanner.getStartPos()) {
+                if (startPos === scanner.getTokenFullStart()) {
                     // What we're parsing isn't actually remotely recognizable as a element and we've consumed no tokens whatsoever
                     // Consume a token to advance the parser in some way and avoid an infinite loop
                     // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
@@ -3460,14 +3483,12 @@ namespace Parser {
     function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
         const pos = getNodePos();
         let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
-        let dotPos = getNodePos();
         while (parseOptional(SyntaxKind.DotToken)) {
             if (token() === SyntaxKind.LessThanToken) {
-                // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
-                entity.jsdocDotPos = dotPos;
+                // The entity is part of a JSDoc-style generic. We will use the gap between `typeName` and
+                // `typeArguments` to report it as a grammar error in the checker.
                 break;
             }
-            dotPos = getNodePos();
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
@@ -3636,9 +3657,9 @@ namespace Parser {
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
-            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
-            isLiteralKind(kind) ? factory.createLiteralLikeNode(kind, scanner.getTokenValue()) :
+            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
+            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
+            isLiteralKind(kind) ? factoryCreateLiteralLikeNode(kind, scanner.getTokenValue()) :
             Debug.fail();
 
         if (scanner.hasExtendedUnicodeEscape()) {
@@ -3823,7 +3844,7 @@ namespace Parser {
 
     function parseTypeParameter(): TypeParameterDeclaration {
         const pos = getNodePos();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
         const name = parseIdentifier();
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
@@ -3910,11 +3931,13 @@ namespace Parser {
         //      BindingElement[?Yield,?Await]
 
         // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-        const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : doOutsideOfAwaitContext(parseDecorators);
+        const modifiers = inOuterAwaitContext ?
+            doInAwaitContext(() => parseModifiers(/*allowDecorators*/ true)) :
+            doOutsideOfAwaitContext(() => parseModifiers(/*allowDecorators*/ true));
 
         if (token() === SyntaxKind.ThisKeyword) {
             const node = factory.createParameterDeclaration(
-                decorators,
+                modifiers,
                 /*dotDotDotToken*/ undefined,
                 createIdentifier(/*isIdentifier*/ true),
                 /*questionToken*/ undefined,
@@ -3922,8 +3945,9 @@ namespace Parser {
                 /*initializer*/ undefined
             );
 
-            if (decorators) {
-                parseErrorAtRange(decorators[0], Diagnostics.Decorators_may_not_be_applied_to_this_parameters);
+            const modifier = firstOrUndefined(modifiers);
+            if (modifier) {
+                parseErrorAtRange(modifier, Diagnostics.Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters);
             }
 
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -3932,7 +3956,6 @@ namespace Parser {
         const savedTopLevel = topLevel;
         topLevel = false;
 
-        const modifiers = combineDecoratorsAndModifiers(decorators, parseModifiers());
         const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
         if (!allowAmbiguity && !isParameterNameStart()) {
@@ -4124,12 +4147,11 @@ namespace Parser {
         return token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken || token() === SyntaxKind.CloseBracketToken;
     }
 
-    function parseIndexSignatureDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): IndexSignatureDeclaration {
+    function parseIndexSignatureDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): IndexSignatureDeclaration {
         const parameters = parseBracketedList<ParameterDeclaration>(ParsingContext.Parameters, () => parseParameter(/*inOuterAwaitContext*/ false), SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
         const type = parseTypeAnnotation();
         parseTypeMemberSemicolon();
         const node = factory.createIndexSignature(modifiers, parameters, type);
-        (node as Mutable<IndexSignatureDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -4202,17 +4224,17 @@ namespace Parser {
         }
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ false);
         if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor, SignatureFlags.Type);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.GetAccessor, SignatureFlags.Type);
         }
 
         if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor, SignatureFlags.Type);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.SetAccessor, SignatureFlags.Type);
         }
 
         if (isIndexSignature()) {
-            return parseIndexSignatureDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers);
+            return parseIndexSignatureDeclaration(pos, hasJSDoc, modifiers);
         }
         return parsePropertyOrMethodSignature(pos, hasJSDoc, modifiers);
     }
@@ -4365,7 +4387,7 @@ namespace Parser {
         if (token() === SyntaxKind.AbstractKeyword) {
             const pos = getNodePos();
             nextToken();
-            const modifier = finishNode(factory.createToken(SyntaxKind.AbstractKeyword), pos);
+            const modifier = finishNode(factoryCreateToken(SyntaxKind.AbstractKeyword), pos);
             modifiers = createNodeArray<Modifier>([modifier], pos);
         }
         return modifiers;
@@ -4376,13 +4398,13 @@ namespace Parser {
         const hasJSDoc = hasPrecedingJSDocComment();
         const modifiers = parseModifiersForConstructorType();
         const isConstructorType = parseOptional(SyntaxKind.NewKeyword);
+        Debug.assert(!modifiers || isConstructorType, "Per isStartOfFunctionOrConstructorType, a function type cannot have modifiers.");
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(SignatureFlags.Type);
         const type = parseReturnType(SyntaxKind.EqualsGreaterThanToken, /*isType*/ false);
         const node = isConstructorType
             ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, type)
             : factory.createFunctionTypeNode(typeParameters, parameters, type);
-        if (!isConstructorType) (node as Mutable<FunctionTypeNode>).modifiers = modifiers;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -4413,7 +4435,7 @@ namespace Parser {
 
     function parseImportTypeAssertions(): ImportTypeAssertionContainer {
         const pos = getNodePos();
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = scanner.getTokenStart();
         parseExpected(SyntaxKind.OpenBraceToken);
         const multiLine = scanner.hasPrecedingLineBreak();
         parseExpected(SyntaxKind.AssertKeyword);
@@ -4731,7 +4753,7 @@ namespace Parser {
     function skipParameterStart(): boolean {
         if (isModifierKind(token())) {
             // Skip modifiers
-            parseModifiers();
+            parseModifiers(/*allowDecorators*/ false);
         }
         if (isIdentifier() || token() === SyntaxKind.ThisKeyword) {
             nextToken();
@@ -4807,7 +4829,6 @@ namespace Parser {
         if (contextFlags & NodeFlags.TypeExcludesFlags) {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
         }
-
         if (isStartOfFunctionTypeOrConstructorType()) {
             return parseFunctionOrConstructorType();
         }
@@ -4878,6 +4899,7 @@ namespace Parser {
             case SyntaxKind.AwaitKeyword:
             case SyntaxKind.YieldKeyword:
             case SyntaxKind.PrivateIdentifier:
+            case SyntaxKind.AtToken:
                 // Yield/await always starts an expression.  Either it is an identifier (in which case
                 // it is definitely an expression).  Or it's a keyword (either because we're in
                 // a generator or async function, or in strict mode (or both)) and it started a yield or await expression.
@@ -5203,19 +5225,21 @@ namespace Parser {
 
             // If we have "<" not followed by an identifier,
             // then this definitely is not an arrow function.
-            if (!isIdentifier()) {
+            if (!isIdentifier() && token() !== SyntaxKind.ConstKeyword) {
                 return Tristate.False;
             }
 
             // JSX overrides
             if (languageVariant === LanguageVariant.JSX) {
                 const isArrowFunctionInJsx = lookAhead(() => {
+                    parseOptional(SyntaxKind.ConstKeyword);
                     const third = nextToken();
                     if (third === SyntaxKind.ExtendsKeyword) {
                         const fourth = nextToken();
                         switch (fourth) {
                             case SyntaxKind.EqualsToken:
                             case SyntaxKind.GreaterThanToken:
+                            case SyntaxKind.SlashToken:
                                 return false;
                             default:
                                 return true;
@@ -5240,7 +5264,7 @@ namespace Parser {
     }
 
     function parsePossibleParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction: boolean): ArrowFunction | undefined {
-        const tokenPos = scanner.getTokenPos();
+        const tokenPos = scanner.getTokenStart();
         if (notParenthesizedArrow?.has(tokenPos)) {
             return undefined;
         }
@@ -5662,6 +5686,11 @@ namespace Parser {
             case SyntaxKind.VoidKeyword:
                 return parseVoidExpression();
             case SyntaxKind.LessThanToken:
+                // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
+                // in JSX and we see an expression like "+ <foo> bar".
+                if (languageVariant === LanguageVariant.JSX) {
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
+                }
                 // This is modified UnaryExpression grammar in TypeScript
                 //  UnaryExpression (modified):
                 //      < type > UnaryExpression
@@ -5884,7 +5913,7 @@ namespace Parser {
         // If it wasn't then just try to parse out a '.' and report an error.
         parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
         // private names will never work with `super` (`super.#foo`), but that's a semantic error, not syntactic
-        return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
+        return finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
     }
 
     function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
@@ -5906,7 +5935,7 @@ namespace Parser {
                 const newLast = finishNode(factory.createJsxElement(
                     lastChild.openingElement,
                     lastChild.children,
-                    finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), end, end)), end, end)),
+                    finishNode(factory.createJsxClosingElement(finishNode(factoryCreateIdentifier(""), end, end)), end, end)),
                 lastChild.openingElement.pos,
                 end);
 
@@ -6075,7 +6104,7 @@ namespace Parser {
         let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
             parseTokenNode<ThisExpression>() : parseIdentifierName();
         while (parseOptional(SyntaxKind.DotToken)) {
-            expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
+            expression = finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
         }
         return expression;
     }
@@ -6161,10 +6190,7 @@ namespace Parser {
     function parseJsxClosingFragment(inExpressionContext: boolean): JsxClosingFragment {
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanSlashToken);
-        if (tokenIsIdentifierOrKeyword(token())) {
-            parseErrorAtRange(parseJsxElementName(), Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
-        }
-        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+        if (parseExpected(SyntaxKind.GreaterThanToken, Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment, /*shouldAdvance*/ false)) {
             // manually advance the scanner in order to look for jsx text inside jsx
             if (inExpressionContext) {
                 nextToken();
@@ -6177,6 +6203,7 @@ namespace Parser {
     }
 
     function parseTypeAssertion(): TypeAssertion {
+        Debug.assert(languageVariant !== LanguageVariant.JSX, "Type assertions should never be parsed in JSX; they should be parsed as comparisons or JSX elements/fragments.");
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanToken);
         const type = parseType();
@@ -6223,8 +6250,8 @@ namespace Parser {
         const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
         const isOptionalChain = questionDotToken || tryReparseOptionalChain(expression);
         const propertyAccess = isOptionalChain ?
-            factory.createPropertyAccessChain(expression, questionDotToken, name) :
-            factory.createPropertyAccessExpression(expression, name);
+            factoryCreatePropertyAccessChain(expression, questionDotToken, name) :
+            factoryCreatePropertyAccessExpression(expression, name);
         if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
             parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
         }
@@ -6252,8 +6279,8 @@ namespace Parser {
         parseExpected(SyntaxKind.CloseBracketToken);
 
         const indexedAccess = questionDotToken || tryReparseOptionalChain(expression) ?
-            factory.createElementAccessChain(expression, questionDotToken, argumentExpression) :
-            factory.createElementAccessExpression(expression, argumentExpression);
+            factoryCreateElementAccessChain(expression, questionDotToken, argumentExpression) :
+            factoryCreateElementAccessExpression(expression, argumentExpression);
         return finishNode(indexedAccess, pos);
     }
 
@@ -6344,15 +6371,15 @@ namespace Parser {
                 }
                 const argumentList = parseArgumentList();
                 const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
-                    factory.createCallChain(expression, questionDotToken, typeArguments, argumentList) :
-                    factory.createCallExpression(expression, typeArguments, argumentList);
+                    factoryCreateCallChain(expression, questionDotToken, typeArguments, argumentList) :
+                    factoryCreateCallExpression(expression, typeArguments, argumentList);
                 expression = finishNode(callExpr, pos);
                 continue;
             }
             if (questionDotToken) {
                 // We parsed `?.` but then failed to parse anything, so report a missing identifier here.
                 const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Identifier_expected);
-                expression = finishNode(factory.createPropertyAccessChain(expression, questionDotToken, name), pos);
+                expression = finishNode(factoryCreatePropertyAccessChain(expression, questionDotToken, name), pos);
             }
             break;
         }
@@ -6440,6 +6467,8 @@ namespace Parser {
                 }
 
                 return parseFunctionExpression();
+            case SyntaxKind.AtToken:
+                return parseDecoratedExpression();
             case SyntaxKind.ClassKeyword:
                 return parseClassExpression();
             case SyntaxKind.FunctionKeyword:
@@ -6467,7 +6496,7 @@ namespace Parser {
         parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpected(SyntaxKind.CloseParenToken);
-        return withJSDoc(finishNode(factory.createParenthesizedExpression(expression), pos), hasJSDoc);
+        return withJSDoc(finishNode(factoryCreateParenthesizedExpression(expression), pos), hasJSDoc);
     }
 
     function parseSpreadElement(): Expression {
@@ -6489,12 +6518,12 @@ namespace Parser {
 
     function parseArrayLiteralExpression(): ArrayLiteralExpression {
         const pos = getNodePos();
-        const openBracketPosition = scanner.getTokenPos();
+        const openBracketPosition = scanner.getTokenStart();
         const openBracketParsed = parseExpected(SyntaxKind.OpenBracketToken);
         const multiLine = scanner.hasPrecedingLineBreak();
         const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketParsed, openBracketPosition);
-        return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
+        return finishNode(factoryCreateArrayLiteralExpression(elements, multiLine), pos);
     }
 
     function parseObjectLiteralElement(): ObjectLiteralElementLike {
@@ -6506,14 +6535,12 @@ namespace Parser {
             return withJSDoc(finishNode(factory.createSpreadAssignment(expression), pos), hasJSDoc);
         }
 
-        const decorators = parseDecorators();
-        const modifiers = parseModifiers();
-
+        const modifiers = parseModifiers(/*allowDecorators*/ true);
         if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
         }
         if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
         }
 
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -6525,7 +6552,7 @@ namespace Parser {
         const exclamationToken = parseOptionalToken(SyntaxKind.ExclamationToken);
 
         if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-            return parseMethodDeclaration(pos, hasJSDoc, decorators, modifiers, asteriskToken, name, questionToken, exclamationToken);
+            return parseMethodDeclaration(pos, hasJSDoc, modifiers, asteriskToken, name, questionToken, exclamationToken);
         }
 
         // check if it is short-hand property assignment or normal property assignment
@@ -6549,7 +6576,6 @@ namespace Parser {
             node = factory.createPropertyAssignment(name, initializer);
         }
         // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
-        node.illegalDecorators = decorators;
         node.modifiers = modifiers;
         node.questionToken = questionToken;
         node.exclamationToken = exclamationToken;
@@ -6558,12 +6584,12 @@ namespace Parser {
 
     function parseObjectLiteralExpression(): ObjectLiteralExpression {
         const pos = getNodePos();
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = scanner.getTokenStart();
         const openBraceParsed = parseExpected(SyntaxKind.OpenBraceToken);
         const multiLine = scanner.hasPrecedingLineBreak();
         const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
-        return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
+        return finishNode(factoryCreateObjectLiteralExpression(properties, multiLine), pos);
     }
 
     function parseFunctionExpression(): FunctionExpression {
@@ -6577,7 +6603,7 @@ namespace Parser {
 
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ false);
         parseExpected(SyntaxKind.FunctionKeyword);
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
         const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
@@ -6621,22 +6647,22 @@ namespace Parser {
             parseErrorAtCurrentToken(Diagnostics.Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0, getTextOfNodeFromSourceText(sourceText, expression));
         }
         const argumentList = token() === SyntaxKind.OpenParenToken ? parseArgumentList() : undefined;
-        return finishNode(factory.createNewExpression(expression, typeArguments, argumentList), pos);
+        return finishNode(factoryCreateNewExpression(expression, typeArguments, argumentList), pos);
     }
 
     // STATEMENTS
     function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = scanner.getTokenStart();
         const openBraceParsed = parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage);
         if (openBraceParsed || ignoreMissingOpenBrace) {
             const multiLine = scanner.hasPrecedingLineBreak();
             const statements = parseList(ParsingContext.BlockStatements, parseStatement);
             parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
-            const result = withJSDoc(finishNode(factory.createBlock(statements, multiLine), pos), hasJSDoc);
+            const result = withJSDoc(finishNode(factoryCreateBlock(statements, multiLine), pos), hasJSDoc);
             if (token() === SyntaxKind.EqualsToken) {
-                parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
+                parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_whole_assignment_in_parentheses);
                 nextToken();
             }
 
@@ -6644,7 +6670,7 @@ namespace Parser {
         }
         else {
             const statements = createMissingList<Statement>();
-            return withJSDoc(finishNode(factory.createBlock(statements, /*multiLine*/ undefined), pos), hasJSDoc);
+            return withJSDoc(finishNode(factoryCreateBlock(statements, /*multiLine*/ undefined), pos), hasJSDoc);
         }
     }
 
@@ -6689,13 +6715,13 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.IfKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = scanner.getTokenStart();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
         const thenStatement = parseStatement();
         const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
-        return withJSDoc(finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
+        return withJSDoc(finishNode(factoryCreateIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
     }
 
     function parseDoStatement(): DoStatement {
@@ -6704,7 +6730,7 @@ namespace Parser {
         parseExpected(SyntaxKind.DoKeyword);
         const statement = parseStatement();
         parseExpected(SyntaxKind.WhileKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = scanner.getTokenStart();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
@@ -6721,12 +6747,12 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.WhileKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = scanner.getTokenStart();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
         const statement = parseStatement();
-        return withJSDoc(finishNode(factory.createWhileStatement(expression, statement), pos), hasJSDoc);
+        return withJSDoc(finishNode(factoryCreateWhileStatement(expression, statement), pos), hasJSDoc);
     }
 
     function parseForOrForInOrForOfStatement(): Statement {
@@ -6750,7 +6776,7 @@ namespace Parser {
         if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
             const expression = allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true));
             parseExpected(SyntaxKind.CloseParenToken);
-            node = factory.createForOfStatement(awaitToken, initializer, expression, parseStatement());
+            node = factoryCreateForOfStatement(awaitToken, initializer, expression, parseStatement());
         }
         else if (parseOptional(SyntaxKind.InKeyword)) {
             const expression = allowInAnd(parseExpression);
@@ -6767,7 +6793,7 @@ namespace Parser {
                 ? allowInAnd(parseExpression)
                 : undefined;
             parseExpected(SyntaxKind.CloseParenToken);
-            node = factory.createForStatement(initializer, condition, incrementor, parseStatement());
+            node = factoryCreateForStatement(initializer, condition, incrementor, parseStatement());
         }
 
         return withJSDoc(finishNode(node, pos) as ForStatement | ForInOrOfStatement, hasJSDoc);
@@ -6800,7 +6826,7 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.WithKeyword);
-        const openParenPosition = scanner.getTokenPos();
+        const openParenPosition = scanner.getTokenStart();
         const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
@@ -6865,7 +6891,7 @@ namespace Parser {
         let expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
         if (expression === undefined) {
             identifierCount++;
-            expression = finishNode(factory.createIdentifier(""), getNodePos());
+            expression = finishNode(factoryCreateIdentifier(""), getNodePos());
         }
         if (!tryParseSemicolon()) {
             parseErrorForMissingSemicolonAfter(expression);
@@ -6935,7 +6961,7 @@ namespace Parser {
             if (!tryParseSemicolon()) {
                 parseErrorForMissingSemicolonAfter(expression);
             }
-            node = factory.createExpressionStatement(expression);
+            node = factoryCreateExpressionStatement(expression);
             if (hasParen) {
                 // do not parse the same jsdoc twice
                 hasJSDoc = false;
@@ -7032,7 +7058,7 @@ namespace Parser {
                     }
                     if (currentToken === SyntaxKind.EqualsToken || currentToken === SyntaxKind.AsteriskToken ||
                         currentToken === SyntaxKind.OpenBraceToken || currentToken === SyntaxKind.DefaultKeyword ||
-                        currentToken === SyntaxKind.AsKeyword) {
+                        currentToken === SyntaxKind.AsKeyword || currentToken === SyntaxKind.AtToken) {
                         return true;
                     }
                     continue;
@@ -7129,16 +7155,16 @@ namespace Parser {
             case SyntaxKind.OpenBraceToken:
                 return parseBlock(/*ignoreMissingOpenBrace*/ false);
             case SyntaxKind.VarKeyword:
-                return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
             case SyntaxKind.LetKeyword:
                 if (isLetDeclaration()) {
-                    return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                    return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
                 }
                 break;
             case SyntaxKind.FunctionKeyword:
-                return parseFunctionDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                return parseFunctionDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
             case SyntaxKind.ClassKeyword:
-                return parseClassDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                return parseClassDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
             case SyntaxKind.IfKeyword:
                 return parseIfStatement();
             case SyntaxKind.DoKeyword:
@@ -7195,7 +7221,7 @@ namespace Parser {
         return parseExpressionOrLabeledStatement();
     }
 
-    function isDeclareModifier(modifier: Modifier) {
+    function isDeclareModifier(modifier: ModifierLike) {
         return modifier.kind === SyntaxKind.DeclareKeyword;
     }
 
@@ -7205,8 +7231,7 @@ namespace Parser {
         // not reusable in that context.
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const decorators = parseDecorators();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ true);
         const isAmbient = some(modifiers, isDeclareModifier);
         if (isAmbient) {
             const node = tryReuseAmbientDeclaration(pos);
@@ -7217,10 +7242,10 @@ namespace Parser {
             for (const m of modifiers!) {
                 (m as Mutable<Node>).flags |= NodeFlags.Ambient;
             }
-            return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, hasJSDoc, decorators, modifiers));
+            return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, hasJSDoc, modifiers));
         }
         else {
-            return parseDeclarationWorker(pos, hasJSDoc, decorators, modifiers);
+            return parseDeclarationWorker(pos, hasJSDoc, modifiers);
         }
     }
 
@@ -7233,47 +7258,46 @@ namespace Parser {
         });
     }
 
-    function parseDeclarationWorker(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): Statement {
+    function parseDeclarationWorker(pos: number, hasJSDoc: boolean, modifiersIn: NodeArray<ModifierLike> | undefined): Statement {
         switch (token()) {
             case SyntaxKind.VarKeyword:
             case SyntaxKind.LetKeyword:
             case SyntaxKind.ConstKeyword:
-                return parseVariableStatement(pos, hasJSDoc, decorators, modifiers);
+                return parseVariableStatement(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.FunctionKeyword:
-                return parseFunctionDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseFunctionDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.ClassKeyword:
-                return parseClassDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseClassDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.InterfaceKeyword:
-                return parseInterfaceDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseInterfaceDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.TypeKeyword:
-                return parseTypeAliasDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseTypeAliasDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.EnumKeyword:
-                return parseEnumDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseEnumDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.GlobalKeyword:
             case SyntaxKind.ModuleKeyword:
             case SyntaxKind.NamespaceKeyword:
-                return parseModuleDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseModuleDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.ImportKeyword:
-                return parseImportDeclarationOrImportEqualsDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseImportDeclarationOrImportEqualsDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.ExportKeyword:
                 nextToken();
                 switch (token()) {
                     case SyntaxKind.DefaultKeyword:
                     case SyntaxKind.EqualsToken:
-                        return parseExportAssignment(pos, hasJSDoc, decorators, modifiers);
+                        return parseExportAssignment(pos, hasJSDoc, modifiersIn);
                     case SyntaxKind.AsKeyword:
-                        return parseNamespaceExportDeclaration(pos, hasJSDoc, decorators, modifiers);
+                        return parseNamespaceExportDeclaration(pos, hasJSDoc, modifiersIn);
                     default:
-                        return parseExportDeclaration(pos, hasJSDoc, decorators, modifiers);
+                        return parseExportDeclaration(pos, hasJSDoc, modifiersIn);
                 }
             default:
-                if (decorators || modifiers) {
+                if (modifiersIn) {
                     // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                     // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                     const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                     setTextRangePos(missing, pos);
-                    missing.illegalDecorators = decorators;
-                    missing.modifiers = modifiers;
+                    (missing as Mutable<MissingDeclaration>).modifiers = modifiersIn;
                     return missing;
                 }
                 return undefined!; // TODO: GH#18217
@@ -7378,7 +7402,7 @@ namespace Parser {
         }
         const type = parseTypeAnnotation();
         const initializer = isInOrOfKeyword(token()) ? undefined : parseInitializer();
-        const node = factory.createVariableDeclaration(name, exclamationToken, type, initializer);
+        const node = factoryCreateVariableDeclaration(name, exclamationToken, type, initializer);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7424,25 +7448,22 @@ namespace Parser {
             setDisallowInContext(savedDisallowIn);
         }
 
-        return finishNode(factory.createVariableDeclarationList(declarations, flags), pos);
+        return finishNode(factoryCreateVariableDeclarationList(declarations, flags), pos);
     }
 
     function canFollowContextualOfKeyword(): boolean {
         return nextTokenIsIdentifier() && nextToken() === SyntaxKind.CloseParenToken;
     }
 
-    function parseVariableStatement(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): VariableStatement {
+    function parseVariableStatement(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): VariableStatement {
         const declarationList = parseVariableDeclarationList(/*inForStatementInitializer*/ false);
         parseSemicolon();
-        const node = factory.createVariableStatement(modifiers, declarationList);
-        // Decorators are not allowed on a variable statement, so we keep track of them to report them in the grammar checker.
-        node.illegalDecorators = decorators;
+        const node = factoryCreateVariableStatement(modifiers, declarationList);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): FunctionDeclaration {
+    function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): FunctionDeclaration {
         const savedAwaitContext = inAwaitContext();
-
         const modifierFlags = modifiersToFlags(modifiers);
         parseExpected(SyntaxKind.FunctionKeyword);
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -7457,7 +7478,6 @@ namespace Parser {
         const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
         setAwaitContext(savedAwaitContext);
         const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
-        (node as Mutable<FunctionDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7473,7 +7493,7 @@ namespace Parser {
         }
     }
 
-    function tryParseConstructorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ConstructorDeclaration | undefined {
+    function tryParseConstructorDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ConstructorDeclaration | undefined {
         return tryParse(() => {
             if (parseConstructorName()) {
                 const typeParameters = parseTypeParameters();
@@ -7483,7 +7503,6 @@ namespace Parser {
                 const node = factory.createConstructorDeclaration(modifiers, parameters, body);
 
                 // Attach invalid nodes if they exist so that we can report them in the grammar checker.
-                (node as Mutable<ConstructorDeclaration>).illegalDecorators = decorators;
                 (node as Mutable<ConstructorDeclaration>).typeParameters = typeParameters;
                 (node as Mutable<ConstructorDeclaration>).type = type;
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -7494,8 +7513,7 @@ namespace Parser {
     function parseMethodDeclaration(
         pos: number,
         hasJSDoc: boolean,
-        decorators: NodeArray<Decorator> | undefined,
-        modifiers: NodeArray<Modifier> | undefined,
+        modifiers: NodeArray<ModifierLike> | undefined,
         asteriskToken: AsteriskToken | undefined,
         name: PropertyName,
         questionToken: QuestionToken | undefined,
@@ -7509,7 +7527,7 @@ namespace Parser {
         const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
         const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, diagnosticMessage);
         const node = factory.createMethodDeclaration(
-            combineDecoratorsAndModifiers(decorators, modifiers),
+            modifiers,
             asteriskToken,
             name,
             questionToken,
@@ -7527,8 +7545,7 @@ namespace Parser {
     function parsePropertyDeclaration(
         pos: number,
         hasJSDoc: boolean,
-        decorators: NodeArray<Decorator> | undefined,
-        modifiers: NodeArray<Modifier> | undefined,
+        modifiers: NodeArray<ModifierLike> | undefined,
         name: PropertyName,
         questionToken: QuestionToken | undefined
     ): PropertyDeclaration {
@@ -7537,7 +7554,7 @@ namespace Parser {
         const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
         parseSemicolonAfterPropertyName(name, type, initializer);
         const node = factory.createPropertyDeclaration(
-            combineDecoratorsAndModifiers(decorators, modifiers),
+            modifiers,
             name,
             questionToken || exclamationToken,
             type,
@@ -7548,8 +7565,7 @@ namespace Parser {
     function parsePropertyOrMethodDeclaration(
         pos: number,
         hasJSDoc: boolean,
-        decorators: NodeArray<Decorator> | undefined,
-        modifiers: NodeArray<Modifier> | undefined
+        modifiers: NodeArray<ModifierLike> | undefined
     ): PropertyDeclaration | MethodDeclaration {
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
         const name = parsePropertyName();
@@ -7557,20 +7573,20 @@ namespace Parser {
         // report an error in the grammar checker.
         const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
         if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-            return parseMethodDeclaration(pos, hasJSDoc, decorators, modifiers, asteriskToken, name, questionToken, /*exclamationToken*/ undefined, Diagnostics.or_expected);
+            return parseMethodDeclaration(pos, hasJSDoc, modifiers, asteriskToken, name, questionToken, /*exclamationToken*/ undefined, Diagnostics.or_expected);
         }
-        return parsePropertyDeclaration(pos, hasJSDoc, decorators, modifiers, name, questionToken);
+        return parsePropertyDeclaration(pos, hasJSDoc, modifiers, name, questionToken);
     }
 
-    function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
+    function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
         const name = parsePropertyName();
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(SignatureFlags.None);
         const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
         const body = parseFunctionBlockOrSemicolon(flags);
         const node = kind === SyntaxKind.GetAccessor
-            ? factory.createGetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
-            : factory.createSetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
+            ? factory.createGetAccessorDeclaration(modifiers, name, parameters, type, body)
+            : factory.createSetAccessorDeclaration(modifiers, name, parameters, body);
         // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
         (node as Mutable<AccessorDeclaration>).typeParameters = typeParameters;
         if (isSetAccessorDeclaration(node)) (node as Mutable<SetAccessorDeclaration>).type = type;
@@ -7646,11 +7662,10 @@ namespace Parser {
         return false;
     }
 
-    function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: ModifiersArray | undefined): ClassStaticBlockDeclaration {
+    function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ClassStaticBlockDeclaration {
         parseExpectedToken(SyntaxKind.StaticKeyword);
         const body = parseClassStaticBlockBody();
         const node = withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(body), pos), hasJSDoc);
-        (node as Mutable<ClassStaticBlockDeclaration>).illegalDecorators = decorators;
         (node as Mutable<ClassStaticBlockDeclaration>).modifiers = modifiers;
         return node;
     }
@@ -7692,20 +7707,11 @@ namespace Parser {
         return finishNode(factory.createDecorator(expression), pos);
     }
 
-    function parseDecorators(): NodeArray<Decorator> | undefined {
-        const pos = getNodePos();
-        let list, decorator;
-        while (decorator = tryParseDecorator()) {
-            list = append(list, decorator);
-        }
-        return list && createNodeArray(list, pos);
-    }
-
-    function tryParseModifier(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, hasSeenStaticModifier?: boolean): Modifier | undefined {
+    function tryParseModifier(hasSeenStaticModifier: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
         const pos = getNodePos();
         const kind = token();
 
-        if (token() === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
+        if (token() === SyntaxKind.ConstKeyword && permitConstAsModifier) {
             // We need to ensure that any subsequent modifiers appear on the same line
             // so that when 'const' is a standalone declaration, we don't issue an error.
             if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
@@ -7724,31 +7730,57 @@ namespace Parser {
             }
         }
 
-        return finishNode(factory.createToken(kind as Modifier["kind"]), pos);
-    }
-
-    function combineDecoratorsAndModifiers(decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): NodeArray<ModifierLike> | undefined {
-        if (!decorators) return modifiers;
-        if (!modifiers) return decorators;
-        const decoratorsAndModifiers = factory.createNodeArray(concatenate<ModifierLike>(decorators, modifiers));
-        setTextRangePosEnd(decoratorsAndModifiers, decorators.pos, modifiers.end);
-        return decoratorsAndModifiers;
+        return finishNode(factoryCreateToken(kind as Modifier["kind"]), pos);
     }
 
     /*
-     * There are situations in which a modifier like 'const' will appear unexpectedly, such as on a class member.
-     * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
-     * and turns it into a standalone declaration), then it is better to parse it and report an error later.
-     *
-     * In such situations, 'permitInvalidConstAsModifier' should be set to true.
-     */
-    function parseModifiers(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
+        * There are situations in which a modifier like 'const' will appear unexpectedly, such as on a class member.
+        * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
+        * and turns it into a standalone declaration), then it is better to parse it and report an error later.
+        *
+        * In such situations, 'permitConstAsModifier' should be set to true.
+        */
+    function parseModifiers(allowDecorators: false, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined;
+    function parseModifiers(allowDecorators: true, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined;
+    function parseModifiers(allowDecorators: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined {
         const pos = getNodePos();
-        let list, modifier, hasSeenStatic = false;
-        while (modifier = tryParseModifier(permitInvalidConstAsModifier, stopOnStartOfClassStaticBlock, hasSeenStatic)) {
-            if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStatic = true;
-            list = append(list, modifier);
+        let list: ModifierLike[] | undefined;
+        let decorator, modifier, hasSeenStaticModifier = false, hasLeadingModifier = false, hasTrailingDecorator = false;
+
+        // Decorators should be contiguous in a list of modifiers but can potentially appear in two places (i.e., `[...leadingDecorators, ...leadingModifiers, ...trailingDecorators, ...trailingModifiers]`).
+        // The leading modifiers *should* only contain `export` and `default` when trailingDecorators are present, but we'll handle errors for any other leading modifiers in the checker.
+        // It is illegal to have both leadingDecorators and trailingDecorators, but we will report that as a grammar check in the checker.
+
+        // parse leading decorators
+        if (allowDecorators && token() === SyntaxKind.AtToken) {
+            while (decorator = tryParseDecorator()) {
+                list = append(list, decorator);
+            }
         }
+
+        // parse leading modifiers
+        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+            if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
+            list = append(list, modifier);
+            hasLeadingModifier = true;
+        }
+
+        // parse trailing decorators, but only if we parsed any leading modifiers
+        if (hasLeadingModifier && allowDecorators && token() === SyntaxKind.AtToken) {
+            while (decorator = tryParseDecorator()) {
+                list = append(list, decorator);
+                hasTrailingDecorator = true;
+            }
+        }
+
+        // parse trailing modifiers, but only if we parsed any trailing decorators
+        if (hasTrailingDecorator) {
+            while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+                if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
+                list = append(list, modifier);
+            }
+        }
+
         return list && createNodeArray(list, pos);
     }
 
@@ -7757,7 +7789,7 @@ namespace Parser {
         if (token() === SyntaxKind.AsyncKeyword) {
             const pos = getNodePos();
             nextToken();
-            const modifier = finishNode(factory.createToken(SyntaxKind.AsyncKeyword), pos);
+            const modifier = finishNode(factoryCreateToken(SyntaxKind.AsyncKeyword), pos);
             modifiers = createNodeArray<Modifier>([modifier], pos);
         }
         return modifiers;
@@ -7771,29 +7803,28 @@ namespace Parser {
         }
 
         const hasJSDoc = hasPrecedingJSDocComment();
-        const decorators = parseDecorators();
-        const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
+        const modifiers = parseModifiers(/*allowDecorators*/ true, /*permitConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
         if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
-            return parseClassStaticBlockDeclaration(pos, hasJSDoc, decorators, modifiers);
+            return parseClassStaticBlockDeclaration(pos, hasJSDoc, modifiers);
         }
 
         if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
         }
 
         if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
         }
 
         if (token() === SyntaxKind.ConstructorKeyword || token() === SyntaxKind.StringLiteral) {
-            const constructorDeclaration = tryParseConstructorDeclaration(pos, hasJSDoc, decorators, modifiers);
+            const constructorDeclaration = tryParseConstructorDeclaration(pos, hasJSDoc, modifiers);
             if (constructorDeclaration) {
                 return constructorDeclaration;
             }
         }
 
         if (isIndexSignature()) {
-            return parseIndexSignatureDeclaration(pos, hasJSDoc, decorators, modifiers);
+            return parseIndexSignatureDeclaration(pos, hasJSDoc, modifiers);
         }
 
         // It is very important that we check this *after* checking indexers because
@@ -7808,32 +7839,46 @@ namespace Parser {
                 for (const m of modifiers!) {
                     (m as Mutable<Node>).flags |= NodeFlags.Ambient;
                 }
-                return doInsideOfContext(NodeFlags.Ambient, () => parsePropertyOrMethodDeclaration(pos, hasJSDoc, decorators, modifiers));
+                return doInsideOfContext(NodeFlags.Ambient, () => parsePropertyOrMethodDeclaration(pos, hasJSDoc, modifiers));
             }
             else {
-                return parsePropertyOrMethodDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parsePropertyOrMethodDeclaration(pos, hasJSDoc, modifiers);
             }
         }
 
-        if (decorators || modifiers) {
+        if (modifiers) {
             // treat this as a property declaration with a missing name.
             const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-            return parsePropertyDeclaration(pos, hasJSDoc, decorators, modifiers, name, /*questionToken*/ undefined);
+            return parsePropertyDeclaration(pos, hasJSDoc, modifiers, name, /*questionToken*/ undefined);
         }
 
         // 'isClassMemberStart' should have hinted not to attempt parsing.
         return Debug.fail("Should not have attempted to parse class member declaration.");
     }
 
+    function parseDecoratedExpression(): PrimaryExpression {
+        const pos = getNodePos();
+        const hasJSDoc = hasPrecedingJSDocComment();
+        const modifiers = parseModifiers(/*allowDecorators*/ true);
+        if (token() === SyntaxKind.ClassKeyword) {
+            return parseClassDeclarationOrExpression(pos, hasJSDoc, modifiers, SyntaxKind.ClassExpression) as ClassExpression;
+        }
+
+        const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Expression_expected);
+        setTextRangePos(missing, pos);
+        (missing as Mutable<MissingDeclaration>).modifiers = modifiers;
+        return missing;
+    }
+
     function parseClassExpression(): ClassExpression {
-        return parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined, SyntaxKind.ClassExpression) as ClassExpression;
+        return parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined, SyntaxKind.ClassExpression) as ClassExpression;
     }
 
-    function parseClassDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ClassDeclaration {
-        return parseClassDeclarationOrExpression(pos, hasJSDoc, decorators, modifiers, SyntaxKind.ClassDeclaration) as ClassDeclaration;
+    function parseClassDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ClassDeclaration {
+        return parseClassDeclarationOrExpression(pos, hasJSDoc, modifiers, SyntaxKind.ClassDeclaration) as ClassDeclaration;
     }
 
-    function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
+    function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
         const savedAwaitContext = inAwaitContext();
         parseExpected(SyntaxKind.ClassKeyword);
 
@@ -7855,8 +7900,8 @@ namespace Parser {
         }
         setAwaitContext(savedAwaitContext);
         const node = kind === SyntaxKind.ClassDeclaration
-            ? factory.createClassDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members)
-            : factory.createClassExpression(combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members);
+            ? factory.createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members)
+            : factory.createClassExpression(modifiers, name, typeParameters, heritageClauses, members);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7918,18 +7963,17 @@ namespace Parser {
         return parseList(ParsingContext.ClassMembers, parseClassElement);
     }
 
-    function parseInterfaceDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): InterfaceDeclaration {
+    function parseInterfaceDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): InterfaceDeclaration {
         parseExpected(SyntaxKind.InterfaceKeyword);
         const name = parseIdentifier();
         const typeParameters = parseTypeParameters();
         const heritageClauses = parseHeritageClauses();
         const members = parseObjectTypeMembers();
         const node = factory.createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
-        (node as Mutable<InterfaceDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseTypeAliasDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): TypeAliasDeclaration {
+    function parseTypeAliasDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): TypeAliasDeclaration {
         parseExpected(SyntaxKind.TypeKeyword);
         const name = parseIdentifier();
         const typeParameters = parseTypeParameters();
@@ -7937,7 +7981,6 @@ namespace Parser {
         const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
         parseSemicolon();
         const node = factory.createTypeAliasDeclaration(modifiers, name, typeParameters, type);
-        (node as Mutable<TypeAliasDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7953,7 +7996,7 @@ namespace Parser {
         return withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
     }
 
-    function parseEnumDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): EnumDeclaration {
+    function parseEnumDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): EnumDeclaration {
         parseExpected(SyntaxKind.EnumKeyword);
         const name = parseIdentifier();
         let members;
@@ -7965,7 +8008,6 @@ namespace Parser {
             members = createMissingList<EnumMember>();
         }
         const node = factory.createEnumDeclaration(modifiers, name, members);
-        (node as Mutable<EnumDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7982,20 +8024,19 @@ namespace Parser {
         return finishNode(factory.createModuleBlock(statements), pos);
     }
 
-    function parseModuleOrNamespaceDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, flags: NodeFlags): ModuleDeclaration {
+    function parseModuleOrNamespaceDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, flags: NodeFlags): ModuleDeclaration {
         // If we are parsing a dotted namespace name, we want to
         // propagate the 'Namespace' flag across the names if set.
         const namespaceFlag = flags & NodeFlags.Namespace;
         const name = parseIdentifier();
         const body = parseOptional(SyntaxKind.DotToken)
-            ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
+            ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
             : parseModuleBlock();
         const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-        (node as Mutable<ModuleDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseAmbientExternalModuleDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ModuleDeclaration {
+    function parseAmbientExternalModuleDeclaration(pos: number, hasJSDoc: boolean, modifiersIn: NodeArray<ModifierLike> | undefined): ModuleDeclaration {
         let flags: NodeFlags = 0;
         let name;
         if (token() === SyntaxKind.GlobalKeyword) {
@@ -8014,16 +8055,15 @@ namespace Parser {
         else {
             parseSemicolon();
         }
-        const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-        (node as Mutable<ModuleDeclaration>).illegalDecorators = decorators;
+        const node = factory.createModuleDeclaration(modifiersIn, name, body, flags);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseModuleDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ModuleDeclaration {
+    function parseModuleDeclaration(pos: number, hasJSDoc: boolean, modifiersIn: NodeArray<ModifierLike> | undefined): ModuleDeclaration {
         let flags: NodeFlags = 0;
         if (token() === SyntaxKind.GlobalKeyword) {
             // global augmentation
-            return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, decorators, modifiers);
+            return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, modifiersIn);
         }
         else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
             flags |= NodeFlags.Namespace;
@@ -8031,10 +8071,10 @@ namespace Parser {
         else {
             parseExpected(SyntaxKind.ModuleKeyword);
             if (token() === SyntaxKind.StringLiteral) {
-                return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, modifiersIn);
             }
         }
-        return parseModuleOrNamespaceDeclaration(pos, hasJSDoc, decorators, modifiers, flags);
+        return parseModuleOrNamespaceDeclaration(pos, hasJSDoc, modifiersIn, flags);
     }
 
     function isExternalModuleReference() {
@@ -8054,22 +8094,21 @@ namespace Parser {
         return nextToken() === SyntaxKind.SlashToken;
     }
 
-    function parseNamespaceExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): NamespaceExportDeclaration {
+    function parseNamespaceExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): NamespaceExportDeclaration {
         parseExpected(SyntaxKind.AsKeyword);
         parseExpected(SyntaxKind.NamespaceKeyword);
         const name = parseIdentifier();
         parseSemicolon();
         const node = factory.createNamespaceExportDeclaration(name);
         // NamespaceExportDeclaration nodes cannot have decorators or modifiers, so we attach them here so we can report them in the grammar checker
-        (node as Mutable<NamespaceExportDeclaration>).illegalDecorators = decorators;
         (node as Mutable<NamespaceExportDeclaration>).modifiers = modifiers;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ImportEqualsDeclaration | ImportDeclaration {
+    function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ImportEqualsDeclaration | ImportDeclaration {
         parseExpected(SyntaxKind.ImportKeyword);
 
-        const afterImportPos = scanner.getStartPos();
+        const afterImportPos = scanner.getTokenFullStart();
 
         // We don't parse the identifier here in await context, instead we will report a grammar error in the checker.
         let identifier: Identifier | undefined;
@@ -8087,7 +8126,7 @@ namespace Parser {
         }
 
         if (identifier && !tokenAfterImportedIdentifierDefinitelyProducesImportDeclaration()) {
-            return parseImportEqualsDeclaration(pos, hasJSDoc, decorators, modifiers, identifier, isTypeOnly);
+            return parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, isTypeOnly);
         }
 
         // ImportDeclaration:
@@ -8110,7 +8149,6 @@ namespace Parser {
 
         parseSemicolon();
         const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
-        (node as Mutable<ImportDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -8127,7 +8165,7 @@ namespace Parser {
         if (!skipAssertKeyword) {
             parseExpected(SyntaxKind.AssertKeyword);
         }
-        const openBracePosition = scanner.getTokenPos();
+        const openBracePosition = scanner.getTokenStart();
         if (parseExpected(SyntaxKind.OpenBraceToken)) {
             const multiLine = scanner.hasPrecedingLineBreak();
             const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
@@ -8158,12 +8196,11 @@ namespace Parser {
         return token() === SyntaxKind.CommaToken || token() === SyntaxKind.FromKeyword;
     }
 
-    function parseImportEqualsDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, identifier: Identifier, isTypeOnly: boolean): ImportEqualsDeclaration {
+    function parseImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, identifier: Identifier, isTypeOnly: boolean): ImportEqualsDeclaration {
         parseExpected(SyntaxKind.EqualsToken);
         const moduleReference = parseModuleReference();
         parseSemicolon();
         const node = factory.createImportEqualsDeclaration(modifiers, isTypeOnly, identifier, moduleReference);
-        (node as Mutable<ImportEqualsDeclaration>).illegalDecorators = decorators;
         const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
         return finished;
     }
@@ -8263,8 +8300,8 @@ namespace Parser {
         //   IdentifierName
         //   IdentifierName as IdentifierName
         let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
-        let checkIdentifierStart = scanner.getTokenPos();
-        let checkIdentifierEnd = scanner.getTextPos();
+        let checkIdentifierStart = scanner.getTokenStart();
+        let checkIdentifierEnd = scanner.getTokenEnd();
         let isTypeOnly = false;
         let propertyName: Identifier | undefined;
         let canParseAsKeyword = true;
@@ -8331,8 +8368,8 @@ namespace Parser {
 
         function parseNameWithKeywordCheck() {
             checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
-            checkIdentifierStart = scanner.getTokenPos();
-            checkIdentifierEnd = scanner.getTextPos();
+            checkIdentifierStart = scanner.getTokenStart();
+            checkIdentifierEnd = scanner.getTokenEnd();
             return parseIdentifierName();
         }
     }
@@ -8341,7 +8378,7 @@ namespace Parser {
         return finishNode(factory.createNamespaceExport(parseIdentifierName()), pos);
     }
 
-    function parseExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportDeclaration {
+    function parseExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportDeclaration {
         const savedAwaitContext = inAwaitContext();
         setAwaitContext(/*value*/ true);
         let exportClause: NamedExportBindings | undefined;
@@ -8372,11 +8409,10 @@ namespace Parser {
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
         const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
-        (node as Mutable<ExportDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseExportAssignment(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportAssignment {
+    function parseExportAssignment(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportAssignment {
         const savedAwaitContext = inAwaitContext();
         setAwaitContext(/*value*/ true);
         let isExportEquals: boolean | undefined;
@@ -8390,7 +8426,6 @@ namespace Parser {
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
         const node = factory.createExportAssignment(modifiers, isExportEquals, expression);
-        (node as Mutable<ExportAssignment>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -8436,7 +8471,7 @@ namespace Parser {
             currentToken = scanner.scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
 
-            const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
+            const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factoryCreateToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
             const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
             if (jsDocDiagnostics) {
                 sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
@@ -8572,19 +8607,14 @@ namespace Parser {
                 loop: while (true) {
                     switch (token()) {
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                removeTrailingWhitespace(comments);
-                                if (!commentsPos) commentsPos = getNodePos();
-                                addTag(parseTag(indent));
-                                // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
-                                // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
-                                // for malformed examples like `/** @param {string} x @returns {number} the length */`
-                                state = JSDocState.BeginningOfLine;
-                                margin = undefined;
-                            }
-                            else {
-                                pushComment(scanner.getTokenText());
-                            }
+                            removeTrailingWhitespace(comments);
+                            if (!commentsPos) commentsPos = getNodePos();
+                            addTag(parseTag(indent));
+                            // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
+                            // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
+                            // for malformed examples like `/** @param {string} x @returns {number} the length */`
+                            state = JSDocState.BeginningOfLine;
+                            margin = undefined;
                             break;
                         case SyntaxKind.NewLineTrivia:
                             comments.push(scanner.getTokenText());
@@ -8593,34 +8623,37 @@ namespace Parser {
                             break;
                         case SyntaxKind.AsteriskToken:
                             const asterisk = scanner.getTokenText();
-                            if (state === JSDocState.SawAsterisk || state === JSDocState.SavingComments) {
+                            if (state === JSDocState.SawAsterisk) {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
                                 pushComment(asterisk);
                             }
                             else {
+                                Debug.assert(state === JSDocState.BeginningOfLine);
                                 // Ignore the first asterisk on a line
                                 state = JSDocState.SawAsterisk;
                                 indent += asterisk.length;
                             }
                             break;
                         case SyntaxKind.WhitespaceTrivia:
+                            Debug.assert(state !== JSDocState.SavingComments, "whitespace shouldn't come from the scanner while saving top-level comment text");
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                             const whitespace = scanner.getTokenText();
-                            if (state === JSDocState.SavingComments) {
-                                comments.push(whitespace);
-                            }
-                            else if (margin !== undefined && indent + whitespace.length > margin) {
+                            if (margin !== undefined && indent + whitespace.length > margin) {
                                 comments.push(whitespace.slice(margin - indent));
                             }
                             indent += whitespace.length;
                             break;
                         case SyntaxKind.EndOfFileToken:
                             break loop;
+                        case SyntaxKind.JSDocCommentTextToken:
+                            state = JSDocState.SavingComments;
+                            pushComment(scanner.getTokenValue());
+                            break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
-                            const commentEnd = scanner.getStartPos();
-                            const linkStart = scanner.getTextPos() - 1;
+                            const commentEnd = scanner.getTokenFullStart();
+                            const linkStart = scanner.getTokenEnd() - 1;
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 if (!linkEnd) {
@@ -8629,7 +8662,7 @@ namespace Parser {
                                 parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentEnd));
                                 parts.push(link);
                                 comments = [];
-                                linkEnd = scanner.getTextPos();
+                                linkEnd = scanner.getTokenEnd();
                                 break;
                             }
                             // fallthrough if it's not a {@link sequence
@@ -8641,15 +8674,20 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    nextTokenJSDoc();
+                    if (state === JSDocState.SavingComments) {
+                        nextJSDocCommentTextToken(/*inBackticks*/ false);
+                    }
+                    else {
+                        nextTokenJSDoc();
+                    }
                 }
-                removeTrailingWhitespace(comments);
-                if (parts.length && comments.length) {
-                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentsPos));
+                const trimmedComments = trimStringEnd(comments.join(""));
+                if (parts.length && trimmedComments.length) {
+                    parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? start, commentsPos));
                 }
                 if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                 const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
-                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : comments.length ? comments.join("") : undefined, tagsArray), start, end);
+                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : trimmedComments.length ? trimmedComments : undefined, tagsArray), start, end);
             });
 
             function removeLeadingNewlines(comments: string[]) {
@@ -8659,8 +8697,18 @@ namespace Parser {
             }
 
             function removeTrailingWhitespace(comments: string[]) {
-                while (comments.length && comments[comments.length - 1].trim() === "") {
-                    comments.pop();
+                while (comments.length) {
+                    const trimmed = trimStringEnd(comments[comments.length - 1]);
+                    if (trimmed === "") {
+                        comments.pop();
+                    }
+                    else if (trimmed.length < comments[comments.length - 1].length) {
+                        comments[comments.length - 1] = trimmed;
+                        break;
+                    }
+                    else {
+                        break;
+                    }
                 }
             }
 
@@ -8715,7 +8763,7 @@ namespace Parser {
 
             function parseTag(margin: number) {
                 Debug.assert(token() === SyntaxKind.AtToken);
-                const start = scanner.getTokenPos();
+                const start = scanner.getTokenStart();
                 nextTokenJSDoc();
 
                 const tagName = parseJSDocIdentifierName(/*message*/ undefined);
@@ -8782,8 +8830,18 @@ namespace Parser {
                     case "callback":
                         tag = parseCallbackTag(start, tagName, margin, indentText);
                         break;
+                    case "overload":
+                        tag = parseOverloadTag(start, tagName, margin, indentText);
+                        break;
+                    case "satisfies":
+                        tag = parseSatisfiesTag(start, tagName, margin, indentText);
+                        break;
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);
+                        break;
+                    case "exception":
+                    case "throws":
+                        tag = parseThrowsTag(start, tagName, margin, indentText);
                         break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
@@ -8806,7 +8864,6 @@ namespace Parser {
                 const parts: JSDocComment[] = [];
                 let linkEnd;
                 let state = JSDocState.BeginningOfLine;
-                let previousWhitespace = true;
                 let margin: number | undefined;
                 function pushComment(text: string) {
                     if (!margin) {
@@ -8822,7 +8879,7 @@ namespace Parser {
                     }
                     state = JSDocState.SawAsterisk;
                 }
-                let tok = token() as JSDocSyntaxKind;
+                let tok = token() as JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
                 loop: while (true) {
                     switch (tok) {
                         case SyntaxKind.NewLineTrivia:
@@ -8832,40 +8889,31 @@ namespace Parser {
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.SavingBackticks
-                                || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
-                                // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
-                                comments.push(scanner.getTokenText());
-                                break;
-                            }
-                            scanner.setTextPos(scanner.getTextPos() - 1);
-                            // falls through
+                            scanner.resetTokenState(scanner.getTokenEnd() - 1);
+                            break loop;
                         case SyntaxKind.EndOfFileToken:
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
-                            if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
-                                pushComment(scanner.getTokenText());
+                            Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text");
+                            const whitespace = scanner.getTokenText();
+                            // if the whitespace crosses the margin, take only the whitespace that passes the margin
+                            if (margin !== undefined && indent + whitespace.length > margin) {
+                                comments.push(whitespace.slice(margin - indent));
+                                state = JSDocState.SavingComments;
                             }
-                            else {
-                                const whitespace = scanner.getTokenText();
-                                // if the whitespace crosses the margin, take only the whitespace that passes the margin
-                                if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments.push(whitespace.slice(margin - indent));
-                                }
-                                indent += whitespace.length;
-                            }
+                            indent += whitespace.length;
                             break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
-                            const commentEnd = scanner.getStartPos();
-                            const linkStart = scanner.getTextPos() - 1;
+                            const commentEnd = scanner.getTokenFullStart();
+                            const linkStart = scanner.getTokenEnd() - 1;
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos, commentEnd));
                                 parts.push(link);
                                 comments = [];
-                                linkEnd = scanner.getTextPos();
+                                linkEnd = scanner.getTokenEnd();
                             }
                             else {
                                 pushComment(scanner.getTokenText());
@@ -8879,6 +8927,12 @@ namespace Parser {
                                 state = JSDocState.SavingBackticks;
                             }
                             pushComment(scanner.getTokenText());
+                            break;
+                        case SyntaxKind.JSDocCommentTextToken:
+                            if (state !== JSDocState.SavingBackticks) {
+                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                            }
+                            pushComment(scanner.getTokenValue());
                             break;
                         case SyntaxKind.AsteriskToken:
                             if (state === JSDocState.BeginningOfLine) {
@@ -8896,26 +8950,25 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
-                    tok = nextTokenJSDoc();
+                    if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
+                        tok = nextJSDocCommentTextToken(state === JSDocState.SavingBackticks);
+                    }
+                    else {
+                        tok = nextTokenJSDoc();
+                    }
                 }
 
                 removeLeadingNewlines(comments);
-                removeTrailingWhitespace(comments);
+                const trimmedComments = trimStringEnd(comments.join(""));
                 if (parts.length) {
-                    if (comments.length) {
-                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
+                    if (trimmedComments.length) {
+                        parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? commentsPos));
                     }
-                    return createNodeArray(parts, commentsPos, scanner.getTextPos());
+                    return createNodeArray(parts, commentsPos, scanner.getTokenEnd());
                 }
-                else if (comments.length) {
-                    return comments.join("");
+                else if (trimmedComments.length) {
+                    return trimmedComments;
                 }
-            }
-
-            function isNextJSDocTokenWhitespace() {
-                const next = nextTokenJSDoc();
-                return next === SyntaxKind.WhitespaceTrivia || next === SyntaxKind.NewLineTrivia;
             }
 
             function parseJSDocLink(start: number) {
@@ -8945,7 +8998,7 @@ namespace Parser {
                 const create = linkType === "link" ? factory.createJSDocLink
                     : linkType === "linkcode" ? factory.createJSDocLinkCode
                     : factory.createJSDocLinkPlain;
-                return finishNode(create(name, text.join("")), start, scanner.getTextPos());
+                return finishNode(create(name, text.join("")), start, scanner.getTokenEnd());
             }
 
             function parseJSDocLinkPrefix() {
@@ -9065,7 +9118,7 @@ namespace Parser {
 
             function parseReturnTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocReturnTag {
                 if (some(tags, isJSDocReturnTag)) {
-                    parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    parseErrorAt(tagName.pos, scanner.getTokenStart(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                 }
 
                 const typeExpression = tryParseTypeExpression();
@@ -9074,7 +9127,7 @@ namespace Parser {
 
             function parseTypeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocTypeTag {
                 if (some(tags, isJSDocTypeTag)) {
-                    parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    parseErrorAt(tagName.pos, scanner.getTokenStart(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                 }
 
                 const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
@@ -9090,13 +9143,19 @@ namespace Parser {
                 return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
             }
 
+            function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
+                const typeExpression = tryParseTypeExpression();
+                const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                return finishNode(factory.createJSDocThrowsTag(tagName, typeExpression, comment), start);
+            }
+
             function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
                 const commentStart = getNodePos();
                 const textOnly = parseAuthorNameAndEmail();
-                let commentEnd = scanner.getStartPos();
+                let commentEnd = scanner.getTokenFullStart();
                 const comments = parseTrailingTagComments(start, commentEnd, indent, indentText);
                 if (!comments) {
-                    commentEnd = scanner.getStartPos();
+                    commentEnd = scanner.getTokenFullStart();
                 }
                 const allParts = typeof comments !== "string"
                     ? createNodeArray(concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as JSDocComment[], commentStart) // cast away readonly
@@ -9117,7 +9176,7 @@ namespace Parser {
                     }
                     else if (token === SyntaxKind.GreaterThanToken && inEmail) {
                         comments.push(scanner.getTokenText());
-                        scanner.setTextPos(scanner.getTokenPos() + 1);
+                        scanner.resetTokenState(scanner.getTokenEnd());
                         break;
                     }
                     comments.push(scanner.getTokenText());
@@ -9135,6 +9194,12 @@ namespace Parser {
             function parseAugmentsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocAugmentsTag {
                 const className = parseExpressionWithTypeArgumentsForAugments();
                 return finishNode(factory.createJSDocAugmentsTag(tagName, className, parseTrailingTagComments(start, getNodePos(), margin, indentText)), start);
+            }
+
+            function parseSatisfiesTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocSatisfiesTag {
+                const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ false);
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
             }
 
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
@@ -9155,7 +9220,7 @@ namespace Parser {
                 let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName();
                 while (parseOptional(SyntaxKind.DotToken)) {
                     const name = parseJSDocIdentifierName();
-                    node = finishNode(factory.createPropertyAccessExpression(node, name), pos) as PropertyAccessEntityNameExpression;
+                    node = finishNode(factoryCreatePropertyAccessExpression(node, name), pos) as PropertyAccessEntityNameExpression;
                 }
                 return node;
             }
@@ -9232,7 +9297,7 @@ namespace Parser {
             }
 
             function parseJSDocTypeNameWithNamespace(nested?: boolean) {
-                const pos = scanner.getTokenPos();
+                const start = scanner.getTokenStart();
                 if (!tokenIsIdentifierOrKeyword(token())) {
                     return undefined;
                 }
@@ -9245,11 +9310,11 @@ namespace Parser {
                         body,
                         nested ? NodeFlags.NestedNamespace : undefined
                     ) as JSDocNamespaceDeclaration;
-                    return finishNode(jsDocNamespaceNode, pos);
+                    return finishNode(jsDocNamespaceNode, start);
                 }
 
                 if (nested) {
-                    typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    (typeNameOrNamespaceName as Mutable<Identifier>).flags |= NodeFlags.IdentifierIsInJSDocNamespace;
                 }
                 return typeNameOrNamespaceName;
             }
@@ -9265,10 +9330,7 @@ namespace Parser {
                 return createNodeArray(parameters || [], pos);
             }
 
-            function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
-                const fullName = parseJSDocTypeNameWithNamespace();
-                skipWhitespace();
-                let comment = parseTagComments(indent);
+            function parseJSDocSignature(start: number, indent: number): JSDocSignature {
                 const parameters = parseCallbackTagParameters(indent);
                 const returnTag = tryParse(() => {
                     if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
@@ -9278,12 +9340,30 @@ namespace Parser {
                         }
                     }
                 });
-                const typeExpression = finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+                return finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+            }
+
+            function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
+                const fullName = parseJSDocTypeNameWithNamespace();
+                skipWhitespace();
+                let comment = parseTagComments(indent);
+                const typeExpression = parseJSDocSignature(start, indent);
                 if (!comment) {
                     comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
                 }
                 const end = comment !== undefined ? getNodePos() : typeExpression.end;
                 return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
+            }
+
+            function parseOverloadTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocOverloadTag {
+                skipWhitespace();
+                let comment = parseTagComments(indent);
+                const typeExpression = parseJSDocSignature(start, indent);
+                if (!comment) {
+                    comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                }
+                const end = comment !== undefined ? getNodePos() : typeExpression.end;
+                return finishNode(factory.createJSDocOverloadTag(tagName, typeExpression, comment), start, end);
             }
 
             function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
@@ -9341,7 +9421,7 @@ namespace Parser {
 
             function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                 Debug.assert(token() === SyntaxKind.AtToken);
-                const start = scanner.getStartPos();
+                const start = scanner.getTokenFullStart();
                 nextTokenJSDoc();
 
                 const tagName = parseJSDocIdentifierName();
@@ -9453,11 +9533,11 @@ namespace Parser {
                 }
 
                 identifierCount++;
-                const pos = scanner.getTokenPos();
-                const end = scanner.getTextPos();
+                const start = scanner.getTokenStart();
+                const end = scanner.getTokenEnd();
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
-                const result = finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind), pos, end);
+                const result = finishNode(factoryCreateIdentifier(text, originalKeywordKind), start, end);
                 nextTokenJSDoc();
                 return result;
             }
@@ -9606,7 +9686,9 @@ namespace IncrementalParser {
         }
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+    function moveElementEntirelyPastChangeRange(element: IncrementalNode, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: IncrementalNodeArray, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
         if (isArray) {
             visitArray(element as IncrementalNodeArray);
         }
@@ -9633,7 +9715,7 @@ namespace IncrementalParser {
                 Debug.assert(text === newText.substring(node.pos, node.end));
             }
 
-            forEachChild(node, visitNode, visitArray);
+            forEachChild(node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
             if (hasJSDocNodes(node)) {
                 for (const jsDocComment of node.jsDoc!) {
                     visitNode(jsDocComment as Node as IncrementalNode);
@@ -9786,7 +9868,7 @@ namespace IncrementalParser {
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child, visitNode, visitArray);
+                forEachChild(child, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
                 if (hasJSDocNodes(child)) {
                     for (const jsDocComment of child.jsDoc!) {
                         visitNode(jsDocComment as Node as IncrementalNode);
@@ -10094,20 +10176,7 @@ namespace IncrementalParser {
 
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
-    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
-}
-
-/** @internal */
-export interface PragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: PragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: FileReference[];
-    typeReferenceDirectives: FileReference[];
-    libReferenceDirectives: FileReference[];
-    amdDependencies: AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
+    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && stringContains(getBaseFileName(fileName), ".d."));
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {

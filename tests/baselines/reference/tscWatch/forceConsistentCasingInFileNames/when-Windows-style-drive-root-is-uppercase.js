@@ -36,7 +36,7 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
@@ -66,28 +66,28 @@ c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
 PolledWatches::
-c:/project/node_modules/@types:
+c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/project/tsconfig.json:
+c:/project/tsconfig.json: *new*
   {}
-c:/project/a.ts:
+c:/project/a.ts: *new*
   {}
-c:/project/b.ts:
+c:/project/b.ts: *new*
   {}
-c:/a/lib/lib.d.ts:
+c:/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-c:/project:
+c:/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [C:/project/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
@@ -95,7 +95,7 @@ exports.b = 2;
 
 //// [C:/project/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("C://project/a");
 var a_2 = require("c://project/a");
 a_1.a;
@@ -119,7 +119,7 @@ Output::
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
@@ -146,30 +146,12 @@ Shape signatures in builder refreshed for::
 c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
 
-PolledWatches::
-c:/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/project/tsconfig.json:
-  {}
-c:/project/a.ts:
-  {}
-c:/project/b.ts:
-  {}
-c:/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-c:/project:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [C:/project/a.js]
 "use strict";
 // some comment
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;

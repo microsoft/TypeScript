@@ -18,5 +18,5 @@ function f(x) {
 }
 var zz = {
     g: function () { },
-    get f() { return "abc"; }
+    get f() { return "abc"; },
 };

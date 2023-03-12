@@ -61,6 +61,7 @@ import {
     hasEffectiveModifier,
     hasSyntacticModifier,
     Identifier,
+    identifierToKeywordKind,
     isArray,
     isArrowFunction,
     isAssignmentExpression,
@@ -87,7 +88,6 @@ import {
     isJsxElement,
     isJsxFragment,
     isJsxSelfClosingElement,
-    isKeyword,
     isModuleBlock,
     isParenthesizedTypeNode,
     isPartOfTypeNode,
@@ -633,7 +633,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
             if (
                 container.kind === SyntaxKind.FunctionDeclaration ||
                 (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
@@ -1070,7 +1070,7 @@ function extractFunctionInScope(
         callArguments.push(factory.createIdentifier(name));
     });
 
-    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
+    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclaration(type) }));
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
     const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
@@ -1351,7 +1351,7 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(node.name.originalKeywordKind!)
+    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
         ? node.name.text
         : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
@@ -1595,7 +1595,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
     const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
     // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
     if (hasWritesOrVariableDeclarations || substitutions.size) {
-        const rewrittenStatements = visitNodes(statements, visitor).slice();
+        const rewrittenStatements = visitNodes(statements, visitor, isStatement).slice();
         if (hasWritesOrVariableDeclarations && !hasReturn && isStatement(body)) {
             // add return at the end to propagate writes back in case if control flow falls out of the function body
             // it is ok to know that range has at least one return since it we only allow unconditional returns
@@ -1620,7 +1620,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
                 if (!returnValueProperty) {
                     returnValueProperty = "__return";
                 }
-                assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor)));
+                assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)));
             }
             if (assignments.length === 1) {
                 return factory.createReturnStatement(assignments[0].name as Expression);
@@ -2124,7 +2124,7 @@ function collectReadsAndWrites(
             const decl = find(visibleDeclarationsInExtractedRange, d => d.symbol === sym);
             if (decl) {
                 if (isVariableDeclaration(decl)) {
-                    const idString = decl.symbol.id!.toString();
+                    const idString = decl.symbol.id.toString();
                     if (!exposedVariableSymbolSet.has(idString)) {
                         exposedVariableDeclarations.push(decl);
                         exposedVariableSymbolSet.set(idString, true);

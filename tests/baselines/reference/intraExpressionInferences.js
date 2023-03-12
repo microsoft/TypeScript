@@ -208,7 +208,7 @@ callIt({
 });
 callIt({
     produce: function (_a) { return 0; },
-    consume: function (n) { return n.toFixed(); }
+    consume: function (n) { return n.toFixed(); },
 });
 callIt({
     produce: function () {
@@ -233,15 +233,15 @@ make({
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b: function (a) { },
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b: function (a) { },
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b: function (a) { },
 });
 function test(foo) { }
 test({
@@ -280,7 +280,7 @@ createMappingComponent({
     map: function (inputs) {
         return {
             bool: inputs.nonexistent,
-            str: inputs.num
+            str: inputs.num, // Causes error
         };
     }
 });
@@ -311,7 +311,7 @@ example({
 });
 branch({
     test: x,
-    "if": function (t) { return t === "a"; },
+    if: function (t) { return t === "a"; },
     then: function (u) {
         var test1 = u;
     }

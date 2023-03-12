@@ -14,6 +14,7 @@ import {
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
+    TestSessionRequest,
 } from "./helpers";
 
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
@@ -43,11 +44,11 @@ import { something } from "something";
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
         return { host, session, file1, file2, file3, something, configFile };
     }
 
-    function verifySessionException<T extends ts.server.protocol.Request>(session: TestSession, request: Partial<T>) {
+    function verifySessionException<T extends ts.server.protocol.Request>(session: TestSession, request: TestSessionRequest<T>) {
         try {
             session.executeCommandSeq(request);
         }
@@ -78,7 +79,7 @@ import { something } from "something";
 
         function verifyCompletions() {
             verifySessionException<ts.server.protocol.CompletionsRequest>(session, {
-                command: ts.server.protocol.CommandTypes.Completions,
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
             });
         }
@@ -103,8 +104,6 @@ import { something } from "something";
         const service = session.getProjectService();
         openFilesForSession([file1], session);
         verifySessionException<ts.server.protocol.SemanticDiagnosticsSyncRequest>(session, {
-            type: "request",
-            seq: 1,
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         });
@@ -156,7 +155,7 @@ function fooB() { }`
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true });
+        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([file1], session);
         checkNumberOfProjects(service, { inferredProjects: 1 });

@@ -18,14 +18,12 @@ const flowtypes = <A>(b: B) => {
 >(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
 >fn : (combined: A & B) => void
 >combined : A & B
->null : null
 
   const literal = (fn: (aPlusB: A & B) => void) => null
 >literal : (fn: (aPlusB: A & B) => void) => any
 >(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => any
 >fn : (aPlusB: A & B) => void
 >aPlusB : A & B
->null : null
 
   return {combined, literal}
 >{combined, literal} : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }

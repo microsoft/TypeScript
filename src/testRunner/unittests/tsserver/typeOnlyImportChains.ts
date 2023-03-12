@@ -2,10 +2,12 @@ import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     File,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
-    makeSessionRequest,
     openFilesForSession,
 } from "./helpers";
 
@@ -24,7 +26,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './b'; new a.A();"
         };
 
-        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError("namedExport typeOnlyNamespaceImport namedExport namedImport", [a, b, c], c);
     });
 
     it("named export -> type-only named import -> named export -> named import", () => {
@@ -41,7 +43,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { A } from './b'; new A();"
         };
 
-        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError("namedExport typeOnlyNamedImport namedExport namedImport", [a, b, c], c);
     });
 
     it("named export -> type-only namespace import -> export equals -> import equals", () => {
@@ -58,7 +60,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import a = require('./b'); new a.A();"
         };
 
-        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError("namedExport typeOnlyNamespaceImport exportEquals importEquals", [a, b, c], c);
     });
 
     it("named export -> type-only namespace import -> export default -> import default", () => {
@@ -75,7 +77,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import a from './b'; new a.A();"
         };
 
-        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError("namedExport typeOnlyNamespaceImport exportDefault importDefault", [a, b, c], c);
     });
 
     it("export default -> type-only import default -> export default -> import default", () => {
@@ -92,7 +94,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import A from './b'; new A();"
         };
 
-        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError("exportDefault typeOnlyImportDefault exportDefault importDefault", [a, b, c], c);
     });
 
     it("named export -> type-only export from -> export star from -> named import", () => {
@@ -113,7 +115,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { A } from './c'; new A();"
         };
 
-        assertUsageError([a, b, c, d], d, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type);
+        assertUsageError("namedExport typeOnlyExportFrom exportStarFrom namedImport", [a, b, c, d], d);
     });
 
     it("named export -> export namespace from -> type-only named import -> named export -> named import", () => {
@@ -134,7 +136,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './c'; new a.A();"
         };
 
-        assertUsageError([a, b, c, d], d, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError("namedExport exportNamespaceFrom typeOnlyNamedImport namedExport namedImport", [a, b, c, d], d);
     });
 
     it("named export -> type-only export from -> export namespace from -> named import", () => {
@@ -155,19 +157,17 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './c'; new a.A();"
         };
 
-        assertUsageError([a, b, c, d], d, ts.Diagnostics.Property_0_does_not_exist_on_type_1);
+        assertUsageError("namedExport typeonlyExportFrom exportNamespaceFrom namedImport", [a, b, c, d], d);
     });
 });
 
-function assertUsageError(files: readonly File[], openFile: File, diagnostic: ts.DiagnosticMessage) {
-    const host = createServerHost(files);
-    const session = createSession(host);
+function assertUsageError(subScenario: string, files: readonly File[], openFile: File) {
+    const host = createServerHost([...files, libFile]);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     openFilesForSession([openFile], session);
-    const req = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-        ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-        { file: openFile.path }
-    );
-    const diagnostics = session.executeCommand(req).response as ts.server.protocol.Diagnostic[];
-    assert.lengthOf(diagnostics, 1);
-    assert.equal(diagnostics[0].code, diagnostic.code);
+    session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+        command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
+        arguments: { file: openFile.path }
+    });
+    baselineTsserverLogs("typeOnlyImportChains", subScenario, session);
 }

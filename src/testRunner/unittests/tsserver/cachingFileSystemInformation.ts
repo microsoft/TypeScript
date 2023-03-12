@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     File,
+    Folder,
     libFile,
     SymLink,
     TestServerHost,
@@ -14,8 +15,8 @@ import {
     createProjectService,
     createSession,
     Logger,
-    makeSessionRequest,
     openFilesForSession,
+    TestProjectService,
 } from "./helpers";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
@@ -42,7 +43,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         return logCacheAndClear;
 
         function setCallsTrackingWithSingleArgFn(prop: CalledMapsWithSingleArg) {
-            const calledMap = ts.createMultiMap<true>();
+            const calledMap = ts.createMultiMap<string, true>();
             const cb = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string) => {
                 calledMap.add(f, /*value*/ true);
@@ -52,7 +53,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
 
         function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: CalledMapsWithFiveArgs) {
-            const calledMap = ts.createMultiMap<[U, V, W, X]>();
+            const calledMap = ts.createMultiMap<string, [U, V, W, X]>();
             const cb = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
                 calledMap.add(f, [arg1!, arg2!, arg3!, arg4!]); // TODO: GH#18217
@@ -62,7 +63,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
 
         function logCacheEntry(logger: Logger, callback: CalledMaps) {
-            const result = ts.arrayFrom<[string, (true | CalledWithFiveArgs)[]], { key: string, count: number }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
+            const result = Array.from<[string, (true | CalledWithFiveArgs)[]], { key: string, count: number }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
             logger.info(`${callback}:: ${JSON.stringify(result)}`);
             calledMaps[callback].clear();
         }
@@ -76,7 +77,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
     }
 
-    function logSemanticDiagnostics(projectService: ts.server.ProjectService, project: ts.server.Project, file: File) {
+    function logSemanticDiagnostics(projectService: TestProjectService, project: ts.server.Project, file: File) {
         const diags = project.getLanguageService().getSemanticDiagnostics(file.path);
         projectService.logger.info(`getSemanticDiagnostics:: ${file.path}:: ${diags.length}`);
         diags.forEach(d => projectService.logger.info(ts.formatDiagnostic(d, project)));
@@ -219,13 +220,15 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
         // Get definitions shouldnt make host requests
-        const getDefinitionRequest = makeSessionRequest<ts.server.protocol.FileLocationRequestArgs>(ts.server.protocol.CommandTypes.Definition, {
-            file: clientFile.path,
-            position: clientFile.content.indexOf("/vessel") + 1,
-            line: undefined!, // TODO: GH#18217
-            offset: undefined! // TODO: GH#18217
+        session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
+            command: ts.server.protocol.CommandTypes.Definition,
+            arguments: {
+                file: clientFile.path,
+                position: clientFile.content.indexOf("/vessel") + 1,
+                line: undefined!, // TODO: GH#18217
+                offset: undefined! // TODO: GH#18217
+            }
         });
-        session.executeCommand(getDefinitionRequest);
         logCacheAndClear(session.logger);
 
         // Open the file should call only file exists on module directory and use cached value for parental directory
@@ -364,7 +367,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     describe("Verify npm install in directory with tsconfig file works when", () => {
         function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
             const root = "/user/username/rootfolder/otherfolder";
-            const getRootedFileOrFolder = (fileOrFolder: File) => {
+            const getRootedFileOrFolder = <T extends File | Folder>(fileOrFolder: T) => {
                 fileOrFolder.path = root + fileOrFolder.path;
                 return fileOrFolder;
             };
@@ -409,7 +412,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             let npmInstallComplete = false;
 
             // Simulate npm install
-            const filesAndFoldersToAdd: File[] = [
+            const filesAndFoldersToAdd: (File | Folder)[] = [
                 { path: "/a/b/node_modules" },
                 { path: "/a/b/node_modules/.staging/@types" },
                 { path: "/a/b/node_modules/.staging/lodash-b0733faa" },

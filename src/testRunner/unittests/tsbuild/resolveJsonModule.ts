@@ -4,7 +4,6 @@ import {
     noChangeOnlyRuns,
     replaceText,
     verifyTsc,
-    verifyTscWithEdits,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
@@ -59,7 +58,7 @@ export default hello.hello`);
         commandLineArgs: ["--b", "/src/tsconfig_withIncludeAndFiles.json", "--v", "--explainFiles"],
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "resolveJsonModule",
         subScenario: "sourcemap",
         fs: () => projFs,
@@ -68,7 +67,7 @@ export default hello.hello`);
         edits: noChangeOnlyRuns
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "resolveJsonModule",
         subScenario: "without outDir",
         fs: () => projFs,
@@ -79,7 +78,7 @@ export default hello.hello`);
 });
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "resolveJsonModule",
         subScenario: "importing json module from project reference",
         fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),
