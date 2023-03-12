@@ -82,7 +82,6 @@ import {
     isString,
     isStringLiteral,
     isStringLiteralLike,
-    isTypeReferenceNode,
     isUrl,
     JsxAttribute,
     LanguageServiceHost,
@@ -341,40 +340,10 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     switch (parent.kind) {
         case SyntaxKind.LiteralType: {
             const grandParent = walkUpParentheses(parent.parent);
-            switch (grandParent.kind) {
-                case SyntaxKind.ExpressionWithTypeArguments:
-                case SyntaxKind.TypeReference: {
-                    const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
-                    if (typeArgument) {
-                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
-                    }
-                    return undefined;
-                }
-                case SyntaxKind.IndexedAccessType:
-                    // Get all apparent property names
-                    // i.e. interface Foo {
-                    //          foo: string;
-                    //          bar: string;
-                    //      }
-                    //      let x: Foo["/*completion position*/"]
-                    const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
-                    if (!rangeContainsPosition(indexType, position)) {
-                        return undefined;
-                    }
-                    return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
-                case SyntaxKind.ImportType:
-                    return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
-                case SyntaxKind.UnionType: {
-                    if (!isTypeReferenceNode(grandParent.parent)) {
-                        return undefined;
-                    }
-                    const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
-                    const types = getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(grandParent as UnionTypeNode)).filter(t => !contains(alreadyUsedTypes, t.value));
-                    return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
-                }
-                default:
-                    return undefined;
+            if (grandParent.kind === SyntaxKind.ImportType) {
+                return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
             }
+            return fromUnionableLiteralType(grandParent);
         }
         case SyntaxKind.PropertyAssignment:
             if (isObjectLiteralExpression(parent.parent) && (parent as PropertyAssignment).name === node) {
@@ -440,6 +409,44 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
             return fromContextualType();
+    }
+
+    function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {
+        switch (grandParent.kind) {
+            case SyntaxKind.ExpressionWithTypeArguments:
+            case SyntaxKind.TypeReference: {
+                const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
+                if (typeArgument) {
+                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                }
+                return undefined;
+            }
+            case SyntaxKind.IndexedAccessType:
+                // Get all apparent property names
+                // i.e. interface Foo {
+                //          foo: string;
+                //          bar: string;
+                //      }
+                //      let x: Foo["/*completion position*/"]
+                const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
+                if (!rangeContainsPosition(indexType, position)) {
+                    return undefined;
+                }
+                return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
+            case SyntaxKind.UnionType: {
+                const result = fromUnionableLiteralType(walkUpParentheses(grandParent.parent));
+                if (!result) {
+                    return undefined;
+                }
+                const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
+                if (result.kind === StringLiteralCompletionKind.Properties) {
+                    return { kind: StringLiteralCompletionKind.Properties, symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)), hasIndexSignature: result.hasIndexSignature };
+                }
+                return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
+            }
+            default:
+                return undefined;
+        }
     }
 
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
