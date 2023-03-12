@@ -1,5 +1,4 @@
-import * as performance from "../compiler/_namespaces/ts.performance";
-import * as ts from "./_namespaces/ts";
+import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -30,6 +29,7 @@ import {
     createWatchCompilerHostOfConfigFile,
     createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchProgram,
+    createWatchStatusReporter as ts_createWatchStatusReporter,
     Debug,
     Diagnostic,
     DiagnosticMessage,
@@ -67,6 +67,7 @@ import {
     parseCommandLine,
     parseConfigFileWithSystem,
     ParsedCommandLine,
+    performIncrementalCompilation as ts_performIncrementalCompilation,
     Program,
     reduceLeftIterator,
     ReportEmitErrorSummary,
@@ -923,7 +924,7 @@ function performIncrementalCompilation(
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
     const host = createIncrementalCompilerHost(options, sys);
-    const exitStatus = ts.performIncrementalCompilation({
+    const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
         rootNames: fileNames,
@@ -984,7 +985,7 @@ function updateWatchCompilationHost(
 }
 
 function createWatchStatusReporter(sys: System, options: CompilerOptions | BuildOptions) {
-    return ts.createWatchStatusReporter(sys, shouldBePretty(sys, options));
+    return ts_createWatchStatusReporter(sys, shouldBePretty(sys, options));
 }
 
 function createWatchOfConfigFile(

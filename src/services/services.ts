@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -89,6 +88,7 @@ import {
     getContainerNode,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEditsForFileRename as ts_getEditsForFileRename,
     getEmitDeclarations,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
@@ -2402,7 +2402,7 @@ export function createLanguageService(
     }
 
     function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
-        return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
+        return ts_getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
     }
 
     function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
