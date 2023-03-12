@@ -8518,7 +8518,7 @@ declare namespace ts {
      *
      * For binding patterns, parameter tags are matched by position.
      */
-    function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[];
+    function getJSDocParameterTags(node: ParameterDeclaration | BindingElement): readonly JSDocParameterTag[];
     /**
      * Gets the JSDoc type parameter tags for the node if present.
      *
