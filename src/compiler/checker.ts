@@ -6616,7 +6616,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type: MappedType) {
                 return isMappedTypeWithKeyofConstraintDeclaration(type)
-                    && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter);
+                    && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter)
+                    && !!type.aliasSymbol;
             }
 
             function createMappedTypeNodeFromType(type: MappedType) {
