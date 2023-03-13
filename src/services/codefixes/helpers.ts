@@ -5,6 +5,7 @@ import {
     ArrowFunction,
     Block,
     CallExpression,
+    canHaveSymbol,
     CharacterCodes,
     ClassLikeDeclaration,
     CodeFixContextBase,
@@ -38,8 +39,10 @@ import {
     IntersectionType,
     isArrowFunction,
     isAutoAccessorPropertyDeclaration,
+    isConstructorTypeNode,
     isFunctionDeclaration,
     isFunctionExpression,
+    isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
     isImportTypeNode,
@@ -64,6 +67,7 @@ import {
     NodeArray,
     NodeBuilderFlags,
     NodeFlags,
+    nodeIsSynthesized,
     nullTransformationContext,
     ObjectFlags,
     ObjectLiteralExpression,
@@ -84,6 +88,7 @@ import {
     some,
     SourceFile,
     Symbol,
+    SymbolAccessibility,
     SymbolFlags,
     SymbolTracker,
     SyntaxKind,
@@ -363,6 +368,7 @@ export function createSignatureDeclarationFromSignature(
 ) {
     const program = context.program;
     const checker = program.getTypeChecker();
+    const resolver = checker.getEmitResolver();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     const isJs = isInJSFile(enclosingDeclaration);
     const flags =
@@ -417,6 +423,9 @@ export function createSignatureDeclarationFromSignature(
                     type = importableReference.typeNode;
                     importSymbols(importAdder, importableReference.symbols);
                 }
+                else if (!isDeclTypeSymbolVisible(parameterDecl.type)) {
+                    type = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                }
             }
             return factory.updateParameterDeclaration(
                 parameterDecl,
@@ -455,6 +464,23 @@ export function createSignatureDeclarationFromSignature(
         return factory.updateFunctionDeclaration(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
     }
     return undefined;
+
+    function isDeclTypeSymbolVisible(declType: TypeNode | undefined) {
+        if (!declType || !canHaveSymbol(declType)) {
+            return true;
+        }
+
+        if (!declType.symbol) {
+            // These nodes won't have a symbol when generated via a code fix, so we treat them as an exception.
+            if (isFunctionTypeNode(declType) || isConstructorTypeNode(declType)) {
+                return nodeIsSynthesized(declType);
+            }
+            return false;
+        }
+
+        const access = resolver.isSymbolAccessible(declType.symbol, declType, declType.symbol.flags, /* shouldComputeAliasToMarkVisible */ true);
+        return access.accessibility === SymbolAccessibility.Accessible;
+    }
 }
 
 /** @internal */
