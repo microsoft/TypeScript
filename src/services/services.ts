@@ -71,6 +71,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findChildOfKind,
     findPrecedingToken,
     first,
@@ -152,6 +153,7 @@ import {
     isIntrinsicJsxName,
     isJSDocCommentContainingNode,
     isJsxAttributes,
+    isJsxChild,
     isJsxClosingElement,
     isJsxClosingFragment,
     isJsxElement,
@@ -2487,38 +2489,61 @@ export function createLanguageService(
         if (!token) return undefined;
 
         let wordPattern : string | undefined;
-        // if it is not in a jsx element/fragment, or if the tags do not match
-        if (isJsxElement(token.parent.parent)){
-            if (token.parent.parent.openingElement.tagName.getText() !== token.parent.parent.closingElement.tagName.getText()) {
-                return undefined;
-            }
-            wordPattern = token.parent.parent.openingElement.tagName.getText();
-        }
-        else if (isJsxFragment(token.parent.parent)) {
-            wordPattern = undefined;
-        }
-        else return undefined;
-
         let ranges : {start: number, end: number};
-        //opening element
-        if (isJsxOpeningElement(token.parent)){
-            ranges = {start : token.parent.parent.closingElement.tagName.pos, end : token.parent.parent.closingElement.tagName.end};
-        }
-        else if (isJsxClosingElement(token.parent)){
-            ranges = {start : token.parent.parent.openingElement.tagName.pos, end : token.parent.parent.openingElement.tagName.end};
-        }
-        else if (isJsxOpeningFragment(token.parent)){
-            const pos = token.parent.parent.closingFragment.pos + 1;
-            ranges = {start : pos, end : pos};
-        }
-        else if (isJsxClosingFragment(token.parent)){
-            const pos = token.parent.parent.openingFragment.pos + 1;
-            ranges = {start : pos, end : pos};
-        }
-        else {
-            return undefined;
-        }
 
+        // if it is not in a jsx element/fragment, or if the tags do not match
+        if (isJsxFragment(token.parent.parent)) {
+            wordPattern = undefined;
+            if (isJsxOpeningFragment(token.parent)){
+                const pos = token.parent.parent.closingFragment.pos + 1;
+                ranges = {start : pos, end : pos};
+            }
+            else if (isJsxClosingFragment(token.parent)){
+                const pos = token.parent.parent.openingFragment.pos + 1;
+                ranges = {start : pos, end : pos};
+            }
+            else return undefined;
+        }
+        // else if (isJsxElement(token.parent.parent)){
+        //     if (token.parent.parent.openingElement.tagName.getText() !== token.parent.parent.closingElement.tagName.getText()) {
+        //         return undefined;
+        //     }
+        //     wordPattern = token.parent.parent.openingElement.tagName.getText();
+        //     if (isJsxOpeningElement(token.parent)){
+        //         ranges = {start : token.parent.parent.closingElement.tagName.pos, end : token.parent.parent.closingElement.tagName.end};
+        //     }
+        //     else if (isJsxClosingElement(token.parent)){
+        //         ranges = {start : token.parent.parent.openingElement.tagName.pos, end : token.parent.parent.openingElement.tagName.end};
+        //     }
+        //     else return undefined;
+        // }
+        else {
+            const tag = findAncestor(token, 
+                (n) => {
+                    // refactor case of?
+                    if (isJsxOpeningElement(n)) return true;
+                    else if (isJsxClosingElement(n)) return true;
+                    else if (isJsxAttributes(n)) return "quit";
+                    else if (isJsxChild(n)) return "quit";
+                    return false;
+                }
+                );
+            if (!tag) return undefined;
+
+            if (isJsxOpeningElement(tag)){
+                ranges = {start : tag.parent.closingElement.tagName.pos, end : tag.parent.closingElement.tagName.end};
+            }
+            else if (isJsxClosingElement(tag)){
+                ranges = {start : tag.parent.openingElement.tagName.pos, end : tag.parent.openingElement.tagName.end};
+            }
+            else return undefined;
+
+            if (tag.parent.openingElement.tagName.getText() === tag.parent.closingElement.tagName.getText()) {
+                wordPattern = tag.tagName.getText();
+            }
+            else return undefined;
+        }
+        
         return {ranges, wordPattern};
 
         // is this cursed?

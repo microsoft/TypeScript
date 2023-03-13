@@ -68,7 +68,7 @@ verify.jsxMirrorCursor( {
     // [{startLine: 1, startCharacter: 5, endLine: 1, endCharacter: 8},
     //         {startLine: 5, startCharacter: 6, endLine: 5, endCharacter: 9}],
     "2": undefined,
-    "3": {ranges: {start: 0, end: 0}, wordPattern : 'div'}, // FAILS
+    "3": {ranges: {start: 46, end: 65}, wordPattern : 'someNamespace.Thing'}, // FAILS
     //  [{startLine: 1, startCharacter: 5, endLine: 1, endCharacter: 25},
     //         {startLine: 2, startCharacter: 6, endLine: 2, endCharacter: 26}],
     "4": undefined,
