@@ -707,10 +707,10 @@ export function transformDeclarations(context: TransformationContext) {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) 
-                 // TODO: isolated declarations: find a better way for this since we don't actually do signature usage analysis 
-                 && !isolatedDeclarations&& !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
-               // Unnecessary property renaming is forbidden in types, so remove renaming
+            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name)
+                // TODO: isolated declarations: find a better way for this since we don't actually do signature usage analysis
+                && !isolatedDeclarations&& !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
+                // Unnecessary property renaming is forbidden in types, so remove renaming
                 return factory.updateBindingElement(
                     elem,
                     elem.dotDotDotToken,
@@ -788,11 +788,11 @@ export function transformDeclarations(context: TransformationContext) {
             return;
         }
         if (isolatedDeclarations) {
-            if (type == undefined) {
+            if (type === undefined) {
                 reportIsolatedDeclarationError(node);
                 return factory.createTypeReferenceNode("invalid");
             }
-            return visitNode(type, visitDeclarationSubtree);
+            return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
         const shouldUseResolverType = node.kind === SyntaxKind.Parameter &&
             (resolver.isRequiredInitializedParameter(node) ||
@@ -905,7 +905,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType = 
+                    const accessorType =
                         isolatedDeclarations ?
                         undefined:
                         getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
@@ -1047,7 +1047,7 @@ export function transformDeclarations(context: TransformationContext) {
             if(isolatedDeclarations) {
                 // TODO: Should report better error here. Suggest we add the syntax import type '....'
                 // Also add a test for this.
-                reportIsolatedDeclarationError(decl)
+                reportIsolatedDeclarationError(decl);
                 return undefined;
             }
             return factory.updateImportDeclaration(
@@ -1132,7 +1132,8 @@ export function transformDeclarations(context: TransformationContext) {
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
                 if (hasIdentifierComputedName(input)) {
                     reportIsolatedDeclarationError(input);
-                }else {
+                }
+                else {
                     return;
                 }
             }
@@ -1228,7 +1229,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const accessorType = 
+                    const accessorType =
                         isolatedDeclarations ?
                         input.type:
                         getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
@@ -1428,9 +1429,9 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isolatedDeclarations) {
                         reportIsolatedDeclarationError(input);
                     }
-                    const type = isolatedDeclarations ? 
+                    const type = isolatedDeclarations ?
                         factory.createTypeReferenceNode("invalid") :
-                        resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker)
+                        resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
                     const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
@@ -1741,15 +1742,15 @@ export function transformDeclarations(context: TransformationContext) {
                             modifiers,
                             input.name,
                             typeParameters,
-                            factory.createNodeArray([factory.createHeritageClause(SyntaxKind.ExtendsKeyword, 
+                            factory.createNodeArray([factory.createHeritageClause(SyntaxKind.ExtendsKeyword,
                                 [
                                     factory.createExpressionWithTypeArguments(
                                         factory.createIdentifier("invalid"),
-                                        /* typeArguments */undefined
+                                        /* typeArguments */ undefined,
                                     )
                                 ])]),
                             members
-                        ))
+                        ));
                     }
                     const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
                     const newId = factory.createUniqueName(`${oldId}_base`, GeneratedIdentifierFlags.Optimistic);

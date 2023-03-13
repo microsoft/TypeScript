@@ -4898,7 +4898,7 @@ export function isDynamicName(name: DeclarationName): boolean {
 }
 
 /**
- * 
+ *
  * @internal
  */
 export function hasIdentifierComputedName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
