@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //@Filename: /bar.ts
-////
+//////header comment
 
 // @Filename: /a.ts
 ////// header comment
@@ -24,7 +24,8 @@ export const p = 0;
 a; y;`,
 
         "/bar.ts":
-`import { b } from './other';
+`//header comment
+import { b } from './other';
 import { p } from './a';
 
 export const y: Date = p + b;

@@ -1128,12 +1128,16 @@ export class ChangeTracker {
     public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
-        const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+        let changes;
+        if (this.changeExistingFile && this.changes) {
+            for (const { oldFile } of this.changeExistingFile) {
+                changes = changesToText.getTextChangesFromChangesForMoveToExistingFile(this.changes, oldFile, this.newLineCharacter, this.formatContext, validate);
+                return changes;
+            }
+        }
+        changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
         for (const { oldFile, fileName, statements } of this.newFiles) {
             changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
-        }
-        for (const { oldFile, newFile, statements } of this.changeExistingFile) {
-            changes.push(changesToText.existingFileChanges(oldFile, newFile.fileName, statements, changes, this.newLineCharacter, this.formatContext));
         }
         return changes;
     }
@@ -1248,6 +1252,34 @@ namespace changesToText {
         });
     }
 
+    export function getTextChangesFromChangesForMoveToExistingFile(changes: readonly Change[], oldFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+        return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
+            // order changes by start position
+            // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
+            const normalized = stableSort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
+            // verify that change intervals do not overlap, except possibly at end points.
+            for (let i = 0; i < normalized.length - 1; i++) {
+                Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
+                    `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
+            }
+
+            const sourceFile = changesInFile[0].sourceFile;
+            const textChanges = mapDefined(normalized, c => {
+                const span = createTextSpanFromRange(c.range);
+                const newText = computeNewText(c, oldFile, newLineCharacter, formatContext, validate);
+
+                // Filter out redundant changes.
+                if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                    return undefined;
+                }
+
+                return createTextChange(span, newText);
+            });
+
+            return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
+        });
+    }
+
     export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
         const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
@@ -1259,19 +1291,6 @@ namespace changesToText {
         const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
         const changes = formatting.formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
-    }
-
-    export function existingFileChanges(oldFile: SourceFile, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], changes: FileTextChanges[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
-        const text = existingFileChangesWorker(oldFile, changes, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
-        return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
-    }
-
-    export function existingFileChangesWorker(oldFile: SourceFile | undefined, _changes: FileTextChanges[], scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
-        // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
-        const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
-        const changeFormatting = formatting.formatDocument(sourceFile, formatContext);
-        return applyChanges(nonFormattedText, changeFormatting) + newLineCharacter;
     }
 
     function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {

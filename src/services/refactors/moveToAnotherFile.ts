@@ -145,8 +145,8 @@ registerRefactor(refactorNameForAnotherFile, {
     getEditsForAction: function getRefactorEditsToMoveToAnotherFile(context, actionName, newFile): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForAnotherFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        const newFileImportAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
         if (newFile) {
+            const newFileImportAdder = codefix.createImportAdder(newFile, context.program, context.preferences, context.host);
             const edits = textChanges.ChangeTracker.with(context, t => doChangeToAnotherFile(context.file, newFile, newFileImportAdder, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
@@ -297,7 +297,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, newFile: SourceFile,_newFileImportAdder: codefix.ImportAdder, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
+    oldFile: SourceFile, newFile: SourceFile, _newFileImportAdder: codefix.ImportAdder, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -318,10 +318,25 @@ function getNewStatementsAndRemoveFromOldFile(
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename);
 
     const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
-    insertImports(changes, newFile, imports, /*blankLineBetween*/ true, preferences);
+    //insertImports(changes, newFile, imports, /*blankLineBetween*/ true, preferences);
+    //trial
+    // const changeTracker = textChanges.ChangeTracker.fromContext(context);
+    // const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
+    // const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
+    // if (nodeToInsertBefore) {
+    //     changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, /*blankLineBetween*/ true);
+    // }
+    // else {
+    //     changeTracker.insertNodeAtEndOfScope(context.file, scope, newFunction);
+    // }
+
+    //changes.insertNodesAtTopOfFile(newFile, imports, /*blankLineBetween*/ false);
     //newFileImportAdder.writeFixes(changes);  //insert import statements in new file
+    if (imports.length > 0) {
+        insertImports(changes, newFile, imports,/*blankLineBetween*/ true, preferences);
+    }
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
-    changes.insertNodeAfter(newFile, newFile.statements[newFile.statements.length-1], body[0]); //needs to be changed
+    changes.insertNodesAfter(newFile, newFile.statements[newFile.statements.length-1], body);
 
     if (imports.length && body.length) {
         return [
