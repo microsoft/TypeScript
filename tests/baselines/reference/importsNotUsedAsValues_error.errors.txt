@@ -5,6 +5,7 @@ error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functi
 /e.ts(1,1): error TS6192: All imports in import declaration are unused.
 /g.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
 /i.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+/j.ts(1,8): error TS6133: 'H' is declared but its value is never read.
 
 
 !!! error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
@@ -69,8 +70,10 @@ error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functi
     let h: H = {};
     console.log(h);
     
-==== /j.ts (0 errors) ====
+==== /j.ts (1 errors) ====
     import H = require('./h'); // noUnusedLocals error only
+           ~
+!!! error TS6133: 'H' is declared but its value is never read.
     
 ==== /k.ts (0 errors) ====
     const enum K { One, Two }
@@ -80,5 +83,5 @@ error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functi
     import K = require('./k');
     K.One;
     
-==== /j.ts (0 errors) ====
+==== /m.ts (0 errors) ====
     // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

@@ -61,7 +61,7 @@ export = K;
 import K = require('./k');
 K.One;
 
-//// [j.ts]
+//// [m.ts]
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
 
 //// [a.js]
@@ -134,7 +134,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var h = {};
 console.log(h);
 //// [j.js]
-// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [k.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -142,3 +143,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 0 /* K.One */;
+//// [m.js]
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
