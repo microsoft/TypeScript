@@ -1165,7 +1165,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 tokenFlags |= TokenFlags.Octal;
                 const withMinus = token === SyntaxKind.MinusToken;
                 const literal = (withMinus ? "-" : "") + "0o" + (+tokenValue).toString(8);
-                start -= +withMinus;
+                if (withMinus) start--;
                 error(Diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, pos - start, literal);
                 return { type: SyntaxKind.NumericLiteral, value: tokenValue };
             }
