@@ -110,12 +110,22 @@ export interface LoggingHost {
 
 /** @internal */
 export namespace Debug {
-    /* eslint-disable prefer-const */
-    let currentAssertionLevel = AssertionLevel.None;
-    export let currentLogLevel = LogLevel.Warning;
-    export let isDebugging = false;
-    export let loggingHost: LoggingHost | undefined;
-    /* eslint-enable prefer-const */
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    // TODO(jakebailey): restore to let/const once Debug is no longer a namespace.
+    /* eslint-disable no-var */
+    var currentAssertionLevel = AssertionLevel.None;
+    export var currentLogLevel = LogLevel.Warning;
+    export var isDebugging = false;
+    export var loggingHost: LoggingHost | undefined;
+
+    var enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
+
+    var isDebugInfoEnabled = false;
+
+    var flowNodeProto: FlowNodeBase | undefined;
+    var nodeArrayProto: NodeArray<Node> | undefined;
+    /* eslint-enable no-var */
 
     type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
 
@@ -408,7 +418,6 @@ export namespace Debug {
         return value.toString();
     }
 
-    const enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
 
     function getEnumMembers(enumObject: any) {
         // Assuming enum objects do not change at runtime, we can cache the enum members list
@@ -496,9 +505,7 @@ export namespace Debug {
         return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
     }
 
-    let isDebugInfoEnabled = false;
 
-    let flowNodeProto: FlowNodeBase | undefined;
 
     function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
         if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
@@ -546,8 +553,6 @@ export namespace Debug {
             }
         }
     }
-
-    let nodeArrayProto: NodeArray<Node> | undefined;
 
     function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
         if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
