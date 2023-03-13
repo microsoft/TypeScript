@@ -1073,7 +1073,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    isLiteralExpression,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
