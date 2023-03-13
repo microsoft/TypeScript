@@ -1065,6 +1065,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    isLiteralExpression,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
@@ -2687,6 +2688,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return symbol;
                 }
                 if (symbol.flags & SymbolFlags.Alias) {
+                    // Do not take target symbol meaning into account in isolated declaration mode since we don't have access to info from other files.
+                    if(compilerOptions.isolatedDeclarations) {
+                        return symbol;
+                    }
                     const targetFlags = getAllSymbolFlags(symbol);
                     // `targetFlags` will be `SymbolFlags.All` if an error occurred in alias resolution; this avoids cascading errors
                     if (targetFlags & meaning) {
@@ -46203,7 +46208,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
-            return isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
+            // TODO: isolated declarations: Add a test for this.
+            // In isolated declaration mode we can't really use the freshness of the type as this would require type information.
+            return compilerOptions.isolatedDeclarations?
+                !node.type && !!node.initializer && isLiteralExpression(node.initializer):
+                isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
         }
         return false;
     }

@@ -4897,6 +4897,27 @@ export function isDynamicName(name: DeclarationName): boolean {
         !isSignedNumericLiteral(expr);
 }
 
+/**
+ * 
+ * @internal
+ */
+export function hasIdentifierComputedName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
+    const name = getNameOfDeclaration(declaration);
+    return !!name && isIdentifierComputedName(name);
+}
+/** @internal */
+export function isIdentifierComputedName(name: DeclarationName): boolean {
+    if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
+        return false;
+    }
+    let expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
+    while(isPropertyAccessExpression(expr)) {
+        expr = expr.expression;
+    }
+    return isIdentifier(expr);
+}
+
+
 /** @internal */
 export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
     switch (name.kind) {

@@ -81,6 +81,7 @@ import {
     hasDynamicName,
     hasEffectiveModifier,
     hasExtension,
+    hasIdentifierComputedName,
     hasJSDocNodes,
     HasModifiers,
     hasSyntacticModifier,
@@ -120,6 +121,7 @@ import {
     isInterfaceDeclaration,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
+    isLiteralExpression,
     isLiteralImportTypeNode,
     isMappedTypeNode,
     isMethodDeclaration,
@@ -317,14 +319,14 @@ export function transformDeclarations(context: TransformationContext) {
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
-    const isolatedDeclarations = false;
+    const isolatedDeclarations = options.isolatedDeclarations;
     return transformRoot;
 
-    function reportIsolatedDeclarationError(_node: Node) {
-        // context.addDiagnostic(createDiagnosticForNode(
-        //     node,
-        //     Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
-        // ));
+    function reportIsolatedDeclarationError(node: Node) {
+        context.addDiagnostic(createDiagnosticForNode(
+            node,
+            Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
+        ));
     }
     function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
         if (!typeReferenceDirectives) {
@@ -584,7 +586,8 @@ export function transformDeclarations(context: TransformationContext) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+        const typeReferences = isolatedDeclarations? node.typeReferenceDirectives: getFileReferencesForUsedTypeReferences();
+        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, typeReferences, node.hasNoDefaultLib, getLibReferences());
         updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
         return updated;
 
@@ -704,7 +707,9 @@ export function transformDeclarations(context: TransformationContext) {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
+            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) 
+                 // TODO: isolated declarations: find a better way for this since we don't actually do signature usage analysis 
+                 && !isolatedDeclarations&& !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                // Unnecessary property renaming is forbidden in types, so remove renaming
                 return factory.updateBindingElement(
                     elem,
@@ -746,12 +751,14 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function shouldPrintWithInitializer(node: Node) {
-        if (isolatedDeclarations) return false;
         return canHaveLiteralInitializer(node) && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
     }
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
         if (shouldPrintWithInitializer(node)) {
+            if(node.initializer && isLiteralExpression(node.initializer)) {
+                return node.initializer;
+            }
             return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
         }
         return undefined;
@@ -898,7 +905,10 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = 
+                        isolatedDeclarations ?
+                        undefined:
+                        getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                     newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
                 }
             }
@@ -1034,6 +1044,12 @@ export function transformDeclarations(context: TransformationContext) {
         }
         // Augmentation of export depends on import
         if (resolver.isImportRequiredByAugmentation(decl)) {
+            if(isolatedDeclarations) {
+                // TODO: Should report better error here. Suggest we add the syntax import type '....'
+                // Also add a test for this.
+                reportIsolatedDeclarationError(decl)
+                return undefined;
+            }
             return factory.updateImportDeclaration(
                 decl,
                 decl.modifiers,
@@ -1114,7 +1130,11 @@ export function transformDeclarations(context: TransformationContext) {
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                return;
+                if (hasIdentifierComputedName(input)) {
+                    reportIsolatedDeclarationError(input);
+                }else {
+                    return;
+                }
             }
         }
 
@@ -1208,7 +1228,10 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = 
+                        isolatedDeclarations ?
+                        input.type:
+                        getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                     return cleanup(factory.updateGetAccessorDeclaration(
                         input,
                         ensureModifiers(input),
@@ -1406,7 +1429,7 @@ export function transformDeclarations(context: TransformationContext) {
                         reportIsolatedDeclarationError(input);
                     }
                     const type = isolatedDeclarations ? 
-                        factory.createTypeReferenceNode("invalud") :
+                        factory.createTypeReferenceNode("invalid") :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker)
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
@@ -1502,7 +1525,12 @@ export function transformDeclarations(context: TransformationContext) {
                     ensureType(input, input.type),
                     /*body*/ undefined
                 ));
-                if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
+                const isExpandoFunctionDeclaration = clean && resolver.isExpandoFunctionDeclaration(input);
+                if (isExpandoFunctionDeclaration && shouldEmitFunctionProperties(input)) {
+                    if(isExpandoFunctionDeclaration && isolatedDeclarations) {
+                        reportIsolatedDeclarationError(input);
+                        return clean;
+                    }
                     const props = resolver.getPropertiesOfContainerFunction(input);
                     // Use parseNodeFactory so it is usable as an enclosing declaration
                     const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
@@ -1830,8 +1858,9 @@ export function transformDeclarations(context: TransformationContext) {
             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node);
         }
         errorNameNode = (node as NamedDeclaration).name;
-        Debug.assert(resolver.isLateBound(getParseTreeNode(node) as Declaration)); // Should only be called with dynamic names
         const decl = node as NamedDeclaration as LateBoundDeclaration;
+
+        Debug.assert((hasIdentifierComputedName(decl) && options.isolatedDeclarations) || resolver.isLateBound(getParseTreeNode(node) as Declaration)); // Should only be called with dynamic names
         const entityName = decl.name.expression;
         checkEntityNameVisibility(entityName, enclosingDeclaration);
         if (!suppressNewDiagnosticContexts) {

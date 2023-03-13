@@ -62,5 +62,5 @@ export = K;
 import K = require('./k');
 K.One;
 
-// @Filename: /j.ts
+// @Filename: /m.ts
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
