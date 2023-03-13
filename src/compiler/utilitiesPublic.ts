@@ -960,7 +960,7 @@ export function getModifiers(node: HasModifiers): readonly Modifier[] | undefine
 function getJSDocParameterTagsWorker(node: ParameterDeclaration | BindingElement, noCache?: boolean): readonly JSDocParameterTag[] {
     const declaration = getRootDeclaration(node);
     if (isParameter(declaration)) {
-        const name = node.name;
+        const name = isBindingElement(node) ? node.propertyName || node.name : node.name;
         const signatureDeclaration = declaration.parent;
         const jsDocParameterTags = filter(getJSDocTagsWorker(signatureDeclaration, noCache), isJSDocParameterTag);
         if (length(jsDocParameterTags) === 0) {
@@ -1151,7 +1151,7 @@ export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
  */
 export function getJSDocType(node: Node): TypeNode | undefined {
     let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
-    if (!tag && isParameter(node)) {
+    if (!tag && (isParameter(node) || isBindingElement(node))) {
         tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
     }
 

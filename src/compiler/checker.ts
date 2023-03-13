@@ -10314,6 +10314,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** Return the inferred type for a binding element */
     function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
         const checkMode = declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
+        if (isInJSFile(declaration) && isParameterDeclaration(declaration)) {
+            const type = tryGetTypeFromEffectiveTypeNode(declaration);
+            if (type) {
+                return type;
+            }
+        }
         const parentType = getTypeForBindingElementParent(declaration.parent.parent, checkMode);
         return parentType && getBindingElementTypeFromParentType(declaration, parentType);
     }

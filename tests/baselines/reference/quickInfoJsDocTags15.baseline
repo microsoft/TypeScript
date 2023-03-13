@@ -1,0 +1,90 @@
+=== /tests/cases/fourslash/quickInfoJsDocTags15.ts ===
+// /**
+//  * @param a - a param
+//  */
+// function foo(a, { a }: { a: string }) {
+//     a
+//     ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: any
+// | - a param
+// | @param a - a param
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags15.ts",
+      "position": 75,
+      "name": "1"
+    },
+    "item": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 74,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "- a param",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- a param",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

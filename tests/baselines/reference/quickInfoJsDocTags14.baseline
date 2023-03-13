@@ -1,0 +1,72 @@
+=== /tests/cases/fourslash/quickInfoJsDocTags14.ts ===
+// /**
+//  * @param a - a param
+// /* @param newA - new a param
+//  */
+// function foo({ a: newA }: { a: string }) {
+//     newA
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) newA: string
+// | - a param
+// | /*
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags14.ts",
+      "position": 110,
+      "name": "1"
+    },
+    "item": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 106,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "newA",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "- a param\n/*",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]
