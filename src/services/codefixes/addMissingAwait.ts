@@ -1,4 +1,3 @@
-import { getSymbolId } from "../../compiler/checkerUtilities";
 import {
     compact,
     contains,
@@ -38,6 +37,7 @@ import {
 } from "../../compiler/types";
 import {
     getAncestor,
+    getSymbolId,
     hasSyntacticModifier,
 } from "../../compiler/utilities";
 import {

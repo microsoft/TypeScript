@@ -1,4 +1,3 @@
-import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     append,
     cast,
@@ -224,6 +223,7 @@ import {
     getPropertyNameForPropertyNameNode,
     getRootDeclaration,
     getSourceFileOfModule,
+    getSymbolId,
     hasEffectiveModifier,
     isAbstractConstructorSymbol,
     isCheckJsEnabledForFile,

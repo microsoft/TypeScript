@@ -1,4 +1,3 @@
-import { getSymbolId } from "./checkerUtilities";
 import {
     clear,
     forEach,
@@ -27,6 +26,7 @@ import {
     TypeReference,
     UnionOrIntersectionType,
 } from "./types";
+import { getSymbolId } from "./utilities";
 
 /** @internal */
 export function createGetSymbolWalker(

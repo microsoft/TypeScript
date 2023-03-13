@@ -1,4 +1,3 @@
-import { getNodeId } from "../checkerUtilities";
 import {
     concatenate,
     forEach,
@@ -86,6 +85,7 @@ import {
     getEntityNameFromTypeNode,
     getFunctionFlags,
     getInitializedVariables,
+    getNodeId,
     insertStatementsAfterStandardPrologue,
     isNodeWithPossibleHoistedDeclaration,
     isSuperProperty,

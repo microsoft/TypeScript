@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import { first } from "../../compiler/core";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";
@@ -20,6 +19,7 @@ import {
     addToSeen,
     getContainingFunction,
     getEntityNameFromTypeNode,
+    getNodeId,
 } from "../../compiler/utilities";
 import {
     codeFixAll,

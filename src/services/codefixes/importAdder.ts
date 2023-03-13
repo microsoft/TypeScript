@@ -1,8 +1,4 @@
 import {
-    getNodeId,
-    getSymbolId,
-} from "../../compiler/checkerUtilities";
-import {
     arrayFrom,
     cast,
     combine,
@@ -97,7 +93,9 @@ import {
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
+    getNodeId,
     getSourceFileOfNode,
+    getSymbolId,
     hostGetCanonicalFileName,
     importFromModuleSpecifier,
     importNameElisionDisabled,

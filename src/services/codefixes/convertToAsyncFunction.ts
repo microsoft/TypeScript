@@ -1,8 +1,4 @@
 import {
-    getNodeId,
-    getSymbolId,
-} from "../../compiler/checkerUtilities";
-import {
     concatenate,
     createMultiMap,
     elementAt,
@@ -65,7 +61,9 @@ import {
 } from "../../compiler/types";
 import {
     getContainingFunction,
+    getNodeId,
     getObjectFlags,
+    getSymbolId,
     isInJSFile,
     moveRangePastModifiers,
 } from "../../compiler/utilities";

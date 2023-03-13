@@ -1,4 +1,3 @@
-import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     cast,
     forEach,
@@ -70,6 +69,7 @@ import {
     getFirstIdentifier,
     getNameOfAccessExpression,
     getSourceFileOfNode,
+    getSymbolId,
     hasSyntacticModifier,
     importFromModuleSpecifier,
     isAccessExpression,

@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     find,
     isString,
@@ -25,6 +24,7 @@ import {
 import {
     addToSeen,
     getEmitScriptTarget,
+    getNodeId,
 } from "../../compiler/utilities";
 import {
     createTextSpan,

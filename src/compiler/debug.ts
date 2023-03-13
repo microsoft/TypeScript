@@ -1,13 +1,7 @@
 /* eslint-disable */
 import * as types from "./types";
-import * as checkerTypes from "./checkerUtilities";
 /* eslint-enable */
 
-import {
-    CheckMode,
-    SignatureCheckMode,
-    TypeFacts,
-} from "./checkerUtilities";
 import {
     compareValues,
     every,
@@ -88,6 +82,9 @@ import {
     TypeMapKind,
     TypeMapper,
     VarianceFlags,
+    CheckMode,
+    SignatureCheckMode,
+    TypeFacts,
 } from "./types";
 import {
     getEffectiveModifierFlagsNoCache,
@@ -586,17 +583,17 @@ export function formatRelationComparisonResult(result: RelationComparisonResult 
 
 /** @internal */
 export function formatCheckMode(mode: CheckMode | undefined): string {
-    return formatEnum(mode, (checkerTypes as any).CheckMode, /*isFlags*/ true);
+    return formatEnum(mode, (types as any).CheckMode, /*isFlags*/ true);
 }
 
 /** @internal */
 export function formatSignatureCheckMode(mode: SignatureCheckMode | undefined): string {
-    return formatEnum(mode, (checkerTypes as any).SignatureCheckMode, /*isFlags*/ true);
+    return formatEnum(mode, (types as any).SignatureCheckMode, /*isFlags*/ true);
 }
 
 /** @internal */
 export function formatTypeFacts(facts: TypeFacts | undefined): string {
-    return formatEnum(facts, (checkerTypes as any).TypeFacts, /*isFlags*/ true);
+    return formatEnum(facts, (types as any).TypeFacts, /*isFlags*/ true);
 }
 
 let isDebugInfoEnabled = false;

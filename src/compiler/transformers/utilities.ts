@@ -1,4 +1,3 @@
-import { getNodeId } from "../checkerUtilities";
 import {
     append,
     cast,
@@ -77,6 +76,7 @@ import {
     getFirstConstructorWithBody,
     getIsolatedModules,
     getNamespaceDeclarationNode,
+    getNodeId,
     getStrictOptionValue,
     hasDecorators,
     hasStaticModifier,

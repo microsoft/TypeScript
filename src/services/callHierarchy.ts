@@ -1,4 +1,3 @@
-import { getNodeId } from "../compiler/checkerUtilities";
 import {
     append,
     compareStringsCaseSensitive,
@@ -79,6 +78,7 @@ import {
 import {
     getClassExtendsHeritageElement,
     getFirstConstructorWithBody,
+    getNodeId,
     hasSyntacticModifier,
     isAccessExpression,
     isDeclarationName,

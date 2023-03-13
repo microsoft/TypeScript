@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
     isExpressionStatement,
@@ -16,6 +15,7 @@ import {
 import {
     addToSeen,
     getContainingFunction,
+    getNodeId,
     isSuperCall,
 } from "../../compiler/utilities";
 import { isFunctionLike } from "../../compiler/utilitiesPublic";

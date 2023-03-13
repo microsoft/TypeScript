@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     find,
     isNumber,
@@ -22,7 +21,7 @@ import {
     SourceFile,
     TextSpan,
 } from "../../compiler/types";
-import { getSyntacticModifierFlags } from "../../compiler/utilities";
+import { getNodeId, getSyntacticModifierFlags } from "../../compiler/utilities";
 import {
     findAncestor,
     textSpanEnd,

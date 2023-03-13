@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     and,
     find,
@@ -28,6 +27,7 @@ import {
     getEffectiveBaseTypeNode,
     getEffectiveImplementsTypeNodes,
     getEffectiveModifierFlags,
+    getNodeId,
 } from "../../compiler/utilities";
 import {
     codeFixAll,

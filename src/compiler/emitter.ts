@@ -10,7 +10,6 @@ import {
     ProgramBundleEmitBuildInfo,
 } from "./builder";
 import { OutputFile } from "./builderStatePublic";
-import { getNodeId } from "./checkerUtilities";
 import {
     arrayToMap,
     cast,
@@ -426,6 +425,7 @@ import {
     getLiteralText,
     GetLiteralTextFlags,
     getNewLineCharacter,
+    getNodeId,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
     getTrailingSemicolonDeferringWriter,

@@ -1,8 +1,4 @@
 import {
-    getNodeId,
-    getSymbolId,
-} from "../../compiler/checkerUtilities";
-import {
     arrayFrom,
     assertType,
     compareProperties,
@@ -121,6 +117,8 @@ import {
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getLocaleSpecificMessage,
+    getNodeId,
+    getSymbolId,
     getThisContainer,
     hasEffectiveModifier,
     hasSyntacticModifier,

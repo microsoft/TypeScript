@@ -1,4 +1,3 @@
-import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     arrayIsEqualTo,
     createMultiMap,
@@ -54,6 +53,7 @@ import {
     addToSeen,
     forEachEntry,
     getLocalSymbolForExportDefault,
+    getSymbolId,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     isExternalOrCommonJsModule,

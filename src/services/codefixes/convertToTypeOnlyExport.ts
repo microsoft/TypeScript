@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     contains,
     filter,
@@ -13,7 +12,7 @@ import {
     SyntaxKind,
     TextSpan,
 } from "../../compiler/types";
-import { addToSeen } from "../../compiler/utilities";
+import { addToSeen, getNodeId } from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,

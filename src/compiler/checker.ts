@@ -4,13 +4,6 @@ import {
     ModuleInstanceState,
 } from "./binder";
 import {
-    CheckMode,
-    getNodeId,
-    getSymbolId,
-    SignatureCheckMode,
-    TypeFacts,
-} from "./checkerUtilities";
-import {
     addRange,
     and,
     append,
@@ -339,6 +332,7 @@ import {
     CaseOrDefaultClause,
     CharacterCodes,
     CheckFlags,
+    CheckMode,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -599,6 +593,7 @@ import {
     SetAccessorDeclaration,
     ShorthandPropertyAssignment,
     Signature,
+    SignatureCheckMode,
     SignatureDeclaration,
     SignatureFlags,
     SignatureKind,
@@ -650,6 +645,7 @@ import {
     TypeCheckerHost,
     TypeComparer,
     TypeElement,
+    TypeFacts,
     TypeFlags,
     TypeFormatFlags,
     TypeId,
@@ -801,6 +797,7 @@ import {
     getNameOfExpando,
     getNamespaceDeclarationNode,
     getNewTargetContainer,
+    getNodeId,
     getNonAugmentationDeclaration,
     getObjectFlags,
     getParameterSymbolFromJSDoc,
@@ -820,6 +817,7 @@ import {
     getSpanOfTokenAtPosition,
     getStrictOptionValue,
     getSuperContainer,
+    getSymbolId,
     getSymbolNameForPrivateIdentifier,
     getTextOfIdentifierOrLiteral,
     getTextOfNode,

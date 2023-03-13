@@ -1,4 +1,4 @@
-import { getSymbolId } from "../../../compiler/checkerUtilities";
+import { getSymbolId } from "../../../compiler/utilities";
 import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,

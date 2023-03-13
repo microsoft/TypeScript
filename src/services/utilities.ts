@@ -2,10 +2,6 @@ import {
     getModuleInstanceState,
     ModuleInstanceState,
 } from "../compiler/binder";
-import {
-    getNodeId,
-    getSymbolId,
-} from "../compiler/checkerUtilities";
 import { setConfigFileInOptions } from "../compiler/commandLineParser";
 import {
     assertType,
@@ -295,9 +291,11 @@ import {
     getIndentString,
     getLeadingCommentRangesOfNode,
     getLocaleSpecificMessage,
+    getNodeId,
     getRootDeclaration,
     getSourceFileOfNode,
     getSpanOfTokenAtPosition,
+    getSymbolId,
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     hasSyntacticModifier,

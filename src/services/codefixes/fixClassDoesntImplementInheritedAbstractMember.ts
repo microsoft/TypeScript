@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     cast,
     first,
@@ -15,6 +14,7 @@ import {
 import {
     addToSeen,
     getEffectiveBaseTypeNode,
+    getNodeId,
     getSyntacticModifierFlags,
 } from "../../compiler/utilities";
 import { isClassLike } from "../../compiler/utilitiesPublic";

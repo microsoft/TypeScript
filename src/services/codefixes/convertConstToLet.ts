@@ -1,4 +1,3 @@
-import { getSymbolId } from "../../compiler/checkerUtilities";
 import { tryCast } from "../../compiler/core";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";
@@ -10,7 +9,7 @@ import {
     SyntaxKind,
     Token,
 } from "../../compiler/types";
-import { addToSeen } from "../../compiler/utilities";
+import { addToSeen, getSymbolId } from "../../compiler/utilities";
 import {
     createCodeFixActionMaybeFixAll,
     createCombinedCodeActions,

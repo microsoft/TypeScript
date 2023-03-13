@@ -1,4 +1,3 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     arrayFrom,
     concatenate,
@@ -95,6 +94,7 @@ import {
     getClassLikeDeclarationOfSymbol,
     getEmitScriptTarget,
     getFirstConstructorWithBody,
+    getNodeId,
     getObjectFlags,
     getSourceFileOfNode,
     hasAbstractModifier,

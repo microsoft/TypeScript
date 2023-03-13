@@ -1,4 +1,3 @@
-import { getNodeId } from "./checkerUtilities";
 import {
     append,
     appendIfUnique,
@@ -222,6 +221,7 @@ import {
     getImmediatelyInvokedFunctionExpression,
     getLeftmostAccessExpression,
     getNameOrArgument,
+    getNodeId,
     getRightMostAssignedExpression,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,

@@ -1,4 +1,3 @@
-import { getNodeId } from "../../checkerUtilities";
 import {
     addRange,
     append,
@@ -110,6 +109,7 @@ import {
     getESModuleInterop,
     getInternalEmitFlags,
     getNamespaceDeclarationNode,
+    getNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
     hasJsonModuleEmitEnabled,

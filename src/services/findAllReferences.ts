@@ -1,8 +1,4 @@
 import {
-    getNodeId,
-    getSymbolId,
-} from "../compiler/checkerUtilities";
-import {
     append,
     cast,
     compareValues,
@@ -140,7 +136,9 @@ import {
     getEffectiveModifierFlags,
     getLocalSymbolForExportDefault,
     getNextJSDocCommentLocation,
+    getNodeId,
     getSuperContainer,
+    getSymbolId,
     getSyntacticModifierFlags,
     getTextOfNode,
     getThisContainer,

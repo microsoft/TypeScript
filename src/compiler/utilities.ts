@@ -1,4 +1,3 @@
-import { getSymbolId } from "./checkerUtilities";
 import {
     addRange,
     arrayFrom,
@@ -406,6 +405,7 @@ import {
     SwitchStatement,
     Symbol,
     SymbolFlags,
+    SymbolId,
     SymbolTable,
     SyntaxKind,
     SyntaxList,
@@ -511,6 +511,28 @@ import {
 
 function isCommonJSContainingModuleKind(kind: ModuleKind) {
     return kind === ModuleKind.CommonJS || kind === ModuleKind.Node16 || kind === ModuleKind.NodeNext;
+}
+
+let nextSymbolId = 1;
+let nextNodeId = 1;
+
+/** @internal */
+export function getNodeId(node: Node): number {
+    if (!node.id) {
+        node.id = nextNodeId;
+        nextNodeId++;
+    }
+    return node.id;
+}
+
+/** @internal */
+export function getSymbolId(symbol: Symbol): SymbolId {
+    if (!symbol.id) {
+        symbol.id = nextSymbolId;
+        nextSymbolId++;
+    }
+
+    return symbol.id;
 }
 
 /** @internal */

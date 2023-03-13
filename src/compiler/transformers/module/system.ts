@@ -1,4 +1,3 @@
-import { getNodeId } from "../../checkerUtilities";
 import {
     addRange,
     append,
@@ -103,6 +102,7 @@ import {
 } from "../../types";
 import {
     getEmitFlags,
+    getNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
     hasSyntacticModifier,

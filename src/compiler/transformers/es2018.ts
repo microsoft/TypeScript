@@ -1,4 +1,3 @@
-import { getNodeId } from "../checkerUtilities";
 import {
     addRange,
     append,
@@ -94,6 +93,7 @@ import {
     FunctionFlags,
     getEmitScriptTarget,
     getFunctionFlags,
+    getNodeId,
     hasSyntacticModifier,
     insertStatementsAfterStandardPrologue,
     isDestructuringAssignment,

@@ -1,4 +1,3 @@
-import { getNodeId } from "../compiler/checkerUtilities";
 import {
     concatenate,
     contains,
@@ -126,6 +125,7 @@ import {
     getAncestor,
     getJSDocCommentRanges,
     getLineOfLocalPosition,
+    getNodeId,
     getScriptKindFromFileName,
     getStartPositionOfLine,
     indexOfNode,

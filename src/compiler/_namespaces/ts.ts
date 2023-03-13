@@ -36,7 +36,6 @@ export * from "../binder";
 export * from "../symbolWalker";
 export * from "../symlinkCache";
 export * from "../checker";
-export * from "../checkerUtilities";
 export * from "../visitorPublic";
 export * from "../sourcemap";
 export * from "../transformers/utilities";

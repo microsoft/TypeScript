@@ -1,4 +1,3 @@
-import { getSymbolId } from "../../compiler/checkerUtilities";
 import {
     append,
     cast,
@@ -106,6 +105,7 @@ import {
     forEachEntry,
     getAssignmentDeclarationKind,
     getLocaleSpecificMessage,
+    getSymbolId,
     hasSyntacticModifier,
     hostGetCanonicalFileName,
     isDeclarationName,
