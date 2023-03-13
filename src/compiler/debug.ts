@@ -515,8 +515,6 @@ export namespace Debug {
         }
     }
 
-    
-
     function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
         if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
             Object.defineProperties(array, {
