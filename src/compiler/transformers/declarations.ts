@@ -760,7 +760,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
         if (shouldPrintWithInitializer(node)) {
-            if(node.initializer && isLiteralExpression(node.initializer)) {
+            if(isolatedDeclarations && node.initializer && isLiteralExpression(node.initializer)) {
                 return node.initializer;
             }
             return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
@@ -1134,7 +1134,7 @@ export function transformDeclarations(context: TransformationContext) {
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                if (hasIdentifierComputedName(input)) {
+                if (isolatedDeclarations && hasIdentifierComputedName(input)) {
                     reportIsolatedDeclarationError(input);
                 }
                 else {
@@ -1741,7 +1741,7 @@ export function transformDeclarations(context: TransformationContext) {
                 if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                     // We must add a temporary declaration for the extends clause expression
 
-                    // Isolated declarations do not allow inferred type in the extends clause
+                    // Isolated declarations does not allow inferred type in the extends clause
                     if(isolatedDeclarations) {
                         reportIsolatedDeclarationError(extendsClause);
                         return cleanup(factory.updateClassDeclaration(
@@ -1805,8 +1805,14 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.EnumDeclaration: {
                 return cleanup(factory.updateEnumDeclaration(input, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
                     if (shouldStripInternal(m)) return;
+                    if (isolatedDeclarations) {
+                        if (m.initializer && !isLiteralExpression(m.initializer)) {
+                            reportIsolatedDeclarationError(m);
+                        }
+                        return m;
+                    }
                     // Rewrite enum values to their constants, if available
-                    const constValue = isolatedDeclarations? undefined : resolver.getConstantValue(m);
+                    const constValue = resolver.getConstantValue(m);
                     return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
                 }))));
             }
