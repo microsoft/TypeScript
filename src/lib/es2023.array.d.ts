@@ -66,7 +66,7 @@ interface Array<T> {
 
     /**
      * Copies an array, then overwrites the value at the provided index with the given value.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to write into the copied array.
      * @returns The copied array with the updated value.
 
@@ -142,7 +142,7 @@ interface ReadonlyArray<T> {
 
     /**
      * Copies the array and inserts the given value at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -205,7 +205,7 @@ interface Int8Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -268,7 +268,7 @@ interface Uint8Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -339,7 +339,7 @@ interface Uint8ClampedArray {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -402,7 +402,7 @@ interface Int16Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -473,7 +473,7 @@ interface Uint16Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -536,7 +536,7 @@ interface Int32Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -607,7 +607,7 @@ interface Uint32Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -678,7 +678,7 @@ interface Float32Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -749,7 +749,7 @@ interface Float64Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -820,7 +820,7 @@ interface BigInt64Array {
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -891,7 +891,7 @@ interface BigUint64Array {
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
-     * @param index The index to insert the value at.
+     * @param index The index of the value to overwrite.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
