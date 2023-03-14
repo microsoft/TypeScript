@@ -11,6 +11,7 @@ ts.Debug.loggingHost = {
 
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();
+    (globalThis as any).ts = ts;
 }
 
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
