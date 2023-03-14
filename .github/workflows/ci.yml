@@ -158,7 +158,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     permissions:
-      pull-requests: write
+      checks: write
 
     steps:
     - uses: actions/checkout@v3
