@@ -37,7 +37,7 @@ interface Array<T> {
     toReversed(): T[];
 
     /**
-     * Copies and sorts the array.
+     * Returns a copy of an array with its elements sorted.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
