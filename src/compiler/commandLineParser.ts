@@ -2083,7 +2083,7 @@ export function readConfigFile(fileName: string, readFile: (path: string) => str
 export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
     const jsonSourceFile = parseJsonText(fileName, jsonText);
     return {
-        config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*reportOptionsErrors*/ false, /*optionsIterator*/ undefined),
+        config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*knownRootOptions*/ undefined, /*optionsIterator*/ undefined),
         error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
     };
 }
@@ -2253,9 +2253,8 @@ export interface JsonConversionNotifier {
     onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
 }
 
-function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Diagnostic[], reportOptionsErrors: boolean, optionsIterator: JsonConversionNotifier | undefined): any {
+function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Diagnostic[], knownRootOptions: TsConfigOnlyOption | undefined, optionsIterator: JsonConversionNotifier | undefined): any {
     const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
-    const knownRootOptions = reportOptionsErrors ? getTsconfigRootOptionsMap() : undefined;
     if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
         errors.push(createDiagnosticForNodeInSourceFile(
             sourceFile,
@@ -2269,19 +2268,19 @@ function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Diagnosti
         if (isArrayLiteralExpression(rootExpression)) {
             const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
             if (firstObject) {
-                return convertToObjectWorker(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+                return convertToJson(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
             }
         }
         return {};
     }
-    return convertToObjectWorker(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+    return convertToJson(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
 }
 
 /**
  * Convert the json syntax tree into the json value
  */
 export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any {
-    return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+    return convertToJson(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
 }
 
 /**
@@ -2291,7 +2290,7 @@ export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]
  *
  * @internal
  */
-export function convertToObjectWorker(
+export function convertToJson(
     sourceFile: JsonSourceFile,
     rootExpression: Expression | undefined,
     errors: Diagnostic[],
@@ -3358,7 +3357,7 @@ function parseOwnConfigOfJsonSourceFile(
             }
         }
     };
-    const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
+    const json = convertConfigFileToObject(sourceFile, errors, getTsconfigRootOptionsMap(), optionsIterator);
 
     if (!typeAcquisition) {
         typeAcquisition = getDefaultTypeAcquisition(configFileName);
