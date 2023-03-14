@@ -5,7 +5,7 @@ import { __importDefault, __importStar } from "tslib";
 // as expected. It calls "require" as though it were in CWD,
 // so it can be tested on a separate install of TypeScript.
 
-const require = createRequire(process.cwd());
+const require = createRequire(process.cwd() + "/index.js");
 
 console.log(`Testing ${process.argv[2]}...`);
 const ts = require(process.argv[2]);

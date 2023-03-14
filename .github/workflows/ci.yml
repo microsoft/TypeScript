@@ -119,8 +119,8 @@ jobs:
         echo "Testing tsserver..."
         echo '{"seq": 1, "command": "status"}' | npx tsserver
 
-        node $GITHUB_WORKSPACE/pr/scripts/checkModuleFormat.mjs typescript
-        node $GITHUB_WORKSPACE/pr/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
+        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
+        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
 
   package-size:
     runs-on: ubuntu-latest
