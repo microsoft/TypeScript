@@ -2348,6 +2348,7 @@ export function convertToJson(
                 if (returnValue) {
                     result[keyText] = value;
                 }
+
                 // Notify key value set, if user asked for it
                 if (jsonConversionNotifier &&
                     // Current callbacks are only on known parent option or if we are setting values in the root
@@ -3288,58 +3289,62 @@ function parseOwnConfigOfJsonSourceFile(
     let extendedConfigPath: string | string[] | undefined;
     let rootCompilerOptions: PropertyName[] | undefined;
 
-    const optionsIterator: JsonConversionNotifier = {
-        onSetValidOptionKeyValueInParent(parentOption: TsConfigOnlyOption, option: CommandLineOption, value: CompilerOptionsValue) {
-            let currentOption;
-            if (parentOption === compilerOptionsDeclaration) currentOption = options;
-            else if (parentOption === watchOptionsDeclaration) currentOption = watchOptions ??= {};
-            else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
-            else Debug.fail("Unknown option");
-            currentOption[option.name] = normalizeOptionValue(option, basePath, value);
-        },
-        onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
-            switch (key) {
-                case "extends":
-                    const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                    if (isString(value)) {
-                    extendedConfigPath = getExtendsConfigPath(
-                        value,
-                        host,
-                        newBase,
-                        errors,
-                        (message, arg0) =>
-                            createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
-                    );
-                    }
-                    else {
-                        extendedConfigPath = [];
-                        for (let index = 0; index < (value as unknown[]).length; index++) {
-                            const fileName = (value as unknown[])[index];
-                            if (isString(fileName)) {
-                                extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
-                                    fileName,
-                                    host,
-                                    newBase,
-                                    errors,
-                                    (message, arg0) =>
-                                        createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
-                                ));
+    const json = convertConfigFileToObject(
+        sourceFile,
+        errors,
+        getTsconfigRootOptionsMap(),
+        {
+            onSetValidOptionKeyValueInParent(parentOption: TsConfigOnlyOption, option: CommandLineOption, value: CompilerOptionsValue) {
+                let currentOption;
+                if (parentOption === compilerOptionsDeclaration) currentOption = options;
+                else if (parentOption === watchOptionsDeclaration) currentOption = watchOptions ??= {};
+                else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
+                else Debug.fail("Unknown option");
+                currentOption[option.name] = normalizeOptionValue(option, basePath, value);
+            },
+            onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
+                switch (key) {
+                    case "extends":
+                        const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
+                        if (isString(value)) {
+                            extendedConfigPath = getExtendsConfigPath(
+                                value,
+                                host,
+                                newBase,
+                                errors,
+                                (message, arg0) =>
+                                    createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
+                            );
+                        }
+                        else {
+                            extendedConfigPath = [];
+                            for (let index = 0; index < (value as unknown[]).length; index++) {
+                                const fileName = (value as unknown[])[index];
+                                if (isString(fileName)) {
+                                    extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
+                                        fileName,
+                                        host,
+                                        newBase,
+                                        errors,
+                                        (message, arg0) =>
+                                            createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
+                                    ));
+                                }
                             }
                         }
-                    }
-                return;
+                        return;
+                }
+            },
+            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
+                if (key === "excludes") {
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
+                }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
+                }
             }
         },
-        onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
-            if (key === "excludes") {
-                errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
-            }
-            if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
-                rootCompilerOptions = append(rootCompilerOptions, keyNode);
-            }
-        }
-    };
-    const json = convertConfigFileToObject(sourceFile, errors, getTsconfigRootOptionsMap(), optionsIterator);
+    );
 
     if (!typeAcquisition) {
         typeAcquisition = getDefaultTypeAcquisition(configFileName);
