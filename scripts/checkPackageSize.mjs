@@ -168,7 +168,7 @@ const commonData = commonFiles.map(path => {
     });
 
 if (commonData.length > 0) {
-    console.log(`## Common files`);
+    console.log(`## Files`);
     console.log();
     logTable(["", "Before", "After", "Diff", "Diff (percent)"], commonData);
     console.log();
