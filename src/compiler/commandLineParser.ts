@@ -97,6 +97,7 @@ import {
     PollingWatchKind,
     PrefixUnaryExpression,
     ProjectReference,
+    PropertyAssignment,
     PropertyName,
     removeTrailingDirectorySeparator,
     returnTrue,
@@ -2083,7 +2084,7 @@ export function readConfigFile(fileName: string, readFile: (path: string) => str
 export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
     const jsonSourceFile = parseJsonText(fileName, jsonText);
     return {
-        config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*knownRootOptions*/ undefined, /*optionsIterator*/ undefined),
+        config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*jsonConversionNotifier*/ undefined),
         error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
     };
 }
@@ -2229,34 +2230,21 @@ function getTsconfigRootOptionsMap() {
 
 /** @internal */
 export interface JsonConversionNotifier {
-    /**
-     * Notifies parent option object is being set with the optionKey and a valid optionValue
-     * Currently it notifies only if there is element with type object (parentOption) and
-     * has element's option declarations map associated with it
-     * @param parentOption parent option name in which the option and value are being set
-     * @param option option declaration which is being set with the value
-     * @param value value of the option
-     */
-    onSetValidOptionKeyValueInParent(parentOption: TsConfigOnlyOption, option: CommandLineOption, value: CompilerOptionsValue): void;
-    /**
-     * Notify when valid root key value option is being set
-     * @param key option key
-     * @param keyNode node corresponding to node in the source file
-     * @param value computed value of the key
-     * @param ValueNode node corresponding to value in the source file
-     */
-    onSetValidOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
-    /**
-     * Notify when unknown root key value option is being set
-     * @param key option key
-     * @param keyNode node corresponding to node in the source file
-     * @param value computed value of the key
-     * @param ValueNode node corresponding to value in the source file
-     */
-    onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
+    rootOptions: TsConfigOnlyOption;
+    onPropertySet(
+        keyText: string,
+        value: any,
+        propertyAssignment: PropertyAssignment,
+        parentOption: TsConfigOnlyOption | undefined,
+        option: CommandLineOption | undefined,
+    ): void;
 }
 
-function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Diagnostic[], knownRootOptions: TsConfigOnlyOption | undefined, optionsIterator: JsonConversionNotifier | undefined): any {
+function convertConfigFileToObject(
+    sourceFile: JsonSourceFile,
+    errors: Diagnostic[],
+    jsonConversionNotifier: JsonConversionNotifier | undefined,
+): any {
     const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
     if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
         errors.push(createDiagnosticForNodeInSourceFile(
@@ -2271,19 +2259,19 @@ function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Diagnosti
         if (isArrayLiteralExpression(rootExpression)) {
             const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
             if (firstObject) {
-                return convertToJson(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+                return convertToJson(sourceFile, firstObject, errors, /*returnValue*/ true, jsonConversionNotifier);
             }
         }
         return {};
     }
-    return convertToJson(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+    return convertToJson(sourceFile, rootExpression, errors, /*returnValue*/ true, jsonConversionNotifier);
 }
 
 /**
  * Convert the json syntax tree into the json value
  */
 export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any {
-    return convertToJson(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+    return convertToJson(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*jsonConversionNotifier*/ undefined);
 }
 
 /**
@@ -2298,17 +2286,13 @@ export function convertToJson(
     rootExpression: Expression | undefined,
     errors: Diagnostic[],
     returnValue: boolean,
-    knownRootOptions: CommandLineOption | undefined,
-    jsonConversionNotifier: JsonConversionNotifier | undefined): any {
+    jsonConversionNotifier: JsonConversionNotifier | undefined,
+): any {
     if (!rootExpression) {
         return returnValue ? {} : undefined;
     }
 
-    return convertPropertyValueToJson(rootExpression, knownRootOptions);
-
-    function isRootOptionMap(objectOption: TsConfigOnlyOption | undefined) {
-        return knownRootOptions && objectOption === knownRootOptions;
-    }
+    return convertPropertyValueToJson(rootExpression, jsonConversionNotifier?.rootOptions);
 
     function convertObjectLiteralExpressionToJson(
         node: ObjectLiteralExpression,
@@ -2350,27 +2334,7 @@ export function convertToJson(
                 }
 
                 // Notify key value set, if user asked for it
-                if (jsonConversionNotifier &&
-                    // Current callbacks are only on known parent option or if we are setting values in the root
-                    (objectOption?.name || isRootOptionMap(objectOption))) {
-                    const isValidOptionValue = isCompilerOptionsValue(option, value);
-                    if (objectOption?.name) {
-                        if (isValidOptionValue) {
-                            // Notify option set in the parent if its a valid option value
-                            jsonConversionNotifier.onSetValidOptionKeyValueInParent(objectOption, option!, value);
-                        }
-                    }
-                    else if (isRootOptionMap(objectOption)) {
-                        if (isValidOptionValue) {
-                            // Notify about the valid root key value being set
-                            jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
-                        }
-                        else if (!option) {
-                            // Notify about the unknown root key value being set
-                            jsonConversionNotifier.onSetUnknownOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
-                        }
-                    }
-                }
+                jsonConversionNotifier?.onPropertySet(keyText, value, element, objectOption, option);
             }
         }
         return result;
@@ -3289,61 +3253,11 @@ function parseOwnConfigOfJsonSourceFile(
     let extendedConfigPath: string | string[] | undefined;
     let rootCompilerOptions: PropertyName[] | undefined;
 
+    const rootOptions = getTsconfigRootOptionsMap();
     const json = convertConfigFileToObject(
         sourceFile,
         errors,
-        getTsconfigRootOptionsMap(),
-        {
-            onSetValidOptionKeyValueInParent(parentOption: TsConfigOnlyOption, option: CommandLineOption, value: CompilerOptionsValue) {
-                let currentOption;
-                if (parentOption === compilerOptionsDeclaration) currentOption = options;
-                else if (parentOption === watchOptionsDeclaration) currentOption = watchOptions ??= {};
-                else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
-                else Debug.fail("Unknown option");
-                currentOption[option.name] = normalizeOptionValue(option, basePath, value);
-            },
-            onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
-                switch (key) {
-                    case "extends":
-                        const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                        if (isString(value)) {
-                            extendedConfigPath = getExtendsConfigPath(
-                                value,
-                                host,
-                                newBase,
-                                errors,
-                                (message, arg0) =>
-                                    createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
-                            );
-                        }
-                        else {
-                            extendedConfigPath = [];
-                            for (let index = 0; index < (value as unknown[]).length; index++) {
-                                const fileName = (value as unknown[])[index];
-                                if (isString(fileName)) {
-                                    extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
-                                        fileName,
-                                        host,
-                                        newBase,
-                                        errors,
-                                        (message, arg0) =>
-                                            createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
-                                    ));
-                                }
-                            }
-                        }
-                        return;
-                }
-            },
-            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
-                if (key === "excludes") {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
-                }
-                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
-                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
-                }
-            }
-        },
+        { rootOptions, onPropertySet },
     );
 
     if (!typeAcquisition) {
@@ -3355,6 +3269,64 @@ function parseOwnConfigOfJsonSourceFile(
     }
 
     return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
+
+    function onPropertySet(
+        keyText: string,
+        value: any,
+        propertyAssignment: PropertyAssignment,
+        parentOption: TsConfigOnlyOption | undefined,
+        option: CommandLineOption | undefined,
+    ) {
+        if (parentOption?.name) {
+            if (!isCompilerOptionsValue(option, value)) return;
+            let currentOption;
+            if (parentOption === compilerOptionsDeclaration) currentOption = options;
+            else if (parentOption === watchOptionsDeclaration) currentOption = watchOptions ??= {};
+            else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
+            else Debug.fail("Unknown option");
+            currentOption[option!.name] = normalizeOptionValue(option!, basePath, value);
+        }
+        else if (parentOption === rootOptions) {
+            if (keyText === "extends") {
+                if (!isCompilerOptionsValue(option, value)) return;
+                const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
+                if (isString(value)) {
+                    extendedConfigPath = getExtendsConfigPath(
+                        value,
+                        host,
+                        newBase,
+                        errors,
+                        (message, arg0) =>
+                            createDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.initializer, message, arg0)
+                    );
+                }
+                else {
+                    extendedConfigPath = [];
+                    for (let index = 0; index < (value as unknown[]).length; index++) {
+                        const fileName = (value as unknown[])[index];
+                        if (isString(fileName)) {
+                            extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
+                                fileName,
+                                host,
+                                newBase,
+                                errors,
+                                (message, arg0) =>
+                                    createDiagnosticForNodeInSourceFile(sourceFile, (propertyAssignment.initializer as ArrayLiteralExpression).elements[index], message, arg0)
+                            ));
+                        }
+                    }
+                }
+            }
+            else if (!option) {
+                if (keyText === "excludes") {
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.name, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
+                }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === keyText)) {
+                    rootCompilerOptions = append(rootCompilerOptions, propertyAssignment.name);
+                }
+            }
+        }
+    }
 }
 
 function getExtendsConfigPath(
