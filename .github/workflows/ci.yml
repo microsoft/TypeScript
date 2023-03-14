@@ -97,6 +97,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
+    - run: |
+        corepack enable npm
+        npm --version
     
     - run:  npm ci
 
@@ -172,6 +175,9 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
+    - run: |
+        corepack enable npm
+        npm --version
 
     - run: npm ci
       working-directory: ./pr
