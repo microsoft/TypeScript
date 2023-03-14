@@ -197,17 +197,17 @@ interface SettingsTypes {
     volume: string;
   };
   video: {
-    resulution: string;
+    resolution: string;
   };
 }
 interface Settings<Params extends { [K in keyof Params]?: string }> {
   config: Params;
 }
 type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
-type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | 'video']>;
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
 type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
 type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
-type GenericSettingsResult2 = GenericSettingsAccess<"audio" | 'video'>;
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
 
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
@@ -440,7 +440,7 @@ interface SettingsTypes {
         volume: string;
     };
     video: {
-        resulution: string;
+        resolution: string;
     };
 }
 interface Settings<Params extends {
@@ -449,7 +449,7 @@ interface Settings<Params extends {
     config: Params;
 }
 type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
-type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | 'video']>;
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
 type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
 type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
-type GenericSettingsResult2 = GenericSettingsAccess<"audio" | 'video'>;
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
