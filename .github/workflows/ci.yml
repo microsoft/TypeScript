@@ -154,7 +154,7 @@ jobs:
         node ./smoke.js typescript
         node ./smoke.js typescript/lib/tsserverlibrary
 
-  package_size:
+  package-size:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
@@ -185,7 +185,10 @@ jobs:
     - run: npx hereby lkg
       working-directory: ./base
 
-    - run: node ./pr/scripts/checkPackageSize.mjs ./base > report.md
+    - run: node ./pr/scripts/checkPackageSize.mjs ./base ./pr > report.md
+
+    - run: cat report.md
+      if: always()
 
     - uses: LouisBrunner/checks-action@69aaabbcf32668b60dc03b65deabfe23e92d9c41 # v1.6.0
       if: always()
