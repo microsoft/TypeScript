@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import * as ts from "./_namespaces/ts";
 import {
     combinePaths,
     createGetCanonicalFileName,
@@ -36,10 +35,6 @@ import {
     RequestCompletedAction,
     TypingsInstaller,
 } from "./_namespaces/ts.server.typingsInstaller";
-
-if (ts.Debug.isDebugging) {
-    (globalThis as any).ts = ts;
-}
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {
