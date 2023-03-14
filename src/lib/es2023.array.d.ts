@@ -67,7 +67,7 @@ interface Array<T> {
     /**
      * Copies an array, then overwrites the value at the provided index with the given value.
      * @param index The index to insert the value at.
-     * @param value The value to insert into the copied array.
+     * @param value The value to write into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
     with<F>(index: number, value: F): (T | F)[];
