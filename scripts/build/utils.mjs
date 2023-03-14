@@ -141,24 +141,6 @@ export function getDiffTool() {
 }
 
 /**
- * Find the size of a directory recursively.
- * Symbolic links can cause a loop.
- * @param {string} root
- * @returns {number} bytes
- */
-export function getDirSize(root) {
-    const stats = fs.lstatSync(root);
-
-    if (!stats.isDirectory()) {
-        return stats.size;
-    }
-
-    return fs.readdirSync(root)
-        .map(file => getDirSize(path.join(root, file)))
-        .reduce((acc, num) => acc + num, 0);
-}
-
-/**
  * @template T
  */
 export class Deferred {
