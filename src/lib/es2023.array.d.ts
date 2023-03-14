@@ -8,14 +8,8 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findLast<S extends T>(
-        predicate: (value: T, index: number, array: T[]) => value is S,
-        thisArg?: any
-    ): S | undefined;
-    findLast(
-        predicate: (value: T, index: number, array: T[]) => unknown,
-        thisArg?: any
-    ): T | undefined;
+    findLast<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S | undefined;
+    findLast(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the last element in the array where predicate is true, and -1
@@ -26,10 +20,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findLastIndex(
-        predicate: (value: T, index: number, array: T[]) => unknown,
-        thisArg?: any
-    ): number;
+    findLastIndex(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Returns a copy of an array with its elements reversed.
