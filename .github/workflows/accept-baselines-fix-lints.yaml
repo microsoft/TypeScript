@@ -15,7 +15,7 @@ jobs:
       run: |
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
-        npm install
+        npm ci
         git rm -r --quiet tests/baselines/reference
         npx hereby runtests-parallel --ci --fix || true
         npx hereby baseline-accept

@@ -47002,7 +47002,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration);
                             }
                             if (!(node.parent.kind === SyntaxKind.ClassDeclaration && hasSyntacticModifier(node.parent, ModifierFlags.Abstract))) {
-                                return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
+                                const message = node.kind === SyntaxKind.PropertyDeclaration
+                                    ? Diagnostics.Abstract_properties_can_only_appear_within_an_abstract_class
+                                    : Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class;
+                                return grammarErrorOnNode(modifier, message);
                             }
                             if (flags & ModifierFlags.Static) {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
