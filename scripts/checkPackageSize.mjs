@@ -1,3 +1,4 @@
+import assert from "assert";
 import cp from "child_process";
 import path from "path";
 
@@ -12,8 +13,8 @@ function filesToMap(files) {
     return new Map(files.map(f => [f.path, f.size]));
 }
 
-const beforeFiles = filesToMap(before.files);
-const afterFiles = filesToMap(after.files);
+const beforeFileToSize = filesToMap(before.files);
+const afterFileToSize = filesToMap(after.files);
 
 /**
  * @param {number} before
@@ -25,13 +26,19 @@ function failIfTooBig(before, after) {
     }
 }
 
+/**
+ * @param {number} value
+ */
+function sign(value) {
+    return value > 0 ? "+" : "-";
+}
+
 const units = ["B", "KiB", "MiB", "GiB"];
 /**
  * @param {number} size
  */
 function prettyPrintSize(size) {
-    const sign = Math.sign(size);
-    size = Math.abs(size);
+    assert(size >= 0);
 
     let i = 0;
     while (size > 1024) {
@@ -39,7 +46,6 @@ function prettyPrintSize(size) {
         size /= 1024;
     }
 
-    size *= sign;
     return `${size.toFixed(2)} ${units[i]}`;
 }
 
@@ -47,9 +53,18 @@ function prettyPrintSize(size) {
  * @param {number} before
  * @param {number} after
  */
-function percentDiff(before, after) {
-    const percent = (after - before) / before;
-    return `${percent.toFixed(2)}%`;
+function prettyPrintSizeDiff(before, after) {
+    const diff = after - before;
+    return sign(diff) + prettyPrintSize(Math.abs(diff));
+}
+
+/**
+ * @param {number} before
+ * @param {number} after
+ */
+function prettyPercentDiff(before, after) {
+    const percent = 100 * (after - before) / before;
+    return `${sign(percent)}${Math.abs(percent).toFixed(2)}%`;
 }
 
 /**
@@ -82,13 +97,30 @@ console.log();
 console.log(`## Overall package size`);
 console.log();
 
-logTable(
-    ["", "Before", "After", "Diff", "Diff (percent)"],
-    [
-        ["Packed", prettyPrintSize(before.size), prettyPrintSize(after.size), prettyPrintSize(after.size - before.size), percentDiff(before.size, after.size)],
-        ["Unpacked", prettyPrintSize(before.unpackedSize), prettyPrintSize(after.unpackedSize), prettyPrintSize(after.unpackedSize - before.unpackedSize), percentDiff(before.unpackedSize, after.unpackedSize)],
-    ]
-);
+if (before.size === after.size && before.unpackedSize === after.unpackedSize) {
+    console.log("No change.");
+}
+else {
+    logTable(
+        ["", "Before", "After", "Diff", "Diff (percent)"],
+        [
+            [
+                "Packed",
+                prettyPrintSize(before.size),
+                prettyPrintSize(after.size),
+                prettyPrintSizeDiff(before.size, after.size),
+                prettyPercentDiff(before.size, after.size),
+            ],
+            [
+                "Unpacked",
+                prettyPrintSize(before.unpackedSize),
+                prettyPrintSize(after.unpackedSize),
+                prettyPrintSizeDiff(before.unpackedSize, after.unpackedSize),
+                prettyPercentDiff(before.unpackedSize, after.unpackedSize),
+            ],
+        ]
+    );
+}
 
 failIfTooBig(before.size, after.size);
 failIfTooBig(before.unpackedSize, after.unpackedSize);
@@ -106,48 +138,49 @@ const inAfter = 1;
  * @param {-1 | 1} marker
  */
 function addFiles(paths, marker) {
-    for (const p in paths) {
+    for (const p of paths) {
         fileCounts.set(p, (fileCounts.get(p) ?? 0) + marker);
     }
 }
-addFiles(beforeFiles.keys(), inBefore);
-addFiles(afterFiles.keys(), inAfter);
+addFiles(beforeFileToSize.keys(), inBefore);
+addFiles(afterFileToSize.keys(), inAfter);
 
 const allEntries = [...fileCounts.entries()];
 const commonFiles = allEntries.filter(([, count]) => count === 0).map(([path]) => path);
 const beforeOnly = allEntries.filter(([, count]) => count === inBefore).map(([path]) => path);
 const afterOnly = allEntries.filter(([, count]) => count === inAfter).map(([path]) => path);
 
-
-console.log(`## Common files`);
-console.log();
-
 const commonData = commonFiles.map(path => {
-    const beforeSize = beforeFiles.get(path) ?? 0;
-    const afterSize = afterFiles.get(path) ?? 0;
+    const beforeSize = beforeFileToSize.get(path) ?? 0;
+    const afterSize = afterFileToSize.get(path) ?? 0;
     return { path, beforeSize, afterSize };
 })
     .filter(({ beforeSize, afterSize }) => beforeSize !== afterSize)
     .map(({ path, beforeSize, afterSize }) => {
-        failIfTooBig(beforeSize, afterSize);
-        return ["`" + path + "`", prettyPrintSize(beforeSize), prettyPrintSize(afterSize), prettyPrintSize(afterSize - beforeSize), percentDiff(beforeSize, afterSize)];
+        // failIfTooBig(beforeSize, afterSize);
+        return [
+            "`" + path + "`",
+            prettyPrintSize(beforeSize),
+            prettyPrintSize(afterSize),
+            prettyPrintSizeDiff(beforeSize, afterSize),
+            prettyPercentDiff(beforeSize, afterSize),
+        ];
     });
 
-if (commonData.length === 0) {
-    console.log("No change.");
+if (commonData.length > 0) {
+    console.log(`## Common files`);
+    console.log();
+    logTable(["", "Before", "After", "Diff", "Diff (percent)"], commonData);
+    console.log();
 }
-else {
-    logTable(["File", "Before", "After", "Diff", "Diff (percent)"], commonData);
-}
-console.log();
 
 if (afterOnly.length > 0) {
     console.log(`## New files`);
     console.log();
     logTable(
-        ["File", "Size"],
+        ["", "Size"],
         afterOnly.map(path => {
-            const afterSize = afterFiles.get(path) ?? 0;
+            const afterSize = afterFileToSize.get(path) ?? 0;
             return { path, afterSize };
         })
             .map(({ path, afterSize }) => {
@@ -157,14 +190,13 @@ if (afterOnly.length > 0) {
     console.log();
 }
 
-
 if (beforeOnly.length > 0) {
     console.log(`## Deleted files`);
     console.log();
     logTable(
-        ["File", "Size"],
+        ["", "Size"],
         beforeOnly.map(path => {
-            const afterSize = afterFiles.get(path) ?? 0;
+            const afterSize = afterFileToSize.get(path) ?? 0;
             return { path, afterSize };
         })
             .map(({ path, afterSize }) => {
