@@ -2153,6 +2153,24 @@ const extendsOptionDeclaration: CommandLineOptionOfListType = {
     },
     category: Diagnostics.File_Management,
 };
+const compilerOptionsDeclaration: TsConfigOnlyOption = {
+    name: "compilerOptions",
+    type: "object",
+    elementOptions: getCommandLineCompilerOptionsMap(),
+    extraKeyDiagnostics: compilerOptionsDidYouMeanDiagnostics,
+};
+const watchOptionsDeclaration: TsConfigOnlyOption = {
+    name: "watchOptions",
+    type: "object",
+    elementOptions: getCommandLineWatchOptionsMap(),
+    extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
+};
+const typeAcquisitionDeclaration: TsConfigOnlyOption = {
+    name: "typeAcquisition",
+    type: "object",
+    elementOptions: getCommandLineTypeAcquisitionMap(),
+    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
+};
 let _tsconfigRootOptions: TsConfigOnlyOption;
 function getTsconfigRootOptionsMap() {
     if (_tsconfigRootOptions === undefined) {
@@ -2160,24 +2178,9 @@ function getTsconfigRootOptionsMap() {
             name: undefined!, // should never be needed since this is root
             type: "object",
             elementOptions: commandLineOptionsToMap([
-                {
-                    name: "compilerOptions",
-                    type: "object",
-                    elementOptions: getCommandLineCompilerOptionsMap(),
-                    extraKeyDiagnostics: compilerOptionsDidYouMeanDiagnostics,
-                },
-                {
-                    name: "watchOptions",
-                    type: "object",
-                    elementOptions: getCommandLineWatchOptionsMap(),
-                    extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
-                },
-                {
-                    name: "typeAcquisition",
-                    type: "object",
-                    elementOptions: getCommandLineTypeAcquisitionMap(),
-                    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
-                },
+                compilerOptionsDeclaration,
+                watchOptionsDeclaration,
+                typeAcquisitionDeclaration,
                 extendsOptionDeclaration,
                 {
                     name: "references",
@@ -2234,7 +2237,7 @@ export interface JsonConversionNotifier {
      * @param option option declaration which is being set with the value
      * @param value value of the option
      */
-    onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue): void;
+    onSetValidOptionKeyValueInParent(parentOption: TsConfigOnlyOption, option: CommandLineOption, value: CompilerOptionsValue): void;
     /**
      * Notify when valid root key value option is being set
      * @param key option key
@@ -2303,15 +2306,13 @@ export function convertToJson(
 
     return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
-    function isRootOptionMap(knownOptions: Map<string, CommandLineOption> | undefined) {
-        return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
+    function isRootOptionMap(objectOption: TsConfigOnlyOption | undefined) {
+        return knownRootOptions && objectOption === knownRootOptions;
     }
 
     function convertObjectLiteralExpressionToJson(
         node: ObjectLiteralExpression,
-        knownOptions: Map<string, CommandLineOption> | undefined,
-        extraKeyDiagnostics: DidYouMeanOptionsDiagnostics | undefined,
-        parentOption: string | undefined
+        objectOption: TsConfigOnlyOption | undefined,
     ): any {
         const result: any = returnValue ? {} : undefined;
         for (const element of node.properties) {
@@ -2329,17 +2330,17 @@ export function convertToJson(
 
             const textOfKey = isComputedNonLiteralName(element.name) ? undefined : getTextOfPropertyName(element.name);
             const keyText = textOfKey && unescapeLeadingUnderscores(textOfKey);
-            const option = keyText && knownOptions ? knownOptions.get(keyText) : undefined;
-            if (keyText && extraKeyDiagnostics && !option) {
-                if (knownOptions) {
+            const option = keyText ? objectOption?.elementOptions?.get(keyText) : undefined;
+            if (keyText && objectOption?.extraKeyDiagnostics && !option) {
+                if (objectOption?.elementOptions) {
                     errors.push(createUnknownOptionError(
                         keyText,
-                        extraKeyDiagnostics,
+                        objectOption.extraKeyDiagnostics,
                         (message, arg0, arg1) => createDiagnosticForNodeInSourceFile(sourceFile, element.name, message, arg0, arg1)
                     ));
                 }
                 else {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnostics.unknownOptionDiagnostic, keyText));
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, objectOption.extraKeyDiagnostics.unknownOptionDiagnostic, keyText));
                 }
             }
             const value = convertPropertyValueToJson(element.initializer, option);
@@ -2350,15 +2351,15 @@ export function convertToJson(
                 // Notify key value set, if user asked for it
                 if (jsonConversionNotifier &&
                     // Current callbacks are only on known parent option or if we are setting values in the root
-                    (parentOption || isRootOptionMap(knownOptions))) {
+                    (objectOption?.name || isRootOptionMap(objectOption))) {
                     const isValidOptionValue = isCompilerOptionsValue(option, value);
-                    if (parentOption) {
+                    if (objectOption?.name) {
                         if (isValidOptionValue) {
                             // Notify option set in the parent if its a valid option value
-                            jsonConversionNotifier.onSetValidOptionKeyValueInParent(parentOption, option!, value);
+                            jsonConversionNotifier.onSetValidOptionKeyValueInParent(objectOption, option!, value);
                         }
                     }
-                    else if (isRootOptionMap(knownOptions)) {
+                    else if (isRootOptionMap(objectOption)) {
                         if (isValidOptionValue) {
                             // Notify about the valid root key value being set
                             jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
@@ -2447,16 +2448,7 @@ export function convertToJson(
                 // that satifies it and need it to modify options set in them (for normalizing file paths)
                 // vs what we set in the json
                 // If need arises, we can modify this interface and callbacks as needed
-                if (option) {
-                    const { elementOptions, extraKeyDiagnostics, name: optionName } = option as TsConfigOnlyOption;
-                    return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression,
-                        elementOptions, extraKeyDiagnostics, optionName));
-                }
-                else {
-                    return validateValue(convertObjectLiteralExpressionToJson(
-                        objectLiteralExpression, /* knownOptions*/ undefined,
-                        /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined));
-                }
+                return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression, option as TsConfigOnlyOption));
 
             case SyntaxKind.ArrayLiteralExpression:
                 reportInvalidOptionValue(option && option.type !== "list" && option.type !== "listOrElement");
@@ -3297,22 +3289,12 @@ function parseOwnConfigOfJsonSourceFile(
     let rootCompilerOptions: PropertyName[] | undefined;
 
     const optionsIterator: JsonConversionNotifier = {
-        onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
+        onSetValidOptionKeyValueInParent(parentOption: TsConfigOnlyOption, option: CommandLineOption, value: CompilerOptionsValue) {
             let currentOption;
-            switch (parentOption) {
-                case "compilerOptions":
-                    currentOption = options;
-                    break;
-                case "watchOptions":
-                    currentOption = (watchOptions || (watchOptions = {}));
-                    break;
-                case "typeAcquisition":
-                    currentOption = (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName)));
-                    break;
-                default:
-                    Debug.fail("Unknown option");
-            }
-
+            if (parentOption === compilerOptionsDeclaration) currentOption = options;
+            else if (parentOption === watchOptionsDeclaration) currentOption = watchOptions ??= {};
+            else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
+            else Debug.fail("Unknown option");
             currentOption[option.name] = normalizeOptionValue(option, basePath, value);
         },
         onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
