@@ -52,7 +52,7 @@ interface Array<T> {
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      * @param items Elements to insert into the array in place of the deleted elements.
-     * @returns A copy of the original array with the remaining elements.
+     * @returns The copied array.
      */
     toSpliced<F>(start: number, deleteCount: number, ...items: F[]): (T | F)[];
 
