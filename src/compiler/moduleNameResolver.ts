@@ -484,6 +484,13 @@ function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolution
     };
 }
 
+function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: string, moduleResolutionState: ModuleResolutionState) {
+    const nameForLookup = endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/") ?
+        mangleScopedPackageNameWithTrace(typeReferenceDirectiveName, moduleResolutionState) :
+        typeReferenceDirectiveName;
+    return combinePaths(typeRoot, nameForLookup);
+}
+
 /**
  * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -619,7 +626,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
                 trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
             }
             return firstDefined(typeRoots, typeRoot => {
-                const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
+                const candidate = getCandidateFromTypeRoot(typeRoot, typeReferenceDirectiveName, moduleResolutionState);
                 const directoryExists = directoryProbablyExists(typeRoot, host);
                 if (!directoryExists && traceEnabled) {
                     trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
@@ -3084,7 +3091,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
     if (!state.compilerOptions.typeRoots) return;
     for (const typeRoot of state.compilerOptions.typeRoots) {
-        const candidate = combinePaths(typeRoot, moduleName);
+        const candidate = getCandidateFromTypeRoot(typeRoot, moduleName, state);
         const directoryExists = directoryProbablyExists(typeRoot, state.host);
         if (!directoryExists && state.traceEnabled) {
             trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
