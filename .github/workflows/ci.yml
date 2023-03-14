@@ -185,10 +185,9 @@ jobs:
     - run: npx hereby lkg
       working-directory: ./base
 
-    - run: node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
-
-    - run: echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
-      if: always()
+    - run: |
+        echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
+        node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
 
   misc:
     runs-on: ubuntu-latest
