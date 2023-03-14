@@ -19,6 +19,6 @@ jobs:
         npx hereby LKG
         npm test
         git diff
-        git add ./lib
+        git add --firce ./lib
         git commit -m "Update LKG"
         git push
