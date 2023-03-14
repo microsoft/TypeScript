@@ -119,7 +119,7 @@ const beforeOnly = allEntries.filter(([, count]) => count === inBefore).map(([pa
 const afterOnly = allEntries.filter(([, count]) => count === inAfter).map(([path]) => path);
 
 
-console.log(`$# Common files`);
+console.log(`## Common files`);
 console.log();
 
 const commonData = commonFiles.map(path => {
