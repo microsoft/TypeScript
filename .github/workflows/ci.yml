@@ -157,9 +157,6 @@ jobs:
   package-size:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    permissions:
-      pull-requests: write
-      checks: write
 
     steps:
     - uses: actions/checkout@v3
@@ -188,18 +185,7 @@ jobs:
     - run: npx hereby lkg
       working-directory: ./base
 
-    - run: node ./pr/scripts/checkPackageSize.mjs ./base ./pr > report.md
-
-    - run: cat report.md
-      if: always()
-
-    - uses: LouisBrunner/checks-action@69aaabbcf32668b60dc03b65deabfe23e92d9c41 # v1.6.0
-      if: always()
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Package size
-        conclusion: ${{ job.status }}
-        output_text_description_file: report.md
+    - run: node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
 
   misc:
     runs-on: ubuntu-latest

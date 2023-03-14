@@ -79,7 +79,10 @@ function logTable(header, data) {
     console.log(lines.join("\n"));
 }
 
-console.log(`# Overall package size`);
+console.log(`# Package size report`);
+console.log();
+
+console.log(`## Overall package size`);
 console.log();
 
 logTable(
@@ -119,7 +122,7 @@ const beforeOnly = allEntries.filter(([, count]) => count === inBefore).map(([pa
 const afterOnly = allEntries.filter(([, count]) => count === inAfter).map(([path]) => path);
 
 
-console.log(`# Common files`);
+console.log(`$# Common files`);
 console.log();
 
 const commonData = commonFiles.map(path => {
@@ -142,7 +145,7 @@ else {
 console.log();
 
 if (afterOnly.length > 0) {
-    console.log(`# New files`);
+    console.log(`## New files`);
     console.log();
     logTable(
         ["File", "Size"],
@@ -159,7 +162,7 @@ if (afterOnly.length > 0) {
 
 
 if (beforeOnly.length > 0) {
-    console.log(`# Deleted files`);
+    console.log(`## Deleted files`);
     console.log();
     logTable(
         ["File", "Size"],
