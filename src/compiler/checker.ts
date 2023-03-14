@@ -18686,6 +18686,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
+                // If none of the type arguments for the outer type parameters contain type variables, it follows
+                // that the instantiated type doesn't reference type variables.
+                if (result.flags & TypeFlags.ObjectFlagsType && !((result as ObjectFlagsType).objectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                    (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed |
+                        (some(typeArguments, couldContainTypeVariables) ? ObjectFlags.CouldContainTypeVariables : 0);
+                }
                 target.instantiations.set(id, result);
             }
             return result;
@@ -18856,7 +18862,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): AnonymousType {
-        const result = createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
+        const result = createObjectType(type.objectFlags & ~(ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.CouldContainTypeVariables) | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
         if (type.objectFlags & ObjectFlags.Mapped) {
             (result as MappedType).declaration = (type as MappedType).declaration;
             // C.f. instantiateSignature
@@ -23858,7 +23864,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const result = !!(type.flags & TypeFlags.Instantiable ||
             type.flags & TypeFlags.Object && !isNonGenericTopLevelType(type) && (
-                objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || forEach(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
+                objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || some(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)) ||
             type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
