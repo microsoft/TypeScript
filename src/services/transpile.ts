@@ -43,6 +43,12 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
+const optionsRedundantWithVerbatimModuleSyntax = new Set([
+    "isolatedModules",
+    "preserveValueImports",
+    "importsNotUsedAsValues"
+]);
+
 /*
  * This function will compile source text from 'input' argument using specified compiler options.
  * If not options are provided - it will use a set of default compiler options.
@@ -66,7 +72,10 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     for (const option of transpileOptionValueCompilerOptions) {
-        options[option.name] = option.transpileOptionValue;
+        // Do not set redundant config options if `verbatimModuleSyntax` was supplied.
+        if (!options.verbatimModuleSyntax || !optionsRedundantWithVerbatimModuleSyntax.has(option.name)) {
+            options[option.name] = option.transpileOptionValue;
+        }
     }
 
     // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths.
