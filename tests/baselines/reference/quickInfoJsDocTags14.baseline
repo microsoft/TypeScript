@@ -4,6 +4,10 @@
 // /* @param newA - new a param
 //  */
 // function foo({ a: newA }: { a: string }) {
+//                ^
+// | ----------------------------------------------------------------------
+// | (property) a: string
+// | ----------------------------------------------------------------------
 //     newA
 //     ^^^^
 // | ----------------------------------------------------------------------
@@ -14,6 +18,56 @@
 // }
 
 [
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags14.ts",
+      "position": 74,
+      "name": ""
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 74,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTags14.ts",
