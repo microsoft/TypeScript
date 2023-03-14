@@ -126,51 +126,54 @@ const afterOnly = allEntries.filter(([, count]) => count === inAfter).map(([path
 console.log(`# Common files`);
 console.log();
 
-logTable(
-    ["File", "Before", "After", "Diff", "Diff (percent)"],
-    commonFiles.map(path => {
-        const beforeSize = beforeFiles.get(path) ?? 0;
-        const afterSize = afterFiles.get(path) ?? 0;
-        return { path, beforeSize, afterSize };
-    })
-        .filter(({ beforeSize, afterSize }) => beforeSize !== afterSize)
-        .map(({ path, beforeSize, afterSize }) => {
-            failIfTooBig(beforeSize, afterSize);
-            return [path, prettyPrintSize(beforeSize), prettyPrintSize(afterSize), prettyPrintSize(afterSize - beforeSize), percentDiff(beforeSize, afterSize)];
-        }),
-);
+const commonData = commonFiles.map(path => {
+    const beforeSize = beforeFiles.get(path) ?? 0;
+    const afterSize = afterFiles.get(path) ?? 0;
+    return { path, beforeSize, afterSize };
+})
+    .filter(({ beforeSize, afterSize }) => beforeSize !== afterSize)
+    .map(({ path, beforeSize, afterSize }) => {
+        failIfTooBig(beforeSize, afterSize);
+        return ["`" + path + "`", prettyPrintSize(beforeSize), prettyPrintSize(afterSize), prettyPrintSize(afterSize - beforeSize), percentDiff(beforeSize, afterSize)];
+    });
 
+if (commonData.length === 0) {
+    console.log("No change.");
+}
+else {
+    logTable(["File", "Before", "After", "Diff", "Diff (percent)"], commonData);
+}
 console.log();
 
+if (afterOnly.length > 0) {
+    console.log(`# New files`);
+    console.log();
+    logTable(
+        ["File", "Size"],
+        afterOnly.map(path => {
+            const afterSize = afterFiles.get(path) ?? 0;
+            return { path, afterSize };
+        })
+            .map(({ path, afterSize }) => {
+                return ["`" + path + "`", prettyPrintSize(afterSize)];
+            }),
+    );
+    console.log();
+}
 
-console.log(`# New files`);
-console.log();
 
-logTable(
-    ["File", "Size"],
-    afterOnly.map(path => {
-        const afterSize = afterFiles.get(path) ?? 0;
-        return { path, afterSize };
-    })
-        .map(({ path, afterSize }) => {
-            return [path, prettyPrintSize(afterSize)];
-        }),
-);
-
-console.log();
-
-console.log(`# Deleted files`);
-console.log();
-
-logTable(
-    ["File", "Size"],
-    beforeOnly.map(path => {
-        const afterSize = afterFiles.get(path) ?? 0;
-        return { path, afterSize };
-    })
-        .map(({ path, afterSize }) => {
-            return [path, prettyPrintSize(afterSize)];
-        }),
-);
-
-console.log();
+if (beforeOnly.length > 0) {
+    console.log(`# Deleted files`);
+    console.log();
+    logTable(
+        ["File", "Size"],
+        beforeOnly.map(path => {
+            const afterSize = afterFiles.get(path) ?? 0;
+            return { path, afterSize };
+        })
+            .map(({ path, afterSize }) => {
+                return ["`" + path + "`", prettyPrintSize(afterSize)];
+            }),
+    );
+    console.log();
+}
