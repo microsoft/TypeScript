@@ -59,19 +59,16 @@ function percentDiff(before, after) {
 function logTable(header, data) {
     /** @type {string[]} */
     const lines = [];
-    const spacer = "| " + new Array(header.length).fill("-").join(" | ") + " |";
 
     /**
      * @param {string[]} row
      */
-    function addRow(row, first = false) {
-        if (!first) {
-            lines.push(spacer);
-        }
+    function addRow(row) {
         lines.push("| " + row.join(" | ") + " |");
     }
 
-    addRow(header, /*first*/ true);
+    addRow(header);
+    addRow(new Array(header.length).fill("-"));
     for (const row of data) {
         addRow(row);
     }
