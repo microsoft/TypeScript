@@ -11,6 +11,7 @@ jobs:
     steps:
     - uses: actions/setup-node@v3
     - run: |
+        corepack enable
         corepack enable npm
         npm --version
     - uses: actions/checkout@v3

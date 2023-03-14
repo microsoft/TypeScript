@@ -14,6 +14,7 @@ jobs:
       with:
         ref: ${{ github.event.client_payload.branch_name }}
     - run: |
+        corepack enable
         corepack enable npm
         npm --version
     # notably, this is essentially the same script as `new-release-branch.yaml` (with fewer inputs), but it assumes the branch already exists

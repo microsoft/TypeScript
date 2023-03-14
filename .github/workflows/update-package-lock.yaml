@@ -20,6 +20,7 @@ jobs:
       with:
         node-version: 16
     - run: |
+        corepack enable
         corepack enable npm
         npm --version
 

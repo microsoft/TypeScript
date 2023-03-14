@@ -98,6 +98,7 @@ jobs:
         node-version: "*"
         check-latest: true
     - run: |
+        corepack enable
         corepack enable npm
         npm --version
     
@@ -176,6 +177,7 @@ jobs:
         node-version: "*"
         check-latest: true
     - run: |
+        corepack enable
         corepack enable npm
         npm --version
 
