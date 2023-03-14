@@ -48,7 +48,7 @@ interface Array<T> {
     toSorted(compareFn?: (a: T, b: T) => number): T[];
 
     /**
-     * Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+     * Copies an array and removes elements and, if necessary, inserts new elements in their place. Returns the copied array.
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      * @param items Elements to insert into the array in place of the deleted elements.
