@@ -2,12 +2,12 @@ tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.t
   Type '{ type: T; localChannelId: string; }' is not assignable to type 'Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">'.
     Types of property 'type' are incompatible.
       Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-        Type '"text" | "email"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-          Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-            Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+        Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
+          Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
+            Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
               Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-                Type '"text" | "email"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-                  Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+                Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+                  Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
                     Type '"text"' is not assignable to type 'T & "text"'.
                       Type 'T' is not assignable to type 'T & "text"'.
                         Type '"text" | "email"' is not assignable to type 'T & "text"'.
@@ -58,12 +58,12 @@ tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.t
 !!! error TS2322:   Type '{ type: T; localChannelId: string; }' is not assignable to type 'Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">'.
 !!! error TS2322:     Types of property 'type' are incompatible.
 !!! error TS2322:       Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-!!! error TS2322:         Type '"text" | "email"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-!!! error TS2322:           Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-!!! error TS2322:             Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+!!! error TS2322:         Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
+!!! error TS2322:           Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
+!!! error TS2322:             Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
 !!! error TS2322:               Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                 Type '"text" | "email"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                   Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+!!! error TS2322:                 Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+!!! error TS2322:                   Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
 !!! error TS2322:                     Type '"text"' is not assignable to type 'T & "text"'.
 !!! error TS2322:                       Type 'T' is not assignable to type 'T & "text"'.
 !!! error TS2322:                         Type '"text" | "email"' is not assignable to type 'T & "text"'.
