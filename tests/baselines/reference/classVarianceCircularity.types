@@ -15,9 +15,9 @@ function f() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->b.Value : any
+>b.Value : number
 >b : Bar<unknown>
->Value : any
+>Value : number
 }
 
 class Bar<T> {
@@ -36,7 +36,7 @@ class Bar<T> {
 >num : number
 
     Value = (this as Bar<any>).num;
->Value : any
+>Value : number
 >(this as Bar<any>).num : number
 >(this as Bar<any>) : Bar<any>
 >this as Bar<any> : Bar<any>
