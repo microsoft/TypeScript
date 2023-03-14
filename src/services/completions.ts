@@ -81,6 +81,7 @@ import {
     getEscapedTextOfIdentifierOrLiteral,
     getExportInfoMap,
     getFormatCodeSettingsForWriting,
+    getJSDocParameterTags,
     getLanguageVariant,
     getLeftmostAccessExpression,
     getLineAndCharacterOfPosition,
@@ -829,7 +830,6 @@ function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
     return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
 }
 
-// >> TODO: merge that with `getJSDocParameterNameCompletions` function?
 function getJSDocParameterCompletions(
     sourceFile: SourceFile,
     position: number,
@@ -837,10 +837,10 @@ function getJSDocParameterCompletions(
     options: CompilerOptions,
     tagNameOnly: boolean): CompletionEntry[] {
     const currentToken = getTokenAtPosition(sourceFile, position);
-    if (!isJSDocTag(currentToken)) {
+    if (!isJSDocTag(currentToken) && !isJSDoc(currentToken)) {
         return [];
     }
-    const jsDoc = currentToken.parent;
+    const jsDoc = isJSDoc(currentToken) ? currentToken : currentToken.parent;
     if (!isJSDoc(jsDoc)) {
         return [];
     }
@@ -852,31 +852,33 @@ function getJSDocParameterCompletions(
     const isJs = isSourceFileJS(sourceFile);
     const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
     const paramTagCount = jsDoc.tags?.filter(tag => isJSDocParameterTag(tag) && tag.getEnd() <= position).length;
-    return mapDefined(func.parameters, param => { // >> TODO: filter out already-tagged parameters?
+    return mapDefined(func.parameters, param => {
+        if (getJSDocParameterTags(param).length) {
+            return undefined; // Parameter is already annotated.
+        }
         if (isIdentifier(param.name)) { // Named parameter
             const tabstopCounter = { tabstop: 1 };
-            let paramName = param.name.text;
-            if (param.initializer) {
-                paramName = getJSDocParamNameWithInitializer(paramName, param.initializer);
-            }
-            let snippetText = getJSDocParamAnnotation(paramName, isJs, /*isObject*/ false, /*isSnippet*/ true, tabstopCounter);
-            let insertText = getJSDocParamAnnotation(paramName, isJs, /*isObject*/ false, /*isSnippet*/ false);
+            const paramName = param.name.text;
+            let snippetText = getJSDocParamAnnotation(paramName, param.initializer, isJs, /*isObject*/ false, /*isSnippet*/ true, tabstopCounter);
+            let insertText = getJSDocParamAnnotation(paramName, param.initializer, isJs, /*isObject*/ false, /*isSnippet*/ false);
             if (tagNameOnly) { // Remove `@`
                 insertText = insertText.slice(1);
                 snippetText = snippetText.slice(1);
             }
             return {
-                name: insertText, // >> TODO: what should the name be?
+                name: insertText,
                 kind: ScriptElementKind.parameterElement,
                 sortText: SortText.LocationPriority,
                 insertText: isSnippet ? snippetText : undefined,
                 isSnippet,
             };
         }
-        else if (param.parent.parameters.indexOf(param) === paramTagCount) {// Destructuring parameter; do it positionally
+        else if (param.parent.parameters.indexOf(param) === paramTagCount) { // Destructuring parameter; do it positionally
             const paramPath = `param${paramTagCount}`;
-            let insertTextResult = generateJSDocParamTagsForDestructuring(paramPath, param.name, isJs, /*isSnippet*/ false);
-            let snippetTextResult = generateJSDocParamTagsForDestructuring(paramPath, param.name, isJs, /*isSnippet*/ true);
+            const insertTextResult =
+                generateJSDocParamTagsForDestructuring(paramPath, param.name, param.initializer, isJs, /*isSnippet*/ false);
+            const snippetTextResult =
+                generateJSDocParamTagsForDestructuring(paramPath, param.name, param.initializer, isJs, /*isSnippet*/ true);
             for (let i = 1; i < insertTextResult.length; i++) {
                 insertTextResult[i] = `* ${insertTextResult[i]}`;
                 snippetTextResult[i] = `* ${snippetTextResult[i]}`;
@@ -888,7 +890,7 @@ function getJSDocParameterCompletions(
                 snippetText = snippetText.slice(1);
             }
             return {
-                name: insertText, // >> TODO: what should the name be?
+                name: insertText,
                 kind: ScriptElementKind.parameterElement,
                 sortText: SortText.LocationPriority,
                 insertText: isSnippet ? snippetText : undefined,
@@ -898,15 +900,22 @@ function getJSDocParameterCompletions(
     });
 }
 
-function generateJSDocParamTagsForDestructuring(path: string, pattern: BindingPattern, isJs: boolean, isSnippet: boolean) {
+function generateJSDocParamTagsForDestructuring(
+    path: string,
+    pattern: BindingPattern,
+    initializer: Expression | undefined,
+    isJs: boolean,
+    isSnippet: boolean): string[] {
+    if (!isJs) {
+        return [getJSDocParamAnnotation(path, initializer, isJs, /*isObject*/ false, isSnippet, { tabstop: 1 })];
+    }
     return patternWorker(path, pattern, { tabstop: 1 });
 
     function patternWorker(path: string, pattern: BindingPattern, counter: TabStopCounter, initializer?: Expression): string[] {
-        const paramName = initializer ? getJSDocParamNameWithInitializer(path, initializer) : path;
         if (isObjectBindingPattern(pattern)) {
             const oldTabstop = counter.tabstop;
             const childCounter = { tabstop: oldTabstop };
-            const rootParam = getJSDocParamAnnotation(paramName, isJs, /*isObject*/ true, isSnippet, childCounter);
+            const rootParam = getJSDocParamAnnotation(path, initializer, isJs, /*isObject*/ true, isSnippet, childCounter);
             let childTags: string[] | undefined = [];
             for (const element of pattern.elements) {
                 const elementTags = elementWorker(path, element, childCounter);
@@ -923,22 +932,19 @@ function generateJSDocParamTagsForDestructuring(path: string, pattern: BindingPa
                 return [rootParam].concat(childTags);
             }
         }
-        return [getJSDocParamAnnotation(paramName, isJs, /*isObject*/ false, isSnippet, counter)];
+        return [getJSDocParamAnnotation(path, initializer, isJs, /*isObject*/ false, isSnippet, counter)];
     }
 
     // Assumes binding element is inside object binding pattern.
     // We can't really deeply annotate an array binding pattern.
     function elementWorker(path: string, element: BindingElement, counter: TabStopCounter): string[] | undefined {
         if ((!element.propertyName && isIdentifier(element.name)) || isIdentifier(element.name)) { // `{ b }` or `{ b: newB }`
-            const propertyName = element.propertyName ? tryGetTextOfPropertyName(element.propertyName) : (element.name as Identifier).text;
+            const propertyName = element.propertyName ? tryGetTextOfPropertyName(element.propertyName) : element.name.text;
             if (!propertyName) {
                 return undefined;
             }
-            let paramName = `${path}.${propertyName}`;
-            if (element.initializer) {
-                paramName = getJSDocParamNameWithInitializer(paramName, element.initializer);
-            }
-            return [getJSDocParamAnnotation(paramName, isJs, /*isObject*/ false, isSnippet, counter)];
+            const paramName = `${path}.${propertyName}`;
+            return [getJSDocParamAnnotation(paramName, element.initializer, isJs, /*isObject*/ false, isSnippet, counter)];
         }
         else if (element.propertyName) { // `{ b: {...} }` or `{ b: [...] }`
             const propertyName = tryGetTextOfPropertyName(element.propertyName);
@@ -952,11 +958,13 @@ interface TabStopCounter {
     tabstop: number;
 }
 
-function getJSDocParamAnnotation(paramName: string, isJs: boolean, isObject: boolean, isSnippet: boolean, tabstopCounter?: TabStopCounter) {
+function getJSDocParamAnnotation(paramName: string, initializer: Expression | undefined, isJs: boolean, isObject: boolean, isSnippet: boolean, tabstopCounter?: TabStopCounter) {
     if (isSnippet) {
         Debug.assertIsDefined(tabstopCounter);
     }
-    const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
+    if (initializer) {
+        paramName = getJSDocParamNameWithInitializer(paramName, initializer);
+    }
     if (isSnippet) {
         paramName = escapeSnippetText(paramName);
     }
@@ -973,9 +981,11 @@ function getJSDocParamAnnotation(paramName: string, isJs: boolean, isObject: boo
                 type = "*";
             }
         }
+        const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
         return `@param {${type}} ${paramName} ${description}`;
     }
     else {
+        const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
         return `@param ${paramName} ${description}`;
     }
 }
