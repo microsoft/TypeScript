@@ -4,7 +4,6 @@ import chalk from "chalk";
 import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
-import path from "path";
 import which from "which";
 
 /**
