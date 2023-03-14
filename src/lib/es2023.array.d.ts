@@ -32,7 +32,7 @@ interface Array<T> {
     ): number;
 
     /**
-     * Copies the array and returns the copied array with all of its elements reversed.
+     * Returns a copy of an array with its elements reversed.
      */
     toReversed(): T[];
 
