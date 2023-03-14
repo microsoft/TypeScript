@@ -73,9 +73,11 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
 
     for (const option of transpileOptionValueCompilerOptions) {
         // Do not set redundant config options if `verbatimModuleSyntax` was supplied.
-        if (!options.verbatimModuleSyntax || !optionsRedundantWithVerbatimModuleSyntax.has(option.name)) {
-            options[option.name] = option.transpileOptionValue;
+        if (options.verbatimModuleSyntax && optionsRedundantWithVerbatimModuleSyntax.has(option.name)) {
+            continue;
         }
+
+        options[option.name] = option.transpileOptionValue;
     }
 
     // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths.
