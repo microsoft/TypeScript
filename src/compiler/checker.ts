@@ -17063,7 +17063,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
                     text += texts[i + 1];
                 }
-                else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t) || t.flags & TypeFlags.Intersection) {
+                else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                     newTypes.push(t);
                     newTexts.push(text);
                     text = texts[i + 1];
@@ -17398,7 +17398,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
-        return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
+        if (type.flags & TypeFlags.Intersection) {
+            return some((type as IntersectionType).types, isPatternLiteralPlaceholderType);
+        }
+
+        if (type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
+            return isPatternLiteralType(type);
+        }
+
+        if (type.flags & TypeFlags.ESSymbolLike) {
+            return false;
+        }
+
+        return !!(type.flags & (TypeFlags.Any | TypeFlags.Primitive));
     }
 
     function isPatternLiteralType(type: Type) {

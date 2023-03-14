@@ -15,7 +15,7 @@ type TU5 = Uppercase<never>;  // never
 >TU5 : never
 
 type TU6 = Uppercase<42>;  // Error
->TU6 : 42
+>TU6 : Uppercase<"42">
 
 type TL1 = Lowercase<'HELLO'>;  // "hello"
 >TL1 : "hello"
@@ -33,7 +33,7 @@ type TL5 = Lowercase<never>;  // never
 >TL5 : never
 
 type TL6 = Lowercase<42>;  // Error
->TL6 : 42
+>TL6 : Lowercase<"42">
 
 type TC1 = Capitalize<'hello'>;  // "Hello"
 >TC1 : "Hello"
@@ -51,7 +51,7 @@ type TC5 = Capitalize<never>;  // never
 >TC5 : never
 
 type TC6 = Capitalize<42>;  // Error
->TC6 : 42
+>TC6 : Capitalize<"42">
 
 type TN1 = Uncapitalize<'Hello'>;  // "hello"
 >TN1 : "hello"
@@ -69,7 +69,7 @@ type TN5 = Uncapitalize<never>;  // never
 >TN5 : never
 
 type TN6 = Uncapitalize<42>;  // Error
->TN6 : 42
+>TN6 : Uncapitalize<"42">
 
 type TX1<S extends string> = Uppercase<`aB${S}`>;
 >TX1 : `AB${Uppercase<S>}`
