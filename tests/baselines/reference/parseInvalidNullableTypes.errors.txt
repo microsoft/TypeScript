@@ -47,7 +47,7 @@ tests/cases/compiler/parseInvalidNullableTypes.ts(24,8): error TS17019: '?' at t
                             ~~~~~~~
 !!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
         return true;
-        ~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string'.
     }
     

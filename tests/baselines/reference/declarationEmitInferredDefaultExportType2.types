@@ -13,5 +13,4 @@ export = {
 
   baz: null
 >baz : null
->null : null
 }

@@ -8,7 +8,6 @@
 >true : true
 >true : true
 >false : false
->null : null
 
     .filter((thing): thing is boolean => thing !== null)
 >filter : { <S extends boolean>(predicate: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (predicate: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
@@ -16,7 +15,6 @@
 >thing : boolean
 >thing !== null : boolean
 >thing : boolean
->null : null
 
     .map(thing => thing.toString());
 >map : <U>(callbackfn: (value: boolean, index: number, array: boolean[]) => U, thisArg?: any) => U[]

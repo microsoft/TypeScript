@@ -100,7 +100,6 @@ var ResultIsNumber7 = -undefined;
 var ResultIsNumber = -null;
 >ResultIsNumber : number
 >-null : number
->null : null
 
 // any type expressions
 var ResultIsNumber8 = -ANY2[0];

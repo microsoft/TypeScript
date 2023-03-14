@@ -39,7 +39,8 @@ jobs:
     - run:  npm ci
 
     - name: Tests
-      run:  npm run test -- --bundle=${{ matrix.bundle }}
+      # run tests, but lint separately
+      run:  npm run test -- --no-lint --bundle=${{ matrix.bundle }}
 
   lint:
     runs-on: ubuntu-latest
@@ -91,10 +92,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - uses: actions/setup-node@v3
       with:
         node-version: "*"
         check-latest: true
+    - run: |
+        corepack enable npm
+        npm --version
+    
     - run:  npm ci
 
     - run: npx hereby lkg
@@ -150,6 +156,44 @@ jobs:
 
         node ./smoke.js typescript
         node ./smoke.js typescript/lib/tsserverlibrary
+
+  package-size:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: pr
+
+    - uses: actions/checkout@v3
+      with:
+        path: base
+        ref: ${{ github.base_ref }}
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run: |
+        corepack enable npm
+        npm --version
+
+    - run: npm ci
+      working-directory: ./pr
+
+    - run: npm ci
+      working-directory: ./base
+
+    - run: npx hereby lkg
+      working-directory: ./pr
+      
+    - run: npx hereby lkg
+      working-directory: ./base
+
+    - run: |
+        echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
+        node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
 
   misc:
     runs-on: ubuntu-latest

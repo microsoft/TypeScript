@@ -1,13 +1,4 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/projects/config/file.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/projects/config/tsconfig.json]
 
@@ -35,12 +26,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/config/file.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:27.000] Search path: /a/b/projects/config
 Info 3    [00:00:28.000] For info: /a/b/projects/config/file.ts :: Config file name: /a/b/projects/config/tsconfig.json
 Info 4    [00:00:29.000] Creating configuration project /a/b/projects/config/tsconfig.json
@@ -63,9 +57,9 @@ Info 13   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/projects/config/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:40.000] Project '/a/b/projects/config/tsconfig.json' (Configured)
 Info 16   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/projects/files/file1.ts
-	/a/b/projects/config/file.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/files/file1.ts Text-1 "export let a = 10;"
+	/a/b/projects/config/file.ts SVC-1-0 "import {a} from \"../files/file1\"; export let b = a;"
 
 
 	../../../lib/lib.d.ts
@@ -83,28 +77,30 @@ Info 18   [00:00:45.000] -----------------------------------------------
 Info 18   [00:00:46.000] Open files: 
 Info 18   [00:00:47.000] 	FileName: /a/b/projects/config/file.ts ProjectRootPath: undefined
 Info 18   [00:00:48.000] 		Projects: /a/b/projects/config/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/b/projects/files/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
-
 Info 18   [00:00:49.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json: *new*
+  {}
+/a/b/projects/files/file1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config: *new*
+  {}
+
+Before request
+
 Info 19   [00:00:50.000] request:
     {
       "command": "open",
@@ -114,24 +110,6 @@ Info 19   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/b/projects/files/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
-
 Info 20   [00:00:51.000] FileWatcher:: Close:: WatchInfo: /a/b/projects/files/file1.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:52.000] Search path: /a/b/projects/files
 Info 22   [00:00:53.000] For info: /a/b/projects/files/file1.ts :: No config files found.
@@ -144,6 +122,10 @@ Info 23   [00:00:58.000] 	FileName: /a/b/projects/config/file.ts ProjectRootPath
 Info 23   [00:00:59.000] 		Projects: /a/b/projects/config/tsconfig.json
 Info 23   [00:01:00.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath: undefined
 Info 23   [00:01:01.000] 		Projects: /a/b/projects/config/tsconfig.json
+Info 23   [00:01:02.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -156,14 +138,16 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/projects/files/file1.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b/projects/config:
   {}
 
-Info 23   [00:01:02.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 24   [00:01:03.000] request:
     {
       "command": "close",
@@ -173,22 +157,6 @@ Info 24   [00:01:03.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
-
 Info 25   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/config/file.ts 500 undefined WatchType: Closed Script info
 Info 26   [00:01:05.000] Project '/a/b/projects/config/tsconfig.json' (Configured)
 Info 26   [00:01:06.000] 	Files (3)
@@ -197,6 +165,10 @@ Info 26   [00:01:07.000] -----------------------------------------------
 Info 26   [00:01:08.000] Open files: 
 Info 26   [00:01:09.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath: undefined
 Info 26   [00:01:10.000] 		Projects: /a/b/projects/config/tsconfig.json
+Info 26   [00:01:11.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -208,17 +180,15 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/projects/config/file.ts:
+/a/b/projects/config/file.ts: *new*
   {}
 
 FsWatchesRecursive::
 /a/b/projects/config:
   {}
 
-Info 26   [00:01:11.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:12.000] request:
     {
       "command": "open",
@@ -228,24 +198,6 @@ Info 27   [00:01:12.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/projects/config/file.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
-
 Info 28   [00:01:13.000] Search path: /a/b/projects/files
 Info 29   [00:01:14.000] For info: /a/b/projects/files/file2.ts :: No config files found.
 Info 30   [00:01:15.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -256,8 +208,8 @@ Info 34   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 35   [00:01:20.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:21.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 37   [00:01:22.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/files/file2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/files/file2.ts SVC-1-0 "export let aa = 10;"
 
 
 	../../../lib/lib.d.ts
@@ -297,53 +249,54 @@ Info 49   [00:01:38.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info 49   [00:01:39.000] 		Projects: 
 Info 49   [00:01:40.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 49   [00:01:41.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/a/b/projects/files/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 49   [00:01:42.000] response:
     {
       "responseRequired": false
     }
-Info 50   [00:01:43.000] request:
-    {
-      "command": "occurrences",
-      "arguments": {
-        "file": "/a/b/projects/files/file1.ts",
-        "line": 1,
-        "offset": 11
-      },
-      "seq": 5,
-      "type": "request"
-    }
-Before request
+After request
 
 PolledWatches::
-/a/b/projects/files/tsconfig.json:
+/a/b/projects/files/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/files/jsconfig.json:
+/a/b/projects/files/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/files/node_modules/@types:
+/a/b/projects/files/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/b/projects/config/file.ts:
+  {}
 
+FsWatchesRecursive *deleted*::
+/a/b/projects/config:
+  {}
+
+Before request
+
+Info 50   [00:01:43.000] request:
+    {
+      "command": "documentHighlights",
+      "arguments": {
+        "file": "/a/b/projects/files/file1.ts",
+        "line": 1,
+        "offset": 11,
+        "filesToSearch": [
+          "/a/b/projects/files/file1.ts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
 Info 51   [00:01:44.000] Before ensureProjectForOpenFiles:
 Info 52   [00:01:45.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 52   [00:01:46.000] 	Files (2)
@@ -360,8 +313,8 @@ Info 54   [00:01:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 55   [00:01:56.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 56   [00:01:57.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 57   [00:01:58.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/files/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/files/file1.ts Text-1 "export let a = 10;"
 
 
 	../../../lib/lib.d.ts
@@ -384,24 +337,9 @@ Info 60   [00:02:08.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info 60   [00:02:09.000] 		Projects: /dev/null/inferredProject2*
 Info 60   [00:02:10.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 60   [00:02:11.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/a/b/projects/files/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 60   [00:02:12.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

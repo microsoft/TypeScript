@@ -6,7 +6,6 @@ import del from "del";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
 import fs from "fs";
-import fsExtra from "fs-extra";
 import _glob from "glob";
 import { task } from "hereby";
 import path from "path";
@@ -16,7 +15,7 @@ import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -702,12 +701,19 @@ export const runTestsAndWatch = task({
     },
 });
 
-export const runTestsParallel = task({
-    name: "runtests-parallel",
+const doRunTestsParallel = task({
+    name: "do-runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
+
+export const runTestsParallel = task({
+    name: "runtests-parallel",
+    description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [doRunTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests-parallel").flags = {
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
@@ -826,12 +832,8 @@ export const produceLKG = task({
         if (missingFiles.length > 0) {
             throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
         }
-        const sizeBefore = getDirSize("lib");
+
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-        const sizeAfter = getDirSize("lib");
-        if (sizeAfter > (sizeBefore * 1.10)) {
-            throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
-        }
     }
 });
 
@@ -876,15 +878,4 @@ export const help = task({
     description: "Prints the top-level tasks.",
     hiddenFromTaskList: true,
     run: () => exec("hereby", ["--tasks"], { hidePrompt: true }),
-});
-
-export const bumpLkgToNightly = task({
-    name: "bump-lkg-to-nightly",
-    description: "Bumps typescript in package.json to the latest nightly and copies it to LKG.",
-    run: async () => {
-        await exec("npm", ["install", "--save-dev", "--save-exact", "typescript@next"]);
-        await fs.promises.rm("lib", { recursive: true, force: true });
-        await fsExtra.copy("node_modules/typescript/lib", "lib");
-        await fs.promises.writeFile("lib/.gitattributes", "* text eol=lf");
-    }
 });

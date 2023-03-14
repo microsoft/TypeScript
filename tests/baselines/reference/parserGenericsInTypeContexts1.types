@@ -9,7 +9,6 @@ var v1: C<T>;
 
 var v2: D<T> = null;
 >v2 : D<T>
->null : null
 
 var v3: E.F<T>;
 >v3 : E.F<T>
