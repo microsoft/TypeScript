@@ -1,9 +1,8 @@
 import assert from "assert";
 import cp from "child_process";
-import path from "path";
 
-const baseRepo = path.resolve(process.argv[2]);
-const headRepo = path.resolve(process.argv[3]);
+const baseRepo = process.argv[2];
+const headRepo = process.argv[3];
 
 /** @type {{ size: number, unpackedSize: number; files: { path: string; size: number; }[]; }[]} */
 const [before, after] = JSON.parse(cp.execFileSync("npm", ["pack", "--dry-run", "--json", baseRepo, headRepo], { encoding: "utf8" }));
