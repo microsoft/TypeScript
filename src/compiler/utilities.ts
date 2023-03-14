@@ -9139,7 +9139,9 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 
 /** @internal */
 export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
-    if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
+    if (preference === "js" ||
+        resolutionMode === ModuleKind.ESNext ||
+        [ModuleResolutionKind.Node16, ModuleResolutionKind.NodeNext].includes(compilerOptions.moduleResolution!)) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
             return ModuleSpecifierEnding.JsExtension;
