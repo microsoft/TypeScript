@@ -10,15 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-    - run: |
-        corepack enable npm
-        npm --version
 
     - name: Configure Git, Run Tests, Update Baselines, Apply Fixes
       run: |
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
-        npm install
+        npm ci
         git rm -r --quiet tests/baselines/reference
         npx hereby runtests-parallel --ci --fix || true
         npx hereby baseline-accept
