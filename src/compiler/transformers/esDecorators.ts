@@ -1072,8 +1072,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             if (initializerStatements) {
                 const statements: Statement[] = [];
                 const nonPrologueStart = factory.copyPrologue(node.body.statements, statements, /*ensureUseStrict*/ false, visitor);
-                addRange(statements, initializerStatements);
                 addRange(statements, visitNodes(node.body.statements, visitor, isStatement, nonPrologueStart));
+                addRange(statements, initializerStatements);
                 body = factory.createBlock(statements, /*multiLine*/ true);
                 setOriginalNode(body, node.body);
                 setTextRange(body, node.body);
