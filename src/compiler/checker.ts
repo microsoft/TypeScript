@@ -5156,7 +5156,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true) ||
                         isEsmCjsRef
                     ) {
-                        const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference);
+                        const moduleType = type.flags & TypeFlags.StructuredType
+                            ? getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference)
+                            : createDefaultPropertyWrapperForModule(symbol, symbol.parent);
                         return cloneTypeAsModuleType(symbol, moduleType, referenceParent);
                     }
                 }
@@ -34177,7 +34179,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createPromiseReturnType(node, anyType);
     }
 
-    function createDefaultPropertyWrapperForModule(symbol: Symbol, originalSymbol: Symbol, anonymousSymbol?: Symbol | undefined) {
+    function createDefaultPropertyWrapperForModule(symbol: Symbol, originalSymbol: Symbol | undefined, anonymousSymbol?: Symbol | undefined) {
         const memberTable = createSymbolTable();
         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
         newSymbol.parent = originalSymbol;
