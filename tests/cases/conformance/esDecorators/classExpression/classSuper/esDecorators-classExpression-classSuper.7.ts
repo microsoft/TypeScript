@@ -5,7 +5,10 @@
 class A {}
 class B extends A {
 	public constructor() {
+		'inject';
 		super();
+		const a = 1;
+		const b = 1;
 	}
 
 	@foo

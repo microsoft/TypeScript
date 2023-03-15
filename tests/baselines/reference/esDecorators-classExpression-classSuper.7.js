@@ -2,7 +2,10 @@
 class A {}
 class B extends A {
 	public constructor() {
+		'inject';
 		super();
+		const a = 1;
+		const b = 1;
 	}
 
 	@foo
@@ -30,8 +33,11 @@ let B = (() => {
             __esDecorate(this, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m } }, null, _instanceExtraInitializers);
         }
         constructor() {
+            'inject';
             super();
             __runInitializers(this, _instanceExtraInitializers);
+            const a = 1;
+            const b = 1;
         }
         m() { }
     };
