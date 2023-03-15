@@ -13177,7 +13177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const mappedType = (type.target as MappedType) || type;
         const nameType = getNameTypeFromMappedType(mappedType);
         const shouldLinkPropDeclarations = !nameType || isFilteringMappedType(mappedType);
-        const templateType = getTemplateTypeFromMappedType(type.target as MappedType || type);
+        const templateType = getTemplateTypeFromMappedType(mappedType);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
         const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
