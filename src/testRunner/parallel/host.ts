@@ -318,14 +318,12 @@ export function start() {
                     }
                     case "timeout": {
                         if (worker.timer) {
-                            // eslint-disable-next-line no-restricted-globals
                             clearTimeout(worker.timer);
                         }
                         if (data.payload.duration === "reset") {
                             worker.timer = undefined;
                         }
                         else {
-                            // eslint-disable-next-line no-restricted-globals
                             worker.timer = setTimeout(killChild, data.payload.duration, data.payload);
                         }
                         break;
@@ -649,6 +647,5 @@ export function start() {
         shimNoopTestInterface(global);
     }
 
-    // eslint-disable-next-line no-restricted-globals
     setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
 }

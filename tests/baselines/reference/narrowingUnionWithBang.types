@@ -50,7 +50,6 @@ const working: WorkingType = null as unknown as WorkingType;
 >working : WorkingType
 >null as unknown as WorkingType : WorkingType
 >null as unknown : unknown
->null : null
 
 if (working.thing!.name !== "Correct") {
 >working.thing!.name !== "Correct" : boolean
@@ -135,7 +134,6 @@ const borked: BorkedType = null as unknown as BorkedType;
 >borked : BorkedType
 >null as unknown as BorkedType : BorkedType
 >null as unknown : unknown
->null : null
 
 if (borked.thing!.name !== "Correct") {
 >borked.thing!.name !== "Correct" : boolean
@@ -220,7 +218,6 @@ const fixed: FixedType = null as unknown as FixedType;
 >fixed : FixedType
 >null as unknown as FixedType : FixedType
 >null as unknown : unknown
->null : null
 
 if (fixed.thing?.name !== "Correct") {
 >fixed.thing?.name !== "Correct" : boolean

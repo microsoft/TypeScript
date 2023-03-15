@@ -1,6 +1,8 @@
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
 tests/cases/compiler/test.ts(1,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 
 
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
 ==== tests/cases/compiler/tsconfig.json (0 errors) ====
     {
         "compilerOptions": {

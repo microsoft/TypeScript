@@ -751,7 +751,7 @@ function createMethodImplementingSignatures(
 function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
     if (length(signatures)) {
         const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
-        return checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+        return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, getNoopSymbolTrackerWithResolver(context));
     }
 }
 

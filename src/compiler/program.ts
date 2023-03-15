@@ -56,7 +56,6 @@ import {
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
-    DeprecationVersion,
     Diagnostic,
     DiagnosticCategory,
     diagnosticCategoryName,
@@ -69,6 +68,7 @@ import {
     DirectoryStructureHost,
     emitFiles,
     EmitHost,
+    emitModuleKindIsNonNodeESM,
     EmitOnly,
     EmitResult,
     emptyArray,
@@ -118,6 +118,7 @@ import {
     getEmitScriptTarget,
     getErrorSpanForNode,
     getExternalModuleName,
+    getIsolatedModules,
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getLineAndCharacterOfPosition,
@@ -316,6 +317,7 @@ import {
     UnparsedSource,
     VariableDeclaration,
     VariableStatement,
+    Version,
     versionMajorMinor,
     walkUpParenthesizedExpressions,
     WriteFileCallback,
@@ -1443,6 +1445,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
 
+    const reportInvalidIgnoreDeprecations = memoize(() => createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations));
+
     let processingDefaultLibFiles: SourceFile[] | undefined;
     let processingOtherFiles: SourceFile[] | undefined;
     let files: SourceFile[];
@@ -1631,7 +1635,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
     let structureIsReused: StructureIsReused;
     tracing?.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
-    structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
+    structureIsReused = tryReuseStructureFromOldProgram();
     tracing?.pop();
     if (structureIsReused !== StructureIsReused.Completely) {
         processingDefaultLibFiles = [];
@@ -3186,7 +3190,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // If we are importing helpers, we need to add a synthetic reference to resolve the
         // helpers library.
-        if ((options.isolatedModules || isExternalModuleFile)
+        if ((getIsolatedModules(options) || isExternalModuleFile)
             && !file.isDeclarationFile) {
             if (options.importHelpers) {
                 // synthesize 'import "tslib"' declaration
@@ -3992,13 +3996,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
         }
 
-        if (options.isolatedModules) {
+        if (options.isolatedModules || options.verbatimModuleSyntax) {
             if (options.out) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
             }
 
             if (options.outFile) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
             }
         }
 
@@ -4240,11 +4244,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createDiagnosticForOptionName(Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
         }
 
+        const moduleKind = getEmitModuleKind(options);
         if (options.verbatimModuleSyntax) {
-            const moduleKind = getEmitModuleKind(options);
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
@@ -4265,13 +4269,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const moduleResolution = getEmitModuleResolutionKind(options);
         if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
         }
         if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
         }
         if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+        }
+
+        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind)) {
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "bundler");
         }
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
@@ -4314,97 +4322,112 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function getVersionForDeprecationDiagnostics(reportInvalidIgnoreDeprecations: boolean) {
-        const version = typeScriptVersion || versionMajorMinor;
+    function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
-                return;
+            // While we could do Version.tryParse here to support any version,
+            // for now, only allow "5.0". We aren't planning on deprecating anything
+            // until 6.0.
+            if (ignoreDeprecations === "5.0") {
+                return new Version(ignoreDeprecations);
             }
-            else if (reportInvalidIgnoreDeprecations) {
-                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
-            }
+            reportInvalidIgnoreDeprecations();
         }
-        return version;
+        return Version.zero;
+    }
+
+    function checkDeprecations(
+        deprecatedIn: string,
+        removedIn: string,
+        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) => void,
+        fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
+    ) {
+        const deprecatedInVersion = new Version(deprecatedIn);
+        const removedInVersion = new Version(removedIn);
+        const typescriptVersion = new Version(typeScriptVersion || versionMajorMinor);
+        const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion();
+
+        const mustBeRemoved = !(removedInVersion.compareTo(typescriptVersion) === Comparison.GreaterThan);
+        const canBeSilenced = !mustBeRemoved && ignoreDeprecationsVersion.compareTo(deprecatedInVersion) === Comparison.LessThan;
+
+        if (mustBeRemoved || canBeSilenced) {
+            fn((name, value, useInstead) => {
+                if (mustBeRemoved) {
+                    if (value === undefined) {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_has_been_removed_Please_remove_it_from_your_configuration, name);
+                    }
+                    else {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_has_been_removed_Please_remove_it_from_your_configuration, name, value);
+                    }
+                }
+                else {
+                    if (value === undefined) {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
+                    }
+                    else {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
+                    }
+                }
+            });
+        }
     }
 
     function verifyDeprecatedCompilerOptions() {
-        const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ true);
-        if (!version) return;
-        if (options.target === ScriptTarget.ES3) {
-            createDeprecatedDiagnosticForOption(version, "target", "ES3");
+        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2, arg3);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, arg0, arg1, arg2, arg3);
+            }
         }
-        if (options.noImplicitUseStrict) {
-            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
-        }
-        if (options.keyofStringsOnly) {
-            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
-        }
-        if (options.suppressExcessPropertyErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
-        }
-        if (options.suppressImplicitAnyIndexErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
-        }
-        if (options.noStrictGenericChecks) {
-            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
-        }
-        if (options.charset) {
-            createDeprecatedDiagnosticForOption(version, "charset");
-        }
-        if (options.out) {
-            createDeprecatedDiagnosticForOption(version, "out");
-        }
-        if (options.importsNotUsedAsValues) {
-            createDeprecatedDiagnosticForOption(version, "importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
-        }
-        if (options.preserveValueImports) {
-            createDeprecatedDiagnosticForOption(version, "preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
-        }
+
+        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.target === ScriptTarget.ES3) {
+                createDeprecatedDiagnostic("target", "ES3");
+            }
+            if (options.noImplicitUseStrict) {
+                createDeprecatedDiagnostic("noImplicitUseStrict");
+            }
+            if (options.keyofStringsOnly) {
+                createDeprecatedDiagnostic("keyofStringsOnly");
+            }
+            if (options.suppressExcessPropertyErrors) {
+                createDeprecatedDiagnostic("suppressExcessPropertyErrors");
+            }
+            if (options.suppressImplicitAnyIndexErrors) {
+                createDeprecatedDiagnostic("suppressImplicitAnyIndexErrors");
+            }
+            if (options.noStrictGenericChecks) {
+                createDeprecatedDiagnostic("noStrictGenericChecks");
+            }
+            if (options.charset) {
+                createDeprecatedDiagnostic("charset");
+            }
+            if (options.out) {
+                createDeprecatedDiagnostic("out", /*value*/ undefined, "outFile");
+            }
+            if (options.importsNotUsedAsValues) {
+                createDeprecatedDiagnostic("importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+            if (options.preserveValueImports) {
+                createDeprecatedDiagnostic("preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+        });
     }
 
     function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
-        if (ref.prepend) {
-            const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ false);
-            if (version) {
-                createDeprecatedOptionForVersionDiagnostic(
-                    version,
-                    (message, arg0, arg1, arg2) => createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2),
-                    "prepend",
-                );
+        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
+            createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2, arg3);
+        }
+
+        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
+            if (ref.prepend) {
+                createDeprecatedDiagnostic("prepend");
             }
-        }
-    }
-
-    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string, useInstead?: string) {
-        return createDeprecatedOptionForVersionDiagnostic(
-            version,
-            (message, arg0, arg1, arg2) => {
-                if (useInstead) {
-                    const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
-                    const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2);
-                    createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
-                }
-                else {
-                    createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, arg0, arg1, arg2);
-                }
-            },
-            name,
-            value,
-        );
-    }
-
-    function createDeprecatedOptionForVersionDiagnostic(
-        version: string,
-        createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string) => void,
-        name: string,
-        value?: string) {
-        if (version === DeprecationVersion.v6_0) {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
-        }
-        else {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
-        }
+        });
     }
 
     function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: (string | number | undefined)[] | undefined): Diagnostic {
@@ -4642,23 +4665,23 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
     }
 
-    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
         const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile || options.configFile, "references"),
             property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
         if (referencesSyntax && referencesSyntax.elements.length > index) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1, arg2));
+            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1, arg2, arg3));
         }
         else {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2, arg3));
         }
     }
 
     function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessageChain): void;
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void;
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void;
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
         const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
         const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
-            !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
+            !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2, arg3);
 
         if (needCompilerDiagnostic) {
             // eslint-disable-next-line local/no-in-operator
@@ -4666,7 +4689,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
             }
             else {
-                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2, arg3));
             }
         }
     }
@@ -4688,9 +4711,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): boolean {
         const props = getPropertyAssignment(objectLiteral, key1, key2);
         for (const prop of props) {
             // eslint-disable-next-line local/no-in-operator
@@ -4698,7 +4721,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
             }
             else {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2, arg3));
             }
         }
         return !!props.length;

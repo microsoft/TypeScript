@@ -20,7 +20,6 @@ function foo<T>(f: { y: T }): T { return null }
 >foo : <T>(f: {    y: T;}) => T
 >f : { y: T; }
 >y : T
->null : null
 
 var x = foo(new C()).x; // was Error that property x does not exist on type {}
 >x : () => Goo

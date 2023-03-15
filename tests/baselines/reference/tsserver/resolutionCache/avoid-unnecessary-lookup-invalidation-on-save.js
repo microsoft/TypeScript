@@ -26,12 +26,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:36.000] Search path: /user/username/projects/myproject/src
 Info 2    [00:00:37.000] For info: /user/username/projects/myproject/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [00:00:38.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -86,10 +80,10 @@ Info 43   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 44   [00:01:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 45   [00:01:20.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 46   [00:01:21.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/node_modules/module1/index.ts
-	/user/username/projects/myproject/node_modules/module2/index.ts
-	/user/username/projects/myproject/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/node_modules/module1/index.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/src/file1.ts SVC-1-0 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
 
 	../../../../a/lib/lib.d.ts
@@ -121,43 +115,23 @@ Before checking timeout queue length (0) and running
 //// [/user/username/projects/myproject/src/file1.ts] file changed its modified time
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/src/node_modules:
+/user/username/projects/myproject/src/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 After checking timeout queue length (0) and running
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/src/node_modules:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/src:
-  {}

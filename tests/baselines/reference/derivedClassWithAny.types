@@ -44,7 +44,6 @@ class D extends C {
 >X : any
 
         return null;
->null : null
     }
     foo(): any {
 >foo : () => any
@@ -60,13 +59,11 @@ class D extends C {
 >Y : any
 
         return null;
->null : null
     }
     static bar(): any {
 >bar : () => any
 
         return null;
->null : null
     }
 }
 
