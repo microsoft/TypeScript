@@ -589,7 +589,6 @@ import {
     isJsxAttributeLike,
     isJsxAttributes,
     isJsxElement,
-    isJsxExpression,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isJsxOpeningLikeElement,
@@ -30196,11 +30195,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
                 }
-                if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
-                    attributeDecl.initializer && isJsxExpression(attributeDecl.initializer) && attributeDecl.initializer.expression && isContextSensitive(attributeDecl.initializer.expression)) {
+                if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
                     const inferenceContext = getInferenceContext(attributes);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
-                    const inferenceNode = attributeDecl.initializer.expression;
+                    const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
                     addIntraExpressionInferenceSite(inferenceContext, inferenceNode, exprType);
                 }
             }
