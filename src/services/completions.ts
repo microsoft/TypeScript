@@ -710,10 +710,14 @@ export function getCompletionsAtPosition(
             return response;
         case CompletionDataKind.JsDocTagName:
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions().concat(getJSDocParameterCompletions(sourceFile, position, preferences, compilerOptions, /*tagNameOnly*/ true)));
+            return jsdocCompletionInfo([
+                ...JsDoc.getJSDocTagNameCompletions(),
+                ...getJSDocParameterCompletions(sourceFile, position, preferences, compilerOptions, /*tagNameOnly*/ true)]);
         case CompletionDataKind.JsDocTag:
             // If the current position is a jsDoc tag, only tags should be provided for completion
-            return jsdocCompletionInfo(JsDoc.getJSDocTagCompletions().concat(getJSDocParameterCompletions(sourceFile, position, preferences, compilerOptions, /*tagNameOnly*/ false)));
+            return jsdocCompletionInfo([
+                ...JsDoc.getJSDocTagCompletions(),
+                ...getJSDocParameterCompletions(sourceFile, position, preferences, compilerOptions, /*tagNameOnly*/ false)]);
         case CompletionDataKind.JsDocParameterName:
             return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
         case CompletionDataKind.Keywords:
@@ -879,12 +883,8 @@ function getJSDocParameterCompletions(
                 generateJSDocParamTagsForDestructuring(paramPath, param.name, param.initializer, isJs, /*isSnippet*/ false);
             const snippetTextResult =
                 generateJSDocParamTagsForDestructuring(paramPath, param.name, param.initializer, isJs, /*isSnippet*/ true);
-            for (let i = 1; i < insertTextResult.length; i++) {
-                insertTextResult[i] = `* ${insertTextResult[i]}`;
-                snippetTextResult[i] = `* ${snippetTextResult[i]}`;
-            }
-            let insertText = insertTextResult.join(getNewLineCharacter(options));
-            let snippetText = snippetTextResult.join(getNewLineCharacter(options));
+            let insertText = insertTextResult.join(getNewLineCharacter(options) + "* ");
+            let snippetText = snippetTextResult.join(getNewLineCharacter(options) + "* ");
             if (tagNameOnly) { // Remove `@`
                 insertText = insertText.slice(1);
                 snippetText = snippetText.slice(1);
@@ -924,12 +924,12 @@ function generateJSDocParamTagsForDestructuring(
                     break;
                 }
                 else {
-                    childTags = childTags.concat(elementTags);
+                    childTags.push(...elementTags);
                 }
             }
             if (childTags) {
                 counter.tabstop = childCounter.tabstop;
-                return [rootParam].concat(childTags);
+                return [rootParam, ...childTags];
             }
         }
         return [getJSDocParamAnnotation(path, initializer, isJs, /*isObject*/ false, isSnippet, counter)];
