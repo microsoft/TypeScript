@@ -30285,7 +30285,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
                     attributesTable = createSymbolTable();
                 }
-                const exprType = getReducedType(checkExpressionCached(attributeDecl.expression, checkMode));
+                const exprType = getReducedType(checkExpression(attributeDecl.expression));
                 if (isTypeAny(exprType)) {
                     hasSpreadAnyType = true;
                 }
