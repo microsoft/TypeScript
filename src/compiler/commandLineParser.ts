@@ -2974,7 +2974,7 @@ function parseJsonConfigFileContentWorker(
     };
 
     function getConfigFileSpecs(): ConfigFileSpecs {
-        const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
+        const referencesOfRaw = getPropFromRaw("references", (element): element is ProjectReference => typeof element === "object", "object");
         const filesSpecs = toPropValue(getSpecsFromRaw("files"));
         if (filesSpecs) {
             const hasZeroOrNoReferences = referencesOfRaw === "no-prop" || isArray(referencesOfRaw) && referencesOfRaw.length === 0;
@@ -3049,7 +3049,7 @@ function parseJsonConfigFileContentWorker(
 
     function getProjectReferences(basePath: string): readonly ProjectReference[] | undefined {
         let projectReferences: ProjectReference[] | undefined;
-        const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
+        const referencesOfRaw = getPropFromRaw("references", (element): element is ProjectReference => typeof element === "object", "object");
         if (isArray(referencesOfRaw)) {
             for (const ref of referencesOfRaw) {
                 if (typeof ref.path !== "string") {
@@ -3077,7 +3077,7 @@ function parseJsonConfigFileContentWorker(
         return getPropFromRaw(prop, isString, "string");
     }
 
-    function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
+    function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => value is T, elementTypeName: string): PropOfRaw<T> {
         if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
             if (isArray(raw[prop])) {
                 const result = raw[prop] as T[];
