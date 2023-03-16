@@ -878,8 +878,12 @@ declare namespace ts {
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
             }
-            interface mirrror {}
-            // ISABEL
+            interface JsxLinkedEditRequest extends FileLocationRequest {
+                readonly command: CommandTypes.JsxLinkedEdit;
+            }
+            interface JsxLinkedEditResponse extends Response {
+                readonly info: JsxLinkedEditInfo;
+            }
             /**
              * Get document highlights request; value of command field is
              * "documentHighlights". Return response giving spans that are relevant
@@ -3850,7 +3854,6 @@ declare namespace ts {
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
             private getJsxClosingTag;
-            private getJsxLinkedEdit;
             private getDocumentHighlights;
             private provideInlayHints;
             private setCompilerOptionsForInferredProjects;
@@ -9981,6 +9984,7 @@ declare namespace ts {
          * Editors should call this after `>` is typed.
          */
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
+        getJsxLinkedEditAtPosition(fileName: string, currentCaretPosition: number): JsxLinkedEditInfo | unknown;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
@@ -10009,6 +10013,13 @@ declare namespace ts {
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
+    }
+    interface JsxLinkedEditInfo {
+        readonly ranges: {
+            start: number;
+            end: number;
+        }[];
+        wordPattern?: string;
     }
     interface CombinedCodeFixScope {
         type: "file";
