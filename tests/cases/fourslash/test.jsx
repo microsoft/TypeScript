@@ -1,0 +1,2 @@
+const c = (< div>
+</div>)

@@ -8,3 +8,11 @@
 ////      </p>
 ////   </div>
 ////);
+
+// const linkedCursors3 = {ranges: [{start: 18, end: 21}, 
+//                                  {start: 91, end: 94}],
+//                         wordPattern : 'div'};
+
+verify.jsxMirrorCursor( {
+    "2": undefined,
+});

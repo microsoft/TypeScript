@@ -22,22 +22,21 @@
 ////);
 
 
-const linkedCursors = {ranges: [{start: 19, end: 22}, 
-                                {start: 30, end: 33}],
-                       wordPattern : 'div'};
+const linkedCursors1 = {ranges: [{start: 19, end: 22}, 
+                                 {start: 30, end: 33}],
+                        wordPattern : 'div'};
 
 verify.jsxMirrorCursor( {
-    "0": linkedCursors,
-    "1": linkedCursors,
-    "2": linkedCursors,
-    "3": linkedCursors,
-    "4": linkedCursors,
-    "5": linkedCursors,
+    "0": linkedCursors1,
+    "1": linkedCursors1,
+    "2": linkedCursors1,
+    "3": linkedCursors1,
+    "4": linkedCursors1,
+    "5": linkedCursors1,
     "6": undefined,
     "7": undefined,
     "8": undefined,
     "9": undefined,
-    // "10":undefined, // if still a comment, this case doesnt yet work !!!!
-    }
-    );
+    // "10":undefined, // if still a comment, case doesnt yet work !!!!
+    });
 

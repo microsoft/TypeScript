@@ -4,9 +4,14 @@
 ////const A = thing;
 ////const B = thing;
 ////const jsx = (
-////    </*7*/A>
+////    </*8*/A>
 ////    </B>
 ////);
 
-// verify.jsxMirrorCursor( {
-//     "0": {ranges: {start: 28, end: 31}, wordPattern : 'div'}} );
+// const linkedCursors8 = {ranges: [{start: 14, end: 14}, 
+//                             {start: 43, end: 43}],
+//                         wordPattern : };
+
+verify.jsxMirrorCursor( {
+    "8": undefined,
+}); 
