@@ -259,13 +259,13 @@ export function initializeNodeSystem(): StartInput {
         msg(s: string, type: Msg = Msg.Err) {
             switch (type) {
                 case Msg.Info:
-                    perfLogger.logInfoEvent(s);
+                    perfLogger?.logInfoEvent(s);
                     break;
                 case Msg.Perf:
-                    perfLogger.logPerfEvent(s);
+                    perfLogger?.logPerfEvent(s);
                     break;
                 default: // Msg.Err
-                    perfLogger.logErrEvent(s);
+                    perfLogger?.logErrEvent(s);
                     break;
             }
 

@@ -36,6 +36,7 @@ import {
     Expression,
     ExpressionStatement,
     findComputedPropertyNameCacheAssignment,
+    findSuperStatementIndex,
     firstOrUndefined,
     forEachEntry,
     ForStatement,
@@ -1072,8 +1073,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             if (initializerStatements) {
                 const statements: Statement[] = [];
                 const nonPrologueStart = factory.copyPrologue(node.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+                const superStatementIndex = findSuperStatementIndex(node.body.statements, nonPrologueStart);
+                const indexOfFirstStatementAfterSuper = superStatementIndex >= 0 ? superStatementIndex + 1 : undefined;
+                addRange(statements, visitNodes(node.body.statements, visitor, isStatement, nonPrologueStart, indexOfFirstStatementAfterSuper ? indexOfFirstStatementAfterSuper - nonPrologueStart : undefined));
                 addRange(statements, initializerStatements);
-                addRange(statements, visitNodes(node.body.statements, visitor, isStatement, nonPrologueStart));
+                addRange(statements, visitNodes(node.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper));
                 body = factory.createBlock(statements, /*multiLine*/ true);
                 setOriginalNode(body, node.body);
                 setTextRange(body, node.body);
