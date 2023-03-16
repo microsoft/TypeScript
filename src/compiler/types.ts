@@ -5097,7 +5097,7 @@ export interface TypeChecker {
     /** @internal */ forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void;
     getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
     isOptionalParameter(node: ParameterDeclaration): boolean;
-    getAmbientModules(): Symbol[];
+    getAmbientModules(sourceFile?: SourceFile): Symbol[];
 
     tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
     /**

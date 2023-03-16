@@ -167,6 +167,7 @@ const libEntries: [string, string][] = [
     ["dom", "lib.dom.d.ts"],
     ["dom.iterable", "lib.dom.iterable.d.ts"],
     ["dom.asynciterable", "lib.dom.asynciterable.d.ts"],
+    ["dom.extras", "lib.dom.extras.d.ts"],
     ["webworker", "lib.webworker.d.ts"],
     ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
     ["webworker.iterable", "lib.webworker.iterable.d.ts"],

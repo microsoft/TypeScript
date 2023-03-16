@@ -11,6 +11,7 @@ export * from "../types.js";
 export * from "../sys.js";
 export * from "../path.js";
 export * from "../diagnosticInformationMap.generated.js";
+export * as deno from "../deno.js";
 export * from "../scanner.js";
 export * from "../utilitiesPublic.js";
 export * from "../utilities.js";

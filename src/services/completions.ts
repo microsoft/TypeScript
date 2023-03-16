@@ -5641,7 +5641,8 @@ function isProbablyGlobalType(type: Type, sourceFile: SourceFile, checker: TypeC
     if (globalSymbol && checker.getTypeOfSymbolAtLocation(globalSymbol, sourceFile) === type) {
         return true;
     }
-    const globalThisSymbol = checker.resolveName("globalThis", /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
+    // deno: provide sourceFile so that it can figure out if it's a node or deno globalThis
+    const globalThisSymbol = checker.resolveName("globalThis", /*location*/ sourceFile, SymbolFlags.Value, /*excludeGlobals*/ false);
     if (globalThisSymbol && checker.getTypeOfSymbolAtLocation(globalThisSymbol, sourceFile) === type) {
         return true;
     }
