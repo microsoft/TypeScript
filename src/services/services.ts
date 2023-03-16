@@ -2490,8 +2490,8 @@ export function createLanguageService(
         const token = findPrecedingToken(position, sourceFile);
         if (!token) return undefined;
 
-        let wordPattern : string | undefined;
-        let ranges : {start: number, end: number}[] = [];
+        let wordPattern: string | undefined;
+        let ranges: {start: number, end: number}[] = [];
 
         // check edge cases <| and >|
         if (token.kind===SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent)) return undefined;
@@ -2503,37 +2503,37 @@ export function createLanguageService(
             const openPos = token.parent.parent.openingFragment.pos + 1;
             const closePos = token.parent.parent.closingFragment.pos + 2;
 
-            ranges = ranges.concat({start : openPos, end : openPos});
-            ranges = ranges.concat({start : closePos, end : closePos});
+            ranges = ranges.concat({ start : openPos, end : openPos });
+            ranges = ranges.concat({ start : closePos, end : closePos });
             wordPattern = undefined;
         }
         else if (isJsxFragment(token.parent.parent)) {
             return undefined;
         }
         else {
-            const tag = findAncestor(token, 
+            const tag = findAncestor(token,
                 (n) => {
                     if (!n.parent.parent) return "quit";
                     else if (isJsxElement(n.parent.parent)) {
                         if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent)) || n.kind===SyntaxKind.LessThanToken || n.kind===SyntaxKind.SlashToken) {
-                            return true };
+                            return true;
+                        }
                         return "quit";
                     }
-                    else return false;
+                    return false;
                 }
                 )?.parent as JsxOpeningElement | JsxClosingElement | undefined;
             if (!tag) return undefined;
 
-            ranges = ranges.concat({start : tag.parent.openingElement.tagName.pos, end : tag.parent.openingElement.tagName.end});
-            ranges = ranges.concat({start : tag.parent.closingElement.tagName.pos, end : tag.parent.closingElement.tagName.end});
-            
+            ranges = ranges.concat({ start : tag.parent.openingElement.tagName.pos, end : tag.parent.openingElement.tagName.end });
+            ranges = ranges.concat({ start : tag.parent.closingElement.tagName.pos, end : tag.parent.closingElement.tagName.end });
+
             if (tag.parent.openingElement.tagName.getText() === tag.parent.closingElement.tagName.getText()) {
                 wordPattern = tag.tagName.getText();
             }
             else return undefined;
         }
-        
-        return {ranges, wordPattern};
+        return { ranges, wordPattern };
     }
 
     function getLinesForRange(sourceFile: SourceFile, textRange: TextRange) {
@@ -3067,7 +3067,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
-        getJsxLinkedEditAtPosition: getJsxLinkedEditAtPosition,
+        getJsxLinkedEditAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,

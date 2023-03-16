@@ -663,8 +663,8 @@ export interface JsxClosingTagInfo {
 }
 
 export interface JsxLinkedEditInfo {
-    readonly ranges : {start: number, end: number}[];
-    wordPattern? : string;
+    readonly ranges: {start: number, end: number}[];
+    wordPattern?: string;
 }
 
 export interface CombinedCodeFixScope { type: "file"; fileName: string; }
