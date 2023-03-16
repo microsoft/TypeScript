@@ -2,7 +2,7 @@
 // @noEmit: true
 // @lib: es5
 
-// repro from #52588
+// See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
 
 declare function test(
   arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
