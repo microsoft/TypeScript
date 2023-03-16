@@ -89,7 +89,7 @@ declare namespace ts {
         namespace protocol {
             enum CommandTypes {
                 JsxClosingTag = "jsxClosingTag",
-                JsxMirrorCursor = "jsxMirrorCursor",
+                JsxLinkedEdit = "jsxLinkedEdit",
                 Brace = "brace",
                 BraceCompletion = "braceCompletion",
                 GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -3850,7 +3850,7 @@ declare namespace ts {
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
             private getJsxClosingTag;
-            private getJsxMirrorCursor;
+            private getJsxLinkedEdit;
             private getDocumentHighlights;
             private provideInlayHints;
             private setCompilerOptionsForInferredProjects;
