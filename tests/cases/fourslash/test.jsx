@@ -1,2 +1,0 @@
-const c = (< div>
-</div>)
