@@ -189,8 +189,8 @@ export class VerifyNegatable {
         this.state.verifyJsxClosingTag(map);
     }
 
-    public jsxMirrorCursor(map: { [markerName: string]: ts.JsxLinkedEditInfo | undefined }): void {
-        this.state.verifyJsxMirrorCursor(map);
+    public jsxLinkedEdit(map: { [markerName: string]: ts.JsxLinkedEditInfo | undefined }): void {
+        this.state.verifyJsxLinkedEdit(map);
     }
 
 

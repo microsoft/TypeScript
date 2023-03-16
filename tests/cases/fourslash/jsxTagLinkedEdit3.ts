@@ -13,6 +13,6 @@
 //                                  {start: 91, end: 94}],
 //                         wordPattern : 'div'};
 
-verify.jsxMirrorCursor( {
+verify.jsxLinkedEdit( {
     "2": undefined,
 });

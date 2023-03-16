@@ -2485,7 +2485,7 @@ export function createLanguageService(
         }
     }
 
-    function getJsxMirrorCursorAtPosition(fileName: string, position: number): JsxLinkedEditInfo | undefined {
+    function getJsxLinkedEditAtPosition(fileName: string, position: number): JsxLinkedEditInfo | undefined {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
         const token = findPrecedingToken(position, sourceFile);
         if (!token) return undefined;
@@ -2511,26 +2511,15 @@ export function createLanguageService(
             return undefined;
         }
         else {
-            const tag = 
-            // findAncestor(token, 
-            //     (n) => { 
-            //         if (isJsxOpeningElement(n) || isJsxClosingElement(n)) return true;                    
-            //         else if (n.kind===SyntaxKind.LessThanToken || isIdentifier(n) || n.kind === SyntaxKind.ThisKeyword || isPropertyAccessExpression(n)) return false;
-            //         return "quit"; });
-            
-            findAncestor(token, 
+            const tag = findAncestor(token, 
                 (n) => {
                     if (!n.parent.parent) return "quit";
                     else if (isJsxElement(n.parent.parent)) {
-                        if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent) )|| n.kind===SyntaxKind.LessThanToken || n.kind===SyntaxKind.SlashToken) return true;
+                        if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent)) || n.kind===SyntaxKind.LessThanToken || n.kind===SyntaxKind.SlashToken) {
+                            return true };
                         return "quit";
                     }
-                    // return true;
-                    // else if (isJsxClosingElement(n.parent)) return true;
-                    // else if (isJsxAttributes(n)) return "quit";
-                    // else if (isJsxChild(n)) return "quit";
                     else return false;
-                    // else if (n.kind === SyntaxKind.JsxTagNameExpression || n.kind === SyntaxKind.JsxTagNamePropertyAccess)
                 }
                 )?.parent as JsxOpeningElement | JsxClosingElement | undefined;
             if (!tag) return undefined;
@@ -2545,28 +2534,6 @@ export function createLanguageService(
         }
         
         return {ranges, wordPattern};
-        // return {ranges: }};
-        // is this cursed?
-        // it doesnt even work -> it errors types
-        // switch (true) {
-        //     case isJsxOpeningElement(token.parent):
-        //         // const nameSpan = {start : token.parent.parent.closingElement.pos, end : token.parent.parent.closingElement.end};
-        //     case isJsxClosingElement(token.parent):
-        //     case isJsxOpeningFragment(token.parent):
-        //     case isJsxClosingFragment(token.parent):
-        //         return undefined
-        // }
-
-        // switch (token.parent.kind) {
-        //     case SyntaxKind.JsxOpeningElement:
-        //         // const nameSpan = {start : token.parent.parent.closingElement.pos, end : token.parent.parent.closingElement.end};
-        //     case SyntaxKind.JsxClosingElement:
-        //     case SyntaxKind.JsxOpeningFragment:
-        //     case SyntaxKind.JsxClosingFragment:
-        //         return undefined
-        // }
-    
-        // ISABEL delete extras
     }
 
     function getLinesForRange(sourceFile: SourceFile, textRange: TextRange) {
@@ -3100,7 +3067,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
-        getJsxMirrorCursorAtPosition,
+        getJsxLinkedEditAtPosition: getJsxLinkedEditAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,
