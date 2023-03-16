@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        
+        "pretty": true,
+        "lib": ["es2018", "DOM"],
+        "target": "es2018",
+        "module": "CommonJS",
+        "moduleResolution": "node",
+
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "composite": true,
+
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictPropertyInitialization": true,
+
+        "skipLibCheck": true,
+
+        "alwaysStrict": true,
+        "preserveConstEnums": true,
+        "outDir": "../build"
+    }
+}

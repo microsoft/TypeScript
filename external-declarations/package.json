@@ -1,0 +1,25 @@
+{
+  "name": "external-declarations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node ../built/local/tsc.js -p ./src",
+    "watch": "node ../built/local/tsc.js -w -p ./src",
+    "run-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=../tests/cases --libPath=../tests/lib --type=all --shardCount=8",
+    "run-test": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases ",
+    "transform-tests-parallel": "node ./build/code-mod/parallel-run.js --rootPaths=../tests/cases --shardCount=8",
+    "transform-test": "node ./build/code-mod/test-updater.js --rootPaths=../tests/cases",
+    "run-transformed-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=./tsc-tests/updated-tests --libPath=../tests/lib --type=all --shardCount=8",
+    "run-transformed-test": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "source-map-support": "^0.5.21",
+    "typescript": "../"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18"
+  }
+}
