@@ -42,3 +42,15 @@ export const result = createStructuredSelector({ mySelector });
 >createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
 >mySelector : Symbol(mySelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 12, 48))
 
+// 52737#discussion_r1127035242
+declare const otherSelectors: { [x: string]: Selector<State, boolean> };
+>otherSelectors : Symbol(otherSelectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 13))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 33))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>State : Symbol(State, Decl(reverseMappedTypeInferFromItsProperties.ts, 6, 19))
+
+export const otherResult = createStructuredSelector(otherSelectors);
+>otherResult : Symbol(otherResult, Decl(reverseMappedTypeInferFromItsProperties.ts, 16, 12))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
+>otherSelectors : Symbol(otherSelectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 13))
+

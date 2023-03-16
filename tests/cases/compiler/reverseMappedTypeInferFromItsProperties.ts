@@ -14,3 +14,7 @@ type State = { foo: number };
 declare const mySelector: Selector<State, boolean>;
 
 export const result = createStructuredSelector({ mySelector });
+
+// 52737#discussion_r1127035242
+declare const otherSelectors: { [x: string]: Selector<State, boolean> };
+export const otherResult = createStructuredSelector(otherSelectors);

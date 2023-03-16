@@ -24582,10 +24582,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (getObjectFlags(target) & ObjectFlags.Mapped && !(target as MappedType).declaration.nameType) {
                 const constraintType = getConstraintTypeFromMappedType(target as MappedType);
-                if (inferToMappedType(source, target as MappedType, constraintType)) {
-                    inferFromMappedProperties(source, target as MappedType);
-                    return;
-                }
+                inferToMappedType(source, target as MappedType, constraintType);
             }
             // Infer from the members of source and target only if the two types are possibly related
             if (!typesDefinitelyUnrelated(source, target)) {
@@ -24691,6 +24688,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferFromProperties(source: Type, target: Type) {
+            if (isGenericMappedType(target) && !target.declaration.nameType) {
+                inferFromMappedProperties(source, target);
+                return;
+            }
             const properties = getPropertiesOfObjectType(target);
             for (const targetProp of properties) {
                 const sourceProp = getPropertyOfType(source, targetProp.escapedName);
@@ -24758,10 +24759,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            for (const targetInfo of indexInfos) {
-                const sourceInfo = getApplicableIndexInfo(source, targetInfo.keyType);
-                if (sourceInfo) {
-                    inferWithPriority(sourceInfo.type, targetInfo.type, priority);
+            if (isGenericMappedType(target)) {
+                const constraint = target.constraintType && getBaseConstraintOfType(target.constraintType);
+                if (constraint) {
+                    for (const info of getIndexInfosOfType(source)) {
+                        if (isApplicableIndexType(info.keyType, constraint)) {
+                            inferWithPriority(info.type, substituteIndexedMappedType(target, info.keyType), priority);
+                        }
+                    }
+                }
+            }
+            else {
+                for (const targetInfo of indexInfos) {
+                    const sourceInfo = getApplicableIndexInfo(source, targetInfo.keyType);
+                    if (sourceInfo) {
+                        inferWithPriority(sourceInfo.type, targetInfo.type, priority);
+                    }
                 }
             }
         }

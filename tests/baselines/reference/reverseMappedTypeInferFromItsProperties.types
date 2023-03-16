@@ -26,3 +26,14 @@ export const result = createStructuredSelector({ mySelector });
 >{ mySelector } : { mySelector: Selector<State, boolean>; }
 >mySelector : Selector<State, boolean>
 
+// 52737#discussion_r1127035242
+declare const otherSelectors: { [x: string]: Selector<State, boolean> };
+>otherSelectors : { [x: string]: Selector<State, boolean>; }
+>x : string
+
+export const otherResult = createStructuredSelector(otherSelectors);
+>otherResult : Selector<State, { [x: string]: any; }>
+>createStructuredSelector(otherSelectors) : Selector<State, { [x: string]: any; }>
+>createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>otherSelectors : { [x: string]: Selector<State, boolean>; }
+
