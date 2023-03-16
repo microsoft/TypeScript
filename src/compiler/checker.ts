@@ -34275,7 +34275,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
             }
         }
-        // return checkAssertionWorker(node, node.type, node.expression);
         return checkAssertionWorker(node);
     }
 
@@ -34323,29 +34322,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
         }
 
-        // function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
-        // let exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
-            // return getRegularTypeOfLiteralType(exprType);
             return getRegularTypeOfLiteralType(checkExpression(expression));
         }
         checkSourceElement(type);
-        checkNodeDeferred(node); // >> TODO: get node
-        // exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(exprType));
-        // const targetType = getTypeFromTypeNode(type);
-        // if (!isErrorType(targetType)) {
-        //     addLazyDiagnostic(() => { // TODO: defer this check
-        //         const widenedType = getWidenedType(exprType);
-        //         if (!isTypeComparableTo(targetType, widenedType)) {
-        //             checkTypeComparableTo(exprType, targetType, errNode,
-        //                 Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
-        //         }
-        //     });
-        // }
-        // return targetType;
+        checkNodeDeferred(node);
         return getTypeFromTypeNode(type);
     }
 
@@ -37603,8 +37587,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkSatisfiesExpressionWorker(node.expression, getJSDocSatisfiesExpressionType(node), checkMode);
             }
             if (isJSDocTypeAssertion(node)) {
-                // const type = getJSDocTypeAssertionType(node);
-                // return checkAssertionWorker(type, type, node.expression);
                 return checkAssertionWorker(node);
             }
         }
