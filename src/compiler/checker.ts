@@ -24689,7 +24689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function inferFromProperties(source: Type, target: Type) {
             if (isGenericMappedType(target) && !target.declaration.nameType) {
-                inferFromMappedProperties(source, target);
+                invokeOnce(source, target, inferFromMappedProperties);
                 return;
             }
             const properties = getPropertiesOfObjectType(target);
@@ -24706,9 +24706,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const sourceProp of properties) {
                 if (!some(sourceProp.declarations, hasSkipDirectInferenceFlag)) {
                     const sourcePropType = getTypeOfSymbol(sourceProp);
-                    if (!couldContainTypeVariables(sourcePropType)) {
-                        continue;
-                    }
                     const targetPropType = substituteIndexedMappedType(target, getStringLiteralType(unescapeLeadingUnderscores(sourceProp.escapedName)));
                     inferFromTypes(sourcePropType, targetPropType);
                 }

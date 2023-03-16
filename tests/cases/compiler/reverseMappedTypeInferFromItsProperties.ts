@@ -18,3 +18,6 @@ export const result = createStructuredSelector({ mySelector });
 // 52737#discussion_r1127035242
 declare const otherSelectors: { [x: string]: Selector<State, boolean> };
 export const otherResult = createStructuredSelector(otherSelectors);
+
+declare function inferFromValue<T, S extends string>(obj: { [K in keyof T]: S }): [T, S];
+const fromValue1 = inferFromValue({ a: "foo", b: "bar" });

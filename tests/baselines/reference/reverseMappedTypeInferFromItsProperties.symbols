@@ -54,3 +54,20 @@ export const otherResult = createStructuredSelector(otherSelectors);
 >createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
 >otherSelectors : Symbol(otherSelectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 13))
 
+declare function inferFromValue<T, S extends string>(obj: { [K in keyof T]: S }): [T, S];
+>inferFromValue : Symbol(inferFromValue, Decl(reverseMappedTypeInferFromItsProperties.ts, 16, 68))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 32))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 34))
+>obj : Symbol(obj, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 53))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 61))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 32))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 34))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 32))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 34))
+
+const fromValue1 = inferFromValue({ a: "foo", b: "bar" });
+>fromValue1 : Symbol(fromValue1, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 5))
+>inferFromValue : Symbol(inferFromValue, Decl(reverseMappedTypeInferFromItsProperties.ts, 16, 68))
+>a : Symbol(a, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 35))
+>b : Symbol(b, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 45))
+
