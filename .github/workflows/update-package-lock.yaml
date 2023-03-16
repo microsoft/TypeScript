@@ -7,10 +7,16 @@ on:
         - cron: '0 6 * * *'
     workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
+
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v3
