@@ -5105,6 +5105,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (name === InternalSymbolName.ExportEquals) return;
             merged.exports!.set(name, merged.exports!.has(name) ? mergeSymbol(merged.exports!.get(name)!, s) : s);
         });
+        if (merged === exported) {
+            // We just mutated a symbol, reset any cached links we may have already set
+            // (Notably required to make late bound members appear)
+            getSymbolLinks(merged).resolvedExports = undefined;
+            getSymbolLinks(merged).resolvedMembers = undefined;
+        }
         getSymbolLinks(merged).cjsExportMerged = merged;
         return links.cjsExportMerged = merged;
     }
@@ -5150,7 +5156,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true) ||
                         isEsmCjsRef
                     ) {
-                        const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference);
+                        const moduleType = type.flags & TypeFlags.StructuredType
+                            ? getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference)
+                            : createDefaultPropertyWrapperForModule(symbol, symbol.parent);
                         return cloneTypeAsModuleType(symbol, moduleType, referenceParent);
                     }
                 }
@@ -8887,7 +8895,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function getNamespaceMembersForSerialization(symbol: Symbol) {
-                return !symbol.exports ? [] : filter(arrayFrom(symbol.exports.values()), isNamespaceMember);
+                const exports = getExportsOfSymbol(symbol);
+                return !exports ? [] : filter(arrayFrom(exports.values()), m => isNamespaceMember(m) && isIdentifierText(m.escapedName as string, ScriptTarget.ESNext));
             }
 
             function isTypeOnlyNamespace(symbol: Symbol) {
@@ -13212,9 +13221,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // and T as the template type.
         const typeParameter = getTypeParameterFromMappedType(type);
         const constraintType = getConstraintTypeFromMappedType(type);
-        const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
-        const isFilteringMappedType = nameType && isTypeAssignableTo(nameType, typeParameter);
-        const templateType = getTemplateTypeFromMappedType(type.target as MappedType || type);
+        const mappedType = (type.target as MappedType) || type;
+        const nameType = getNameTypeFromMappedType(mappedType);
+        const shouldLinkPropDeclarations = !nameType || isFilteringMappedType(mappedType);
+        const templateType = getTemplateTypeFromMappedType(mappedType);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
         const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
@@ -13260,7 +13270,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop.links.keyType = keyType;
                     if (modifiersProp) {
                         prop.links.syntheticOrigin = modifiersProp;
-                        prop.declarations = !nameType || isFilteringMappedType ? modifiersProp.declarations : undefined;
+                        prop.declarations = shouldLinkPropDeclarations ? modifiersProp.declarations : undefined;
                     }
                     members.set(propName, prop);
                 }
@@ -13391,6 +13401,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
+    }
+
+    function isFilteringMappedType(type: MappedType): boolean {
+        const nameType = getNameTypeFromMappedType(type);
+        return !!nameType && isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type));
     }
 
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -13846,7 +13861,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeVariable = getHomomorphicTypeVariable(type);
         if (typeVariable && !type.declaration.nameType) {
             const constraint = getConstraintOfTypeParameter(typeVariable);
-            if (constraint && isArrayOrTupleType(constraint)) {
+            if (constraint && isArrayType(constraint)) {
                 return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
             }
         }
@@ -17521,8 +17536,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // K is generic and N is assignable to P, instantiate E using a mapper that substitutes the index type for P.
         // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
         if (isGenericMappedType(objectType)) {
-            const nameType = getNameTypeFromMappedType(objectType);
-            if (!nameType || isTypeAssignableTo(nameType, getTypeParameterFromMappedType(objectType))) {
+            if (!getNameTypeFromMappedType(objectType) || isFilteringMappedType(objectType)) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
         }
@@ -30247,7 +30261,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
         const attributes = openingLikeElement.attributes;
-        const attributesType = getContextualType(attributes, ContextFlags.None);
+        const contextualType = getContextualType(attributes, ContextFlags.None);
         const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
         let attributesTable = createSymbolTable();
         let spread: Type = emptyJsxObjectType;
@@ -30276,11 +30290,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
                     explicitlySpecifyChildrenAttribute = true;
                 }
-                if (attributesType) {
-                    const prop = getPropertyOfType(attributesType, member.escapedName);
+                if (contextualType) {
+                    const prop = getPropertyOfType(contextualType, member.escapedName);
                     if (prop && prop.declarations && isDeprecatedSymbol(prop)) {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
+                }
+                if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
+                    const inferenceContext = getInferenceContext(attributes);
+                    Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
+                    const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
+                    addIntraExpressionInferenceSite(inferenceContext, inferenceNode, exprType);
                 }
             }
             else {
@@ -34185,7 +34205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createPromiseReturnType(node, anyType);
     }
 
-    function createDefaultPropertyWrapperForModule(symbol: Symbol, originalSymbol: Symbol, anonymousSymbol?: Symbol | undefined) {
+    function createDefaultPropertyWrapperForModule(symbol: Symbol, originalSymbol: Symbol | undefined, anonymousSymbol?: Symbol | undefined) {
         const memberTable = createSymbolTable();
         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
         newSymbol.parent = originalSymbol;
