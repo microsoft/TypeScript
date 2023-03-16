@@ -266,9 +266,7 @@ function Foo<T>(props: Props<T>) {
   b: (arg) => { arg.toString(); },
 >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 105, 15))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 }} />;
 

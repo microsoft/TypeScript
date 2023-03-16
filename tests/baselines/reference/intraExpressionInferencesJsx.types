@@ -276,7 +276,7 @@ function Foo<T>(props: Props<T>) {
 <Foo {...{
 ><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : JSX.Element
 >Foo : <T>(props: Props<T>) => JSX.Element
->{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: string) => number; b: (arg: number) => void; }
+>{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: string) => number; b: (arg: unknown) => void; }
 
   a: (x) => 10,
 >a : (x: string) => number
@@ -285,13 +285,13 @@ function Foo<T>(props: Props<T>) {
 >10 : 10
 
   b: (arg) => { arg.toString(); },
->b : (arg: number) => void
->(arg) => { arg.toString(); } : (arg: number) => void
->arg : number
->arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
->arg : number
->toString : (radix?: number | undefined) => string
+>b : (arg: unknown) => void
+>(arg) => { arg.toString(); } : (arg: unknown) => void
+>arg : unknown
+>arg.toString() : any
+>arg.toString : any
+>arg : unknown
+>toString : any
 
 }} />;
 
