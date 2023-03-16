@@ -1,5 +1,5 @@
-=== tests/cases/compiler/contextualSignatureInArrayElementPrefersArrayUnionMemberLibEs5.ts ===
-// repro from #52588
+=== tests/cases/compiler/contextualSignatureInArrayElementLibEs2015.ts ===
+// See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
 
 declare function test(
 >test : (arg: Record<string, (arg: string) => void> | ((arg: number) => void)[]) => void
