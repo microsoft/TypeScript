@@ -78,7 +78,8 @@
         "ms": "^2.1.3",
         "node-fetch": "^3.2.10",
         "source-map-support": "^0.5.21",
-        "typescript": "5.0.0-dev.20230112",
+        "tslib": "^2.5.0",
+        "typescript": "5.0.1-rc",
         "which": "^2.0.2"
     },
     "overrides": {

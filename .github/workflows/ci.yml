@@ -89,9 +89,45 @@ jobs:
 
   smoke:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./pr
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run: |
+        corepack enable npm
+        npm --version
+    
+    - run:  npm ci
+
+    - run: npx hereby lkg
+    - run: |
+        npm pack
+        mv typescript*.tgz typescript.tgz
+        echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
+      id: pack
+
+    - name: Smoke test
+      run: |
+        cd "$(mktemp -d)"
+        npm init --yes
+        npm install ${{ steps.pack.outputs.package }}
+
+        echo "Testing tsc..."
+        npx tsc --version
+
+        echo "Testing tsserver..."
+        echo '{"seq": 1, "command": "status"}' | npx tsserver
+
+        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
+        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
+
+  package-size:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
 
     steps:
     - uses: actions/checkout@v3
@@ -102,80 +138,30 @@ jobs:
       with:
         path: base
         ref: ${{ github.base_ref }}
-      if: github.event_name == 'pull_request'
 
     - uses: actions/setup-node@v3
       with:
         node-version: "*"
         check-latest: true
-    
-    # Pre-build the base branch so we can check lib folder size changes.
-    # Note that github.sha points to a merge commit, meaning we're testing
-    # the base branch versus the base branch with the PR applied.
-    - name: Build base LKG
-      if: github.event_name == 'pull_request'
-      run: |
-        npm ci
-        npx hereby lkg
-        rm -rf $GITHUB_WORKSPACE/pr/lib
-        mv ./lib $GITHUB_WORKSPACE/pr/
+    - run: |
+        corepack enable npm
+        npm --version
+
+    - run: npm ci
+      working-directory: ./pr
+
+    - run: npm ci
       working-directory: ./base
 
-    - run:  npm ci
-
     - run: npx hereby lkg
+      working-directory: ./pr
+      
+    - run: npx hereby lkg
+      working-directory: ./base
+
     - run: |
-        npm pack
-        mv typescript*.tgz typescript.tgz
-        echo "PACKAGE=$PWD/typescript.tgz" >> $GITHUB_ENV
-
-    - name: Smoke test
-      run: |
-        cd "$(mktemp -d)"
-        npm init --yes
-        npm install $PACKAGE tslib
-
-        echo "Testing tsc..."
-        npx tsc --version
-
-        echo "Testing tsserver..."
-        echo '{"seq": 1, "command": "status"}' | npx tsserver
-
-        cat > smoke.js << 'EOF'
-        console.log(`Testing ${process.argv[2]}...`);
-        const { __importDefault, __importStar } = require("tslib");
-        const ts = require(process.argv[2]);
-
-        // See: https://github.com/microsoft/TypeScript/pull/51474#issuecomment-1310871623
-        const fns = [
-          [() => ts.version,                          true],
-          [() => ts.default.version,                  false],
-          [() => __importDefault(ts).version,         false],
-          [() => __importDefault(ts).default.version, true],
-          [() => __importStar(ts).version,            true],
-          [() => __importStar(ts).default.version,    true],
-        ];
-
-        for (const [fn, shouldSucceed] of fns) {
-          let success = false;
-          try {
-            success = !!fn();
-          }
-          catch {}
-          const status = success ? "succeeded" : "failed";
-          if (success === shouldSucceed) {
-            console.log(`${fn.toString()} ${status} as expected.`);
-          }
-          else {
-            console.log(`${fn.toString()} unexpectedly ${status}.`);
-            process.exitCode = 1;
-          }
-        }
-        console.log("ok");
-        EOF
-
-        node ./smoke.js typescript
-        node ./smoke.js typescript/lib/tsserverlibrary
+        echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
+        node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
 
   misc:
     runs-on: ubuntu-latest

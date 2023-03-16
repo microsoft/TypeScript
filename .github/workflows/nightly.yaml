@@ -19,6 +19,9 @@ jobs:
       with:
         # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
         registry-url: https://registry.npmjs.org/
+    - run: |
+        corepack enable npm
+        npm --version
     - name: Setup and publish nightly
       run: |
         npm whoami
