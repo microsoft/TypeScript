@@ -18,7 +18,7 @@ class C3 {
     accessor #y = 0;
 }
 
-// @filename: file3.ts
+// @filename: file3-2.ts
 class C3 {
     accessor x = 0;
 }
