@@ -14,14 +14,14 @@ declare function test(
 test([
 >test([  (arg) => {    arg; // number  },]) : void
 >test : (arg: Record<string, (arg: string) => void> | ((arg: number) => void)[]) => void
->[  (arg) => {    arg; // number  },] : ((arg: number) => void)[]
+>[  (arg) => {    arg; // number  },] : ((arg: any) => void)[]
 
   (arg) => {
->(arg) => {    arg; // number  } : (arg: number) => void
->arg : number
+>(arg) => {    arg; // number  } : (arg: any) => void
+>arg : any
 
     arg; // number
->arg : number
+>arg : any
 
   },
 ]);
