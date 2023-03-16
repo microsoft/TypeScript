@@ -10,9 +10,6 @@ on:
       - main
       - release-*
 
-permissions:
-  contents: read
-
 jobs:
   richnav:
     runs-on: windows-latest

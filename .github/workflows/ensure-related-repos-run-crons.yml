@@ -11,9 +11,6 @@ on:
         - cron: '0 0 1 * *'
     workflow_dispatch: {}
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest

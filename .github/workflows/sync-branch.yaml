@@ -9,9 +9,6 @@ on:
         description: 'Target Branch Name'
         required: true
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest

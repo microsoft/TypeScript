@@ -4,9 +4,6 @@ on:
   repository_dispatch:
     types: set-version
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest

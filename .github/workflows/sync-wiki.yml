@@ -2,9 +2,6 @@ name: Sync Two Wiki Repos
 
 on: [gollum]
 
-permissions:
-  contents: read
-
 jobs:
   sync:
     runs-on: ubuntu-latest
