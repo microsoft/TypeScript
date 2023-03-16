@@ -25,6 +25,7 @@ import {
     noop,
     Path,
     PollingInterval,
+    reduceLeft,
     resolveModuleName,
     Version,
     version,
@@ -81,12 +82,12 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
 }
 
 /** @internal */
-export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string, args: string[]) => boolean) {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
         const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
         remaining = result.remaining;
-        hasError = install(result.command) || hasError;
+        hasError = install(result.command, result.args) || hasError;
     }
     return hasError;
 }
@@ -94,16 +95,18 @@ export function installNpmPackages(npmPath: string, tsVersion: string, packageNa
 /** @internal */
 export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
     const sliceStart = packageNames.length - remaining;
-    let command: string, toSlice = remaining;
+    let toSlice = remaining;
+    let args: string[];
     while (true) {
-        command = `${npmPath} install --ignore-scripts ${(toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")} --save-dev --user-agent="typesInstaller/${tsVersion}"`;
-        if (command.length < 8000) {
+        const slice = toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice);
+        const length = reduceLeft(slice, (total, pkg) => total + pkg.length, 0);
+        if (length < 8000) {
+            args = ["install", "--ignore-scripts", ...slice, "--save-dev", `--user-agent=typesInstaller/${tsVersion}`];
             break;
         }
-
         toSlice = toSlice - Math.floor(toSlice / 2);
     }
-    return { command, remaining: remaining - toSlice };
+    return { command: npmPath, args, remaining: remaining - toSlice };
 }
 
 export type RequestCompletedAction = (success: boolean) => void;

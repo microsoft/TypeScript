@@ -100,11 +100,12 @@ function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): strin
 interface ExecSyncOptions {
     cwd: string;
     encoding: "utf-8";
+    timeout?: number;
 }
-type ExecSync = (command: string, options: ExecSyncOptions) => string;
+type ExecFileSync = (command: string, args: string[], options: ExecSyncOptions) => string;
 
 export class NodeTypingsInstaller extends TypingsInstaller {
-    private readonly nodeExecSync: ExecSync;
+    private readonly nodeExecFileSync: ExecFileSync;
     private readonly npmPath: string;
     readonly typesRegistry: Map<string, MapLike<string>>;
 
@@ -130,7 +131,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             this.log.writeLine(`NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`);
             this.log.writeLine(`validateDefaultNpmLocation: ${validateDefaultNpmLocation}`);
         }
-        ({ execSync: this.nodeExecSync } = require("child_process"));
+        ({ execSync: this.nodeExecFileSync } = require("child_process"));
 
         this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
 
@@ -138,7 +139,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
             }
-            this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
+            this.execFileSyncAndLog(this.npmPath, ["install", "--ignore-scripts", `${typesRegistryPackageName}@${this.latestDistTag}`], { cwd: globalTypingsCacheLocation });
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
             }
@@ -216,7 +217,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
         }
         const start = Date.now();
-        const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
+        const hasError = installNpmPackages(this.npmPath, version, packageNames, (command, args) => this.execFileSyncAndLog(command, args, { cwd }));
         if (this.log.isEnabled()) {
             this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
         }
@@ -224,12 +225,12 @@ export class NodeTypingsInstaller extends TypingsInstaller {
     }
 
     /** Returns 'true' in case of error. */
-    private execSyncAndLog(command: string, options: Pick<ExecSyncOptions, "cwd">): boolean {
+    private execFileSyncAndLog(command: string, args: string[], options: Pick<ExecSyncOptions, "cwd">): boolean {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Exec: ${command}`);
         }
         try {
-            const stdout = this.nodeExecSync(command, { ...options, encoding: "utf-8" });
+            const stdout = this.nodeExecFileSync(command, args, { ...options, encoding: "utf-8", timeout: 10_000 });
             if (this.log.isEnabled()) {
                 this.log.writeLine(`    Succeeded. stdout:${indent(sys.newLine, stdout)}`);
             }
