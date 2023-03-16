@@ -3444,11 +3444,10 @@ export class TestState {
         }
     }
 
-    public verifyJsxMirrorCursor(map: {[markerName:string]:ts.JsxMirrorCursorInfo | undefined}):void {
+    public verifyJsxLinkedEdit(map: {[markerName:string]:ts.JsxLinkedEditInfo | undefined}):void {
         for (const markerName in map) {
             this.goToMarker(markerName);
-            // const actual = {};
-            const actual = this.languageService.getJsxMirrorCursorAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const actual = this.languageService.getJsxLinkedEditAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.deepEqual(actual, map[markerName], markerName);
         }
     }

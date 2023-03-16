@@ -23,7 +23,7 @@ const linkedCursors4 = {ranges: [{start: 18, end: 21},
                             {start: 69, end: 72}],
                         wordPattern : 'div'};
 
-verify.jsxMirrorCursor( {
+verify.jsxLinkedEdit( {
     "0": linkedCursors4,
     "1": linkedCursors4,
     // "2": undefined,

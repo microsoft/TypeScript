@@ -10,7 +10,7 @@ const linkedCursors6 = {ranges: [{start: 19, end: 38},
                             {start: 46, end: 65}],
                         wordPattern : 'someNamespace.Thing'};
 
-verify.jsxMirrorCursor( {
+verify.jsxLinkedEdit( {
     "1": linkedCursors6,
     "2": linkedCursors6,
     "3": linkedCursors6,

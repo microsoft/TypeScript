@@ -23,7 +23,7 @@ import {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
-    JsxMirrorCursor = "jsxMirrorCursor",
+    JsxLinkedEdit = "jsxLinkedEdit",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -1102,12 +1102,12 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
-export interface JsxMirrorCursorRequest extends FileLocationRequest {
-    readonly command: CommandTypes.JsxMirrorCursor;
+export interface JsxLinkedEditRequest extends FileLocationRequest {
+    readonly command: CommandTypes.JsxLinkedEdit;
     // ISABEL?
 }
 
-export interface JsxMirrorCursorResponse extends Response {
+export interface JsxLinkedEditResponse extends Response {
     // ISABEL?
 }
 

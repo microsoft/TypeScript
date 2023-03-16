@@ -1802,11 +1802,6 @@ export class Session<TMessage = string> implements EventSender {
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
     }
 
-    private getJsxMirrorCursor(args): undefined{
-        return undefined;
-        //ISABEL stub
-    }
-
     private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
@@ -3394,7 +3389,7 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
         },
-        [protocol.CommandTypes.JsxMirrorCursor]: (request: protocol.JsxMirrorCursorRequest) => {
+        [protocol.CommandTypes.JsxLinkedEdit]: (request: protocol.JsxLinkedEditRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
             // ISABEL what ;
         },

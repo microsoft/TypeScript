@@ -593,7 +593,7 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getJsxClosingTagAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
-    getJsxMirrorCursorAtPosition(): never {
+    getJsxLinkedEditAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {

@@ -12,6 +12,6 @@
 //                             {start: 43, end: 43}],
 //                         wordPattern : };
 
-verify.jsxMirrorCursor( {
+verify.jsxLinkedEdit( {
     "8": undefined,
 }); 
