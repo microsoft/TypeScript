@@ -17422,18 +17422,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
         if (type.flags & TypeFlags.Intersection) {
-            return some((type as IntersectionType).types, isPatternLiteralPlaceholderType);
+            return some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) || isPatternLiteralPlaceholderType(t));
         }
-
-        if (type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
-            return isPatternLiteralType(type);
-        }
-
-        if (type.flags & TypeFlags.ESSymbolLike) {
-            return false;
-        }
-
-        return !!(type.flags & (TypeFlags.Any | TypeFlags.Primitive));
+        return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
     }
 
     function isPatternLiteralType(type: Type) {
