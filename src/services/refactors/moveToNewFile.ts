@@ -86,6 +86,7 @@ import {
     last,
     length,
     makeImportIfNecessary,
+    makeStringLiteral,
     mapDefined,
     ModifierFlags,
     ModifierLike,
@@ -287,7 +288,7 @@ function getNewStatementsAndRemoveFromOldFile(
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
-    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename);
+    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename, quotePreference);
 
     const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
@@ -321,7 +322,7 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
 }
 
 function updateImportsInOtherFiles(
-    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newFilename: string,
+    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newFilename: string, quotePreference: QuotePreference
 ): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
@@ -340,11 +341,11 @@ function updateImportsInOtherFiles(
 
                 const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newFilename);
                 const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
-                const newImportDeclaration = filterImport(importNode, factory.createStringLiteral(newModuleSpecifier), shouldMove);
+                const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
                 const ns = getNamespaceLikeImport(importNode);
-                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode);
+                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode, quotePreference);
             });
         }
     }
@@ -372,6 +373,7 @@ function updateNamespaceLikeImport(
     newModuleSpecifier: string,
     oldImportId: Identifier,
     oldImportNode: SupportedImport,
+    quotePreference: QuotePreference
 ): void {
     const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
     let needUniqueName = false;
@@ -389,13 +391,13 @@ function updateNamespaceLikeImport(
         for (const ref of toChange) {
             changes.replaceNode(sourceFile, ref, factory.createIdentifier(newNamespaceName));
         }
-        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier));
+        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier, quotePreference));
     }
 }
 
-function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string): Node {
+function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string, quotePreference: QuotePreference): Node {
     const newNamespaceId = factory.createIdentifier(newNamespaceName);
-    const newModuleString = factory.createStringLiteral(newModuleSpecifier);
+    const newModuleString = makeStringLiteral(newModuleSpecifier, quotePreference);
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             return factory.createImportDeclaration(
@@ -488,7 +490,7 @@ function makeImportOrRequire(
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
         const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
         return bindingElements.length
-            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(factory.createStringLiteral(pathToNewFileWithCorrectExtension))) as RequireVariableStatement
+            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToNewFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
             : undefined;
     }
 }

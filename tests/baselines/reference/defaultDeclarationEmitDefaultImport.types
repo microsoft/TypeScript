@@ -2,7 +2,6 @@
 export function getSomething(): Something { return null as any }
 >getSomething : () => Something
 >null as any : any
->null : null
 
 export default class Something {}
 >Something : Something

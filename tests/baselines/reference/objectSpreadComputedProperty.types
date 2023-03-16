@@ -13,7 +13,6 @@ function f() {
 
     let a: any = null;
 >a : any
->null : null
 
     const o1 = { ...{}, [n]: n };
 >o1 : {}

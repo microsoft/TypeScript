@@ -60,3 +60,70 @@ emit('a', {
     },
 });
 
+// simplified repro from 52589#issuecomment-1416180638
+declare class MyCompiler {
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+
+  compile(): void;
+>compile : Symbol(MyCompiler.compile, Decl(contextualTypeCaching.ts, 24, 26))
+}
+interface WebpackPluginInstance {
+>WebpackPluginInstance : Symbol(WebpackPluginInstance, Decl(contextualTypeCaching.ts, 26, 1))
+
+  apply: (compiler: MyCompiler) => void;
+>apply : Symbol(WebpackPluginInstance.apply, Decl(contextualTypeCaching.ts, 27, 33))
+>compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 28, 10))
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+}
+type WebpackPluginFunction = (this: MyCompiler, compiler: MyCompiler) => void;
+>WebpackPluginFunction : Symbol(WebpackPluginFunction, Decl(contextualTypeCaching.ts, 29, 1))
+>this : Symbol(this, Decl(contextualTypeCaching.ts, 30, 30))
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+>compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 30, 47))
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+
+interface Optimization {
+>Optimization : Symbol(Optimization, Decl(contextualTypeCaching.ts, 30, 78))
+
+  minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
+>minimizer : Symbol(Optimization.minimizer, Decl(contextualTypeCaching.ts, 31, 24))
+>WebpackPluginInstance : Symbol(WebpackPluginInstance, Decl(contextualTypeCaching.ts, 26, 1))
+>WebpackPluginFunction : Symbol(WebpackPluginFunction, Decl(contextualTypeCaching.ts, 29, 1))
+}
+declare const A: <T, P extends keyof T>(
+>A : Symbol(A, Decl(contextualTypeCaching.ts, 34, 13))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+>P : Symbol(P, Decl(contextualTypeCaching.ts, 34, 20))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+
+  obj: T,
+>obj : Symbol(obj, Decl(contextualTypeCaching.ts, 34, 40))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+
+  prop: P,
+>prop : Symbol(prop, Decl(contextualTypeCaching.ts, 35, 9))
+>P : Symbol(P, Decl(contextualTypeCaching.ts, 34, 20))
+
+  factory: () => T[P]
+>factory : Symbol(factory, Decl(contextualTypeCaching.ts, 36, 10))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+>P : Symbol(P, Decl(contextualTypeCaching.ts, 34, 20))
+
+) => void;
+export const applyOptimizationDefaults = (optimization: Optimization) => {
+>applyOptimizationDefaults : Symbol(applyOptimizationDefaults, Decl(contextualTypeCaching.ts, 39, 12))
+>optimization : Symbol(optimization, Decl(contextualTypeCaching.ts, 39, 42))
+>Optimization : Symbol(Optimization, Decl(contextualTypeCaching.ts, 30, 78))
+
+  A(optimization, "minimizer", () => [
+>A : Symbol(A, Decl(contextualTypeCaching.ts, 34, 13))
+>optimization : Symbol(optimization, Decl(contextualTypeCaching.ts, 39, 42))
+    {
+      apply: (compiler) => {},
+>apply : Symbol(apply, Decl(contextualTypeCaching.ts, 41, 5))
+>compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 42, 14))
+
+    },
+  ]);
+};
+

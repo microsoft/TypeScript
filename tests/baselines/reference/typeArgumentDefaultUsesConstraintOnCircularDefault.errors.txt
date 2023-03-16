@@ -9,7 +9,7 @@ tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(3,18)
 !!! error TS2744: Type parameter defaults can only reference previously declared type parameters.
     
     let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
-                     ~~~~~~~~~~
+                     ~~~
 !!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Test<any>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'foo' does not exist in type 'Test<any>'.
     
