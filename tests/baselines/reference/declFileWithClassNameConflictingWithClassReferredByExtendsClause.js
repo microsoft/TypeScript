@@ -79,12 +79,12 @@ declare module A.B.Base {
         id: number;
     }
 }
-declare module X.Y.base {
+declare namespace X.Y.base {
     class W extends A.B.Base.W {
         name: string;
     }
 }
-declare module X.Y.base.Z {
+declare namespace X.Y.base.Z {
     class W<TValue> extends X.Y.base.W {
         value: boolean;
     }

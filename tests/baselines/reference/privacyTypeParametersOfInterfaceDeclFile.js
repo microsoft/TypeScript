@@ -299,7 +299,7 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
 }
 export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
 }
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClassInPublicModule {
     }
     export class publicClassInPublicModule {
@@ -332,7 +332,7 @@ export declare module publicModule {
     }
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClassInPrivateModule {
     }
     export class publicClassInPrivateModule {

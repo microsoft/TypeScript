@@ -870,7 +870,7 @@ export declare class publicClassWithWithPrivateModuleTypeParameters {
     myPublicMethod<T extends privateModule.publicClass>(): void;
 }
 export declare function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>(): void;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -923,7 +923,7 @@ export declare module publicModule {
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>(): void;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {

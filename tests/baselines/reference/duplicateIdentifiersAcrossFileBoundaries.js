@@ -88,8 +88,8 @@ declare var v: number;
 declare class Foo {
     static x: number;
 }
-declare module N {
-    module F {
+declare namespace N {
+    namespace F {
     }
 }
 //// [file2.d.ts]
@@ -101,7 +101,7 @@ declare function C2(): void;
 declare class f {
 }
 declare var v: number;
-declare module Foo {
+declare namespace Foo {
     var x: number;
 }
 declare module N {

@@ -125,7 +125,7 @@ export declare function exportedFunction(): {
 export declare module m2 {
     var a: number;
 }
-export declare module m3 {
+export declare namespace m3 {
     function foo(): string;
 }
 export declare var eVar1: any, eVar2: number;

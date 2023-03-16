@@ -51,7 +51,7 @@ var M;
 
 
 //// [declInput-2.d.ts]
-declare module M {
+declare namespace M {
     class C {
     }
     export class E {

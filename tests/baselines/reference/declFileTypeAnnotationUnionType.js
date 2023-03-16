@@ -58,7 +58,7 @@ var y = new g() || new m.g() || (function () { return new c(); });
 declare class c {
     private p;
 }
-declare module m {
+declare namespace m {
     class c {
         private q;
     }

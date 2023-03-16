@@ -1163,7 +1163,7 @@ export interface eI {
     p7(pa1: any, pa2: any): void;
     p7?(pa1: any, pa2: any): void;
 }
-export declare module eM {
+export declare namespace eM {
     var eV: any;
     function eF(): void;
     class eC {
@@ -1215,14 +1215,14 @@ export declare module eM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module eM {
+    namespace eM {
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {

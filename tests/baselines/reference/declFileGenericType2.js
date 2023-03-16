@@ -117,16 +117,16 @@ declare module templa.mvc.composite {
         getControllers(): mvc.IController<mvc.IModel>[];
     }
 }
-declare module templa.dom.mvc {
+declare namespace templa.dom.mvc {
     interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
     }
 }
-declare module templa.dom.mvc {
+declare namespace templa.dom.mvc {
     class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
         constructor();
     }
 }
-declare module templa.dom.mvc.composite {
+declare namespace templa.dom.mvc.composite {
     class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
         _controllers: templa.mvc.IController<templa.mvc.IModel>[];
         constructor();

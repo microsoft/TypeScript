@@ -17,7 +17,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasInterfaceInsideTopLevelModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     interface I {
     }
 }
