@@ -153,13 +153,14 @@ import {
     isIntrinsicJsxName,
     isJSDocCommentContainingNode,
     isJsxAttributes,
-    isJsxChild,
     isJsxClosingElement,
     isJsxClosingFragment,
     isJsxElement,
     isJsxFragment,
     isJsxOpeningElement,
     isJsxOpeningFragment,
+    isJsxSelfClosingElement,
+    isJSXTagName,
     isJsxText,
     isLabelName,
     isLiteralComputedPropertyDeclarationName,
@@ -188,12 +189,13 @@ import {
     JSDocTagInfo,
     JsonSourceFile,
     JsxAttributes,
+    JsxClosingElement,
     JsxClosingTagInfo,
     JsxElement,
     JsxEmit,
     JsxFragment,
     JsxLinkedEditInfo,
-    JsxMirrorCursorInfo,
+    JsxOpeningElement,
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
@@ -2489,55 +2491,53 @@ export function createLanguageService(
         if (!token) return undefined;
 
         let wordPattern : string | undefined;
-        let ranges : {start: number, end: number};
+        let ranges : {start: number, end: number}[] = [];
 
-        // if it is not in a jsx element/fragment, or if the tags do not match
-        if (isJsxFragment(token.parent.parent)) {
+        // check edge cases <| and >|
+        if (token.kind===SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent)) return undefined;
+        if (token.kind===SyntaxKind.LessThanToken && isJsxClosingElement(token.parent)) return undefined;
+
+        if ((isJsxOpeningFragment(token.parent) && token.kind===SyntaxKind.LessThanToken)
+            || (isJsxClosingFragment(token.parent) && token.kind===SyntaxKind.SlashToken)){
+
+            const openPos = token.parent.parent.openingFragment.pos + 1;
+            const closePos = token.parent.parent.closingFragment.pos + 2;
+
+            ranges = ranges.concat({start : openPos, end : openPos});
+            ranges = ranges.concat({start : closePos, end : closePos});
             wordPattern = undefined;
-            if (isJsxOpeningFragment(token.parent)){
-                const pos = token.parent.parent.closingFragment.pos + 1;
-                ranges = {start : pos, end : pos};
-            }
-            else if (isJsxClosingFragment(token.parent)){
-                const pos = token.parent.parent.openingFragment.pos + 1;
-                ranges = {start : pos, end : pos};
-            }
-            else return undefined;
         }
-        // else if (isJsxElement(token.parent.parent)){
-        //     if (token.parent.parent.openingElement.tagName.getText() !== token.parent.parent.closingElement.tagName.getText()) {
-        //         return undefined;
-        //     }
-        //     wordPattern = token.parent.parent.openingElement.tagName.getText();
-        //     if (isJsxOpeningElement(token.parent)){
-        //         ranges = {start : token.parent.parent.closingElement.tagName.pos, end : token.parent.parent.closingElement.tagName.end};
-        //     }
-        //     else if (isJsxClosingElement(token.parent)){
-        //         ranges = {start : token.parent.parent.openingElement.tagName.pos, end : token.parent.parent.openingElement.tagName.end};
-        //     }
-        //     else return undefined;
-        // }
+        else if (isJsxFragment(token.parent.parent)) {
+            return undefined;
+        }
         else {
-            const tag = findAncestor(token, 
+            const tag = 
+            // findAncestor(token, 
+            //     (n) => { 
+            //         if (isJsxOpeningElement(n) || isJsxClosingElement(n)) return true;                    
+            //         else if (n.kind===SyntaxKind.LessThanToken || isIdentifier(n) || n.kind === SyntaxKind.ThisKeyword || isPropertyAccessExpression(n)) return false;
+            //         return "quit"; });
+            
+            findAncestor(token, 
                 (n) => {
-                    // refactor case of?
-                    if (isJsxOpeningElement(n)) return true;
-                    else if (isJsxClosingElement(n)) return true;
-                    else if (isJsxAttributes(n)) return "quit";
-                    else if (isJsxChild(n)) return "quit";
-                    return false;
+                    if (!n.parent.parent) return "quit";
+                    else if (isJsxElement(n.parent.parent)) {
+                        if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent) )|| n.kind===SyntaxKind.LessThanToken || n.kind===SyntaxKind.SlashToken) return true;
+                        return "quit";
+                    }
+                    // return true;
+                    // else if (isJsxClosingElement(n.parent)) return true;
+                    // else if (isJsxAttributes(n)) return "quit";
+                    // else if (isJsxChild(n)) return "quit";
+                    else return false;
+                    // else if (n.kind === SyntaxKind.JsxTagNameExpression || n.kind === SyntaxKind.JsxTagNamePropertyAccess)
                 }
-                );
+                )?.parent as JsxOpeningElement | JsxClosingElement | undefined;
             if (!tag) return undefined;
 
-            if (isJsxOpeningElement(tag)){
-                ranges = {start : tag.parent.closingElement.tagName.pos, end : tag.parent.closingElement.tagName.end};
-            }
-            else if (isJsxClosingElement(tag)){
-                ranges = {start : tag.parent.openingElement.tagName.pos, end : tag.parent.openingElement.tagName.end};
-            }
-            else return undefined;
-
+            ranges = ranges.concat({start : tag.parent.openingElement.tagName.pos, end : tag.parent.openingElement.tagName.end});
+            ranges = ranges.concat({start : tag.parent.closingElement.tagName.pos, end : tag.parent.closingElement.tagName.end});
+            
             if (tag.parent.openingElement.tagName.getText() === tag.parent.closingElement.tagName.getText()) {
                 wordPattern = tag.tagName.getText();
             }
@@ -2545,7 +2545,7 @@ export function createLanguageService(
         }
         
         return {ranges, wordPattern};
-
+        // return {ranges: }};
         // is this cursed?
         // it doesnt even work -> it errors types
         // switch (true) {
