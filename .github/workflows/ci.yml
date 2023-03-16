@@ -107,13 +107,14 @@ jobs:
     - run: |
         npm pack
         mv typescript*.tgz typescript.tgz
-        echo "PACKAGE=$PWD/typescript.tgz" >> $GITHUB_ENV
+        echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
+      id: pack
 
     - name: Smoke test
       run: |
         cd "$(mktemp -d)"
         npm init --yes
-        npm install $PACKAGE tslib
+        npm install ${{ steps.pack.outputs.package }}
 
         echo "Testing tsc..."
         npx tsc --version
@@ -121,41 +122,8 @@ jobs:
         echo "Testing tsserver..."
         echo '{"seq": 1, "command": "status"}' | npx tsserver
 
-        cat > smoke.js << 'EOF'
-        console.log(`Testing ${process.argv[2]}...`);
-        const { __importDefault, __importStar } = require("tslib");
-        const ts = require(process.argv[2]);
-
-        // See: https://github.com/microsoft/TypeScript/pull/51474#issuecomment-1310871623
-        const fns = [
-          [() => ts.version,                          true],
-          [() => ts.default.version,                  false],
-          [() => __importDefault(ts).version,         false],
-          [() => __importDefault(ts).default.version, true],
-          [() => __importStar(ts).version,            true],
-          [() => __importStar(ts).default.version,    true],
-        ];
-
-        for (const [fn, shouldSucceed] of fns) {
-          let success = false;
-          try {
-            success = !!fn();
-          }
-          catch {}
-          const status = success ? "succeeded" : "failed";
-          if (success === shouldSucceed) {
-            console.log(`${fn.toString()} ${status} as expected.`);
-          }
-          else {
-            console.log(`${fn.toString()} unexpectedly ${status}.`);
-            process.exitCode = 1;
-          }
-        }
-        console.log("ok");
-        EOF
-
-        node ./smoke.js typescript
-        node ./smoke.js typescript/lib/tsserverlibrary
+        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
+        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
 
   package-size:
     runs-on: ubuntu-latest
