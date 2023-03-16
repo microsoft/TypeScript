@@ -56,21 +56,21 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -122,24 +122,6 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js] file written with same contents
@@ -189,6 +171,10 @@ FsWatches::
 /a/b/commonfile1.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/commonfile2.ts:
   {}
 
 FsWatchesRecursive::
@@ -248,7 +234,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
 
 FsWatchesRecursive::

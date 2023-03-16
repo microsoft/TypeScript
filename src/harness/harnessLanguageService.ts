@@ -551,9 +551,6 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getFileReferences(fileName: string): ts.ReferenceEntry[] {
         return unwrapJSONCallResult(this.shim.getFileReferences(fileName));
     }
-    getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
-        return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
-    }
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): ts.DocumentHighlights[] {
         return unwrapJSONCallResult(this.shim.getDocumentHighlights(fileName, position, JSON.stringify(filesToSearch)));
     }

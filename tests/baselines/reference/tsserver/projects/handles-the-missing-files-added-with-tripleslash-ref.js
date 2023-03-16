@@ -1,13 +1,4 @@
 Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/commonFile1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
@@ -27,12 +18,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:14.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/commonFile1.ts :: No config files found.
 Info 4    [00:00:17.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -43,8 +37,8 @@ Info 8    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 9    [00:00:22.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:23.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:24.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile1.ts SVC-1-0 "/// <reference path=\"commonFile2.ts\"/>\n                    let x = y"
 
 
 	../lib/lib.d.ts
@@ -60,24 +54,24 @@ Info 13   [00:00:28.000] -----------------------------------------------
 Info 13   [00:00:29.000] Open files: 
 Info 13   [00:00:30.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 13   [00:00:31.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 13   [00:00:32.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/commonfile2.ts: *new*
+  {"pollingInterval":500}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
+Before request
+
 Info 14   [00:00:33.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -87,34 +81,6 @@ Info 14   [00:00:33.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 15   [00:00:34.000] response:
     {
       "response": [
@@ -147,6 +113,8 @@ Info 15   [00:00:34.000] response:
       ],
       "responseRequired": true
     }
+After request
+
 Info 16   [00:00:37.000] FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 17   [00:00:38.000] FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 18   [00:00:39.000] Scheduled: /dev/null/inferredProject1*
@@ -161,11 +129,13 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-
-FsWatchesRecursive::
 
 Info 21   [00:00:42.000] Running: /dev/null/inferredProject1*
 Info 22   [00:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -173,9 +143,9 @@ Info 23   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 50
 Info 24   [00:00:45.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 25   [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 26   [00:00:47.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/commonFile2.ts
-	/a/b/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile2.ts Text-1 "let y = 1"
+	/a/b/commonFile1.ts SVC-1-0 "/// <reference path=\"commonFile2.ts\"/>\n                    let x = y"
 
 
 	../lib/lib.d.ts
@@ -212,10 +182,10 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
 
-FsWatchesRecursive::
+Before request
 
 Info 31   [00:01:04.000] request:
     {
@@ -226,36 +196,9 @@ Info 31   [00:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 32   [00:01:05.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

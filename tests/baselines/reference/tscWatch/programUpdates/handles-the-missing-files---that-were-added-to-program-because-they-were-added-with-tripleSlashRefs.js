@@ -52,16 +52,14 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 
 PolledWatches::
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -77,6 +75,16 @@ Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
 
+
+PolledWatches *deleted*::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 Output::
 >> Screen clear
@@ -103,17 +111,13 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/commonfile1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

@@ -8,7 +8,7 @@
     
     /** @satisfies {{ f: (x: string) => string }} */
     const t2 = { g: "oops" }; // should error
-                 ~~~~~~~~~
+                 ~
 !!! error TS1360: Type '{ g: string; }' does not satisfy the expected type '{ f: (x: string) => string; }'.
 !!! error TS1360:   Object literal may only specify known properties, and 'g' does not exist in type '{ f: (x: string) => string; }'.
     
