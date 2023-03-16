@@ -28947,7 +28947,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return undefined;
                         }
                     }
-                    return isInJSFile(decl) ? undefined : getTypeOfExpression(binaryExpression.left);
+                    return isInJSFile(decl) || decl === binaryExpression.left ? undefined : getTypeOfExpression(binaryExpression.left);
                 }
             case AssignmentDeclarationKind.ExportsProperty:
             case AssignmentDeclarationKind.Prototype:
