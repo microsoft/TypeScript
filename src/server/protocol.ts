@@ -4,6 +4,7 @@ import {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    JsxLinkedEditInfo,
     MapLike,
     OutliningSpanKind,
     OutputFile,
@@ -1104,11 +1105,10 @@ export interface JsxClosingTagResponse extends Response {
 
 export interface JsxLinkedEditRequest extends FileLocationRequest {
     readonly command: CommandTypes.JsxLinkedEdit;
-    // ISABEL?
 }
 
 export interface JsxLinkedEditResponse extends Response {
-    // ISABEL?
+    readonly info: JsxLinkedEditInfo;
 }
 
 

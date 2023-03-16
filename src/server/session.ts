@@ -3391,7 +3391,6 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.JsxLinkedEdit]: (request: protocol.JsxLinkedEditRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
-            // ISABEL what ;
         },
         [protocol.CommandTypes.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
             return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));

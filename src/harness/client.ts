@@ -726,6 +726,10 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
+    getJsxLinkedEditAtPosition(_fileName: string, _currentCaretPosition: number): unknown {
+        return notImplemented();
+    }
+
     getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
         return notImplemented();
     }
