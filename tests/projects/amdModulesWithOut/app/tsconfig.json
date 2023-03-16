@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "target": "es5",
         "module": "amd",
         "composite": true,

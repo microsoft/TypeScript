@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-const multiLineOffset = 12;
+const multiLineOffset = 11;
 
 ////class C {
 ////    /*0*/

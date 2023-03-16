@@ -15,7 +15,6 @@ import {
     flatten,
     GeneratedIdentifierFlags,
     getEmitScriptTarget,
-    getEntries,
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getLineAndCharacterOfPosition,
@@ -58,6 +57,7 @@ import {
     NodeFlags,
     PropertyAssignment,
     ScriptTarget,
+    setIdentifierGeneratedImportReference,
     setParentRecursive,
     setTextRange,
     singleOrUndefined,
@@ -136,7 +136,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
         const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
         const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
-        generatedName.generatedImportReference = specifier;
+        setIdentifierGeneratedImportReference(generatedName, specifier);
         specifierSourceImports.set(name, specifier);
         return generatedName;
     }
@@ -172,7 +172,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(map(arrayFrom(importSpecifiersMap.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
+                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
                             /*exclaimationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
@@ -193,7 +193,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return visited;
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         if (node.transformFlags & TransformFlags.ContainsJsx) {
             return visitorWorker(node);
         }
@@ -202,7 +202,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
     }
 
-    function visitorWorker(node: Node): VisitResult<Node> {
+    function visitorWorker(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.JsxElement:
                 return visitJsxElement(node as JsxElement, /*isChild*/ false);
@@ -428,7 +428,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
-        return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
+        return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }
 
     function transformJsxAttributesToObjectProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
@@ -451,8 +451,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         // of JsxSpreadAttribute nodes into expressions.
         const expressions = flatten(
             spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                ? map(attrs, transformJsxSpreadAttributeToExpression)
-                : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                ? map(attrs as JsxSpreadAttribute[], transformJsxSpreadAttributeToExpression)
+                : factory.createObjectLiteralExpression(map(attrs as JsxAttribute[], transformJsxAttributeToObjectLiteralElement))
             )
         );
 
@@ -470,7 +470,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
-        return visitNode(node.expression, visitor, isExpression);
+        return Debug.checkDefined(visitNode(node.expression, visitor, isExpression));
     }
 
     function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
@@ -494,7 +494,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             if (node.expression === undefined) {
                 return factory.createTrue();
             }
-            return visitNode(node.expression, visitor, isExpression);
+            return Debug.checkDefined(visitNode(node.expression, visitor, isExpression));
         }
         if (isJsxElement(node)) {
             return visitJsxElement(node, /*isChild*/ false);
@@ -636,7 +636,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 }
 
-const entities = new Map(getEntries({
+const entities = new Map(Object.entries({
     quot: 0x0022,
     amp: 0x0026,
     apos: 0x0027,

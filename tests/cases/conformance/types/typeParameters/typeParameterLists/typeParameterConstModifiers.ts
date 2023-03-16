@@ -30,6 +30,8 @@ const x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
 declare function f6<const T extends readonly unknown[]>(...args: T): T;
 
 const x61 = f6(1, 'b', { a: 1, b: 'x' });
+const x62 = f6(...[1, 'b']);
+const x63 = f6(true, ...[1, 'b']);
 
 class C1<const T> {
     constructor(x: T) {}
@@ -72,3 +74,13 @@ declare let obj: Obj;
 declare let value: "123";
 
 set(obj, ['a', 'b', 'c'], value);
+
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+
+const test = inners(1,2,3,4,5);
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+
+const test2 = inners2([1,2,3,4,5]);

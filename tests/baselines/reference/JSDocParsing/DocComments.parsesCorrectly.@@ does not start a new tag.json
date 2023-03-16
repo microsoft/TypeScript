@@ -27,7 +27,6 @@
                 "end": 18,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "ThisKeyword",
                 "escapedText": "this"
             },
             "isNameFirst": true,

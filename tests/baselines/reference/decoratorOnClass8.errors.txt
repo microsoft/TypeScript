@@ -1,4 +1,5 @@
 tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 1 arguments, but the decorator expects 2.
 
 
 ==== tests/cases/conformance/decorators/class/decoratorOnClass8.ts (1 errors) ====
@@ -7,5 +8,7 @@ tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1238
     @dec()
     ~~~~~~
 !!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   The runtime will invoke the decorator with 1 arguments, but the decorator expects 2.
+!!! related TS6210 tests/cases/conformance/decorators/class/decoratorOnClass8.ts:1:44: An argument for 'paramIndex' was not provided.
     class C {
     }

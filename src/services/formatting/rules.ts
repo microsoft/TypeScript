@@ -1,15 +1,4 @@
 import {
-    anyContext,
-    ContextPredicate,
-    FormattingContext,
-    FormattingRequestKind,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    TextRangeWithKind,
-    TokenRange,
-} from "../_namespaces/ts.formatting";
-import {
     BinaryExpression,
     contains,
     findAncestor,
@@ -32,6 +21,17 @@ import {
     typeKeywords,
     YieldExpression,
 } from "../_namespaces/ts";
+import {
+    anyContext,
+    ContextPredicate,
+    FormattingContext,
+    FormattingRequestKind,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    TextRangeWithKind,
+    TokenRange,
+} from "../_namespaces/ts.formatting";
 
 /** @internal */
 export interface RuleSpec {
@@ -57,7 +57,11 @@ export function getAllRules(): RuleSpec[] {
     const anyTokenIncludingEOF = tokenRangeFrom([...allTokens, SyntaxKind.EndOfFileToken]);
     const keywords = tokenRangeFromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
     const binaryOperators = tokenRangeFromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
-    const binaryKeywordOperators = [SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword, SyntaxKind.AsKeyword, SyntaxKind.IsKeyword];
+    const binaryKeywordOperators = [
+        SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword,
+        SyntaxKind.OfKeyword, SyntaxKind.AsKeyword,
+        SyntaxKind.IsKeyword, SyntaxKind.SatisfiesKeyword,
+    ];
     const unaryPrefixOperators = [SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken];
     const unaryPrefixExpressions = [
         SyntaxKind.NumericLiteral, SyntaxKind.BigIntLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken,
@@ -236,11 +240,12 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceBetweenCloseParenAndAngularBracket", SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterOpenAngularBracket", SyntaxKind.LessThanToken, anyToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceBeforeCloseAngularBracket", anyToken, SyntaxKind.GreaterThanToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
-        rule("NoSpaceAfterCloseAngularBracket",
-            SyntaxKind.GreaterThanToken,
-            [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken],
-            [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/],
-            RuleAction.DeleteSpace),
+        rule("NoSpaceAfterCloseAngularBracket", SyntaxKind.GreaterThanToken, [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken], [
+            isNonJsxSameLineTokenContext,
+            isTypeArgumentOrParameterOrAssertionContext,
+            isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/,
+            isNonTypeAssertionContext
+        ], RuleAction.DeleteSpace),
 
         // decorators
         rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
@@ -829,6 +834,10 @@ function isTypeArgumentOrParameterOrAssertionContext(context: FormattingContext)
 
 function isTypeAssertionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.TypeAssertionExpression;
+}
+
+function isNonTypeAssertionContext(context: FormattingContext): boolean {
+    return !isTypeAssertionContext(context);
 }
 
 function isVoidOpContext(context: FormattingContext): boolean {

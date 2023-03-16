@@ -29,7 +29,7 @@ class Foo {
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file], session);
         session.executeCommandSeq<ts.server.protocol.SelectionRangeRequest>({
-            command: ts.server.CommandNames.SelectionRange,
+            command: ts.server.protocol.CommandTypes.SelectionRange,
             arguments: {
                 file: file.path, locations: [
                     { line: 4, offset: 13 }, // a === b

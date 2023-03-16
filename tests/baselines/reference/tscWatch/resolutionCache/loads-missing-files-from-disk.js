@@ -46,19 +46,19 @@ Shape signatures in builder refreshed for::
 /a/foo.ts (used version)
 
 PolledWatches::
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/foo.ts:
+/a/foo.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/:
+/: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -105,14 +105,20 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-PolledWatches::
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/foo.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/bar.d.ts:
+/a/bar.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
   {}
 
 FsWatchesRecursive::

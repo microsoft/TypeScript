@@ -52,6 +52,7 @@ import {
     JSDocImplementsTag,
     JSDocParameterTag,
     JSDocPropertyTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocTag,
     JSDocTagInfo,
@@ -134,6 +135,8 @@ const jsDocTagNames = [
     "lends",
     "license",
     "link",
+    "linkcode",
+    "linkplain",
     "listens",
     "member",
     "memberof",
@@ -142,16 +145,19 @@ const jsDocTagNames = [
     "module",
     "name",
     "namespace",
+    "overload",
     "override",
     "package",
     "param",
     "private",
+    "prop",
     "property",
     "protected",
     "public",
     "readonly",
     "requires",
     "returns",
+    "satisfies",
     "see",
     "since",
     "static",
@@ -290,7 +296,8 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
             }
             return displayParts;
         case SyntaxKind.JSDocTypeTag:
-            return withNode((tag as JSDocTypeTag).typeExpression);
+        case SyntaxKind.JSDocSatisfiesTag:
+            return withNode((tag as JSDocTypeTag | JSDocSatisfiesTag).typeExpression);
         case SyntaxKind.JSDocTypedefTag:
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocPropertyTag:

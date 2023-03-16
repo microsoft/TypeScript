@@ -66,7 +66,6 @@ function f3() {
 
     let x = null;
 >x : any
->null : null
 
     if (cond) {
 >cond : boolean
@@ -152,7 +151,6 @@ function f7() {
 
     var x = null;
 >x : any
->null : null
 
     if (cond) {
 >cond : boolean
