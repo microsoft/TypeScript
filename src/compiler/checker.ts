@@ -29935,7 +29935,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inConstContext = isConstContext(node);
         const checkFlags = inConstContext ? CheckFlags.Readonly : 0;
         const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
-        const enumTag = getJSDocEnumTag(node);
+        const enumTag = isInJavascript ? getJSDocEnumTag(node) : undefined;
         const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
         let objectFlags: ObjectFlags = freshObjectLiteralFlag;
         let patternWithComputedProperties = false;
