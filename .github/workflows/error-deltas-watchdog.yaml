@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
     permissions:
+      contents: read # Apparently required to create issues
       issues: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
