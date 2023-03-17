@@ -1248,7 +1248,7 @@ namespace changesToText {
 
     export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter, /*isNewFileStatement*/ true).text).join(newLineCharacter);
+        const nonFormattedText = statements.map((s, i) => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter, /*includeLeadingTriviaWhitespaces*/ i !== 0).text).join(newLineCharacter);
         const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
         const changes = formatting.formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
@@ -1298,11 +1298,11 @@ namespace changesToText {
     }
 
     /** Note: output node may be mutated input node. */
-    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string, isNewFileStatement = false): { text: string, node: Node } {
+    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string, includeLeadingTriviaWhitespaces = false): { text: string, node: Node } {
         const writer = createWriter(newLineCharacter);
         const newLine = getNewLineKind(newLineCharacter);
         // workaround as text emitted below by printer doesn't include leading whitespaces, but includes newline
-        const leadingWhitespaces = isNewFileStatement && sourceFile && node.pos !== -1 ? node.getFullText(sourceFile).match(/^\r?\n(\s*)/)?.[1] ?? "" : "";
+        const leadingWhitespaces = includeLeadingTriviaWhitespaces && sourceFile && node.pos !== -1 ? node.getFullText(sourceFile).match(/^\r?\n(\s*)/)?.[1] ?? "" : "";
         createPrinter({
             newLine,
             neverAsciiEscape: true,
