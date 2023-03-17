@@ -3615,6 +3615,10 @@
         "category": "Error",
         "code": 2847
     },
+    "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
+        "category": "Error",
+        "code": 2848
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
