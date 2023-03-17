@@ -7,44 +7,15 @@ import {
 } from "../../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    createHasErrorMessageLogger,
     createLoggerWithInMemoryLogs,
-    createSessionWithDefaultEventHandler,
-    createSessionWithEventTracking,
-    Logger,
+    createSession,
+    createSessionWithCustomEventHandler,
+    openFilesForSession,
     TestSession,
 } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
-    function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
-        assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
-        const seen = new Map<string, true>();
-        ts.forEach(actual, f => {
-            assert.isFalse(seen.has(f), `${caption}: Found duplicate ${f}. Actual: ${actual} Expected: ${expected}`);
-            seen.set(f, true);
-            assert.isTrue(ts.contains(expected, f), `${caption}: Expected not to contain ${f}. Actual: ${actual} Expected: ${expected}`);
-        });
-    }
-
-    function createVerifyInitialOpen(session: TestSession, verifyProjectsUpdatedInBackgroundEventHandler: (events: ts.server.ProjectsUpdatedInBackgroundEvent[]) => void) {
-        return (file: File) => {
-            session.executeCommandSeq({
-                command: ts.server.protocol.CommandTypes.Open,
-                arguments: {
-                    file: file.path
-                }
-            } as ts.server.protocol.OpenRequest);
-            verifyProjectsUpdatedInBackgroundEventHandler([]);
-        };
-    }
-
-    interface ProjectsUpdatedInBackgroundEventVerifier {
-        session: TestSession;
-        verifyProjectsUpdatedInBackgroundEventHandler(events: ts.server.ProjectsUpdatedInBackgroundEvent[]): void;
-        verifyInitialOpen(file: File): void;
-    }
-
-    function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost, logger?: Logger) => ProjectsUpdatedInBackgroundEventVerifier) {
+    function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {
         it("when adding new file", () => {
             const commonFile1: File = {
                 path: "/a/b/file1.ts",
@@ -62,87 +33,53 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
-            const openFiles = [commonFile1.path];
             const host = createServerHost([commonFile1, libFile, configFile]);
-            const { verifyProjectsUpdatedInBackgroundEventHandler, verifyInitialOpen } = createSession(host);
-            verifyInitialOpen(commonFile1);
+            const session = createSession(host);
+            openFilesForSession([commonFile1], session);
 
             host.writeFile(commonFile2.path, commonFile2.content);
             host.runQueuedTimeoutCallbacks();
-            verifyProjectsUpdatedInBackgroundEventHandler([{
-                eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                data: {
-                    openFiles
-                }
-            }]);
 
             host.writeFile(commonFile3.path, commonFile3.content);
             host.runQueuedTimeoutCallbacks();
-            verifyProjectsUpdatedInBackgroundEventHandler([{
-                eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                data: {
-                    openFiles
-                }
-            }]);
+            baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and when adding new file`, session);
         });
 
         describe("with --out or --outFile setting", () => {
-            function verifyEventWithOutSettings(compilerOptions: ts.CompilerOptions = {}) {
-                const config: File = {
-                    path: "/a/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions
-                    })
-                };
+            function verifyEventWithOutSettings(subScenario: string, compilerOptions: ts.CompilerOptions = {}) {
+                it(subScenario, () => {
+                    const config: File = {
+                        path: "/a/tsconfig.json",
+                        content: JSON.stringify({
+                            compilerOptions
+                        })
+                    };
 
-                const f1: File = {
-                    path: "/a/a.ts",
-                    content: "export let x = 1"
-                };
-                const f2: File = {
-                    path: "/a/b.ts",
-                    content: "export let y = 1"
-                };
+                    const f1: File = {
+                        path: "/a/a.ts",
+                        content: "export let x = 1"
+                    };
+                    const f2: File = {
+                        path: "/a/b.ts",
+                        content: "export let y = 1"
+                    };
 
-                const openFiles = [f1.path];
-                const files = [f1, config, libFile];
-                const host = createServerHost(files);
-                const { verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host);
-                verifyInitialOpen(f1);
+                    const files = [f1, config, libFile];
+                    const host = createServerHost(files);
+                    const session = createSession(host);
+                    openFilesForSession([f1], session);
 
-                host.writeFile(f2.path, f2.content);
-                host.runQueuedTimeoutCallbacks();
+                    host.writeFile(f2.path, f2.content);
+                    host.runQueuedTimeoutCallbacks();
 
-                verifyProjectsUpdatedInBackgroundEventHandler([{
-                    eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                    data: {
-                        openFiles
-                    }
-                }]);
-
-                host.writeFile(f2.path, "export let x = 11");
-                host.runQueuedTimeoutCallbacks();
-                verifyProjectsUpdatedInBackgroundEventHandler([{
-                    eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                    data: {
-                        openFiles
-                    }
-                }]);
+                    host.writeFile(f2.path, "export let x = 11");
+                    host.runQueuedTimeoutCallbacks();
+                    baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                });
             }
-
-            it("when both options are not set", () => {
-                verifyEventWithOutSettings();
-            });
-
-            it("when --out is set", () => {
-                const outJs = "/a/out.js";
-                verifyEventWithOutSettings({ out: outJs });
-            });
-
-            it("when --outFile is set", () => {
-                const outJs = "/a/out.js";
-                verifyEventWithOutSettings({ outFile: outJs });
-            });
+            verifyEventWithOutSettings("when both options are not set");
+            verifyEventWithOutSettings("when --out is set", { out: "/a/out.js" });
+            verifyEventWithOutSettings("when --outFile is set", { outFile: "/a/out.js" });
         });
 
         describe("with modules and configured project", () => {
@@ -191,49 +128,22 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
 
-                const filesToReload = firstReloadFileList && getFiles(firstReloadFileList) || files;
+                const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) || files;
                 const host = createServerHost([filesToReload[0], configFile]);
 
                 // Initial project creation
-                const { session, verifyProjectsUpdatedInBackgroundEventHandler, verifyInitialOpen } = createSession(host);
-                const openFiles = [filesToReload[0].path];
-                verifyInitialOpen(filesToReload[0]);
+                const session = createSession(host);
+                openFilesForSession([filesToReload[0]], session);
 
                 // Since this is first event, it will have all the files
                 filesToReload.forEach(f => host.ensureFileOrFolder(f));
                 if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
-                verifyProjectsUpdatedInBackgroundEvent();
 
                 return {
-                    host,
+                    host, session,
                     moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile,
                     updateContentOfOpenFile,
-                    verifyNoProjectsUpdatedInBackgroundEvent,
-                    verifyProjectsUpdatedInBackgroundEvent
                 };
-
-                function getFiles(filelist: string[]) {
-                    return ts.map(filelist, getFile);
-                }
-
-                function getFile(fileName: string) {
-                    return ts.find(files, file => file.path === fileName)!;
-                }
-
-                function verifyNoProjectsUpdatedInBackgroundEvent() {
-                    host.runQueuedTimeoutCallbacks();
-                    verifyProjectsUpdatedInBackgroundEventHandler([]);
-                }
-
-                function verifyProjectsUpdatedInBackgroundEvent() {
-                    host.runQueuedTimeoutCallbacks();
-                    verifyProjectsUpdatedInBackgroundEventHandler([{
-                        eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                        data: {
-                            openFiles
-                        }
-                    }]);
-                }
 
                 function updateContentOfOpenFile(file: File, newContent: string) {
                     session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
@@ -252,35 +162,36 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             }
 
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
-                const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
+                const { host, moduleFile1, session } = getInitialState();
 
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { console.log('hi'); };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should contains only itself`, session);
             });
 
             it("should be up-to-date with the reference map changes", () => {
-                const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, verifyProjectsUpdatedInBackgroundEvent, verifyNoProjectsUpdatedInBackgroundEvent } = getInitialState();
+                const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, session } = getInitialState();
 
                 // Change file1Consumer1 content to `export let y = Foo();`
                 updateContentOfOpenFile(file1Consumer1, "export let y = Foo();");
-                verifyNoProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Add the import statements back to file1Consumer1
                 updateContentOfOpenFile(file1Consumer1, `import {Foo} from "./moduleFile1";let y = Foo();`);
-                verifyNoProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
                 host.writeFile(moduleFile1.path, `export var T: number;export var T2: string;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Multiple file edits in one go:
 
@@ -288,65 +199,72 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
                 updateContentOfOpenFile(file1Consumer1, `export let y = Foo();`);
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with the reference map changes`, session);
             });
 
             it("should be up-to-date with deleted files", () => {
-                const { host, moduleFile1, file1Consumer2, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
+                const { host, moduleFile1, file1Consumer2, session } = getInitialState();
 
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
 
                 // Delete file1Consumer2
                 host.deleteFile(file1Consumer2.path);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with deleted files`, session);
             });
 
             it("should be up-to-date with newly created files", () => {
-                const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent, } = getInitialState();
+                const { host, moduleFile1, session, } = getInitialState();
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.writeFile("/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with newly created files`, session);
             });
 
             it("should detect changes in non-root files", () => {
-                const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, moduleFile1, session } = getInitialState({
                     configObj: { files: [file1Consumer1Path] },
                 });
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // change file1 internal, and verify only file1 is affected
                 host.writeFile(moduleFile1.path, moduleFile1.content + "var T1: number;");
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect changes in non-root files`, session);
             });
 
             it("should return all files if a global file changed shape", () => {
-                const { host, globalFile3, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
+                const { host, globalFile3, session } = getInitialState();
 
                 host.writeFile(globalFile3.path, globalFile3.content + "var T2: string;");
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should return all files if a global file changed shape`, session);
             });
 
             it("should always return the file itself if '--isolatedModules' is specified", () => {
-                const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, moduleFile1, session } = getInitialState({
                     configObj: { compilerOptions: { isolatedModules: true } }
                 });
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should always return the file itself if --isolatedModules is specified`, session);
             });
 
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
                 const outFilePath = "/a/b/out.js";
-                const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, moduleFile1, session } = getInitialState({
                     configObj: { compilerOptions: { module: "system", outFile: outFilePath } }
                 });
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should always return the file itself if --out or --outFile is specified`, session);
             });
 
             it("should return cascaded affected file list", () => {
@@ -354,21 +272,22 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     path: "/a/b/file1Consumer1Consumer1.ts",
                     content: `import {y} from "./file1Consumer1";`
                 };
-                const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, verifyNoProjectsUpdatedInBackgroundEvent, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [file1Consumer1Consumer1]
                 });
 
                 updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T: number;");
-                verifyNoProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Doesnt change the shape of file1Consumer1
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Change both files before the timeout
                 updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T2: number;");
                 host.writeFile(moduleFile1.path, `export var T2: number;export function Foo() { };`);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should return cascaded affected file list`, session);
             });
 
             it("should work fine for files with circular references", () => {
@@ -384,13 +303,14 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     /// <reference path="./file1.ts" />
                     export var t2 = 10;`
                 };
-                const { host, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [file1, file2],
                     firstReloadFileList: [file1.path, libFile.path, file2.path, configFilePath]
                 });
 
                 host.writeFile(file2.path, file2.content + "export var t3 = 10;");
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should work fine for files with circular references`, session);
             });
 
             it("should detect removed code file", () => {
@@ -400,13 +320,14 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     /// <reference path="./moduleFile1.ts" />
                     export var x = Foo();`
                 };
-                const { host, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [referenceFile1],
                     firstReloadFileList: [referenceFile1.path, libFile.path, moduleFile1Path, configFilePath]
                 });
 
                 host.deleteFile(moduleFile1Path);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect removed code file`, session);
             });
 
             it("should detect non-existing code file", () => {
@@ -416,17 +337,18 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     /// <reference path="./moduleFile2.ts" />
                     export var x = Foo();`
                 };
-                const { host, moduleFile2, updateContentOfOpenFile, verifyNoProjectsUpdatedInBackgroundEvent, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                const { host, moduleFile2, updateContentOfOpenFile, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [referenceFile1],
                     firstReloadFileList: [referenceFile1.path, libFile.path, configFilePath]
                 });
 
                 updateContentOfOpenFile(referenceFile1, referenceFile1.content + "export var yy = Foo();");
-                verifyNoProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
 
                 // Create module File2 and see both files are saved
                 host.writeFile(moduleFile2.path, moduleFile2.content);
-                verifyProjectsUpdatedInBackgroundEvent();
+                host.runQueuedTimeoutCallbacks();
+                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect non-existing code file`, session);
             });
         });
 
@@ -451,34 +373,19 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                         content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
                     };
 
-                    const openFiles = [file1.path];
                     const host = createServerHost([file1, file3, libFile, configFile]);
-                    const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host, createLoggerWithInMemoryLogs(host));
-                    verifyInitialOpen(file1);
+                    const session = createSession(host);
+                    openFilesForSession([file1], session);
 
                     file3.content += "export class d {}";
                     host.writeFile(file3.path, file3.content);
                     host.checkTimeoutQueueLengthAndRun(2);
 
-                    // Since this is first event
-                    verifyProjectsUpdatedInBackgroundEventHandler([{
-                        eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                        data: {
-                            openFiles
-                        }
-                    }]);
-
                     host.writeFile(file2.path, file2.content);
                     host.runQueuedTimeoutCallbacks(); // For invalidation
                     host.runQueuedTimeoutCallbacks(); // For actual update
 
-                    verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
-                        eventName: ts.server.ProjectsUpdatedInBackgroundEvent,
-                        data: {
-                            openFiles
-                        }
-                    }] : []);
-                    baselineTsserverLogs("projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                    baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
                 });
             }
             verifyWithMaxCacheLimit("project is not at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
@@ -487,85 +394,23 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     }
 
     describe("when event handler is set in the session", () => {
-        verifyProjectsUpdatedInBackgroundEvent("when event handler is set in the session", createSessionWithProjectChangedEventHandler);
-
-        function createSessionWithProjectChangedEventHandler(host: TestServerHost, logger: Logger | undefined): ProjectsUpdatedInBackgroundEventVerifier {
-            const { session, events: projectChangedEvents } = createSessionWithEventTracking<ts.server.ProjectsUpdatedInBackgroundEvent>(
-                host,
-                ts.server.ProjectsUpdatedInBackgroundEvent,
-                logger && { logger }
-            );
-            return {
-                session,
-                verifyProjectsUpdatedInBackgroundEventHandler,
-                verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectsUpdatedInBackgroundEventHandler)
-            };
-
-            function eventToString(event: ts.server.ProjectsUpdatedInBackgroundEvent) {
-                return JSON.stringify(event && { eventName: event.eventName, data: event.data });
-            }
-
-            function eventsToString(events: readonly ts.server.ProjectsUpdatedInBackgroundEvent[]) {
-                return "[" + ts.map(events, eventToString).join(",") + "]";
-            }
-
-            function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: readonly ts.server.ProjectsUpdatedInBackgroundEvent[]) {
-                assert.equal(projectChangedEvents.length, expectedEvents.length, `Incorrect number of events Actual: ${eventsToString(projectChangedEvents)} Expected: ${eventsToString(expectedEvents)}`);
-                ts.forEach(projectChangedEvents, (actualEvent, i) => {
-                    const expectedEvent = expectedEvents[i];
-                    assert.strictEqual(actualEvent.eventName, expectedEvent.eventName);
-                    verifyFiles("openFiles", actualEvent.data.openFiles, expectedEvent.data.openFiles);
-                });
-
-                // Verified the events, reset them
-                projectChangedEvents.length = 0;
-            }
-        }
+        verifyProjectsUpdatedInBackgroundEvent("when event handler is set in the session", createSessionWithCustomEventHandler);
     });
 
     describe("when event handler is not set but session is created with canUseEvents = true", () => {
         describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", createSessionThatUsesEvents);
+            verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host => createSession(host, {
+                canUseEvents: true,
+                logger: createLoggerWithInMemoryLogs(host)
+            }));
         });
 
         describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", (host, logger) => createSessionThatUsesEvents(host, logger, /*noGetErrOnBackgroundUpdate*/ true));
+            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host => createSession(host, {
+                canUseEvents: true,
+                logger: createLoggerWithInMemoryLogs(host),
+                noGetErrOnBackgroundUpdate: true
+            }));
         });
-
-
-        function createSessionThatUsesEvents(host: TestServerHost, logger: Logger | undefined, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
-            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<ts.server.protocol.ProjectsUpdatedInBackgroundEvent>(
-                host,
-                ts.server.ProjectsUpdatedInBackgroundEvent,
-                { noGetErrOnBackgroundUpdate, logger: logger || createHasErrorMessageLogger() }
-            );
-
-            return {
-                session,
-                verifyProjectsUpdatedInBackgroundEventHandler,
-                verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectsUpdatedInBackgroundEventHandler)
-            };
-
-            function verifyProjectsUpdatedInBackgroundEventHandler(expected: readonly ts.server.ProjectsUpdatedInBackgroundEvent[]) {
-                const expectedEvents: ts.server.protocol.ProjectsUpdatedInBackgroundEventBody[] = ts.map(expected, e => {
-                    return {
-                        openFiles: e.data.openFiles
-                    };
-                });
-                const events = getEvents();
-                assert.equal(events.length, expectedEvents.length, `Incorrect number of events Actual: ${ts.map(events, e => e.body)} Expected: ${expectedEvents}`);
-                ts.forEach(events, (actualEvent, i) => {
-                    const expectedEvent = expectedEvents[i];
-                    verifyFiles("openFiles", actualEvent.body.openFiles, expectedEvent.openFiles);
-                });
-
-                // Verified the events, reset them
-                clearEvents();
-
-                if (events.length) {
-                    host.checkTimeoutQueueLength(noGetErrOnBackgroundUpdate ? 0 : 1); // Error checking queued only if not noGetErrOnBackgroundUpdate
-                }
-            }
-        }
     });
 });

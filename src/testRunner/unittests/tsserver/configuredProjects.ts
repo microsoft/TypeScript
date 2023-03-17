@@ -21,7 +21,6 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    createSessionWithEventTracking,
     openFilesForSession,
     verifyGetErrRequest,
 } from "./helpers";
@@ -751,25 +750,22 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) =>
             filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
-        const { session, events } = createSessionWithEventTracking<ts.server.ProjectLanguageServiceStateEvent>(host, ts.server.ProjectLanguageServiceStateEvent);
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         session.executeCommand({
             seq: 0,
             type: "request",
             command: "open",
             arguments: { file: f1.path }
         } as ts.server.protocol.OpenRequest);
+        session.logger.log(`Language languageServiceEnabled:: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
 
-        const projectService = session.getProjectService();
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        const project = configuredProjectAt(projectService, 0);
-        assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-        assert.equal(events.length, 1, "should receive event");
-        assert.equal(events[0].data.project, project, "project name");
-        assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
-
-        const options = projectService.getFormatCodeOptions(f1.path as ts.server.NormalizedPath);
-        const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
-        assert.deepEqual(edits, [{ span: ts.createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.FormatFull,
+            arguments: {
+                file: f1.path,
+            }
+        });
+        baselineTsserverLogs("configuredProjects", "syntactic features work even if language service is disabled", session);
     });
 
     it("when multiple projects are open, detects correct default project", () => {
@@ -1263,7 +1259,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         };
 
         const host = createServerHost([file1, libFile, configFile]);
-        const { session, events } = createSessionWithEventTracking<ts.server.ConfigFileDiagEvent>(host, ts.server.ConfigFileDiagEvent);
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         const originalReadFile = host.readFile;
         host.readFile = f => {
             return f === configFile.path ?
@@ -1272,15 +1268,6 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         };
         openFilesForSession([file1], session);
 
-        assert.deepEqual(events, [{
-            eventName: ts.server.ConfigFileDiagEvent,
-            data: {
-                triggerFile: file1.path,
-                configFileName: configFile.path,
-                diagnostics: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_read_file_0, configFile.path)
-                ]
-            }
-        }]);
+        baselineTsserverLogs("configuredProjects", "should be tolerated without crashing the server", session);
     });
 });
