@@ -6,7 +6,7 @@ export class Wizard {
 >Wizard : Wizard
 
   get steps() {
->steps : WizardStepProps
+>steps : any
 
     return {
 >{      wizard: this,      ...props,    } as WizardStepProps : WizardStepProps

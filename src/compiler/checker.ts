@@ -34322,12 +34322,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
         }
 
-        // const exprType = checkExpressionCached(expression, checkMode);
+        const exprType = checkExpressionCached(expression);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
-            return getRegularTypeOfLiteralType(checkExpression(expression));
+            return getRegularTypeOfLiteralType(exprType);
         }
         checkSourceElement(type);
         checkNodeDeferred(node);
