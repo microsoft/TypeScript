@@ -291,7 +291,7 @@ export function getErrorSummaryText(
     else {
         messageAndArgs =
             distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
-            // TODO(jakebailey): grammer of "Found 1 errors"
+            // TODO(jakebailey): grammar of "Found 1 errors" is incorrect.
             distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
             [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
     }
