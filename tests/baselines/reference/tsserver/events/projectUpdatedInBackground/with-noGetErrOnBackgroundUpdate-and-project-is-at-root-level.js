@@ -147,15 +147,11 @@ Info 37   [00:01:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/project/file1.ts"]}}
 After checking timeout queue length (2) and running
 
-Checking timeout queue length: 1
-
 Before running timeout callbacks
 //// [/a/b/node_modules/file2.d.ts]
 export class a { }
 
 
-Info 38   [00:01:23.000] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/project/file1.ts","diagnostics":[]}}
 After running timeout callbacks
 
 Before running timeout callbacks
