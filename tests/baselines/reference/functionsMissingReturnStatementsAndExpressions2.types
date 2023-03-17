@@ -1,7 +1,0 @@
-=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions2.ts ===
-function f1(): undefined | number {
->f1 : () => undefined | number
-
-    // Okay; return type allows implicit return of undefined
-}
-

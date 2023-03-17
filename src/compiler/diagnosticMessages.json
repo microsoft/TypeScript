@@ -1872,7 +1872,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.": {
+    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -3610,6 +3610,10 @@
     "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
+    },
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
+        "category": "Error",
+        "code": 2847
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

@@ -1,6 +1,6 @@
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(112,16): error TS2378: A 'get' accessor must return a value.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(134,15): error TS18050: The value 'undefined' cannot be used here.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): error TS1003: Identifier expected.
@@ -9,7 +9,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): e
 ==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (6 errors) ====
     function f1(): string {
                    ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
         // errors because there are no return statements
     }
     
@@ -109,7 +109,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): e
     
     function f21(): number | string {
                     ~~~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
         // Not okay; union does not contain void or any
     }
     
@@ -119,7 +119,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): e
     
     function f23(): undefined | number {
                     ~~~~~~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
         // Error; because `undefined | number` becomes `number` without strictNullChecks.
     }
     
