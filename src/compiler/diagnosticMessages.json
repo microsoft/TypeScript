@@ -3611,9 +3611,17 @@
         "category": "Error",
         "code": 2846
     },
-    "The source signature requires more arguments ({0}) than are provided by the target ({1}).": {
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
         "category": "Error",
         "code": 2847
+    },
+    "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
+        "category": "Error",
+        "code": 2848
+    },
+    "The source signature requires more arguments ({0}) than are provided by the target ({1}).": {
+        "category": "Error",
+        "code": 2849
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -6722,7 +6730,7 @@
         "category": "Suggestion",
         "code": 80010
     },
-    
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001

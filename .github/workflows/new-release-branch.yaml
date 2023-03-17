@@ -4,9 +4,15 @@ on:
   repository_dispatch:
     types: new-release-branch
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/setup-node@v3
