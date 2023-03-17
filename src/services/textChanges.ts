@@ -1301,7 +1301,7 @@ namespace changesToText {
         const writer = createWriter(newLineCharacter);
         const newLine = getNewLineKind(newLineCharacter);
         // workaround as text emitted below by printer doesn't include leading whitespaces, but includes newline
-        const leadingWhitespaces = sourceFile ? node.getFullText(sourceFile).match(/^(\s*)\n/)?.[1] ?? "" : ""
+        const leadingWhitespaces = sourceFile && node.pos !== -1 ? node.getFullText(sourceFile).match(/^\r?\n(\s*)/)?.[1] ?? "" : "";
         createPrinter({
             newLine,
             neverAsciiEscape: true,
