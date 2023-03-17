@@ -190,6 +190,10 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
     spread(u1, u2);
 }
 
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
@@ -356,3 +360,4 @@ type DotString = `${string}.${string}.${string}`;
 declare function noSpread<P extends DotString>(args: P[]): P;
 declare function spread<P extends DotString>(...args: P[]): P;
 declare function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>): void;
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;

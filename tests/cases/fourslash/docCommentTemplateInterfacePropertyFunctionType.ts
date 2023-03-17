@@ -5,7 +5,7 @@
 ////    foo: (a: number, b: string) => void;
 ////}
 
-verify.docCommentTemplateAt("", 12,
+verify.docCommentTemplateAt("", 11,
    `/**
      * 
      * @param a
@@ -13,7 +13,7 @@ verify.docCommentTemplateAt("", 12,
      * @returns
      */`);
 
-verify.docCommentTemplateAt("", 12,
+verify.docCommentTemplateAt("", 11,
    `/**
      * 
      * @param a

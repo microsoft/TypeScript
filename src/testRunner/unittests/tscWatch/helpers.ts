@@ -1,6 +1,14 @@
-import * as ts from "../../_namespaces/ts";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import { Baseline } from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    baselinePrograms,
+    CommandLineCallbacks,
+    commandLineCallbacks,
+    CommandLineProgram,
+    createSolutionBuilderHostForBaseline,
+    generateSourceMapBaselineFiles,
+} from "../tsc/helpers";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -11,14 +19,6 @@ import {
     TestServerHostCreationParameters,
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
-import {
-    baselinePrograms,
-    commandLineCallbacks,
-    CommandLineCallbacks,
-    CommandLineProgram,
-    createSolutionBuilderHostForBaseline,
-    generateSourceMapBaselineFiles,
-} from "../tsc/helpers";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -173,6 +173,7 @@ export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["base
     edit(sys);
     baseline.push("Input::");
     sys.diff(baseline, oldSnap);
+    sys.serializeWatches(baseline);
     return sys.snap();
 }
 
@@ -276,6 +277,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;
+    ts.Debug.assert(sys.writtenFiles === undefined);
     const solutionBuilder = createSolutionBuilder(changeToHostTrackingWrittenFiles(
         patchHostForBuildInfoReadWrite(sys)
     ), solutionRoots, originalRead);
@@ -283,6 +285,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     sys.readFile = originalReadFile;
     sys.write = originalWrite;
     sys.writeFile = originalWriteFile;
+    sys.writtenFiles = undefined;
     return sys;
 }
 

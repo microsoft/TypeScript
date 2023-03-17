@@ -1,7 +1,6 @@
 === tests/cases/compiler/restUnion3.ts ===
 declare const nullAndUndefinedUnion: null | undefined;
 >nullAndUndefinedUnion : null | undefined
->null : null
 
 var rest4: { };
 >rest4 : {}

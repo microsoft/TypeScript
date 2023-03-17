@@ -74,12 +74,11 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(158,17): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(162,9): error TS2681: A constructor cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(164,31): error TS2681: A constructor cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(165,30): error TS2680: A 'this' parameter must be the first parameter.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,26): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,26): error TS2680: A 'this' parameter must be the first parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,20): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,23): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,23): error TS2680: A 'this' parameter must be the first parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,23): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,20): error TS1433: Decorators may not be applied to 'this' parameters.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,20): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,30): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,32): error TS1359: Identifier expected. 'new' is a reserved word that cannot be used here.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,37): error TS1005: ',' expected.
@@ -94,7 +93,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(177,19): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (64 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (63 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -393,10 +392,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     
     ///// parse errors /////
     function modifiers(async this: C): number { return this.n; }
-                             ~~~~
-!!! error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
-                             ~~~~~~~
-!!! error TS2680: A 'this' parameter must be the first parameter.
+                       ~~~~~
+!!! error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
     function restParam(...this: C): number { return this.n; }
                           ~~~~
 !!! error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
@@ -407,7 +404,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
 !!! error TS1005: ',' expected.
     function decorated(@deco() this: C): number { return this.n; }
                        ~~~~~~~
-!!! error TS1433: Decorators may not be applied to 'this' parameters.
+!!! error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
     function initializer(this: C = new C()): number { return this.n; }
                                  ~
 !!! error TS1005: ',' expected.

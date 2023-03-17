@@ -49,7 +49,6 @@ var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the fir
 >[{a:null}] : { a: null; }[]
 >{a:null} : { a: null; }
 >a : null
->null : null
 
 
 

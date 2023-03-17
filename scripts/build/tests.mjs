@@ -1,19 +1,19 @@
+import { CancelError } from "@esfx/canceltoken";
+import chalk from "chalk";
 import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import chalk from "chalk";
+
+import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
 import { exec } from "./utils.mjs";
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
-import { CancelError } from "@esfx/canceltoken";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
 export const localRwcBaseline = "internal/baselines/rwc/local";
 export const refRwcBaseline = "internal/baselines/rwc/reference";
-export const localTest262Baseline = "internal/baselines/test262/local";
 
 /**
  * @param {string} runJs
@@ -175,9 +175,9 @@ export async function cleanTestDirs() {
  * @param {string} runners
  * @param {boolean} light
  * @param {string} [taskConfigsFolder]
- * @param {string | number} [workerCount]
+ * @param {number} [workerCount]
  * @param {string} [stackTraceLimit]
- * @param {string | number} [timeout]
+ * @param {number} [timeout]
  * @param {boolean} [keepFailed]
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]

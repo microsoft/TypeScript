@@ -65,10 +65,12 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             assert(completions.isIncomplete);
             assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit);
             assert.lengthOf(completions.entries.filter(entry => entry.source && !(entry.data as any)?.moduleSpecifier), excessFileCount);
+            assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 2 } });
         })
             .continueTyping("a", completions => {
                 assert(completions.isIncomplete);
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit * 2);
+                assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 3 } });
             })
             .continueTyping("_", completions => {
                 assert(!completions.isIncomplete);

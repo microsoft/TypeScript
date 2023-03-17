@@ -1,9 +1,10 @@
-import * as ts from "../_namespaces/ts";
-import * as Harness from "../_namespaces/Harness";
-import * as evaluator from "../_namespaces/evaluator";
-import * as vfs from "../_namespaces/vfs";
 import * as documents from "../_namespaces/documents";
+import * as evaluator from "../_namespaces/evaluator";
 import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import { NewLineKind, ScriptTarget, transpileModule } from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
@@ -30,10 +31,10 @@ describe("unittests:: TransformAPI", () => {
             }
             return ts.visitEachChild(node, visitor, context);
         }
-        return (file: ts.SourceFile) => ts.visitNode(file, visitor);
+        return (file: ts.SourceFile) => ts.visitNode(file, visitor, ts.isSourceFile);
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName(context: ts.TransformationContext) {
+    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(context: ts.TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
@@ -43,17 +44,17 @@ describe("unittests:: TransformAPI", () => {
             }
             return node;
         };
-        return (file: ts.SourceFile) => file;
+        return (file: T) => file;
     }
 
     function replaceIdentifiersNamedOldNameWithNewName2(context: ts.TransformationContext) {
-        const visitor: ts.Visitor = (node) => {
+        const visitor = (node: ts.Node): ts.Node => {
             if (ts.isIdentifier(node) && node.text === "oldName") {
                 return ts.factory.createIdentifier("newName");
             }
             return ts.visitEachChild(node, visitor, context);
         };
-        return (node: ts.SourceFile) => ts.visitNode(node, visitor);
+        return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
     }
 
     function createTaggedTemplateLiteral(): ts.Transformer<ts.SourceFile> {
@@ -109,7 +110,7 @@ describe("unittests:: TransformAPI", () => {
         return transformSourceFile(`let a: () => void`, [
             context => file => ts.visitNode(file, function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
                 return ts.visitEachChild(node, visitor, context);
-            })
+            }, ts.isSourceFile)
         ]);
     });
 
@@ -120,7 +121,7 @@ describe("unittests:: TransformAPI", () => {
                     return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword);
                 }
                 return ts.visitEachChild(node, visitor, context);
-            })
+            }, ts.isSourceFile)
         ]);
     });
 
@@ -328,13 +329,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/Microsoft/TypeScript/issues/17384
     testBaseline("transformAddDecoratedNode", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddDecoratedNode],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
@@ -366,13 +368,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/microsoft/TypeScript/issues/33295
     testBaseline("transformParameterProperty", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddParameterProperty],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+                experimentalDecorators: true,
             }
         }).outputText;
 
@@ -557,7 +560,7 @@ module MyModule {
         return host.readFile("source.js")!.toString();
 
         function transformSourceFile(context: ts.TransformationContext) {
-            const visitor: ts.Visitor = (node) => {
+            const visitor = (node: ts.Node): ts.Node => {
                 if (ts.isMethodDeclaration(node)) {
                     return ts.factory.updateMethodDeclaration(
                         node,
@@ -573,7 +576,7 @@ module MyModule {
                 }
                 return ts.visitEachChild(node, visitor, context);
             };
-            return (node: ts.SourceFile) => ts.visitNode(node, visitor);
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
         }
 
     });
@@ -643,8 +646,9 @@ class MyClass {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
@@ -658,11 +662,38 @@ const MyClass = class {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
+    testBaseline("jsxExpression", () => {
+        function doNothing(context: ts.TransformationContext) {
+            const visitor = (node: ts.Node): ts.Node => {
+                return ts.visitEachChild(node, visitor, context);
+            };
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
+        }
+
+        return ts.transpileModule(`
+function test () {
+    return <>
+        {/* This comment breaks the transformer */}
+    </>
+}
+`, {
+            transformers: {
+                before: [doNothing],
+            },
+            compilerOptions: {
+                jsx: ts.JsxEmit.React,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+            }
+        }).outputText;
+    });
 });
 

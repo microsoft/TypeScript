@@ -30,7 +30,7 @@
     "File '/node_modules/foo/@bar.js' does not exist.",
     "File '/node_modules/foo/@bar.jsx' does not exist.",
     "'package.json' does not have a 'main' field.",
-    "File '/node_modules/foo/@bar/index.js' exist - use it as a name resolution result.",
+    "File '/node_modules/foo/@bar/index.js' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/foo/@bar/index.js', result '/node_modules/foo/@bar/index.js'.",
     "======== Module name 'foo/@bar' was successfully resolved to '/node_modules/foo/@bar/index.js' with Package ID 'foo/@bar/index.js@1.2.3'. ========"
 ]

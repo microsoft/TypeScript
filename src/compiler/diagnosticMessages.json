@@ -635,7 +635,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.": {
+    "Re-exporting a type when '{0}' is enabled requires using 'export type'.": {
         "category": "Error",
         "code": 1205
     },
@@ -646,10 +646,6 @@
     "Decorators cannot be applied to multiple get/set accessors of the same name.": {
         "category": "Error",
         "code": 1207
-    },
-    "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
-        "category": "Error",
-        "code": 1208
     },
     "Invalid optional chain from new expression. Did you mean to call '{0}()'?": {
         "category": "Error",
@@ -686,10 +682,6 @@
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
-    },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.": {
-        "category": "Error",
-        "code": 1219
     },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
@@ -819,6 +811,10 @@
         "category": "Error",
         "code": 1252
     },
+    "Abstract properties can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1253
+    },
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
@@ -875,7 +871,7 @@
         "category": "Error",
         "code": 1268
     },
-    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
+    "Cannot use 'export import' on a type or type-only namespace when '{0}' is enabled.": {
         "category": "Error",
         "code": 1269
     },
@@ -910,6 +906,50 @@
     "'{0}' modifier can only appear on a type parameter of a function, method or class": {
         "category": "Error",
         "code": 1277
+    },
+    "The runtime will invoke the decorator with {1} arguments, but the decorator expects {0}.": {
+        "category": "Error",
+        "code": 1278
+    },
+    "The runtime will invoke the decorator with {1} arguments, but the decorator expects at least {0}.": {
+        "category": "Error",
+        "code": 1279
+    },
+    "Namespaces are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
+        "category": "Error",
+        "code": 1280
+    },
+    "Cannot access '{0}' from another file without qualification when '{1}' is enabled. Use '{2}' instead.": {
+        "category": "Error",
+        "code": 1281
+    },
+    "An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
+        "category": "Error",
+        "code": 1282
+    },
+    "An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
+        "category": "Error",
+        "code": 1283
+    },
+    "An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
+        "category": "Error",
+        "code": 1284
+    },
+    "An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
+        "category": "Error",
+        "code": 1285
+    },
+    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1286
+    },
+    "A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1287
+    },
+    "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1288
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1039,10 +1079,6 @@
     "Class constructor may not be an accessor.": {
         "category": "Error",
         "code": 1341
-    },
-    "Type arguments cannot be used here.": {
-        "category": "Error",
-        "code": 1342
     },
     "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
         "category": "Error",
@@ -1195,10 +1231,6 @@
     "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
         "category": "Error",
         "code": 1382
-    },
-    "Only named exports may use 'export type'.": {
-        "category": "Error",
-        "code": 1383
     },
     "Function type notation must be parenthesized when used in a union type.": {
         "category": "Error",
@@ -1388,7 +1420,7 @@
         "category": "Error",
         "code": 1432
     },
-    "Decorators may not be applied to 'this' parameters.": {
+    "Neither decorators nor modifiers may be applied to 'this' parameters.": {
         "category": "Error",
         "code": 1433
     },
@@ -1440,7 +1472,7 @@
         "category": "Error",
         "code": 1446
     },
-    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.": {
+    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",
         "code": 1448
     },
@@ -1552,6 +1584,18 @@
     "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`.": {
         "category": "Message",
         "code": 1483
+    },
+    "'{0}' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1484
+    },
+    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1485
+    },
+    "Decorator used before 'export' here.": {
+        "category": "Error",
+        "code": 1486
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2990,10 +3034,6 @@
         "category": "Error",
         "code": 2690
     },
-    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
-        "category": "Error",
-        "code": 2691
-    },
     "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
@@ -3219,7 +3259,7 @@
         "category": "Error",
         "code": 2747
     },
-    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+    "Cannot access ambient const enums when '{0}' is enabled.": {
         "category": "Error",
         "code": 2748
     },
@@ -3459,7 +3499,7 @@
         "category": "Error",
         "code": 2808
     },
-    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
     },
@@ -4213,7 +4253,7 @@
         "category": "Error",
         "code": 5090
     },
-    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
+    "Option 'preserveConstEnums' cannot be disabled when '{0}' is enabled.": {
         "category": "Error",
         "code": 5091
     },
@@ -4229,11 +4269,11 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -4245,25 +4285,37 @@
         "category": "Error",
         "code": 5098
     },
-    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
-        "category": "Error",
-        "code": 5099
-    },
-    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
-        "category": "Error",
-        "code": 5100
-    },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+    "Option '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
-    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
+    "Option '{0}' has been removed. Please remove it from your configuration.": {
         "category": "Error",
         "code": 5102
     },
     "Invalid value for '--ignoreDeprecations'.": {
         "category": "Error",
         "code": 5103
+    },
+    "Option '{0}' is redundant and cannot be specified with option '{1}'.": {
+        "category": "Error",
+        "code": 5104
+    },
+    "Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.": {
+        "category": "Error",
+        "code": 5105
+    },
+    "Use '{0}' instead.": {
+        "category": "Message",
+        "code": 5106
+    },
+    "Option '{0}={1}' is deprecated and will stop functioning in TypeScript {2}. Specify compilerOption '\"ignoreDeprecations\": \"{3}\"' to silence this error.": {
+        "category": "Error",
+        "code": 5107
+    },
+    "Option '{0}={1}' has been removed. Please remove it from your configuration.": {
+        "category": "Error",
+        "code": 5108
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4595,7 +4647,7 @@
         "category": "Message",
         "code": 6096
     },
-    "File '{0}' exist - use it as a name resolution result.": {
+    "File '{0}' exists - use it as a name resolution result.": {
         "category": "Message",
         "code": 6097
     },
@@ -5206,6 +5258,10 @@
         "category": "Message",
         "code": 6264
     },
+    "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6265
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",
@@ -5510,6 +5566,26 @@
         "category": "Message",
         "code": 6411
     },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that file '{2}' was root file of compilation but not any more.": {
+        "category": "Message",
+        "code": 6412
+    },
+    "Entering conditional exports.": {
+        "category": "Message",
+        "code": 6413
+    },
+    "Resolved under condition '{0}'.": {
+        "category": "Message",
+        "code": 6414
+    },
+    "Failed to resolve under condition '{0}'.": {
+        "category": "Message",
+        "code": 6415
+    },
+    "Exiting conditional exports.": {
+        "category": "Message",
+        "code": 6416
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -5655,7 +5731,7 @@
         "category": "Message",
         "code": 6629
     },
-    "Enable experimental support for TC39 stage 2 draft decorators.": {
+    "Enable experimental support for legacy experimental decorators.": {
         "category": "Message",
         "code": 6630
     },
@@ -5999,6 +6075,10 @@
         "category": "Message",
         "code": 6803
     },
+    "Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting.": {
+        "category": "Message",
+        "code": 6804
+    },
 
     "one of:": {
         "category": "Message",
@@ -6152,6 +6232,10 @@
     "Function expression, which lacks return-type annotation, implicitly has an '{0}' return type.": {
         "category": "Error",
         "code": 7011
+    },
+    "This overload implicitly returns the type '{0}' because it lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7012
     },
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
@@ -6488,6 +6572,10 @@
         "category": "Error",
         "code": 8037
     },
+    "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
+        "category": "Error",
+        "code": 8038
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
@@ -6622,7 +6710,15 @@
         "category": "Suggestion",
         "code": 80008
     },
-
+    "JSDoc typedef may be converted to TypeScript type.": {
+        "category": "Suggestion",
+        "code": 80009
+    },
+    "JSDoc typedefs may be converted to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80010
+    },
+    
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -7480,6 +7576,14 @@
         "category": "Message",
         "code": 95175
     },
+    "Convert typedef to TypeScript type.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Convert all typedef to TypeScript types.": {
+        "category": "Message",
+        "code": 95177
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7636,5 +7740,9 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "Compiler option '{0}' cannot be given an empty string.": {
+        "category": "Error",
+        "code": 18051
     }
 }

@@ -223,7 +223,6 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >(/** @type {*} */(null)) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >(null) : any
->null : null
 
 /**
  * 

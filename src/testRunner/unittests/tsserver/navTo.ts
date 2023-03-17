@@ -27,12 +27,12 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
 
         // Try to find some interface type defined in lib.d.ts
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "Document", file: file1.path, projectFileName: configFile.path }
         }).response as ts.server.protocol.NavtoItem[];
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path }
         }).response as ts.server.protocol.NavtoItem[];
         baselineTsserverLogs("navTo", "should not include type symbols", session);
@@ -72,7 +72,7 @@ export const ghijkl = a.abcdef;`
         openFilesForSession([file1, file2], session);
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "abcdef", file: file1.path }
         });
 
@@ -120,7 +120,7 @@ export const ghijkl = a.abcdef;`
         openFilesForSession([file1], session);
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "abcdef" }
         });
         baselineTsserverLogs("navTo", "should de-duplicate symbols when searching all projects", session);
@@ -141,7 +141,7 @@ export const ghijkl = a.abcdef;`
 
         // Try to find some interface type defined in lib.d.ts
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path }
         });
         baselineTsserverLogs("navTo", "should work with Deprecated", session);

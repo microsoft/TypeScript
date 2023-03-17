@@ -26,6 +26,8 @@ verify.completions(
         marker: "2",
         exact: [
             { name: "lib", kind: "script", kindModifiers: ".d.ts" },
+            { name: "lib.decorators", kind: "script", kindModifiers: ".d.ts" },
+            { name: "lib.decorators.legacy", kind: "script", kindModifiers: ".d.ts" },
             { name: "ns", kind: "script", kindModifiers: ".ts" },
             { name: "user", kind: "script", kindModifiers: ".js" },
             { name: "node_modules", kind: "directory" },

@@ -2,7 +2,6 @@
 interface Bar {  bar: number; foo: object | null;  }
 >bar : number
 >foo : object | null
->null : null
 
 let a = {
 >a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
@@ -12,7 +11,6 @@ let a = {
 >test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
 >a : K
 >b : Bar[K] | null | undefined
->null : null
 
 };
 a.test("bar", null); // ok, null is assignable to number | null | undefined
@@ -21,5 +19,4 @@ a.test("bar", null); // ok, null is assignable to number | null | undefined
 >a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
 >test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
 >"bar" : "bar"
->null : null
 

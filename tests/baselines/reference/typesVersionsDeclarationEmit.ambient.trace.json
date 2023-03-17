@@ -16,7 +16,7 @@
     "Loading module as file / folder, candidate module location 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index', target file types: TypeScript, Declaration.",
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.ts' does not exist.",
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.tsx' does not exist.",
-    "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts' exist - use it as a name resolution result.",
+    "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts', result 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts'.",
     "======== Module name 'ext' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts' with Package ID 'ext/ts3.1/index.d.ts@1.0.0'. ========",
     "======== Resolving module 'ext/other' from 'tests/cases/conformance/declarationEmit/main.ts'. ========",

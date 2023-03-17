@@ -200,7 +200,6 @@ describe("unittests:: tsserver:: project telemetry", () => {
             compilerOptions: {},
             typeAcquisition: {
                 enable: true,
-                enableAutoDiscovery: false,
                 include: ["hunter2", "hunter3"],
                 exclude: [],
             },

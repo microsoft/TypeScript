@@ -1,0 +1,24 @@
+=== tests/cases/compiler/a.js ===
+//// [thisKeyword.ts]
+module foo {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+
+    this.bar = 4;
+}
+
+//// [thisKeyword.js]
+var foo;
+>foo : Symbol(foo, Decl(a.js, 6, 3))
+
+(function (foo) {
+>foo : Symbol(foo, Decl(a.js, 7, 11))
+
+    this.bar = 4;
+>this.bar : Symbol((Anonymous function).bar, Decl(a.js, 7, 17))
+>this : Symbol((Anonymous function), Decl(a.js, 7, 1))
+>bar : Symbol((Anonymous function).bar, Decl(a.js, 7, 17))
+
+})(foo || (foo = {}));
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+
