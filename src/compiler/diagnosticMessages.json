@@ -3619,7 +3619,7 @@
         "category": "Error",
         "code": 2848
     },
-    "The source signature requires more arguments ({0}) than are provided by the target ({1}).": {
+    "Target signature provides too few arguments. Expected {0} or more, but got {1}.": {
         "category": "Error",
         "code": 2849
     },
