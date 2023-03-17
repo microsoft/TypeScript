@@ -359,7 +359,6 @@ import {
     JsxElement,
     JsxEmit,
     JsxFragment,
-    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningLikeElement,
     JsxSelfClosingElement,
@@ -10134,13 +10133,13 @@ export function tryGetJSDocSatisfiesTypeNode(node: Node) {
 }
 
 /** @internal */
-export function getEscapedTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): __String {
-    return isIdentifier(node) ? node.escapedText : (getEscapedTextOfJsxAttributeName(node.namespace) + ":" + getEscapedTextOfJsxAttributeName(node.name)) as __String;
+export function getEscapedTextOfJsxAttributeName(node: JsxAttributeName): __String {
+    return isIdentifier(node) ? node.escapedText : `${node.namespace.escapedText}:${idText(node.name)}` as __String;
 }
 
 /** @internal */
-export function getTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): string {
-    return isIdentifier(node) ? idText(node) : getTextOfJsxAttributeName(node.namespace) + ":" + getTextOfJsxAttributeName(node.name);
+export function getTextOfJsxAttributeName(node: JsxAttributeName): string {
+    return isIdentifier(node) ? idText(node) : `${idText(node.namespace)}:${idText(node.name)}`;
 }
 
 /** @internal */
