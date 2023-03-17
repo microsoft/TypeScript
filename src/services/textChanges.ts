@@ -988,6 +988,7 @@ export class ChangeTracker {
     public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
         if (!containingList) {
             Debug.fail("node is not a list element");
+            return;
         }
         const index = indexOfNode(containingList, after);
         if (index < 0) {
