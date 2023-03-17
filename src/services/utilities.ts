@@ -43,6 +43,7 @@ import {
     DeleteExpression,
     Diagnostic,
     DiagnosticAndArguments,
+    DiagnosticArguments,
     DiagnosticMessage,
     DiagnosticWithLocation,
     directoryProbablyExists,
@@ -4058,7 +4059,7 @@ export type DiagnosticOrDiagnosticAndArguments = DiagnosticMessage | DiagnosticA
 /** @internal */
 export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): string {
     return isArray(diag)
-        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as DiagnosticArguments)
         : getLocaleSpecificMessage(diag);
 }
 
