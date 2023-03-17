@@ -24,7 +24,7 @@ tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 
     /** @type {FunctionReturningPromise} */
     async function testPromise2() {
         return "asd";
-        ~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     }
     
@@ -56,7 +56,7 @@ tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 
     /** @type {FunctionReturningNever} */
     async function testNever2() {
         return "asd";
-        ~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'never'.
     }
     

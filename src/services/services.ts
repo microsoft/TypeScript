@@ -487,10 +487,10 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
 }
 
 function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
-    scanner.setTextPos(pos);
+    scanner.resetTokenState(pos);
     while (pos < end) {
         const token = scanner.scan();
-        const textPos = scanner.getTextPos();
+        const textPos = scanner.getTokenEnd();
         if (textPos <= end) {
             if (token === SyntaxKind.Identifier) {
                 if (hasTabstop(parent)) {

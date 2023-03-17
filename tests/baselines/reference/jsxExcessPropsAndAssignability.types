@@ -21,12 +21,10 @@ const myHoc = <ComposedComponentProps extends any>(
 >WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
 >React : any
 >null as any : any
->null : null
 
     const props: ComposedComponentProps = null as any;
 >props : ComposedComponentProps
 >null as any : any
->null : null
 
     <WrapperComponent {...props} myProp={'1000000'} />;
 ><WrapperComponent {...props} myProp={'1000000'} /> : JSX.Element

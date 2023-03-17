@@ -8,7 +8,6 @@ function A () {
 >this.unknown : any
 >this : this
 >unknown : any
->null : null
 
     this.unknowable = undefined
 >this.unknowable = undefined : undefined
@@ -129,7 +128,6 @@ var n;
 function f(a = null, b = n, l = []) {
 >f : (a?: null, b?: number | undefined, l?: any[]) => void
 >a : null
->null : null
 >b : number | undefined
 >n : number | undefined
 >l : any[]
@@ -144,7 +142,6 @@ function f(a = null, b = n, l = []) {
     a = null
 >a = null : null
 >a : null
->null : null
 
     a = 1
 >a = 1 : 1

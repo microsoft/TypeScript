@@ -84,13 +84,11 @@ function f2<T, U>(x: T, y: U) {
 >true ? x : null : T
 >true : true
 >x : T
->null : null
 
     var r0 = true ? null : x;
 >r0 : T
 >true ? null : x : T
 >true : true
->null : null
 >x : T
 
     var u: typeof undefined;

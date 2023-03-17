@@ -11,14 +11,12 @@ var b = [1, null]; // number[]
 >b : number[]
 >[1, null] : number[]
 >1 : 1
->null : null
 
 var c = [1, '', null]; // {}[]
 >c : (string | number)[]
 >[1, '', null] : (string | number)[]
 >1 : 1
 >'' : ""
->null : null
 
 var d = [{}, 1]; // {}[]
 >d : {}[]
@@ -93,7 +91,6 @@ var l = [() => 1, () => null]; // { (): any }[]
 >() => 1 : () => number
 >1 : 1
 >() => null : () => any
->null : null
 
 var m = [() => 1, () => '', () => null]; // { (): any }[]
 >m : (() => any)[]
@@ -103,7 +100,6 @@ var m = [() => 1, () => '', () => null]; // { (): any }[]
 >() => '' : () => string
 >'' : ""
 >() => null : () => any
->null : null
 
 var n = [[() => 1], [() => '']]; // {}[]
 >n : ((() => number)[] | (() => string)[])[]
@@ -187,7 +183,6 @@ module Derived {
 >() => base : () => Base
 >base : Base
 >() => null : () => any
->null : null
 
     var m = [() => base, () => derived, () => null]; // { (): any }[]
 >m : (() => any)[]
@@ -197,7 +192,6 @@ module Derived {
 >() => derived : () => Derived
 >derived : Derived
 >() => null : () => any
->null : null
 
     var n = [[() => base], [() => derived]]; // { (): Base }[]
 >n : (() => Base)[][]
@@ -246,7 +240,6 @@ module WithContextualType {
     var b: Derived[] = [null];
 >b : Derived[]
 >[null] : null[]
->null : null
 
     var c: Derived[] = [];
 >c : Derived[]
@@ -276,7 +269,6 @@ function foo<T, U>(t: T, u: U) {
 >b : T[]
 >[t, null] : T[]
 >t : T
->null : null
 
     var c = [t, u]; // {}[]
 >c : (T | U)[]
@@ -306,7 +298,6 @@ function foo<T, U>(t: T, u: U) {
 >() => u : () => U
 >u : U
 >() => null : () => any
->null : null
 }
 
 function foo2<T extends Base, U extends Derived>(t: T, u: U) {
@@ -324,7 +315,6 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >b : T[]
 >[t, null] : T[]
 >t : T
->null : null
 
     var c = [t, u]; // {}[]
 >c : (T | U)[]
@@ -354,7 +344,6 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >() => u : () => U
 >u : U
 >() => null : () => any
->null : null
 
     var g = [t, base]; // Base[]
 >g : Base[]
@@ -396,7 +385,6 @@ function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 >b : T[]
 >[t, null] : T[]
 >t : T
->null : null
 
     var c = [t, u]; // {}[]
 >c : (T | U)[]
@@ -426,7 +414,6 @@ function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 >() => u : () => U
 >u : U
 >() => null : () => any
->null : null
 
     var g = [t, base]; // Base[]
 >g : Base[]
@@ -468,7 +455,6 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >b : T[]
 >[t, null] : T[]
 >t : T
->null : null
 
     var c = [t, u]; // BUG 821629
 >c : (T | U)[]
@@ -498,7 +484,6 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >() => u : () => U
 >u : U
 >() => null : () => any
->null : null
 
     var g = [t, base]; // Base[]
 >g : Base[]

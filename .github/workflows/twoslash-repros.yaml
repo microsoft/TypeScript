@@ -19,6 +19,9 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   run:
     if: ${{ github.repository == 'microsoft/TypeScript' }}

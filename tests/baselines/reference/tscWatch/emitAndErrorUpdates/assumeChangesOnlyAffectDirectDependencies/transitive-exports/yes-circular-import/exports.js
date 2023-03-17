@@ -250,7 +250,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:20 AM[0m] Found 1 error. Watching for file changes.
 
@@ -314,7 +314,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:31 AM[0m] Found 1 error. Watching for file changes.
 
@@ -363,7 +363,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:42 AM[0m] Found 1 error. Watching for file changes.
 

@@ -1,10 +1,10 @@
-error TS5101: Flag 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 tests/cases/compiler/keyofDoesntContainSymbols.ts(11,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/compiler/keyofDoesntContainSymbols.ts(14,23): error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num"'.
 tests/cases/compiler/keyofDoesntContainSymbols.ts(17,23): error TS2345: Argument of type '0' is not assignable to parameter of type '"str" | "num"'.
 
 
-!!! error TS5101: Flag 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+!!! error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 ==== tests/cases/compiler/keyofDoesntContainSymbols.ts (3 errors) ====
     const sym = Symbol();
     const num = 0;

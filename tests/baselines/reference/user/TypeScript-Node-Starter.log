@@ -1,9 +1,0 @@
-Exit Code: 2
-Standard output:
-node_modules/mongoose/index.d.ts(438,37): error TS2589: Type instantiation is excessively deep and possibly infinite.
-node_modules/mongoose/index.d.ts(1194,5): error TS2589: Type instantiation is excessively deep and possibly infinite.
-node_modules/mongoose/index.d.ts(1195,5): error TS2589: Type instantiation is excessively deep and possibly infinite.
-
-
-
-Standard error:

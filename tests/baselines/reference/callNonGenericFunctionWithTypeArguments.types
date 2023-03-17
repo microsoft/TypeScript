@@ -5,7 +5,6 @@
 function f(x: number) { return null; }
 >f : (x: number) => any
 >x : number
->null : null
 
 var r = f<string>(1);
 >r : any
@@ -17,7 +16,6 @@ var f2 = (x: number) => { return null; }
 >f2 : (x: number) => any
 >(x: number) => { return null; } : (x: number) => any
 >x : number
->null : null
 
 var r2 = f2<string>(1);
 >r2 : any
@@ -43,7 +41,6 @@ class C {
 >x : number
 
         return null;
->null : null
     }
 }
 var r4 = (new C()).f<string>(1);
@@ -80,7 +77,6 @@ class C2 {
 >x : number
 
         return null;
->null : null
     }
 }
 var r6 = (new C2()).f<string>(1);
