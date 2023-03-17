@@ -94,11 +94,13 @@ import {
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
+    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
     isDeclaration,
+    isElementAccessExpression,
     isEntityName,
     isEntityNameExpression,
     isExportAssignment,
@@ -114,6 +116,7 @@ import {
     isGlobalScopeAugmentation,
     isIdentifier,
     isIdentifierANonContextualKeyword,
+    isIdentifierText,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -181,6 +184,7 @@ import {
     pushIfUnique,
     removeAllComments,
     ResolutionMode,
+    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -1490,13 +1494,16 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!p.valueDeclaration || !isPropertyAccessExpression(p.valueDeclaration)) {
-                            return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
+                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                            return undefined;
+                        }
+                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
+                        if (!isIdentifierText(nameStr, ScriptTarget.ESNext)) {
+                            return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                         const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
-                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
                         if (isNonContextualKeywordName) {
