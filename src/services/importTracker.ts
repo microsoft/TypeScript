@@ -17,6 +17,8 @@ import {
     forEach,
     getAssignmentDeclarationKind,
     getFirstIdentifier,
+    getJSXImplicitImportBase,
+    getJSXRuntimeImport,
     getNameOfAccessExpression,
     getSourceFileOfNode,
     getSymbolId,
@@ -473,7 +475,10 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
 
         forEachImport(referencingFile, (_importDecl, moduleSpecifier) => {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
-            if (moduleSymbol === searchModuleSymbol) {
+            const compilerOptions = program.getCompilerOptions();
+            const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(compilerOptions, referencingFile), compilerOptions);
+
+            if (moduleSymbol === searchModuleSymbol && moduleSpecifier.text !== jsxImport) {
                 refs.push({ kind: "import", literal: moduleSpecifier });
             }
         });
