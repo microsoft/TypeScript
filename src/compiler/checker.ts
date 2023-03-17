@@ -295,6 +295,7 @@ import {
     getJSDocDeprecatedTag,
     getJSDocEnumTag,
     getJSDocHost,
+    getJSDocOverloadTags,
     getJSDocParameterTags,
     getJSDocRoot,
     getJSDocSatisfiesExpressionType,
@@ -14647,22 +14648,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             if (isInJSFile(decl) && decl.jsDoc) {
-                let hasJSDocOverloads = false;
-                for (const node of decl.jsDoc) {
-                    if (node.tags) {
-                        for (const tag of node.tags) {
-                            if (isJSDocOverloadTag(tag)) {
-                                const jsDocSignature = tag.typeExpression;
-                                if (jsDocSignature.type === undefined && !isConstructorDeclaration(decl)) {
-                                    reportImplicitAny(jsDocSignature, anyType);
-                                }
-                                result.push(getSignatureFromDeclaration(jsDocSignature));
-                                hasJSDocOverloads = true;
-                            }
+                const tags = getJSDocOverloadTags(decl);
+                if (length(tags)) {
+                    for (const tag of tags) {
+                        const jsDocSignature = tag.typeExpression;
+                        if (jsDocSignature.type === undefined && !isConstructorDeclaration(decl)) {
+                            reportImplicitAny(jsDocSignature, anyType);
                         }
+                        result.push(getSignatureFromDeclaration(jsDocSignature));
                     }
-                }
-                if (hasJSDocOverloads) {
                     continue;
                 }
             }
@@ -38905,15 +38899,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (isInJSFile(current) && isFunctionLike(current) && current.jsDoc) {
-                    for (const node of current.jsDoc) {
-                        if (node.tags) {
-                            for (const tag of node.tags) {
-                                if (isJSDocOverloadTag(tag)) {
-                                    hasOverloads = true;
-                                }
-                            }
-                        }
-                    }
+                    hasOverloads = length(getJSDocOverloadTags(current)) > 0;
                 }
             }
         }
