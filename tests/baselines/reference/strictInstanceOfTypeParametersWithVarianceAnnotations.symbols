@@ -1,241 +1,239 @@
 === tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts ===
-class UnconstrainedIn<in T> {
->UnconstrainedIn : Symbol(UnconstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 22))
+class UnconstrainedCovariant<out T> {
+>UnconstrainedCovariant : Symbol(UnconstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
 
-    read: (value: T) => void;
->read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
->value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 1, 11))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 22))
+    x: T;
+>x : Symbol(UnconstrainedCovariant.x, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 37))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
 }
 
-declare const x1: unknown;
->x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+declare const unc_covariant: unknown;
+>unc_covariant : Symbol(unc_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
 
-if (x1 instanceof UnconstrainedIn) {
->x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
->UnconstrainedIn : Symbol(UnconstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+if (unc_covariant instanceof UnconstrainedCovariant) {
+>unc_covariant : Symbol(unc_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+>UnconstrainedCovariant : Symbol(UnconstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
 
-    x1.read(1);
->x1.read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
->x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
->read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+    let unknown_covariant: UnconstrainedCovariant<unknown> = unc_covariant;
+>unknown_covariant : Symbol(unknown_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 7, 7))
+>UnconstrainedCovariant : Symbol(UnconstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+>unc_covariant : Symbol(unc_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
 
-    x1.read("foo");
->x1.read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
->x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
->read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+    let never_covariant: UnconstrainedCovariant<never> = unc_covariant;  // Error
+>never_covariant : Symbol(never_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 8, 7))
+>UnconstrainedCovariant : Symbol(UnconstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+>unc_covariant : Symbol(unc_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+
+    let any_covariant: UnconstrainedCovariant<any> = unc_covariant;
+>any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 9, 7))
+>UnconstrainedCovariant : Symbol(UnconstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+>unc_covariant : Symbol(unc_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+
+    let sub_covariant: UnconstrainedCovariant<"literal"> = unc_covariant;  // Error
+>sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 10, 7))
+>UnconstrainedCovariant : Symbol(UnconstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+>unc_covariant : Symbol(unc_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
 }
 
-class ConstrainedIn<in T extends number> {
->ConstrainedIn : Symbol(ConstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 9, 1))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 20))
+class ConstrainedCovariant<out T extends string> {
+>ConstrainedCovariant : Symbol(ConstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 13, 27))
 
-    read: (value: T) => void;
->read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
->value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 12, 11))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 20))
+    x: T;
+>x : Symbol(ConstrainedCovariant.x, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 13, 50))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 13, 27))
 }
 
-declare const y1: unknown;
->y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
+declare const con_covariant: unknown;
+>con_covariant : Symbol(con_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 17, 13))
 
-if (y1 instanceof ConstrainedIn) {
->y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
->ConstrainedIn : Symbol(ConstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 9, 1))
+if (con_covariant instanceof ConstrainedCovariant) {
+>con_covariant : Symbol(con_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 17, 13))
+>ConstrainedCovariant : Symbol(ConstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 1))
 
-    y1.read(1);
->y1.read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
->y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
->read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+    let never_covariant: ConstrainedCovariant<never> = con_covariant;  // Error
+>never_covariant : Symbol(never_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 20, 7))
+>ConstrainedCovariant : Symbol(ConstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 1))
+>con_covariant : Symbol(con_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 17, 13))
 
-    y1.read("foo");
->y1.read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
->y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
->read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+    let any_covariant: ConstrainedCovariant<any> = con_covariant;
+>any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 21, 7))
+>ConstrainedCovariant : Symbol(ConstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 1))
+>con_covariant : Symbol(con_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 17, 13))
+
+    let constraint_covariant: ConstrainedCovariant<string> = con_covariant;
+>constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 7))
+>ConstrainedCovariant : Symbol(ConstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 1))
+>con_covariant : Symbol(con_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 17, 13))
+
+    let sub_covariant: ConstrainedCovariant<"literal"> = con_covariant;  // Error
+>sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 23, 7))
+>ConstrainedCovariant : Symbol(ConstrainedCovariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 1))
+>con_covariant : Symbol(con_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 17, 13))
 }
 
-class UnconstrainedOut<out T> {
->UnconstrainedOut : Symbol(UnconstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 20, 1))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 23))
+class UnconstrainedContravariant<in T> {
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 33))
 
-    value: T;
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 23))
+    f: (x: T) => void;
+>f : Symbol(UnconstrainedContravariant.f, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 40))
+>x : Symbol(x, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 27, 8))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 33))
 }
 
-declare const x2: unknown;
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+declare const unc_contravariant: unknown;
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-if (x2 instanceof UnconstrainedOut) {
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->UnconstrainedOut : Symbol(UnconstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 20, 1))
+if (unc_contravariant instanceof UnconstrainedContravariant) {
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 
-    x2.value.toUpperCase();
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;
+>unknown_covariant : Symbol(unknown_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 33, 7))
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-    x2.value++;
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+    let never_covariant: UnconstrainedContravariant<never> = unc_contravariant;
+>never_covariant : Symbol(never_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 34, 7))
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-    x2.value();
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;
+>any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 35, 7))
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-    if (typeof x2.value === "string") {
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;
+>constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 36, 7))
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-        x2.value.toUpperCase();
->x2.value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
-    }
-    if (typeof x2.value === "number") {
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
-
-        x2.value++;
->x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
->x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
->value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
-    }
+    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;
+>sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 37, 7))
+>UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
+>unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 }
 
-class ConstrainedOut<out T extends number> {
->ConstrainedOut : Symbol(ConstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 39, 1))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 21))
+class ConstrainedContravariant<in T extends string> {
+>ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 40, 31))
 
-    value: T;
->value : Symbol(ConstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 44))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 21))
+    f: (x: T) => void;
+>f : Symbol(ConstrainedContravariant.f, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 40, 53))
+>x : Symbol(x, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 8))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 40, 31))
 }
 
-declare const y2: unknown;
->y2 : Symbol(y2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 45, 13))
+declare const con_contravariant: unknown;
+>con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
 
-if (y2 instanceof ConstrainedOut) {
->y2 : Symbol(y2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 45, 13))
->ConstrainedOut : Symbol(ConstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 39, 1))
+if (con_contravariant instanceof ConstrainedContravariant) {
+>con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
+>ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
 
-    y2.value++;
->y2.value : Symbol(ConstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 44))
->y2 : Symbol(y2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 45, 13))
->value : Symbol(ConstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 44))
+    let never_covariant: ConstrainedContravariant<never> = con_contravariant;
+>never_covariant : Symbol(never_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 47, 7))
+>ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
+>con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
+
+    let any_covariant: ConstrainedContravariant<any> = con_contravariant;
+>any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 48, 7))
+>ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
+>con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
+
+    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;
+>constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 49, 7))
+>ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
+>con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
+
+    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;
+>sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 50, 7))
+>ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
+>con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
 }
 
-class UnconstrainedInOut<in out T> {
->UnconstrainedInOut : Symbol(UnconstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 49, 1))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 25))
+class UnconstrainedInvariant<in out T> {
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 53, 29))
 
-    value: T;
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 25))
-
-    read: (value: T) => void;
->read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
->value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 53, 11))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 25))
+    f: (x: T) => T;
+>f : Symbol(UnconstrainedInvariant.f, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 53, 40))
+>x : Symbol(x, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 54, 8))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 53, 29))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 53, 29))
 }
 
-declare const x3: unknown;
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+declare const unc_invariant: unknown;
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
 
-if (x3 instanceof UnconstrainedInOut) {
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->UnconstrainedInOut : Symbol(UnconstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 49, 1))
+if (unc_invariant instanceof UnconstrainedInvariant) {
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
 
-    x3.value.toUpperCase();
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+    let unknown_covariant: UnconstrainedInvariant<unknown> = unc_invariant;
+>unknown_covariant : Symbol(unknown_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 60, 7))
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
 
-    x3.value++;
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+    let never_covariant: UnconstrainedInvariant<never> = unc_invariant;  // Error
+>never_covariant : Symbol(never_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 61, 7))
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
 
-    x3.value();
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+    let any_covariant: UnconstrainedInvariant<any> = unc_invariant;
+>any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 62, 7))
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
 
-    if (typeof x3.value === "string") {
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+    let constraint_covariant: UnconstrainedInvariant<string> = unc_invariant;  // Error
+>constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 63, 7))
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
 
-        x3.value.toUpperCase();
->x3.value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
-    }
-    if (typeof x3.value === "number") {
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
-
-        x3.value++;
->x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
-    }
-
-    x3.read(1);
->x3.read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
-
-    x3.read("foo");
->x3.read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
->x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
->read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
+    let sub_covariant: UnconstrainedInvariant<"literal"> = unc_invariant;  // Error
+>sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 64, 7))
+>UnconstrainedInvariant : Symbol(UnconstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 1))
+>unc_invariant : Symbol(unc_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 57, 13))
 }
 
-class ConstrainedInOut<in out T extends number> {
->ConstrainedInOut : Symbol(ConstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 72, 1))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 23))
+class ConstrainedInvariant<in out T extends string> {
+>ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 67, 27))
 
-    value: T;
->value : Symbol(ConstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 49))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 23))
-
-    read: (value: T) => void;
->read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
->value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 76, 11))
->T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 23))
+    f: (x: T) => T;
+>f : Symbol(ConstrainedInvariant.f, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 67, 53))
+>x : Symbol(x, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 68, 8))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 67, 27))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 67, 27))
 }
 
-declare const y3: unknown;
->y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
+declare const con_invariant: unknown;
+>con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
 
-if (y3 instanceof ConstrainedInOut) {
->y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
->ConstrainedInOut : Symbol(ConstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 72, 1))
+if (con_invariant instanceof ConstrainedInvariant) {
+>con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
+>ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
 
-    y3.value++;
->y3.value : Symbol(ConstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 49))
->y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
->value : Symbol(ConstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 49))
+    let never_covariant: ConstrainedInvariant<never> = con_invariant;  // Error
+>never_covariant : Symbol(never_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 7))
+>ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
+>con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
 
-    y3.read(1);
->y3.read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
->y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
->read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+    let any_covariant: ConstrainedInvariant<any> = con_invariant;
+>any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 7))
+>ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
+>con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
 
-    y3.read("foo");
->y3.read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
->y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
->read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;  // Error
+>constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 76, 7))
+>ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
+>con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
+
+    let sub_covariant: ConstrainedInvariant<"literal"> = con_invariant;  // Error
+>sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 77, 7))
+>ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
+>con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
 }
 

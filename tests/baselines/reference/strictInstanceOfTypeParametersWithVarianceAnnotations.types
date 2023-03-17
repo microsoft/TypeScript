@@ -1,277 +1,205 @@
 === tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts ===
-class UnconstrainedIn<in T> {
->UnconstrainedIn : UnconstrainedIn<T>
+class UnconstrainedCovariant<out T> {
+>UnconstrainedCovariant : UnconstrainedCovariant<T>
 
-    read: (value: T) => void;
->read : (value: T) => void
->value : T
+    x: T;
+>x : T
 }
 
-declare const x1: unknown;
->x1 : unknown
+declare const unc_covariant: unknown;
+>unc_covariant : unknown
 
-if (x1 instanceof UnconstrainedIn) {
->x1 instanceof UnconstrainedIn : boolean
->x1 : unknown
->UnconstrainedIn : typeof UnconstrainedIn
+if (unc_covariant instanceof UnconstrainedCovariant) {
+>unc_covariant instanceof UnconstrainedCovariant : boolean
+>unc_covariant : unknown
+>UnconstrainedCovariant : typeof UnconstrainedCovariant
 
-    x1.read(1);
->x1.read(1) : void
->x1.read : (value: unknown) => void
->x1 : UnconstrainedIn<unknown>
->read : (value: unknown) => void
->1 : 1
+    let unknown_covariant: UnconstrainedCovariant<unknown> = unc_covariant;
+>unknown_covariant : UnconstrainedCovariant<unknown>
+>unc_covariant : UnconstrainedCovariant<unknown>
 
-    x1.read("foo");
->x1.read("foo") : void
->x1.read : (value: unknown) => void
->x1 : UnconstrainedIn<unknown>
->read : (value: unknown) => void
->"foo" : "foo"
+    let never_covariant: UnconstrainedCovariant<never> = unc_covariant;  // Error
+>never_covariant : UnconstrainedCovariant<never>
+>unc_covariant : UnconstrainedCovariant<unknown>
+
+    let any_covariant: UnconstrainedCovariant<any> = unc_covariant;
+>any_covariant : UnconstrainedCovariant<any>
+>unc_covariant : UnconstrainedCovariant<unknown>
+
+    let sub_covariant: UnconstrainedCovariant<"literal"> = unc_covariant;  // Error
+>sub_covariant : UnconstrainedCovariant<"literal">
+>unc_covariant : UnconstrainedCovariant<unknown>
 }
 
-class ConstrainedIn<in T extends number> {
->ConstrainedIn : ConstrainedIn<T>
+class ConstrainedCovariant<out T extends string> {
+>ConstrainedCovariant : ConstrainedCovariant<T>
 
-    read: (value: T) => void;
->read : (value: T) => void
->value : T
+    x: T;
+>x : T
 }
 
-declare const y1: unknown;
->y1 : unknown
+declare const con_covariant: unknown;
+>con_covariant : unknown
 
-if (y1 instanceof ConstrainedIn) {
->y1 instanceof ConstrainedIn : boolean
->y1 : unknown
->ConstrainedIn : typeof ConstrainedIn
+if (con_covariant instanceof ConstrainedCovariant) {
+>con_covariant instanceof ConstrainedCovariant : boolean
+>con_covariant : unknown
+>ConstrainedCovariant : typeof ConstrainedCovariant
 
-    y1.read(1);
->y1.read(1) : void
->y1.read : (value: number) => void
->y1 : ConstrainedIn<number>
->read : (value: number) => void
->1 : 1
+    let never_covariant: ConstrainedCovariant<never> = con_covariant;  // Error
+>never_covariant : ConstrainedCovariant<never>
+>con_covariant : ConstrainedCovariant<string>
 
-    y1.read("foo");
->y1.read("foo") : void
->y1.read : (value: number) => void
->y1 : ConstrainedIn<number>
->read : (value: number) => void
->"foo" : "foo"
+    let any_covariant: ConstrainedCovariant<any> = con_covariant;
+>any_covariant : ConstrainedCovariant<any>
+>con_covariant : ConstrainedCovariant<string>
+
+    let constraint_covariant: ConstrainedCovariant<string> = con_covariant;
+>constraint_covariant : ConstrainedCovariant<string>
+>con_covariant : ConstrainedCovariant<string>
+
+    let sub_covariant: ConstrainedCovariant<"literal"> = con_covariant;  // Error
+>sub_covariant : ConstrainedCovariant<"literal">
+>con_covariant : ConstrainedCovariant<string>
 }
 
-class UnconstrainedOut<out T> {
->UnconstrainedOut : UnconstrainedOut<T>
+class UnconstrainedContravariant<in T> {
+>UnconstrainedContravariant : UnconstrainedContravariant<T>
 
-    value: T;
->value : T
+    f: (x: T) => void;
+>f : (x: T) => void
+>x : T
 }
 
-declare const x2: unknown;
->x2 : unknown
+declare const unc_contravariant: unknown;
+>unc_contravariant : unknown
 
-if (x2 instanceof UnconstrainedOut) {
->x2 instanceof UnconstrainedOut : boolean
->x2 : unknown
->UnconstrainedOut : typeof UnconstrainedOut
+if (unc_contravariant instanceof UnconstrainedContravariant) {
+>unc_contravariant instanceof UnconstrainedContravariant : boolean
+>unc_contravariant : unknown
+>UnconstrainedContravariant : typeof UnconstrainedContravariant
 
-    x2.value.toUpperCase();
->x2.value.toUpperCase() : any
->x2.value.toUpperCase : any
->x2.value : unknown
->x2 : UnconstrainedOut<unknown>
->value : unknown
->toUpperCase : any
+    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;
+>unknown_covariant : UnconstrainedContravariant<unknown>
+>unc_contravariant : UnconstrainedContravariant<unknown>
 
-    x2.value++;
->x2.value++ : number
->x2.value : unknown
->x2 : UnconstrainedOut<unknown>
->value : unknown
+    let never_covariant: UnconstrainedContravariant<never> = unc_contravariant;
+>never_covariant : UnconstrainedContravariant<never>
+>unc_contravariant : UnconstrainedContravariant<unknown>
 
-    x2.value();
->x2.value() : any
->x2.value : unknown
->x2 : UnconstrainedOut<unknown>
->value : unknown
+    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;
+>any_covariant : UnconstrainedContravariant<any>
+>unc_contravariant : UnconstrainedContravariant<unknown>
 
-    if (typeof x2.value === "string") {
->typeof x2.value === "string" : boolean
->typeof x2.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x2.value : unknown
->x2 : UnconstrainedOut<unknown>
->value : unknown
->"string" : "string"
+    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;
+>constraint_covariant : UnconstrainedContravariant<string>
+>unc_contravariant : UnconstrainedContravariant<unknown>
 
-        x2.value.toUpperCase();
->x2.value.toUpperCase() : string
->x2.value.toUpperCase : () => string
->x2.value : string
->x2 : UnconstrainedOut<unknown>
->value : string
->toUpperCase : () => string
-    }
-    if (typeof x2.value === "number") {
->typeof x2.value === "number" : boolean
->typeof x2.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x2.value : unknown
->x2 : UnconstrainedOut<unknown>
->value : unknown
->"number" : "number"
-
-        x2.value++;
->x2.value++ : number
->x2.value : number
->x2 : UnconstrainedOut<unknown>
->value : number
-    }
+    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;
+>sub_covariant : UnconstrainedContravariant<"literal">
+>unc_contravariant : UnconstrainedContravariant<unknown>
 }
 
-class ConstrainedOut<out T extends number> {
->ConstrainedOut : ConstrainedOut<T>
+class ConstrainedContravariant<in T extends string> {
+>ConstrainedContravariant : ConstrainedContravariant<T>
 
-    value: T;
->value : T
+    f: (x: T) => void;
+>f : (x: T) => void
+>x : T
 }
 
-declare const y2: unknown;
->y2 : unknown
+declare const con_contravariant: unknown;
+>con_contravariant : unknown
 
-if (y2 instanceof ConstrainedOut) {
->y2 instanceof ConstrainedOut : boolean
->y2 : unknown
->ConstrainedOut : typeof ConstrainedOut
+if (con_contravariant instanceof ConstrainedContravariant) {
+>con_contravariant instanceof ConstrainedContravariant : boolean
+>con_contravariant : unknown
+>ConstrainedContravariant : typeof ConstrainedContravariant
 
-    y2.value++;
->y2.value++ : number
->y2.value : number
->y2 : ConstrainedOut<number>
->value : number
+    let never_covariant: ConstrainedContravariant<never> = con_contravariant;
+>never_covariant : ConstrainedContravariant<never>
+>con_contravariant : ConstrainedContravariant<string>
+
+    let any_covariant: ConstrainedContravariant<any> = con_contravariant;
+>any_covariant : ConstrainedContravariant<any>
+>con_contravariant : ConstrainedContravariant<string>
+
+    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;
+>constraint_covariant : ConstrainedContravariant<string>
+>con_contravariant : ConstrainedContravariant<string>
+
+    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;
+>sub_covariant : ConstrainedContravariant<"literal">
+>con_contravariant : ConstrainedContravariant<string>
 }
 
-class UnconstrainedInOut<in out T> {
->UnconstrainedInOut : UnconstrainedInOut<T>
+class UnconstrainedInvariant<in out T> {
+>UnconstrainedInvariant : UnconstrainedInvariant<T>
 
-    value: T;
->value : T
-
-    read: (value: T) => void;
->read : (value: T) => void
->value : T
+    f: (x: T) => T;
+>f : (x: T) => T
+>x : T
 }
 
-declare const x3: unknown;
->x3 : unknown
+declare const unc_invariant: unknown;
+>unc_invariant : unknown
 
-if (x3 instanceof UnconstrainedInOut) {
->x3 instanceof UnconstrainedInOut : boolean
->x3 : unknown
->UnconstrainedInOut : typeof UnconstrainedInOut
+if (unc_invariant instanceof UnconstrainedInvariant) {
+>unc_invariant instanceof UnconstrainedInvariant : boolean
+>unc_invariant : unknown
+>UnconstrainedInvariant : typeof UnconstrainedInvariant
 
-    x3.value.toUpperCase();
->x3.value.toUpperCase() : any
->x3.value.toUpperCase : any
->x3.value : unknown
->x3 : UnconstrainedInOut<unknown>
->value : unknown
->toUpperCase : any
+    let unknown_covariant: UnconstrainedInvariant<unknown> = unc_invariant;
+>unknown_covariant : UnconstrainedInvariant<unknown>
+>unc_invariant : UnconstrainedInvariant<unknown>
 
-    x3.value++;
->x3.value++ : number
->x3.value : unknown
->x3 : UnconstrainedInOut<unknown>
->value : unknown
+    let never_covariant: UnconstrainedInvariant<never> = unc_invariant;  // Error
+>never_covariant : UnconstrainedInvariant<never>
+>unc_invariant : UnconstrainedInvariant<unknown>
 
-    x3.value();
->x3.value() : any
->x3.value : unknown
->x3 : UnconstrainedInOut<unknown>
->value : unknown
+    let any_covariant: UnconstrainedInvariant<any> = unc_invariant;
+>any_covariant : UnconstrainedInvariant<any>
+>unc_invariant : UnconstrainedInvariant<unknown>
 
-    if (typeof x3.value === "string") {
->typeof x3.value === "string" : boolean
->typeof x3.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x3.value : unknown
->x3 : UnconstrainedInOut<unknown>
->value : unknown
->"string" : "string"
+    let constraint_covariant: UnconstrainedInvariant<string> = unc_invariant;  // Error
+>constraint_covariant : UnconstrainedInvariant<string>
+>unc_invariant : UnconstrainedInvariant<unknown>
 
-        x3.value.toUpperCase();
->x3.value.toUpperCase() : string
->x3.value.toUpperCase : () => string
->x3.value : string
->x3 : UnconstrainedInOut<unknown>
->value : string
->toUpperCase : () => string
-    }
-    if (typeof x3.value === "number") {
->typeof x3.value === "number" : boolean
->typeof x3.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x3.value : unknown
->x3 : UnconstrainedInOut<unknown>
->value : unknown
->"number" : "number"
-
-        x3.value++;
->x3.value++ : number
->x3.value : number
->x3 : UnconstrainedInOut<unknown>
->value : number
-    }
-
-    x3.read(1);
->x3.read(1) : void
->x3.read : (value: unknown) => void
->x3 : UnconstrainedInOut<unknown>
->read : (value: unknown) => void
->1 : 1
-
-    x3.read("foo");
->x3.read("foo") : void
->x3.read : (value: unknown) => void
->x3 : UnconstrainedInOut<unknown>
->read : (value: unknown) => void
->"foo" : "foo"
+    let sub_covariant: UnconstrainedInvariant<"literal"> = unc_invariant;  // Error
+>sub_covariant : UnconstrainedInvariant<"literal">
+>unc_invariant : UnconstrainedInvariant<unknown>
 }
 
-class ConstrainedInOut<in out T extends number> {
->ConstrainedInOut : ConstrainedInOut<T>
+class ConstrainedInvariant<in out T extends string> {
+>ConstrainedInvariant : ConstrainedInvariant<T>
 
-    value: T;
->value : T
-
-    read: (value: T) => void;
->read : (value: T) => void
->value : T
+    f: (x: T) => T;
+>f : (x: T) => T
+>x : T
 }
 
-declare const y3: unknown;
->y3 : unknown
+declare const con_invariant: unknown;
+>con_invariant : unknown
 
-if (y3 instanceof ConstrainedInOut) {
->y3 instanceof ConstrainedInOut : boolean
->y3 : unknown
->ConstrainedInOut : typeof ConstrainedInOut
+if (con_invariant instanceof ConstrainedInvariant) {
+>con_invariant instanceof ConstrainedInvariant : boolean
+>con_invariant : unknown
+>ConstrainedInvariant : typeof ConstrainedInvariant
 
-    y3.value++;
->y3.value++ : number
->y3.value : unknown
->y3 : ConstrainedInOut<unknown>
->value : unknown
+    let never_covariant: ConstrainedInvariant<never> = con_invariant;  // Error
+>never_covariant : ConstrainedInvariant<never>
+>con_invariant : ConstrainedInvariant<unknown>
 
-    y3.read(1);
->y3.read(1) : void
->y3.read : (value: unknown) => void
->y3 : ConstrainedInOut<unknown>
->read : (value: unknown) => void
->1 : 1
+    let any_covariant: ConstrainedInvariant<any> = con_invariant;
+>any_covariant : ConstrainedInvariant<any>
+>con_invariant : ConstrainedInvariant<unknown>
 
-    y3.read("foo");
->y3.read("foo") : void
->y3.read : (value: unknown) => void
->y3 : ConstrainedInOut<unknown>
->read : (value: unknown) => void
->"foo" : "foo"
+    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;  // Error
+>constraint_covariant : ConstrainedInvariant<string>
+>con_invariant : ConstrainedInvariant<unknown>
+
+    let sub_covariant: ConstrainedInvariant<"literal"> = con_invariant;  // Error
+>sub_covariant : ConstrainedInvariant<"literal">
+>con_invariant : ConstrainedInvariant<unknown>
 }
 
