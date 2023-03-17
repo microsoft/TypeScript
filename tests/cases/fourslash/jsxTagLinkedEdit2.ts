@@ -19,6 +19,6 @@ verify.jsxLinkedEdit( {
     "2": undefined,
     "3": linkedCursors2,
     "4": undefined,
-    // "5": undefined, // if still a comment, case doesnt yet work !!!!
+    "5": undefined,
     "6": undefined,
 });

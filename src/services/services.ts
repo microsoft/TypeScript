@@ -73,6 +73,7 @@ import {
     FindAllReferences,
     findAncestor,
     findChildOfKind,
+    findNextToken,
     findPrecedingToken,
     first,
     firstDefined,
@@ -2493,16 +2494,13 @@ export function createLanguageService(
         let wordPattern: string | undefined;
         let ranges: {start: number, end: number}[] = [];
 
-        // check edge cases <| and >|
-        if (token.kind===SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent)) return undefined;
-        if (token.kind===SyntaxKind.LessThanToken && isJsxClosingElement(token.parent)) return undefined;
-
         if ((isJsxOpeningFragment(token.parent) && token.kind===SyntaxKind.LessThanToken)
             || (isJsxClosingFragment(token.parent) && token.kind===SyntaxKind.SlashToken)){
 
             const openPos = token.parent.parent.openingFragment.pos + 1;
             const closePos = token.parent.parent.closingFragment.pos + 2;
 
+            //TODO: fragments with whitespace?
             ranges = ranges.concat({ start : openPos, end : openPos });
             ranges = ranges.concat({ start : closePos, end : closePos });
             wordPattern = undefined;
@@ -2515,7 +2513,9 @@ export function createLanguageService(
                 (n) => {
                     if (!n.parent.parent) return "quit";
                     else if (isJsxElement(n.parent.parent)) {
-                        if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent)) || n.kind===SyntaxKind.LessThanToken || n.kind===SyntaxKind.SlashToken) {
+                        if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent))
+                            || (n.kind===SyntaxKind.LessThanToken && isJSXTagName(findNextToken(n,n.parent,sourceFile) ?? n))
+                            || n.kind===SyntaxKind.SlashToken) {
                             return true;
                         }
                         return "quit";
@@ -2525,8 +2525,10 @@ export function createLanguageService(
                 )?.parent as JsxOpeningElement | JsxClosingElement | undefined;
             if (!tag) return undefined;
 
-            ranges = ranges.concat({ start : tag.parent.openingElement.tagName.pos, end : tag.parent.openingElement.tagName.end });
-            ranges = ranges.concat({ start : tag.parent.closingElement.tagName.pos, end : tag.parent.closingElement.tagName.end });
+            ranges = ranges.concat({ start : tag.parent.openingElement.tagName.getStart(), end : tag.parent.openingElement.tagName.end });
+            ranges = ranges.concat({ start : tag.parent.closingElement.tagName.getStart(), end : tag.parent.closingElement.tagName.end });
+
+            if (!(ranges[0].start <= position && position <= ranges[0].end || ranges[1].start <= position && position <= ranges[1].end)) return undefined;
 
             if (tag.parent.openingElement.tagName.getText() === tag.parent.closingElement.tagName.getText()) {
                 wordPattern = tag.tagName.getText();

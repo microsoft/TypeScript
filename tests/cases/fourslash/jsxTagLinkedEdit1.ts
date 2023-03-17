@@ -6,20 +6,30 @@
 //   </div>
 //);
 
-
 // @Filename: /basic.tsx
 ////const jsx = (
 ////    </*0*/d/*1*/iv/*2*/>/*7*/
-////    </*6*///*3*/di/*4*/v/*5*/>/*9*/
+////    </*6*///*3*/di/*4*/v/*5*/>/*8*/
 ////);
-////const jsx2 = (
+
+// @Filename: /whitespaceInvalidClosing.tsx
+////const jsx = (
 ////   <div>
-////   < /*8*/ /div>
+////   < /*9*/ /div>
 ////);
+
+// @Filename: /whitespaceOpening.tsx
 ////const jsx3 = (
-////   </*10*/ div>
-////   </div>
+////   </*10*/ /*11*/div/*12*/ /*13*/> /*14*/
+////   </di/*A*/v>
 ////);
+
+// @Filename: /whitespaceClosing.tsx
+////const jsx = (
+////   <di/*B*/v>
+////   <//*15*/ /*16*/div/*17*/ /*18*/> /*19*/
+////);
+
 
 
 const linkedCursors1 = {ranges: [{start: 19, end: 22}, 
@@ -36,7 +46,10 @@ verify.jsxLinkedEdit( {
     "6": undefined,
     "7": undefined,
     "8": undefined,
-    "9": undefined,
-    // "10":undefined, // if still a comment, case doesnt yet work !!!!
+    "9": undefined, // I believe this should be an invalid tag
+    "10": undefined,
+    "13": undefined,
+    "15": undefined,
+    "18": undefined,
     });
 
