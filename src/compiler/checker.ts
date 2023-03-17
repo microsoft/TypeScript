@@ -10150,10 +10150,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const variance = variances[i];
             switch (variance & VarianceFlags.VarianceMask) {
-                case VarianceFlags.Independent:
-                case VarianceFlags.Bivariant:
-                    return anyType;
                 case VarianceFlags.Contravariant:
+                case VarianceFlags.Bivariant:
                     return neverType;
             }
             return getBaseConstraintOfType(typeParameter) || unknownType;
