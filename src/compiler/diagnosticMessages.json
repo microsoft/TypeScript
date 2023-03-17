@@ -3611,6 +3611,10 @@
         "category": "Error",
         "code": 2846
     },
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
+        "category": "Error",
+        "code": 2847
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -6718,7 +6722,7 @@
         "category": "Suggestion",
         "code": 80010
     },
-    
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
