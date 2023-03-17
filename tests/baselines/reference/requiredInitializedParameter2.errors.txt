@@ -1,6 +1,6 @@
 tests/cases/compiler/requiredInitializedParameter2.ts(6,5): error TS2416: Property 'method' in type 'C1' is not assignable to the same property in base type 'I1'.
   Type '(a: number, b: any) => void' is not assignable to type '() => any'.
-    The source signature requires more arguments (2) than are provided by the target (0).
+    Target signature provides too few arguments. Expected 2 or more, but got 0.
 
 
 ==== tests/cases/compiler/requiredInitializedParameter2.ts (1 errors) ====
@@ -13,5 +13,5 @@ tests/cases/compiler/requiredInitializedParameter2.ts(6,5): error TS2416: Proper
         ~~~~~~
 !!! error TS2416: Property 'method' in type 'C1' is not assignable to the same property in base type 'I1'.
 !!! error TS2416:   Type '(a: number, b: any) => void' is not assignable to type '() => any'.
-!!! error TS2416:     The source signature requires more arguments (2) than are provided by the target (0).
+!!! error TS2416:     Target signature provides too few arguments. Expected 2 or more, but got 0.
     }
