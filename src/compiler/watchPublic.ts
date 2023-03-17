@@ -843,19 +843,19 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     function updateProgram() {
         switch (reloadLevel) {
             case ConfigFileProgramReloadLevel.Partial:
-                perfLogger.logStartUpdateProgram("PartialConfigReload");
+                perfLogger?.logStartUpdateProgram("PartialConfigReload");
                 reloadFileNamesFromConfigFile();
                 break;
             case ConfigFileProgramReloadLevel.Full:
-                perfLogger.logStartUpdateProgram("FullConfigReload");
+                perfLogger?.logStartUpdateProgram("FullConfigReload");
                 reloadConfigFile();
                 break;
             default:
-                perfLogger.logStartUpdateProgram("SynchronizeProgram");
+                perfLogger?.logStartUpdateProgram("SynchronizeProgram");
                 synchronizeProgram();
                 break;
         }
-        perfLogger.logStopUpdateProgram("Done");
+        perfLogger?.logStopUpdateProgram("Done");
         return getCurrentBuilderProgram();
     }
 

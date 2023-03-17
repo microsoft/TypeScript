@@ -493,9 +493,9 @@ const binder = /* @__PURE__ */ createBinder();
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
     performance.mark("beforeBind");
-    perfLogger.logStartBindFile("" + file.fileName);
+    perfLogger?.logStartBindFile("" + file.fileName);
     binder(file, options);
-    perfLogger.logStopBindFile();
+    perfLogger?.logStopBindFile();
     performance.mark("afterBind");
     performance.measure("Bind", "beforeBind", "afterBind");
 }
