@@ -10153,8 +10153,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case VarianceFlags.Independent:
                 case VarianceFlags.Bivariant:
                     return anyType;
-                case VarianceFlags.Invariant:
-                    return unknownType;
+                case VarianceFlags.Contravariant:
+                    return neverType;
             }
             return getBaseConstraintOfType(typeParameter) || unknownType;
         });

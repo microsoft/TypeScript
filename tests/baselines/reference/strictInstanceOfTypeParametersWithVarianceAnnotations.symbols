@@ -90,7 +90,7 @@ if (unc_contravariant instanceof UnconstrainedContravariant) {
 >unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 >UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 
-    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;
+    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;  // Error
 >unknown_covariant : Symbol(unknown_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 33, 7))
 >UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 >unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
@@ -100,17 +100,17 @@ if (unc_contravariant instanceof UnconstrainedContravariant) {
 >UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 >unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;
+    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;  // Error
 >any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 35, 7))
 >UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 >unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;
+    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;  // Error
 >constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 36, 7))
 >UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 >unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
 
-    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;
+    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;  // Error
 >sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 37, 7))
 >UnconstrainedContravariant : Symbol(UnconstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 24, 1))
 >unc_contravariant : Symbol(unc_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 30, 13))
@@ -138,17 +138,17 @@ if (con_contravariant instanceof ConstrainedContravariant) {
 >ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
 >con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
 
-    let any_covariant: ConstrainedContravariant<any> = con_contravariant;
+    let any_covariant: ConstrainedContravariant<any> = con_contravariant;  // Error
 >any_covariant : Symbol(any_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 48, 7))
 >ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
 >con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
 
-    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;
+    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;  // Error
 >constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 49, 7))
 >ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
 >con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
 
-    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;
+    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;  // Error
 >sub_covariant : Symbol(sub_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 50, 7))
 >ConstrainedContravariant : Symbol(ConstrainedContravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 38, 1))
 >con_contravariant : Symbol(con_contravariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 44, 13))
@@ -226,7 +226,7 @@ if (con_invariant instanceof ConstrainedInvariant) {
 >ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
 >con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))
 
-    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;  // Error
+    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;
 >constraint_covariant : Symbol(constraint_covariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 76, 7))
 >ConstrainedInvariant : Symbol(ConstrainedInvariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 65, 1))
 >con_invariant : Symbol(con_invariant, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 71, 13))

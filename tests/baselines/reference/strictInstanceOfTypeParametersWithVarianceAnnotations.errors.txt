@@ -6,6 +6,20 @@ tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(21
   Type 'string' is not assignable to type 'never'.
 tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(24,9): error TS2322: Type 'ConstrainedCovariant<string>' is not assignable to type 'ConstrainedCovariant<"literal">'.
   Type 'string' is not assignable to type '"literal"'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(34,9): error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<unknown>'.
+  Type 'unknown' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(36,9): error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<any>'.
+  Type 'any' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(37,9): error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<string>'.
+  Type 'string' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(38,9): error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<"literal">'.
+  Type 'string' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(49,9): error TS2322: Type 'ConstrainedContravariant<never>' is not assignable to type 'ConstrainedContravariant<any>'.
+  Type 'any' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(50,9): error TS2322: Type 'ConstrainedContravariant<never>' is not assignable to type 'ConstrainedContravariant<string>'.
+  Type 'string' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(51,9): error TS2322: Type 'ConstrainedContravariant<never>' is not assignable to type 'ConstrainedContravariant<"literal">'.
+  Type 'string' is not assignable to type 'never'.
 tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(62,9): error TS2322: Type 'UnconstrainedInvariant<unknown>' is not assignable to type 'UnconstrainedInvariant<never>'.
   The types returned by 'f(...)' are incompatible between these types.
     Type 'unknown' is not assignable to type 'never'.
@@ -15,18 +29,15 @@ tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(64
 tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(65,9): error TS2322: Type 'UnconstrainedInvariant<unknown>' is not assignable to type 'UnconstrainedInvariant<"literal">'.
   The types returned by 'f(...)' are incompatible between these types.
     Type 'unknown' is not assignable to type '"literal"'.
-tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(75,9): error TS2322: Type 'ConstrainedInvariant<unknown>' is not assignable to type 'ConstrainedInvariant<never>'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(75,9): error TS2322: Type 'ConstrainedInvariant<string>' is not assignable to type 'ConstrainedInvariant<never>'.
   The types returned by 'f(...)' are incompatible between these types.
-    Type 'unknown' is not assignable to type 'never'.
-tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(77,9): error TS2322: Type 'ConstrainedInvariant<unknown>' is not assignable to type 'ConstrainedInvariant<string>'.
+    Type 'string' is not assignable to type 'never'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(78,9): error TS2322: Type 'ConstrainedInvariant<string>' is not assignable to type 'ConstrainedInvariant<"literal">'.
   The types returned by 'f(...)' are incompatible between these types.
-    Type 'unknown' is not assignable to type 'string'.
-tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(78,9): error TS2322: Type 'ConstrainedInvariant<unknown>' is not assignable to type 'ConstrainedInvariant<"literal">'.
-  The types returned by 'f(...)' are incompatible between these types.
-    Type 'unknown' is not assignable to type '"literal"'.
+    Type 'string' is not assignable to type '"literal"'.
 
 
-==== tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts (10 errors) ====
+==== tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts (16 errors) ====
     class UnconstrainedCovariant<out T> {
         x: T;
     }
@@ -72,11 +83,23 @@ tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(78
     declare const unc_contravariant: unknown;
     
     if (unc_contravariant instanceof UnconstrainedContravariant) {
-        let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;
+        let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;  // Error
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'never'.
         let never_covariant: UnconstrainedContravariant<never> = unc_contravariant;
-        let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;
-        let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;
-        let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;
+        let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;  // Error
+            ~~~~~~~~~~~~~
+!!! error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<any>'.
+!!! error TS2322:   Type 'any' is not assignable to type 'never'.
+        let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;  // Error
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<string>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'never'.
+        let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;  // Error
+            ~~~~~~~~~~~~~
+!!! error TS2322: Type 'UnconstrainedContravariant<never>' is not assignable to type 'UnconstrainedContravariant<"literal">'.
+!!! error TS2322:   Type 'string' is not assignable to type 'never'.
     }
     
     class ConstrainedContravariant<in T extends string> {
@@ -87,9 +110,18 @@ tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(78
     
     if (con_contravariant instanceof ConstrainedContravariant) {
         let never_covariant: ConstrainedContravariant<never> = con_contravariant;
-        let any_covariant: ConstrainedContravariant<any> = con_contravariant;
-        let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;
-        let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;
+        let any_covariant: ConstrainedContravariant<any> = con_contravariant;  // Error
+            ~~~~~~~~~~~~~
+!!! error TS2322: Type 'ConstrainedContravariant<never>' is not assignable to type 'ConstrainedContravariant<any>'.
+!!! error TS2322:   Type 'any' is not assignable to type 'never'.
+        let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;  // Error
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'ConstrainedContravariant<never>' is not assignable to type 'ConstrainedContravariant<string>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'never'.
+        let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;  // Error
+            ~~~~~~~~~~~~~
+!!! error TS2322: Type 'ConstrainedContravariant<never>' is not assignable to type 'ConstrainedContravariant<"literal">'.
+!!! error TS2322:   Type 'string' is not assignable to type 'never'.
     }
     
     class UnconstrainedInvariant<in out T> {
@@ -127,19 +159,15 @@ tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(78
     if (con_invariant instanceof ConstrainedInvariant) {
         let never_covariant: ConstrainedInvariant<never> = con_invariant;  // Error
             ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'ConstrainedInvariant<unknown>' is not assignable to type 'ConstrainedInvariant<never>'.
+!!! error TS2322: Type 'ConstrainedInvariant<string>' is not assignable to type 'ConstrainedInvariant<never>'.
 !!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
-!!! error TS2322:     Type 'unknown' is not assignable to type 'never'.
+!!! error TS2322:     Type 'string' is not assignable to type 'never'.
         let any_covariant: ConstrainedInvariant<any> = con_invariant;
-        let constraint_covariant: ConstrainedInvariant<string> = con_invariant;  // Error
-            ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'ConstrainedInvariant<unknown>' is not assignable to type 'ConstrainedInvariant<string>'.
-!!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
-!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+        let constraint_covariant: ConstrainedInvariant<string> = con_invariant;
         let sub_covariant: ConstrainedInvariant<"literal"> = con_invariant;  // Error
             ~~~~~~~~~~~~~
-!!! error TS2322: Type 'ConstrainedInvariant<unknown>' is not assignable to type 'ConstrainedInvariant<"literal">'.
+!!! error TS2322: Type 'ConstrainedInvariant<string>' is not assignable to type 'ConstrainedInvariant<"literal">'.
 !!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
-!!! error TS2322:     Type 'unknown' is not assignable to type '"literal"'.
+!!! error TS2322:     Type 'string' is not assignable to type '"literal"'.
     }
     

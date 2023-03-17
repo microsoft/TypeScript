@@ -33,11 +33,11 @@ class UnconstrainedContravariant<in T> {
 declare const unc_contravariant: unknown;
 
 if (unc_contravariant instanceof UnconstrainedContravariant) {
-    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;
+    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;  // Error
     let never_covariant: UnconstrainedContravariant<never> = unc_contravariant;
-    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;
-    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;
-    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;
+    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;  // Error
+    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;  // Error
+    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;  // Error
 }
 
 class ConstrainedContravariant<in T extends string> {
@@ -48,9 +48,9 @@ declare const con_contravariant: unknown;
 
 if (con_contravariant instanceof ConstrainedContravariant) {
     let never_covariant: ConstrainedContravariant<never> = con_contravariant;
-    let any_covariant: ConstrainedContravariant<any> = con_contravariant;
-    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;
-    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;
+    let any_covariant: ConstrainedContravariant<any> = con_contravariant;  // Error
+    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;  // Error
+    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;  // Error
 }
 
 class UnconstrainedInvariant<in out T> {
@@ -76,6 +76,6 @@ declare const con_invariant: unknown;
 if (con_invariant instanceof ConstrainedInvariant) {
     let never_covariant: ConstrainedInvariant<never> = con_invariant;  // Error
     let any_covariant: ConstrainedInvariant<any> = con_invariant;
-    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;  // Error
+    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;
     let sub_covariant: ConstrainedInvariant<"literal"> = con_invariant;  // Error
 }
