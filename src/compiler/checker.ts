@@ -16582,7 +16582,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const u of unionTypes) {
             if (!containsType(u.types, type)) {
                 const primitive = type.flags & TypeFlags.StringLiteral ? stringType :
-                    type.flags & TypeFlags.NumberLiteral ? numberType :
+                    type.flags & (TypeFlags.Enum | TypeFlags.NumberLiteral) ? numberType :
                     type.flags & TypeFlags.BigIntLiteral ? bigintType :
                     type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
                     undefined;
@@ -16616,10 +16616,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
-    }
-
-    function eachIsUnionContaining(types: Type[], flag: TypeFlags) {
-        return every(types, t => !!(t.flags & TypeFlags.Union) && some((t as UnionType).types, tt => !!(tt.flags & flag)));
     }
 
     function removeFromEach(types: Type[], flag: TypeFlags) {
@@ -16753,12 +16749,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // reduced we'll never reduce again, so this occurs at most once.
                     result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
-                else if (eachIsUnionContaining(typeSet, TypeFlags.Undefined)) {
+                else if (every(typeSet, t => !!(t.flags & TypeFlags.Union && (t as UnionType).types[0].flags & TypeFlags.Undefined))) {
                     const containedUndefinedType = some(typeSet, containsMissingType) ? missingType : undefinedType;
                     removeFromEach(typeSet, TypeFlags.Undefined);
                     result = getUnionType([getIntersectionType(typeSet), containedUndefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
-                else if (eachIsUnionContaining(typeSet, TypeFlags.Null)) {
+                else if (every(typeSet, t => !!(t.flags & TypeFlags.Union && ((t as UnionType).types[0].flags & TypeFlags.Null || (t as UnionType).types[1].flags & TypeFlags.Null)))) {
                     removeFromEach(typeSet, TypeFlags.Null);
                     result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
@@ -20854,6 +20850,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (target.flags & TypeFlags.Union) {
                 if (containsType(targetTypes, source)) {
                     return Ternary.True;
+                }
+                if (getObjectFlags(target) & ObjectFlags.PrimitiveUnion && !(source.flags & TypeFlags.EnumLiteral) && (
+                    source.flags & (TypeFlags.StringLiteral | TypeFlags.BooleanLiteral | TypeFlags.BigIntLiteral) ||
+                    (relation === subtypeRelation || relation === strictSubtypeRelation) && source.flags & TypeFlags.NumberLiteral)) {
+                    // When relating a literal type to a union of primitive types, we know the relation is false unless
+                    // the union contains the base primitive type or the literal type in one of its fresh/regular forms.
+                    // We exclude numeric literals for non-subtype relations because numeric literals are assignable to
+                    // numeric enum literals with the same value. Similarly, we exclude enum literal types because
+                    // identically named enum types are related (see isEmumTypeRelatedTo).
+                    const alternateForm = source === (source as StringLiteralType).regularType ? (source as StringLiteralType).freshType : (source as StringLiteralType).regularType;
+                    const primitive = source.flags & TypeFlags.StringLiteral ? stringType :
+                        source.flags & TypeFlags.NumberLiteral ? numberType :
+                        source.flags & TypeFlags.BigIntLiteral ? bigintType :
+                        undefined;
+                    return primitive && containsType(targetTypes, primitive) || alternateForm && containsType(targetTypes, alternateForm) ? Ternary.True : Ternary.False;
                 }
                 const match = getMatchingUnionConstituentForType(target as UnionType, source);
                 if (match) {
