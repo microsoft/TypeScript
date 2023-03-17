@@ -29,7 +29,6 @@ import {
     emptyArray,
     endsWith,
     ensureTrailingDirectorySeparator,
-    every,
     Expression,
     extend,
     Extension,
@@ -2974,7 +2973,7 @@ function parseJsonConfigFileContentWorker(
     };
 
     function getConfigFileSpecs(): ConfigFileSpecs {
-        const referencesOfRaw = getPropFromRaw("references", (element): element is ProjectReference => typeof element === "object", "object");
+        const referencesOfRaw = getPropFromRaw("references", (element): element is ProjectReference => !!element && typeof element === "object", "object");
         const filesSpecs = toPropValue(getSpecsFromRaw("files"));
         if (filesSpecs) {
             const hasZeroOrNoReferences = referencesOfRaw === "no-prop" || isArray(referencesOfRaw) && referencesOfRaw.length === 0;
@@ -3049,7 +3048,7 @@ function parseJsonConfigFileContentWorker(
 
     function getProjectReferences(basePath: string): readonly ProjectReference[] | undefined {
         let projectReferences: ProjectReference[] | undefined;
-        const referencesOfRaw = getPropFromRaw("references", (element): element is ProjectReference => typeof element === "object", "object");
+        const referencesOfRaw = getPropFromRaw("references", (element): element is ProjectReference => !!element && typeof element === "object", "object");
         if (isArray(referencesOfRaw)) {
             for (const ref of referencesOfRaw) {
                 if (typeof ref.path !== "string") {
@@ -3079,9 +3078,10 @@ function parseJsonConfigFileContentWorker(
 
     function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => value is T, elementTypeName: string): PropOfRaw<T> {
         if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
-            if (isArray(raw[prop])) {
-                const result = raw[prop] as T[];
-                if (!sourceFile && !every(result, validateElement)) {
+            const value = raw[prop];
+            if (isArray(value)) {
+                const result = filter(value, validateElement);
+                if (!sourceFile && result.length !== value.length) {
                     errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                 }
                 return result;
