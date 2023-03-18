@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "c:/project/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [c:/project/tsconfig.json]
 {}
@@ -32,12 +23,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "c:/project/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: c:/project
 Info 3    [00:00:20.000] For info: c:/project/file1.ts :: Config file name: c:/project/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project c:/project/tsconfig.json
@@ -61,9 +55,9 @@ Info 13   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info 14   [00:00:31.000] Finishing updateGraphWorker: Project: c:/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:32.000] Project 'c:/project/tsconfig.json' (Configured)
 Info 16   [00:00:33.000] 	Files (3)
-	c:/a/lib/lib.d.ts
-	c:/project/file1.ts
-	c:/project/file2.ts
+	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/project/file1.ts SVC-1-0 "let x = 10;"
+	c:/project/file2.ts Text-1 "let y = 10;"
 
 
 	../a/lib/lib.d.ts
@@ -81,25 +75,24 @@ Info 18   [00:00:37.000] -----------------------------------------------
 Info 18   [00:00:38.000] Open files: 
 Info 18   [00:00:39.000] 	FileName: c:/project/file1.ts ProjectRootPath: undefined
 Info 18   [00:00:40.000] 		Projects: c:/project/tsconfig.json
-After request
-
-PolledWatches::
-c:/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/project/tsconfig.json:
-  {}
-c:/project/file2.ts:
-  {}
-c:/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-c:/project:
-  {}
-
 Info 18   [00:00:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+c:/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+c:/project/tsconfig.json: *new*
+  {}
+c:/project/file2.ts: *new*
+  {}
+c:/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+c:/project: *new*
+  {}

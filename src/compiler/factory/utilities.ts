@@ -1,10 +1,13 @@
 import {
     AccessorDeclaration,
     addEmitFlags,
+    addInternalEmitFlags,
     AdditiveOperator,
     AdditiveOperatorOrHigher,
     AssertionLevel,
+    AssignmentExpression,
     AssignmentOperatorOrHigher,
+    AssignmentPattern,
     BinaryExpression,
     BinaryOperator,
     BinaryOperatorToken,
@@ -20,8 +23,10 @@ import {
     CommaListExpression,
     compareStringsCaseSensitive,
     CompilerOptions,
+    ComputedPropertyName,
     Debug,
     Declaration,
+    DefaultKeyword,
     EmitFlags,
     EmitHelperFactory,
     EmitHost,
@@ -29,9 +34,11 @@ import {
     EntityName,
     EqualityOperator,
     EqualityOperatorOrHigher,
+    EqualsToken,
     ExclamationToken,
     ExponentiationOperator,
     ExportDeclaration,
+    ExportKeyword,
     Expression,
     ExpressionStatement,
     externalHelpersModuleNameText,
@@ -67,9 +74,12 @@ import {
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    InternalEmitFlags,
     isAssignmentExpression,
     isAssignmentOperator,
+    isAssignmentPattern,
     isBlock,
+    isCommaListExpression,
     isComputedPropertyName,
     isDeclarationBindingElement,
     isDefaultImport,
@@ -84,6 +94,7 @@ import {
     isLiteralExpression,
     isMemberName,
     isMinusToken,
+    isModifierKind,
     isObjectLiteralElementLike,
     isParenthesizedExpression,
     isPlusToken,
@@ -102,13 +113,12 @@ import {
     isSpreadElement,
     isStringLiteral,
     isThisTypeNode,
-    isTypeNode,
-    isTypeParameterDeclaration,
     isVariableDeclarationList,
     JSDocNamespaceBody,
     JSDocTypeAssertion,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
+    last,
     LeftHandSideExpression,
     LiteralExpression,
     LogicalOperator,
@@ -117,6 +127,7 @@ import {
     MemberExpression,
     MethodDeclaration,
     MinusToken,
+    Modifier,
     ModifiersArray,
     ModuleKind,
     ModuleName,
@@ -127,14 +138,15 @@ import {
     Node,
     NodeArray,
     NodeFactory,
+    nodeIsSynthesized,
     NullLiteral,
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
-    or,
     OuterExpression,
     OuterExpressionKinds,
     outFile,
+    ParenthesizedExpression,
     parseNodeFactory,
     PlusToken,
     PostfixUnaryExpression,
@@ -164,8 +176,8 @@ import {
     TextRange,
     ThisTypeNode,
     Token,
+    TransformFlags,
     TypeNode,
-    TypeParameterDeclaration,
 } from "../_namespaces/ts";
 
 // Compound nodes
@@ -187,7 +199,7 @@ export function createMemberAccessForPropertyName(factory: NodeFactory, target: 
                 : factory.createElementAccessExpression(target, memberName),
             memberName
         );
-        getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
+        addEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
         return expression;
     }
 }
@@ -599,9 +611,13 @@ export function startsWithUseStrict(statements: readonly Statement[]) {
 }
 
 /** @internal */
+export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken> } {
+    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
+}
+
+/** @internal */
 export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
-    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken ||
-        node.kind === SyntaxKind.CommaListExpression;
+    return isCommaExpression(node) || isCommaListExpression(node);
 }
 
 /** @internal */
@@ -612,7 +628,7 @@ export function isJSDocTypeAssertion(node: Node): node is JSDocTypeAssertion {
 }
 
 /** @internal */
-export function getJSDocTypeAssertionType(node: JSDocTypeAssertion) {
+export function getJSDocTypeAssertionType(node: JSDocTypeAssertion): TypeNode {
     const type = getJSDocType(node);
     Debug.assertIsDefined(type);
     return type;
@@ -628,6 +644,7 @@ export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All):
             return (kinds & OuterExpressionKinds.Parentheses) !== 0;
         case SyntaxKind.TypeAssertionExpression:
         case SyntaxKind.AsExpression:
+        case SyntaxKind.ExpressionWithTypeArguments:
         case SyntaxKind.SatisfiesExpression:
             return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
         case SyntaxKind.NonNullExpression:
@@ -648,6 +665,16 @@ export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.Al
         node = node.expression;
     }
     return node;
+}
+
+/** @internal */
+export function walkUpOuterExpressions(node: Expression, kinds = OuterExpressionKinds.All): Node {
+    let parent = node.parent;
+    while (isOuterExpression(parent, kinds)) {
+        parent = parent.parent;
+        Debug.assert(parent);
+    }
+    return parent;
 }
 
 /** @internal */
@@ -726,7 +753,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                 nodeFactory.createStringLiteral(externalHelpersModuleNameText),
                  /*assertClause*/ undefined
             );
-            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+            addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
             return externalHelpersImportDeclaration;
         }
     }
@@ -1127,23 +1154,29 @@ export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers
     return kind === SyntaxKind.ClassStaticBlockDeclaration
         || kind === SyntaxKind.PropertyAssignment
         || kind === SyntaxKind.ShorthandPropertyAssignment
-        || kind === SyntaxKind.FunctionType
         || kind === SyntaxKind.MissingDeclaration
         || kind === SyntaxKind.NamespaceExportDeclaration;
 }
 
-/** @internal */
-export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;
-/** @internal */
-export const isQuestionOrExclamationToken = or(isQuestionToken, isExclamationToken) as (node: Node) => node is QuestionToken | ExclamationToken;
-/** @internal */
-export const isIdentifierOrThisTypeNode = or(isIdentifier, isThisTypeNode) as (node: Node) => node is Identifier | ThisTypeNode;
-/** @internal */
-export const isReadonlyKeywordOrPlusOrMinusToken = or(isReadonlyKeyword, isPlusToken, isMinusToken) as (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
-/** @internal */
-export const isQuestionOrPlusOrMinusToken = or(isQuestionToken, isPlusToken, isMinusToken) as (node: Node) => node is QuestionToken | PlusToken | MinusToken;
-/** @internal */
-export const isModuleName = or(isIdentifier, isStringLiteral) as (node: Node) => node is ModuleName;
+export function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken {
+    return isQuestionToken(node) || isExclamationToken(node);
+}
+
+export function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode {
+    return isIdentifier(node) || isThisTypeNode(node);
+}
+
+export function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken {
+    return isReadonlyKeyword(node) || isPlusToken(node) || isMinusToken(node);
+}
+
+export function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken {
+    return isQuestionToken(node) || isPlusToken(node) || isMinusToken(node);
+}
+
+export function isModuleName(node: Node): node is ModuleName {
+    return isIdentifier(node) || isStringLiteral(node);
+}
 
 /** @internal */
 export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
@@ -1250,7 +1283,6 @@ function isBinaryOperator(kind: SyntaxKind): kind is BinaryOperator {
         || kind === SyntaxKind.CommaToken;
 }
 
-/** @internal */
 export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }
@@ -1455,7 +1487,7 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
     const machine = new BinaryExpressionStateMachine(onEnter, onLeft, onOperator, onRight, onExit, foldState);
     return trampoline;
 
-    function trampoline(node: BinaryExpression, outerState?: TOuterState) {
+    function trampoline(node: BinaryExpression, outerState: TOuterState) {
         const resultHolder: { value: TResult } = { value: undefined! };
         const stateStack: BinaryExpressionState[] = [BinaryExpressionState.enter];
         const nodeStack: BinaryExpression[] = [node];
@@ -1467,6 +1499,22 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
         Debug.assertEqual(stackIndex, 0);
         return resultHolder.value;
     }
+}
+
+function isExportOrDefaultKeywordKind(kind: SyntaxKind): kind is SyntaxKind.ExportKeyword | SyntaxKind.DefaultKeyword {
+    return kind === SyntaxKind.ExportKeyword || kind === SyntaxKind.DefaultKeyword;
+}
+
+/** @internal */
+export function isExportOrDefaultModifier(node: Node): node is ExportKeyword | DefaultKeyword {
+    const kind = node.kind;
+    return isExportOrDefaultKeywordKind(kind);
+}
+
+/** @internal */
+export function isNonExportDefaultModifier(node: Node): node is Exclude<Modifier, ExportKeyword | DefaultKeyword> {
+    const kind = node.kind;
+    return isModifierKind(kind) && !isExportOrDefaultKeywordKind(kind);
 }
 
 /**
@@ -1489,18 +1537,19 @@ export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArra
  * @internal
  */
 export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-    if (name.autoGenerate.flags & GeneratedIdentifierFlags.Node) {
-        const autoGenerateId = name.autoGenerate.id;
+    const autoGenerate = name.emitNode.autoGenerate;
+    if (autoGenerate.flags & GeneratedIdentifierFlags.Node) {
+        const autoGenerateId = autoGenerate.id;
         let node = name as Node;
         let original = node.original;
         while (original) {
             node = original;
-
+            const autoGenerate = node.emitNode?.autoGenerate;
             // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
             if (isMemberName(node) && (
-                node.autoGenerate === undefined ||
-                !!(node.autoGenerate.flags & GeneratedIdentifierFlags.Node) &&
-                node.autoGenerate.id !== autoGenerateId)) {
+                autoGenerate === undefined ||
+                !!(autoGenerate.flags & GeneratedIdentifierFlags.Node) &&
+                autoGenerate.id !== autoGenerateId)) {
                 break;
             }
 
@@ -1572,7 +1621,6 @@ export function formatGeneratedName(privateName: boolean, prefix: string | Gener
     return `${privateName ? "#" : ""}${prefix}${baseName}${suffix}`;
 }
 
-
 /**
  * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
  *
@@ -1616,7 +1664,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName): SetAccessorDeclaration {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,
@@ -1637,4 +1685,91 @@ export function createAccessorPropertySetRedirector(factory: NodeFactory, node: 
             )
         ])
     );
+}
+
+/** @internal */
+export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyName) {
+    let node = name.expression;
+    while (true) {
+        node = skipOuterExpressions(node);
+        if (isCommaListExpression(node)) {
+            node = last(node.elements);
+            continue;
+        }
+
+        if (isCommaExpression(node)) {
+            node = node.right;
+            continue;
+        }
+
+        if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && isGeneratedIdentifier(node.left)) {
+            return node as AssignmentExpression<EqualsToken> & { readonly left: GeneratedIdentifier };
+        }
+
+        break;
+    }
+}
+
+function isSyntheticParenthesizedExpression(node: Expression): node is ParenthesizedExpression {
+    return isParenthesizedExpression(node)
+        && nodeIsSynthesized(node)
+        && !node.emitNode;
+}
+
+function flattenCommaListWorker(node: Expression, expressions: Expression[]) {
+    if (isSyntheticParenthesizedExpression(node)) {
+        flattenCommaListWorker(node.expression, expressions);
+    }
+    else if (isCommaExpression(node)) {
+        flattenCommaListWorker(node.left, expressions);
+        flattenCommaListWorker(node.right, expressions);
+    }
+    else if (isCommaListExpression(node)) {
+        for (const child of node.elements) {
+            flattenCommaListWorker(child, expressions);
+        }
+    }
+    else {
+        expressions.push(node);
+    }
+}
+
+/**
+ * Flatten a CommaExpression or CommaListExpression into an array of one or more expressions, unwrapping any nested
+ * comma expressions and synthetic parens.
+ *
+ * @internal
+ */
+export function flattenCommaList(node: Expression) {
+    const expressions: Expression[] = [];
+    flattenCommaListWorker(node, expressions);
+    return expressions;
+}
+
+/**
+ * Walk an AssignmentPattern to determine if it contains object rest (`...`) syntax. We cannot rely on
+ * propagation of `TransformFlags.ContainsObjectRestOrSpread` since it isn't propagated by default in
+ * ObjectLiteralExpression and ArrayLiteralExpression since we do not know whether they belong to an
+ * AssignmentPattern at the time the nodes are parsed.
+ *
+ * @internal
+ */
+export function containsObjectRestOrSpread(node: AssignmentPattern): boolean {
+    if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return true;
+    if (node.transformFlags & TransformFlags.ContainsES2018) {
+        // check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
+        // will not be correctly interpreted by the ES2018 transformer
+        for (const element of getElementsOfBindingOrAssignmentPattern(node)) {
+            const target = getTargetOfBindingOrAssignmentElement(element);
+            if (target && isAssignmentPattern(target)) {
+                if (target.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                    return true;
+                }
+                if (target.transformFlags & TransformFlags.ContainsES2018) {
+                    if (containsObjectRestOrSpread(target)) return true;
+                }
+            }
+        }
+    }
+    return false;
 }

@@ -73,3 +73,21 @@ function f1<T extends string>() {
 >undefined : Symbol(undefined)
 }
 
+// repro from #43189
+
+type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
+>RemapRecord : Symbol(RemapRecord, Decl(genericMappedTypeAsClause.ts, 19, 1))
+>K : Symbol(K, Decl(genericMappedTypeAsClause.ts, 23, 17))
+>V : Symbol(V, Decl(genericMappedTypeAsClause.ts, 23, 37))
+>_ : Symbol(_, Decl(genericMappedTypeAsClause.ts, 23, 46))
+>K : Symbol(K, Decl(genericMappedTypeAsClause.ts, 23, 17))
+>V : Symbol(V, Decl(genericMappedTypeAsClause.ts, 23, 37))
+
+interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
+>RecordInterface2 : Symbol(RecordInterface2, Decl(genericMappedTypeAsClause.ts, 23, 67))
+>K : Symbol(K, Decl(genericMappedTypeAsClause.ts, 24, 27))
+>V : Symbol(V, Decl(genericMappedTypeAsClause.ts, 24, 47))
+>RemapRecord : Symbol(RemapRecord, Decl(genericMappedTypeAsClause.ts, 19, 1))
+>K : Symbol(K, Decl(genericMappedTypeAsClause.ts, 24, 27))
+>V : Symbol(V, Decl(genericMappedTypeAsClause.ts, 24, 47))
+

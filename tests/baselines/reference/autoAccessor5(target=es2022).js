@@ -29,6 +29,6 @@ class C1 {
 }
 class C2 {
     #_e_accessor_storage = 1;
-    get [(_a = f(), _a)]() { return this.#_e_accessor_storage; }
+    get [_a = f()]() { return this.#_e_accessor_storage; }
     set [_a](value) { this.#_e_accessor_storage = value; }
 }

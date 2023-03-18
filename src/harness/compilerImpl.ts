@@ -1,10 +1,10 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vpath from "./_namespaces/vpath";
-import * as documents from "./_namespaces/documents";
-import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
+import * as documents from "./_namespaces/documents";
+import * as fakes from "./_namespaces/fakes";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 /**
  * Test harness compiler functionality.
@@ -191,7 +191,7 @@ export class CompilationResult {
     public getSourceMapRecord(): string | undefined {
         const maps = this.result!.sourceMaps;
         if (maps && maps.length > 0) {
-            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
+            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, ts.arrayFrom(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), ts.arrayFrom(this.dts.values()));
         }
     }
 
@@ -213,7 +213,7 @@ export class CompilationResult {
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
-            const outDir = ext === ".d.ts" || ext === ".json.d.ts" || ext === ".d.mts" || ext === ".d.cts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ts.stringContains(ext, ".d.")) ? this.options.declarationDir || this.options.outDir : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {

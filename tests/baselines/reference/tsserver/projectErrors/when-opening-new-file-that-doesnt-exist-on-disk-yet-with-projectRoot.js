@@ -1,16 +1,4 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "untitled:Untitled-1",
-        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
-        "scriptKindName": "TS",
-        "projectRootPath": "/user/someuser/projects/someFolder"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,12 +20,18 @@ class c { }
 class c { }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "untitled:Untitled-1",
+        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
+        "scriptKindName": "TS",
+        "projectRootPath": "/user/someuser/projects/someFolder"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:27.000] Search path: 
 Info 3    [00:00:28.000] For info: untitled:Untitled-1 :: No config files found.
 Info 4    [00:00:29.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -49,8 +43,8 @@ Info 9    [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 10   [00:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:37.000] 	Files (2)
-	/a/lib/lib.d.ts
-	untitled:Untitled-1
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	untitled:Untitled-1 SVC-1-0 "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />"
 
 
 	../../../../a/lib/lib.d.ts
@@ -66,26 +60,24 @@ Info 14   [00:00:41.000] -----------------------------------------------
 Info 14   [00:00:42.000] Open files: 
 Info 14   [00:00:43.000] 	FileName: untitled:Untitled-1 ProjectRootPath: /user/someuser/projects/someFolder
 Info 14   [00:00:44.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 14   [00:00:45.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/typings/@epic/core.d.ts: *new*
+  {"pollingInterval":500}
+/user/someuser/projects/somefolder/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/someuser/projects/somefolder/src/somefile.d.ts: *new*
+  {}
+
 
 ScriptInfos:
 path: /user/someuser/projects/somefolder/untitled:untitled-1 fileName: untitled:Untitled-1
@@ -93,19 +85,7 @@ path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
 Checking timeout queue length: 0
 
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
+Before request
 
 Info 15   [00:00:46.000] request:
     {
@@ -119,142 +99,28 @@ Info 15   [00:00:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 16   [00:00:47.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 17   [00:00:48.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 18   [00:00:49.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"untitled:Untitled-1","diagnostics":[{"start":{"line":1,"offset":22},"end":{"line":1,"offset":63},"text":"File '../../../../../../typings/@epic/Core.d.ts' not found.","code":6053,"category":"error"},{"start":{"line":2,"offset":22},"end":{"line":2,"offset":41},"text":"File 'src/somefile.d.ts' not found.","code":6053,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 19   [00:00:50.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
 Info 20   [00:00:51.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/someuser/projects/somefolder/src/somefile.d.ts:
-  {}
-
-FsWatchesRecursive::

@@ -52,6 +52,7 @@ const fixRemoveBracesFromArrowFunctionBody = "fixRemoveBracesFromArrowFunctionBo
 const fixIdWrapTheBlockWithParen = "fixWrapTheBlockWithParen";
 const errorCodes = [
     Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value.code,
+    Diagnostics.A_function_whose_declared_type_is_neither_undefined_void_nor_any_must_return_a_value.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code
 ];
@@ -214,6 +215,7 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
     const declaration = findAncestor(node.parent, isFunctionLikeDeclaration);
     switch (errorCode) {
         case Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value.code:
+        case Diagnostics.A_function_whose_declared_type_is_neither_undefined_void_nor_any_must_return_a_value.code:
             if (!declaration || !declaration.body || !declaration.type || !rangeContainsRange(declaration.type, node)) return undefined;
             return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /* isFunctionType */ false);
         case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:

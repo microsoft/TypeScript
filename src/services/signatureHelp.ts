@@ -7,7 +7,7 @@ import {
     CheckFlags,
     contains,
     countWhere,
-    createPrinter,
+    createPrinterWithRemoveComments,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -659,7 +659,7 @@ function createTypeHelpItems(
 function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[], checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
     const typeSymbolDisplay = symbolToDisplayParts(checker, symbol);
 
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
     const documentation = symbol.getDocumentationComment(checker);
@@ -699,7 +699,7 @@ interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly paramet
 
 function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
     const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
     const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
 
@@ -713,7 +713,7 @@ function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeC
 }
 
 function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const typeParameterParts = mapToDisplayParts(writer => {
         if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
             const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));

@@ -20,3 +20,8 @@ function f1<T extends string>() {
     const x5: MappedModel<T> = { a: 'bar', b: 42 };  // Error
     const x6: MappedModel<T> = undefined;  // Error
 }
+
+// repro from #43189
+
+type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
+interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error

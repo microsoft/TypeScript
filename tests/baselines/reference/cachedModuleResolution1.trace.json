@@ -7,7 +7,7 @@
     "Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.",
     "File '/a/b/node_modules/foo.ts' does not exist.",
     "File '/a/b/node_modules/foo.tsx' does not exist.",
-    "File '/a/b/node_modules/foo.d.ts' exist - use it as a name resolution result.",
+    "File '/a/b/node_modules/foo.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'.",
     "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========",
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
