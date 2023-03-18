@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(45,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(51,9): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(47,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(53,9): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
 
 
 ==== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts (2 errors) ====
@@ -33,6 +33,8 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterCon
     declare function f6<const T extends readonly unknown[]>(...args: T): T;
     
     const x61 = f6(1, 'b', { a: 1, b: 'x' });
+    const x62 = f6(...[1, 'b']);
+    const x63 = f6(true, ...[1, 'b']);
     
     class C1<const T> {
         constructor(x: T) {}
