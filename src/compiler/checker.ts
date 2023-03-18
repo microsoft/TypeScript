@@ -21469,8 +21469,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (sourceFlags & TypeFlags.IndexedAccess) {
                         const indexType = (source as IndexedAccessType).indexType;
                         if (indexType.flags & TypeFlags.Index) {
-                            const a = getBaseConstraintOfType((indexType as IndexType).type);
-                            const indexConstraint = a && a !== noConstraintType ? getIndexType(a) : keyofConstraintType;
+                            const unresolvedIndexConstraint = getBaseConstraintOfType((indexType as IndexType).type);
+                            const indexConstraint = unresolvedIndexConstraint && unresolvedIndexConstraint !== noConstraintType ? getIndexType(unresolvedIndexConstraint) : keyofConstraintType;
                             const constraint = getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint);
                             if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
                                 return result;
