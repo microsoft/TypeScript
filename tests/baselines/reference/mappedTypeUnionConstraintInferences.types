@@ -17,7 +17,6 @@ export function doSomething_Actual<T extends {
     const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
 >x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 >null as any : any
->null : null
 
     return x;
 >x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }

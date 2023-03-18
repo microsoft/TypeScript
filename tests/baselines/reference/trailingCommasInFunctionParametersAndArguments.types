@@ -20,8 +20,8 @@ declare function f25(...args,): void;
 f2(...[],);
 >f2(...[],) : void
 >f2 : (...args: any[]) => void
->...[] : undefined
->[] : undefined[]
+>...[] : never
+>[] : readonly []
 
 // Not confused by overloads
 declare function f3(x, ): number;

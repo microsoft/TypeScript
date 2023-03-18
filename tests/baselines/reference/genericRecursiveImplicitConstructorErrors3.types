@@ -22,7 +22,6 @@ module TypeScript {
 
         public type: PullTypeSymbol = null;
 >type : any
->null : null
     }
     export class PullTypeSymbol <A,B,C>extends PullSymbol {
 >PullTypeSymbol : PullTypeSymbol<A, B, C>
@@ -30,7 +29,6 @@ module TypeScript {
 
         private _elementType: PullTypeSymbol = null;
 >_elementType : any
->null : null
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
 >toString : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean) => any
