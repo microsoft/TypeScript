@@ -493,9 +493,9 @@ const binder = /* @__PURE__ */ createBinder();
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
     performance.mark("beforeBind");
-    perfLogger.logStartBindFile("" + file.fileName);
+    perfLogger?.logStartBindFile("" + file.fileName);
     binder(file, options);
-    perfLogger.logStopBindFile();
+    perfLogger?.logStopBindFile();
     performance.mark("afterBind");
     performance.measure("Bind", "beforeBind", "afterBind");
 }
@@ -3213,7 +3213,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
                 break;
-
+            // Namespaces are not allowed in javascript files, so do nothing here
+            case SyntaxKind.ModuleDeclaration:
+                break;
             default:
                 Debug.failBadSyntaxKind(thisContainer);
         }

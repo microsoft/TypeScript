@@ -6,9 +6,12 @@ tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(39,9): 
   Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema3<boolean>; }'.
 tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(52,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
   Object literal may only specify known properties, and 'invalid' does not exist in type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(86,11): error TS2322: Type '{ name: string; children: { name: string; children: { name: string; }[]; }[]; }' is not assignable to type 'User'.
+  Object literal may only specify known properties, and 'children' does not exist in type 'User'.
+tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(102,35): error TS2339: Property 'children' does not exist on type 'User'.
 
 
-==== tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts (4 errors) ====
+==== tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts (6 errors) ====
     // repro from #44750
     
     type Request = { l1: { l2: boolean } };
@@ -81,4 +84,56 @@ tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(52,9): 
         },
       },
     }
+    
+    // repro from #40405
+    
+    type Length<T extends any[]> = T["length"];
+    type Prepend<V, T extends any[]> = ((head: V, ...args: T) => void) extends (
+      ...args: infer R
+    ) => void
+      ? R
+      : any;
+    
+    type BuildTree<T, N extends number = -1, I extends any[] = []> = {
+      1: T;
+      0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };
+    }[Length<I> extends N ? 1 : 0];
+    
+    interface User {
+      name: string;
+    }
+    
+    type GrandUser = BuildTree<User, 2>;
+    
+    const grandUser: GrandUser = {
+      name: "Grand User",
+      children: [
+        {
+          name: "Son",
+          children: [
+            {
+              name: "Grand son",
+              children: [
+              ~~~~~~~~
+!!! error TS2322: Type '{ name: string; children: { name: string; children: { name: string; }[]; }[]; }' is not assignable to type 'User'.
+!!! error TS2322:   Object literal may only specify known properties, and 'children' does not exist in type 'User'.
+                {
+                  name: "123",
+                  children: [
+                    {
+                      name: "Some other name",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    
+    grandUser.children[0].children[0].children[0];
+                                      ~~~~~~~~
+!!! error TS2339: Property 'children' does not exist on type 'User'.
+    
     
