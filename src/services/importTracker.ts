@@ -65,6 +65,7 @@ import {
     NamedImportsOrExports,
     NamespaceImport,
     Node,
+    nodeIsSynthesized,
     nodeSeenTracker,
     Program,
     some,
@@ -457,6 +458,7 @@ export type ModuleReference =
 export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
     const refs: ModuleReference[] = [];
     const checker = program.getTypeChecker();
+    const compilerOptions = program.getCompilerOptions();
     for (const referencingFile of sourceFiles) {
         const searchSourceFile = searchModuleSymbol.valueDeclaration;
         if (searchSourceFile?.kind === SyntaxKind.SourceFile) {
@@ -473,12 +475,11 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
             }
         }
 
+        const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(compilerOptions, referencingFile), compilerOptions);
         forEachImport(referencingFile, (_importDecl, moduleSpecifier) => {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
-            const compilerOptions = program.getCompilerOptions();
-            const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(compilerOptions, referencingFile), compilerOptions);
 
-            if (moduleSymbol === searchModuleSymbol && moduleSpecifier.text !== jsxImport) {
+            if (moduleSymbol === searchModuleSymbol && !(moduleSpecifier.text === jsxImport && nodeIsSynthesized(moduleSpecifier))) {
                 refs.push({ kind: "import", literal: moduleSpecifier });
             }
         });
