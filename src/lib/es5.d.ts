@@ -1844,15 +1844,23 @@ interface Int8Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2126,15 +2134,23 @@ interface Uint8Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2408,15 +2424,23 @@ interface Uint8ClampedArray {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2689,15 +2713,23 @@ interface Int16Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2971,15 +3003,23 @@ interface Uint16Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3253,15 +3293,23 @@ interface Int32Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3535,15 +3583,23 @@ interface Uint32Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3816,15 +3872,23 @@ interface Float32Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -4099,15 +4163,23 @@ interface Float64Array {
     readonly byteOffset: number;
 
     /**
-     * Returns the this object after copying a section of the array identified by start and end
-     * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
-     * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * Return the `this` object after shallow copying part of the array to another location in the same array, without modifying its length.
+     * @param target Zero-based index at which to copy the sequence to, converted to an integer.
+     * - Negative index counts back from the end of the array — if `target < 0`, `target + array.length` is used.
+     * - If `target < -array.length`, `0` is used.
+     * - If `target >= array.length`, nothing is copied.
+     * - If `target` is positioned after `start` after normalization, copying only happens until the end of `array.length` (in other words, `copyWithin()` never extends the array).
+     * @param start Zero-based index at which to start copying elements from, converted to an integer.
+     * - Negative index counts back from the end of the array — if `start < 0`, `start + array.length` is used.
+     * - If `start < -array.length` or `start` is omitted, `0` is used.
+     * - If `start >= array.length`, nothing is copied.
+     * @param end Zero-based index at which to end copying elements from, converted to an integer. `copyWithin()` copies up to but not including end.
+     * - Negative index counts back from the end of the array — if `end < 0`, `end + array.length` is used.
+     * - If `end < -array.length`, `0` is used.
+     * - If `end >= array.length` or `end` is omitted, `array.length` is used, causing all elements until the end to be copied.
+     * - If `end` is positioned before or at `start` after normalization, nothing is copied.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
