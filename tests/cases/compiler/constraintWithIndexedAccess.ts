@@ -25,3 +25,5 @@ export type TypeHardcodedAsParameter<T extends 'Boat', F extends keyof DataFetch
 type VehicleSelector<T extends keyof DataFetchFns> = DataFetchFns[T];
 export type TypeHardcodedAsParameter2<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<VehicleSelector<T>[F]>;
 export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
+export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error

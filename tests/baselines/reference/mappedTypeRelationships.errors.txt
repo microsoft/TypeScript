@@ -20,8 +20,9 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(41,5): error TS2
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(45,5): error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(46,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
-    Type 'T[string]' is not assignable to type 'U[K] | undefined'.
+  Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
+      Type 'T[string]' is not assignable to type 'U[K] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(51,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(56,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(61,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
@@ -155,8 +156,9 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
-!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'U[K] | undefined'.
     }
     
     function f20<T>(x: T, y: Readonly<T>, k: keyof T) {

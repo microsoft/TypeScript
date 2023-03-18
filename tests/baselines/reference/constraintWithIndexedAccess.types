@@ -81,3 +81,9 @@ export type TypeHardcodedAsParameter2<T extends 'Boat', F extends keyof DataFetc
 export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
 >TypeGeneric : TypeGeneric<T, F>
 
+export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
+>TypeGeneric : import("tests/cases/compiler/constraintWithIndexedAccess").TypeGeneric<T, F>
+
+export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error
+>TypeGeneric : import("tests/cases/compiler/constraintWithIndexedAccess").TypeGeneric<T, F>
+

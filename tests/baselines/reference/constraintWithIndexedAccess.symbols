@@ -137,3 +137,27 @@ export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchF
 >T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 26, 24))
 >F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 26, 53))
 
+export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
+>TypeGeneric : Symbol(TypeGeneric, Decl(constraintWithIndexedAccess.ts, 26, 120))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 24))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 27, 53))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 24))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 24))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 24))
+
+export type TypeGeneric<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error
+>TypeGeneric : Symbol(TypeGeneric, Decl(constraintWithIndexedAccess.ts, 27, 120))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 28, 24))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 28, 53))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 28, 24))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 28, 53))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 28, 53))
+

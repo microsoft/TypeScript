@@ -13508,12 +13508,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // we substitute an instantiation of E where P is replaced with X.
             return substituteIndexedMappedType(type.objectType as MappedType, type.indexType);
         }
-        const indexType = type.indexType;
-        let indexConstraint = getSimplifiedTypeOrConstraint(indexType);
-        if (indexConstraint && indexConstraint.flags & TypeFlags.Index) {
-            const constraint = getBaseConstraintOfType((indexConstraint as IndexType).type);
-            indexConstraint = constraint && constraint !== noConstraintType ? getIndexType(constraint) : keyofConstraintType;
-        }
+        const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
         if (indexConstraint && indexConstraint !== type.indexType) {
             const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.accessFlags);
             if (indexedAccess) {
@@ -21470,6 +21465,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
                     else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                         return result;
+                    }
+                    if (sourceFlags & TypeFlags.IndexedAccess) {
+                        const indexType = (source as IndexedAccessType).indexType;
+                        if (indexType.flags & TypeFlags.Index) {
+                            const a = getBaseConstraintOfType((indexType as IndexType).type);
+                            const indexConstraint = a && a !== noConstraintType ? getIndexType(a) : keyofConstraintType;
+                            const constraint = getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint);
+                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                                return result;
+                            }
+                        }
                     }
                     if (isMappedTypeGenericIndexedAccess(source)) {
                         // For an indexed access type { [P in K]: E}[X], above we have already explored an instantiation of E with X
