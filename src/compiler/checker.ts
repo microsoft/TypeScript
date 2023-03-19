@@ -6615,7 +6615,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type: MappedType) {
-                if (!isMappedTypeWithKeyofConstraintDeclaration(type)) {
+                if (!type.target || !isMappedTypeWithKeyofConstraintDeclaration(type)) {
                     return false;
                 }
                 const index = getIndexType(getModifiersTypeFromMappedType(type));
