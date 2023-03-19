@@ -29090,18 +29090,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    // In an array literal contextually typed by a type T, the contextual type of an element expression at index N is
-    // the type of the property with the numeric name N in T, if one exists. Otherwise, if T has a numeric index signature,
-    // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
-    // type of T.
-    function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
-        return arrayContextualType && (
-            index >= 0 && getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String) ||
-            mapType(arrayContextualType, t =>
-                isTupleType(t) ?
-                    getElementTypeOfSliceOfTupleType(t, 0, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true) :
-                    getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
-                /*noReductions*/ true));
+    function getSpreadIndices(elements: readonly Node[]) {
+        let first, last;
+        for (let i = 0; i < elements.length; i++) {
+            if (isSpreadElement(elements[i])) {
+                first ??= i;
+                last = i;
+            }
+        }
+        return { first, last };
+    }
+
+    function getContextualTypeForElementExpression(type: Type | undefined, index: number, length?: number, firstSpreadIndex?: number, lastSpreadIndex?: number): Type | undefined {
+        return type && mapType(type, t => {
+            if (isTupleType(t)) {
+                // If index is before any spread element and within the fixed part of the contextual tuple type, return
+                // the type of the contextual tuple element.
+                if ((firstSpreadIndex === undefined || index < firstSpreadIndex) && index < t.target.fixedLength) {
+                    return getTypeArguments(t)[index];
+                }
+                // When the length is known and the index is after all spread elements we compute the offset from the element
+                // to the end and the number of ending fixed elements in the contextual tuple type.
+                const offset = length !== undefined && (lastSpreadIndex === undefined || index > lastSpreadIndex) ? length - index : 0;
+                const fixedEndLength = offset > 0 && t.target.hasRestElement ? getEndElementCount(t.target, ElementFlags.Fixed) : 0;
+                // If the offset is within the ending fixed part of the contextual tuple type, return the type of the contextual
+                // tuple element.
+                if (offset > 0 && offset <= fixedEndLength) {
+                    return getTypeArguments(t)[getTypeReferenceArity(t) - offset];
+                }
+                // Return a union of the possible contextual element types with no subtype reduction.
+                return getElementTypeOfSliceOfTupleType(t,
+                    firstSpreadIndex === undefined ? t.target.fixedLength : Math.min(t.target.fixedLength, firstSpreadIndex),
+                    length === undefined || lastSpreadIndex === undefined ? fixedEndLength : Math.min(fixedEndLength, length - lastSpreadIndex),
+                    /*writing*/ false, /*noReductions*/ true);
+            }
+            // If element index is known and a contextual property with that name exists, return it. Otherwise return the
+            // iterated or element type of the contextual type.
+            return (!firstSpreadIndex || index < firstSpreadIndex) && getTypeOfPropertyOfContextualType(t, "" + index as __String) ||
+                getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
+        }, /*noReductions*/ true);
     }
 
     // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
@@ -29332,12 +29359,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ArrayLiteralExpression: {
                 const arrayLiteral = parent as ArrayLiteralExpression;
                 const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
-                // The index of an array literal element doesn't necessarily line up with the index of the corresponding
-                // element in a contextual tuple type when there are preceding spread elements in the array literal. For
-                // this reason we only pass indices for elements that precede the first spread element.
-                const spreadIndex = getNodeLinks(arrayLiteral).firstSpreadIndex ??= findIndex(arrayLiteral.elements, isSpreadElement);
                 const elementIndex = indexOfNode(arrayLiteral.elements, node);
-                return getContextualTypeForElementExpression(type, spreadIndex < 0 || elementIndex < spreadIndex ? elementIndex : -1);
+                const spreadIndices = getNodeLinks(arrayLiteral).spreadIndices ??= getSpreadIndices(arrayLiteral.elements);
+                return getContextualTypeForElementExpression(type, elementIndex, arrayLiteral.elements.length, spreadIndices.first, spreadIndices.last);
             }
             case SyntaxKind.ConditionalExpression:
                 return getContextualTypeForConditionalOperand(node, contextFlags);
@@ -32332,7 +32356,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                const contextualType = getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
+                const contextualType = isTupleType(restType) ?
+                    getContextualTypeForElementExpression(restType, i - index, argCount - index) || unknownType :
+                    getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
                 const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
                 const hasPrimitiveContextualType = inConstContext || maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
