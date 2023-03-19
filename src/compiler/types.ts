@@ -6422,6 +6422,10 @@ export interface UnionOrIntersectionType extends Type {
     resolvedStringIndexType: IndexType;
     /** @internal */
     resolvedBaseConstraint: Type;
+    /** @internal */
+    partiallyResolvedPropertiesSeenSymbols?: SymbolTable;
+    /** @internal */
+    partiallyResolvedProperties?: Symbol[];
 }
 
 export interface UnionType extends UnionOrIntersectionType {

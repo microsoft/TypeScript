@@ -183,6 +183,7 @@ import {
     findAncestor,
     findBestPatternMatch,
     findIndex,
+    findIterator,
     findLast,
     findLastIndex,
     findUseStrictPrologue,
@@ -948,6 +949,7 @@ import {
     skipTrivia,
     skipTypeChecking,
     some,
+    someIterator,
     SourceFile,
     SpreadAssignment,
     SpreadElement,
@@ -13466,25 +13468,53 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getPropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType): Symbol[] {
         if (!type.resolvedProperties) {
-            const members = createSymbolTable();
-            for (const current of type.types) {
-                for (const prop of getPropertiesOfType(current)) {
-                    if (!members.has(prop.escapedName)) {
-                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
-                        if (combinedProp) {
-                            members.set(prop.escapedName, combinedProp);
+            for (const _ of iteratePropertiesOfUnionOrIntersectionType(type, /*skipYield*/ true)) {
+                Debug.fail("Iterator should have been empty.");
+            }
+        }
+        return type.resolvedProperties;
+    }
+
+    function *iteratePropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType, skipYield = false) {
+        if (type.resolvedProperties) {
+            if (!skipYield) {
+                yield* type.resolvedProperties;
+            }
+            return;
+        }
+
+        if (type.partiallyResolvedProperties) {
+            if (!skipYield) {
+                yield* type.partiallyResolvedProperties;
+            }
+        }
+
+        const seenSymbols = type.partiallyResolvedPropertiesSeenSymbols ??= createSymbolTable();
+        for (const current of type.types) {
+            for (const prop of getPropertiesOfType(current)) {
+                if (!seenSymbols.has(prop.escapedName)) {
+                    const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
+                    if (combinedProp) {
+                        seenSymbols.set(prop.escapedName, combinedProp);
+                        if (isNamedMember(combinedProp, prop.escapedName)) {
+                            type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, combinedProp);
+                            if (!skipYield) {
+                                yield combinedProp;
+                            }
                         }
                     }
                 }
-                // The properties of a union type are those that are present in all constituent types, so
-                // we only need to check the properties of the first type without index signature
-                if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
-                    break;
-                }
             }
-            type.resolvedProperties = getNamedMembers(members);
+            // The properties of a union type are those that are present in all constituent types, so
+            // we only need to check the properties of the first type without index signature
+            if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
+                break;
+            }
         }
-        return type.resolvedProperties;
+
+        type.resolvedProperties = type.partiallyResolvedProperties ?? emptyArray;
+        type.partiallyResolvedProperties = undefined;
+        type.partiallyResolvedPropertiesSeenSymbols = undefined;
     }
 
     function getPropertiesOfType(type: Type): Symbol[] {
@@ -14136,7 +14166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else if (type.flags & TypeFlags.Intersection) {
             if (!((type as IntersectionType).objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
                 (type as IntersectionType).objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
-                    (some(getPropertiesOfUnionOrIntersectionType(type as IntersectionType), isNeverReducedProperty) ? ObjectFlags.IsNeverIntersection : 0);
+                    (someIterator(iteratePropertiesOfUnionOrIntersectionType(type as IntersectionType), isNeverReducedProperty) ? ObjectFlags.IsNeverIntersection : 0);
             }
             return (type as IntersectionType).objectFlags & ObjectFlags.IsNeverIntersection ? neverType : type;
         }
@@ -14191,12 +14221,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: Type) {
         if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
-            const neverProp = find(getPropertiesOfUnionOrIntersectionType(type as IntersectionType), isDiscriminantWithNeverType);
+            const neverProp = findIterator(iteratePropertiesOfUnionOrIntersectionType(type as IntersectionType), isDiscriminantWithNeverType);
             if (neverProp) {
                 return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(neverProp));
             }
-            const privateProp = find(getPropertiesOfUnionOrIntersectionType(type as IntersectionType), isConflictingPrivateProperty);
+            const privateProp = findIterator(iteratePropertiesOfUnionOrIntersectionType(type as IntersectionType), isConflictingPrivateProperty);
             if (privateProp) {
                 return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_private_in_some,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(privateProp));
@@ -22372,7 +22402,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function membersRelatedToIndexInfo(source: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             let result = Ternary.True;
             const keyType = targetInfo.keyType;
-            const props = source.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(source as IntersectionType) : getPropertiesOfObjectType(source);
+            const props = source.flags & TypeFlags.Intersection ? iteratePropertiesOfUnionOrIntersectionType(source as IntersectionType) : getPropertiesOfObjectType(source);
             for (const prop of props) {
                 // Skip over ignored JSX and symbol-named members
                 if (isIgnoredJsxProperty(source, prop)) {
