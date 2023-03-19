@@ -13472,49 +13472,55 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Debug.fail("Iterator should have been empty.");
             }
         }
-        return type.resolvedProperties;
+        return type.resolvedProperties!;
     }
 
-    function *iteratePropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType, skipYield = false) {
+    function* iteratePropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType, skipYield = false) {
         if (type.resolvedProperties) {
-            if (!skipYield) {
-                yield* type.resolvedProperties;
-            }
+            Debug.assert(!skipYield);
+            yield* type.resolvedProperties;
             return;
         }
 
-        if (type.partiallyResolvedProperties) {
-            if (!skipYield) {
-                yield* type.partiallyResolvedProperties;
-            }
+        if (!skipYield && type.partiallyResolvedProperties) {
+            yield* type.partiallyResolvedProperties;
         }
 
-        const seenSymbols = type.partiallyResolvedPropertiesSeenSymbols ??= createSymbolTable();
-        for (const current of type.types) {
-            for (const prop of getPropertiesOfType(current)) {
-                if (!seenSymbols.has(prop.escapedName)) {
-                    const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
-                    if (combinedProp) {
-                        seenSymbols.set(prop.escapedName, combinedProp);
-                        if (isNamedMember(combinedProp, prop.escapedName)) {
-                            type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, combinedProp);
-                            if (!skipYield) {
-                                yield combinedProp;
-                            }
-                        }
-                    }
-                }
-            }
-            // The properties of a union type are those that are present in all constituent types, so
-            // we only need to check the properties of the first type without index signature
-            if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
-                break;
+        // If we have an iterator already, pick up where we left off.
+        // Otherwise, we haven't started, so create a new iterator.
+        const generator = type.partiallyResolvedPropertiesGenerator ??= worker();
+        for (const symbol of generator) {
+            type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, symbol);
+            if (!skipYield) {
+                yield symbol;
             }
         }
 
         type.resolvedProperties = type.partiallyResolvedProperties ?? emptyArray;
         type.partiallyResolvedProperties = undefined;
-        type.partiallyResolvedPropertiesSeenSymbols = undefined;
+        type.partiallyResolvedPropertiesGenerator = undefined;
+
+        function* worker() {
+            const seenSymbols = createSymbolTable();
+            for (const current of type.types) {
+                for (const prop of getPropertiesOfType(current)) {
+                    if (!seenSymbols.has(prop.escapedName)) {
+                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
+                        if (combinedProp) {
+                            seenSymbols.set(prop.escapedName, combinedProp);
+                            if (isNamedMember(combinedProp, prop.escapedName)) {
+                                yield combinedProp;
+                            }
+                        }
+                    }
+                }
+                // The properties of a union type are those that are present in all constituent types, so
+                // we only need to check the properties of the first type without index signature
+                if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
+                    break;
+                }
+            }
+        }
     }
 
     function getPropertiesOfType(type: Type): Symbol[] {
