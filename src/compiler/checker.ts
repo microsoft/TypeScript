@@ -16264,6 +16264,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             i--;
             const source = types[i];
             if (hasEmptyObject || source.flags & TypeFlags.StructuredOrInstantiable) {
+                // A type parameter with a union constraint may be a subtype of some union, but not a subtype of the
+                // individual constituents of that union. For example, `T extends A | B` is a subtype of `A | B`, but not
+                // a subtype of just `A` or just `B`. When we encounter such a type parameter, we therefore check if the
+                // type parameter is a subtype of a union of all the other types.
+                if (source.flags & TypeFlags.TypeParameter && getBaseConstraintOrType(source).flags & TypeFlags.Union) {
+                    if (isTypeRelatedTo(source, getUnionType(map(types, t => t === source ? neverType : t)), strictSubtypeRelation)) {
+                        orderedRemoveItemAt(types, i);
+                    }
+                    continue;
+                }
                 // Find the first property with a unit type, if any. When constituents have a property by the same name
                 // but of a different unit type, we can quickly disqualify them from subtype checks. This helps subtype
                 // reduction of large discriminated union types.
