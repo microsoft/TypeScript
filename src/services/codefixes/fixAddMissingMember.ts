@@ -317,7 +317,8 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+        const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
         if (!length(properties)) return undefined;
 
         return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
@@ -694,7 +695,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (isObjectLiteralType(type)) {
         const props = map(checker.getPropertiesOfType(type), prop => {
-            const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration), enclosingDeclaration) : createUndefined();
+            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), enclosingDeclaration);
             return factory.createPropertyAssignment(prop.name, initializer);
         });
         return factory.createObjectLiteralExpression(props, /*multiLine*/ true);

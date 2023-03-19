@@ -9,8 +9,8 @@
 
 // @Filename: imports.ts
 ////import {
-////  B,
-////  C,
+////    B,
+////    C,
 ////} from './exports';
 ////
 ////declare const b: B;
@@ -19,11 +19,11 @@
 
 goTo.file("imports.ts");
 verify.codeFix({
-  index: 0,
-  description: ts.Diagnostics.Convert_to_type_only_import.message,
-  newFileContent: `import type {
-  B,
-  C,
+    index: 0,
+    description: ts.Diagnostics.Convert_to_type_only_import.message,
+    newFileContent: `import type {
+    B,
+    C,
 } from './exports';
 
 declare const b: B;

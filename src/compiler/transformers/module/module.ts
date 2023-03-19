@@ -850,6 +850,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function visitImportCallExpression(node: ImportCall): Expression {
+        if (moduleKind === ModuleKind.None && languageVersion >= ScriptTarget.ES2020) {
+            return visitEachChild(node, visitor, context);
+        }
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.

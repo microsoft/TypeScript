@@ -14,5 +14,4 @@ var y: A<A>;
 
 (): A => null;
 >(): A => null : () => any
->null : null
 

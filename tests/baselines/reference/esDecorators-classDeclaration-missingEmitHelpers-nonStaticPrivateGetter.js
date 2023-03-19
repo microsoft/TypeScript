@@ -26,7 +26,7 @@ let C = (() => {
     return class C {
         static {
             _private_get_foo_decorators = [dec];
-            tslib_1.__esDecorate(this, _private_get_foo_descriptor = { get: tslib_1.__setFunctionName(function () { return 1; }, "#foo", "get") }, _private_get_foo_decorators, { kind: "getter", name: "#foo", static: false, private: true }, null, _instanceExtraInitializers);
+            tslib_1.__esDecorate(this, _private_get_foo_descriptor = { get: tslib_1.__setFunctionName(function () { return 1; }, "#foo", "get") }, _private_get_foo_decorators, { kind: "getter", name: "#foo", static: false, private: true, access: { has: obj => #foo in obj, get: obj => obj.#foo } }, null, _instanceExtraInitializers);
         }
         get #foo() { return _private_get_foo_descriptor.get.call(this); }
         constructor() {

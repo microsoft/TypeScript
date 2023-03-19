@@ -44,7 +44,6 @@ var r5 = x instanceof null;
 >r5 : boolean
 >x instanceof null : boolean
 >x : any
->null : null
 
 var r6 = x instanceof undefined;
 >r6 : boolean

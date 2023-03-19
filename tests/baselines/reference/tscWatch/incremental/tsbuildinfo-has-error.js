@@ -47,19 +47,19 @@ Shape signatures in builder refreshed for::
 /src/project/main.ts (used version)
 
 PolledWatches::
-/src/project/node_modules/@types:
+/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/project/tsconfig.json:
+/src/project/tsconfig.json: *new*
   {}
-/src/project/main.ts:
+/src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined

@@ -101,7 +101,6 @@ else {
 if (nonNull === null) {
 >nonNull === null : boolean
 >nonNull : {}
->null : null
 
   nonNull;
 >nonNull : never

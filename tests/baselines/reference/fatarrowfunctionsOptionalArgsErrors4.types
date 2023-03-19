@@ -6,7 +6,6 @@
 >arg : number
 >0 : 0
 >47 : 47
->null : null
 
     false ? ((arg?: number = 0) => 57) : null;
 >false ? ((arg?: number = 0) => 57) : null : (arg?: number) => number
@@ -16,12 +15,10 @@
 >arg : number
 >0 : 0
 >57 : 57
->null : null
 
     false ? null : (arg?: number = 0) => 67;
 >false ? null : (arg?: number = 0) => 67 : (arg?: number) => number
 >false : false
->null : null
 >(arg?: number = 0) => 67 : (arg?: number) => number
 >arg : number
 >0 : 0

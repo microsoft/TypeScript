@@ -234,6 +234,7 @@ import {
     isArray,
     isArrayLiteralExpression,
     isArrowFunction,
+    isAutoAccessorPropertyDeclaration,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -300,6 +301,7 @@ import {
     isMetaProperty,
     isMethodDeclaration,
     isMethodOrAccessor,
+    isModifierLike,
     isModuleDeclaration,
     isNamedDeclaration,
     isNamespaceExport,
@@ -333,6 +335,7 @@ import {
     isTypeElement,
     isTypeLiteralNode,
     isTypeNode,
+    isTypeParameterDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
     isVariableStatement,
@@ -461,7 +464,6 @@ import {
     Signature,
     SignatureDeclaration,
     SignatureFlags,
-    SignatureKind,
     singleElementArray,
     singleOrUndefined,
     skipOuterExpressions,
@@ -594,7 +596,11 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
-    let str = "";
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var str = "";
+    /* eslint-enable no-var */
     const writeText: (text: string) => void = text => str += text;
     return {
         getText: () => str,
@@ -964,6 +970,30 @@ export function nodeIsPresent(node: Node | undefined): boolean {
     return !nodeIsMissing(node);
 }
 
+/**
+ * Tests whether `child` is a grammar error on `parent`.
+ * @internal
+ */
+export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
+    if (isTypeParameterDeclaration(parent)) return child === parent.expression;
+    if (isClassStaticBlockDeclaration(parent)) return child === parent.modifiers;
+    if (isPropertySignature(parent)) return child === parent.initializer;
+    if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
+    if (isPropertyAssignment(parent)) return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isShorthandPropertyAssignment(parent)) return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
+    if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isGetAccessorDeclaration(parent)) return child === parent.typeParameters || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isSetAccessorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isNamespaceExportDeclaration(parent)) return child === parent.modifiers || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    return false;
+}
+
+function isGrammarErrorElement<T extends Node>(nodeArray: NodeArray<T> | undefined, child: Node | NodeArray<Node>, isElement: (node: Node) => node is T) {
+    if (!nodeArray || isArray(child) || !isElement(child)) return false;
+    return contains(nodeArray, child);
+}
+
 function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
     if (from === undefined || from.length === 0) return to;
     let statementIndex = 0;
@@ -1193,108 +1223,407 @@ export function getInternalEmitFlags(node: Node): InternalEmitFlags {
     return emitNode && emitNode.internalFlags || 0;
 }
 
+// Map from a type name, to a map of targets to array of features introduced to the type at that target.
 /** @internal */
-export interface ScriptTargetFeatures {
-    [key: string]: { [key: string]: string[] | undefined };
-}
+export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, string[]>>;
+
 
 /** @internal */
 export function getScriptTargetFeatures(): ScriptTargetFeatures {
-    return {
-        es2015: {
-            Array: ["find", "findIndex", "fill", "copyWithin", "entries", "keys", "values"],
-            RegExp: ["flags", "sticky", "unicode"],
-            Reflect: ["apply", "construct", "defineProperty", "deleteProperty", "get"," getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"],
-            ArrayConstructor: ["from", "of"],
-            ObjectConstructor: ["assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"],
-            NumberConstructor: ["isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"],
-            Math: ["clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"],
-            Map: ["entries", "keys", "values"],
-            Set: ["entries", "keys", "values"],
-            Promise: emptyArray,
-            PromiseConstructor: ["all", "race", "reject", "resolve"],
-            Symbol: ["for", "keyFor"],
-            WeakMap: ["entries", "keys", "values"],
-            WeakSet: ["entries", "keys", "values"],
-            Iterator: emptyArray,
-            AsyncIterator: emptyArray,
-            String: ["codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"],
-            StringConstructor: ["fromCodePoint", "raw"]
-        },
-        es2016: {
-            Array: ["includes"]
-        },
-        es2017: {
-            Atomics: emptyArray,
-            SharedArrayBuffer: emptyArray,
-            String: ["padStart", "padEnd"],
-            ObjectConstructor: ["values", "entries", "getOwnPropertyDescriptors"],
-            DateTimeFormat: ["formatToParts"]
-        },
-        es2018: {
-            Promise: ["finally"],
-            RegExpMatchArray: ["groups"],
-            RegExpExecArray: ["groups"],
-            RegExp: ["dotAll"],
-            Intl: ["PluralRules"],
-            AsyncIterable: emptyArray,
-            AsyncIterableIterator: emptyArray,
-            AsyncGenerator: emptyArray,
-            AsyncGeneratorFunction: emptyArray,
-            NumberFormat: ["formatToParts"]
-        },
-        es2019: {
-            Array: ["flat", "flatMap"],
-            ObjectConstructor: ["fromEntries"],
-            String: ["trimStart", "trimEnd", "trimLeft", "trimRight"],
-            Symbol: ["description"]
-        },
-        es2020: {
-            BigInt: emptyArray,
-            BigInt64Array: emptyArray,
-            BigUint64Array: emptyArray,
-            PromiseConstructor: ["allSettled"],
-            SymbolConstructor: ["matchAll"],
-            String: ["matchAll"],
-            DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
-            RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
-        },
-        es2021: {
-            PromiseConstructor: ["any"],
-            String: ["replaceAll"]
-        },
-        es2022: {
-            Array: ["at"],
-            String: ["at"],
-            Int8Array: ["at"],
-            Uint8Array: ["at"],
-            Uint8ClampedArray: ["at"],
-            Int16Array: ["at"],
-            Uint16Array: ["at"],
-            Int32Array: ["at"],
-            Uint32Array: ["at"],
-            Float32Array: ["at"],
-            Float64Array: ["at"],
-            BigInt64Array: ["at"],
-            BigUint64Array: ["at"],
-            ObjectConstructor: ["hasOwn"],
-            Error: ["cause"]
-        },
-        es2023: {
-            Array: ["findLastIndex", "findLast"],
-            Int8Array: ["findLastIndex", "findLast"],
-            Uint8Array: ["findLastIndex", "findLast"],
-            Uint8ClampedArray: ["findLastIndex", "findLast"],
-            Int16Array: ["findLastIndex", "findLast"],
-            Uint16Array: ["findLastIndex", "findLast"],
-            Int32Array: ["findLastIndex", "findLast"],
-            Uint32Array: ["findLastIndex", "findLast"],
-            Float32Array: ["findLastIndex", "findLast"],
-            Float64Array: ["findLastIndex", "findLast"],
-            BigInt64Array: ["findLastIndex", "findLast"],
-            BigUint64Array: ["findLastIndex", "findLast"],
-        }
-    };
+    return new Map(Object.entries({
+        Array: new Map(Object.entries({
+            es2015: [
+                "find",
+                "findIndex",
+                "fill",
+                "copyWithin",
+                "entries",
+                "keys",
+                "values"
+            ],
+            es2016: [
+                "includes"
+            ],
+            es2019: [
+                "flat",
+                "flatMap"
+            ],
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Iterator: new Map(Object.entries({
+            es2015: emptyArray,
+        })),
+        AsyncIterator: new Map(Object.entries({
+            es2015: emptyArray,
+        })),
+        Atomics: new Map(Object.entries({
+            es2017: emptyArray,
+        })),
+        SharedArrayBuffer: new Map(Object.entries({
+            es2017: emptyArray,
+        })),
+        AsyncIterable: new Map(Object.entries({
+            es2018: emptyArray,
+        })),
+        AsyncIterableIterator: new Map(Object.entries({
+            es2018: emptyArray,
+        })),
+        AsyncGenerator: new Map(Object.entries({
+            es2018: emptyArray,
+        })),
+        AsyncGeneratorFunction: new Map(Object.entries({
+            es2018: emptyArray,
+        })),
+        RegExp: new Map(Object.entries({
+            es2015: [
+                "flags",
+                "sticky",
+                "unicode"
+            ],
+            es2018: [
+                "dotAll"
+            ]
+        })),
+        Reflect: new Map(Object.entries({
+            es2015: [
+                "apply",
+                "construct",
+                "defineProperty",
+                "deleteProperty",
+                "get",
+                " getOwnPropertyDescriptor",
+                "getPrototypeOf",
+                "has",
+                "isExtensible",
+                "ownKeys",
+                "preventExtensions",
+                "set",
+                "setPrototypeOf"
+            ]
+        })),
+        ArrayConstructor: new Map(Object.entries({
+            es2015: [
+                "from",
+                "of"
+            ]
+        })),
+        ObjectConstructor: new Map(Object.entries({
+            es2015: [
+                "assign",
+                "getOwnPropertySymbols",
+                "keys",
+                "is",
+                "setPrototypeOf"
+            ],
+            es2017: [
+                "values",
+                "entries",
+                "getOwnPropertyDescriptors"
+            ],
+            es2019: [
+                "fromEntries"
+            ],
+            es2022: [
+                "hasOwn"
+            ]
+        })),
+        NumberConstructor: new Map(Object.entries({
+            es2015: [
+                "isFinite",
+                "isInteger",
+                "isNaN",
+                "isSafeInteger",
+                "parseFloat",
+                "parseInt"
+            ]
+        })),
+        Math: new Map(Object.entries({
+            es2015: [
+                "clz32",
+                "imul",
+                "sign",
+                "log10",
+                "log2",
+                "log1p",
+                "expm1",
+                "cosh",
+                "sinh",
+                "tanh",
+                "acosh",
+                "asinh",
+                "atanh",
+                "hypot",
+                "trunc",
+                "fround",
+                "cbrt"
+            ]
+        })),
+        Map: new Map(Object.entries({
+            es2015: [
+                "entries",
+                "keys",
+                "values"
+            ]
+        })),
+        Set: new Map(Object.entries({
+            es2015: [
+                "entries",
+                "keys",
+                "values"
+            ]
+        })),
+        PromiseConstructor: new Map(Object.entries({
+            es2015: [
+                "all",
+                "race",
+                "reject",
+                "resolve"
+            ],
+            es2020: [
+                "allSettled"
+            ],
+            es2021: [
+                "any"
+            ]
+        })),
+        Symbol: new Map(Object.entries({
+            es2015: [
+                "for",
+                "keyFor"
+            ],
+            es2019: [
+                "description"
+            ]
+        })),
+        WeakMap: new Map(Object.entries({
+            es2015: [
+                "entries",
+                "keys",
+                "values"
+            ]
+        })),
+        WeakSet: new Map(Object.entries({
+            es2015: [
+                "entries",
+                "keys",
+                "values"
+            ]
+        })),
+        String: new Map(Object.entries({
+            es2015: [
+                "codePointAt",
+                "includes",
+                "endsWith",
+                "normalize",
+                "repeat",
+                "startsWith",
+                "anchor",
+                "big",
+                "blink",
+                "bold",
+                "fixed",
+                "fontcolor",
+                "fontsize",
+                "italics",
+                "link",
+                "small",
+                "strike",
+                "sub",
+                "sup"
+            ],
+            es2017: [
+                "padStart",
+                "padEnd"
+            ],
+            es2019: [
+                "trimStart",
+                "trimEnd",
+                "trimLeft",
+                "trimRight"
+            ],
+            es2020: [
+                "matchAll"
+            ],
+            es2021: [
+                "replaceAll"
+            ],
+            es2022: [
+                "at"
+            ]
+        })),
+        StringConstructor: new Map(Object.entries({
+            es2015: [
+                "fromCodePoint",
+                "raw"
+            ]
+        })),
+        DateTimeFormat: new Map(Object.entries({
+            es2017: [
+                "formatToParts"
+            ]
+        })),
+        Promise: new Map(Object.entries({
+            es2015: emptyArray,
+            es2018: [
+                "finally"
+            ]
+        })),
+        RegExpMatchArray: new Map(Object.entries({
+            es2018: [
+                "groups"
+            ]
+        })),
+        RegExpExecArray: new Map(Object.entries({
+            es2018: [
+                "groups"
+            ]
+        })),
+        Intl: new Map(Object.entries({
+            es2018: [
+                "PluralRules"
+            ]
+        })),
+        NumberFormat: new Map(Object.entries({
+            es2018: [
+                "formatToParts"
+            ]
+        })),
+        SymbolConstructor: new Map(Object.entries({
+            es2020: [
+                "matchAll"
+            ]
+        })),
+        DataView: new Map(Object.entries({
+            es2020: [
+                "setBigInt64",
+                "setBigUint64",
+                "getBigInt64",
+                "getBigUint64"
+            ]
+        })),
+        BigInt: new Map(Object.entries({
+            es2020: emptyArray
+        })),
+        RelativeTimeFormat: new Map(Object.entries({
+            es2020: [
+                "format",
+                "formatToParts",
+                "resolvedOptions"
+            ]
+        })),
+        Int8Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Uint8Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Uint8ClampedArray: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Int16Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Uint16Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Int32Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Uint32Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Float32Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Float64Array: new Map(Object.entries({
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        BigInt64Array: new Map(Object.entries({
+            es2020: emptyArray,
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        BigUint64Array: new Map(Object.entries({
+            es2020: emptyArray,
+            es2022: [
+                "at"
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
+        })),
+        Error: new Map(Object.entries({
+            es2022: [
+                "cause"
+            ]
+        })),
+    }));
 }
 
 /** @internal */
@@ -1482,7 +1811,7 @@ function isCommonJSContainingModuleKind(kind: ModuleKind) {
 
 /** @internal */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-    return isExternalModule(node) || compilerOptions.isolatedModules || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return isExternalModule(node) || getIsolatedModules(compilerOptions) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
 }
 
 /**
@@ -1513,7 +1842,7 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
     if (startsWithUseStrict(node.statements)) {
         return true;
     }
-    if (isExternalModule(node) || compilerOptions.isolatedModules) {
+    if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
         // ECMAScript Modules are always strict.
         if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return true;
@@ -1821,8 +2150,8 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
     const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
     scanner.scan();
-    const start = scanner.getTokenPos();
-    return createTextSpanFromBounds(start, scanner.getTextPos());
+    const start = scanner.getTokenStart();
+    return createTextSpanFromBounds(start, scanner.getTokenEnd());
 }
 
 /** @internal */
@@ -1850,13 +2179,14 @@ function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunctio
 export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
     let errorNode: Node | undefined = node;
     switch (node.kind) {
-        case SyntaxKind.SourceFile:
+        case SyntaxKind.SourceFile: {
             const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
             if (pos === sourceFile.text.length) {
                 // file is empty - return span for the beginning of the file
                 return createTextSpan(0, 0);
             }
             return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
         // This list is a work in progress. Add missing node kinds to improve their error
         // spans.
         case SyntaxKind.VariableDeclaration:
@@ -1881,10 +2211,16 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
         case SyntaxKind.ArrowFunction:
             return getErrorSpanForArrowFunction(sourceFile, node as ArrowFunction);
         case SyntaxKind.CaseClause:
-        case SyntaxKind.DefaultClause:
+        case SyntaxKind.DefaultClause: {
             const start = skipTrivia(sourceFile.text, (node as CaseOrDefaultClause).pos);
             const end = (node as CaseOrDefaultClause).statements.length > 0 ? (node as CaseOrDefaultClause).statements[0].pos : (node as CaseOrDefaultClause).end;
             return createTextSpanFromBounds(start, end);
+        }
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.YieldExpression: {
+            const pos = skipTrivia(sourceFile.text, (node as ReturnStatement | YieldExpression).pos);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
     }
 
     if (errorNode === undefined) {
@@ -2041,6 +2377,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.SymbolKeyword:
         case SyntaxKind.ObjectKeyword:
         case SyntaxKind.UndefinedKeyword:
+        case SyntaxKind.NullKeyword:
         case SyntaxKind.NeverKeyword:
             return true;
         case SyntaxKind.VoidKeyword:
@@ -5485,12 +5822,16 @@ export function isNightly() {
 
 /** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
-    let output: string;
-    let indent: number;
-    let lineStart: boolean;
-    let lineCount: number;
-    let linePos: number;
-    let hasTrailingComment = false;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var output: string;
+    var indent: number;
+    var lineStart: boolean;
+    var lineCount: number;
+    var linePos: number;
+    var hasTrailingComment = false;
+    /* eslint-enable no-var */
 
     function updateLineCountAndPosFor(s: string) {
         const lineStartsOfS = computeLineStarts(s);
@@ -7150,26 +7491,25 @@ export function isWriteAccess(node: Node) {
 const enum AccessKind {
     /** Only reads from a variable. */
     Read,
-    /** Only writes to a variable without using the result. E.g.: `x++;`. */
+    /** Only writes to a variable without ever reading it. E.g.: `x=1;`. */
     Write,
-    /** Writes to a variable and uses the result as an expression. E.g.: `f(x++);`. */
+    /** Reads from and writes to a variable. E.g.: `f(x++);`, `x/=1`. */
     ReadWrite
 }
 function accessKind(node: Node): AccessKind {
     const { parent } = node;
-    if (!parent) return AccessKind.Read;
 
-    switch (parent.kind) {
+    switch (parent?.kind) {
         case SyntaxKind.ParenthesizedExpression:
             return accessKind(parent);
         case SyntaxKind.PostfixUnaryExpression:
         case SyntaxKind.PrefixUnaryExpression:
             const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
-            return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
+            return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? AccessKind.ReadWrite : AccessKind.Read;
         case SyntaxKind.BinaryExpression:
             const { left, operatorToken } = parent as BinaryExpression;
             return left === node && isAssignmentOperator(operatorToken.kind) ?
-                operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : writeOrReadWrite()
+                operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : AccessKind.ReadWrite
                 : AccessKind.Read;
         case SyntaxKind.PropertyAccessExpression:
             return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
@@ -7185,11 +7525,6 @@ function accessKind(node: Node): AccessKind {
             return accessKind(parent);
         default:
             return AccessKind.Read;
-    }
-
-    function writeOrReadWrite(): AccessKind {
-        // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-        return parent.parent && walkUpParenthesizedExpressions(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
     }
 }
 function reverseAccessKind(a: AccessKind): AccessKind {
@@ -7317,11 +7652,6 @@ export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclar
 /** @internal */
 export function getObjectFlags(type: Type): ObjectFlags {
     return type.flags & TypeFlags.ObjectFlagsType ? (type as ObjectFlagsType).objectFlags : 0;
-}
-
-/** @internal */
-export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
-    return checker.getSignaturesOfType(type, SignatureKind.Call).length !== 0 || checker.getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
 }
 
 /** @internal */
@@ -7608,7 +7938,6 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
     this.skipTrivia = skipTrivia || (pos => pos);
 }
 
-// eslint-disable-next-line prefer-const
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
     getNodeConstructor: () => Node as any,
@@ -7989,6 +8318,7 @@ export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["mo
         getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
 }
 
+/** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
     return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
 }
@@ -8143,7 +8473,7 @@ export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
 
 /** @internal */
 export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
-    return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    return !!(compilerOptions.preserveConstEnums || getIsolatedModules(compilerOptions));
 }
 
 /** @internal */
@@ -9222,7 +9552,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
     // * a bigint can be scanned, and that when it is scanned, it is
     // * the full length of the input string (so the scanner is one character beyond the augmented input length)
     // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-    return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
+    return success && result === SyntaxKind.BigIntLiteral && scanner.getTokenEnd() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
         && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
 }
 
