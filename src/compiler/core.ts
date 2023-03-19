@@ -181,13 +181,12 @@ export function find<T>(array: readonly T[] | undefined, predicate: (element: T,
 export function findIterator<T>(iter: Iterable<T>, predicate: (element: T, index: number) => boolean, startIndex = 0): T | undefined {
     let i = 0;
     for (const value of iter) {
-        if (i < startIndex) {
-            i++;
-            continue;
+        if (i >= startIndex) {
+            if (predicate(value, i)) {
+                return value;
+            }
         }
-        if (predicate(value, i)) {
-            return value;
-        }
+        i++;
     }
     return undefined;
 }
