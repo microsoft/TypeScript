@@ -221,7 +221,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
         const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
         const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)) : emptyArray;
-        return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || emptyArray);
+        return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node));
     }
 
     // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -245,7 +245,8 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         });
     }
 
-    return concatenate(fileReferenceDefinition, getDefinitionFromObjectLiteralElement(typeChecker, node) || getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution));
+    const objectLiteralElementDefinition = getDefinitionFromObjectLiteralElement(typeChecker, node);
+    return concatenate(fileReferenceDefinition, objectLiteralElementDefinition.length ? objectLiteralElementDefinition : getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution));
 }
 
 /**
@@ -274,11 +275,11 @@ function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: N
     if (element) {
         const contextualType = element && typeChecker.getContextualType(element.parent);
         if (contextualType) {
-            const definitions = flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
+            return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
                 getDefinitionFromSymbol(typeChecker, propertySymbol, node));
-            return definitions.length ? definitions : undefined;
         }
     }
+    return emptyArray;
 }
 
 function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node) {
@@ -367,7 +368,7 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
     const typeDefinitions = fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution);
     return typeDefinitions.length ? typeDefinitions
         : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
-        : undefined;
+            : undefined;
 }
 
 function definitionFromType(type: Type, checker: TypeChecker, node: Node, failedAliasResolution: boolean | undefined): readonly DefinitionInfo[] {
