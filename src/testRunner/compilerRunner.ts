@@ -1,7 +1,4 @@
-import * as vpath from "./_namespaces/vpath";
-import * as ts from "./_namespaces/ts";
 import * as compiler from "./_namespaces/compiler";
-import * as Utils from "./_namespaces/Utils";
 import {
     Baseline,
     Compiler,
@@ -14,11 +11,13 @@ import {
     TestCaseParser,
     TestRunnerKind,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vpath from "./_namespaces/vpath";
 
 export const enum CompilerTestType {
     Conformance,
     Regressions,
-    Test262
 }
 
 interface CompilerFileBasedTest extends FileBasedTest {
@@ -40,9 +39,6 @@ export class CompilerBaselineRunner extends RunnerBase {
         }
         else if (testType === CompilerTestType.Regressions) {
             this.testSuiteName = "compiler";
-        }
-        else if (testType === CompilerTestType.Test262) {
-            this.testSuiteName = "test262";
         }
         else {
             this.testSuiteName = "compiler"; // default to this for historical reasons

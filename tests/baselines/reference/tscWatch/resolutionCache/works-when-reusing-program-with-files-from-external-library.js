@@ -58,29 +58,29 @@ Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file2.ts (used version)
 
 PolledWatches::
-/a/b/projects/myproject/src/node_modules:
+/a/b/projects/myproject/src/node_modules: *new*
   {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules/@types:
+/a/b/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/myproject/node_modules/@types:
+/a/b/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/projects/myproject/src/tsconfig.json:
+/a/b/projects/myproject/src/tsconfig.json: *new*
   {}
-/a/b/projects/myproject/src/file1.ts:
+/a/b/projects/myproject/src/file1.ts: *new*
   {}
-/a/b/projects/myproject/node_modules/module1/index.js:
+/a/b/projects/myproject/node_modules/module1/index.js: *new*
   {}
-/a/b/projects/myproject/src/file2.ts:
+/a/b/projects/myproject/src/file2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/projects/myproject/node_modules:
+/a/b/projects/myproject/node_modules: *new*
   {}
-/a/b/projects/myproject/src:
+/a/b/projects/myproject/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -131,32 +131,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (computed .d.ts)
-
-PolledWatches::
-/a/b/projects/myproject/src/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/myproject/src/tsconfig.json:
-  {}
-/a/b/projects/myproject/src/file1.ts:
-  {}
-/a/b/projects/myproject/node_modules/module1/index.js:
-  {}
-/a/b/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/myproject/node_modules:
-  {}
-/a/b/projects/myproject/src:
-  {}
 
 exitCode:: ExitStatus.undefined
 

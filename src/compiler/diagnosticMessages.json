@@ -811,6 +811,10 @@
         "category": "Error",
         "code": 1252
     },
+    "Abstract properties can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1253
+    },
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
@@ -1075,10 +1079,6 @@
     "Class constructor may not be an accessor.": {
         "category": "Error",
         "code": 1341
-    },
-    "Type arguments cannot be used here.": {
-        "category": "Error",
-        "code": 1342
     },
     "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
         "category": "Error",
@@ -1592,6 +1592,10 @@
     "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.": {
         "category": "Error",
         "code": 1485
+    },
+    "Decorator used before 'export' here.": {
+        "category": "Error",
+        "code": 1486
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3030,10 +3034,6 @@
         "category": "Error",
         "code": 2690
     },
-    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
-        "category": "Error",
-        "code": 2691
-    },
     "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
@@ -3499,7 +3499,7 @@
         "category": "Error",
         "code": 2808
     },
-    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
     },
@@ -3610,6 +3610,14 @@
     "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
+    },
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
+        "category": "Error",
+        "code": 2847
+    },
+    "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
+        "category": "Error",
+        "code": 2848
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4269,7 +4277,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4285,19 +4293,11 @@
         "category": "Error",
         "code": 5098
     },
-    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
-        "category": "Error",
-        "code": 5099
-    },
-    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
-        "category": "Error",
-        "code": 5100
-    },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+    "Option '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
-    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
+    "Option '{0}' has been removed. Please remove it from your configuration.": {
         "category": "Error",
         "code": 5102
     },
@@ -4316,6 +4316,14 @@
     "Use '{0}' instead.": {
         "category": "Message",
         "code": 5106
+    },
+    "Option '{0}={1}' is deprecated and will stop functioning in TypeScript {2}. Specify compilerOption '\"ignoreDeprecations\": \"{3}\"' to silence this error.": {
+        "category": "Error",
+        "code": 5107
+    },
+    "Option '{0}={1}' has been removed. Please remove it from your configuration.": {
+        "category": "Error",
+        "code": 5108
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5258,6 +5266,10 @@
         "category": "Message",
         "code": 6264
     },
+    "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6265
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",
@@ -5565,6 +5577,22 @@
     "Project '{0}' is out of date because buildinfo file '{1}' indicates that file '{2}' was root file of compilation but not any more.": {
         "category": "Message",
         "code": 6412
+    },
+    "Entering conditional exports.": {
+        "category": "Message",
+        "code": 6413
+    },
+    "Resolved under condition '{0}'.": {
+        "category": "Message",
+        "code": 6414
+    },
+    "Failed to resolve under condition '{0}'.": {
+        "category": "Message",
+        "code": 6415
+    },
+    "Exiting conditional exports.": {
+        "category": "Message",
+        "code": 6416
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6213,6 +6241,10 @@
         "category": "Error",
         "code": 7011
     },
+    "This overload implicitly returns the type '{0}' because it lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7012
+    },
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
@@ -6548,7 +6580,7 @@
         "category": "Error",
         "code": 8037
     },
-    "Decorators must come after 'export' or 'export default' in JavaScript files.": {
+    "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
         "category": "Error",
         "code": 8038
     },
@@ -6685,6 +6717,14 @@
     "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.": {
         "category": "Suggestion",
         "code": 80008
+    },
+    "JSDoc typedef may be converted to TypeScript type.": {
+        "category": "Suggestion",
+        "code": 80009
+    },
+    "JSDoc typedefs may be converted to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80010
     },
 
     "Add missing 'super()' call": {
@@ -7543,6 +7583,14 @@
     "Use `Number.isNaN` in all conditions.": {
         "category": "Message",
         "code": 95175
+    },
+    "Convert typedef to TypeScript type.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Convert all typedef to TypeScript types.": {
+        "category": "Message",
+        "code": 95177
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

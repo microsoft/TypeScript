@@ -121,8 +121,6 @@ function f13(x: string | number | boolean) {
 function f14(x: number | null | undefined): number | null {
 >f14 : (x: number | null | undefined) => number | null
 >x : number | null | undefined
->null : null
->null : null
 
     const notUndefined = x !== undefined;
 >notUndefined : boolean

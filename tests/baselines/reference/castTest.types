@@ -32,13 +32,11 @@ var s = <string>"";
 var ar = <any[]>null;
 >ar : any[]
 ><any[]>null : any[]
->null : null
 
 var f = <(res : number) => void>null;
 >f : (res: number) => void
 ><(res : number) => void>null : (res: number) => void
 >res : number
->null : null
 
 declare class Point
 >Point : Point

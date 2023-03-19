@@ -17,7 +17,7 @@ enum E5 {
 >E5 : E5
 
     C = new Number(30)
->C : E5
+>C : E5.C
 >new Number(30) : Number
 >Number : NumberConstructor
 >30 : 30

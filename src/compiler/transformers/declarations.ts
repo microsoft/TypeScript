@@ -94,11 +94,13 @@ import {
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
+    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
     isDeclaration,
+    isElementAccessExpression,
     isEntityName,
     isEntityNameExpression,
     isExportAssignment,
@@ -113,6 +115,8 @@ import {
     isFunctionLike,
     isGlobalScopeAugmentation,
     isIdentifier,
+    isIdentifierANonContextualKeyword,
+    isIdentifierText,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -165,6 +169,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    NodeFactory,
     NodeFlags,
     NodeId,
     normalizeSlashes,
@@ -179,6 +184,7 @@ import {
     pushIfUnique,
     removeAllComments,
     ResolutionMode,
+    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -695,7 +701,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced) {
+            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                // Unnecessary property renaming is forbidden in types, so remove renaming
                 return factory.updateBindingElement(
                     elem,
@@ -723,7 +729,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         const newParam = factory.updateParameterDeclaration(
             p,
-            maskModifiers(p, modifierMask),
+            maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
             filterBindingPatternInitializersAndRenamings(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
@@ -1488,13 +1494,16 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!p.valueDeclaration || !isPropertyAccessExpression(p.valueDeclaration)) {
-                            return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
+                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                            return undefined;
+                        }
+                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
+                        if (!isIdentifierText(nameStr, ScriptTarget.ESNext)) {
+                            return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                         const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
-                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
                         if (isNonContextualKeywordName) {
@@ -1855,7 +1864,7 @@ function isAlwaysType(node: Node) {
 }
 
 // Elide "public" modifier, as it is the default
-function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
+function maskModifiers(factory: NodeFactory, node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
     return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
 }
 

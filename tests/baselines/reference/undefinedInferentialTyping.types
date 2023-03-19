@@ -5,7 +5,6 @@ function f<T>(arr: T[], elemnt: T): T {
 >elemnt : T
 
     return null;
->null : null
 }
 
 var a = f([], 3); // should be number

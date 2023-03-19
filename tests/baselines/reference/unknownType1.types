@@ -3,14 +3,12 @@
 
 type T00 = unknown & null;  // null
 >T00 : null
->null : null
 
 type T01 = unknown & undefined;  // undefined
 >T01 : undefined
 
 type T02 = unknown & null & undefined;  // never
 >T02 : never
->null : null
 
 type T03 = unknown & string;  // string
 >T03 : string
@@ -28,14 +26,12 @@ type T06 = unknown & any;  // any
 
 type T10 = unknown | null;  // unknown
 >T10 : unknown
->null : null
 
 type T11 = unknown | undefined;  // unknown
 >T11 : unknown
 
 type T12 = unknown | null | undefined;  // unknown
 >T12 : unknown
->null : null
 
 type T13 = unknown | string;  // unknown
 >T13 : unknown
@@ -327,7 +323,6 @@ function f22(x: unknown) {
 
     let v7: {} | null | undefined = x;  // Error
 >v7 : {} | null | undefined
->null : null
 >x : unknown
 }
 

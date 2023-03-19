@@ -17,6 +17,5 @@ module M {
 >c4 : string
 >"" : ""
 >c5 : any
->null : null
 }
 

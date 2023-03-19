@@ -118,7 +118,7 @@ declare enum E3 {
 >E3 : E3
 
     A
->A : E3
+>A : E3.A
 }
 declare module E3 {
 >E3 : typeof E3

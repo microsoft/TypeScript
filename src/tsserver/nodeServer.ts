@@ -1,4 +1,37 @@
+import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
+import {
+    ApplyCodeActionCommandResult,
+    assertType,
+    CharacterCodes,
+    combinePaths,
+    createQueue,
+    Debug,
+    directorySeparator,
+    DirectoryWatcherCallback,
+    FileWatcher,
+    getDirectoryPath,
+    getRootLength,
+    JsTyping,
+    LanguageServiceMode,
+    MapLike,
+    noop,
+    noopFileWatcher,
+    normalizePath,
+    normalizeSlashes,
+    perfLogger,
+    resolveJSModule,
+    SortedReadonlyArray,
+    startTracing,
+    stripQuotes,
+    sys,
+    toFileNameLowerCase,
+    tracing,
+    TypeAcquisition,
+    validateLocaleAndSetLanguage,
+    versionMajorMinor,
+    WatchOptions,
+} from "./_namespaces/ts";
 import * as server from "./_namespaces/ts.server";
 import {
     ActionInvalidate,
@@ -43,40 +76,6 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "./_namespaces/ts.server";
-import {
-    ApplyCodeActionCommandResult,
-    assertType,
-    CharacterCodes,
-    combinePaths,
-    createQueue,
-    Debug,
-    directorySeparator,
-    DirectoryWatcherCallback,
-    FileWatcher,
-    getDirectoryPath,
-    getNodeMajorVersion,
-    getRootLength,
-    JsTyping,
-    LanguageServiceMode,
-    MapLike,
-    noop,
-    noopFileWatcher,
-    normalizePath,
-    normalizeSlashes,
-    perfLogger,
-    resolveJSModule,
-    SortedReadonlyArray,
-    startTracing,
-    stripQuotes,
-    sys,
-    toFileNameLowerCase,
-    tracing,
-    TypeAcquisition,
-    validateLocaleAndSetLanguage,
-    versionMajorMinor,
-    WatchOptions,
-} from "./_namespaces/ts";
-import * as protocol from "../server/protocol";
 
 interface LogOptions {
     file?: string;
@@ -260,13 +259,13 @@ export function initializeNodeSystem(): StartInput {
         msg(s: string, type: Msg = Msg.Err) {
             switch (type) {
                 case Msg.Info:
-                    perfLogger.logInfoEvent(s);
+                    perfLogger?.logInfoEvent(s);
                     break;
                 case Msg.Perf:
-                    perfLogger.logPerfEvent(s);
+                    perfLogger?.logPerfEvent(s);
                     break;
                 default: // Msg.Err
-                    perfLogger.logErrEvent(s);
+                    perfLogger?.logErrEvent(s);
                     break;
             }
 
@@ -299,9 +298,7 @@ export function initializeNodeSystem(): StartInput {
 
     const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
 
-    const nodeVersion = getNodeMajorVersion();
-    // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
+    const useWatchGuard = process.platform === "win32";
     const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const logger = createLogger();
 

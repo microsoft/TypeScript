@@ -84,7 +84,6 @@ export function createReactSingleSelect<
 >value === null ? undefined : value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | undefined
 >value === null : boolean
 >value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null
->null : null
 >undefined : undefined
 >value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>>
                     }
@@ -128,7 +127,6 @@ export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<Val
 export type HandlerRendererResult = JSX.Element | null | false;
 >HandlerRendererResult : false | JSX.Element | null
 >JSX : any
->null : null
 >false : false
 
 // Handlers
@@ -245,7 +243,6 @@ export type OnChangeMultipleHandler<TValue = OptionValues> = OnChangeHandler<TVa
 export type OnChangeHandler<TValue = OptionValues, TOption = Option<TValue> | Options<TValue>> = (newValue: TOption | null) => void;
 >OnChangeHandler : OnChangeHandler<TValue, TOption>
 >newValue : TOption | null
->null : null
 
 export type OnNewOptionClickHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >OnNewOptionClickHandler : OnNewOptionClickHandler<TValue>
@@ -475,7 +472,6 @@ export interface ValueComponentProps<TValue = OptionValues> {
 
     onClick: OnValueClickHandler<TValue> | null;
 >onClick : OnValueClickHandler<TValue> | null
->null : null
 
     onRemove?: SelectValueHandler<TValue>;
 >onRemove : SelectValueHandler<TValue> | undefined
@@ -506,7 +502,6 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     arrowRenderer?: ArrowRendererHandler | null;
 >arrowRenderer : ArrowRendererHandler | null | undefined
->null : null
 
     /**
      * blurs the input element after a selection has been made. Handy for lowering the keyboard on mobile devices.

@@ -135,7 +135,6 @@ function ff(s) {
 >s : string
 
         return null
->null : null
     }
     else {
         return Target[s]

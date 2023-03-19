@@ -98,7 +98,6 @@ class Chain<T> {
 >s : S
 
         return null;
->null : null
     }
 }
 
@@ -228,6 +227,5 @@ class Chain2<T extends I> {
 >"" : ""
 
         return null;
->null : null
     }
 }
