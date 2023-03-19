@@ -1,7 +1,6 @@
 === tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts ===
 type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
 >HomomorphicMappedType : HomomorphicMappedType<T>
->null : null
 
 function test1<T extends [number] | [string]>(args: T) {
 >test1 : <T extends [number] | [string]>(args: T) => void
