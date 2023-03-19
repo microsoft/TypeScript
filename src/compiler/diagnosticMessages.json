@@ -4233,10 +4233,6 @@
         "category": "Error",
         "code": 5083
     },
-    "Tuple members must all have names or all not have names.": {
-        "category": "Error",
-        "code": 5084
-    },
     "A tuple member cannot be both optional and rest.": {
         "category": "Error",
         "code": 5085

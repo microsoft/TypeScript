@@ -1,0 +1,30 @@
+=== tests/cases/conformance/types/tuple/named/partiallyNamedTuples.ts ===
+type NamedAndAnonymous = [a: string, number];
+>NamedAndAnonymous : [a: string, number]
+
+function fa1(...args: NamedAndAnonymous) {}
+>fa1 : (a: string, args_1: number) => void
+>args : NamedAndAnonymous
+
+function fa2(a: NamedAndAnonymous, ...args: NamedAndAnonymous) {}
+>fa2 : (a: NamedAndAnonymous, a: string, args_1: number) => void
+>a : NamedAndAnonymous
+>args : NamedAndAnonymous
+
+type NamedAnonymousMixed = [a: string, number, c: number, NamedAndAnonymous];
+>NamedAnonymousMixed : [a: string, number, c: number, NamedAndAnonymous]
+
+function fb1(...args: NamedAnonymousMixed) {}
+>fb1 : (a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
+>args : NamedAnonymousMixed
+
+function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
+>fb2 : (a: NamedAnonymousMixed, a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
+>a : NamedAnonymousMixed
+>args : NamedAnonymousMixed
+
+function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
+>fb3 : (a: NamedAnonymousMixed, a: string, args_1: number) => void
+>a : NamedAnonymousMixed
+>args : NamedAndAnonymous
+

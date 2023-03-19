@@ -1,0 +1,39 @@
+=== tests/cases/conformance/types/tuple/named/partiallyNamedTuples.ts ===
+type NamedAndAnonymous = [a: string, number];
+>NamedAndAnonymous : Symbol(NamedAndAnonymous, Decl(partiallyNamedTuples.ts, 0, 0))
+
+function fa1(...args: NamedAndAnonymous) {}
+>fa1 : Symbol(fa1, Decl(partiallyNamedTuples.ts, 0, 45))
+>args : Symbol(args, Decl(partiallyNamedTuples.ts, 2, 13))
+>NamedAndAnonymous : Symbol(NamedAndAnonymous, Decl(partiallyNamedTuples.ts, 0, 0))
+
+function fa2(a: NamedAndAnonymous, ...args: NamedAndAnonymous) {}
+>fa2 : Symbol(fa2, Decl(partiallyNamedTuples.ts, 2, 43))
+>a : Symbol(a, Decl(partiallyNamedTuples.ts, 3, 13))
+>NamedAndAnonymous : Symbol(NamedAndAnonymous, Decl(partiallyNamedTuples.ts, 0, 0))
+>args : Symbol(args, Decl(partiallyNamedTuples.ts, 3, 34))
+>NamedAndAnonymous : Symbol(NamedAndAnonymous, Decl(partiallyNamedTuples.ts, 0, 0))
+
+type NamedAnonymousMixed = [a: string, number, c: number, NamedAndAnonymous];
+>NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
+>NamedAndAnonymous : Symbol(NamedAndAnonymous, Decl(partiallyNamedTuples.ts, 0, 0))
+
+function fb1(...args: NamedAnonymousMixed) {}
+>fb1 : Symbol(fb1, Decl(partiallyNamedTuples.ts, 5, 77))
+>args : Symbol(args, Decl(partiallyNamedTuples.ts, 7, 13))
+>NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
+
+function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
+>fb2 : Symbol(fb2, Decl(partiallyNamedTuples.ts, 7, 45))
+>a : Symbol(a, Decl(partiallyNamedTuples.ts, 8, 13))
+>NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
+>args : Symbol(args, Decl(partiallyNamedTuples.ts, 8, 36))
+>NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
+
+function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
+>fb3 : Symbol(fb3, Decl(partiallyNamedTuples.ts, 8, 69))
+>a : Symbol(a, Decl(partiallyNamedTuples.ts, 9, 13))
+>NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
+>args : Symbol(args, Decl(partiallyNamedTuples.ts, 9, 36))
+>NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
+
