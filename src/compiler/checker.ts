@@ -13486,8 +13486,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             yield* type.partiallyResolvedProperties;
         }
 
-        // If we have an iterator already, pick up where we left off.
-        // Otherwise, we haven't started, so create a new iterator.
+        // If we have a generator already, pick up where we left off.
+        // Otherwise, we haven't started, so create a new one.
         const generator = type.partiallyResolvedPropertiesGenerator ??= worker();
         for (const symbol of generator) {
             type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, symbol);
