@@ -5659,7 +5659,7 @@ export interface EmitResolver {
     isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -6028,7 +6028,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    firstSpreadIndex?: number;          // Index of first spread element in array literal (-1 for none)
+    spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
 }
@@ -6130,7 +6130,7 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
-    NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
+    NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -6151,8 +6151,6 @@ export interface Type {
     permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
     /** @internal */
     restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
-    /** @internal */
-    uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
     /** @internal */
     immediateBaseConstraint?: Type;  // Immediate base constraint cache
     /** @internal */
@@ -6442,6 +6440,8 @@ export interface UnionType extends UnionOrIntersectionType {
 export interface IntersectionType extends UnionOrIntersectionType {
     /** @internal */
     resolvedApparentType: Type;
+    /** @internal */
+    uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
 }
 
 export type StructuredType = ObjectType | UnionType | IntersectionType;
@@ -6591,11 +6591,19 @@ export interface IndexedAccessType extends InstantiableType {
 
 export type TypeVariable = TypeParameter | IndexedAccessType;
 
+/** @internal */
+export const enum IndexFlags {
+    None = 0,
+    StringsOnly = 1 << 0,
+    NoIndexSignatures = 1 << 1,
+    NoReducibleCheck = 1 << 2,
+}
+
 // keyof T types (TypeFlags.Index)
 export interface IndexType extends InstantiableType {
     type: InstantiableType | UnionOrIntersectionType;
     /** @internal */
-    stringsOnly: boolean;
+    indexFlags: IndexFlags;
 }
 
 export interface ConditionalRoot {
