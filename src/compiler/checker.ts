@@ -13501,13 +13501,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         type.partiallyResolvedPropertiesGenerator = undefined;
 
         function* worker() {
-            const seenSymbols = createSymbolTable();
+            const seenSymbols = new Set<__String>();
             for (const current of type.types) {
                 for (const prop of getPropertiesOfType(current)) {
                     if (!seenSymbols.has(prop.escapedName)) {
                         const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
                         if (combinedProp) {
-                            seenSymbols.set(prop.escapedName, combinedProp);
+                            seenSymbols.add(prop.escapedName);
                             if (isNamedMember(combinedProp, prop.escapedName)) {
                                 yield combinedProp;
                             }
