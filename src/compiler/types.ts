@@ -6417,11 +6417,11 @@ export interface UnionOrIntersectionType extends Type {
     /** @internal */
     resolvedProperties?: Symbol[];
     /** @internal */
-    resolvedIndexType: IndexType;
+    resolvedIndexType?: IndexType;
     /** @internal */
-    resolvedStringIndexType: IndexType;
+    resolvedStringIndexType?: IndexType;
     /** @internal */
-    resolvedBaseConstraint: Type;
+    resolvedBaseConstraint?: Type;
     /** @internal */
     partiallyResolvedProperties?: Symbol[];
     /** @internal */
