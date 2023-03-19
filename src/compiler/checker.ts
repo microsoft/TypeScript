@@ -13468,21 +13468,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getPropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType): Symbol[] {
         if (!type.resolvedProperties) {
-            for (const _ of iteratePropertiesOfUnionOrIntersectionType(type, /*skipYield*/ true)) {
+            for (const _ of iteratePropertiesOfUnionOrIntersectionType(type, /*doYield*/ false)) {
                 Debug.fail("Iterator should have been empty.");
             }
         }
         return type.resolvedProperties!;
     }
 
-    function* iteratePropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType, skipYield = false) {
+    function* iteratePropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType, doYield = true) {
         if (type.resolvedProperties) {
-            Debug.assert(!skipYield);
+            Debug.assert(doYield);
             yield* type.resolvedProperties;
             return;
         }
 
-        if (!skipYield && type.partiallyResolvedProperties) {
+        if (doYield && type.partiallyResolvedProperties) {
             yield* type.partiallyResolvedProperties;
         }
 
@@ -13491,7 +13491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const generator = type.partiallyResolvedPropertiesGenerator ??= worker();
         for (const symbol of generator) {
             type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, symbol);
-            if (!skipYield) {
+            if (doYield) {
                 yield symbol;
             }
         }
