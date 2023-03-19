@@ -13488,7 +13488,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // If we have a generator already, pick up where we left off.
         // Otherwise, we haven't started, so create a new one.
-        const generator = type.partiallyResolvedPropertiesGenerator ??= worker();
+        const generator = type.partiallyResolvedPropertiesGenerator ??= iteratePropertiesOfUnionOrIntersectionTypeWorker(type);
         for (const symbol of generator) {
             type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, symbol);
             if (doYield) {
@@ -13499,26 +13499,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         type.resolvedProperties = type.partiallyResolvedProperties ?? emptyArray;
         type.partiallyResolvedProperties = undefined;
         type.partiallyResolvedPropertiesGenerator = undefined;
+    }
 
-        function* worker() {
-            const seenSymbols = new Set<__String>();
-            for (const current of type.types) {
-                for (const prop of getPropertiesOfType(current)) {
-                    if (!seenSymbols.has(prop.escapedName)) {
-                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
-                        if (combinedProp) {
-                            seenSymbols.add(prop.escapedName);
-                            if (isNamedMember(combinedProp, prop.escapedName)) {
-                                yield combinedProp;
-                            }
+    function* iteratePropertiesOfUnionOrIntersectionTypeWorker(type: UnionOrIntersectionType) {
+        const seenSymbols = new Set<__String>();
+        for (const current of type.types) {
+            for (const prop of getPropertiesOfType(current)) {
+                if (!seenSymbols.has(prop.escapedName)) {
+                    const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
+                    if (combinedProp) {
+                        seenSymbols.add(prop.escapedName);
+                        if (isNamedMember(combinedProp, prop.escapedName)) {
+                            yield combinedProp;
                         }
                     }
                 }
-                // The properties of a union type are those that are present in all constituent types, so
-                // we only need to check the properties of the first type without index signature
-                if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
-                    break;
-                }
+            }
+            // The properties of a union type are those that are present in all constituent types, so
+            // we only need to check the properties of the first type without index signature
+            if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
+                break;
             }
         }
     }
