@@ -5,7 +5,6 @@ class B<T> {
    foo(x: T): T { return null; }
 >foo : (x: T) => T
 >x : T
->null : null
 }
 
 var x: B<number>;

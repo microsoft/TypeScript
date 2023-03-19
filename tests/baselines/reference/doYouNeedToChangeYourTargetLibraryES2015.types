@@ -434,12 +434,10 @@ const testMathCbrt = Math.cbrt(0);
 const testMap: Map<any, any> = null as any;
 >testMap : Map<any, any>
 >null as any : any
->null : null
 
 const testSet: Set<any> = null as any;
 >testSet : Set<any>
 >null as any : any
->null : null
 
 const testPromiseAll = Promise.all([]);
 >testPromiseAll : any
@@ -490,22 +488,18 @@ const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
 const testWeakMap: WeakMap<any, any> = null as any;
 >testWeakMap : WeakMap<any, any>
 >null as any : any
->null : null
 
 const testWeakSet: WeakMap<any, any> = null as any;
 >testWeakSet : WeakMap<any, any>
 >null as any : any
->null : null
 
 const testIterator: Iterator<any, any, any> = null as any;
 >testIterator : Iterator<any, any, any>
 >null as any : any
->null : null
 
 const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 >testAsyncIterator : AsyncIterator<any, any, any>
 >null as any : any
->null : null
 
 const testStringCodePointAt = "".codePointAt(0);
 >testStringCodePointAt : any

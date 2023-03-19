@@ -2692,7 +2692,7 @@ export class TestState {
 
     public rangesByText(): Map<string, Range[]> {
         if (this.testData.rangesByText) return this.testData.rangesByText;
-        const result = ts.createMultiMap<Range>();
+        const result = ts.createMultiMap<string, Range>();
         this.testData.rangesByText = result;
         for (const range of this.getRanges()) {
             const text = this.rangeText(range);
@@ -3557,7 +3557,16 @@ export class TestState {
     }
 
     private getOccurrencesAtCurrentPosition() {
-        return this.languageService.getOccurrencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+        return ts.flatMap(
+            this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, [this.activeFile.fileName]),
+            entry => entry.highlightSpans.map<ts.ReferenceEntry>(highlightSpan => ({
+                fileName: entry.fileName,
+                textSpan: highlightSpan.textSpan,
+                isWriteAccess: highlightSpan.kind === ts.HighlightSpanKind.writtenReference,
+                ...highlightSpan.isInString && { isInString: true },
+                ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
+            }))
+        );
     }
 
     public verifyOccurrencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
@@ -4888,11 +4897,11 @@ function codeFence(code: string, lang?: string) {
 function getRangeOfIdentifierTouchingPosition(content: string, position: number): ts.TextRange | undefined {
     const scanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ true, ts.LanguageVariant.Standard, content);
     while (scanner.scan() !== ts.SyntaxKind.EndOfFileToken) {
-        const tokenStart = scanner.getStartPos();
-        if (scanner.getToken() === ts.SyntaxKind.Identifier && tokenStart <= position && scanner.getTextPos() >= position) {
-            return { pos: tokenStart, end: scanner.getTextPos() };
+        const tokenFullStart = scanner.getTokenFullStart();
+        if (scanner.getToken() === ts.SyntaxKind.Identifier && tokenFullStart <= position && scanner.getTokenEnd() >= position) {
+            return { pos: tokenFullStart, end: scanner.getTokenEnd() };
         }
-        if (tokenStart > position) {
+        if (tokenFullStart > position) {
             break;
         }
     }

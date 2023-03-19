@@ -37,7 +37,7 @@ tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts(34,7): error
         needs: {
           last: true,
           doesntExist: true // error
-          ~~~~~~~~~~~~~~~~~
+          ~~~~~~~~~~~
 !!! error TS2322: Type '{ last: true; doesntExist: true; }' is not assignable to type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
 !!! related TS6500 tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts:14:7: The expected type comes from property 'needs' which is declared here on type '{ needs: AllowedNeeds<{ last: boolean; doesntExist: boolean; }>; compute: (x: Pick<User, "last">) => any; }'

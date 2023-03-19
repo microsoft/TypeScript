@@ -392,7 +392,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return fromContextualType();
+            return fromContextualType() || fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -432,16 +432,24 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
         case SyntaxKind.CaseClause:
             const tracker = newCaseClauseTracker(typeChecker, (parent as CaseClause).parent.clauses);
-            const literals = fromContextualType().types.filter(literal => !tracker.hasValue(literal.value));
+            const contextualTypes = fromContextualType();
+            if (!contextualTypes) {
+                return;
+            }
+            const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
             return fromContextualType();
     }
 
-    function fromContextualType(): StringLiteralCompletionsFromTypes {
+    function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, ContextFlags.Completions)), isNewIdentifier: false };
+        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
+        if (!types.length) {
+            return;
+        }
+        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
     }
 }
 

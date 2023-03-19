@@ -44,5 +44,4 @@ export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any);
 >BindingKey : typeof BindingKey
 >create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
 >null as any : any
->null : null
 

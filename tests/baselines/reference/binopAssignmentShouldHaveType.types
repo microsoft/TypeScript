@@ -22,7 +22,6 @@ module Test {
 
    var name:string= null;
 >name : string
->null : null
 
    if ((name= this.getName()).length > 0) {
 >(name= this.getName()).length > 0 : boolean

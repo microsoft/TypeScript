@@ -6,10 +6,11 @@ describe("unittests:: services:: Transpile", () => {
     interface TranspileTestSettings {
         options?: ts.TranspileOptions;
         noSetFileName?: boolean;
+        testVerbatimModuleSyntax?: true | "only";
     }
 
-    function transpilesCorrectly(name: string, input: string, testSettings: TranspileTestSettings) {
-        describe(name, () => {
+    function transpilesCorrectly(nameIn: string, input: string, testSettings: TranspileTestSettings) {
+        const runOnce = (name: string, testSettings: TranspileTestSettings) => describe(name, () => {
             let transpileResult: ts.TranspileOutput;
             let oldTranspileResult: string;
             let oldTranspileDiagnostics: ts.Diagnostic[];
@@ -39,7 +40,7 @@ describe("unittests:: services:: Transpile", () => {
 
             transpileOptions.reportDiagnostics = true;
 
-            const justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
+            const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
             const toBeCompiled = [{
                 unitName,
                 content: input
@@ -85,27 +86,48 @@ describe("unittests:: services:: Transpile", () => {
                 });
             }
         });
+
+        if (testSettings.testVerbatimModuleSyntax !== "only") {
+            runOnce(nameIn, testSettings);
+        }
+        if (testSettings.testVerbatimModuleSyntax) {
+            runOnce(nameIn + " (verbatimModuleSyntax=true)", {
+                ...testSettings,
+                options: {
+                    ...testSettings.options,
+                    compilerOptions: {
+                        ...testSettings.options?.compilerOptions,
+                        verbatimModuleSyntax: true
+                    }
+                }
+            });
+        }
     }
 
     transpilesCorrectly("Generates no diagnostics with valid inputs", `var x = 0;`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Generates no diagnostics for missing file references", `/// <reference path="file2.ts" />
 var x = 0;`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Generates no diagnostics for missing module imports", `import {a} from "module2";`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Generates expected syntactic diagnostics", `a b`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Does not generate semantic diagnostics", `var x: string = 0;`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Generates module output", `var x = 0;`, {
@@ -113,7 +135,8 @@ var x = 0;`, {
     });
 
     transpilesCorrectly("Uses correct newLine character", `var x = 0;`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS, newLine: ts.NewLineKind.LineFeed } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS, newLine: ts.NewLineKind.LineFeed } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Sets module name", "var x = 1;", {
@@ -121,7 +144,8 @@ var x = 0;`, {
     });
 
     transpilesCorrectly("No extra errors for file without extension", `"use strict";\r\nvar x = 0;`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS }, fileName: "file" }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS }, fileName: "file" },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Rename dependencies - System",
@@ -168,7 +192,8 @@ var x = 0;`, {
                     experimentalDecorators: true,
                     target: ts.ScriptTarget.ES5,
                 }
-            }
+            },
+            testVerbatimModuleSyntax: true
         });
 
     transpilesCorrectly("Supports backslashes in file name", "var x", {
@@ -206,227 +231,287 @@ var x = 0;`, {
     });
 
     transpilesCorrectly("Support options with lib values", "const a = 10;", {
-        options: { compilerOptions: { lib: ["es6", "dom"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { lib: ["es6", "dom"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Support options with types values", "const a = 10;", {
-        options: { compilerOptions: { types: ["jquery", "typescript"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { types: ["jquery", "typescript"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'allowJs'", "x;", {
-        options: { compilerOptions: { allowJs: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { allowJs: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'allowSyntheticDefaultImports'", "x;", {
-        options: { compilerOptions: { allowSyntheticDefaultImports: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { allowSyntheticDefaultImports: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'allowUnreachableCode'", "x;", {
-        options: { compilerOptions: { allowUnreachableCode: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { allowUnreachableCode: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'allowUnusedLabels'", "x;", {
-        options: { compilerOptions: { allowUnusedLabels: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { allowUnusedLabels: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'alwaysStrict'", "x;", {
-        options: { compilerOptions: { alwaysStrict: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { alwaysStrict: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'baseUrl'", "x;", {
-        options: { compilerOptions: { baseUrl: "./folder/baseUrl" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { baseUrl: "./folder/baseUrl" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'charset'", "x;", {
-        options: { compilerOptions: { charset: "en-us" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { charset: "en-us" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'declaration'", "x;", {
-        options: { compilerOptions: { declaration: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { declaration: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'declarationDir'", "x;", {
-        options: { compilerOptions: { declarationDir: "out/declarations" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { declarationDir: "out/declarations" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'emitBOM'", "x;", {
-        options: { compilerOptions: { emitBOM: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { emitBOM: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'emitDecoratorMetadata'", "x;", {
-        options: { compilerOptions: { emitDecoratorMetadata: true, experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { emitDecoratorMetadata: true, experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'experimentalDecorators'", "x;", {
-        options: { compilerOptions: { experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'forceConsistentCasingInFileNames'", "x;", {
-        options: { compilerOptions: { forceConsistentCasingInFileNames: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { forceConsistentCasingInFileNames: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'isolatedModules'", "x;", {
         options: { compilerOptions: { isolatedModules: true }, fileName: "input.js", reportDiagnostics: true }
     });
 
+    transpilesCorrectly("Does not support setting 'isolatedModules'", "x;", {
+        options: { compilerOptions: { isolatedModules: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: "only"
+    });
+
     transpilesCorrectly("Supports setting 'jsx'", "x;", {
-        options: { compilerOptions: { jsx: 1 }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { jsx: 1 }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'lib'", "x;", {
-        options: { compilerOptions: { lib: ["es2015", "dom"] }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { lib: ["es2015", "dom"] }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'locale'", "x;", {
-        options: { compilerOptions: { locale: "en-us" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { locale: "en-us" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'module'", "x;", {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'moduleResolution'", "x;", {
-        options: { compilerOptions: { moduleResolution: ts.ModuleResolutionKind.Node10 }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { moduleResolution: ts.ModuleResolutionKind.Node10 }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'newLine'", "x;", {
-        options: { compilerOptions: { newLine: ts.NewLineKind.CarriageReturnLineFeed }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { newLine: ts.NewLineKind.CarriageReturnLineFeed }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noEmit'", "x;", {
-        options: { compilerOptions: { noEmit: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noEmit: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noEmitHelpers'", "x;", {
-        options: { compilerOptions: { noEmitHelpers: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noEmitHelpers: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noEmitOnError'", "x;", {
-        options: { compilerOptions: { noEmitOnError: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noEmitOnError: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noErrorTruncation'", "x;", {
-        options: { compilerOptions: { noErrorTruncation: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noErrorTruncation: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noFallthroughCasesInSwitch'", "x;", {
-        options: { compilerOptions: { noFallthroughCasesInSwitch: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noFallthroughCasesInSwitch: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noImplicitAny'", "x;", {
-        options: { compilerOptions: { noImplicitAny: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noImplicitAny: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noImplicitReturns'", "x;", {
-        options: { compilerOptions: { noImplicitReturns: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noImplicitReturns: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noImplicitThis'", "x;", {
-        options: { compilerOptions: { noImplicitThis: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noImplicitThis: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noImplicitUseStrict'", "x;", {
-        options: { compilerOptions: { noImplicitUseStrict: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noImplicitUseStrict: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noLib'", "x;", {
-        options: { compilerOptions: { noLib: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noLib: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'noResolve'", "x;", {
-        options: { compilerOptions: { noResolve: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { noResolve: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'out'", "x;", {
-        options: { compilerOptions: { out: "./out" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { out: "./out" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'outDir'", "x;", {
-        options: { compilerOptions: { outDir: "./outDir" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { outDir: "./outDir" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'outFile'", "x;", {
-        options: { compilerOptions: { outFile: "./outFile" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { outFile: "./outFile" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'paths'", "x;", {
-        options: { compilerOptions: { paths: { "*": ["./generated*"] } }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { paths: { "*": ["./generated*"] } }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'preserveConstEnums'", "x;", {
-        options: { compilerOptions: { preserveConstEnums: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { preserveConstEnums: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'reactNamespace'", "x;", {
-        options: { compilerOptions: { reactNamespace: "react" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { reactNamespace: "react" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'jsxFactory'", "x;", {
-        options: { compilerOptions: { jsxFactory: "createElement" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { jsxFactory: "createElement" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'jsxFragmentFactory'", "x;", {
-        options: { compilerOptions: { jsxFactory: "x", jsxFragmentFactory: "frag" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { jsxFactory: "x", jsxFragmentFactory: "frag" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'removeComments'", "x;", {
-        options: { compilerOptions: { removeComments: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { removeComments: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'rootDir'", "x;", {
-        options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "./rootDir/input.js", reportDiagnostics: true }
+        options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "./rootDir/input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'rootDirs'", "x;", {
-        options: { compilerOptions: { rootDirs: ["./a", "./b"] }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { rootDirs: ["./a", "./b"] }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'skipLibCheck'", "x;", {
-        options: { compilerOptions: { skipLibCheck: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { skipLibCheck: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'skipDefaultLibCheck'", "x;", {
-        options: { compilerOptions: { skipDefaultLibCheck: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { skipDefaultLibCheck: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'strictNullChecks'", "x;", {
-        options: { compilerOptions: { strictNullChecks: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { strictNullChecks: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'stripInternal'", "x;", {
-        options: { compilerOptions: { stripInternal: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { stripInternal: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'suppressExcessPropertyErrors'", "x;", {
-        options: { compilerOptions: { suppressExcessPropertyErrors: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { suppressExcessPropertyErrors: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'suppressImplicitAnyIndexErrors'", "x;", {
-        options: { compilerOptions: { suppressImplicitAnyIndexErrors: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { suppressImplicitAnyIndexErrors: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'target'", "x;", {
-        options: { compilerOptions: { target: 2 }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { target: 2 }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'types'", "x;", {
-        options: { compilerOptions: { types: ["jquery", "jasmine"] }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { types: ["jquery", "jasmine"] }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'typeRoots'", "x;", {
-        options: { compilerOptions: { typeRoots: ["./folder"] }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { typeRoots: ["./folder"] }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'incremental'", "x;", {
-        options: { compilerOptions: { incremental: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { incremental: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'composite'", "x;", {
-        options: { compilerOptions: { composite: true }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { composite: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports setting 'tsbuildinfo'", "x;", {
-        options: { compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option",
@@ -443,9 +528,9 @@ var x = 0;`, {
                     moduleResolution: ts.ModuleResolutionKind.Node10,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
-                    isolatedModules: true,
                 }
-            }
+            },
+            testVerbatimModuleSyntax: true
         }
     );
 
@@ -463,29 +548,33 @@ var x = 0;`, {
                     moduleResolution: ts.ModuleResolutionKind.Node10,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
-                    isolatedModules: true,
+                    isolatedModules: true
                 }
             }
         }
     );
 
     transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Supports 'as const' arrays", `([] as const).forEach(k => console.log(k));`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Infer correct file extension", `const fn = <T>(a: T) => a`, {
-        noSetFileName: true
+        noSetFileName: true,
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Export star as ns conflict does not crash", `
 var a;
 export { a as alias };
 export * as alias from './file';`, {
-        noSetFileName: true
+        noSetFileName: true,
+        testVerbatimModuleSyntax: true
     });
 
     transpilesCorrectly("Elides import equals referenced only by export type",
@@ -495,10 +584,26 @@ export * as alias from './file';`, {
         }
     );
 
+    transpilesCorrectly("Does not elide import equals referenced only by export type",
+        `import IFoo = Namespace.IFoo;` +
+        `export type { IFoo };`, {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+            testVerbatimModuleSyntax: "only"
+        }
+    );
+
     transpilesCorrectly("Elides import equals referenced only by type only export specifier",
         `import IFoo = Namespace.IFoo;` +
         `export { type IFoo };`, {
             options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+        }
+    );
+
+    transpilesCorrectly("Does not elide import equals referenced only by type only export specifier",
+        `import IFoo = Namespace.IFoo;` +
+        `export { type IFoo };`, {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+            testVerbatimModuleSyntax: "only"
         }
     );
 });

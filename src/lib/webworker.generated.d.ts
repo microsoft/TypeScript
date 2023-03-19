@@ -47,9 +47,28 @@ interface AudioConfiguration {
     spatialRendering?: boolean;
 }
 
+interface AvcEncoderConfig {
+    format?: AvcBitstreamFormat;
+}
+
 interface BlobPropertyBag {
     endings?: EndingType;
     type?: string;
+}
+
+interface CSSMatrixComponentOptions {
+    is2D?: boolean;
+}
+
+interface CSSNumericType {
+    angle?: number;
+    flex?: number;
+    frequency?: number;
+    length?: number;
+    percent?: number;
+    percentHint?: CSSNumericBaseType;
+    resolution?: number;
+    time?: number;
 }
 
 interface CacheQueryOptions {
@@ -142,6 +161,17 @@ interface EcdhKeyDeriveParams extends Algorithm {
 
 interface EcdsaParams extends Algorithm {
     hash: HashAlgorithmIdentifier;
+}
+
+interface EncodedVideoChunkInit {
+    data: BufferSource;
+    duration?: number;
+    timestamp: number;
+    type: EncodedVideoChunkType;
+}
+
+interface EncodedVideoChunkMetadata {
+    decoderConfig?: VideoDecoderConfig;
 }
 
 interface ErrorEventInit extends EventInit {
@@ -436,6 +466,11 @@ interface PermissionDescriptor {
     name: PermissionName;
 }
 
+interface PlaneLayout {
+    offset: number;
+    stride: number;
+}
+
 interface ProgressEventInit extends EventInit {
     lengthComputable?: boolean;
     loaded?: number;
@@ -525,6 +560,11 @@ interface RegistrationOptions {
     scope?: string;
     type?: WorkerType;
     updateViaCache?: ServiceWorkerUpdateViaCache;
+}
+
+interface ReportingObserverOptions {
+    buffered?: boolean;
+    types?: string[];
 }
 
 interface RequestInit {
@@ -709,6 +749,85 @@ interface VideoConfiguration {
     width: number;
 }
 
+interface VideoDecoderConfig {
+    codec: string;
+    codedHeight?: number;
+    codedWidth?: number;
+    colorSpace?: VideoColorSpaceInit;
+    description?: BufferSource;
+    displayAspectHeight?: number;
+    displayAspectWidth?: number;
+    hardwareAcceleration?: HardwareAcceleration;
+    optimizeForLatency?: boolean;
+}
+
+interface VideoDecoderInit {
+    error: WebCodecsErrorCallback;
+    output: VideoFrameOutputCallback;
+}
+
+interface VideoDecoderSupport {
+    config?: VideoDecoderConfig;
+    supported?: boolean;
+}
+
+interface VideoEncoderConfig {
+    alpha?: AlphaOption;
+    avc?: AvcEncoderConfig;
+    bitrate?: number;
+    bitrateMode?: BitrateMode;
+    codec: string;
+    displayHeight?: number;
+    displayWidth?: number;
+    framerate?: number;
+    hardwareAcceleration?: HardwareAcceleration;
+    height: number;
+    latencyMode?: LatencyMode;
+    scalabilityMode?: string;
+    width: number;
+}
+
+interface VideoEncoderEncodeOptions {
+    keyFrame?: boolean;
+}
+
+interface VideoEncoderInit {
+    error: WebCodecsErrorCallback;
+    output: EncodedVideoChunkOutputCallback;
+}
+
+interface VideoEncoderSupport {
+    config?: VideoEncoderConfig;
+    supported?: boolean;
+}
+
+interface VideoFrameBufferInit {
+    codedHeight: number;
+    codedWidth: number;
+    colorSpace?: VideoColorSpaceInit;
+    displayHeight?: number;
+    displayWidth?: number;
+    duration?: number;
+    format: VideoPixelFormat;
+    layout?: PlaneLayout[];
+    timestamp: number;
+    visibleRect?: DOMRectInit;
+}
+
+interface VideoFrameCopyToOptions {
+    layout?: PlaneLayout[];
+    rect?: DOMRectInit;
+}
+
+interface VideoFrameInit {
+    alpha?: AlphaOption;
+    displayHeight?: number;
+    displayWidth?: number;
+    duration?: number;
+    timestamp?: number;
+    visibleRect?: DOMRectInit;
+}
+
 interface WebGLContextAttributes {
     alpha?: boolean;
     antialias?: boolean;
@@ -852,6 +971,271 @@ interface ByteLengthQueuingStrategy extends QueuingStrategy<ArrayBufferView> {
 declare var ByteLengthQueuingStrategy: {
     prototype: ByteLengthQueuingStrategy;
     new(init: QueuingStrategyInit): ByteLengthQueuingStrategy;
+};
+
+interface CSSImageValue extends CSSStyleValue {
+}
+
+declare var CSSImageValue: {
+    prototype: CSSImageValue;
+    new(): CSSImageValue;
+};
+
+interface CSSKeywordValue extends CSSStyleValue {
+    value: string;
+}
+
+declare var CSSKeywordValue: {
+    prototype: CSSKeywordValue;
+    new(value: string): CSSKeywordValue;
+};
+
+interface CSSMathClamp extends CSSMathValue {
+    readonly lower: CSSNumericValue;
+    readonly upper: CSSNumericValue;
+    readonly value: CSSNumericValue;
+}
+
+declare var CSSMathClamp: {
+    prototype: CSSMathClamp;
+    new(lower: CSSNumberish, value: CSSNumberish, upper: CSSNumberish): CSSMathClamp;
+};
+
+interface CSSMathInvert extends CSSMathValue {
+    readonly value: CSSNumericValue;
+}
+
+declare var CSSMathInvert: {
+    prototype: CSSMathInvert;
+    new(arg: CSSNumberish): CSSMathInvert;
+};
+
+interface CSSMathMax extends CSSMathValue {
+    readonly values: CSSNumericArray;
+}
+
+declare var CSSMathMax: {
+    prototype: CSSMathMax;
+    new(...args: CSSNumberish[]): CSSMathMax;
+};
+
+interface CSSMathMin extends CSSMathValue {
+    readonly values: CSSNumericArray;
+}
+
+declare var CSSMathMin: {
+    prototype: CSSMathMin;
+    new(...args: CSSNumberish[]): CSSMathMin;
+};
+
+interface CSSMathNegate extends CSSMathValue {
+    readonly value: CSSNumericValue;
+}
+
+declare var CSSMathNegate: {
+    prototype: CSSMathNegate;
+    new(arg: CSSNumberish): CSSMathNegate;
+};
+
+interface CSSMathProduct extends CSSMathValue {
+    readonly values: CSSNumericArray;
+}
+
+declare var CSSMathProduct: {
+    prototype: CSSMathProduct;
+    new(...args: CSSNumberish[]): CSSMathProduct;
+};
+
+interface CSSMathSum extends CSSMathValue {
+    readonly values: CSSNumericArray;
+}
+
+declare var CSSMathSum: {
+    prototype: CSSMathSum;
+    new(...args: CSSNumberish[]): CSSMathSum;
+};
+
+interface CSSMathValue extends CSSNumericValue {
+    readonly operator: CSSMathOperator;
+}
+
+declare var CSSMathValue: {
+    prototype: CSSMathValue;
+    new(): CSSMathValue;
+};
+
+interface CSSMatrixComponent extends CSSTransformComponent {
+    matrix: DOMMatrix;
+}
+
+declare var CSSMatrixComponent: {
+    prototype: CSSMatrixComponent;
+    new(matrix: DOMMatrixReadOnly, options?: CSSMatrixComponentOptions): CSSMatrixComponent;
+};
+
+interface CSSNumericArray {
+    readonly length: number;
+    forEach(callbackfn: (value: CSSNumericValue, key: number, parent: CSSNumericArray) => void, thisArg?: any): void;
+    [index: number]: CSSNumericValue;
+}
+
+declare var CSSNumericArray: {
+    prototype: CSSNumericArray;
+    new(): CSSNumericArray;
+};
+
+interface CSSNumericValue extends CSSStyleValue {
+    add(...values: CSSNumberish[]): CSSNumericValue;
+    div(...values: CSSNumberish[]): CSSNumericValue;
+    equals(...value: CSSNumberish[]): boolean;
+    max(...values: CSSNumberish[]): CSSNumericValue;
+    min(...values: CSSNumberish[]): CSSNumericValue;
+    mul(...values: CSSNumberish[]): CSSNumericValue;
+    sub(...values: CSSNumberish[]): CSSNumericValue;
+    to(unit: string): CSSUnitValue;
+    toSum(...units: string[]): CSSMathSum;
+    type(): CSSNumericType;
+}
+
+declare var CSSNumericValue: {
+    prototype: CSSNumericValue;
+    new(): CSSNumericValue;
+};
+
+interface CSSPerspective extends CSSTransformComponent {
+    length: CSSPerspectiveValue;
+}
+
+declare var CSSPerspective: {
+    prototype: CSSPerspective;
+    new(length: CSSPerspectiveValue): CSSPerspective;
+};
+
+interface CSSRotate extends CSSTransformComponent {
+    angle: CSSNumericValue;
+    x: CSSNumberish;
+    y: CSSNumberish;
+    z: CSSNumberish;
+}
+
+declare var CSSRotate: {
+    prototype: CSSRotate;
+    new(angle: CSSNumericValue): CSSRotate;
+    new(x: CSSNumberish, y: CSSNumberish, z: CSSNumberish, angle: CSSNumericValue): CSSRotate;
+};
+
+interface CSSScale extends CSSTransformComponent {
+    x: CSSNumberish;
+    y: CSSNumberish;
+    z: CSSNumberish;
+}
+
+declare var CSSScale: {
+    prototype: CSSScale;
+    new(x: CSSNumberish, y: CSSNumberish, z?: CSSNumberish): CSSScale;
+};
+
+interface CSSSkew extends CSSTransformComponent {
+    ax: CSSNumericValue;
+    ay: CSSNumericValue;
+}
+
+declare var CSSSkew: {
+    prototype: CSSSkew;
+    new(ax: CSSNumericValue, ay: CSSNumericValue): CSSSkew;
+};
+
+interface CSSSkewX extends CSSTransformComponent {
+    ax: CSSNumericValue;
+}
+
+declare var CSSSkewX: {
+    prototype: CSSSkewX;
+    new(ax: CSSNumericValue): CSSSkewX;
+};
+
+interface CSSSkewY extends CSSTransformComponent {
+    ay: CSSNumericValue;
+}
+
+declare var CSSSkewY: {
+    prototype: CSSSkewY;
+    new(ay: CSSNumericValue): CSSSkewY;
+};
+
+interface CSSStyleValue {
+    toString(): string;
+}
+
+declare var CSSStyleValue: {
+    prototype: CSSStyleValue;
+    new(): CSSStyleValue;
+};
+
+interface CSSTransformComponent {
+    is2D: boolean;
+    toMatrix(): DOMMatrix;
+    toString(): string;
+}
+
+declare var CSSTransformComponent: {
+    prototype: CSSTransformComponent;
+    new(): CSSTransformComponent;
+};
+
+interface CSSTransformValue extends CSSStyleValue {
+    readonly is2D: boolean;
+    readonly length: number;
+    toMatrix(): DOMMatrix;
+    forEach(callbackfn: (value: CSSTransformComponent, key: number, parent: CSSTransformValue) => void, thisArg?: any): void;
+    [index: number]: CSSTransformComponent;
+}
+
+declare var CSSTransformValue: {
+    prototype: CSSTransformValue;
+    new(transforms: CSSTransformComponent[]): CSSTransformValue;
+};
+
+interface CSSTranslate extends CSSTransformComponent {
+    x: CSSNumericValue;
+    y: CSSNumericValue;
+    z: CSSNumericValue;
+}
+
+declare var CSSTranslate: {
+    prototype: CSSTranslate;
+    new(x: CSSNumericValue, y: CSSNumericValue, z?: CSSNumericValue): CSSTranslate;
+};
+
+interface CSSUnitValue extends CSSNumericValue {
+    readonly unit: string;
+    value: number;
+}
+
+declare var CSSUnitValue: {
+    prototype: CSSUnitValue;
+    new(value: number, unit: string): CSSUnitValue;
+};
+
+interface CSSUnparsedValue extends CSSStyleValue {
+    readonly length: number;
+    forEach(callbackfn: (value: CSSUnparsedSegment, key: number, parent: CSSUnparsedValue) => void, thisArg?: any): void;
+    [index: number]: CSSUnparsedSegment;
+}
+
+declare var CSSUnparsedValue: {
+    prototype: CSSUnparsedValue;
+    new(members: CSSUnparsedSegment[]): CSSUnparsedValue;
+};
+
+interface CSSVariableReferenceValue {
+    readonly fallback: CSSUnparsedValue | null;
+    variable: string;
+}
+
+declare var CSSVariableReferenceValue: {
+    prototype: CSSVariableReferenceValue;
+    new(variable: string, fallback?: CSSUnparsedValue | null): CSSVariableReferenceValue;
 };
 
 /**
@@ -1074,6 +1458,14 @@ interface CloseEvent extends Event {
 declare var CloseEvent: {
     prototype: CloseEvent;
     new(type: string, eventInitDict?: CloseEventInit): CloseEvent;
+};
+
+interface CompressionStream extends GenericTransformStream {
+}
+
+declare var CompressionStream: {
+    prototype: CompressionStream;
+    new(format: string): CompressionStream;
 };
 
 /** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
@@ -1380,6 +1772,14 @@ declare var DOMStringList: {
     new(): DOMStringList;
 };
 
+interface DecompressionStream extends GenericTransformStream {
+}
+
+declare var DecompressionStream: {
+    prototype: DecompressionStream;
+    new(format: string): DecompressionStream;
+};
+
 interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "message": MessageEvent;
     "messageerror": MessageEvent;
@@ -1469,6 +1869,19 @@ interface EXT_texture_norm16 {
     readonly RGB16_SNORM_EXT: 0x8F9A;
     readonly RGBA16_SNORM_EXT: 0x8F9B;
 }
+
+interface EncodedVideoChunk {
+    readonly byteLength: number;
+    readonly duration: number | null;
+    readonly timestamp: number;
+    readonly type: EncodedVideoChunkType;
+    copyTo(destination: BufferSource): void;
+}
+
+declare var EncodedVideoChunk: {
+    prototype: EncodedVideoChunk;
+    new(init: EncodedVideoChunkInit): EncodedVideoChunk;
+};
 
 /** Events providing information related to errors in scripts or in files. */
 interface ErrorEvent extends Event {
@@ -3001,6 +3414,38 @@ interface ReadableStreamGenericReader {
     cancel(reason?: any): Promise<void>;
 }
 
+interface Report {
+    readonly body: ReportBody | null;
+    readonly type: string;
+    readonly url: string;
+    toJSON(): any;
+}
+
+declare var Report: {
+    prototype: Report;
+    new(): Report;
+};
+
+interface ReportBody {
+    toJSON(): any;
+}
+
+declare var ReportBody: {
+    prototype: ReportBody;
+    new(): ReportBody;
+};
+
+interface ReportingObserver {
+    disconnect(): void;
+    observe(): void;
+    takeRecords(): ReportList;
+}
+
+declare var ReportingObserver: {
+    prototype: ReportingObserver;
+    new(callback: ReportingObserverCallback, options?: ReportingObserverOptions): ReportingObserver;
+};
+
 /** This Fetch API interface represents a resource request. */
 interface Request extends Body {
     /** Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching. */
@@ -3236,6 +3681,19 @@ declare var StorageManager: {
     new(): StorageManager;
 };
 
+interface StylePropertyMapReadOnly {
+    readonly size: number;
+    get(property: string): undefined | CSSStyleValue;
+    getAll(property: string): CSSStyleValue[];
+    has(property: string): boolean;
+    forEach(callbackfn: (value: CSSStyleValue[], key: string, parent: StylePropertyMapReadOnly) => void, thisArg?: any): void;
+}
+
+declare var StylePropertyMapReadOnly: {
+    prototype: StylePropertyMapReadOnly;
+    new(): StylePropertyMapReadOnly;
+};
+
 /**
  * This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
  * Available only in secure contexts.
@@ -3426,7 +3884,6 @@ interface URLSearchParams {
 declare var URLSearchParams: {
     prototype: URLSearchParams;
     new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
-    toString(): string;
 };
 
 interface VideoColorSpace {
@@ -3440,6 +3897,81 @@ interface VideoColorSpace {
 declare var VideoColorSpace: {
     prototype: VideoColorSpace;
     new(init?: VideoColorSpaceInit): VideoColorSpace;
+};
+
+interface VideoDecoderEventMap {
+    "dequeue": Event;
+}
+
+/** Available only in secure contexts. */
+interface VideoDecoder extends EventTarget {
+    readonly decodeQueueSize: number;
+    ondequeue: ((this: VideoDecoder, ev: Event) => any) | null;
+    readonly state: CodecState;
+    close(): void;
+    configure(config: VideoDecoderConfig): void;
+    decode(chunk: EncodedVideoChunk): void;
+    flush(): Promise<void>;
+    reset(): void;
+    addEventListener<K extends keyof VideoDecoderEventMap>(type: K, listener: (this: VideoDecoder, ev: VideoDecoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof VideoDecoderEventMap>(type: K, listener: (this: VideoDecoder, ev: VideoDecoderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var VideoDecoder: {
+    prototype: VideoDecoder;
+    new(init: VideoDecoderInit): VideoDecoder;
+    isConfigSupported(config: VideoDecoderConfig): Promise<VideoDecoderSupport>;
+};
+
+interface VideoEncoderEventMap {
+    "dequeue": Event;
+}
+
+/** Available only in secure contexts. */
+interface VideoEncoder extends EventTarget {
+    readonly encodeQueueSize: number;
+    ondequeue: ((this: VideoEncoder, ev: Event) => any) | null;
+    readonly state: CodecState;
+    close(): void;
+    configure(config: VideoEncoderConfig): void;
+    encode(frame: VideoFrame, options?: VideoEncoderEncodeOptions): void;
+    flush(): Promise<void>;
+    reset(): void;
+    addEventListener<K extends keyof VideoEncoderEventMap>(type: K, listener: (this: VideoEncoder, ev: VideoEncoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof VideoEncoderEventMap>(type: K, listener: (this: VideoEncoder, ev: VideoEncoderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var VideoEncoder: {
+    prototype: VideoEncoder;
+    new(init: VideoEncoderInit): VideoEncoder;
+    isConfigSupported(config: VideoEncoderConfig): Promise<VideoEncoderSupport>;
+};
+
+interface VideoFrame {
+    readonly codedHeight: number;
+    readonly codedRect: DOMRectReadOnly | null;
+    readonly codedWidth: number;
+    readonly colorSpace: VideoColorSpace;
+    readonly displayHeight: number;
+    readonly displayWidth: number;
+    readonly duration: number | null;
+    readonly format: VideoPixelFormat | null;
+    readonly timestamp: number;
+    readonly visibleRect: DOMRectReadOnly | null;
+    allocationSize(options?: VideoFrameCopyToOptions): number;
+    clone(): VideoFrame;
+    close(): void;
+    copyTo(destination: BufferSource, options?: VideoFrameCopyToOptions): Promise<PlaneLayout[]>;
+}
+
+declare var VideoFrame: {
+    prototype: VideoFrame;
+    new(image: CanvasImageSource, init?: VideoFrameInit): VideoFrame;
+    new(data: BufferSource, init: VideoFrameBufferInit): VideoFrame;
 };
 
 interface WEBGL_color_buffer_float {
@@ -3495,6 +4027,13 @@ interface WEBGL_compressed_texture_etc {
 
 interface WEBGL_compressed_texture_etc1 {
     readonly COMPRESSED_RGB_ETC1_WEBGL: 0x8D64;
+}
+
+interface WEBGL_compressed_texture_pvrtc {
+    readonly COMPRESSED_RGB_PVRTC_4BPPV1_IMG: 0x8C00;
+    readonly COMPRESSED_RGB_PVRTC_2BPPV1_IMG: 0x8C01;
+    readonly COMPRESSED_RGBA_PVRTC_4BPPV1_IMG: 0x8C02;
+    readonly COMPRESSED_RGBA_PVRTC_2BPPV1_IMG: 0x8C03;
 }
 
 /** The WEBGL_compressed_texture_s3tc extension is part of the WebGL API and exposes four S3TC compressed texture formats. */
@@ -4913,6 +5452,7 @@ declare var WebGLRenderingContext: {
 };
 
 interface WebGLRenderingContextBase {
+    drawingBufferColorSpace: PredefinedColorSpace;
     readonly drawingBufferHeight: GLsizei;
     readonly drawingBufferWidth: GLsizei;
     activeTexture(texture: GLenum): void;
@@ -4997,6 +5537,7 @@ interface WebGLRenderingContextBase {
     getExtension(extensionName: "WEBGL_compressed_texture_astc"): WEBGL_compressed_texture_astc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_etc"): WEBGL_compressed_texture_etc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_etc1"): WEBGL_compressed_texture_etc1 | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_pvrtc"): WEBGL_compressed_texture_pvrtc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_s3tc"): WEBGL_compressed_texture_s3tc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_s3tc_srgb"): WEBGL_compressed_texture_s3tc_srgb | null;
     getExtension(extensionName: "WEBGL_debug_renderer_info"): WEBGL_debug_renderer_info | null;
@@ -5637,6 +6178,7 @@ declare var WorkerLocation: {
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
 interface WorkerNavigator extends NavigatorConcurrentHardware, NavigatorID, NavigatorLanguage, NavigatorLocks, NavigatorOnLine, NavigatorStorage {
     readonly mediaCapabilities: MediaCapabilities;
+    readonly permissions: Permissions;
 }
 
 declare var WorkerNavigator: {
@@ -5981,6 +6523,10 @@ declare namespace WebAssembly {
     function validate(bytes: BufferSource): boolean;
 }
 
+interface EncodedVideoChunkOutputCallback {
+    (chunk: EncodedVideoChunk, metadata?: EncodedVideoChunkMetadata): void;
+}
+
 interface FrameRequestCallback {
     (time: DOMHighResTimeStamp): void;
 }
@@ -5999,6 +6545,10 @@ interface PerformanceObserverCallback {
 
 interface QueuingStrategySize<T = any> {
     (chunk: T): number;
+}
+
+interface ReportingObserverCallback {
+    (reports: Report[], observer: ReportingObserver): void;
 }
 
 interface TransformerFlushCallback<O> {
@@ -6041,8 +6591,16 @@ interface UnderlyingSourceStartCallback<R> {
     (controller: ReadableStreamController<R>): any;
 }
 
+interface VideoFrameOutputCallback {
+    (output: VideoFrame): void;
+}
+
 interface VoidFunction {
     (): void;
+}
+
+interface WebCodecsErrorCallback {
+    (error: DOMException): void;
 }
 
 /** Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging. */
@@ -6105,7 +6663,11 @@ type BinaryData = ArrayBuffer | ArrayBufferView;
 type BlobPart = BufferSource | Blob | string;
 type BodyInit = ReadableStream | XMLHttpRequestBodyInit;
 type BufferSource = ArrayBufferView | ArrayBuffer;
-type CanvasImageSource = ImageBitmap | OffscreenCanvas;
+type CSSKeywordish = string | CSSKeywordValue;
+type CSSNumberish = number | CSSNumericValue;
+type CSSPerspectiveValue = CSSNumericValue | CSSKeywordish;
+type CSSUnparsedSegment = string | CSSVariableReferenceValue;
+type CanvasImageSource = ImageBitmap | OffscreenCanvas | VideoFrame;
 type DOMHighResTimeStamp = number;
 type EpochTimeStamp = number;
 type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
@@ -6137,14 +6699,20 @@ type PushMessageDataInit = BufferSource | string;
 type ReadableStreamController<T> = ReadableStreamDefaultController<T> | ReadableByteStreamController;
 type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
 type ReadableStreamReader<T> = ReadableStreamDefaultReader<T> | ReadableStreamBYOBReader;
+type ReportList = Report[];
 type RequestInfo = Request | string;
-type TexImageSource = ImageBitmap | ImageData | OffscreenCanvas;
+type TexImageSource = ImageBitmap | ImageData | OffscreenCanvas | VideoFrame;
 type TimerHandler = string | Function;
-type Transferable = OffscreenCanvas | ImageBitmap | MessagePort | ReadableStream | WritableStream | TransformStream | ArrayBuffer;
+type Transferable = OffscreenCanvas | ImageBitmap | MessagePort | ReadableStream | WritableStream | TransformStream | VideoFrame | ArrayBuffer;
 type Uint32List = Uint32Array | GLuint[];
 type VibratePattern = number | number[];
 type XMLHttpRequestBodyInit = Blob | BufferSource | FormData | URLSearchParams | string;
+type AlphaOption = "discard" | "keep";
+type AvcBitstreamFormat = "annexb" | "avc";
 type BinaryType = "arraybuffer" | "blob";
+type BitrateMode = "constant" | "variable";
+type CSSMathOperator = "clamp" | "invert" | "max" | "min" | "negate" | "product" | "sum";
+type CSSNumericBaseType = "angle" | "flex" | "frequency" | "length" | "percent" | "resolution" | "time";
 type CanvasDirection = "inherit" | "ltr" | "rtl";
 type CanvasFillRule = "evenodd" | "nonzero";
 type CanvasFontKerning = "auto" | "none" | "normal";
@@ -6156,9 +6724,11 @@ type CanvasTextAlign = "center" | "end" | "left" | "right" | "start";
 type CanvasTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
 type CanvasTextRendering = "auto" | "geometricPrecision" | "optimizeLegibility" | "optimizeSpeed";
 type ClientTypes = "all" | "sharedworker" | "window" | "worker";
+type CodecState = "closed" | "configured" | "unconfigured";
 type ColorGamut = "p3" | "rec2020" | "srgb";
 type ColorSpaceConversion = "default" | "none";
 type DocumentVisibilityState = "hidden" | "visible";
+type EncodedVideoChunkType = "delta" | "key";
 type EndingType = "native" | "transparent";
 type FileSystemHandleKind = "directory" | "file";
 type FontDisplay = "auto" | "block" | "fallback" | "optional" | "swap";
@@ -6166,6 +6736,7 @@ type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
 type FontFaceSetLoadStatus = "loaded" | "loading";
 type FrameType = "auxiliary" | "nested" | "none" | "top-level";
 type GlobalCompositeOperation = "color" | "color-burn" | "color-dodge" | "copy" | "darken" | "destination-atop" | "destination-in" | "destination-out" | "destination-over" | "difference" | "exclusion" | "hard-light" | "hue" | "lighten" | "lighter" | "luminosity" | "multiply" | "overlay" | "saturation" | "screen" | "soft-light" | "source-atop" | "source-in" | "source-out" | "source-over" | "xor";
+type HardwareAcceleration = "no-preference" | "prefer-hardware" | "prefer-software";
 type HdrMetadataType = "smpteSt2086" | "smpteSt2094-10" | "smpteSt2094-40";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "done" | "pending";
@@ -6176,6 +6747,7 @@ type ImageSmoothingQuality = "high" | "low" | "medium";
 type KeyFormat = "jwk" | "pkcs8" | "raw" | "spki";
 type KeyType = "private" | "public" | "secret";
 type KeyUsage = "decrypt" | "deriveBits" | "deriveKey" | "encrypt" | "sign" | "unwrapKey" | "verify" | "wrapKey";
+type LatencyMode = "quality" | "realtime";
 type LockMode = "exclusive" | "shared";
 type MediaDecodingType = "file" | "media-source" | "webrtc";
 type MediaEncodingType = "record" | "webrtc";
@@ -6204,6 +6776,7 @@ type ServiceWorkerUpdateViaCache = "all" | "imports" | "none";
 type TransferFunction = "hlg" | "pq" | "srgb";
 type VideoColorPrimaries = "bt470bg" | "bt709" | "smpte170m";
 type VideoMatrixCoefficients = "bt470bg" | "bt709" | "rgb" | "smpte170m";
+type VideoPixelFormat = "BGRA" | "BGRX" | "I420" | "I420A" | "I422" | "I444" | "NV12" | "RGBA" | "RGBX";
 type VideoTransferCharacteristics = "bt709" | "iec61966-2-1" | "smpte170m";
 type WebGLPowerPreference = "default" | "high-performance" | "low-power";
 type WorkerType = "classic" | "module";

@@ -23,3 +23,27 @@ emit('a', {
         nestedCallback: (r) => {},
     },
 });
+
+// simplified repro from 52589#issuecomment-1416180638
+declare class MyCompiler {
+  compile(): void;
+}
+interface WebpackPluginInstance {
+  apply: (compiler: MyCompiler) => void;
+}
+type WebpackPluginFunction = (this: MyCompiler, compiler: MyCompiler) => void;
+interface Optimization {
+  minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
+}
+declare const A: <T, P extends keyof T>(
+  obj: T,
+  prop: P,
+  factory: () => T[P]
+) => void;
+export const applyOptimizationDefaults = (optimization: Optimization) => {
+  A(optimization, "minimizer", () => [
+    {
+      apply: (compiler) => {},
+    },
+  ]);
+};
