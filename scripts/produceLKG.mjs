@@ -31,9 +31,7 @@ async function copyLibFiles() {
 async function copyLocalizedDiagnostics() {
     for (const d of localizationDirectories) {
         const fileName = path.join(source, d);
-        if (fs.statSync(fileName).isDirectory()) {
-            await fs.copy(fileName, path.join(dest, d));
-        }
+        await fs.copy(fileName, path.join(dest, d));
     }
 }
 
