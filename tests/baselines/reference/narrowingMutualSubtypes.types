@@ -83,14 +83,14 @@ const a4b = [r4, c4];  // {}[]
 >r4 : { [x: string]: unknown; }
 >c4 : {}
 
-// Check that narrowing preserves original type in false branch for non-identical mutual subtypes
+// Check that {} is a strict supertype of Record<string, unknown>
 
 declare function isObject1(value: unknown): value is Record<string, unknown>;
 >isObject1 : (value: unknown) => value is Record<string, unknown>
 >value : unknown
 
-function gg(x: {}) {
->gg : (x: {}) => void
+function gg1(x: {}) {
+>gg1 : (x: {}) => void
 >x : {}
 
     if (isObject1(x)) {
@@ -122,15 +122,65 @@ function gg2(x: Record<string, unknown>) {
 >isObject2 : (value: unknown) => value is {}
 >x : Record<string, unknown>
 
-        x;  // {}
+        x;  // Record<string, unknown>
 >x : Record<string, unknown>
     }
     else {
-        x;  // Record<string, unknown>
+        x;  // never
 >x : never
     }
     x;  // Record<string, unknown>
 >x : Record<string, unknown>
+}
+
+// Check that {} is a strict supertype of Record<string, any>
+
+declare function isObject3(value: unknown): value is Record<string, any>;
+>isObject3 : (value: unknown) => value is Record<string, any>
+>value : unknown
+
+function gg3(x: {}) {
+>gg3 : (x: {}) => void
+>x : {}
+
+    if (isObject3(x)) {
+>isObject3(x) : boolean
+>isObject3 : (value: unknown) => value is Record<string, any>
+>x : {}
+
+        x;  // Record<string, any>
+>x : Record<string, any>
+    }
+    else {
+        x;  // {}
+>x : {}
+    }
+    x;  // {}
+>x : {}
+}
+
+declare function isObject4(value: unknown): value is {};
+>isObject4 : (value: unknown) => value is {}
+>value : unknown
+
+function gg4(x: Record<string, any>) {
+>gg4 : (x: Record<string, any>) => void
+>x : Record<string, any>
+
+    if (isObject4(x)) {
+>isObject4(x) : boolean
+>isObject4 : (value: unknown) => value is {}
+>x : Record<string, any>
+
+        x;  // Record<string, any>
+>x : Record<string, any>
+    }
+    else {
+        x;  // never
+>x : never
+    }
+    x;  // Record<string, any>
+>x : Record<string, any>
 }
 
 // Repro from #50916

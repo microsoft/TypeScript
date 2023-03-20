@@ -27,11 +27,11 @@ const c4 = {};
 const a4a = [c4, r4];  // {}[]
 const a4b = [r4, c4];  // {}[]
 
-// Check that narrowing preserves original type in false branch for non-identical mutual subtypes
+// Check that {} is a strict supertype of Record<string, unknown>
 
 declare function isObject1(value: unknown): value is Record<string, unknown>;
 
-function gg(x: {}) {
+function gg1(x: {}) {
     if (isObject1(x)) {
         x;  // Record<string, unknown>
     }
@@ -45,12 +45,38 @@ declare function isObject2(value: unknown): value is {};
 
 function gg2(x: Record<string, unknown>) {
     if (isObject2(x)) {
-        x;  // {}
-    }
-    else {
         x;  // Record<string, unknown>
     }
+    else {
+        x;  // never
+    }
     x;  // Record<string, unknown>
+}
+
+// Check that {} is a strict supertype of Record<string, any>
+
+declare function isObject3(value: unknown): value is Record<string, any>;
+
+function gg3(x: {}) {
+    if (isObject3(x)) {
+        x;  // Record<string, any>
+    }
+    else {
+        x;  // {}
+    }
+    x;  // {}
+}
+
+declare function isObject4(value: unknown): value is {};
+
+function gg4(x: Record<string, any>) {
+    if (isObject4(x)) {
+        x;  // Record<string, any>
+    }
+    else {
+        x;  // never
+    }
+    x;  // Record<string, any>
 }
 
 // Repro from #50916
@@ -92,7 +118,7 @@ var a3b = [r3, c3]; // {}[]
 var c4 = {};
 var a4a = [c4, r4]; // {}[]
 var a4b = [r4, c4]; // {}[]
-function gg(x) {
+function gg1(x) {
     if (isObject1(x)) {
         x; // Record<string, unknown>
     }
@@ -103,12 +129,30 @@ function gg(x) {
 }
 function gg2(x) {
     if (isObject2(x)) {
-        x; // {}
-    }
-    else {
         x; // Record<string, unknown>
     }
+    else {
+        x; // never
+    }
     x; // Record<string, unknown>
+}
+function gg3(x) {
+    if (isObject3(x)) {
+        x; // Record<string, any>
+    }
+    else {
+        x; // {}
+    }
+    x; // {}
+}
+function gg4(x) {
+    if (isObject4(x)) {
+        x; // Record<string, any>
+    }
+    else {
+        x; // never
+    }
+    x; // Record<string, any>
 }
 function is(value) {
     return true;
