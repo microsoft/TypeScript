@@ -15081,7 +15081,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeListId(types: readonly Type[] | undefined) {
-        let result = "";
+        let result: string[] | undefined;
         if (types) {
             const length = types.length;
             let i = 0;
@@ -15091,17 +15091,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 while (i + count < length && types[i + count].id === startId + count) {
                     count++;
                 }
-                if (result.length) {
-                    result += ",";
+                if (count === 1) {
+                    result = append(result, `${startId}`);
                 }
-                result += startId;
-                if (count > 1) {
-                    result += ":" + count;
+                else {
+                    result = append(result, `${startId}:${count}`);
                 }
                 i += count;
             }
         }
-        return result;
+        return result ? result.join(",") : "";
     }
 
     function getAliasId(aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
