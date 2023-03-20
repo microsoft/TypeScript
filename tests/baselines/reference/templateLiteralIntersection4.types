@@ -23,8 +23,8 @@ declare function createStore<Store extends { [K: string]: any }>(store: Store): 
 
 const { Provider, useUsername, useAge, useStore } = createStore({
 >Provider : unknown
->useUsername : any
->useAge : any
+>useUsername : StateHook<string>
+>useAge : StateHook<number>
 >useStore : StateHook<{ username: string; age: number; }>
 >createStore({  username: "Aral",  age: 31}) : StoreUtils<{ username: string; age: number; }>
 >createStore : <Store extends { [K: string]: any; }>(store: Store) => StoreUtils<Store>
