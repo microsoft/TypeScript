@@ -11,3 +11,10 @@ interface FuncB<T> {
 };
 const outerB = <T,>(func: FuncB<T>, arg: T) => {};
 outerB(inner, (arg: 'a' | 'b') => {});
+
+interface FuncC<T> {
+  (arg: T): void;
+  x?: T;
+};
+const outerC = <T,>(func: FuncC<T>, arg: T) => {};
+outerC(inner, (arg: 'a' | 'b') => {}); // error

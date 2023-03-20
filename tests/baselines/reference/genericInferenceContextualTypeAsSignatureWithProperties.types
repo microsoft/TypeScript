@@ -28,3 +28,24 @@ outerB(inner, (arg: 'a' | 'b') => {});
 >(arg: 'a' | 'b') => {} : (arg: 'a' | 'b') => void
 >arg : "a" | "b"
 
+interface FuncC<T> {
+  (arg: T): void;
+>arg : T
+
+  x?: T;
+>x : T | undefined
+
+};
+const outerC = <T,>(func: FuncC<T>, arg: T) => {};
+>outerC : <T>(func: FuncC<T>, arg: T) => void
+><T,>(func: FuncC<T>, arg: T) => {} : <T>(func: FuncC<T>, arg: T) => void
+>func : FuncC<T>
+>arg : T
+
+outerC(inner, (arg: 'a' | 'b') => {}); // error
+>outerC(inner, (arg: 'a' | 'b') => {}) : void
+>outerC : <T>(func: FuncC<T>, arg: T) => void
+>inner : <T extends "a" | "b" | "c">(cb: (arg: T) => void) => void
+>(arg: 'a' | 'b') => {} : (arg: 'a' | 'b') => void
+>arg : "a" | "b"
+

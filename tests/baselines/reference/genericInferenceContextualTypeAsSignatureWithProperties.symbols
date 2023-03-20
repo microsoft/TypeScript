@@ -34,3 +34,30 @@ outerB(inner, (arg: 'a' | 'b') => {});
 >inner : Symbol(inner, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 5))
 >arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 9, 15))
 
+interface FuncC<T> {
+>FuncC : Symbol(FuncC, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 9, 38))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 11, 16))
+
+  (arg: T): void;
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 12, 3))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 11, 16))
+
+  x?: T;
+>x : Symbol(FuncC.x, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 12, 17))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 11, 16))
+
+};
+const outerC = <T,>(func: FuncC<T>, arg: T) => {};
+>outerC : Symbol(outerC, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 5))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 16))
+>func : Symbol(func, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 20))
+>FuncC : Symbol(FuncC, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 9, 38))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 16))
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 35))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 16))
+
+outerC(inner, (arg: 'a' | 'b') => {}); // error
+>outerC : Symbol(outerC, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 15, 5))
+>inner : Symbol(inner, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 5))
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 16, 15))
+

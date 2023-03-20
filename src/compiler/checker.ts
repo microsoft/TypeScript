@@ -32166,18 +32166,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
     function getSingleCallSignature(type: Type): Signature | undefined {
-        return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false);
+        return getSingleSignature(type, SignatureKind.Call, /*allowMembersWithTypeVariables*/ false);
     }
 
     function getSingleCallOrConstructSignature(type: Type): Signature | undefined {
-        return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false) ||
-            getSingleSignature(type, SignatureKind.Construct, /*allowMembers*/ false);
+        return getSingleSignature(type, SignatureKind.Call, /*allowMembersWithTypeVariables*/ false) ||
+            getSingleSignature(type, SignatureKind.Construct, /*allowMembersWithTypeVariables*/ false);
     }
 
-    function getSingleSignature(type: Type, kind: SignatureKind, allowMembers: boolean): Signature | undefined {
+    function couldMembersContainTypeVariables(resolved: ResolvedType) {
+        return some(resolved.properties, sym => couldContainTypeVariables(getTypeOfSymbol(sym))) ||
+            some(resolved.indexInfos, info => couldContainTypeVariables(info.type));
+    }
+
+    function getSingleSignature(type: Type, kind: SignatureKind, allowMembersWithTypeVariables: boolean): Signature | undefined {
         if (type.flags & TypeFlags.Object) {
             const resolved = resolveStructuredTypeMembers(type as ObjectType);
-            if (allowMembers || resolved.properties.length === 0 && resolved.indexInfos.length === 0) {
+            // We could validate that the other members don't reference the type parameters we want to promote to the signature.
+            // That's pretty hard, so a reasonable proxy is checking that the other members of the type don't reference any type variables at all.
+            if (allowMembersWithTypeVariables || !couldMembersContainTypeVariables(resolved)) {
                 if (kind === SignatureKind.Call && resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0) {
                     return resolved.callSignatures[0];
                 }
@@ -37346,13 +37353,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration | QualifiedName, type: Type, checkMode?: CheckMode) {
         if (checkMode && checkMode & (CheckMode.Inferential | CheckMode.SkipGenericFunctions)) {
-            const callSignature = getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ true);
-            const constructSignature = getSingleSignature(type, SignatureKind.Construct, /*allowMembers*/ true);
+            const callSignature = getSingleSignature(type, SignatureKind.Call, /*allowMembersWithTypeVariables*/ true);
+            const constructSignature = getSingleSignature(type, SignatureKind.Construct, /*allowMembersWithTypeVariables*/ true);
             const signature = callSignature || constructSignature;
             if (signature && signature.typeParameters) {
                 const contextualType = getApparentTypeOfContextualType(node as Expression, ContextFlags.NoConstraints);
                 if (contextualType) {
-                    const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ true);
+                    const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembersWithTypeVariables*/ false);
                     if (contextualSignature && !contextualSignature.typeParameters) {
                         if (checkMode & CheckMode.SkipGenericFunctions) {
                             skippedGenericFunction(node, checkMode);
