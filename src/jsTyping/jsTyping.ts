@@ -31,7 +31,6 @@ import {
     versionMajorMinor,
 } from "./_namespaces/ts";
 
-/** @internal */
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;

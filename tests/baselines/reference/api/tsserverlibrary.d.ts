@@ -79,6 +79,14 @@ declare namespace ts {
             readonly kind: EventEndInstallTypes;
             readonly installSuccess: boolean;
         }
+        interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+            useCaseSensitiveFileNames: boolean;
+            writeFile(path: string, content: string): void;
+            createDirectory(path: string): void;
+            getCurrentDirectory?(): string;
+            watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
+            watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+        }
         interface SetTypings extends ProjectResponse {
             readonly typeAcquisition: TypeAcquisition;
             readonly compilerOptions: CompilerOptions;
@@ -2963,6 +2971,54 @@ declare namespace ts {
                 jsxText = 23,
                 jsxAttributeStringLiteralValue = 24,
                 bigintLiteral = 25
+            }
+        }
+        namespace typingsInstaller {
+            interface Log {
+                isEnabled(): boolean;
+                writeLine(text: string): void;
+            }
+            type RequestCompletedAction = (success: boolean) => void;
+            interface PendingRequest {
+                requestId: number;
+                packageNames: string[];
+                cwd: string;
+                onRequestCompleted: RequestCompletedAction;
+            }
+            abstract class TypingsInstaller {
+                protected readonly installTypingHost: InstallTypingHost;
+                private readonly globalCachePath;
+                private readonly safeListPath;
+                private readonly typesMapLocation;
+                private readonly throttleLimit;
+                protected readonly log: Log;
+                private readonly packageNameToTypingLocation;
+                private readonly missingTypingsSet;
+                private readonly knownCachesSet;
+                private readonly projectWatchers;
+                private safeList;
+                private readonly toCanonicalFileName;
+                private readonly globalCachePackageJsonPath;
+                private installRunCount;
+                private inFlightRequestCount;
+                abstract readonly typesRegistry: Map<string, MapLike<string>>;
+                constructor(installTypingHost: InstallTypingHost, globalCachePath: string, safeListPath: Path, typesMapLocation: Path, throttleLimit: number, log?: Log);
+                closeProject(req: CloseProject): void;
+                private closeWatchers;
+                install(req: DiscoverTypings): void;
+                private initializeSafeList;
+                private processCacheLocation;
+                private filterTypings;
+                protected ensurePackageDirectoryExists(directory: string): void;
+                private installTypings;
+                private ensureDirectoryExists;
+                private watchFiles;
+                private createSetTypings;
+                private installTypingsAsync;
+                private executeWithThrottling;
+                protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
+                protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
+                protected readonly latestDistTag = "latest";
             }
         }
         interface CompressedData {
@@ -9789,6 +9845,14 @@ declare namespace ts {
         emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
     }
     type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+    namespace JsTyping {
+        interface TypingResolutionHost {
+            directoryExists(path: string): boolean;
+            fileExists(fileName: string): boolean;
+            readFile(path: string, encoding?: string): string | undefined;
+            readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
+        }
+    }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
