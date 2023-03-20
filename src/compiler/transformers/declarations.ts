@@ -368,14 +368,14 @@ export function transformDeclarations(context: TransformationContext) {
                     context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
                         errorInfo.diagnosticMessage,
                         getTextOfNode(errorInfo.typeName),
-                        symbolAccessibilityResult.errorSymbolName,
-                        symbolAccessibilityResult.errorModuleName));
+                        symbolAccessibilityResult.errorSymbolName!,
+                        symbolAccessibilityResult.errorModuleName!));
                 }
                 else {
                     context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
                         errorInfo.diagnosticMessage,
-                        symbolAccessibilityResult.errorSymbolName,
-                        symbolAccessibilityResult.errorModuleName));
+                        symbolAccessibilityResult.errorSymbolName!,
+                        symbolAccessibilityResult.errorModuleName!));
                 }
                 return true;
             }
