@@ -99,7 +99,6 @@ var x: Proxy<number>; // error
 
 var y: Proxy<null>; // ok
 >y : Proxy<null>
->null : null
 
 var z: Proxy<undefined> ; // ok
 >z : Proxy<undefined>

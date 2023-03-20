@@ -188,7 +188,6 @@ class ListWrapper {
     if (!array) return null;
 >!array : boolean
 >array : T[]
->null : null
 
     return array[0];
 >array[0] : T
@@ -210,7 +209,6 @@ class ListWrapper {
 >array : T[]
 >length : number
 >0 : 0
->null : null
 
     return array[array.length - 1];
 >array[array.length - 1] : T
@@ -453,7 +451,6 @@ class ListWrapper {
 >start : number
 >0 : 0
 >end : number
->null : null
 
     list.fill(value, start, end === null ? list.length : end);
 >list.fill(value, start, end === null ? list.length : end) : void
@@ -465,7 +462,6 @@ class ListWrapper {
 >end === null ? list.length : end : number
 >end === null : boolean
 >end : number
->null : null
 >list.length : number
 >list : any[]
 >length : number
@@ -520,7 +516,6 @@ class ListWrapper {
 >from : number
 >0 : 0
 >to : number
->null : null
 
     return l.slice(from, to === null ? undefined : to);
 >l.slice(from, to === null ? undefined : to) : T[]
@@ -531,7 +526,6 @@ class ListWrapper {
 >to === null ? undefined : to : number
 >to === null : boolean
 >to : number
->null : null
 >undefined : undefined
 >to : number
   }
@@ -615,11 +609,9 @@ class ListWrapper {
 >0 : 0
 
       return null;
->null : null
     }
     var solution: T = null;
 >solution : T
->null : null
 
     var maxValue = -Infinity;
 >maxValue : number

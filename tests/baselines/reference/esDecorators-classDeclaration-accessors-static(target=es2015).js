@@ -34,12 +34,12 @@ let C = (() => {
             static set [(_static_set_member_decorators_1 = [dec(32)], _c = __propKey(method3))](value) { }
         },
         (() => {
-            __esDecorate(_a, null, _static_get_method1_decorators, { kind: "getter", name: "method1", static: true, private: false }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_set_method1_decorators, { kind: "setter", name: "method1", static: true, private: false }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_get_member_decorators, { kind: "getter", name: "method2", static: true, private: false }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_set_member_decorators, { kind: "setter", name: "method2", static: true, private: false }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_get_member_decorators_1, { kind: "getter", name: _b, static: true, private: false }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_set_member_decorators_1, { kind: "setter", name: _c, static: true, private: false }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_get_method1_decorators, { kind: "getter", name: "method1", static: true, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 } }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_set_method1_decorators, { kind: "setter", name: "method1", static: true, private: false, access: { has: obj => "method1" in obj, set: (obj, value) => { obj.method1 = value; } } }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_get_member_decorators, { kind: "getter", name: "method2", static: true, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] } }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_set_member_decorators, { kind: "setter", name: "method2", static: true, private: false, access: { has: obj => "method2" in obj, set: (obj, value) => { obj["method2"] = value; } } }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_get_member_decorators_1, { kind: "getter", name: _b, static: true, private: false, access: { has: obj => _b in obj, get: obj => obj[_b] } }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_set_member_decorators_1, { kind: "setter", name: _c, static: true, private: false, access: { has: obj => _c in obj, set: (obj, value) => { obj[_c] = value; } } }, null, _staticExtraInitializers);
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         _a;

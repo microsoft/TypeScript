@@ -11,7 +11,6 @@ var foo = [
     { name: null },
 >{ name: null } : { name: null; }
 >name : null
->null : null
 
     { name: 'baz' }
 >{ name: 'baz' } : { name: string; }

@@ -13,7 +13,6 @@ class Component {
 
             {/* missing */}
             {null/* preserved */}
->null : null
             {
                 // ??? 1
             }

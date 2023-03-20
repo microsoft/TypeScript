@@ -35,12 +35,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:42.000] Search path: /user/username/projects/myproject/product/src
 Info 2    [00:00:43.000] For info: /user/username/projects/myproject/product/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [00:00:44.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -70,22 +64,22 @@ Info 13   [00:00:54.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 14   [00:00:55.000] ======== Resolving module './module1' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 15   [00:00:56.000] Module resolution kind is not specified, using 'Node10'.
 Info 16   [00:00:57.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/module1', target file types: TypeScript, Declaration.
-Info 17   [00:00:58.000] File '/user/username/projects/myproject/product/src/module1.ts' exist - use it as a name resolution result.
+Info 17   [00:00:58.000] File '/user/username/projects/myproject/product/src/module1.ts' exists - use it as a name resolution result.
 Info 18   [00:00:59.000] ======== Module name './module1' was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'. ========
 Info 19   [00:01:00.000] ======== Resolving module '../module2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 20   [00:01:01.000] Module resolution kind is not specified, using 'Node10'.
 Info 21   [00:01:02.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
-Info 22   [00:01:03.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
+Info 22   [00:01:03.000] File '/user/username/projects/myproject/product/module2.ts' exists - use it as a name resolution result.
 Info 23   [00:01:04.000] ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
 Info 24   [00:01:05.000] ======== Resolving module '../module1' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info 25   [00:01:06.000] Module resolution kind is not specified, using 'Node10'.
 Info 26   [00:01:07.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/module1', target file types: TypeScript, Declaration.
-Info 27   [00:01:08.000] File '/user/username/projects/myproject/product/src/module1.ts' exist - use it as a name resolution result.
+Info 27   [00:01:08.000] File '/user/username/projects/myproject/product/src/module1.ts' exists - use it as a name resolution result.
 Info 28   [00:01:09.000] ======== Module name '../module1' was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'. ========
 Info 29   [00:01:10.000] ======== Resolving module '../../module2' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info 30   [00:01:11.000] Module resolution kind is not specified, using 'Node10'.
 Info 31   [00:01:12.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
-Info 32   [00:01:13.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
+Info 32   [00:01:13.000] File '/user/username/projects/myproject/product/module2.ts' exists - use it as a name resolution result.
 Info 33   [00:01:14.000] ======== Module name '../../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
 Info 34   [00:01:15.000] ======== Resolving module '../src/module1}' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info 35   [00:01:16.000] Module resolution kind is not specified, using 'Node10'.
@@ -104,17 +98,17 @@ Info 47   [00:01:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 48   [00:01:29.000] ======== Resolving module '../module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info 49   [00:01:30.000] Module resolution kind is not specified, using 'Node10'.
 Info 50   [00:01:31.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
-Info 51   [00:01:32.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
+Info 51   [00:01:32.000] File '/user/username/projects/myproject/product/module2.ts' exists - use it as a name resolution result.
 Info 52   [00:01:33.000] ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
 Info 53   [00:01:34.000] ======== Resolving module '../../src/module1' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info 54   [00:01:35.000] Module resolution kind is not specified, using 'Node10'.
 Info 55   [00:01:36.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/module1', target file types: TypeScript, Declaration.
-Info 56   [00:01:37.000] File '/user/username/projects/myproject/product/src/module1.ts' exist - use it as a name resolution result.
+Info 56   [00:01:37.000] File '/user/username/projects/myproject/product/src/module1.ts' exists - use it as a name resolution result.
 Info 57   [00:01:38.000] ======== Module name '../../src/module1' was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'. ========
 Info 58   [00:01:39.000] ======== Resolving module '../../module2' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info 59   [00:01:40.000] Module resolution kind is not specified, using 'Node10'.
 Info 60   [00:01:41.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
-Info 61   [00:01:42.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
+Info 61   [00:01:42.000] File '/user/username/projects/myproject/product/module2.ts' exists - use it as a name resolution result.
 Info 62   [00:01:43.000] ======== Module name '../../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
 Info 63   [00:01:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 64   [00:01:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
@@ -122,13 +116,13 @@ Info 65   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 66   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 67   [00:01:48.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 68   [00:01:49.000] 	Files (7)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/product/module2.ts
-	/user/username/projects/myproject/product/src/module1.ts
-	/user/username/projects/myproject/product/src/file1.ts
-	/user/username/projects/myproject/product/src/feature/file2.ts
-	/user/username/projects/myproject/product/test/file4.ts
-	/user/username/projects/myproject/product/test/src/file3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/product/module2.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/product/src/module1.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import { module1 } from \"./module1\";import { module2 } from \"../module2\";"
+	/user/username/projects/myproject/product/src/feature/file2.ts Text-1 "import { module1 } from \"../module1\";import { module2 } from \"../../module2\";"
+	/user/username/projects/myproject/product/test/file4.ts Text-1 "import { module1 } from \"../src/module1}\";import { module2 } from \"../module2\";"
+	/user/username/projects/myproject/product/test/src/file3.ts Text-1 "import { module1 } from \"../../src/module1\";import { module2 } from \"../../module2\";"
 
 
 	../../../../a/lib/lib.d.ts
@@ -188,29 +182,29 @@ import { module1 } from "../src/module1}";import { module2 } from "../module2";i
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/product/module2.ts:
+/user/username/projects/myproject/product/module2.ts: *new*
   {}
-/user/username/projects/myproject/product/src/module1.ts:
+/user/username/projects/myproject/product/src/module1.ts: *new*
   {}
-/user/username/projects/myproject/product/src/feature/file2.ts:
+/user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
-/user/username/projects/myproject/product/test/file4.ts:
+/user/username/projects/myproject/product/test/file4.ts: *new*
   {}
-/user/username/projects/myproject/product/test/src/file3.ts:
+/user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/product:
+/user/username/projects/myproject/product: *new*
   {}
 
 Info 82   [00:02:21.000] Running: /user/username/projects/myproject/tsconfig.json
@@ -224,48 +218,32 @@ Info 89   [00:02:28.000] Reusing resolution of module '../module2' from '/user/u
 Info 90   [00:02:29.000] Reusing resolution of module '../../src/module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'.
 Info 91   [00:02:30.000] Reusing resolution of module '../../module2' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/module2.ts'.
 Info 92   [00:02:31.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 93   [00:02:32.000] Different program with same set of files
-Info 94   [00:02:33.000] Running: *ensureProjectForOpenFiles*
-Info 95   [00:02:34.000] Before ensureProjectForOpenFiles:
-Info 96   [00:02:35.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 96   [00:02:36.000] 	Files (7)
+Info 93   [00:02:32.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 94   [00:02:33.000] 	Files (7)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/product/module2.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/product/src/module1.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import { module1 } from \"./module1\";import { module2 } from \"../module2\";"
+	/user/username/projects/myproject/product/src/feature/file2.ts Text-2 "import { module1 } from \"../module1\";import { module2 } from \"../../module2\";import { module1 } from \"../module1\";import { module2 } from \"../../module2\";"
+	/user/username/projects/myproject/product/test/file4.ts Text-2 "import { module1 } from \"../src/module1}\";import { module2 } from \"../module2\";import { module1 } from \"../src/module1}\";import { module2 } from \"../module2\";"
+	/user/username/projects/myproject/product/test/src/file3.ts Text-2 "import { module1 } from \"../../src/module1\";import { module2 } from \"../../module2\";import { module1 } from \"../../src/module1\";import { module2 } from \"../../module2\";"
 
-Info 96   [00:02:37.000] -----------------------------------------------
-Info 96   [00:02:38.000] Open files: 
-Info 96   [00:02:39.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 96   [00:02:40.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 96   [00:02:41.000] After ensureProjectForOpenFiles:
-Info 97   [00:02:42.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 97   [00:02:43.000] 	Files (7)
+Info 95   [00:02:34.000] -----------------------------------------------
+Info 96   [00:02:35.000] Running: *ensureProjectForOpenFiles*
+Info 97   [00:02:36.000] Before ensureProjectForOpenFiles:
+Info 98   [00:02:37.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 98   [00:02:38.000] 	Files (7)
 
-Info 97   [00:02:44.000] -----------------------------------------------
-Info 97   [00:02:45.000] Open files: 
-Info 97   [00:02:46.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 97   [00:02:47.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 98   [00:02:39.000] -----------------------------------------------
+Info 98   [00:02:40.000] Open files: 
+Info 98   [00:02:41.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 98   [00:02:42.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 98   [00:02:43.000] After ensureProjectForOpenFiles:
+Info 99   [00:02:44.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 99   [00:02:45.000] 	Files (7)
+
+Info 99   [00:02:46.000] -----------------------------------------------
+Info 99   [00:02:47.000] Open files: 
+Info 99   [00:02:48.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 99   [00:02:49.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running timeout callbacks
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/product/module2.ts:
-  {}
-/user/username/projects/myproject/product/src/module1.ts:
-  {}
-/user/username/projects/myproject/product/src/feature/file2.ts:
-  {}
-/user/username/projects/myproject/product/test/file4.ts:
-  {}
-/user/username/projects/myproject/product/test/src/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/product:
-  {}

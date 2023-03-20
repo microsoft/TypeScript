@@ -56,7 +56,6 @@ var ra4 = a4 in x;
 var ra5 = null in x;
 >ra5 : boolean
 >null in x : boolean
->null : null
 >x : any
 
 var ra6 = undefined in x;
@@ -166,7 +165,6 @@ var rb9 = x in null;
 >rb9 : boolean
 >x in null : boolean
 >x : any
->null : null
 
 var rb10 = x in undefined;
 >rb10 : boolean

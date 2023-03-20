@@ -54,6 +54,7 @@ import {
     getEmitScriptTarget,
     getFirstConstructorWithBody,
     getInitializedVariables,
+    getIsolatedModules,
     getOriginalNode,
     getParseTreeNode,
     getProperties,
@@ -185,7 +186,6 @@ import {
     TextRange,
     TransformationContext,
     TransformFlags,
-    UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
     visitEachChild,
@@ -259,7 +259,7 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespace: ModuleDeclaration;
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
-    let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
+    let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
     let currentClassHasParameterProperties: boolean | undefined;
 
     /**
@@ -2706,7 +2706,7 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function tryGetConstEnumValue(node: Node): string | number | undefined {
-        if (compilerOptions.isolatedModules) {
+        if (getIsolatedModules(compilerOptions)) {
             return undefined;
         }
 

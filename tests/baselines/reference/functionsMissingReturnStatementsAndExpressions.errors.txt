@@ -1,11 +1,12 @@
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(104,16): error TS2378: A 'get' accessor must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(126,15): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(127,5): error TS1003: Identifier expected.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(112,16): error TS2378: A 'get' accessor must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(134,15): error TS18050: The value 'undefined' cannot be used here.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (5 errors) ====
+==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (6 errors) ====
     function f1(): string {
                    ~~~~~~
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -40,12 +41,12 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(127,5): e
         return null;
     }
     
-    function f8(): void {
+    function f8(): any {
         // Fine since are typed any.
         return;
     }
     
-    function f9(): void {
+    function f9(): any {
         // Fine since we are typed any and return undefined
         return undefined;
     }
@@ -112,6 +113,16 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(127,5): e
         // Not okay; union does not contain void or any
     }
     
+    function f22(): undefined {
+        // Okay; return type allows implicit return of undefined
+    }
+    
+    function f23(): undefined | number {
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        // Error; because `undefined | number` becomes `number` without strictNullChecks.
+    }
+    
     class C {
         public get m1() {
                    ~~
@@ -144,3 +155,4 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(127,5): e
         ~
 !!! error TS1003: Identifier expected.
     }
+    

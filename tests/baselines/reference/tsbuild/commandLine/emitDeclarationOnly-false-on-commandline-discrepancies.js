@@ -23,6 +23,20 @@ CleanBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": true
@@ -67,6 +81,20 @@ IncrementalBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": false
@@ -115,6 +143,20 @@ CleanBuild:
         "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
       }
     },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": true
@@ -163,6 +205,20 @@ IncrementalBuild:
         "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
       }
     },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": false

@@ -1,5 +1,9 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    commandLineCallbacks,
+    compilerOptionsToConfigJson,
+} from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -18,10 +22,6 @@ import {
     verifyTscWatch,
     watchBaseline,
 } from "./helpers";
-import {
-    commandLineCallbacks,
-    compilerOptionsToConfigJson,
-} from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: program updates", () => {
     const scenario = "programUpdates";
@@ -267,6 +267,48 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 caption: "Enable  allowUnsusedLabels",
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: true }
+                })),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+            }
+        ]
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "Updates diagnostics when '--allowArbitraryExtensions' changes",
+        commandLineArgs: ["-w", "-p", "/tsconfig.json"],
+        sys: () => {
+            const aTs: File = {
+                path: "/a.ts",
+                content: "import {} from './b.css'"
+            };
+            const bCssTs: File = {
+                path: "/b.d.css.ts",
+                content: "declare const style: string;"
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: { allowArbitraryExtensions: true },
+                    files: ["/a.ts"],
+                })
+            };
+            return createWatchedSystem([libFile, aTs, bCssTs, tsconfig]);
+        },
+        edits: [
+            {
+                caption: "Disable  allowArbitraryExtensions",
+                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
+                    compilerOptions: { allowArbitraryExtensions: false },
+                    files: ["/a.ts"],
+                })),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+            },
+            {
+                caption: "Enable  allowArbitraryExtensions",
+                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
+                    compilerOptions: { allowArbitraryExtensions: true },
+                    files: ["/a.ts"],
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
@@ -928,28 +970,36 @@ declare const eval: any`
         ]
     });
 
-    verifyTscWatch({
-        scenario,
-        subScenario: "types should load from config file path if config exists",
-        commandLineArgs: ["-w", "-p", configFilePath],
-        sys: () => {
-            const f1 = {
-                path: "/a/b/app.ts",
-                content: "let x = 1"
-            };
-            const config = {
-                path: configFilePath,
-                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
-            };
-            const node = {
-                path: "/a/b/node_modules/@types/node/index.d.ts",
-                content: "declare var process: any"
-            };
-            const cwd = {
-                path: "/a/c"
-            };
-            return createWatchedSystem([f1, config, node, cwd, libFile], { currentDirectory: cwd.path });
-        },
+    describe("types from config file", () => {
+        function verifyTypesLoad(includeTypeRoots: boolean) {
+            verifyTscWatch({
+                scenario,
+                subScenario: includeTypeRoots ?
+                    "types should not load from config file path if config exists but does not specifies typeRoots" :
+                    "types should load from config file path if config exists",
+                commandLineArgs: ["-w", "-p", configFilePath],
+                sys: () => {
+                    const f1 = {
+                        path: "/a/b/app.ts",
+                        content: "let x = 1"
+                    };
+                    const config = {
+                        path: configFilePath,
+                        content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } })
+                    };
+                    const node = {
+                        path: "/a/b/node_modules/@types/node/index.d.ts",
+                        content: "declare var process: any"
+                    };
+                    const cwd = {
+                        path: "/a/c"
+                    };
+                    return createWatchedSystem([f1, config, node, cwd, libFile], { currentDirectory: cwd.path });
+                },
+            });
+        }
+        verifyTypesLoad(/*includeTypeRoots*/ false);
+        verifyTypesLoad(/*includeTypeRoots*/ true);
     });
 
     verifyTscWatch({

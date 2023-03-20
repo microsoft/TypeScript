@@ -10,8 +10,9 @@ declare var React: any;
 >React : any
 
 <>hi</div> // Error
-><>hi</div> // Error<>eof   // Error : JSX.Element
-><>hi</div> : JSX.Element
+><>hi</ : JSX.Element
+>div> // Error<>eof   // Error : boolean
+>div : any
 
 <>eof   // Error
 ><>eof   // Error : JSX.Element

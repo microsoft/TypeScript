@@ -31,6 +31,20 @@ CleanBuild:
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./src/a.ts",
+          "./src/b.ts",
+          "./src/c.ts",
+          "./src/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": true,
@@ -81,6 +95,20 @@ IncrementalBuild:
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./src/a.ts",
+          "./src/b.ts",
+          "./src/c.ts",
+          "./src/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": false,
@@ -193,6 +221,19 @@ CleanBuild:
       "./src/f.ts": "-4849089835-import { a } from \"a\"; export const f = a;",
       "./src/g.ts": "-18341999015-import { b } from \"b\"; export const g = b;"
     },
+    "root": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          "./src/e.ts",
+          "./src/f.ts",
+          "./src/g.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": true,
@@ -242,6 +283,19 @@ IncrementalBuild:
       "./src/f.ts": "-4849089835-import { a } from \"a\"; export const f = a;",
       "./src/g.ts": "-18341999015-import { b } from \"b\"; export const g = b;"
     },
+    "root": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          "./src/e.ts",
+          "./src/f.ts",
+          "./src/g.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "emitDeclarationOnly": false,
