@@ -1472,6 +1472,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
     var requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
     var isolatedModulesLikeFlagName = compilerOptions.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules";
+    // It is an error ro use `importsNotUsedAsValues` alongside `verbatimModuleSyntax`, but we still need to not crash.
+    // Given that, in such a scenario, `verbatimModuleSyntax` is basically disabled, as least as far as alias visibility tracking goes.
+    var canCollectSymbolAliasAccessabilityData = !compilerOptions.verbatimModuleSyntax || !!compilerOptions.importsNotUsedAsValues;
 
     /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
     var apparentArgumentCount: number | undefined;
@@ -4540,7 +4543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
-        if (compilerOptions.verbatimModuleSyntax) {
+        if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
         const symbol = getSymbolOfDeclaration(node);
@@ -4559,7 +4562,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
     // the alias as an expression (which recursively takes us back here if the target references another alias).
     function markAliasSymbolAsReferenced(symbol: Symbol) {
-        Debug.assert(!compilerOptions.verbatimModuleSyntax);
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
         const links = getSymbolLinks(symbol);
         if (!links.referenced) {
             links.referenced = true;
@@ -27631,7 +27634,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function markAliasReferenced(symbol: Symbol, location: Node) {
-        if (compilerOptions.verbatimModuleSyntax) {
+        if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
         if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
@@ -30773,7 +30776,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 jsxFactorySym.isReferenced = SymbolFlags.All;
 
                 // If react/jsxFactory symbol is alias, mark it as refereced
-                if (!compilerOptions.verbatimModuleSyntax && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                if (canCollectSymbolAliasAccessabilityData && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
                     markAliasSymbolAsReferenced(jsxFactorySym);
                 }
             }
@@ -39710,7 +39713,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
         const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isReference*/ true);
         if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-            if (!compilerOptions.verbatimModuleSyntax
+            if (canCollectSymbolAliasAccessabilityData
                 && symbolIsValue(rootSymbol)
                 && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
                 && !getTypeOnlyAliasDeclaration(rootSymbol)) {
@@ -44227,6 +44230,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportsForTypeOnlyConversion(sourceFile: SourceFile) {
+        if (!canCollectSymbolAliasAccessabilityData) {
+            return;
+        }
         for (const statement of sourceFile.statements) {
             if (canConvertImportDeclarationToTypeOnly(statement) || canConvertImportEqualsDeclarationToTypeOnly(statement)) {
                 error(
@@ -45949,7 +45955,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValueAliasDeclaration(node: Node): boolean {
-        Debug.assert(!compilerOptions.verbatimModuleSyntax);
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return isAliasResolvedToValue(getSymbolOfDeclaration(node as ImportEqualsDeclaration));
@@ -46003,7 +46009,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
-        Debug.assert(!compilerOptions.verbatimModuleSyntax);
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
         if (isAliasSymbolDeclaration(node)) {
             const symbol = getSymbolOfDeclaration(node as Declaration);
             const links = symbol && getSymbolLinks(symbol);
@@ -46377,13 +46383,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isValueAliasDeclaration: nodeIn => {
                 const node = getParseTreeNode(nodeIn);
                 // Synthesized nodes are always treated like values.
-                return node ? isValueAliasDeclaration(node) : true;
+                return node && canCollectSymbolAliasAccessabilityData ? isValueAliasDeclaration(node) : true;
             },
             hasGlobalName,
             isReferencedAliasDeclaration: (nodeIn, checkChildren?) => {
                 const node = getParseTreeNode(nodeIn);
                 // Synthesized nodes are always treated as referenced.
-                return node ? isReferencedAliasDeclaration(node, checkChildren) : true;
+                return node && canCollectSymbolAliasAccessabilityData ? isReferencedAliasDeclaration(node, checkChildren) : true;
             },
             getNodeCheckFlags: nodeIn => {
                 const node = getParseTreeNode(nodeIn);
