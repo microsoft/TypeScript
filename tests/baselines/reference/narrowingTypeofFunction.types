@@ -35,7 +35,7 @@ function f2<T>(x: (T & F) | T & string) {
 >"function" : "function"
 
         x;
->x : (T & F) | (T & string)
+>x : T & F
     }
     else {
         x;

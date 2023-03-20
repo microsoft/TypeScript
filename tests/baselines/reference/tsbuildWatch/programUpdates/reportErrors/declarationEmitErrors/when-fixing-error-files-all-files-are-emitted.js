@@ -55,21 +55,19 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/solution/app/filewitherror.ts (used version)
-/user/username/projects/solution/app/filewithouterror.ts (computed .d.ts)
-
-WatchedFiles::
-/user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+/user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/app/filewitherror.ts: *new*
+  {}
+/user/username/projects/solution/app/filewithouterror.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/solution/app: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -88,7 +86,7 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -106,25 +104,11 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/solution/app/fileWithError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
@@ -144,7 +128,7 @@ export declare var myClassWithError: {
 
 //// [/user/username/projects/solution/app/fileWithoutError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClass = void 0;
 var myClass = /** @class */ (function () {
     function myClass() {
@@ -160,7 +144,7 @@ export declare class myClass {
 
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./fileWithoutError.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -172,19 +156,41 @@ export declare class myClass {
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./filewitherror.ts": {
+        "original": {
+          "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
+          "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
+        },
         "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
         "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
       },
       "./filewithouterror.ts": {
+        "original": {
+          "version": "-11785903855-export class myClass { }",
+          "signature": "-7432826827-export declare class myClass {\n}\n"
+        },
         "version": "-11785903855-export class myClass { }",
         "signature": "-7432826827-export declare class myClass {\n}\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./filewitherror.ts"
+      ],
+      [
+        3,
+        "./filewithouterror.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -194,9 +200,10 @@ export declare class myClass {
       "../../../../../a/lib/lib.d.ts",
       "./filewitherror.ts",
       "./filewithouterror.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./fileWithoutError.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 984
+  "size": 1046
 }
 

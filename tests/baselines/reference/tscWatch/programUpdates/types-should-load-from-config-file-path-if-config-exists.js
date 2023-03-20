@@ -3,7 +3,7 @@ Input::
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"],"typeRoots":[]}}
+{"compilerOptions":{"types":["node"]}}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -32,7 +32,7 @@ Output::
 
 
 Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"types":["node"],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,27 +49,21 @@ Shape signatures in builder refreshed for::
 /a/b/app.ts (used version)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/app.ts:
-  {"fileName":"/a/b/app.ts","pollingInterval":250}
-/a/b/node_modules/@types/node/index.d.ts:
-  {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/node/package.json:
-  {"fileName":"/a/b/node_modules/node/package.json","pollingInterval":250}
-/a/b/node_modules/@types/node/package.json:
-  {"fileName":"/a/b/node_modules/@types/node/package.json","pollingInterval":250}
-
 FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/app.ts: *new*
+  {}
+/a/b/node_modules/@types/node/index.d.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules:
-  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/node_modules: *new*
+  {}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

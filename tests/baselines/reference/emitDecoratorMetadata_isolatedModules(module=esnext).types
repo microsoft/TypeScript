@@ -4,9 +4,10 @@ export type { T1 }
 >T1 : T1
 
 === tests/cases/compiler/type2.ts ===
+
 export interface T2 {}
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/class3.ts ===
+
+=== tests/cases/compiler/class3.ts ===
 export class C3 {}
 >C3 : C3
 

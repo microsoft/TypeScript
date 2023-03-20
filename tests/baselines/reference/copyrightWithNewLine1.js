@@ -15,7 +15,7 @@ greeter.start();
 ****************************/
 define(["require", "exports", "./greeter"], function (require, exports, model) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var el = document.getElementById('content');
     var greeter = new model.Greeter(el);
     /** things */

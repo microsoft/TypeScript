@@ -14,10 +14,11 @@ module Microsoft.PeopleAtWork.Model {
     }
 }
 === tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
+
 /// <reference path="emitMemberAccessExpression_file3.ts" />
-No type information for this code."use strict";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/emitMemberAccessExpression_file2.ts ===
+"use strict";
+
+=== tests/cases/compiler/emitMemberAccessExpression_file2.ts ===
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 module Microsoft.PeopleAtWork.Model {

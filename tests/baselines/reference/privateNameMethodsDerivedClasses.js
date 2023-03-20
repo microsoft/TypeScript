@@ -30,6 +30,6 @@ class Base {
 _Base_instances = new WeakSet(), _Base_prop = function _Base_prop() { return 123; };
 class Derived extends Base {
     static method(x) {
-        console.log(x..call(x));
+        console.log(x.());
     }
 }

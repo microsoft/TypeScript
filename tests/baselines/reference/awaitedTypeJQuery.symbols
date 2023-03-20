@@ -1,0 +1,793 @@
+=== tests/cases/compiler/awaitedTypeJQuery.ts ===
+/// <reference lib="dom" />
+
+interface Thenable<T> extends PromiseLike<T> { }
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>T : Symbol(T, Decl(awaitedTypeJQuery.ts, 2, 19))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedTypeJQuery.ts, 2, 19))
+
+// JQuery's Promise type
+interface PromiseBase<TR, TJ, TN,
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>TR : Symbol(TR, Decl(awaitedTypeJQuery.ts, 5, 22))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 5, 25))
+>TN : Symbol(TN, Decl(awaitedTypeJQuery.ts, 5, 29))
+
+    UR, UJ, UN,
+>UR : Symbol(UR, Decl(awaitedTypeJQuery.ts, 5, 33))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 6, 7))
+>UN : Symbol(UN, Decl(awaitedTypeJQuery.ts, 6, 11))
+
+    VR, VJ, VN,
+>VR : Symbol(VR, Decl(awaitedTypeJQuery.ts, 6, 15))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 7, 7))
+>VN : Symbol(VN, Decl(awaitedTypeJQuery.ts, 7, 11))
+
+    SR, SJ, SN> {
+>SR : Symbol(SR, Decl(awaitedTypeJQuery.ts, 7, 15))
+>SJ : Symbol(SJ, Decl(awaitedTypeJQuery.ts, 8, 7))
+>SN : Symbol(SN, Decl(awaitedTypeJQuery.ts, 8, 11))
+
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 9, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 9, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 9, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 9, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 10, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 10, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 10, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 11, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 11, 33))
+
+        RRD = never, RJD = never, RND = never,
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 11, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 12, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 12, 33))
+
+        ARF = never, AJF = never, ANF = never,
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 12, 46))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 13, 20))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 13, 33))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 13, 46))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 14, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 14, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 14, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 15, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 15, 33))
+
+        RRF = never, RJF = never, RNF = never,
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 15, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 16, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 16, 33))
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 16, 46))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 17, 20))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 17, 33))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 17, 46))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 18, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 18, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 18, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 19, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 19, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 19, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 20, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 20, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(awaitedTypeJQuery.ts, 20, 47))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 21, 25))
+>TR : Symbol(TR, Decl(awaitedTypeJQuery.ts, 5, 22))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 21, 31))
+>UR : Symbol(UR, Decl(awaitedTypeJQuery.ts, 5, 33))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 21, 38))
+>VR : Symbol(VR, Decl(awaitedTypeJQuery.ts, 6, 15))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 21, 45))
+>SR : Symbol(SR, Decl(awaitedTypeJQuery.ts, 7, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 9, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 9, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 9, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 9, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 10, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 10, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 10, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 11, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 11, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 11, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 12, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 12, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 9, 9))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 9, 9))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(awaitedTypeJQuery.ts, 24, 53))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 25, 25))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 5, 25))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 25, 31))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 6, 7))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 25, 38))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 7, 7))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 25, 45))
+>SJ : Symbol(SJ, Decl(awaitedTypeJQuery.ts, 8, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 12, 46))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 13, 20))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 13, 33))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 13, 46))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 14, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 14, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 14, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 15, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 15, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 15, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 16, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 16, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 12, 46))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 12, 46))
+
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(awaitedTypeJQuery.ts, 28, 53))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 29, 29))
+>TN : Symbol(TN, Decl(awaitedTypeJQuery.ts, 5, 29))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 29, 35))
+>UN : Symbol(UN, Decl(awaitedTypeJQuery.ts, 6, 11))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 29, 42))
+>VN : Symbol(VN, Decl(awaitedTypeJQuery.ts, 7, 11))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 29, 49))
+>SN : Symbol(SN, Decl(awaitedTypeJQuery.ts, 8, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 16, 46))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 17, 20))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 17, 33))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 17, 46))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 18, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 18, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 18, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 19, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 19, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP,
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 19, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 20, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 20, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 17, 33))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 17, 33))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 9, 9))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 12, 46))
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 16, 46))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 9, 21))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 13, 20))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 17, 20))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 9, 34))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 13, 33))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 17, 33))
+
+        BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 9, 47))
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 13, 46))
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 17, 46))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 10, 20))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 14, 20))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 18, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 10, 33))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 14, 33))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 18, 33))
+
+        CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 10, 46))
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 14, 46))
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 18, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 11, 20))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 15, 20))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 19, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 11, 33))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 15, 33))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 19, 33))
+
+        RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>;
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 11, 46))
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 15, 46))
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 19, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 12, 20))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 16, 20))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 20, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 12, 33))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 16, 33))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 20, 33))
+
+    then<ARF = never, AJF = never, ANF = never,
+>then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 36, 9))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 36, 21))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 36, 34))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 36, 47))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 37, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 37, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 37, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 38, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 38, 33))
+
+        RRF = never, RJF = never, RNF = never,
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 38, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 39, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 39, 33))
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 39, 46))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 40, 20))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 40, 33))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 40, 46))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 41, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 41, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 41, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 42, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 42, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 42, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 43, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 43, 33))
+
+            doneFilter: null,
+>doneFilter : Symbol(doneFilter, Decl(awaitedTypeJQuery.ts, 43, 47))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(awaitedTypeJQuery.ts, 44, 29))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 45, 25))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 5, 25))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 45, 31))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 6, 7))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 45, 38))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 7, 7))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 45, 45))
+>SJ : Symbol(SJ, Decl(awaitedTypeJQuery.ts, 8, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 36, 9))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 36, 21))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 36, 34))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 36, 47))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 37, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 37, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 37, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 38, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 38, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 38, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 39, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 39, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 36, 9))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 36, 9))
+
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(awaitedTypeJQuery.ts, 48, 53))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 49, 29))
+>TN : Symbol(TN, Decl(awaitedTypeJQuery.ts, 5, 29))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 49, 35))
+>UN : Symbol(UN, Decl(awaitedTypeJQuery.ts, 6, 11))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 49, 42))
+>VN : Symbol(VN, Decl(awaitedTypeJQuery.ts, 7, 11))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 49, 49))
+>SN : Symbol(SN, Decl(awaitedTypeJQuery.ts, 8, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 39, 46))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 40, 20))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 40, 33))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 40, 46))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 41, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 41, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 41, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 42, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 42, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP,
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 42, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 43, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 43, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 40, 33))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 40, 33))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 36, 9))
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 39, 46))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 36, 21))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 40, 20))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 36, 34))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 40, 33))
+
+        BRF | BRP, BJF | BJP, BNF | BNP,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 36, 47))
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 40, 46))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 37, 20))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 41, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 37, 33))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 41, 33))
+
+        CRF | CRP, CJF | CJP, CNF | CNP,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 37, 46))
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 41, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 38, 20))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 42, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 38, 33))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 42, 33))
+
+        RRF | RRP, RJF | RJP, RNF | RNP>;
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 38, 46))
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 42, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 39, 20))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 43, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 39, 33))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 43, 33))
+
+    then<ARP = never, AJP = never, ANP = never,
+>then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 56, 9))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 56, 21))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 56, 34))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 56, 47))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 57, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 57, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 57, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 58, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 58, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 58, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 59, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 59, 33))
+
+            doneFilter: null,
+>doneFilter : Symbol(doneFilter, Decl(awaitedTypeJQuery.ts, 59, 47))
+
+            failFilter: null,
+>failFilter : Symbol(failFilter, Decl(awaitedTypeJQuery.ts, 60, 29))
+
+            progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(awaitedTypeJQuery.ts, 61, 29))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 62, 30))
+>TN : Symbol(TN, Decl(awaitedTypeJQuery.ts, 5, 29))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 62, 36))
+>UN : Symbol(UN, Decl(awaitedTypeJQuery.ts, 6, 11))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 62, 43))
+>VN : Symbol(VN, Decl(awaitedTypeJQuery.ts, 7, 11))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 62, 50))
+>SN : Symbol(SN, Decl(awaitedTypeJQuery.ts, 8, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 56, 9))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 56, 21))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 56, 34))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 56, 47))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 57, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 57, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 57, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 58, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 58, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARP, AJP, ANP,
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 58, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 59, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 59, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 56, 34))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 56, 34))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARP : Symbol(ARP, Decl(awaitedTypeJQuery.ts, 56, 9))
+>AJP : Symbol(AJP, Decl(awaitedTypeJQuery.ts, 56, 21))
+>ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 56, 34))
+
+        BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(awaitedTypeJQuery.ts, 56, 47))
+>BJP : Symbol(BJP, Decl(awaitedTypeJQuery.ts, 57, 20))
+>BNP : Symbol(BNP, Decl(awaitedTypeJQuery.ts, 57, 33))
+
+        CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(awaitedTypeJQuery.ts, 57, 46))
+>CJP : Symbol(CJP, Decl(awaitedTypeJQuery.ts, 58, 20))
+>CNP : Symbol(CNP, Decl(awaitedTypeJQuery.ts, 58, 33))
+
+        RRP, RJP, RNP>;
+>RRP : Symbol(RRP, Decl(awaitedTypeJQuery.ts, 58, 46))
+>RJP : Symbol(RJP, Decl(awaitedTypeJQuery.ts, 59, 20))
+>RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 59, 33))
+
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 69, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 69, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 69, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 69, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 70, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 70, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 70, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 71, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 71, 33))
+
+        RRD = never, RJD = never, RND = never,
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 71, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 72, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 72, 33))
+
+        ARF = never, AJF = never, ANF = never,
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 72, 46))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 73, 20))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 73, 33))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 73, 46))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 74, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 74, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 74, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 75, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 75, 33))
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 75, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 76, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 76, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(awaitedTypeJQuery.ts, 76, 47))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 77, 25))
+>TR : Symbol(TR, Decl(awaitedTypeJQuery.ts, 5, 22))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 77, 31))
+>UR : Symbol(UR, Decl(awaitedTypeJQuery.ts, 5, 33))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 77, 38))
+>VR : Symbol(VR, Decl(awaitedTypeJQuery.ts, 6, 15))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 77, 45))
+>SR : Symbol(SR, Decl(awaitedTypeJQuery.ts, 7, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 69, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 69, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 69, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 69, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 70, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 70, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 70, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 71, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 71, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 71, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 72, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 72, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 69, 9))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 69, 9))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(awaitedTypeJQuery.ts, 80, 53))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 81, 25))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 5, 25))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 81, 31))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 6, 7))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 81, 38))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 7, 7))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 81, 45))
+>SJ : Symbol(SJ, Decl(awaitedTypeJQuery.ts, 8, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 72, 46))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 73, 20))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 73, 33))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 73, 46))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 74, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 74, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 74, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 75, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 75, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 75, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 76, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 76, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 72, 46))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 72, 46))
+
+            progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF,
+>progressFilter : Symbol(progressFilter, Decl(awaitedTypeJQuery.ts, 84, 53))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 69, 9))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 72, 46))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 69, 21))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 73, 20))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 69, 34))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 73, 33))
+
+        BRD | BRF, BJD | BJF, BND | BNF,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 69, 47))
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 73, 46))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 70, 20))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 74, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 70, 33))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 74, 33))
+
+        CRD | CRF, CJD | CJF, CND | CNF,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 70, 46))
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 74, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 71, 20))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 75, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 71, 33))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 75, 33))
+
+        RRD | RRF, RJD | RJF, RND | RNF>;
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 71, 46))
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 75, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 72, 20))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 76, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 72, 33))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 76, 33))
+
+    then<ARF = never, AJF = never, ANF = never,
+>then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 89, 9))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 89, 21))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 89, 34))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 89, 47))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 90, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 90, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 90, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 91, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 91, 33))
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 91, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 92, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 92, 33))
+
+            doneFilter: null,
+>doneFilter : Symbol(doneFilter, Decl(awaitedTypeJQuery.ts, 92, 47))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(awaitedTypeJQuery.ts, 93, 29))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 94, 25))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 5, 25))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 94, 31))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 6, 7))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 94, 38))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 7, 7))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 94, 45))
+>SJ : Symbol(SJ, Decl(awaitedTypeJQuery.ts, 8, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 89, 9))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 89, 21))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 89, 34))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 89, 47))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 90, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 90, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 90, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 91, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 91, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 91, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 92, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 92, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 89, 9))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 89, 9))
+
+            progressFilter?: null): PromiseBase<ARF, AJF, ANF,
+>progressFilter : Symbol(progressFilter, Decl(awaitedTypeJQuery.ts, 97, 53))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARF : Symbol(ARF, Decl(awaitedTypeJQuery.ts, 89, 9))
+>AJF : Symbol(AJF, Decl(awaitedTypeJQuery.ts, 89, 21))
+>ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 89, 34))
+
+        BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(awaitedTypeJQuery.ts, 89, 47))
+>BJF : Symbol(BJF, Decl(awaitedTypeJQuery.ts, 90, 20))
+>BNF : Symbol(BNF, Decl(awaitedTypeJQuery.ts, 90, 33))
+
+        CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(awaitedTypeJQuery.ts, 90, 46))
+>CJF : Symbol(CJF, Decl(awaitedTypeJQuery.ts, 91, 20))
+>CNF : Symbol(CNF, Decl(awaitedTypeJQuery.ts, 91, 33))
+
+        RRF, RJF, RNF>;
+>RRF : Symbol(RRF, Decl(awaitedTypeJQuery.ts, 91, 46))
+>RJF : Symbol(RJF, Decl(awaitedTypeJQuery.ts, 92, 20))
+>RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 92, 33))
+
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 102, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 102, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 102, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 102, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 103, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 103, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 103, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 104, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 104, 33))
+
+        RRD = never, RJD = never, RND = never>(
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 104, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 105, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 105, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(awaitedTypeJQuery.ts, 105, 47))
+>t : Symbol(t, Decl(awaitedTypeJQuery.ts, 106, 25))
+>TR : Symbol(TR, Decl(awaitedTypeJQuery.ts, 5, 22))
+>u : Symbol(u, Decl(awaitedTypeJQuery.ts, 106, 31))
+>UR : Symbol(UR, Decl(awaitedTypeJQuery.ts, 5, 33))
+>v : Symbol(v, Decl(awaitedTypeJQuery.ts, 106, 38))
+>VR : Symbol(VR, Decl(awaitedTypeJQuery.ts, 6, 15))
+>s : Symbol(s, Decl(awaitedTypeJQuery.ts, 106, 45))
+>SR : Symbol(SR, Decl(awaitedTypeJQuery.ts, 7, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 102, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 102, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 102, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 102, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 103, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 103, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 103, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 104, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 104, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 104, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 105, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 105, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeJQuery.ts, 0, 0))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 102, 9))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 102, 9))
+
+            failFilter?: null,
+>failFilter : Symbol(failFilter, Decl(awaitedTypeJQuery.ts, 109, 53))
+
+            progressFilter?: null): PromiseBase<ARD, AJD, AND,
+>progressFilter : Symbol(progressFilter, Decl(awaitedTypeJQuery.ts, 110, 30))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>ARD : Symbol(ARD, Decl(awaitedTypeJQuery.ts, 102, 9))
+>AJD : Symbol(AJD, Decl(awaitedTypeJQuery.ts, 102, 21))
+>AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 102, 34))
+
+        BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(awaitedTypeJQuery.ts, 102, 47))
+>BJD : Symbol(BJD, Decl(awaitedTypeJQuery.ts, 103, 20))
+>BND : Symbol(BND, Decl(awaitedTypeJQuery.ts, 103, 33))
+
+        CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(awaitedTypeJQuery.ts, 103, 46))
+>CJD : Symbol(CJD, Decl(awaitedTypeJQuery.ts, 104, 20))
+>CND : Symbol(CND, Decl(awaitedTypeJQuery.ts, 104, 33))
+
+        RRD, RJD, RND>;
+>RRD : Symbol(RRD, Decl(awaitedTypeJQuery.ts, 104, 46))
+>RJD : Symbol(RJD, Decl(awaitedTypeJQuery.ts, 105, 20))
+>RND : Symbol(RND, Decl(awaitedTypeJQuery.ts, 105, 33))
+}
+
+interface Promise3<TR, TJ, TN,
+>Promise3 : Symbol(Promise3, Decl(awaitedTypeJQuery.ts, 115, 1))
+>TR : Symbol(TR, Decl(awaitedTypeJQuery.ts, 117, 19))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 117, 22))
+>TN : Symbol(TN, Decl(awaitedTypeJQuery.ts, 117, 26))
+
+    UR, UJ, UN,
+>UR : Symbol(UR, Decl(awaitedTypeJQuery.ts, 117, 30))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 118, 7))
+>UN : Symbol(UN, Decl(awaitedTypeJQuery.ts, 118, 11))
+
+    VR, VJ, VN> extends PromiseBase<TR, TJ, TN,
+>VR : Symbol(VR, Decl(awaitedTypeJQuery.ts, 118, 15))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 119, 7))
+>VN : Symbol(VN, Decl(awaitedTypeJQuery.ts, 119, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(awaitedTypeJQuery.ts, 2, 48))
+>TR : Symbol(TR, Decl(awaitedTypeJQuery.ts, 117, 19))
+>TJ : Symbol(TJ, Decl(awaitedTypeJQuery.ts, 117, 22))
+>TN : Symbol(TN, Decl(awaitedTypeJQuery.ts, 117, 26))
+
+    UR, UJ, UN,
+>UR : Symbol(UR, Decl(awaitedTypeJQuery.ts, 117, 30))
+>UJ : Symbol(UJ, Decl(awaitedTypeJQuery.ts, 118, 7))
+>UN : Symbol(UN, Decl(awaitedTypeJQuery.ts, 118, 11))
+
+    VR, VJ, VN,
+>VR : Symbol(VR, Decl(awaitedTypeJQuery.ts, 118, 15))
+>VJ : Symbol(VJ, Decl(awaitedTypeJQuery.ts, 119, 7))
+>VN : Symbol(VN, Decl(awaitedTypeJQuery.ts, 119, 11))
+
+    never, never, never> { }
+
+type T = Awaited<Promise3<string, Error, number, {}, string, boolean, any, Element, never>>; // string
+>T : Symbol(T, Decl(awaitedTypeJQuery.ts, 122, 28))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise3 : Symbol(Promise3, Decl(awaitedTypeJQuery.ts, 115, 1))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+

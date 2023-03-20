@@ -11,7 +11,7 @@ function yadda() {
 
 //// [evolvingArrayTypeInAssert.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.unsafeCast = void 0;
 function unsafeCast(_value) { }
 exports.unsafeCast = unsafeCast;

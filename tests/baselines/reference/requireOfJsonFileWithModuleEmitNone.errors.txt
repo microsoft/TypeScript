@@ -1,8 +1,8 @@
-error TS5070: Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.
+error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
 tests/cases/compiler/file1.ts(1,1): error TS1148: Cannot use imports, exports, or module augmentations when '--module' is 'none'.
 
 
-!!! error TS5070: Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.
+!!! error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
 ==== tests/cases/compiler/file1.ts (1 errors) ====
     import * as b from './b.json';
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

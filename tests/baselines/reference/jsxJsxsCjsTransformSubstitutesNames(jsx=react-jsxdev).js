@@ -6,7 +6,7 @@ export {};
 
 //// [jsxJsxsCjsTransformSubstitutesNames.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNames.tsx";
 /// <reference path="react16.d.ts" />

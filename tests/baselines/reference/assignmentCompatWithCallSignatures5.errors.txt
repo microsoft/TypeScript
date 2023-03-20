@@ -84,6 +84,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
 !!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14: This type parameter might need an `extends T` constraint.
     var b15: <U, V>(x: { a: U; b: V; }) => U[]; 
     a15 = b15; // ok, T = U, T = V
     b15 = a15; // ok
@@ -94,6 +95,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:       Types of property 'b' are incompatible.
 !!! error TS2322:         Type 'V' is not assignable to type 'U'.
 !!! error TS2322:           'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14: This type parameter might need an `extends U` constraint.
     var b16: <T>(x: { a: T; b: T }) => T[]; 
     a15 = b16; // ok
     b15 = a16; // ok
@@ -103,6 +105,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'Base'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11: This type parameter might need an `extends Base` constraint.
     var b17: <T>(x: (a: T) => T) => T[]; 
     a17 = b17; // ok
     b17 = a17; // ok

@@ -37,7 +37,6 @@ window.setTimeout(() => null, 100);
 >window : Window & typeof globalThis
 >setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
->null : null
 >100 : 100
 
 // Arrow function as value in array literal
@@ -68,12 +67,12 @@ enum E {
 >E : E
 
     x = () => 4, // Error expected
->x : E
+>x : E.x
 >() => 4 : () => number
 >4 : 4
 
     y = (() => this).length // error, can't use this in enum
->y : E
+>y : E.y
 >(() => this).length : number
 >(() => this) : () => any
 >() => this : () => any
@@ -140,7 +139,6 @@ module M2 {
 >window : Window & typeof globalThis
 >setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
->null : null
 >100 : 100
 
     // Arrow function as value in array literal
@@ -171,12 +169,12 @@ module M2 {
 >E : E
 
         x = () => 4, // Error expected
->x : E
+>x : E.x
 >() => 4 : () => number
 >4 : 4
 
         y = (() => this).length
->y : E
+>y : E.y
 >(() => this).length : number
 >(() => this) : () => any
 >() => this : () => any

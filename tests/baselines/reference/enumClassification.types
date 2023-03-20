@@ -130,34 +130,34 @@ enum E11 {
 >E11 : E11
 
     A = +0,
->A : E11
+>A : E11.A
 >+0 : 0
 >0 : 0
 
     B,
->B : E11
+>B : E11.B
 
     C
->C : E11
+>C : E11.C
 }
 
 enum E12 {
 >E12 : E12
 
     A = 1 << 0,
->A : E12
+>A : E12.A
 >1 << 0 : number
 >1 : 1
 >0 : 0
 
     B = 1 << 1,
->B : E12
+>B : E12.B
 >1 << 1 : number
 >1 : 1
 >1 : 1
 
     C = 1 << 2
->C : E12
+>C : E12.C
 >1 << 2 : number
 >1 : 1
 >2 : 2
@@ -169,24 +169,24 @@ enum E20 {
 >E20 : E20
 
     A = "foo".length,
->A : E20
+>A : E20.A
 >"foo".length : number
 >"foo" : "foo"
 >length : number
 
     B = A + 1,
->B : E20
+>B : E20.B
 >A + 1 : number
->A : E20
+>A : E20.A
 >1 : 1
 
     C = +"123",
->C : E20
+>C : E20.C
 >+"123" : number
 >"123" : "123"
 
     D = Math.sin(1)
->D : E20
+>D : E20.D
 >Math.sin(1) : number
 >Math.sin : (x: number) => number
 >Math : Math

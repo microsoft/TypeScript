@@ -10,7 +10,7 @@ export var bVal = b;
 
 //// [internalAliasVarInsideTopLevelModuleWithoutExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bVal = exports.a = void 0;
 var a;
 (function (a) {

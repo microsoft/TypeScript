@@ -40,4 +40,5 @@ tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(21,5): e
         e = a;
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'E'.
+!!! related TS2208 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:20:12: This type parameter might need an `extends E` constraint.
     }

@@ -1,0 +1,153 @@
+=== tests/cases/compiler/a.d.ts ===
+type O = { a: string; b: number; c: number; };
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>b : Symbol(b, Decl(a.d.ts, 0, 21))
+>c : Symbol(c, Decl(a.d.ts, 0, 32))
+
+type F1 = (arg: number) => any; 
+>F1 : Symbol(F1, Decl(a.d.ts, 0, 46))
+>arg : Symbol(arg, Decl(a.d.ts, 1, 11))
+
+type F2 = ({ a: string }: O) => any; 
+>F2 : Symbol(F2, Decl(a.d.ts, 1, 31))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 2, 12))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type F3 = ({ a: string, b, c }: O) => any; 
+>F3 : Symbol(F3, Decl(a.d.ts, 2, 36))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 3, 12))
+>b : Symbol(b, Decl(a.d.ts, 3, 23))
+>c : Symbol(c, Decl(a.d.ts, 3, 26))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type F4 = ({ a: string }: O) => any; 
+>F4 : Symbol(F4, Decl(a.d.ts, 3, 42))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 4, 12))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type F5 = ({ a: string, b, c }: O) => any; 
+>F5 : Symbol(F5, Decl(a.d.ts, 4, 36))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 5, 12))
+>b : Symbol(b, Decl(a.d.ts, 5, 23))
+>c : Symbol(c, Decl(a.d.ts, 5, 26))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type F6 = ({ a: string }) => typeof string; 
+>F6 : Symbol(F6, Decl(a.d.ts, 5, 42))
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 6, 12))
+>string : Symbol(string, Decl(a.d.ts, 6, 12))
+
+type F7 = ({ a: string, b: number }) => typeof number; 
+>F7 : Symbol(F7, Decl(a.d.ts, 6, 43))
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 7, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(a.d.ts, 7, 23))
+>number : Symbol(number, Decl(a.d.ts, 7, 23))
+
+type F8 = ({ a, b: number }) => typeof number; 
+>F8 : Symbol(F8, Decl(a.d.ts, 7, 54))
+>a : Symbol(a, Decl(a.d.ts, 8, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(a.d.ts, 8, 15))
+>number : Symbol(number, Decl(a.d.ts, 8, 15))
+
+type F9 = ([a, b, c]) => void; 
+>F9 : Symbol(F9, Decl(a.d.ts, 8, 46))
+>a : Symbol(a, Decl(a.d.ts, 9, 12))
+>b : Symbol(b, Decl(a.d.ts, 9, 14))
+>c : Symbol(c, Decl(a.d.ts, 9, 17))
+
+type G1 = (arg: number) => any; 
+>G1 : Symbol(G1, Decl(a.d.ts, 9, 30))
+>arg : Symbol(arg, Decl(a.d.ts, 11, 11))
+
+type G2 = ({ a: string }: O) => any; 
+>G2 : Symbol(G2, Decl(a.d.ts, 11, 31))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 12, 12))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type G3 = ({ a: string, b, c }: O) => any; 
+>G3 : Symbol(G3, Decl(a.d.ts, 12, 36))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 13, 12))
+>b : Symbol(b, Decl(a.d.ts, 13, 23))
+>c : Symbol(c, Decl(a.d.ts, 13, 26))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type G4 = ({ a: string }: O) => any; 
+>G4 : Symbol(G4, Decl(a.d.ts, 13, 42))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 14, 12))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type G5 = ({ a: string, b, c }: O) => any; 
+>G5 : Symbol(G5, Decl(a.d.ts, 14, 36))
+>a : Symbol(a, Decl(a.d.ts, 0, 10))
+>string : Symbol(string, Decl(a.d.ts, 15, 12))
+>b : Symbol(b, Decl(a.d.ts, 15, 23))
+>c : Symbol(c, Decl(a.d.ts, 15, 26))
+>O : Symbol(O, Decl(a.d.ts, 0, 0))
+
+type G6 = ({ a: string }) => typeof string; 
+>G6 : Symbol(G6, Decl(a.d.ts, 15, 42))
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 16, 12))
+>string : Symbol(string, Decl(a.d.ts, 16, 12))
+
+type G7 = ({ a: string, b: number }) => typeof number; 
+>G7 : Symbol(G7, Decl(a.d.ts, 16, 43))
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 17, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(a.d.ts, 17, 23))
+>number : Symbol(number, Decl(a.d.ts, 17, 23))
+
+type G8 = ({ a, b: number }) => typeof number; 
+>G8 : Symbol(G8, Decl(a.d.ts, 17, 54))
+>a : Symbol(a, Decl(a.d.ts, 18, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(a.d.ts, 18, 15))
+>number : Symbol(number, Decl(a.d.ts, 18, 15))
+
+type G9 = ([a, b, c]) => void; 
+>G9 : Symbol(G9, Decl(a.d.ts, 18, 46))
+>a : Symbol(a, Decl(a.d.ts, 19, 12))
+>b : Symbol(b, Decl(a.d.ts, 19, 14))
+>c : Symbol(c, Decl(a.d.ts, 19, 17))
+
+interface I {
+>I : Symbol(I, Decl(a.d.ts, 19, 30))
+
+  method1(arg: number): any; 
+>method1 : Symbol(I.method1, Decl(a.d.ts, 21, 13))
+>arg : Symbol(arg, Decl(a.d.ts, 22, 10))
+
+  method2({ a: string }): any; 
+>method2 : Symbol(I.method2, Decl(a.d.ts, 22, 28))
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 23, 11))
+
+  (arg: number): any; 
+>arg : Symbol(arg, Decl(a.d.ts, 25, 3))
+
+  ({ a: string }): any; 
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 26, 4))
+
+  new (arg: number): any; 
+>arg : Symbol(arg, Decl(a.d.ts, 28, 7))
+
+  new ({ a: string }): any; 
+>a : Symbol(a)
+>string : Symbol(string, Decl(a.d.ts, 29, 8))
+}
+
+

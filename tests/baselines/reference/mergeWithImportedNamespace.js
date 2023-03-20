@@ -11,7 +11,7 @@ export namespace N {
 
 //// [f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.N = void 0;
 var N;
 (function (N) {
@@ -19,4 +19,4 @@ var N;
 })(N = exports.N || (exports.N = {}));
 //// [f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

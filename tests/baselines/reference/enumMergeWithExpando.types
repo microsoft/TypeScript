@@ -5,8 +5,8 @@ declare namespace lf {
 
     export enum Order { ASC, DESC }
 >Order : Order
->ASC : Order
->DESC : Order
+>ASC : Order.ASC
+>DESC : Order.DESC
 }
 
 === tests/cases/conformance/salsa/enums.js ===

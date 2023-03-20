@@ -1,0 +1,68 @@
+=== tests/cases/compiler/index.tsx ===
+interface Elements {
+>Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
+
+  foo: { callback?: (value: number) => void };
+>foo : Symbol(Elements.foo, Decl(index.tsx, 0, 20))
+>callback : Symbol(callback, Decl(index.tsx, 1, 8))
+>value : Symbol(value, Decl(index.tsx, 1, 21))
+
+  bar: { callback?: (value: string) => void };
+>bar : Symbol(Elements.bar, Decl(index.tsx, 1, 46))
+>callback : Symbol(callback, Decl(index.tsx, 2, 8))
+>value : Symbol(value, Decl(index.tsx, 2, 21))
+}
+
+type Props<C extends keyof Elements> = { as?: C } & Elements[C];
+>Props : Symbol(Props, Decl(index.tsx, 3, 1))
+>C : Symbol(C, Decl(index.tsx, 5, 11))
+>Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
+>as : Symbol(as, Decl(index.tsx, 5, 40))
+>C : Symbol(C, Decl(index.tsx, 5, 11))
+>Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
+>C : Symbol(C, Decl(index.tsx, 5, 11))
+
+declare function Test<C extends keyof Elements>(props: Props<C>): null;
+>Test : Symbol(Test, Decl(index.tsx, 5, 64))
+>C : Symbol(C, Decl(index.tsx, 6, 22))
+>Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
+>props : Symbol(props, Decl(index.tsx, 6, 48))
+>Props : Symbol(Props, Decl(index.tsx, 3, 1))
+>C : Symbol(C, Decl(index.tsx, 6, 22))
+
+<Test
+>Test : Symbol(Test, Decl(index.tsx, 5, 64))
+
+  as="bar"
+>as : Symbol(as, Decl(index.tsx, 8, 5))
+
+  callback={(value) => {}}
+>callback : Symbol(callback, Decl(index.tsx, 9, 10))
+>value : Symbol(value, Decl(index.tsx, 10, 13))
+
+/>;
+
+Test({
+>Test : Symbol(Test, Decl(index.tsx, 5, 64))
+
+  as: "bar",
+>as : Symbol(as, Decl(index.tsx, 13, 6))
+
+  callback: (value) => {},
+>callback : Symbol(callback, Decl(index.tsx, 14, 12))
+>value : Symbol(value, Decl(index.tsx, 15, 13))
+
+});
+
+<Test<'bar'>
+>Test : Symbol(Test, Decl(index.tsx, 5, 64))
+
+  as="bar"
+>as : Symbol(as, Decl(index.tsx, 18, 12))
+
+  callback={(value) => {}}
+>callback : Symbol(callback, Decl(index.tsx, 19, 10))
+>value : Symbol(value, Decl(index.tsx, 20, 13))
+
+/>;
+

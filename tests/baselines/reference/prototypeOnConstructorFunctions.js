@@ -12,4 +12,4 @@ i.const.prototype.prop = "yo";
 
 //// [prototypeOnConstructorFunctions.js]
 var i;
-i["const"].prototype.prop = "yo";
+i.const.prototype.prop = "yo";

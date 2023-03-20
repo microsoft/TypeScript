@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(4,9): error TS2304: Cannot find name 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(4,9): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 
 
@@ -11,10 +11,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
     class C {
         a = x; // error
             ~
-!!! error TS2304: Cannot find name 'x'.
+!!! error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
         b: typeof x; // error
                   ~
-!!! error TS2304: Cannot find name 'x'.
+!!! error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
         constructor(x) { }
     }
     
@@ -24,7 +24,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
 !!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
         b: typeof x; // error
                   ~
-!!! error TS2304: Cannot find name 'x'.
+!!! error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
         constructor(public x) { }
     }
     

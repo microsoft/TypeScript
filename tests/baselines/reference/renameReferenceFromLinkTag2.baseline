@@ -1,0 +1,9 @@
+/*====== /a.ts ======*/
+
+enum E {
+    /** {@link [|RENAME|]} */
+    Foo
+}
+interface RENAME {
+    foo: E.Foo;
+}

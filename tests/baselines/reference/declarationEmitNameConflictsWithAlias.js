@@ -8,7 +8,7 @@ export module M {
 
 //// [declarationEmitNameConflictsWithAlias.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
 var M;
 (function (M) {

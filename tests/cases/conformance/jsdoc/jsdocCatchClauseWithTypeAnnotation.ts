@@ -50,8 +50,8 @@ function fn() {
     try { } catch ({ x }) { }                                        // should be OK
     try { } catch (/** @type {any} */ { x }) { x.foo; }              // should be OK
     try { } catch (/** @type {Any} */ { x }) { x.foo;}               // should be OK
-    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // should be OK
-    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // should be OK
+    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // error in the destructure
+    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // error in the destructure
     try { } catch (/** @type {Error} */ { x }) { }                   // error in the type
     try { } catch (/** @type {object} */ { x }) { }                  // error in the type
 }

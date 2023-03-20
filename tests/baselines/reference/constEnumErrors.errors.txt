@@ -1,9 +1,9 @@
 tests/cases/compiler/constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/constEnumErrors.ts(12,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-tests/cases/compiler/constEnumErrors.ts(14,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+tests/cases/compiler/constEnumErrors.ts(14,9): error TS2474: const enum member initializers must be constant expressions.
 tests/cases/compiler/constEnumErrors.ts(14,12): error TS2339: Property 'Z' does not exist on type 'typeof E1'.
-tests/cases/compiler/constEnumErrors.ts(15,10): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+tests/cases/compiler/constEnumErrors.ts(15,10): error TS2474: const enum member initializers must be constant expressions.
 tests/cases/compiler/constEnumErrors.ts(15,13): error TS2339: Property 'Z' does not exist on type 'typeof E1'.
 tests/cases/compiler/constEnumErrors.ts(22,13): error TS2476: A const enum member can only be accessed using a string literal.
 tests/cases/compiler/constEnumErrors.ts(24,13): error TS2476: A const enum member can only be accessed using a string literal.
@@ -38,12 +38,12 @@ tests/cases/compiler/constEnumErrors.ts(43,9): error TS2478: 'const' enum member
         // forward reference to the element of the same enum
         Y = E1.Z,
             ~~~~
-!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+!!! error TS2474: const enum member initializers must be constant expressions.
                ~
 !!! error TS2339: Property 'Z' does not exist on type 'typeof E1'.
         Y1 = E1["Z"]
              ~~~~~~~
-!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+!!! error TS2474: const enum member initializers must be constant expressions.
                 ~~~
 !!! error TS2339: Property 'Z' does not exist on type 'typeof E1'.
     }

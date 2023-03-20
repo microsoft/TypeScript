@@ -23,6 +23,6 @@ define(["require", "exports"], function (require, exports) {
 //// [exportAssignmentInternalModule_B.js]
 define(["require", "exports", "exportAssignmentInternalModule_A"], function (require, exports, modM) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var n = modM.x;
 });

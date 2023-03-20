@@ -8,11 +8,9 @@ class BiMap<K, V> {
     public get(key: K): V { return null; }
 >get : (key: K) => V
 >key : K
->null : null
 
     public inverse(): BiMap<V, K> { return null; }
 >inverse : () => BiMap<V, K>
->null : null
 }
 
 var b = new BiMap<string, number>();

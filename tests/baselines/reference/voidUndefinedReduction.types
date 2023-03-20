@@ -4,7 +4,6 @@
 function isDefined<T>(value: T | undefined | null | void): value is T {
 >isDefined : <T>(value: T | undefined | null | void) => value is T
 >value : void | T | null | undefined
->null : null
 
   return value !== undefined && value !== null;
 >value !== undefined && value !== null : boolean
@@ -12,8 +11,7 @@ function isDefined<T>(value: T | undefined | null | void): value is T {
 >value : void | T | null | undefined
 >undefined : undefined
 >value !== null : boolean
->value : T | null
->null : null
+>value : (T & {}) | null
 }
 
 declare const foo: string | undefined;

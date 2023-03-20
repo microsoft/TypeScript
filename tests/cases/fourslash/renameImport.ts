@@ -27,7 +27,7 @@ goTo.eachRange(range => {
     const name = target === "dir" ? "/dir" : target === "dir/index" ? "/dir/index.ts" : "/a.ts";
     const kind = target === "dir" ? "directory" : "module";
     verify.renameInfoSucceeded(/*displayName*/ name, /*fullDisplayName*/ name, /*kind*/ kind, /*kindModifiers*/ "", /*fileToRename*/ name, range);
-    verify.renameInfoFailed("You cannot rename this element.", /*allowRenameOfImportPath*/ false);
+    verify.renameInfoFailed("You cannot rename this element.", { allowRenameOfImportPath: false });
 });
 
 goTo.marker("global");

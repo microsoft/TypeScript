@@ -34,12 +34,12 @@ function f7(): void {
     return null;
 }
 
-function f8(): void {
+function f8(): any {
     // Fine since are typed any.
     return;
 }
 
-function f9(): void {
+function f9(): any {
     // Fine since we are typed any and return undefined
     return undefined;
 }
@@ -102,6 +102,14 @@ function f20(): any | number {
 
 function f21(): number | string {
     // Not okay; union does not contain void or any
+}
+
+function f22(): undefined {
+    // Okay; return type allows implicit return of undefined
+}
+
+function f23(): undefined | number {
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 
 class C {

@@ -347,7 +347,7 @@ export var tests: TestRunner = (function () {
 "use strict";
 //import FileManager = require('filemanager');
 //import App = require('app');
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.tests = exports.TestRunner = exports.TestCase = void 0;
 var TestFileDir = ".\\TempTestFiles";
 var TestCase = /** @class */ (function () {

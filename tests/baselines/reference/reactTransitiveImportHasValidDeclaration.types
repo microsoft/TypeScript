@@ -28,9 +28,10 @@ export interface StyledOtherComponentList {
 export interface StyledOtherComponent<A, B, C> {}
 
 === tests/cases/compiler/node_modules/create-emotion-styled/index.d.ts ===
+
 export * from "./types/react";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
+
+=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
 import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-styled";
 >StyledOtherComponent : any
 >StyledOtherComponentList : any

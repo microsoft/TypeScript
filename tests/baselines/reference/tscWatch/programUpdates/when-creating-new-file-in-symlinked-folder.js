@@ -64,31 +64,31 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/folder1/module1.ts (used version)
 /user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/client/folder1/module1.ts:
-  {"fileName":"/user/username/projects/myproject/client/folder1/module1.ts","pollingInterval":250}
-/user/username/projects/myproject/client/linktofolder2/module2.ts:
-  {"fileName":"/user/username/projects/myproject/client/linktofolder2/module2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/client/folder1/module1.ts: *new*
+  {}
+/user/username/projects/myproject/client/linktofolder2/module2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/client:
-  {"directoryName":"/user/username/projects/myproject/client","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/folder2:
-  {"directoryName":"/user/username/projects/myproject/folder2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/client: *new*
+  {}
+/user/username/projects/myproject/folder2: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/client/folder1/module1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Module1Class = void 0;
 var Module1Class = /** @class */ (function () {
     function Module1Class() {
@@ -100,7 +100,7 @@ exports.Module1Class = Module1Class;
 
 //// [/user/username/projects/myproject/folder2/module2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -145,32 +145,32 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/linktofolder2/module3.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/client/folder1/module1.ts:
-  {"fileName":"/user/username/projects/myproject/client/folder1/module1.ts","pollingInterval":250}
-/user/username/projects/myproject/client/linktofolder2/module2.ts:
-  {"fileName":"/user/username/projects/myproject/client/linktofolder2/module2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/client/linktofolder2/module3.ts:
-  {"fileName":"/user/username/projects/myproject/client/linktofolder2/module3.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/client/folder1/module1.ts:
+  {}
+/user/username/projects/myproject/client/linktofolder2/module2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/client/linktofolder2/module3.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/client:
-  {"directoryName":"/user/username/projects/myproject/client","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/folder2:
-  {"directoryName":"/user/username/projects/myproject/folder2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/folder2/module3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

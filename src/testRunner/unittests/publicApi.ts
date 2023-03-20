@@ -1,3 +1,10 @@
+import * as compiler from "../_namespaces/compiler";
+import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
+
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
         const builtFile = `built/local/${fileName}`;
@@ -21,6 +28,7 @@ describe("unittests:: Public APIs", () => {
                 ...ts.getDefaultCompilerOptions(),
                 strict: true,
                 exactOptionalPropertyTypes: true,
+                lib: ["lib.es2018.d.ts"],
             };
             const host = new fakes.CompilerHost(sys, options);
             const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);
@@ -129,6 +137,30 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const file = program.getSourceFile("/file.ts")!;
         const type = checker.getTypeAtLocation(file);
         assert.equal(type.flags, ts.TypeFlags.Any);
+    });
+
+    it("works on ExpressionWithTypeArguments", () => {
+        const content = `
+            function fn<T>(value: T) {
+                return { value };
+            }
+            const foo = fn<string>;
+        `;
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        assert.equal(checker.getTypeAtLocation(declaration.initializer!).flags, ts.TypeFlags.Object);
     });
 
     it("returns an errorType for VariableDeclaration with BindingPattern name", () => {

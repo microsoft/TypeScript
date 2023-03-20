@@ -148,12 +148,13 @@ class C implements String {
 >localeCompare : Symbol(C.localeCompare, Decl(stringLiteralTypeIsSubtypeOfString.ts, 47, 81))
 >that : Symbol(that, Decl(stringLiteralTypeIsSubtypeOfString.ts, 48, 18))
 
-    match(regexp: any): string[] { return null; }
+    match(regexp: any): RegExpMatchArray { return null; }
 >match : Symbol(C.match, Decl(stringLiteralTypeIsSubtypeOfString.ts, 48, 56))
 >regexp : Symbol(regexp, Decl(stringLiteralTypeIsSubtypeOfString.ts, 49, 10))
+>RegExpMatchArray : Symbol(RegExpMatchArray, Decl(lib.es5.d.ts, --, --))
 
     replace(searchValue: any, replaceValue: any): string { return null; }
->replace : Symbol(C.replace, Decl(stringLiteralTypeIsSubtypeOfString.ts, 49, 49))
+>replace : Symbol(C.replace, Decl(stringLiteralTypeIsSubtypeOfString.ts, 49, 57))
 >searchValue : Symbol(searchValue, Decl(stringLiteralTypeIsSubtypeOfString.ts, 50, 12))
 >replaceValue : Symbol(replaceValue, Decl(stringLiteralTypeIsSubtypeOfString.ts, 50, 29))
 
@@ -205,7 +206,7 @@ class C implements String {
     [index: number]: string;
 >index : Symbol(index, Decl(stringLiteralTypeIsSubtypeOfString.ts, 63, 5))
 }
- 
+
 // BUG 831846
 function f10(x: 'a');
 >f10 : Symbol(f10, Decl(stringLiteralTypeIsSubtypeOfString.ts, 64, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 67, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 68, 19))

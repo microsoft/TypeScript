@@ -1,9 +1,10 @@
 === tests/cases/conformance/salsa/plainJSGrammarErrors2.js ===
 
-No type information for this code.=== /a.js ===
+=== /a.js ===
+
 export default 1;
-No type information for this code.
-No type information for this code.=== /b.js ===
+
+=== /b.js ===
 /**
  * @deprecated
  */

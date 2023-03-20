@@ -653,7 +653,7 @@ function expectNotUndefined<T>(value: Undefinable<T>): T {
 >'value is undefined' : "value is undefined"
     }
     return value;
->value : T
+>value : T & ({} | null)
 }
 
 interface Bar {

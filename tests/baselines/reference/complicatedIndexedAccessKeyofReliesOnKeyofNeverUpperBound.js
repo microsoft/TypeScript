@@ -45,7 +45,7 @@ newTextChannel2.phoneNumber = '613-555-1234';
 
 //// [complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeNewChannel = void 0;
 function makeNewChannel(type) {
     var localChannelId = "blahblahblah";

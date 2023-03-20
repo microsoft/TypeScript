@@ -15,11 +15,11 @@ const enum D {
 >D : D
 
     d = 10,
->d : D
+>d : D.d
 >10 : 10
 
     e = 199 * Math.floor(Math.random() * 1000),
->e : D
+>e : D.e
 >199 * Math.floor(Math.random() * 1000) : number
 >199 : 199
 >Math.floor(Math.random() * 1000) : number
@@ -33,10 +33,10 @@ const enum D {
 >random : () => number
 >1000 : 1000
 
-    f = d - (100 * Math.floor(Math.random() % 8))
->f : D
+    f = d - (100 * Math.floor(Math.random() % 8)),
+>f : D.f
 >d - (100 * Math.floor(Math.random() % 8)) : number
->d : D
+>d : D.d
 >(100 * Math.floor(Math.random() % 8)) : number
 >100 * Math.floor(Math.random() % 8) : number
 >100 : 100
@@ -52,6 +52,6 @@ const enum D {
 >8 : 8
 
     g = CONST,
->g : D
+>g : D.g
 >CONST : number
 }

@@ -334,22 +334,22 @@ declare const g22: (z?: boolean | undefined) => string[];
 declare const g23: () => string[];
 declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 declare const c30: [(x: number) => string, (x: number) => number];
-declare type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
-declare type T02 = Parameters<(...args: [number, string, boolean]) => void>;
-declare type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
-declare type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
-declare type T05<T> = Parameters<(...args: T[]) => void>;
-declare type T06<T> = ConstructorParameters<new (...args: []) => void>;
-declare type T07<T extends any[]> = Parameters<(...args: T) => void>;
-declare type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
-declare type T09 = Parameters<Function>;
-declare type Record1 = {
+type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
+type T02 = Parameters<(...args: [number, string, boolean]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
+type T05<T> = Parameters<(...args: T[]) => void>;
+type T06<T> = ConstructorParameters<new (...args: []) => void>;
+type T07<T extends any[]> = Parameters<(...args: T) => void>;
+type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
+type T09 = Parameters<Function>;
+type Record1 = {
     move: [number, 'left' | 'right'];
     jump: [number, 'up' | 'down'];
     stop: string;
     done: [];
 };
-declare type EventType<T> = {
+type EventType<T> = {
     emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void;
 };
 declare var events: EventType<Record1>;

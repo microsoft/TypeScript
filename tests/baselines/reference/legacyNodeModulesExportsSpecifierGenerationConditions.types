@@ -22,5 +22,5 @@ export const x: () => Thing;
 >x : () => Thing
 
 === tests/cases/conformance/node/node_modules/inner/private.d.ts ===
+
 export interface Thing {} // not exported in export map, inaccessible under new module modes
-No type information for this code.

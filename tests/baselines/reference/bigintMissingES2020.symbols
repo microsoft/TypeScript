@@ -13,5 +13,5 @@ test<{t?: string}, bigint>();
 >test : Symbol(test, Decl(bigintMissingES2020.ts, 0, 0))
 >t : Symbol(t, Decl(bigintMissingES2020.ts, 3, 6))
 
-// should have global error when bigint is used but ES2020 lib is not present
+// no error when bigint is used even when ES2020 lib is not present
 

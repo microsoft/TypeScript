@@ -11,5 +11,5 @@ f({
 //// [unionTypeWithIndexAndMethodSignature.js]
 "use strict";
 f({
-    m: function (x) { }
+    m: function (x) { },
 });

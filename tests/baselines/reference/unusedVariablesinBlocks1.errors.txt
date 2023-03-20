@@ -11,6 +11,5 @@ tests/cases/compiler/unusedVariablesinBlocks1.ts(4,13): error TS6133: 'x' is dec
             let x = 11;
                 ~
 !!! error TS6133: 'x' is declared but its value is never read.
-            x++;
         }
     }

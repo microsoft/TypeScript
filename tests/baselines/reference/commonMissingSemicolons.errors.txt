@@ -39,7 +39,7 @@ tests/cases/compiler/commonMissingSemicolons.ts(26,18): error TS1003: Identifier
 tests/cases/compiler/commonMissingSemicolons.ts(27,1): error TS2304: Cannot find name 'functionMyFunction'.
 tests/cases/compiler/commonMissingSemicolons.ts(30,1): error TS1435: Unknown keyword or identifier. Did you mean 'interface'?
 tests/cases/compiler/commonMissingSemicolons.ts(30,1): error TS2304: Cannot find name 'interfaced'.
-tests/cases/compiler/commonMissingSemicolons.ts(30,12): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/commonMissingSemicolons.ts(30,12): error TS1435: Unknown keyword or identifier. Did you mean 'interface'?
 tests/cases/compiler/commonMissingSemicolons.ts(30,12): error TS2304: Cannot find name 'myInterface2'.
 tests/cases/compiler/commonMissingSemicolons.ts(32,1): error TS2693: 'interface' only refers to a type, but is being used as a value here.
 tests/cases/compiler/commonMissingSemicolons.ts(32,11): error TS1438: Interface must be given a name.
@@ -193,7 +193,7 @@ tests/cases/compiler/commonMissingSemicolons.ts(78,1): error TS1128: Declaration
     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'interfaced'.
                ~~~~~~~~~~~~
-!!! error TS1434: Unexpected keyword or identifier.
+!!! error TS1435: Unknown keyword or identifier. Did you mean 'interface'?
                ~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'myInterface2'.
     interface interface { }

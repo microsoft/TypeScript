@@ -8,7 +8,6 @@ class C<T> {
 >y : U
 
       return null;
->null : null
      }
 }
  

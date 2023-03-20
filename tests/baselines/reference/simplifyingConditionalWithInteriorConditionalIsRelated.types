@@ -15,7 +15,7 @@ function JustConditional<T>(): ConditionalType<T> {
 >JustConditional : <T>() => ConditionalType<T>
 
     return ConditionalOrUndefined<T>()!; // shouldn't error
->ConditionalOrUndefined<T>()! : NonNullable<ConditionalType<T>>
+>ConditionalOrUndefined<T>()! : ConditionalType<T>
 >ConditionalOrUndefined<T>() : ConditionalType<T> | undefined
 >ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
 }
@@ -54,6 +54,5 @@ function f<T>() {
 >x : T extends string ? string : string
 >null as any as A : T extends number ? T extends string ? string : string : never
 >null as any : any
->null : null
 }
 

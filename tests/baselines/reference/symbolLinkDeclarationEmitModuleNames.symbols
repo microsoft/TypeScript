@@ -53,7 +53,7 @@ export class BindingKey<T> {
 }
 
 === tests/cases/compiler/monorepo/context/index.ts ===
+
 export * from "./src/value-promise";
-No type information for this code.export * from "./src/bindingkey";
-No type information for this code.
-No type information for this code.
+export * from "./src/bindingkey";
+

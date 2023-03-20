@@ -7,7 +7,6 @@ var a = {
 >x : <T>(y: T) => T
 >function <T>(y: T): T { return null; } : <T>(y: T) => T
 >y : T
->null : null
 }
 var a2 = {
 >a2 : { x: (y: any) => any; }
@@ -17,7 +16,6 @@ var a2 = {
 >x : (y: any) => any
 >function (y: any): any { return null; } : (y: any) => any
 >y : any
->null : null
 }
 export interface I {
    x<T>(y: T): T;

@@ -21,9 +21,10 @@ import * as a from "./a";
 >a : Symbol(a, Decl(c.ts, 0, 6))
 
 === tests/cases/conformance/externalModules/typeOnly/d.ts ===
+
 export = {};
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+
+=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
 import D = require("./d");
 >D : Symbol(D, Decl(e.ts, 0, 0))
 

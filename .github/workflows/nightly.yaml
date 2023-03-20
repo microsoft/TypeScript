@@ -8,28 +8,31 @@ on:
   repository_dispatch:
     types: publish-nightly
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use node version 14
-      uses: actions/setup-node@v3
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
       with:
-        node-version: 14
+        # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
         registry-url: https://registry.npmjs.org/
+    - run: |
+        corepack enable npm
+        npm --version
     - name: Setup and publish nightly
       run: |
         npm whoami
         npm ci
-        gulp configure-nightly
-        gulp LKG
-        gulp runtests-parallel
-        gulp clean
+        npx hereby configure-nightly
+        npx hereby LKG
+        npx hereby runtests-parallel
+        npx hereby clean
         npm publish --tag next
       env:
         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-        CI: true
-    

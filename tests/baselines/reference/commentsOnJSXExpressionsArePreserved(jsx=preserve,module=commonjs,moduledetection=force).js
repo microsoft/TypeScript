@@ -22,7 +22,7 @@ class Component {
 
 //// [commentsOnJSXExpressionsArePreserved.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Component = /** @class */ (function () {
     function Component() {
     }

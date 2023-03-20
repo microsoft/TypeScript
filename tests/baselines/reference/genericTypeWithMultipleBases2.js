@@ -21,7 +21,7 @@ x.m2();
 //// [genericTypeWithMultipleBases2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var x;
     x.p1;
     x.m1();

@@ -40,12 +40,6 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/typescript.ts (used version)
 
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/username/project/typescript.js]
@@ -59,12 +53,6 @@ Input::
 
 Output::
 
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -77,12 +65,6 @@ var zz30 = 100;
 
 Output::
 
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -92,9 +74,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -112,12 +94,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/username/project/typescript.ts (computed .d.ts)
 
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/username/project/typescript.js]
@@ -130,12 +106,6 @@ Change:: Polling queues polled and everything is in the high polling queue
 Input::
 
 Output::
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

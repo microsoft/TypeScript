@@ -137,23 +137,21 @@ function test(level: number | string):number {
 if (xUnknown == null) {
 >xUnknown == null : boolean
 >xUnknown : unknown
->null : null
 
     xUnknown;
 >xUnknown : null | undefined
 
 } else {
     xUnknown
->xUnknown : unknown
+>xUnknown : {}
 }
 
 if (xUnknown != null) {
 >xUnknown != null : boolean
 >xUnknown : unknown
->null : null
 
     xUnknown;
->xUnknown : unknown
+>xUnknown : {}
 
 } else {
     xUnknown;

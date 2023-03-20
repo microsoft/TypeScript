@@ -10,7 +10,7 @@ var y = new b();
 
 //// [sourceMapValidationImport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.m = void 0;
 var m;
 (function (m) {

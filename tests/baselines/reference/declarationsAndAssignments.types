@@ -81,7 +81,7 @@ function f1() {
 function f2() {
 >f2 : () => void
 
-    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+    var { } = { x: 5, y: "hello" };       // Ok, empty binding pattern means nothing
 >{ x: 5, y: "hello" } : { x: number; y: string; }
 >x : number
 >5 : 5

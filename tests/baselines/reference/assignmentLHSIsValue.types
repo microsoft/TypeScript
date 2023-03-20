@@ -67,7 +67,6 @@ foo = value;
 // literals
 null = value;
 >null = value : any
->null : null
 >value : any
 
 true = value;
@@ -190,7 +189,6 @@ foo() = value;
 (null) = value;
 >(null) = value : any
 >(null) : null
->null : null
 >value : any
 
 (true) = value;

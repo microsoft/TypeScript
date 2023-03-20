@@ -460,19 +460,19 @@ assign(a, { o: 2, c: { 0: { a: 2, c: '213123' } } });
 
 
 //// [conditionalTypes1.d.ts]
-declare type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;
-declare type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;
-declare type T02 = Exclude<string | number | (() => void), Function>;
-declare type T03 = Extract<string | number | (() => void), Function>;
-declare type T04 = NonNullable<string | number | undefined>;
-declare type T05 = NonNullable<(() => string) | string[] | null | undefined>;
+type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;
+type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;
+type T02 = Exclude<string | number | (() => void), Function>;
+type T03 = Extract<string | number | (() => void), Function>;
+type T04 = NonNullable<string | number | undefined>;
+type T05 = NonNullable<(() => string) | string[] | null | undefined>;
 declare function f1<T>(x: T, y: NonNullable<T>): void;
 declare function f2<T extends string | undefined>(x: T, y: NonNullable<T>): void;
 declare function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>): void;
 declare function f4<T extends {
     x: string | undefined;
 }>(x: T["x"], y: NonNullable<T["x"]>): void;
-declare type Options = {
+type Options = {
     k: "a";
     a: number;
 } | {
@@ -482,26 +482,26 @@ declare type Options = {
     k: "c";
     c: boolean;
 };
-declare type T10 = Exclude<Options, {
+type T10 = Exclude<Options, {
     k: "a" | "b";
 }>;
-declare type T11 = Extract<Options, {
+type T11 = Extract<Options, {
     k: "a" | "b";
 }>;
-declare type T12 = Exclude<Options, {
+type T12 = Exclude<Options, {
     k: "a";
 } | {
     k: "b";
 }>;
-declare type T13 = Extract<Options, {
+type T13 = Extract<Options, {
     k: "a";
 } | {
     k: "b";
 }>;
-declare type T14 = Exclude<Options, {
+type T14 = Exclude<Options, {
     q: "a";
 }>;
-declare type T15 = Extract<Options, {
+type T15 = Extract<Options, {
     q: "a";
 }>;
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, {
@@ -511,27 +511,27 @@ declare let x0: {
     k: "a";
     a: number;
 };
-declare type OptionsOfKind<K extends Options["k"]> = Extract<Options, {
+type OptionsOfKind<K extends Options["k"]> = Extract<Options, {
     k: K;
 }>;
-declare type T16 = OptionsOfKind<"a" | "b">;
-declare type Select<T, K extends keyof T, V extends T[K]> = Extract<T, {
+type T16 = OptionsOfKind<"a" | "b">;
+type Select<T, K extends keyof T, V extends T[K]> = Extract<T, {
     [P in K]: V;
 }>;
-declare type T17 = Select<Options, "k", "a" | "b">;
-declare type TypeName<T> = T extends string ? "string" : T extends number ? "number" : T extends boolean ? "boolean" : T extends undefined ? "undefined" : T extends Function ? "function" : "object";
-declare type T20 = TypeName<string | (() => void)>;
-declare type T21 = TypeName<any>;
-declare type T22 = TypeName<never>;
-declare type T23 = TypeName<{}>;
-declare type KnockoutObservable<T> = {
+type T17 = Select<Options, "k", "a" | "b">;
+type TypeName<T> = T extends string ? "string" : T extends number ? "number" : T extends boolean ? "boolean" : T extends undefined ? "undefined" : T extends Function ? "function" : "object";
+type T20 = TypeName<string | (() => void)>;
+type T21 = TypeName<any>;
+type T22 = TypeName<never>;
+type T23 = TypeName<{}>;
+type KnockoutObservable<T> = {
     object: T;
 };
-declare type KnockoutObservableArray<T> = {
+type KnockoutObservableArray<T> = {
     array: T;
 };
-declare type KnockedOut<T> = T extends any[] ? KnockoutObservableArray<T[number]> : KnockoutObservable<T>;
-declare type KnockedOutObj<T> = {
+type KnockedOut<T> = T extends any[] ? KnockoutObservableArray<T[number]> : KnockoutObservable<T>;
+type KnockedOutObj<T> = {
     [P in keyof T]: KnockedOut<T[P]>;
 };
 interface Item {
@@ -539,139 +539,139 @@ interface Item {
     name: string;
     subitems: string[];
 }
-declare type KOItem = KnockedOutObj<Item>;
+type KOItem = KnockedOutObj<Item>;
 interface Part {
     id: number;
     name: string;
     subparts: Part[];
     updatePart(newName: string): void;
 }
-declare type FunctionPropertyNames<T> = {
+type FunctionPropertyNames<T> = {
     [K in keyof T]: T[K] extends Function ? K : never;
 }[keyof T];
-declare type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
-declare type NonFunctionPropertyNames<T> = {
+type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
+type NonFunctionPropertyNames<T> = {
     [K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
-declare type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
-declare type T30 = FunctionProperties<Part>;
-declare type T31 = NonFunctionProperties<Part>;
+type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+type T30 = FunctionProperties<Part>;
+type T31 = NonFunctionProperties<Part>;
 declare function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>): void;
 declare function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>): void;
-declare type DeepReadonly<T> = T extends any[] ? DeepReadonlyArray<T[number]> : T extends object ? DeepReadonlyObject<T> : T;
+type DeepReadonly<T> = T extends any[] ? DeepReadonlyArray<T[number]> : T extends object ? DeepReadonlyObject<T> : T;
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {
 }
-declare type DeepReadonlyObject<T> = {
+type DeepReadonlyObject<T> = {
     readonly [P in NonFunctionPropertyNames<T>]: DeepReadonly<T[P]>;
 };
 declare function f10(part: DeepReadonly<Part>): void;
-declare type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T extends string ? "" : false;
+type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T extends string ? "" : false;
 declare function zeroOf<T extends number | string | boolean>(value: T): ZeroOf<T>;
 declare function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T): void;
 declare function f21<T extends number | string>(x: T, y: ZeroOf<T>): void;
-declare type T35<T extends {
+type T35<T extends {
     a: string;
     b: number;
 }> = T[];
-declare type T36<T> = T extends {
+type T36<T> = T extends {
     a: string;
 } ? T extends {
     b: number;
 } ? T35<T> : never : never;
-declare type T37<T> = T extends {
+type T37<T> = T extends {
     b: number;
 } ? T extends {
     a: string;
 } ? T35<T> : never : never;
-declare type T38<T> = [T] extends [{
+type T38<T> = [T] extends [{
     a: string;
 }] ? [T] extends [{
     b: number;
 }] ? T35<T> : never : never;
-declare type Extends<T, U> = T extends U ? true : false;
-declare type If<C extends boolean, T, F> = C extends true ? T : F;
-declare type Not<C extends boolean> = If<C, false, true>;
-declare type And<A extends boolean, B extends boolean> = If<A, B, false>;
-declare type Or<A extends boolean, B extends boolean> = If<A, true, B>;
-declare type IsString<T> = Extends<T, string>;
-declare type Q1 = IsString<number>;
-declare type Q2 = IsString<"abc">;
-declare type Q3 = IsString<any>;
-declare type Q4 = IsString<never>;
-declare type N1 = Not<false>;
-declare type N2 = Not<true>;
-declare type N3 = Not<boolean>;
-declare type A1 = And<false, false>;
-declare type A2 = And<false, true>;
-declare type A3 = And<true, false>;
-declare type A4 = And<true, true>;
-declare type A5 = And<boolean, false>;
-declare type A6 = And<false, boolean>;
-declare type A7 = And<boolean, true>;
-declare type A8 = And<true, boolean>;
-declare type A9 = And<boolean, boolean>;
-declare type O1 = Or<false, false>;
-declare type O2 = Or<false, true>;
-declare type O3 = Or<true, false>;
-declare type O4 = Or<true, true>;
-declare type O5 = Or<boolean, false>;
-declare type O6 = Or<false, boolean>;
-declare type O7 = Or<boolean, true>;
-declare type O8 = Or<true, boolean>;
-declare type O9 = Or<boolean, boolean>;
-declare type T40 = never extends never ? true : false;
-declare type T41 = number extends never ? true : false;
-declare type T42 = never extends number ? true : false;
-declare type IsNever<T> = [T] extends [never] ? true : false;
-declare type T50 = IsNever<never>;
-declare type T51 = IsNever<number>;
-declare type T52 = IsNever<any>;
+type Extends<T, U> = T extends U ? true : false;
+type If<C extends boolean, T, F> = C extends true ? T : F;
+type Not<C extends boolean> = If<C, false, true>;
+type And<A extends boolean, B extends boolean> = If<A, B, false>;
+type Or<A extends boolean, B extends boolean> = If<A, true, B>;
+type IsString<T> = Extends<T, string>;
+type Q1 = IsString<number>;
+type Q2 = IsString<"abc">;
+type Q3 = IsString<any>;
+type Q4 = IsString<never>;
+type N1 = Not<false>;
+type N2 = Not<true>;
+type N3 = Not<boolean>;
+type A1 = And<false, false>;
+type A2 = And<false, true>;
+type A3 = And<true, false>;
+type A4 = And<true, true>;
+type A5 = And<boolean, false>;
+type A6 = And<false, boolean>;
+type A7 = And<boolean, true>;
+type A8 = And<true, boolean>;
+type A9 = And<boolean, boolean>;
+type O1 = Or<false, false>;
+type O2 = Or<false, true>;
+type O3 = Or<true, false>;
+type O4 = Or<true, true>;
+type O5 = Or<boolean, false>;
+type O6 = Or<false, boolean>;
+type O7 = Or<boolean, true>;
+type O8 = Or<true, boolean>;
+type O9 = Or<boolean, boolean>;
+type T40 = never extends never ? true : false;
+type T41 = number extends never ? true : false;
+type T42 = never extends number ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false;
+type T50 = IsNever<never>;
+type T51 = IsNever<number>;
+type T52 = IsNever<any>;
 declare function f22<T>(x: T extends (infer U)[] ? U[] : never): void;
 declare function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never): void;
-declare type Eq<T, U> = T extends U ? U extends T ? true : false : false;
-declare type T60 = Eq<true, true>;
-declare type T61 = Eq<true, false>;
-declare type T62 = Eq<false, true>;
-declare type T63 = Eq<false, false>;
-declare type Eq1<T, U> = Eq<T, U> extends false ? false : true;
-declare type T70 = Eq1<true, true>;
-declare type T71 = Eq1<true, false>;
-declare type T72 = Eq1<false, true>;
-declare type T73 = Eq1<false, false>;
-declare type Eq2<T, U> = Eq<T, U> extends true ? true : false;
-declare type T80 = Eq2<true, true>;
-declare type T81 = Eq2<true, false>;
-declare type T82 = Eq2<false, true>;
-declare type T83 = Eq2<false, false>;
-declare type Foo<T> = T extends string ? boolean : number;
-declare type Bar<T> = T extends string ? boolean : number;
+type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+type T60 = Eq<true, true>;
+type T61 = Eq<true, false>;
+type T62 = Eq<false, true>;
+type T63 = Eq<false, false>;
+type Eq1<T, U> = Eq<T, U> extends false ? false : true;
+type T70 = Eq1<true, true>;
+type T71 = Eq1<true, false>;
+type T72 = Eq1<false, true>;
+type T73 = Eq1<false, false>;
+type Eq2<T, U> = Eq<T, U> extends true ? true : false;
+type T80 = Eq2<true, true>;
+type T81 = Eq2<true, false>;
+type T82 = Eq2<false, true>;
+type T83 = Eq2<false, false>;
+type Foo<T> = T extends string ? boolean : number;
+type Bar<T> = T extends string ? boolean : number;
 declare const convert: <U>(value: Foo<U>) => Bar<U>;
-declare type Baz<T> = Foo<T>;
+type Baz<T> = Foo<T>;
 declare const convert2: <T>(value: Foo<T>) => Foo<T>;
 declare function f31<T>(): void;
 declare function f32<T, U>(): void;
 declare function f33<T, U>(): void;
-declare type T90<T> = T extends 0 ? 0 : () => 0;
-declare type T91<T> = T extends 0 ? 0 : () => 0;
+type T90<T> = T extends 0 ? 0 : () => 0;
+type T91<T> = T extends 0 ? 0 : () => 0;
 declare const f40: <U>(a: T90<U>) => T91<U>;
 declare const f41: <U>(a: T91<U>) => T90<U>;
-declare type T92<T> = T extends () => 0 ? () => 1 : () => 2;
-declare type T93<T> = T extends () => 0 ? () => 1 : () => 2;
+type T92<T> = T extends () => 0 ? () => 1 : () => 2;
+type T93<T> = T extends () => 0 ? () => 1 : () => 2;
 declare const f42: <U>(a: T92<U>) => T93<U>;
 declare const f43: <U>(a: T93<U>) => T92<U>;
-declare type T94<T> = T extends string ? true : 42;
-declare type T95<T> = T extends string ? boolean : number;
+type T94<T> = T extends string ? true : 42;
+type T95<T> = T extends string ? boolean : number;
 declare const f44: <U>(value: T94<U>) => T95<U>;
 declare const f45: <U>(value: T95<U>) => T94<U>;
 declare function f50(): void;
-declare type OldDiff<T extends keyof any, U extends keyof any> = ({
+type OldDiff<T extends keyof any, U extends keyof any> = ({
     [P in T]: P;
 } & {
     [P in U]: never;
 } & {
     [x: string]: never;
 })[T];
-declare type NewDiff<T, U> = T extends U ? never : T;
+type NewDiff<T, U> = T extends U ? never : T;
 interface A {
     a: 'a';
 }
@@ -683,16 +683,16 @@ interface B2 extends A {
     b: 'b';
     c: NewDiff<keyof this, keyof A>;
 }
-declare type c1 = B1['c'];
-declare type c2 = B2['c'];
-declare type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
-declare type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
-declare type Test1 = NonFooKeys1<{
+type c1 = B1['c'];
+type c2 = B2['c'];
+type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+type Test1 = NonFooKeys1<{
     foo: 1;
     bar: 2;
     baz: 3;
 }>;
-declare type Test2 = NonFooKeys2<{
+type Test2 = NonFooKeys2<{
     foo: 1;
     bar: 2;
     baz: 3;
@@ -703,13 +703,13 @@ interface Foo2 {
 interface Bar2 {
     bar: string;
 }
-declare type FooBar = Foo2 | Bar2;
+type FooBar = Foo2 | Bar2;
 declare interface ExtractFooBar<FB extends FooBar> {
 }
-declare type Extracted<Struct> = {
+type Extracted<Struct> = {
     [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
 };
-declare type RecursivePartial<T> = {
+type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends Array<any> ? {
         [index: number]: RecursivePartial<T[P][0]>;
     } : T[P] extends object ? RecursivePartial<T[P]> : T[P];
@@ -723,5 +723,5 @@ declare var a: {
         c: string;
     }[];
 };
-declare type Weird1 = (<U extends boolean>(a: U) => never) extends (<U extends true>(a: U) => never) ? never : never;
-declare type Weird2 = (<U extends boolean>(a: U) => U) extends (<U extends true>(a: U) => infer T) ? T : never;
+type Weird1 = (<U extends boolean>(a: U) => never) extends (<U extends true>(a: U) => never) ? never : never;
+type Weird2 = (<U extends boolean>(a: U) => U) extends (<U extends true>(a: U) => infer T) ? T : never;
