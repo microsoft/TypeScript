@@ -1111,7 +1111,6 @@ export interface JsxLinkedEditResponse extends Response {
     readonly info: JsxLinkedEditInfo;
 }
 
-
 /**
  * Get document highlights request; value of command field is
  * "documentHighlights". Return response giving spans that are relevant

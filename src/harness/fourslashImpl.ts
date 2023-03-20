@@ -3444,7 +3444,7 @@ export class TestState {
         }
     }
 
-    public verifyJsxLinkedEdit(map: {[markerName: string]: ts.JsxLinkedEditInfo | undefined}): void {
+    public verifyJsxLinkedEdit(map: { [markerName: string]: ts.JsxLinkedEditInfo | undefined } ): void {
         for (const markerName in map) {
             this.goToMarker(markerName);
             const actual = this.languageService.getJsxLinkedEditAtPosition(this.activeFile.fileName, this.currentCaretPosition);

@@ -193,7 +193,6 @@ export class VerifyNegatable {
         this.state.verifyJsxLinkedEdit(map);
     }
 
-
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }
