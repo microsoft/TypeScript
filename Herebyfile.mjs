@@ -11,7 +11,6 @@ import { task } from "hereby";
 import path from "path";
 import util from "util";
 
-import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
@@ -94,17 +93,6 @@ const cleanDiagnostics = task({
  * The file is always generated in 'enu/diagnosticMessages.generated.json.lcg'
  */
 const generatedLCGFile = "built/local/enu/diagnosticMessages.generated.json.lcg";
-
-/**
- * The localization target produces the two following transformations:
- *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
- *       convert localized resources into a .json file the compiler can understand
- *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
- *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
- */
-const localizationTargets = localizationDirectories
-    .map(f => `built/local/${f}/diagnosticMessages.generated.json`)
-    .concat(generatedLCGFile);
 
 const localize = task({
     name: "localize",

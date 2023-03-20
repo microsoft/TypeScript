@@ -3,8 +3,6 @@ import glob from "glob";
 import path from "path";
 import url from "url";
 
-import { localizationDirectories } from "./build/localization.mjs";
-
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
@@ -27,6 +25,8 @@ async function produceLKG() {
 async function copyLibFiles() {
     await copyFilesWithGlob("lib?(.*).d.ts");
 }
+
+const localizationDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"].map(f => f.toLowerCase());
 
 async function copyLocalizedDiagnostics() {
     for (const d of localizationDirectories) {
