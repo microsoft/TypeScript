@@ -5242,7 +5242,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {1}": {
+      "Found 1 error in {0}": {
         "category": "Message",
         "code": 6259
     },
@@ -5269,6 +5269,10 @@
     "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
         "category": "Message",
         "code": 6265
+    },
+    "Option '{0}' can only be specified on command line.": {
+        "category": "Error",
+        "code": 6266
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
