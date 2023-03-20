@@ -17070,32 +17070,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return type;
 
-        function addSpans(texts: readonly string[] | string, types: readonly Type[]): boolean {
-            const isTextsArray = isArray(texts);
+        function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
             for (let i = 0; i < types.length; i++) {
                 const t = types[i];
-                const addText = isTextsArray ? texts[i + 1] : texts;
                 if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
                     text += getTemplateStringForType(t) || "";
-                    text += addText;
-                    if (!isTextsArray) return true;
+                    text += texts[i + 1];
                 }
                 else if (t.flags & TypeFlags.TemplateLiteral) {
                     text += (t as TemplateLiteralType).texts[0];
                     if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
-                    text += addText;
-                    if (!isTextsArray) return true;
+                    text += texts[i + 1];
                 }
                 else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                     newTypes.push(t);
                     newTexts.push(text);
-                    text = addText;
+                    text = texts[i + 1];
                 }
-                else if (t.flags & TypeFlags.Intersection) {
-                    const added = addSpans(texts[i + 1], (t as IntersectionType).types);
-                    if (!added) return false;
-                }
-                else if (isTextsArray) {
+                else {
                     return false;
                 }
             }
@@ -17113,6 +17105,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createTemplateLiteralType(texts: readonly string[], types: readonly Type[]) {
         const type = createType(TypeFlags.TemplateLiteral) as TemplateLiteralType;
+        type.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
         type.texts = texts;
         type.types = types;
         return type;
@@ -17120,6 +17113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getStringMappingType(symbol: Symbol, type: Type): Type {
         return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
+            type.flags & TypeFlags.Intersection ? getIntersectionType(map((type as IntersectionType).types, t => getStringMappingType(symbol, t))) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
@@ -17423,6 +17417,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
+        if (type.flags & TypeFlags.Intersection) {
+            return some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) || isPatternLiteralPlaceholderType(t));
+        }
         return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
     }
 
@@ -17444,12 +17441,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGenericObjectFlags(type: Type): ObjectFlags {
-        if (type.flags & TypeFlags.UnionOrIntersection) {
-            if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
-                (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
-                    reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
+        if (type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral)) {
+            if (!((type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                    reduceLeft((type as UnionOrIntersectionType | TemplateLiteralType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
             }
-            return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
+            return (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericType;
         }
         if (type.flags & TypeFlags.Substitution) {
             if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
@@ -17459,7 +17456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -23896,7 +23893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || some(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)) ||
-            type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
+            type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType | TemplateLiteralType).types, couldContainTypeVariables));
         if (type.flags & TypeFlags.ObjectFlagsType) {
             (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
         }
