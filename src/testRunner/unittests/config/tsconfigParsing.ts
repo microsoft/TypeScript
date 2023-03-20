@@ -342,6 +342,17 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         allFileList: ["/apath/a.ts"],
     }]);
 
+    baselinedParsed("generates errors when commandline option is in tsconfig", () => [{
+        jsonText: JSON.stringify({
+            compilerOptions: {
+                help: true,
+            }
+        }),
+        configFileName: "/apath/tsconfig.json",
+        basePath: "tests/cases/unittests",
+        allFileList: ["/apath/a.ts"],
+    }]);
+
     function baselineWildcards(subScenario: string, scenario: () => { configFileName: string, jsonText: string, basePath: string }[]) {
         baselineParseConfig({
             scenario: "tsconfigParsing",
