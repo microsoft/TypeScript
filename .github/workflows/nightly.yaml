@@ -8,6 +8,9 @@ on:
   repository_dispatch:
     types: publish-nightly
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest

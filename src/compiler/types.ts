@@ -6028,7 +6028,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    firstSpreadIndex?: number;          // Index of first spread element in array literal (-1 for none)
+    spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
 }
@@ -6107,7 +6107,7 @@ export const enum TypeFlags {
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
-    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
+    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection | TemplateLiteral,
     /** @internal */
     Simplifiable = IndexedAccess | Conditional,
     /** @internal */
@@ -6130,7 +6130,7 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
-    NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
+    NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -6261,7 +6261,7 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-    // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
+    // Flags that require TypeFlags.UnionOrIntersection, TypeFlags.Substitution, or TypeFlags.TemplateLiteral
     /** @internal */
     IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
     /** @internal */
@@ -6288,7 +6288,7 @@ export const enum ObjectFlags {
 }
 
 /** @internal */
-export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
+export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
 
 // Object types (TypeFlags.ObjectType)
 export interface ObjectType extends Type {
@@ -6636,6 +6636,8 @@ export interface ConditionalType extends InstantiableType {
 }
 
 export interface TemplateLiteralType extends InstantiableType {
+    /** @internal */
+    objectFlags: ObjectFlags;
     texts: readonly string[];  // Always one element longer than types
     types: readonly Type[];  // Always at least one element
 }

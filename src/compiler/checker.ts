@@ -16582,7 +16582,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const u of unionTypes) {
             if (!containsType(u.types, type)) {
                 const primitive = type.flags & TypeFlags.StringLiteral ? stringType :
-                    type.flags & TypeFlags.NumberLiteral ? numberType :
+                    type.flags & (TypeFlags.Enum | TypeFlags.NumberLiteral) ? numberType :
                     type.flags & TypeFlags.BigIntLiteral ? bigintType :
                     type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
                     undefined;
@@ -16616,10 +16616,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
-    }
-
-    function eachIsUnionContaining(types: Type[], flag: TypeFlags) {
-        return every(types, t => !!(t.flags & TypeFlags.Union) && some((t as UnionType).types, tt => !!(tt.flags & flag)));
     }
 
     function removeFromEach(types: Type[], flag: TypeFlags) {
@@ -16753,12 +16749,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // reduced we'll never reduce again, so this occurs at most once.
                     result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
-                else if (eachIsUnionContaining(typeSet, TypeFlags.Undefined)) {
+                else if (every(typeSet, t => !!(t.flags & TypeFlags.Union && (t as UnionType).types[0].flags & TypeFlags.Undefined))) {
                     const containedUndefinedType = some(typeSet, containsMissingType) ? missingType : undefinedType;
                     removeFromEach(typeSet, TypeFlags.Undefined);
                     result = getUnionType([getIntersectionType(typeSet), containedUndefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
-                else if (eachIsUnionContaining(typeSet, TypeFlags.Null)) {
+                else if (every(typeSet, t => !!(t.flags & TypeFlags.Union && ((t as UnionType).types[0].flags & TypeFlags.Null || (t as UnionType).types[1].flags & TypeFlags.Null)))) {
                     removeFromEach(typeSet, TypeFlags.Null);
                     result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
@@ -17074,32 +17070,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return type;
 
-        function addSpans(texts: readonly string[] | string, types: readonly Type[]): boolean {
-            const isTextsArray = isArray(texts);
+        function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
             for (let i = 0; i < types.length; i++) {
                 const t = types[i];
-                const addText = isTextsArray ? texts[i + 1] : texts;
                 if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
                     text += getTemplateStringForType(t) || "";
-                    text += addText;
-                    if (!isTextsArray) return true;
+                    text += texts[i + 1];
                 }
                 else if (t.flags & TypeFlags.TemplateLiteral) {
                     text += (t as TemplateLiteralType).texts[0];
                     if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
-                    text += addText;
-                    if (!isTextsArray) return true;
+                    text += texts[i + 1];
                 }
                 else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                     newTypes.push(t);
                     newTexts.push(text);
-                    text = addText;
+                    text = texts[i + 1];
                 }
-                else if (t.flags & TypeFlags.Intersection) {
-                    const added = addSpans(texts[i + 1], (t as IntersectionType).types);
-                    if (!added) return false;
-                }
-                else if (isTextsArray) {
+                else {
                     return false;
                 }
             }
@@ -17117,6 +17105,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createTemplateLiteralType(texts: readonly string[], types: readonly Type[]) {
         const type = createType(TypeFlags.TemplateLiteral) as TemplateLiteralType;
+        type.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
         type.texts = texts;
         type.types = types;
         return type;
@@ -17124,6 +17113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getStringMappingType(symbol: Symbol, type: Type): Type {
         return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
+            type.flags & TypeFlags.Intersection ? getIntersectionType(map((type as IntersectionType).types, t => getStringMappingType(symbol, t))) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
@@ -17427,6 +17417,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
+        if (type.flags & TypeFlags.Intersection) {
+            return some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) || isPatternLiteralPlaceholderType(t));
+        }
         return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
     }
 
@@ -17448,12 +17441,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGenericObjectFlags(type: Type): ObjectFlags {
-        if (type.flags & TypeFlags.UnionOrIntersection) {
-            if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
-                (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
-                    reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
+        if (type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral)) {
+            if (!((type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                    reduceLeft((type as UnionOrIntersectionType | TemplateLiteralType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
             }
-            return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
+            return (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericType;
         }
         if (type.flags & TypeFlags.Substitution) {
             if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
@@ -17463,7 +17456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -18709,6 +18702,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
+                // If none of the type arguments for the outer type parameters contain type variables, it follows
+                // that the instantiated type doesn't reference type variables.
+                if (result.flags & TypeFlags.ObjectFlagsType && !((result as ObjectFlagsType).objectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                    (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed |
+                        (some(typeArguments, couldContainTypeVariables) ? ObjectFlags.CouldContainTypeVariables : 0);
+                }
                 target.instantiations.set(id, result);
             }
             return result;
@@ -18879,7 +18878,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): AnonymousType {
-        const result = createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
+        const result = createObjectType(type.objectFlags & ~(ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.CouldContainTypeVariables) | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
         if (type.objectFlags & ObjectFlags.Mapped) {
             (result as MappedType).declaration = (type as MappedType).declaration;
             // C.f. instantiateSignature
@@ -19592,8 +19591,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result;
             }
             const moreThanOneRealChildren = length(validChildren) > 1;
-            const arrayLikeTargetParts = filterType(childrenTargetType, isAssignableToAvailableAnyIterable);
-            const nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isAssignableToAvailableAnyIterable(t));
+            let arrayLikeTargetParts: Type;
+            let nonArrayLikeTargetParts: Type;
+            const iterableType = getGlobalIterableType(/*reportErrors*/ false);
+            if (iterableType !== emptyGenericType) {
+                const anyIterable = createIterableType(anyType);
+                arrayLikeTargetParts = filterType(childrenTargetType, t => isTypeAssignableTo(t, anyIterable));
+                nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isTypeAssignableTo(t, anyIterable));
+            }
+            else {
+                arrayLikeTargetParts = filterType(childrenTargetType, isArrayOrTupleLikeType);
+                nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isArrayOrTupleLikeType(t));
+            }
             if (moreThanOneRealChildren) {
                 if (arrayLikeTargetParts !== neverType) {
                     const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
@@ -20844,6 +20853,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (target.flags & TypeFlags.Union) {
                 if (containsType(targetTypes, source)) {
                     return Ternary.True;
+                }
+                if (getObjectFlags(target) & ObjectFlags.PrimitiveUnion && !(source.flags & TypeFlags.EnumLiteral) && (
+                    source.flags & (TypeFlags.StringLiteral | TypeFlags.BooleanLiteral | TypeFlags.BigIntLiteral) ||
+                    (relation === subtypeRelation || relation === strictSubtypeRelation) && source.flags & TypeFlags.NumberLiteral)) {
+                    // When relating a literal type to a union of primitive types, we know the relation is false unless
+                    // the union contains the base primitive type or the literal type in one of its fresh/regular forms.
+                    // We exclude numeric literals for non-subtype relations because numeric literals are assignable to
+                    // numeric enum literals with the same value. Similarly, we exclude enum literal types because
+                    // identically named enum types are related (see isEmumTypeRelatedTo).
+                    const alternateForm = source === (source as StringLiteralType).regularType ? (source as StringLiteralType).freshType : (source as StringLiteralType).regularType;
+                    const primitive = source.flags & TypeFlags.StringLiteral ? stringType :
+                        source.flags & TypeFlags.NumberLiteral ? numberType :
+                        source.flags & TypeFlags.BigIntLiteral ? bigintType :
+                        undefined;
+                    return primitive && containsType(targetTypes, primitive) || alternateForm && containsType(targetTypes, alternateForm) ? Ternary.True : Ternary.False;
                 }
                 const match = getMatchingUnionConstituentForType(target as UnionType, source);
                 if (match) {
@@ -23116,11 +23140,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isArrayLikeType(type) || isTupleLikeType(type);
     }
 
-    function isAssignableToAvailableAnyIterable(type: Type): boolean {
-        const anyIterable = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType && createIterableType(anyType);
-        return anyIterable ? isTypeAssignableTo(type, anyIterable) : isArrayOrTupleLikeType(type);
-    }
-
     function getTupleElementType(type: Type, index: number) {
         const propType = getTypeOfPropertyOfType(type, "" + index as __String);
         if (propType) {
@@ -23871,10 +23890,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const result = !!(type.flags & TypeFlags.Instantiable ||
             type.flags & TypeFlags.Object && !isNonGenericTopLevelType(type) && (
-                objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || forEach(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
+                objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || some(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)) ||
-            type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
+            type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType | TemplateLiteralType).types, couldContainTypeVariables));
         if (type.flags & TypeFlags.ObjectFlagsType) {
             (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
         }
@@ -28942,7 +28961,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return undefined;
                         }
                     }
-                    return isInJSFile(decl) ? undefined : getTypeOfExpression(binaryExpression.left);
+                    return isInJSFile(decl) || decl === binaryExpression.left ? undefined : getTypeOfExpression(binaryExpression.left);
                 }
             case AssignmentDeclarationKind.ExportsProperty:
             case AssignmentDeclarationKind.Prototype:
@@ -29074,18 +29093,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    // In an array literal contextually typed by a type T, the contextual type of an element expression at index N is
-    // the type of the property with the numeric name N in T, if one exists. Otherwise, if T has a numeric index signature,
-    // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
-    // type of T.
-    function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
-        return arrayContextualType && (
-            index >= 0 && getTypeOfPropertyOfContextualType(filterType(arrayContextualType, t => !!getIndexTypeOfType(t, numberType) || isAssignableToAvailableAnyIterable(t)), "" + index as __String) ||
-            mapType(arrayContextualType, t =>
-                isTupleType(t) ?
-                    getElementTypeOfSliceOfTupleType(t, 0, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true) :
-                    getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
-                /*noReductions*/ true));
+    function getSpreadIndices(elements: readonly Node[]) {
+        let first, last;
+        for (let i = 0; i < elements.length; i++) {
+            if (isSpreadElement(elements[i])) {
+                first ??= i;
+                last = i;
+            }
+        }
+        return { first, last };
+    }
+
+    function getContextualTypeForElementExpression(type: Type | undefined, index: number, length?: number, firstSpreadIndex?: number, lastSpreadIndex?: number): Type | undefined {
+        return type && mapType(type, t => {
+            if (isTupleType(t)) {
+                // If index is before any spread element and within the fixed part of the contextual tuple type, return
+                // the type of the contextual tuple element.
+                if ((firstSpreadIndex === undefined || index < firstSpreadIndex) && index < t.target.fixedLength) {
+                    return getTypeArguments(t)[index];
+                }
+                // When the length is known and the index is after all spread elements we compute the offset from the element
+                // to the end and the number of ending fixed elements in the contextual tuple type.
+                const offset = length !== undefined && (lastSpreadIndex === undefined || index > lastSpreadIndex) ? length - index : 0;
+                const fixedEndLength = offset > 0 && t.target.hasRestElement ? getEndElementCount(t.target, ElementFlags.Fixed) : 0;
+                // If the offset is within the ending fixed part of the contextual tuple type, return the type of the contextual
+                // tuple element.
+                if (offset > 0 && offset <= fixedEndLength) {
+                    return getTypeArguments(t)[getTypeReferenceArity(t) - offset];
+                }
+                // Return a union of the possible contextual element types with no subtype reduction.
+                return getElementTypeOfSliceOfTupleType(t,
+                    firstSpreadIndex === undefined ? t.target.fixedLength : Math.min(t.target.fixedLength, firstSpreadIndex),
+                    length === undefined || lastSpreadIndex === undefined ? fixedEndLength : Math.min(fixedEndLength, length - lastSpreadIndex),
+                    /*writing*/ false, /*noReductions*/ true);
+            }
+            // If element index is known and a contextual property with that name exists, return it. Otherwise return the
+            // iterated or element type of the contextual type.
+            return (!firstSpreadIndex || index < firstSpreadIndex) && getTypeOfPropertyOfContextualType(t, "" + index as __String) ||
+                getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
+        }, /*noReductions*/ true);
     }
 
     // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
@@ -29324,12 +29370,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ArrayLiteralExpression: {
                 const arrayLiteral = parent as ArrayLiteralExpression;
                 const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
-                // The index of an array literal element doesn't necessarily line up with the index of the corresponding
-                // element in a contextual tuple type when there are preceding spread elements in the array literal. For
-                // this reason we only pass indices for elements that precede the first spread element.
-                const spreadIndex = getNodeLinks(arrayLiteral).firstSpreadIndex ??= findIndex(arrayLiteral.elements, isSpreadElement);
                 const elementIndex = indexOfNode(arrayLiteral.elements, node);
-                return getContextualTypeForElementExpression(type, spreadIndex < 0 || elementIndex < spreadIndex ? elementIndex : -1);
+                const spreadIndices = getNodeLinks(arrayLiteral).spreadIndices ??= getSpreadIndices(arrayLiteral.elements);
+                return getContextualTypeForElementExpression(type, elementIndex, arrayLiteral.elements.length, spreadIndices.first, spreadIndices.last);
             }
             case SyntaxKind.ConditionalExpression:
                 return getContextualTypeForConditionalOperand(node, contextFlags);
@@ -29938,7 +29981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inConstContext = isConstContext(node);
         const checkFlags = inConstContext ? CheckFlags.Readonly : 0;
         const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
-        const enumTag = getJSDocEnumTag(node);
+        const enumTag = isInJavascript ? getJSDocEnumTag(node) : undefined;
         const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
         let objectFlags: ObjectFlags = freshObjectLiteralFlag;
         let patternWithComputedProperties = false;
@@ -32324,7 +32367,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                const contextualType = getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
+                const contextualType = isTupleType(restType) ?
+                    getContextualTypeForElementExpression(restType, i - index, argCount - index) || unknownType :
+                    getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
                 const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
                 const hasPrimitiveContextualType = inConstContext || maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
@@ -34345,6 +34390,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
         checkGrammarExpressionWithTypeArguments(node);
         forEach(node.typeArguments, checkSourceElement);
+        if (node.kind === SyntaxKind.ExpressionWithTypeArguments) {
+            const parent = walkUpParenthesizedExpressions(node.parent);
+            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.InstanceOfKeyword && isNodeDescendantOf(node, (parent as BinaryExpression).right)) {
+                error(node, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_not_be_an_instantiation_expression);
+            }
+        }
         const exprType = node.kind === SyntaxKind.ExpressionWithTypeArguments ? checkExpression(node.expression) :
             isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) :
             checkExpression(node.exprName);
@@ -35532,8 +35583,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const functionFlags = getFunctionFlags(func);
             const type = returnType && unwrapReturnType(returnType, functionFlags);
 
-            // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (type && maybeTypeOfKind(type, TypeFlags.Any | TypeFlags.Void)) {
+            // Functions with an explicitly specified 'undefined, 'void' or 'any' return type don't need any return expressions.
+            if (type && maybeTypeOfKind(type, TypeFlags.Undefined | TypeFlags.Void | TypeFlags.Any)) {
                 return;
             }
 
@@ -35552,9 +35603,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (type && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
-                error(errorNode, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+                if (strictNullChecks) {
+                    error(errorNode, Diagnostics.A_function_whose_declared_type_is_neither_undefined_void_nor_any_must_return_a_value);
+                }
+                else {
+                    error(errorNode, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+                }
             }
-            else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
+            else if (type && strictNullChecks) {
                 error(errorNode, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
             }
             else if (compilerOptions.noImplicitReturns) {
@@ -35647,6 +35703,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         // Force resolution of all parameter types such that the absence of a contextual type is consistently reflected.
                         assignNonContextualParameterTypes(signature);
+                    }
+                }
+                else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
+                    const inferenceContext = getInferenceContext(node);
+                    if (checkMode && checkMode & CheckMode.Inferential) {
+                        inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
@@ -45124,6 +45186,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
+    function isThisPropertyAndThisTyped(node: PropertyAccessExpression) {
+        if (node.expression.kind === SyntaxKind.ThisKeyword) {
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+            if (isFunctionLike(container)) {
+                const containingLiteral = getContainingObjectLiteral(container);
+                if (containingLiteral) {
+                    const contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined);
+                    const type = contextualType && getThisTypeFromContextualType(contextualType);
+                    return type && !isTypeAny(type);
+                }
+            }
+        }
+    }
+
     function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocMemberName): Symbol | undefined {
         if (isDeclarationName(name)) {
             return getSymbolOfNode(name.parent);
@@ -45133,7 +45209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             name.parent.kind === SyntaxKind.PropertyAccessExpression &&
             name.parent === (name.parent.parent as BinaryExpression).left) {
             // Check if this is a special property assignment
-            if (!isPrivateIdentifier(name) && !isJSDocMemberName(name)) {
+            if (!isPrivateIdentifier(name) && !isJSDocMemberName(name) && !isThisPropertyAndThisTyped(name.parent as PropertyAccessExpression)) {
                 const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(name);
                 if (specialPropertyAssignmentSymbol) {
                     return specialPropertyAssignmentSymbol;

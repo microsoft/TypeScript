@@ -387,81 +387,6 @@ export function toExternalFiles(fileNames: string[]) {
     return ts.map(fileNames, toExternalFile);
 }
 
-export function fileStats(nonZeroStats: Partial<ts.server.FileStats>): ts.server.FileStats {
-    return { ts: 0, tsSize: 0, tsx: 0, tsxSize: 0, dts: 0, dtsSize: 0, js: 0, jsSize: 0, jsx: 0, jsxSize: 0, deferred: 0, deferredSize: 0, ...nonZeroStats };
-}
-
-export class TestServerEventManager {
-    private events: ts.server.ProjectServiceEvent[] = [];
-    readonly session: TestSession;
-    readonly service: ts.server.ProjectService;
-    readonly host: TestServerHost;
-    constructor(files: File[], suppressDiagnosticEvents?: boolean) {
-        this.host = createServerHost(files);
-        this.session = createSession(this.host, {
-            canUseEvents: true,
-            eventHandler: event => this.events.push(event),
-            suppressDiagnosticEvents,
-        });
-        this.service = this.session.getProjectService();
-    }
-
-    getEvents(): readonly ts.server.ProjectServiceEvent[] {
-        const events = this.events;
-        this.events = [];
-        return events;
-    }
-
-    getEvent<T extends ts.server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
-        let eventData: T["data"] | undefined;
-        ts.filterMutate(this.events, e => {
-            if (e.eventName === eventName) {
-                if (eventData !== undefined) {
-                    assert(false, "more than one event found");
-                }
-                eventData = e.data;
-                return false;
-            }
-            return true;
-        });
-        return ts.Debug.checkDefined(eventData);
-    }
-
-    hasZeroEvent<T extends ts.server.ProjectServiceEvent>(eventName: T["eventName"]) {
-        this.events.forEach(event => assert.notEqual(event.eventName, eventName));
-    }
-
-    assertProjectInfoTelemetryEvent(partial: Partial<ts.server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
-        assert.deepEqual<ts.server.ProjectInfoTelemetryEventData>(this.getEvent<ts.server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
-            projectId: ts.sys.createSHA256Hash!(configFile),
-            fileStats: fileStats({ ts: 1 }),
-            compilerOptions: {},
-            extends: false,
-            files: false,
-            include: false,
-            exclude: false,
-            compileOnSave: false,
-            typeAcquisition: {
-                enable: false,
-                exclude: false,
-                include: false,
-            },
-            configFileName: "tsconfig.json",
-            projectType: "configured",
-            languageServiceEnabled: true,
-            version: ts.version,
-            ...partial,
-        });
-    }
-
-    assertOpenFileTelemetryEvent(info: ts.server.OpenFileInfo): void {
-        assert.deepEqual<ts.server.OpenFileInfoTelemetryEventData>(this.getEvent<ts.server.OpenFileInfoTelemetryEvent>(ts.server.OpenFileInfoTelemetryEvent), { info });
-    }
-    assertNoOpenFilesTelemetryEvent(): void {
-        this.hasZeroEvent<ts.server.OpenFileInfoTelemetryEvent>(ts.server.OpenFileInfoTelemetryEvent);
-    }
-}
-
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     patched: boolean;
     baselineHost(title: string): void;
@@ -528,7 +453,6 @@ export interface TestSessionOptions extends ts.server.SessionOptions {
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 export class TestSession extends ts.server.Session {
     private seq = 0;
-    public events: ts.server.protocol.Event[] = [];
     public testhost: TestSessionAndServiceHost;
     public override logger: Logger;
 
@@ -574,13 +498,7 @@ export class TestSession extends ts.server.Session {
         return this.executeCommand(request);
     }
 
-    public override event<T extends object>(body: T, eventName: string) {
-        this.events.push(ts.server.toEvent(eventName, body));
-        super.event(body, eventName);
-    }
-
     public clearMessages() {
-        ts.clear(this.events);
         this.testhost.clearOutput();
     }
 }
@@ -610,38 +528,32 @@ export function createSession(host: TestServerHost, opts: Partial<TestSessionOpt
     return new TestSession({ ...sessionOptions, ...opts });
 }
 
-export function createSessionWithEventTracking<T extends ts.server.ProjectServiceEvent>(host: TestServerHost, eventNames: T["eventName"] | T["eventName"][], opts: Partial<TestSessionOptions> = {}) {
-    const events: T[] = [];
-    const session = createSession(host, {
-        eventHandler: e => {
-            if (ts.isArray(eventNames) ? eventNames.some(eventName => e.eventName === eventName) : eventNames === e.eventName) {
-                events.push(e as T);
-            }
-        },
-        ...opts
-    });
-
-    return { session, events };
-}
-
-export function createSessionWithDefaultEventHandler<T extends ts.server.protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
-    const session = createSession(host, { canUseEvents: true, ...opts });
-
-    return {
-        session,
-        getEvents,
-        clearEvents
-    };
-
-    function getEvents() {
-        return ts.mapDefined(host.getOutput(), s => {
-            const e = mapOutputToJson(s);
-            return (ts.isArray(eventNames) ? eventNames.some(eventName => e.event === eventName) : e.event === eventNames) ? e as T : undefined;
-        });
-    }
-
-    function clearEvents() {
-        session.clearMessages();
+export function createSessionWithCustomEventHandler(host: TestServerHost, opts?: Partial<TestSessionOptions>) {
+    const session = createSession(host, { eventHandler, logger: createLoggerWithInMemoryLogs(host), ...opts });
+    return session;
+    function eventHandler(event: ts.server.ProjectServiceEvent) {
+        let data = event.data as any;
+        switch (event.eventName) {
+            // No change to data
+            case ts.server.ProjectsUpdatedInBackgroundEvent:
+            case ts.server.LargeFileReferencedEvent:
+            case ts.server.ProjectInfoTelemetryEvent:
+            case ts.server.OpenFileInfoTelemetryEvent:
+                break;
+            // Convert project to project name
+            case ts.server.ProjectLoadingStartEvent:
+            case ts.server.ProjectLoadingFinishEvent:
+            case ts.server.ProjectLanguageServiceStateEvent:
+                data = { ...data, project: event.data.project.getProjectName() };
+                break;
+            // Map diagnostics
+            case ts.server.ConfigFileDiagEvent:
+                data = { ...data, diagnostics: ts.map(event.data.diagnostics, diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)) };
+                break;
+            default:
+                ts.Debug.assertNever(event);
+        }
+        session.event(data, `CustomHandler::${event.eventName}`);
     }
 }
 
