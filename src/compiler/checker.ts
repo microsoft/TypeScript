@@ -22891,7 +22891,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type.symbol;
             }
             if (isTupleType(type)) {
-                return type;
+                return type.target;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
