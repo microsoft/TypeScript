@@ -20157,8 +20157,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         for (let i = 0; i < elements.length; i++) {
             if (elements[i].flags & TypeFlags.Simplifiable) {
-                normalizedElements ??= elements.slice(0, i);
-                normalizedElements.push(getSimplifiedType(elements[i], writing));
+                const simplified = getSimplifiedType(elements[i], writing);
+                if (simplified !== elements[i]) {
+                    normalizedElements ??= elements.slice(0, i);
+                    normalizedElements.push(simplified);
+                }
             }
             else {
                 normalizedElements?.push(elements[i]);
