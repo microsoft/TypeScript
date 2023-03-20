@@ -34352,11 +34352,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpressionCached(expression)));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
-            const widenedType = getWidenedType(exprType);
-            if (!isTypeComparableTo(targetType, widenedType)) {
-                checkTypeComparableTo(exprType, targetType, errNode,
-                    Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
-            }
+            addLazyDiagnostic(() => {
+                const widenedType = getWidenedType(exprType);
+                if (!isTypeComparableTo(targetType, widenedType)) {
+                    checkTypeComparableTo(exprType, targetType, errNode,
+                        Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
+                }
+            });
         }
     }
 
