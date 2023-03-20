@@ -84,3 +84,38 @@ const foo2 = getIds([{
 }] as const)
 >const : Symbol(const)
 
+// Repro from comment in #49226
+
+type T1<T> = [number, T1<{ x: T }>];
+>T1 : Symbol(T1, Decl(inferFromNestedSameShapeTuple.ts, 32, 12))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 36, 8))
+>T1 : Symbol(T1, Decl(inferFromNestedSameShapeTuple.ts, 32, 12))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 36, 26))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 36, 8))
+
+type T2<T> = [42, T2<{ x: T }>];
+>T2 : Symbol(T2, Decl(inferFromNestedSameShapeTuple.ts, 36, 36))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 37, 8))
+>T2 : Symbol(T2, Decl(inferFromNestedSameShapeTuple.ts, 36, 36))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 37, 22))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 37, 8))
+
+function qq<U>(x: T1<U>, y: T2<U>) {
+>qq : Symbol(qq, Decl(inferFromNestedSameShapeTuple.ts, 37, 32))
+>U : Symbol(U, Decl(inferFromNestedSameShapeTuple.ts, 39, 12))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 39, 15))
+>T1 : Symbol(T1, Decl(inferFromNestedSameShapeTuple.ts, 32, 12))
+>U : Symbol(U, Decl(inferFromNestedSameShapeTuple.ts, 39, 12))
+>y : Symbol(y, Decl(inferFromNestedSameShapeTuple.ts, 39, 24))
+>T2 : Symbol(T2, Decl(inferFromNestedSameShapeTuple.ts, 36, 36))
+>U : Symbol(U, Decl(inferFromNestedSameShapeTuple.ts, 39, 12))
+
+    x = y;
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 39, 15))
+>y : Symbol(y, Decl(inferFromNestedSameShapeTuple.ts, 39, 24))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(inferFromNestedSameShapeTuple.ts, 39, 24))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 39, 15))
+}
+
