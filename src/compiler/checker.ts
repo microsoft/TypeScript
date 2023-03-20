@@ -1241,6 +1241,7 @@ const enum TypeSystemPropertyName {
     ResolvedBaseTypes,
     WriteType,
     ParameterInitializerContainsUndefined,
+    ResolvedProperties,
 }
 
 /** @internal */
@@ -10129,6 +10130,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!getSymbolLinks(target as Symbol).writeType;
             case TypeSystemPropertyName.ParameterInitializerContainsUndefined:
                 return getNodeLinks(target as ParameterDeclaration).parameterInitializerContainsUndefined !== undefined;
+            case TypeSystemPropertyName.ResolvedProperties:
+                return !!(target as UnionOrIntersectionType).resolvedProperties;
         }
         return Debug.assertNever(propertyName);
     }
@@ -13485,13 +13488,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             yield* type.partiallyResolvedProperties;
         }
 
+        if (!pushTypeResolution(type, TypeSystemPropertyName.ResolvedProperties)) {
+            return;
+        }
+
         // If we have a generator already, pick up where we left off.
         // Otherwise, we haven't started, so create a new one.
-        const generator = type.partiallyResolvedPropertiesGenerator ??= iteratePropertiesOfUnionOrIntersectionTypeWorker(type);
-        for (const symbol of generator) {
-            type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, symbol);
-            if (doYield) {
-                yield symbol;
+        try {
+            const generator = type.partiallyResolvedPropertiesGenerator ??= iteratePropertiesOfUnionOrIntersectionTypeWorker(type);
+            for (const symbol of generator) {
+                type.partiallyResolvedProperties = append(type.partiallyResolvedProperties, symbol);
+                if (doYield) {
+                    yield symbol;
+                }
+            }
+        }
+        finally {
+            // Ensure we pop when we're all done iterating. If done outside of a finally,
+            // this code won't actually execute.
+            if (!popTypeResolution()) {
+                return;
             }
         }
 
