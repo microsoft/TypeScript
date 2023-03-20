@@ -24244,8 +24244,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let inferencePriority: number = InferencePriority.MaxValue;
         let allowComplexConstraintInference = true;
         let visited: Map<string, number>;
-        let sourceStack: object[];
-        let targetStack: object[];
+        let sourceStack: Type[];
+        let targetStack: Type[];
         let expandingFlags = ExpandingFlags.None;
         inferFromTypes(originalSource, originalTarget);
 
@@ -24501,20 +24501,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
             // the source side and the target side.
             const saveExpandingFlags = expandingFlags;
-            const sourceIdentity = getRecursionIdentity(source);
-            const targetIdentity = getRecursionIdentity(target);
-            if (contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
-            if (contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+            (sourceStack ??= []).push(source);
+            (targetStack ??= []).push(target);
+            if (isDeeplyNestedType(source, sourceStack, sourceStack.length, 2)) expandingFlags |= ExpandingFlags.Source;
+            if (isDeeplyNestedType(target, targetStack, targetStack.length, 2)) expandingFlags |= ExpandingFlags.Target;
             if (expandingFlags !== ExpandingFlags.Both) {
-                (sourceStack || (sourceStack = [])).push(sourceIdentity);
-                (targetStack || (targetStack = [])).push(targetIdentity);
                 action(source, target);
-                targetStack.pop();
-                sourceStack.pop();
             }
             else {
                 inferencePriority = InferencePriority.Circularity;
             }
+            targetStack.pop();
+            sourceStack.pop();
             expandingFlags = saveExpandingFlags;
             visited.set(key, inferencePriority);
             inferencePriority = Math.min(inferencePriority, saveInferencePriority);
