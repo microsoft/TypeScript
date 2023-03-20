@@ -24,7 +24,6 @@ import {
     arrayToMultiMap,
     ArrayTypeNode,
     ArrowFunction,
-    AsExpression,
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentKind,
@@ -34268,14 +34267,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getReturnTypeOfSignature(signature);
     }
 
-    function checkAssertion(node: AssertionExpression) {
+    function checkAssertion(node: AssertionExpression, checkMode: CheckMode | undefined) {
         if (node.kind === SyntaxKind.TypeAssertionExpression) {
             const file = getSourceFileOfNode(node);
             if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
                 grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
             }
         }
-        return checkAssertionWorker(node);
+        return checkAssertionWorker(node, checkMode);
     }
 
     function isValidConstAssertionArgument(node: Node): boolean {
@@ -34306,8 +34305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression) {
-        // TODO: maybe we don't need this? maybe can be helper?
+    function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression, checkMode: CheckMode | undefined) {
         let type: TypeNode;
         let expression: Expression;
         switch (node.kind) {
@@ -34322,7 +34320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
         }
 
-        const exprType = checkExpressionCached(expression);
+        const exprType = checkExpressionCached(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
@@ -34341,8 +34339,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
-                type = (node as TypeAssertion | AsExpression).type;
-                expression = (node as TypeAssertion | AsExpression).expression;
+                type = node.type;
+                expression = node.expression;
                 errNode = node;
                 break;
             case SyntaxKind.ParenthesizedExpression:
@@ -37588,7 +37586,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkSatisfiesExpressionWorker(node.expression, getJSDocSatisfiesExpressionType(node), checkMode);
             }
             if (isJSDocTypeAssertion(node)) {
-                return checkAssertionWorker(node);
+                return checkAssertionWorker(node, checkMode);
             }
         }
         return checkExpression(node.expression, checkMode);
@@ -37669,7 +37667,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkTypeOfExpression(node as TypeOfExpression);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
-                return checkAssertion(node as AssertionExpression);
+                return checkAssertion(node as AssertionExpression, checkMode);
             case SyntaxKind.NonNullExpression:
                 return checkNonNullAssertion(node as NonNullExpression);
             case SyntaxKind.ExpressionWithTypeArguments:
@@ -44711,7 +44709,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Here, performing a full type check of the body of the function expression whilst in the process of
     // determining the type of foo would cause foo to be given type any because of the recursive reference.
     // Delaying the type check of the body ensures foo has been assigned a type.
-    function checkNodeDeferred(node: Node) { // >>
+    function checkNodeDeferred(node: Node) {
         const enclosingFile = getSourceFileOfNode(node);
         const links = getNodeLinks(enclosingFile);
         if (!(links.flags & NodeCheckFlags.TypeChecked)) {
@@ -44731,7 +44729,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         links.deferredNodes = undefined;
     }
 
-    function checkDeferredNode(node: Node) { // >>
+    function checkDeferredNode(node: Node) {
         tracing?.push(tracing.Phase.Check, "checkDeferredNode", { kind: node.kind, pos: node.pos, end: node.end, path: (node as TracingNode).tracingPath });
         const saveCurrentNode = currentNode;
         currentNode = node;
