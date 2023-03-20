@@ -20152,23 +20152,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
-        let normalizedElements: Type[] | undefined;
         const elements = getTypeArguments(type);
-
-        for (let i = 0; i < elements.length; i++) {
-            if (elements[i].flags & TypeFlags.Simplifiable) {
-                const simplified = getSimplifiedType(elements[i], writing);
-                if (simplified !== elements[i]) {
-                    normalizedElements ??= elements.slice(0, i);
-                    normalizedElements.push(simplified);
-                }
-            }
-            else {
-                normalizedElements?.push(elements[i]);
-            }
-        }
-
-        return normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
+        const normalizedElements = sameMap(elements, t => t.flags & TypeFlags.Simplifiable ? getSimplifiedType(t, writing) : t);
+        return elements !== normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
     }
 
     /**
