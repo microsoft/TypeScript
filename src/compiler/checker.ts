@@ -22888,8 +22888,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type.symbol;
             }
             if (isTupleType(type)) {
-                // Tuple types are tracked through their target type
-                return type.target;
+                return type;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
