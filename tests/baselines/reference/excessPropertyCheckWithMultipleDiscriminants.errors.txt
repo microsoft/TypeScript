@@ -10,9 +10,11 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(83,5): erro
   Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
   Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(130,5): error TS2322: Type '"string"' is not assignable to type '"number"'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): error TS2322: Type '"string"' is not assignable to type '"number"'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (6 errors) ====
+==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (8 errors) ====
     // Repro from #32657
     
     interface Base<T> {
@@ -125,4 +127,53 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(93,5): erro
 !!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
 !!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
     }
+    
+    // Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+    
+    export type BaseAttribute<T> = {
+        type?: string | undefined;
+        required?: boolean | undefined;
+        defaultsTo?: T | undefined;
+    };
+    
+    export type Attribute =
+        | string
+        | StringAttribute
+        | NumberAttribute
+        | OneToOneAttribute
+    
+    export type Attribute2 =
+        | string
+        | StringAttribute
+        | NumberAttribute
+    
+    export type StringAttribute = BaseAttribute<string> & {
+        type: 'string';
+    };
+    
+    export type NumberAttribute = BaseAttribute<number> & {
+        type: 'number';
+        autoIncrement?: boolean | undefined;
+    };
+    
+    export type OneToOneAttribute = BaseAttribute<any> & {
+        model: string;
+    };
+    
+    // both should error due to excess properties
+    const attributes: Attribute = {
+        type: 'string',
+        ~~~~
+!!! error TS2322: Type '"string"' is not assignable to type '"number"'.
+        autoIncrement: true,
+        required: true,
+    };
+    
+    const attributes2: Attribute2 = {
+        type: 'string',
+        ~~~~
+!!! error TS2322: Type '"string"' is not assignable to type '"number"'.
+        autoIncrement: true,
+        required: true,
+    };
     

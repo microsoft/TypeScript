@@ -94,9 +94,56 @@ const c2: CommonWithDisjointOverlappingOptionals = {
     b: 1  // excess property
 }
 
+// Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+
+export type BaseAttribute<T> = {
+    type?: string | undefined;
+    required?: boolean | undefined;
+    defaultsTo?: T | undefined;
+};
+
+export type Attribute =
+    | string
+    | StringAttribute
+    | NumberAttribute
+    | OneToOneAttribute
+
+export type Attribute2 =
+    | string
+    | StringAttribute
+    | NumberAttribute
+
+export type StringAttribute = BaseAttribute<string> & {
+    type: 'string';
+};
+
+export type NumberAttribute = BaseAttribute<number> & {
+    type: 'number';
+    autoIncrement?: boolean | undefined;
+};
+
+export type OneToOneAttribute = BaseAttribute<any> & {
+    model: string;
+};
+
+// both should error due to excess properties
+const attributes: Attribute = {
+    type: 'string',
+    autoIncrement: true,
+    required: true,
+};
+
+const attributes2: Attribute2 = {
+    type: 'string',
+    autoIncrement: true,
+    required: true,
+};
+
 
 //// [excessPropertyCheckWithMultipleDiscriminants.js]
+"use strict";
 // Repro from #32657
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = {
     type: "number",
     value: 10,
@@ -137,4 +184,15 @@ var c2 = {
     n: 1,
     a: 1,
     b: 1 // excess property
+};
+// both should error due to excess properties
+var attributes = {
+    type: 'string',
+    autoIncrement: true,
+    required: true,
+};
+var attributes2 = {
+    type: 'string',
+    autoIncrement: true,
+    required: true,
 };

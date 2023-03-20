@@ -213,3 +213,98 @@ const c2: CommonWithDisjointOverlappingOptionals = {
 >1 : 1
 }
 
+// Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+
+export type BaseAttribute<T> = {
+>BaseAttribute : BaseAttribute<T>
+
+    type?: string | undefined;
+>type : string
+
+    required?: boolean | undefined;
+>required : boolean
+
+    defaultsTo?: T | undefined;
+>defaultsTo : T
+
+};
+
+export type Attribute =
+>Attribute : string | StringAttribute | NumberAttribute | OneToOneAttribute
+
+    | string
+    | StringAttribute
+    | NumberAttribute
+    | OneToOneAttribute
+
+export type Attribute2 =
+>Attribute2 : string | StringAttribute | NumberAttribute
+
+    | string
+    | StringAttribute
+    | NumberAttribute
+
+export type StringAttribute = BaseAttribute<string> & {
+>StringAttribute : BaseAttribute<string> & { type: 'string'; }
+
+    type: 'string';
+>type : "string"
+
+};
+
+export type NumberAttribute = BaseAttribute<number> & {
+>NumberAttribute : BaseAttribute<number> & { type: 'number'; autoIncrement?: boolean | undefined; }
+
+    type: 'number';
+>type : "number"
+
+    autoIncrement?: boolean | undefined;
+>autoIncrement : boolean
+
+};
+
+export type OneToOneAttribute = BaseAttribute<any> & {
+>OneToOneAttribute : BaseAttribute<any> & { model: string; }
+
+    model: string;
+>model : string
+
+};
+
+// both should error due to excess properties
+const attributes: Attribute = {
+>attributes : Attribute
+>{    type: 'string',    autoIncrement: true,    required: true,} : { type: "string"; autoIncrement: boolean; required: true; }
+
+    type: 'string',
+>type : "string"
+>'string' : "string"
+
+    autoIncrement: true,
+>autoIncrement : boolean
+>true : true
+
+    required: true,
+>required : true
+>true : true
+
+};
+
+const attributes2: Attribute2 = {
+>attributes2 : Attribute2
+>{    type: 'string',    autoIncrement: true,    required: true,} : { type: "string"; autoIncrement: boolean; required: true; }
+
+    type: 'string',
+>type : "string"
+>'string' : "string"
+
+    autoIncrement: true,
+>autoIncrement : boolean
+>true : true
+
+    required: true,
+>required : true
+>true : true
+
+};
+
