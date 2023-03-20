@@ -2154,7 +2154,7 @@ const extendsOptionDeclaration: CommandLineOptionOfListType = {
         type: "string"
     },
     category: Diagnostics.File_Management,
-    disallowNull: true,
+    disallowNullOrUndefined: true,
 };
 const compilerOptionsDeclaration: TsConfigOnlyOption = {
     name: "compilerOptions",
@@ -2412,7 +2412,7 @@ function getCompilerOptionValueTypeString(option: CommandLineOption): string {
 
 function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
     if (option) {
-        if (isNullOrUndefined(value)) return !option.disallowNull; // All options are undefinable/nullable
+        if (isNullOrUndefined(value)) return !option.disallowNullOrUndefined; // All options are undefinable/nullable
         if (option.type === "list") {
             return isArray(value);
         }
