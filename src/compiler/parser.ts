@@ -52,7 +52,7 @@ import {
     ConstructSignatureDeclaration,
     containsParseError,
     ContinueStatement,
-    convertToObjectWorker,
+    convertToJson,
     createDetachedDiagnostic,
     createNodeFactory,
     createScanner,
@@ -1570,7 +1570,7 @@ namespace Parser {
         scriptKind = ensureScriptKind(fileName, scriptKind);
         if (scriptKind === ScriptKind.JSON) {
             const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
-            convertToObjectWorker(result, result.statements[0]?.expression, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+            convertToJson(result, result.statements[0]?.expression, result.parseDiagnostics, /*returnValue*/ false, /*jsonConversionNotifier*/ undefined);
             result.referencedFiles = emptyArray;
             result.typeReferenceDirectives = emptyArray;
             result.libReferenceDirectives = emptyArray;
