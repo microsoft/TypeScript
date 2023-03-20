@@ -4683,6 +4683,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning));
+            if (!symbol && (namespace.flags & SymbolFlags.Alias)) {
+              // `namespace` can be resolved further if there was a symbol merge with a re-export
+              symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(resolveAlias(namespace)), right.escapedText, meaning));
+            }
             if (!symbol) {
                 if (!ignoreErrors) {
                     const namespaceName = getFullyQualifiedName(namespace);
