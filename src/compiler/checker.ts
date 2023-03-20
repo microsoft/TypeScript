@@ -1472,6 +1472,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
     var requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
     var isolatedModulesLikeFlagName = compilerOptions.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules";
+    // It is an error to use `importsNotUsedAsValues` alongside `verbatimModuleSyntax`, but we still need to not crash.
+    // Given that, in such a scenario, `verbatimModuleSyntax` is basically disabled, as least as far as alias visibility tracking goes.
+    var canCollectSymbolAliasAccessabilityData = !compilerOptions.verbatimModuleSyntax || !!compilerOptions.importsNotUsedAsValues;
 
     /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
     var apparentArgumentCount: number | undefined;
@@ -4540,7 +4543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
-        if (compilerOptions.verbatimModuleSyntax) {
+        if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
         const symbol = getSymbolOfDeclaration(node);
@@ -4559,7 +4562,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
     // the alias as an expression (which recursively takes us back here if the target references another alias).
     function markAliasSymbolAsReferenced(symbol: Symbol) {
-        Debug.assert(!compilerOptions.verbatimModuleSyntax);
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
         const links = getSymbolLinks(symbol);
         if (!links.referenced) {
             links.referenced = true;
@@ -13861,7 +13864,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeVariable = getHomomorphicTypeVariable(type);
         if (typeVariable && !type.declaration.nameType) {
             const constraint = getConstraintOfTypeParameter(typeVariable);
-            if (constraint && isArrayType(constraint)) {
+            if (constraint && everyType(constraint, isArrayOrTupleType)) {
                 return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
             }
         }
@@ -20126,6 +20129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNormalizedType(type: Type, writing: boolean): Type {
         while (true) {
             const t = isFreshLiteralType(type) ? (type as FreshableType).regularType :
+                isGenericTupleType(type) ? getNormalizedTupleType(type, writing) :
                 getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) : getSingleBaseForNonAugmentingSubtype(type) || type :
                 type.flags & TypeFlags.UnionOrIntersection ? getNormalizedUnionOrIntersectionType(type as UnionOrIntersectionType, writing) :
                 type.flags & TypeFlags.Substitution ? writing ? (type as SubstitutionType).baseType : getSubstitutionIntersection(type as SubstitutionType) :
@@ -20148,6 +20152,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return type;
+    }
+
+    function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
+        const elements = getTypeArguments(type);
+        const normalizedElements = sameMap(elements, t => t.flags & TypeFlags.Simplifiable ? getSimplifiedType(t, writing) : t);
+        return elements !== normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
     }
 
     /**
@@ -21679,7 +21689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return varianceResult;
                     }
                 }
-                else if (isReadonlyArrayType(target) ? isArrayOrTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
+                else if (isReadonlyArrayType(target) ? everyType(source, isArrayOrTupleType) : isArrayType(target) && everyType(source, t => isTupleType(t) && !t.target.readonly)) {
                     if (relation !== identityRelation) {
                         return isRelatedTo(getIndexTypeOfType(source, numberType) || anyType, getIndexTypeOfType(target, numberType) || anyType, RecursionFlags.Both, reportErrors);
                     }
@@ -22881,8 +22891,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type.symbol;
             }
             if (isTupleType(type)) {
-                // Tuple types are tracked through their target type
-                return type.target;
+                return type;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
@@ -24692,7 +24701,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraintType.flags & TypeFlags.TypeParameter) {
                 // We're inferring from some source type S to a mapped type { [P in K]: X }, where K is a type
                 // parameter. First infer from 'keyof S' to K.
-                inferWithPriority(getIndexType(source), constraintType, InferencePriority.MappedTypeConstraint);
+                inferWithPriority(getIndexType(source, /*indexFlags*/ !!source.pattern ? IndexFlags.NoIndexSignatures : IndexFlags.None), constraintType, InferencePriority.MappedTypeConstraint);
                 // If K is constrained to a type C, also infer to C. Thus, for a mapped type { [P in K]: X },
                 // where K extends keyof T, we make the same inferences as for a homomorphic mapped type
                 // { [P in keyof T]: X }. This enables us to make meaningful inferences when the target is a
@@ -25304,32 +25313,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function tryGetElementAccessExpressionName(node: ElementAccessExpression) {
-        if (isStringOrNumericLiteralLike(node.argumentExpression)) {
-            return escapeLeadingUnderscores(node.argumentExpression.text);
-        }
-        if (isEntityNameExpression(node.argumentExpression)) {
-            const symbol = resolveEntityName(node.argumentExpression, SymbolFlags.Value, /*ignoreErrors*/ true);
-            if (!symbol || !(isConstVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
+        return isStringOrNumericLiteralLike(node.argumentExpression) ? escapeLeadingUnderscores(node.argumentExpression.text) :
+            isEntityNameExpression(node.argumentExpression) ? tryGetNameFromEntityNameExpression(node.argumentExpression) : undefined;
+    }
 
-            const declaration = symbol.valueDeclaration;
-            if (declaration === undefined) return undefined;
+    function tryGetNameFromEntityNameExpression(node: EntityNameOrEntityNameExpression) {
+        const symbol = resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true);
+        if (!symbol || !(isConstVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
 
-            const type = tryGetTypeFromEffectiveTypeNode(declaration);
-            if (type) {
-                const name = tryGetNameFromType(type);
-                if (name !== undefined) {
-                    return name;
-                }
+        const declaration = symbol.valueDeclaration;
+        if (declaration === undefined) return undefined;
+
+        const type = tryGetTypeFromEffectiveTypeNode(declaration);
+        if (type) {
+            const name = tryGetNameFromType(type);
+            if (name !== undefined) {
+                return name;
             }
-
-            if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
-                const initializer = getEffectiveInitializer(declaration);
-                if (initializer) {
-                    return tryGetNameFromType(getTypeOfExpression(initializer));
-                }
-                if (isEnumMember(declaration)) {
-                    return getTextOfPropertyName(declaration.name);
-                }
+        }
+        if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node)) {
+            const initializer = getEffectiveInitializer(declaration);
+            if (initializer) {
+                return tryGetNameFromType(getTypeOfExpression(initializer));
+            }
+            if (isEnumMember(declaration)) {
+                return getTextOfPropertyName(declaration.name);
             }
         }
         return undefined;
@@ -27629,7 +27637,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function markAliasReferenced(symbol: Symbol, location: Node) {
-        if (compilerOptions.verbatimModuleSyntax) {
+        if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
         if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
@@ -29249,7 +29257,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getContextualType(node, contextFlags);
         const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
         if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
-            const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
+            const apparentType = mapType(
+                instantiatedType,
+                // When obtaining apparent type of *contextual* type we don't want to get apparent type of mapped types.
+                // That would evaluate mapped types with array or tuple type constraints too eagerly
+                // and thus it would prevent `getTypeOfPropertyOfContextualType` from obtaining per-position contextual type for elements of array literal expressions.
+                // Apparent type of other mapped types is already the mapped type itself so we can just avoid calling `getApparentType` here for all mapped types.
+                t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
+                /*noReductions*/ true
+            );
             return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
                 apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
                 apparentType;
@@ -30771,7 +30787,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 jsxFactorySym.isReferenced = SymbolFlags.All;
 
                 // If react/jsxFactory symbol is alias, mark it as refereced
-                if (!compilerOptions.verbatimModuleSyntax && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                if (canCollectSymbolAliasAccessabilityData && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
                     markAliasSymbolAsReferenced(jsxFactorySym);
                 }
             }
@@ -39708,7 +39724,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
         const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isReference*/ true);
         if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-            if (!compilerOptions.verbatimModuleSyntax
+            if (canCollectSymbolAliasAccessabilityData
                 && symbolIsValue(rootSymbol)
                 && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
                 && !getTypeOnlyAliasDeclaration(rootSymbol)) {
@@ -44225,6 +44241,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportsForTypeOnlyConversion(sourceFile: SourceFile) {
+        if (!canCollectSymbolAliasAccessabilityData) {
+            return;
+        }
         for (const statement of sourceFile.statements) {
             if (canConvertImportDeclarationToTypeOnly(statement) || canConvertImportEqualsDeclarationToTypeOnly(statement)) {
                 error(
@@ -44311,7 +44330,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getAllSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
                     checkExpressionCached(id);
-                    if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                    if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
                         error(id,
                             node.isExportEquals
                                 ? Diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration
@@ -44319,7 +44338,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             idText(id));
                     }
                 }
-                else if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax) {
+                else if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax) {
                     error(id,
                         node.isExportEquals
                             ? Diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type
@@ -45947,7 +45966,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValueAliasDeclaration(node: Node): boolean {
-        Debug.assert(!compilerOptions.verbatimModuleSyntax);
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return isAliasResolvedToValue(getSymbolOfDeclaration(node as ImportEqualsDeclaration));
@@ -46001,7 +46020,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
-        Debug.assert(!compilerOptions.verbatimModuleSyntax);
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
         if (isAliasSymbolDeclaration(node)) {
             const symbol = getSymbolOfDeclaration(node as Declaration);
             const links = symbol && getSymbolLinks(symbol);
@@ -46375,13 +46394,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isValueAliasDeclaration: nodeIn => {
                 const node = getParseTreeNode(nodeIn);
                 // Synthesized nodes are always treated like values.
-                return node ? isValueAliasDeclaration(node) : true;
+                return node && canCollectSymbolAliasAccessabilityData ? isValueAliasDeclaration(node) : true;
             },
             hasGlobalName,
             isReferencedAliasDeclaration: (nodeIn, checkChildren?) => {
                 const node = getParseTreeNode(nodeIn);
                 // Synthesized nodes are always treated as referenced.
-                return node ? isReferencedAliasDeclaration(node, checkChildren) : true;
+                return node && canCollectSymbolAliasAccessabilityData ? isReferencedAliasDeclaration(node, checkChildren) : true;
             },
             getNodeCheckFlags: nodeIn => {
                 const node = getParseTreeNode(nodeIn);
@@ -47649,7 +47668,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inDestructuring) {
-                const effectiveName = getPropertyNameForPropertyNameNode(name);
+                const effectiveName = getEffectivePropertyNameForPropertyNameNode(name);
                 if (effectiveName === undefined) {
                     continue;
                 }
@@ -48670,6 +48689,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return undefined;
+    }
+
+    function getEffectivePropertyNameForPropertyNameNode(node: PropertyName) {
+        const name = getPropertyNameForPropertyNameNode(node);
+        return name ? name :
+            isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
     }
 }
 

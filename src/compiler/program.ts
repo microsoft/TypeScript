@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String,
     addInternalEmitFlags,
@@ -104,12 +103,15 @@ import {
     forEachEmittedFile,
     forEachEntry,
     forEachKey,
+    forEachResolvedProjectReference as ts_forEachResolvedProjectReference,
     FunctionLikeDeclaration,
     getAllowJSCompilerOption,
     getAutomaticTypeDirectiveNames,
     getBaseFileName,
     GetCanonicalFileName,
+    getCommonSourceDirectory as ts_getCommonSourceDirectory,
     getCommonSourceDirectoryOfConfig,
+    getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitDeclarations,
@@ -304,9 +306,11 @@ import {
     SymlinkCache,
     SyntaxKind,
     sys,
+    System,
     targetOptionDeclaration,
     toFileNameLowerCase,
     tokenToString,
+    toPath as ts_toPath,
     trace,
     tracing,
     trimStringEnd,
@@ -448,7 +452,7 @@ export function createWriteFileMeasuringIO(
 }
 
 /** @internal */
-export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
+export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system: System = sys): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
     function directoryExists(directoryPath: string): boolean {
@@ -1951,13 +1955,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function toPath(fileName: string): Path {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function getCommonSourceDirectory() {
         if (commonSourceDirectory === undefined) {
             const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, program));
-            commonSourceDirectory = ts.getCommonSourceDirectory(
+            commonSourceDirectory = ts_getCommonSourceDirectory(
                 options,
                 () => mapDefined(emittedFiles, file => file.isDeclarationFile ? undefined : file.fileName),
                 currentDirectory,
@@ -3092,7 +3096,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return runWithCancellationToken(() => {
             const resolver = getTypeChecker().getEmitResolver(sourceFile, cancellationToken);
             // Don't actually write any files since we're just getting diagnostics.
-            return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
+            return ts_getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
         });
     }
 
@@ -3657,7 +3661,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function forEachResolvedProjectReference<T>(
         cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined
     ): T | undefined {
-        return ts.forEachResolvedProjectReference(resolvedProjectReferences, cb);
+        return ts_forEachResolvedProjectReference(resolvedProjectReferences, cb);
     }
 
     function getSourceOfProjectReferenceRedirect(path: Path) {
