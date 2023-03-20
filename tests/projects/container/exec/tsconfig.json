@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/exec.js",
     },
     "files": [

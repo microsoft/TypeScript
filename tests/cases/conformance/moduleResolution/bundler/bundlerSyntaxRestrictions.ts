@@ -1,10 +1,23 @@
 // @moduleResolution: bundler
+// @module: esnext
 // @checkJs: true
 // @allowJs: true
 // @outDir: out
 
 // @Filename: /node_modules/@types/node/index.d.ts
 declare var require: (...args: any[]) => any;
+
+// @Filename: /ambient.d.ts
+declare module "fs" {
+    export function readFileSync(path: string, encoding?: string): string;
+}
+declare module "path" {
+    import fs = require("fs"); // ok
+    namespace path {
+        export const sep: string;
+    }
+    export = path; // ok
+}
 
 // @Filename: /mainJs.js
 import {} from "./a";

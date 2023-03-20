@@ -4,7 +4,6 @@ declare const p: Promise<number>
 
 declare const p2: null | Promise<number>
 >p2 : Promise<number> | null
->null : null
 
 declare const obj: { p: Promise<unknown> }
 >obj : { p: Promise<unknown>; }

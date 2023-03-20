@@ -1,4 +1,12 @@
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.ts]
+label: while (1) {}
+
+//// [/tsconfig.json]
+{ "compilerOptions": { "allowUnusedLabels": true } }
+
+
 Info 1    [00:00:08.000] request:
     {
       "command": "open",
@@ -8,20 +16,6 @@ Info 1    [00:00:08.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.ts]
-label: while (1) {}
-
-//// [/tsconfig.json]
-{ "compilerOptions": { "allowUnusedLabels": true } }
-
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
@@ -42,7 +36,7 @@ Info 10   [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 11   [00:00:18.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:19.000] Project '/tsconfig.json' (Configured)
 Info 13   [00:00:20.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 "label: while (1) {}"
 
 
 	a.ts
@@ -56,24 +50,24 @@ Info 15   [00:00:24.000] -----------------------------------------------
 Info 15   [00:00:25.000] Open files: 
 Info 15   [00:00:26.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 15   [00:00:27.000] 		Projects: /tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 15   [00:00:28.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
 Info 16   [00:00:31.000] FileWatcher:: Triggered with /tsconfig.json 1:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info 17   [00:00:32.000] Scheduled: /tsconfig.json
 Info 18   [00:00:33.000] Scheduled: *ensureProjectForOpenFiles*
@@ -82,18 +76,6 @@ Before running timeout callbacks
 //// [/tsconfig.json]
 { "compilerOptions": { "allowUnusedLabels": false } }
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 20   [00:00:35.000] Running: /tsconfig.json
 Info 21   [00:00:36.000] Reloading configured project /tsconfig.json
@@ -108,39 +90,33 @@ Info 22   [00:00:37.000] Config: /tsconfig.json : {
 }
 Info 23   [00:00:38.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 24   [00:00:39.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 25   [00:00:40.000] Different program with same set of files
-Info 26   [00:00:41.000] Running: *ensureProjectForOpenFiles*
-Info 27   [00:00:42.000] Before ensureProjectForOpenFiles:
-Info 28   [00:00:43.000] Project '/tsconfig.json' (Configured)
-Info 28   [00:00:44.000] 	Files (1)
+Info 25   [00:00:40.000] Project '/tsconfig.json' (Configured)
+Info 26   [00:00:41.000] 	Files (1)
+	/a.ts SVC-1-0 "label: while (1) {}"
 
-Info 28   [00:00:45.000] -----------------------------------------------
-Info 28   [00:00:46.000] Open files: 
-Info 28   [00:00:47.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 28   [00:00:48.000] 		Projects: /tsconfig.json
-Info 28   [00:00:49.000] After ensureProjectForOpenFiles:
-Info 29   [00:00:50.000] Project '/tsconfig.json' (Configured)
-Info 29   [00:00:51.000] 	Files (1)
+Info 27   [00:00:42.000] -----------------------------------------------
+Info 28   [00:00:43.000] Running: *ensureProjectForOpenFiles*
+Info 29   [00:00:44.000] Before ensureProjectForOpenFiles:
+Info 30   [00:00:45.000] Project '/tsconfig.json' (Configured)
+Info 30   [00:00:46.000] 	Files (1)
 
-Info 29   [00:00:52.000] -----------------------------------------------
-Info 29   [00:00:53.000] Open files: 
-Info 29   [00:00:54.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 29   [00:00:55.000] 		Projects: /tsconfig.json
+Info 30   [00:00:47.000] -----------------------------------------------
+Info 30   [00:00:48.000] Open files: 
+Info 30   [00:00:49.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 30   [00:00:50.000] 		Projects: /tsconfig.json
+Info 30   [00:00:51.000] After ensureProjectForOpenFiles:
+Info 31   [00:00:52.000] Project '/tsconfig.json' (Configured)
+Info 31   [00:00:53.000] 	Files (1)
+
+Info 31   [00:00:54.000] -----------------------------------------------
+Info 31   [00:00:55.000] Open files: 
+Info 31   [00:00:56.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 31   [00:00:57.000] 		Projects: /tsconfig.json
 After running timeout callbacks
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
+Before request
 
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
-Info 29   [00:00:56.000] request:
+Info 31   [00:00:58.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -149,35 +125,7 @@ Info 29   [00:00:56.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
-Info 30   [00:00:57.000] response:
+Info 32   [00:00:59.000] response:
     {
       "response": [
         {
@@ -197,3 +145,4 @@ Info 30   [00:00:57.000] response:
       ],
       "responseRequired": true
     }
+After request

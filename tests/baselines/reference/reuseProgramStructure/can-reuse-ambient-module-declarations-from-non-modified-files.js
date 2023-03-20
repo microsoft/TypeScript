@@ -197,6 +197,6 @@ File '/fs.jsx' does not exist.
 
 MissingPaths:: ["lib.d.ts"]
 
-/a/b/app.ts(2,21): error TS2792: Cannot find module 'fs'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+/a/b/app.ts(2,21): error TS2792: Cannot find module 'fs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 

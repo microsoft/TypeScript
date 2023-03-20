@@ -244,11 +244,9 @@ baz2 = baz1;  // Error
 interface Parent<out A> {
     child: Child<A> | null;
 >child : Child<A, unknown> | null
->null : null
 
     parent: Parent<A> | null;
 >parent : Parent<A> | null
->null : null
 }
 
 interface Child<A, B = unknown> extends Parent<A> {
@@ -278,11 +276,8 @@ const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, 
 >b : number
 >0 : 0
 >child : null
->null : null
 >parent : null
->null : null
 >parent : null
->null : null
 
 const notString: Parent<string> = pu;  // Error
 >notString : Parent<string>

@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
 
 describe("unittests:: customTransforms", () => {
     function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
@@ -23,7 +23,7 @@ describe("unittests:: customTransforms", () => {
             const program = ts.createProgram(ts.arrayFrom(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
             program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
             let content = "";
-            for (const [file, text] of ts.arrayFrom(outputs.entries())) {
+            for (const [file, text] of outputs.entries()) {
                 if (content) content += "\n\n";
                 content += `// [${file}]\n`;
                 content += text;
@@ -91,7 +91,7 @@ describe("unittests:: customTransforms", () => {
         context => node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
             if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
             return ts.visitEachChild(node, visitor, context);
-        })
+        }, ts.isSourceFile)
     ]}, {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.ES2015,
@@ -126,7 +126,7 @@ describe("unittests:: customTransforms", () => {
                         return node;
                     }
                     return ts.visitEachChild(node, visitor, context);
-                })
+                }, ts.isSourceFile)
             ]
         },
         { sourceMap: true }
@@ -155,7 +155,7 @@ describe("unittests:: customTransforms", () => {
                             return newNode;
                         }
                         return ts.visitEachChild(node, visitor, context);
-                    });
+                    }, ts.isSourceFile);
                     return {
                         transformSourceFile,
                         transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends),

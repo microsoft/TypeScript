@@ -24,9 +24,7 @@ function f() {
 
 function b(): IPromise<void> { return null; }
 >b : () => IPromise<void>
->null : null
 
 function d(): IPromise<any> { return null; }
 >d : () => IPromise<any>
->null : null
 

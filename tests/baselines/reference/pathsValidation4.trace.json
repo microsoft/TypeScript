@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'someModule' from 'tests/cases/compiler/src/main.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'baseUrl' option is set to 'tests/cases/compiler/src', using this value to resolve non-relative module name 'someModule'.",
     "'paths' option is specified, looking for a pattern to match module name 'someModule'.",
     "'baseUrl' option is set to 'tests/cases/compiler/src', using this value to resolve non-relative module name 'someModule'.",

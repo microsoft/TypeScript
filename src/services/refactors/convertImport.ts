@@ -263,7 +263,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
         ? factory.createIdentifier(namespaceImportName)
         : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element =>
+        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element =>
             factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }

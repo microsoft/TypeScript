@@ -140,7 +140,7 @@ enum E7 {
 >E7 : E7
 
     A = 'foo'['foo']
->A : E7
+>A : E7.A
 >'foo'['foo'] : error
 >'foo' : "foo"
 >'foo' : "foo"
@@ -151,7 +151,7 @@ enum E8 {
 >E8 : E8
 
     B = 'foo'['foo']
->B : E8
+>B : E8.B
 >'foo'['foo'] : error
 >'foo' : "foo"
 >'foo' : "foo"
@@ -172,8 +172,8 @@ enum E9 {
 // (refer to .js to validate)
 // Enum constant members are propagated
 var doNotPropagate = [
->doNotPropagate : (E8 | E7 | E4.Z | E3)[]
->[    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z] : (E8 | E7 | E4.Z | E3)[]
+>doNotPropagate : (E8 | E7 | E4 | E3)[]
+>[    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z] : (E8 | E7 | E4 | E3)[]
 
     E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
 >E8.B : E8

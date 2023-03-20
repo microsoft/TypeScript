@@ -28,7 +28,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SomeClass = void 0;
 function Input(target, key) { }
-var SomeClass = /** @class */ (function () {
+var SomeClass = exports.SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     __decorate([
@@ -37,4 +37,3 @@ var SomeClass = /** @class */ (function () {
     ], SomeClass.prototype, "event", void 0);
     return SomeClass;
 }());
-exports.SomeClass = SomeClass;

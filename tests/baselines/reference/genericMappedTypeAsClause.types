@@ -65,3 +65,10 @@ function f1<T extends string>() {
 >undefined : undefined
 }
 
+// repro from #43189
+
+type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
+>RemapRecord : RemapRecord<K, V>
+
+interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
+

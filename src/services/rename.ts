@@ -97,7 +97,7 @@ function getRenameInfoForNode(
     }
 
     // Cannot rename `default` as in `import { default as foo } from "./someModule";
-    if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
+    if (isIdentifier(node) && node.escapedText === "default" && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
         return undefined;
     }
 

@@ -11,12 +11,9 @@ export default class Operation {
     validateParameters(parameterValues: any) : IValidationError[] | null {
 >validateParameters : (parameterValues: any) => IValidationError[] | null
 >parameterValues : any
->null : null
 
         let result: IValidationError[] | null = null;
 >result : IValidationError[] | null
->null : null
->null : null
 
         for(const parameterLocation of Object.keys(parameterValues)) {
 >parameterLocation : string

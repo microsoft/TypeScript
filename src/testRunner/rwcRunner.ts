@@ -1,6 +1,6 @@
-import * as Playback from "./_namespaces/Playback";
-import * as Harness from "./_namespaces/Harness";
 import * as compiler from "./_namespaces/compiler";
+import * as Harness from "./_namespaces/Harness";
+import * as Playback from "./_namespaces/Playback";
 import * as ts from "./_namespaces/ts";
 import * as vpath from "./_namespaces/vpath";
 

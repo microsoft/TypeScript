@@ -3,5 +3,4 @@ throw;
 > : any
 
 export throw null;
->null : null
 

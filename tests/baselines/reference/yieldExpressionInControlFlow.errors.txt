@@ -8,7 +8,7 @@ tests/cases/conformance/es6/yieldExpressions/bug25149.js(4,13): error TS7057: 'y
         var o
         while (true) {
             o = yield o
-                ~~~~~~~
+                ~~~~~
 !!! error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
         }
     }
