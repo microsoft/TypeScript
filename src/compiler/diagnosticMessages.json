@@ -5270,6 +5270,10 @@
         "category": "Message",
         "code": 6265
     },
+    "Option '{0}' can only be specified on command line.": {
+        "category": "Error",
+        "code": 6266
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",

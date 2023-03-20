@@ -3169,6 +3169,7 @@ function getExtendsConfigPathOrArray(
     basePath: string,
     configFileName: string | undefined,
     errors: Diagnostic[],
+    propertyAssignment?: PropertyAssignment,
     valueExpression?: Expression,
     sourceFile?: JsonSourceFile,
 ) {
@@ -3199,12 +3200,12 @@ function getExtendsConfigPathOrArray(
                 ));
             }
             else {
-                convertJsonOption(extendsOptionDeclaration.element, value, basePath, errors, (valueExpression as ArrayLiteralExpression | undefined)?.elements[index], sourceFile);
+                convertJsonOption(extendsOptionDeclaration.element, value, basePath, errors, propertyAssignment, (valueExpression as ArrayLiteralExpression | undefined)?.elements[index], sourceFile);
             }
         }
     }
     else {
-        convertJsonOption(extendsOptionDeclaration, value, basePath, errors, valueExpression, sourceFile);
+        convertJsonOption(extendsOptionDeclaration, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
     }
     return extendedConfigPath;
 }
@@ -3247,7 +3248,7 @@ function parseOwnConfigOfJsonSourceFile(
         option: CommandLineOption | undefined,
     ) {
         // Ensure value is verified except for extends which is handled in its own way for error reporting
-        if (option && option !== extendsOptionDeclaration) value = convertJsonOption(option, value, basePath, errors, propertyAssignment.initializer, sourceFile);
+        if (option && option !== extendsOptionDeclaration) value = convertJsonOption(option, value, basePath, errors, propertyAssignment, propertyAssignment.initializer, sourceFile);
         if (parentOption?.name) {
             if (option) {
                 let currentOption;
@@ -3274,7 +3275,7 @@ function parseOwnConfigOfJsonSourceFile(
         }
         else if (parentOption === rootOptions) {
             if (option === extendsOptionDeclaration) {
-                extendedConfigPath = getExtendsConfigPathOrArray(value, host, basePath, configFileName, errors, propertyAssignment.initializer, sourceFile);
+                extendedConfigPath = getExtendsConfigPathOrArray(value, host, basePath, configFileName, errors, propertyAssignment, propertyAssignment.initializer, sourceFile);
             }
             else if (!option) {
                 if (keyText === "excludes") {
@@ -3457,18 +3458,23 @@ export function convertJsonOption(
     value: any,
     basePath: string,
     errors: Diagnostic[],
+    propertyAssignment?: PropertyAssignment,
     valueExpression?: Expression,
     sourceFile?: TsConfigSourceFile,
 ): CompilerOptionsValue {
+    if (opt.isCommandLineOnly) {
+        errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment?.name, Diagnostics.Option_0_can_only_be_specified_on_command_line, opt.name));
+        return undefined;
+    }
     if (isCompilerOptionsValue(opt, value)) {
         const optType = opt.type;
         if ((optType === "list") && isArray(value)) {
-            return convertJsonOptionOfListType(opt, value, basePath, errors, valueExpression as ArrayLiteralExpression | undefined, sourceFile);
+            return convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile);
         }
         else if (optType === "listOrElement") {
             return isArray(value) ?
-                convertJsonOptionOfListType(opt, value, basePath, errors, valueExpression as ArrayLiteralExpression | undefined, sourceFile) :
-                convertJsonOption(opt.element, value, basePath, errors, valueExpression, sourceFile);
+                convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile) :
+                convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
             return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
@@ -3529,10 +3535,11 @@ function convertJsonOptionOfListType(
     values: readonly any[],
     basePath: string,
     errors: Diagnostic[],
+    propertyAssignment: PropertyAssignment | undefined,
     valueExpression: ArrayLiteralExpression | undefined,
     sourceFile: TsConfigSourceFile | undefined,
 ): any[] {
-    return filter(map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, valueExpression?.elements[index], sourceFile)), v => option.listPreserveFalsyValues ? true : !!v);
+    return filter(map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, propertyAssignment, valueExpression?.elements[index], sourceFile)), v => option.listPreserveFalsyValues ? true : !!v);
 }
 
 /**
