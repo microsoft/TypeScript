@@ -22,6 +22,7 @@ import {
     createGetCanonicalFileName,
     Debug,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticMessage,
     Diagnostics,
     DidYouMeanOptionsDiagnostics,
@@ -1692,7 +1693,7 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
     return createDiagnosticForInvalidCustomType(opt, createCompilerDiagnostic);
 }
 
-function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1: string) => Diagnostic): Diagnostic {
+function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
     const namesOfType = arrayFrom(opt.type.keys());
     const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
@@ -2994,9 +2995,9 @@ function parseJsonConfigFileContentWorker(
         return "no-prop";
     }
 
-    function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
+    function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, ...args: DiagnosticArguments) {
         if (!sourceFile) {
-            errors.push(createCompilerDiagnostic(message, arg0, arg1));
+            errors.push(createCompilerDiagnostic(message, ...args));
         }
     }
 }
@@ -3445,10 +3446,10 @@ function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, 
     return defaultOptions;
 }
 
-function createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile: TsConfigSourceFile | undefined, node: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
+function createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile: TsConfigSourceFile | undefined, node: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
     return sourceFile && node ?
-        createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3) :
-        createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
+        createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args) :
+        createCompilerDiagnostic(message, ...args);
 }
 
 /** @internal */
@@ -3519,8 +3520,8 @@ function convertJsonOptionOfCustomType(
         return validateJsonOptionValue(opt, val, errors, valueExpression, sourceFile);
     }
     else {
-        errors.push(createDiagnosticForInvalidCustomType(opt, (message, arg0, arg1) =>
-            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, arg0, arg1)));
+        errors.push(createDiagnosticForInvalidCustomType(opt, (message, ...args) =>
+            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args)));
     }
 }
 
