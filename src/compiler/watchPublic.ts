@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     BuilderProgram,
     BuildInfo,
@@ -81,6 +80,7 @@ import {
     sys,
     System,
     toPath,
+    toPath as ts_toPath,
     updateErrorForNoInputFiles,
     updateMissingFilePathsWatch,
     updateSharedExtendedConfigFileWatcher,
@@ -672,7 +672,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function toPath(fileName: string) {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function isFileMissingOnHost(hostSourceFile: HostFileInfo | undefined): hostSourceFile is FileMissingOnHost {

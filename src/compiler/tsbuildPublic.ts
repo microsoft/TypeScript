@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     AffectedFileResult,
     arrayToMap,
@@ -52,6 +51,7 @@ import {
     ForegroundColorEscapeSequences,
     formatColorAndReset,
     getAllProjectOutputs,
+    getBuildInfo as ts_getBuildInfo,
     getBuildInfoFileVersionMap,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
@@ -60,6 +60,7 @@ import {
     getFilesInErrorForSummary,
     getFirstProjectOutput,
     getLocaleTimeString,
+    getModifiedTime as ts_getModifiedTime,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
     getPendingEmitKind,
@@ -108,6 +109,7 @@ import {
     Status,
     sys,
     System,
+    toPath as ts_toPath,
     TypeReferenceDirectiveResolutionCache,
     unorderedRemoveItem,
     updateErrorForNoInputFiles,
@@ -525,7 +527,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
 }
 
 function toPath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: string) {
-    return ts.toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
+    return ts_toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
 function toResolvedConfigFilePath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: ResolvedConfigFileName): ResolvedConfigFilePath {
@@ -1150,7 +1152,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             const path = toPath(state, name);
             emittedOutputs.set(toPath(state, name), name);
             if (data?.buildInfo) setBuildInfo(state, data.buildInfo, projectPath, options, resultFlags);
-            const modifiedTime = data?.differsOnlyInMap ? ts.getModifiedTime(state.host, name) : undefined;
+            const modifiedTime = data?.differsOnlyInMap ? ts_getModifiedTime(state.host, name) : undefined;
             writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             // Revert the timestamp for the d.ts that is same
             if (data?.differsOnlyInMap) state.host.setModifiedTime(name, modifiedTime!);
@@ -1565,7 +1567,7 @@ function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T
     // In watch mode we store the modified times in the cache
     // This is either Date | FileWatcherWithModifiedTime because we query modified times first and
     // then after complete compilation of the project, watch the files so we dont want to loose these modified times.
-    const result = ts.getModifiedTime(state.host, fileName);
+    const result = ts_getModifiedTime(state.host, fileName);
     if (state.watch) {
         if (existing) (existing as FileWatcherWithModifiedTime).modifiedTime = result;
         else state.filesWatched.set(path, result);
@@ -1657,7 +1659,7 @@ function getBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, 
         return existing.buildInfo || undefined;
     }
     const value = state.readFileWithCache(buildInfoPath);
-    const buildInfo = value ? ts.getBuildInfo(buildInfoPath, value) : undefined;
+    const buildInfo = value ? ts_getBuildInfo(buildInfoPath, value) : undefined;
     state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
     return buildInfo;
 }
@@ -1732,7 +1734,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
     if (buildInfoPath) {
         const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
-        buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
+        buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts_getModifiedTime(host, buildInfoPath);
         if (buildInfoTime === missingFileModifiedTime) {
             if (!buildInfoCacheEntry) {
                 state.buildInfoCache.set(resolvedPath, {
@@ -1864,7 +1866,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // Output is missing; can stop checking
             let outputTime = outputTimeStampMap?.get(path);
             if (!outputTime) {
-                outputTime = ts.getModifiedTime(state.host, output);
+                outputTime = ts_getModifiedTime(state.host, output);
                 outputTimeStampMap?.set(path, outputTime);
             }
 
