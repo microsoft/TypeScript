@@ -1472,7 +1472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
     var requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
     var isolatedModulesLikeFlagName = compilerOptions.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules";
-    // It is an error ro use `importsNotUsedAsValues` alongside `verbatimModuleSyntax`, but we still need to not crash.
+    // It is an error to use `importsNotUsedAsValues` alongside `verbatimModuleSyntax`, but we still need to not crash.
     // Given that, in such a scenario, `verbatimModuleSyntax` is basically disabled, as least as far as alias visibility tracking goes.
     var canCollectSymbolAliasAccessabilityData = !compilerOptions.verbatimModuleSyntax || !!compilerOptions.importsNotUsedAsValues;
 
