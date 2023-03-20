@@ -44326,7 +44326,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getAllSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
                     checkExpressionCached(id);
-                    if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                    if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
                         error(id,
                             node.isExportEquals
                                 ? Diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration
@@ -44334,7 +44334,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             idText(id));
                     }
                 }
-                else if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax) {
+                else if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax) {
                     error(id,
                         node.isExportEquals
                             ? Diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type
