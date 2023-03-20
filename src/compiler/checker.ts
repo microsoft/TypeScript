@@ -17118,7 +17118,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getStringMappingType(symbol: Symbol, type: Type): Type {
         return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
-            type.flags & TypeFlags.Intersection ? getIntersectionType(map((type as IntersectionType).types, t => getStringMappingType(symbol, t))) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
