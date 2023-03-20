@@ -71,7 +71,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): err
         p2: true,
         p3: 42,
         p4: "hello"
-        ~~~~~~~~~~~
+        ~~
 !!! error TS2322: Type '{ p1: "left"; p2: true; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
 !!! error TS2322:   Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
     };
@@ -110,7 +110,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): err
         n: 1,
         a: 1,
         b: 1  // excess property
-        ~~~~
+        ~
 !!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithOverlappingOptionals'.
 !!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
     }
@@ -123,7 +123,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): err
         n: 1,
         a: 1,
         b: 1  // excess property
-        ~~~~
+        ~
 !!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
 !!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
     }

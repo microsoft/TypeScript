@@ -88,7 +88,7 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(112,63): error TS2322: Typ
 !!! error TS2322:     Property 'y' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; y: number; }'.
 !!! related TS2728 tests/cases/compiler/excessPropertyCheckWithUnions.ts:19:5: 'y' is declared here.
     amb = { tag: "A", z: true }
-                      ~~~~~~~
+                      ~
 !!! error TS2322: Type '{ tag: "A"; z: boolean; }' is not assignable to type 'Ambiguous'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
     
