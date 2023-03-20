@@ -29252,6 +29252,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function getApparentTypeOfInstantiatedContextualType(type: Type) {
+        return getObjectFlags(type) & ObjectFlags.Mapped ? type : getApparentType(type);
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -29266,7 +29270,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // That would evaluate mapped types with array or tuple type constraints too eagerly
                 // and thus it would prevent `getTypeOfPropertyOfContextualType` from obtaining per-position contextual type for elements of array literal expressions.
                 // Apparent type of other mapped types is already the mapped type itself so we can just avoid calling `getApparentType` here for all mapped types.
-                t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
+                t => {
+                    if (t.flags & TypeFlags.Intersection) {
+                        return getIntersectionType(map((t as IntersectionType).types, getApparentTypeOfInstantiatedContextualType));
+                    }
+                    return getApparentTypeOfInstantiatedContextualType(t);
+                },
                 /*noReductions*/ true
             );
             return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :

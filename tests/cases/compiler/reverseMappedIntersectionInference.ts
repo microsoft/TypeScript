@@ -68,3 +68,32 @@ const res2 = withTuples([
     },
   },
 ]);
+
+type Tuple<T> = readonly [T, ...T[]];
+
+declare function withTuplesConstraints<T extends Tuple<any>, E extends Tuple<any>>(
+  arg: Results<T> & Errors<E>
+): [T, E];
+
+const res3 = withTuplesConstraints([
+  {
+    data: "foo",
+    onSuccess: (dataArg) => {
+      dataArg;
+    },
+    error: 404,
+    onError: (errorArg) => {
+      errorArg;
+    },
+  },
+  {
+    data: true,
+    onSuccess: (dataArg) => {
+      dataArg;
+    },
+    error: 500,
+    onError: (errorArg) => {
+      errorArg;
+    },
+  },
+]);

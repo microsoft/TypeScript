@@ -180,3 +180,80 @@ const res2 = withTuples([
   },
 ]);
 
+type Tuple<T> = readonly [T, ...T[]];
+>Tuple : Tuple<T>
+
+declare function withTuplesConstraints<T extends Tuple<any>, E extends Tuple<any>>(
+>withTuplesConstraints : <T extends Tuple<any>, E extends Tuple<any>>(arg: Results<T> & Errors<E>) => [T, E]
+
+  arg: Results<T> & Errors<E>
+>arg : Results<T> & Errors<E>
+
+): [T, E];
+
+const res3 = withTuplesConstraints([
+>res3 : [[string, boolean], [number, number]]
+>withTuplesConstraints([  {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },]) : [[string, boolean], [number, number]]
+>withTuplesConstraints : <T extends Tuple<any>, E extends Tuple<any>>(arg: Results<T> & Errors<E>) => [T, E]
+>[  {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },] : [{ data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }, { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }]
+  {
+>{    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  } : { data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }
+
+    data: "foo",
+>data : string
+>"foo" : "foo"
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: string) => void
+>(dataArg) => {      dataArg;    } : (dataArg: string) => void
+>dataArg : string
+
+      dataArg;
+>dataArg : string
+
+    },
+    error: 404,
+>error : number
+>404 : 404
+
+    onError: (errorArg) => {
+>onError : (errorArg: number) => void
+>(errorArg) => {      errorArg;    } : (errorArg: number) => void
+>errorArg : number
+
+      errorArg;
+>errorArg : number
+
+    },
+  },
+  {
+>{    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  } : { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }
+
+    data: true,
+>data : true
+>true : true
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: boolean) => void
+>(dataArg) => {      dataArg;    } : (dataArg: boolean) => void
+>dataArg : boolean
+
+      dataArg;
+>dataArg : boolean
+
+    },
+    error: 500,
+>error : number
+>500 : 500
+
+    onError: (errorArg) => {
+>onError : (errorArg: number) => void
+>(errorArg) => {      errorArg;    } : (errorArg: number) => void
+>errorArg : number
+
+      errorArg;
+>errorArg : number
+
+    },
+  },
+]);

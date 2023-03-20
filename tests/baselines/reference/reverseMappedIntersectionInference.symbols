@@ -186,3 +186,79 @@ const res2 = withTuples([
   },
 ]);
 
+type Tuple<T> = readonly [T, ...T[]];
+>Tuple : Symbol(Tuple, Decl(reverseMappedIntersectionInference.ts, 66, 3))
+>T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 68, 11))
+>T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 68, 11))
+>T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 68, 11))
+
+declare function withTuplesConstraints<T extends Tuple<any>, E extends Tuple<any>>(
+>withTuplesConstraints : Symbol(withTuplesConstraints, Decl(reverseMappedIntersectionInference.ts, 68, 37))
+>T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 70, 39))
+>Tuple : Symbol(Tuple, Decl(reverseMappedIntersectionInference.ts, 66, 3))
+>E : Symbol(E, Decl(reverseMappedIntersectionInference.ts, 70, 60))
+>Tuple : Symbol(Tuple, Decl(reverseMappedIntersectionInference.ts, 66, 3))
+
+  arg: Results<T> & Errors<E>
+>arg : Symbol(arg, Decl(reverseMappedIntersectionInference.ts, 70, 83))
+>Results : Symbol(Results, Decl(reverseMappedIntersectionInference.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 70, 39))
+>Errors : Symbol(Errors, Decl(reverseMappedIntersectionInference.ts, 5, 2))
+>E : Symbol(E, Decl(reverseMappedIntersectionInference.ts, 70, 60))
+
+): [T, E];
+>T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 70, 39))
+>E : Symbol(E, Decl(reverseMappedIntersectionInference.ts, 70, 60))
+
+const res3 = withTuplesConstraints([
+>res3 : Symbol(res3, Decl(reverseMappedIntersectionInference.ts, 74, 5))
+>withTuplesConstraints : Symbol(withTuplesConstraints, Decl(reverseMappedIntersectionInference.ts, 68, 37))
+  {
+    data: "foo",
+>data : Symbol(data, Decl(reverseMappedIntersectionInference.ts, 75, 3))
+
+    onSuccess: (dataArg) => {
+>onSuccess : Symbol(onSuccess, Decl(reverseMappedIntersectionInference.ts, 76, 16))
+>dataArg : Symbol(dataArg, Decl(reverseMappedIntersectionInference.ts, 77, 16))
+
+      dataArg;
+>dataArg : Symbol(dataArg, Decl(reverseMappedIntersectionInference.ts, 77, 16))
+
+    },
+    error: 404,
+>error : Symbol(error, Decl(reverseMappedIntersectionInference.ts, 79, 6))
+
+    onError: (errorArg) => {
+>onError : Symbol(onError, Decl(reverseMappedIntersectionInference.ts, 80, 15))
+>errorArg : Symbol(errorArg, Decl(reverseMappedIntersectionInference.ts, 81, 14))
+
+      errorArg;
+>errorArg : Symbol(errorArg, Decl(reverseMappedIntersectionInference.ts, 81, 14))
+
+    },
+  },
+  {
+    data: true,
+>data : Symbol(data, Decl(reverseMappedIntersectionInference.ts, 85, 3))
+
+    onSuccess: (dataArg) => {
+>onSuccess : Symbol(onSuccess, Decl(reverseMappedIntersectionInference.ts, 86, 15))
+>dataArg : Symbol(dataArg, Decl(reverseMappedIntersectionInference.ts, 87, 16))
+
+      dataArg;
+>dataArg : Symbol(dataArg, Decl(reverseMappedIntersectionInference.ts, 87, 16))
+
+    },
+    error: 500,
+>error : Symbol(error, Decl(reverseMappedIntersectionInference.ts, 89, 6))
+
+    onError: (errorArg) => {
+>onError : Symbol(onError, Decl(reverseMappedIntersectionInference.ts, 90, 15))
+>errorArg : Symbol(errorArg, Decl(reverseMappedIntersectionInference.ts, 91, 14))
+
+      errorArg;
+>errorArg : Symbol(errorArg, Decl(reverseMappedIntersectionInference.ts, 91, 14))
+
+    },
+  },
+]);
