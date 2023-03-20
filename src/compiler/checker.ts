@@ -13467,18 +13467,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getPropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType): Symbol[] {
-        if (!type.resolvedProperties) {
-            for (const _ of iteratePropertiesOfUnionOrIntersectionType(type, /*doYield*/ false)) {
-                Debug.fail("Iterator should have been empty.");
-            }
+        for (const _ of iteratePropertiesOfUnionOrIntersectionType(type, /*doYield*/ false)) {
+            Debug.fail("Iterator should have been empty.");
         }
         return type.resolvedProperties!;
     }
 
     function* iteratePropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType, doYield = true) {
         if (type.resolvedProperties) {
-            Debug.assert(doYield);
-            yield* type.resolvedProperties;
+            if (doYield) {
+                yield* type.resolvedProperties;
+            }
             return;
         }
 
