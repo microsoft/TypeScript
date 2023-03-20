@@ -13506,9 +13506,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         finally {
             // Ensure we pop when we're all done iterating. If done outside of a finally,
             // this code won't actually execute.
-            if (!popTypeResolution()) {
-                return;
-            }
+            popTypeResolution();
         }
 
         type.resolvedProperties = type.partiallyResolvedProperties ?? emptyArray;
