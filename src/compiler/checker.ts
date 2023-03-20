@@ -22585,15 +22585,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (match === -1) {
             return defaultValue;
         }
-        // make sure exactly 1 matches before returning it
-        let nextMatch = discriminable.indexOf(/*searchElement*/ true, match + 1);
-        while (nextMatch !== -1) {
-            if (!isTypeIdenticalTo(target.types[match], target.types[nextMatch])) {
-                return defaultValue;
-            }
-            nextMatch = discriminable.indexOf(/*searchElement*/ true, nextMatch + 1);
-        }
-        return target.types[match];
+        return getUnionType(target.types.filter((_, index) => discriminable[index]));
     }
 
     /**
