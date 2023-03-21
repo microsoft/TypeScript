@@ -1182,8 +1182,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
         const { optionsNameMap } = getOptionsNameMap();
         for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
             const optionInfo = optionsNameMap.get(name.toLowerCase());
-            // all semantic diagnostics affect build info
-            if (optionInfo && (optionInfo.affectsBuildInfo || optionInfo.affectsSemanticDiagnostics)) {
+            if (optionInfo?.affectsBuildInfo) {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(
                     optionInfo,
                     options[name] as CompilerOptionsValue,
