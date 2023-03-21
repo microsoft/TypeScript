@@ -41,11 +41,11 @@ import {
     filterMutate,
     find,
     findIndex,
-    firstDefined,
     firstOrUndefinedIterator,
     flatten,
     forEach,
     forEachEntry,
+    forEachTsConfigPropArray,
     getBaseFileName,
     getDirectoryPath,
     getFileMatcherPatterns,
@@ -59,7 +59,6 @@ import {
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfPropertyName,
-    getTsConfigPropArray,
     getTsConfigPropArrayElementValue,
     hasExtension,
     hasProperty,
@@ -2886,7 +2885,7 @@ function parseJsonConfigFileContentWorker(
                 if (sourceFile) {
                     const fileName = configFileName || "tsconfig.json";
                     const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
-                    const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
+                    const nodeValue = forEachTsConfigPropArray(sourceFile, "files", property => property.initializer);
                     const error = createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, nodeValue, diagnosticMessage, fileName);
                     errors.push(error);
                 }
