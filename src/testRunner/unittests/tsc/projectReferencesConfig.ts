@@ -1,4 +1,5 @@
 import * as ts from "../../_namespaces/ts";
+
 import { loadProjectFromFiles, verifyTsc } from "./helpers";
 
 function emptyModule() {

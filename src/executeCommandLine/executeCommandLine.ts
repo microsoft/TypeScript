@@ -1,4 +1,3 @@
-import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -90,6 +89,7 @@ import {
 } from "./_namespaces/ts";
 
 import * as Debug from "../compiler/debug";
+import * as performance from "../compiler/performance";
 
 interface Statistic {
     name: string;
