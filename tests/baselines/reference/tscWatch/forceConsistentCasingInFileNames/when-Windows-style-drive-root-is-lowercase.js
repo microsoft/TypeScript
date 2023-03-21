@@ -66,21 +66,21 @@ c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
 PolledWatches::
-c:/project/node_modules/@types:
+c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/project/tsconfig.json:
+c:/project/tsconfig.json: *new*
   {}
-c:/project/a.ts:
+c:/project/a.ts: *new*
   {}
-c:/project/b.ts:
+c:/project/b.ts: *new*
   {}
-c:/a/lib/lib.d.ts:
+c:/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-c:/project:
+c:/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -145,24 +145,6 @@ c:/project/b.ts
 Shape signatures in builder refreshed for::
 c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
-
-PolledWatches::
-c:/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/project/tsconfig.json:
-  {}
-c:/project/a.ts:
-  {}
-c:/project/b.ts:
-  {}
-c:/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-c:/project:
-  {}
 
 exitCode:: ExitStatus.undefined
 

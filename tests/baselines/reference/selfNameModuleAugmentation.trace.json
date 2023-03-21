@@ -1,6 +1,7 @@
 [
     "======== Resolving module 'acorn-walk' from '/node_modules/acorn-walk/dist/walk.d.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/node_modules/acorn-walk/dist/package.json' does not exist.",
     "Found 'package.json' at '/node_modules/acorn-walk/package.json'.",
     "Entering conditional exports.",
@@ -23,6 +24,7 @@
     "======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk/dist/walk.d.ts@8.2.0'. ========",
     "======== Resolving module 'acorn-walk' from '/index.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/package.json' does not exist.",
     "Loading module 'acorn-walk' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "File '/node_modules/acorn-walk/package.json' exists according to earlier cached lookups.",

@@ -44,6 +44,7 @@ import {
     declarationNameToString,
     DeleteExpression,
     DestructuringAssignment,
+    DiagnosticArguments,
     DiagnosticCategory,
     DiagnosticMessage,
     DiagnosticRelatedInformation,
@@ -488,70 +489,76 @@ function initFlowNode<T extends FlowNode>(node: T) {
     return node;
 }
 
-const binder = createBinder();
+const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
     performance.mark("beforeBind");
-    perfLogger.logStartBindFile("" + file.fileName);
+    perfLogger?.logStartBindFile("" + file.fileName);
     binder(file, options);
-    perfLogger.logStopBindFile();
+    perfLogger?.logStopBindFile();
     performance.mark("afterBind");
     performance.measure("Bind", "beforeBind", "afterBind");
 }
 
 function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
-    let file: SourceFile;
-    let options: CompilerOptions;
-    let languageVersion: ScriptTarget;
-    let parent: Node;
-    let container: IsContainer | EntityNameExpression;
-    let thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
-    let blockScopeContainer: IsBlockScopedContainer;
-    let lastContainer: HasLocals;
-    let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
-    let seenThisKeyword: boolean;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var file: SourceFile;
+    var options: CompilerOptions;
+    var languageVersion: ScriptTarget;
+    var parent: Node;
+    var container: IsContainer | EntityNameExpression;
+    var thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
+    var blockScopeContainer: IsBlockScopedContainer;
+    var lastContainer: HasLocals;
+    var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
+    var seenThisKeyword: boolean;
 
     // state used by control flow analysis
-    let currentFlow: FlowNode;
-    let currentBreakTarget: FlowLabel | undefined;
-    let currentContinueTarget: FlowLabel | undefined;
-    let currentReturnTarget: FlowLabel | undefined;
-    let currentTrueTarget: FlowLabel | undefined;
-    let currentFalseTarget: FlowLabel | undefined;
-    let currentExceptionTarget: FlowLabel | undefined;
-    let preSwitchCaseFlow: FlowNode | undefined;
-    let activeLabelList: ActiveLabel | undefined;
-    let hasExplicitReturn: boolean;
+    var currentFlow: FlowNode;
+    var currentBreakTarget: FlowLabel | undefined;
+    var currentContinueTarget: FlowLabel | undefined;
+    var currentReturnTarget: FlowLabel | undefined;
+    var currentTrueTarget: FlowLabel | undefined;
+    var currentFalseTarget: FlowLabel | undefined;
+    var currentExceptionTarget: FlowLabel | undefined;
+    var preSwitchCaseFlow: FlowNode | undefined;
+    var activeLabelList: ActiveLabel | undefined;
+    var hasExplicitReturn: boolean;
 
     // state used for emit helpers
-    let emitFlags: NodeFlags;
+    var emitFlags: NodeFlags;
 
     // If this file is an external module, then it is automatically in strict-mode according to
     // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
     // not depending on if we see "use strict" in certain places or if we hit a class/namespace
     // or if compiler options contain alwaysStrict.
-    let inStrictMode: boolean;
+    var inStrictMode: boolean;
 
     // If we are binding an assignment pattern, we will bind certain expressions differently.
-    let inAssignmentPattern = false;
+    var inAssignmentPattern = false;
 
-    let symbolCount = 0;
+    var symbolCount = 0;
 
-    let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
-    let classifiableNames: Set<__String>;
+    var Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
+    var classifiableNames: Set<__String>;
 
-    const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    var unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    /* eslint-enable no-var */
+
+    return bindSourceFile;
 
     /**
      * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
      * If so, the node _must_ be in the current file (as that's the only way anything could have traversed to it to yield it as the error node)
      * This version of `createDiagnosticForNode` uses the binder's context to account for this, and always yields correct diagnostics even in these situations.
      */
-    function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
-        return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, arg0, arg1, arg2);
+    function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
+        return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, ...args);
     }
 
     function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
@@ -599,8 +606,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
-
-    return bindSourceFile;
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
         if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
@@ -836,7 +841,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     const declarationName = getNameOfDeclaration(node) || node;
                     forEach(symbol.declarations, (declaration, index) => {
                         const decl = getNameOfDeclaration(declaration) || declaration;
-                        const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
+                        const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
                             multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
                         );
@@ -845,7 +850,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         }
                     });
 
-                    const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined);
+                    const diag = messageNeedsName ? createDiagnosticForNode(declarationName, message, getDisplayName(node)) : createDiagnosticForNode(declarationName, message);
                     file.bindDiagnostics.push(addRelatedInfo(diag, ...relatedInformation));
 
                     symbol = createSymbol(SymbolFlags.None, name);
@@ -2609,9 +2614,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+    function errorOnFirstToken(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         const span = getSpanOfTokenAtPosition(file, node.pos);
-        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
+        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, ...args));
     }
 
     function errorOrSuggestionOnNode(isError: boolean, node: Node, message: DiagnosticMessage): void {
@@ -3209,7 +3214,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
                 break;
-
+            // Namespaces are not allowed in javascript files, so do nothing here
+            case SyntaxKind.ModuleDeclaration:
+                break;
             default:
                 Debug.failBadSyntaxKind(thisContainer);
         }

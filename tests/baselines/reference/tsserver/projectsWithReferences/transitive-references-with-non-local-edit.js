@@ -40,12 +40,6 @@ export class X {}
 export class A {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:40.000] Search path: /user/username/projects/myproject/c
 Info 2    [00:00:41.000] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
 Info 3    [00:00:42.000] Creating configuration project /user/username/projects/myproject/c/tsconfig.json
@@ -124,11 +118,11 @@ Info 26   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 27   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:01:07.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 29   [00:01:08.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -161,88 +155,64 @@ export const b = new A();export function gFoo() { }
 
 
 PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
+/user/username/projects/myproject/c/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a/tsconfig.json:
+/user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/b/index.ts:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts:
+/user/username/projects/myproject/a/index.ts: *new*
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
-/user/username/projects/myproject/refs:
+/user/username/projects/myproject/refs: *new*
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/a: *new*
   {}
 
 Info 35   [00:01:22.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 36   [00:01:23.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
 Info 37   [00:01:24.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 38   [00:01:25.000] Different program with same set of files
-Info 39   [00:01:26.000] Running: *ensureProjectForOpenFiles*
-Info 40   [00:01:27.000] Before ensureProjectForOpenFiles:
-Info 41   [00:01:28.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 41   [00:01:29.000] 	Files (5)
+Info 38   [00:01:25.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 39   [00:01:26.000] 	Files (5)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-2 "import {A} from '@ref/a';\nexport const b = new A();export function gFoo() { }"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
-Info 41   [00:01:30.000] -----------------------------------------------
-Info 41   [00:01:31.000] Open files: 
-Info 41   [00:01:32.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 41   [00:01:33.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-Info 41   [00:01:34.000] After ensureProjectForOpenFiles:
-Info 42   [00:01:35.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 42   [00:01:36.000] 	Files (5)
+Info 40   [00:01:27.000] -----------------------------------------------
+Info 41   [00:01:28.000] Running: *ensureProjectForOpenFiles*
+Info 42   [00:01:29.000] Before ensureProjectForOpenFiles:
+Info 43   [00:01:30.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 43   [00:01:31.000] 	Files (5)
 
-Info 42   [00:01:37.000] -----------------------------------------------
-Info 42   [00:01:38.000] Open files: 
-Info 42   [00:01:39.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 42   [00:01:40.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 43   [00:01:32.000] -----------------------------------------------
+Info 43   [00:01:33.000] Open files: 
+Info 43   [00:01:34.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 43   [00:01:35.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 43   [00:01:36.000] After ensureProjectForOpenFiles:
+Info 44   [00:01:37.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 44   [00:01:38.000] 	Files (5)
+
+Info 44   [00:01:39.000] -----------------------------------------------
+Info 44   [00:01:40.000] Open files: 
+Info 44   [00:01:41.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 44   [00:01:42.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
 After checking timeout queue length (2) and running
-
-PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/b/index.ts:
-  {}
-/user/username/projects/myproject/a/index.ts:
-  {}
-/user/username/projects/myproject/refs/a.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}
-/user/username/projects/myproject/refs:
-  {}
-/user/username/projects/myproject/a:
-  {}

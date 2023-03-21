@@ -1,6 +1,8 @@
 [
-    "======== Resolving type reference directive 'linked', containing file '/app/app.ts', root directory not set. ========",
-    "Root directory cannot be determined, skipping primary search paths.",
+    "======== Resolving type reference directive 'linked', containing file '/app/app.ts', root directory 'node_modules/@types,/node_modules/@types'. ========",
+    "Resolving with primary search path 'node_modules/@types, /node_modules/@types'.",
+    "Directory 'node_modules/@types' does not exist, skipping all lookups in it.",
+    "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
     "Looking up in 'node_modules' folder, initial location '/app'.",
     "File '/app/node_modules/linked/package.json' does not exist.",
     "File '/app/node_modules/linked.d.ts' does not exist.",

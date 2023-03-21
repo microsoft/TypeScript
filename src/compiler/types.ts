@@ -14,7 +14,6 @@ import {
     PackageJsonInfoCache,
     Pattern,
     ProgramBuildInfo,
-    Push,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts";
@@ -130,6 +129,11 @@ export const enum SyntaxKind {
     // Identifiers and PrivateIdentifiers
     Identifier,
     PrivateIdentifier,
+    /**
+     * Only the special JSDoc comment text scanner produces JSDocCommentTextTokes. One of these tokens spans all text after a tag comment's start and before the next @
+     * @internal
+     */
+    JSDocCommentTextToken,
     // Reserved words
     BreakKeyword,
     CaseKeyword,
@@ -574,6 +578,9 @@ export type PunctuationSyntaxKind =
     | SyntaxKind.BarEqualsToken
     | SyntaxKind.CaretEqualsToken
     ;
+
+/** @internal */
+export type PunctuationOrKeywordSyntaxKind = PunctuationSyntaxKind | KeywordSyntaxKind;
 
 export type KeywordSyntaxKind =
     | SyntaxKind.AbstractKeyword
@@ -4661,7 +4668,7 @@ export interface FilePreprocessingReferencedDiagnostic {
     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
     reason: ReferencedFile;
     diagnostic: DiagnosticMessage;
-    args?: (string | number | undefined)[];
+    args?: DiagnosticArguments;
 }
 
 /** @internal */
@@ -4670,7 +4677,7 @@ export interface FilePreprocessingFileExplainingDiagnostic {
     file?: Path;
     fileProcessingReason: FileIncludeReason;
     diagnostic: DiagnosticMessage;
-    args?: (string | number | undefined)[];
+    args?: DiagnosticArguments;
 }
 
 /** @internal */
@@ -4723,7 +4730,7 @@ export interface Program extends ScriptReferenceHost {
      */
     emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     /** @internal */
-    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
+    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult;
 
     getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -5100,17 +5107,46 @@ export interface TypeChecker {
     getBaseConstraintOfType(type: Type): Type | undefined;
     getDefaultFromTypeParameter(type: Type): Type | undefined;
 
-    /** @internal */ getAnyType(): Type;
-    /** @internal */ getStringType(): Type;
-    /** @internal */ getNumberType(): Type;
-    /** @internal */ getBooleanType(): Type;
-    /** @internal */ getFalseType(fresh?: boolean): Type;
-    /** @internal */ getTrueType(fresh?: boolean): Type;
-    /** @internal */ getVoidType(): Type;
-    /** @internal */ getUndefinedType(): Type;
-    /** @internal */ getNullType(): Type;
-    /** @internal */ getESSymbolType(): Type;
-    /** @internal */ getNeverType(): Type;
+    /**
+     * Gets the intrinsic `any` type. There are multiple types that act as `any` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `any`. Instead, use `type.flags & TypeFlags.Any`.
+     */
+    getAnyType(): Type;
+    getStringType(): Type;
+    getStringLiteralType(value: string): StringLiteralType;
+    getNumberType(): Type;
+    getNumberLiteralType(value: number): NumberLiteralType;
+    getBigIntType(): Type;
+    getBooleanType(): Type;
+    /* eslint-disable @typescript-eslint/unified-signatures */
+    /** @internal */
+    getFalseType(fresh?: boolean): Type;
+    getFalseType(): Type;
+    /** @internal */
+    getTrueType(fresh?: boolean): Type;
+    getTrueType(): Type;
+    /* eslint-enable @typescript-eslint/unified-signatures */
+    getVoidType(): Type;
+    /**
+     * Gets the intrinsic `undefined` type. There are multiple types that act as `undefined` used internally in the compiler
+     * depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+     * if another type is `undefined`. Instead, use `type.flags & TypeFlags.Undefined`.
+     */
+    getUndefinedType(): Type;
+    /**
+     * Gets the intrinsic `null` type. There are multiple types that act as `null` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `null`. Instead, use `type.flags & TypeFlags.Null`.
+     */
+    getNullType(): Type;
+    getESSymbolType(): Type;
+    /**
+     * Gets the intrinsic `never` type. There are multiple types that act as `never` used internally in the compiler,
+     * so the type returned by this function should not be used in equality checks to determine if another type
+     * is `never`. Instead, use `type.flags & TypeFlags.Never`.
+     */
+    getNeverType(): Type;
     /** @internal */ getOptionalType(): Type;
     /** @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
     /** @internal */ createArrayType(elementType: Type): Type;
@@ -5240,6 +5276,7 @@ export interface TypeChecker {
     /** @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
     /** @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, memberSymbol: Symbol): MemberOverrideStatus;
     /** @internal */ isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node): boolean;
+    /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
 }
 
 /** @internal */
@@ -5625,7 +5662,7 @@ export interface EmitResolver {
     isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -5810,7 +5847,7 @@ export interface SymbolLinks {
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    typeOnlyExportStarMap?: UnderscoreEscapedMap<ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
     typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
     isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
@@ -5914,18 +5951,16 @@ export const enum InternalSymbolName {
  * with a normal string (which is good, it cannot be misused on assignment or on usage),
  * while still being comparable with a normal string via === (also good) and castable from a string.
  */
-export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName; // eslint-disable-line @typescript-eslint/naming-convention
+export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
-/** ReadonlyMap where keys are `__String`s. */
-export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-}
+/** @deprecated Use ReadonlyMap<__String, T> instead. */
+export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
 
-/** Map where keys are `__String`s. */
-export interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-}
+/** @deprecated Use Map<__String, T> instead. */
+export type UnderscoreEscapedMap<T> = Map<__String, T>;
 
 /** SymbolTable based on ES6 Map interface. */
-export type SymbolTable = UnderscoreEscapedMap<Symbol>;
+export type SymbolTable = Map<__String, Symbol>;
 
 /**
  * Used to track a `declare module "foo*"`-like declaration.
@@ -5996,7 +6031,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    firstSpreadIndex?: number;          // Index of first spread element in array literal (-1 for none)
+    spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
 }
@@ -6054,8 +6089,6 @@ export const enum TypeFlags {
     PossiblyFalsy = DefinitelyFalsy | String | Number | BigInt | Boolean,
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
-    /** @internal */
-    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol | TemplateLiteral,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
     NumberLike = Number | NumberLiteral | Enum,
     BigIntLike = BigInt | BigIntLiteral,
@@ -6063,6 +6096,8 @@ export const enum TypeFlags {
     EnumLike = Enum | EnumLiteral,
     ESSymbolLike = ESSymbol | UniqueESSymbol,
     VoidLike = Void | Undefined,
+    /** @internal */
+    Primitive = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | VoidLike | Null,
     /** @internal */
     DefinitelyNonNullable = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | Object | NonPrimitive,
     /** @internal */
@@ -6075,7 +6110,7 @@ export const enum TypeFlags {
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
-    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
+    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection | TemplateLiteral,
     /** @internal */
     Simplifiable = IndexedAccess | Conditional,
     /** @internal */
@@ -6098,7 +6133,7 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
-    NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
+    NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -6119,8 +6154,6 @@ export interface Type {
     permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
     /** @internal */
     restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
-    /** @internal */
-    uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
     /** @internal */
     immediateBaseConstraint?: Type;  // Immediate base constraint cache
     /** @internal */
@@ -6231,7 +6264,7 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-    // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
+    // Flags that require TypeFlags.UnionOrIntersection, TypeFlags.Substitution, or TypeFlags.TemplateLiteral
     /** @internal */
     IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
     /** @internal */
@@ -6258,7 +6291,7 @@ export const enum ObjectFlags {
 }
 
 /** @internal */
-export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
+export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
 
 // Object types (TypeFlags.ObjectType)
 export interface ObjectType extends Type {
@@ -6410,6 +6443,8 @@ export interface UnionType extends UnionOrIntersectionType {
 export interface IntersectionType extends UnionOrIntersectionType {
     /** @internal */
     resolvedApparentType: Type;
+    /** @internal */
+    uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
 }
 
 export type StructuredType = ObjectType | UnionType | IntersectionType;
@@ -6559,11 +6594,19 @@ export interface IndexedAccessType extends InstantiableType {
 
 export type TypeVariable = TypeParameter | IndexedAccessType;
 
+/** @internal */
+export const enum IndexFlags {
+    None = 0,
+    StringsOnly = 1 << 0,
+    NoIndexSignatures = 1 << 1,
+    NoReducibleCheck = 1 << 2,
+}
+
 // keyof T types (TypeFlags.Index)
 export interface IndexType extends InstantiableType {
     type: InstantiableType | UnionOrIntersectionType;
     /** @internal */
-    stringsOnly: boolean;
+    indexFlags: IndexFlags;
 }
 
 export interface ConditionalRoot {
@@ -6596,6 +6639,8 @@ export interface ConditionalType extends InstantiableType {
 }
 
 export interface TemplateLiteralType extends InstantiableType {
+    /** @internal */
+    objectFlags: ObjectFlags;
     texts: readonly string[];  // Always one element longer than types
     types: readonly Type[];  // Always at least one element
 }
@@ -6876,6 +6921,12 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     /** @internal */ skippedOn?: keyof CompilerOptions;
 }
 
+/** @internal */
+export type DiagnosticArguments = (string | number)[];
+
+/** @internal */
+export type DiagnosticAndArguments = [message: DiagnosticMessage, ...args: DiagnosticArguments];
+
 export interface DiagnosticRelatedInformation {
     category: DiagnosticCategory;
     code: number;
@@ -6913,6 +6964,12 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowe
 
 export enum ModuleResolutionKind {
     Classic  = 1,
+    /**
+     * @deprecated
+     * `NodeJs` was renamed to `Node10` to better reflect the version of Node that it targets.
+     * Use the new name or consider switching to a modern module resolution target.
+     */
+    NodeJs   = 2,
     Node10   = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
     // to better support ecmascript modules and their use within node - however more features are still being added.
@@ -6921,7 +6978,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
-    Bundler   = 100,
+    Bundler  = 100,
 }
 
 export enum ModuleDetectionKind {
@@ -7308,6 +7365,7 @@ export interface CommandLineOptionBase {
     affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
+    disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
 }
 
 /** @internal */
@@ -8892,7 +8950,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node | undefined>): number;
+    copyPrologue(source: readonly Statement[], target: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node | undefined>): number;
     /**
      * Copies only the standard (string-expression) prologue-directives into the target statement-array.
      * @param source origin statements array
@@ -8902,7 +8960,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, ensureUseStrict?: boolean): number;
+    copyStandardPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, ensureUseStrict?: boolean): number;
     /**
      * Copies only the custom prologue-directives into target statement-array.
      * @param source origin statements array
@@ -8912,8 +8970,8 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
-    /** @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number | undefined;
+    copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
+    /** @internal */ copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number | undefined;
     /** @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
     /** @internal */ liftToBlock(nodes: readonly Node[]): Statement;
     /**
@@ -9475,7 +9533,6 @@ export interface EmitTextWriter extends SymbolWriter {
 }
 
 export interface GetEffectiveTypeRootsHost {
-    directoryExists?(directoryName: string): boolean;
     getCurrentDirectory?(): string;
 }
 
@@ -9872,13 +9929,4 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
-}
-
-/** @internal */
-export const enum DeprecationVersion {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    v5_0 = "5.0",
-    v5_5 = "5.5",
-    v6_0 = "6.0",
-    /* eslint-enable @typescript-eslint/naming-convention */
 }

@@ -6,8 +6,6 @@ function f1() {
 
     let a: number | null = null;
 >a : number | null
->null : null
->null : null
 
     try {
         a = 123;
@@ -29,7 +27,6 @@ function f1() {
 >a != null && a.toFixed(0) == "123" : boolean
 >a != null : boolean
 >a : number | null
->null : null
 >a.toFixed(0) == "123" : boolean
 >a.toFixed(0) : string
 >a.toFixed : (fractionDigits?: number | undefined) => string
@@ -579,7 +576,6 @@ function t1() {
 >e : unknown
 
             return null;
->null : null
         }
         x;  // Unreachable
 >x : "x" | null

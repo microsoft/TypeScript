@@ -1397,7 +1397,7 @@ type Unbounded = [...Numbers, boolean];
 
 const data: Unbounded = [false, false];  // Error
 >data : [...number[], boolean]
->[false, false] : [false, false]
+>[false, false] : [boolean, false]
 >false : false
 >false : false
 

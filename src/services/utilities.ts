@@ -42,6 +42,8 @@ import {
     defaultMaximumTruncationLength,
     DeleteExpression,
     Diagnostic,
+    DiagnosticAndArguments,
+    DiagnosticArguments,
     DiagnosticMessage,
     DiagnosticWithLocation,
     directoryProbablyExists,
@@ -312,6 +314,7 @@ import {
     singleOrUndefined,
     skipAlias,
     skipOuterExpressions,
+    skipParentheses,
     some,
     SortKind,
     SourceFile,
@@ -360,6 +363,7 @@ import {
     VariableDeclaration,
     visitEachChild,
     VoidExpression,
+    walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
 
@@ -2163,6 +2167,10 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
     return false;
 }
 
+function areIntersectedTypesAvoidingStringReduction(checker: TypeChecker, t1: Type, t2: Type) {
+    return !!(t1.flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(t2);
+}
+
 /** @internal */
 export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     if (!type.isIntersection()) {
@@ -2170,13 +2178,8 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     }
 
     const { types, checker } = type;
-    return types.length === 2
-        && (types[0].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[1]);
-}
-
-/** @internal */
-export function isPunctuation(kind: SyntaxKind): boolean {
-    return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
+    return types.length === 2 &&
+        (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) || areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
 }
 
 /** @internal */
@@ -3298,7 +3301,7 @@ export function needsParentheses(expression: Expression): boolean {
 
 /** @internal */
 export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
-    const { parent } = node;
+    const parent = walkUpParenthesizedExpressions(node.parent);
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
             return checker.getContextualType(parent as NewExpression, contextFlags);
@@ -3309,7 +3312,7 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
                 : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
-            return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
+            return getSwitchedType(parent as CaseClause, checker);
         default:
             return checker.getContextualType(node, contextFlags);
     }
@@ -4052,11 +4055,11 @@ export function getNewLineKind(newLineCharacter: string): NewLineKind {
 }
 
 /** @internal */
-export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+export type DiagnosticOrDiagnosticAndArguments = DiagnosticMessage | DiagnosticAndArguments;
 /** @internal */
-export function diagnosticToString(diag: DiagnosticAndArguments): string {
+export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): string {
     return isArray(diag)
-        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as DiagnosticArguments)
         : getLocaleSpecificMessage(diag);
 }
 
@@ -4098,8 +4101,8 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
 
     for (const clause of clauses) {
         if (!isDefaultClause(clause)) {
-            if (isLiteralExpression(clause.expression)) {
-                const expression = clause.expression;
+            const expression = skipParentheses(clause.expression);
+            if (isLiteralExpression(expression)) {
                 switch (expression.kind) {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                     case SyntaxKind.StringLiteral:

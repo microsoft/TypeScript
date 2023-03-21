@@ -104,7 +104,6 @@ class PersonMixin extends Function {
 >"object" : "object"
 >o !== null : boolean
 >o : any
->null : null
 >o instanceof Person : boolean
 >o : any
 >Person : typeof Person

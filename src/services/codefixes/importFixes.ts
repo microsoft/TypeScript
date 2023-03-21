@@ -18,7 +18,7 @@ import {
     createMultiMap,
     createPackageJsonImportFilter,
     Debug,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     DiagnosticWithLocation,
     emptyArray,
@@ -1148,7 +1148,7 @@ function getExportInfos(
 ): ReadonlyMap<string, readonly SymbolExportInfo[]> {
     // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
     // Maps symbol id to info for modules providing that symbol (original export + re-exports).
-    const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
+    const originalSymbolToExportInfos = createMultiMap<string, SymbolExportInfo>();
     const packageJsonFilter = createPackageJsonImportFilter(fromFile, preferences, host);
     const moduleSpecifierCache = host.getModuleSpecifierCache?.();
     const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
@@ -1212,13 +1212,13 @@ function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: C
 }
 
 function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): CodeFixAction {
-    let diag!: DiagnosticAndArguments;
+    let diag!: DiagnosticOrDiagnosticAndArguments;
     const changes = textChanges.ChangeTracker.with(context, tracker => {
         diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences);
     });
     return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
 }
-function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticAndArguments {
+function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticOrDiagnosticAndArguments {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     switch (fix.kind) {
         case ImportFixKind.UseNamespace:

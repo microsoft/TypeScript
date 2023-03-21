@@ -90,6 +90,7 @@ import {
     DefaultClause,
     DestructuringAssignment,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticMessageChain,
@@ -440,6 +441,8 @@ import {
     PropertyNameLiteral,
     PropertySignature,
     PseudoBigInt,
+    PunctuationOrKeywordSyntaxKind,
+    PunctuationSyntaxKind,
     QualifiedName,
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
@@ -464,7 +467,6 @@ import {
     Signature,
     SignatureDeclaration,
     SignatureFlags,
-    SignatureKind,
     singleElementArray,
     singleOrUndefined,
     skipOuterExpressions,
@@ -597,7 +599,11 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
-    let str = "";
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var str = "";
+    /* eslint-enable no-var */
     const writeText: (text: string) => void = text => str += text;
     return {
         getText: () => str,
@@ -2055,21 +2061,21 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
 }
 
 /** @internal */
-export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const sourceFile = getSourceFileOfNode(node);
-    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
+    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const start = skipTrivia(sourceFile.text, nodes.pos);
-    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
+    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
-    return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
+    return createFileDiagnostic(sourceFile, span.start, span.length, message, ...args);
 }
 
 /** @internal */
@@ -2147,8 +2153,8 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
     const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
     scanner.scan();
-    const start = scanner.getTokenPos();
-    return createTextSpanFromBounds(start, scanner.getTextPos());
+    const start = scanner.getTokenStart();
+    return createTextSpanFromBounds(start, scanner.getTokenEnd());
 }
 
 /** @internal */
@@ -2176,13 +2182,14 @@ function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunctio
 export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
     let errorNode: Node | undefined = node;
     switch (node.kind) {
-        case SyntaxKind.SourceFile:
+        case SyntaxKind.SourceFile: {
             const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
             if (pos === sourceFile.text.length) {
                 // file is empty - return span for the beginning of the file
                 return createTextSpan(0, 0);
             }
             return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
         // This list is a work in progress. Add missing node kinds to improve their error
         // spans.
         case SyntaxKind.VariableDeclaration:
@@ -2207,10 +2214,16 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
         case SyntaxKind.ArrowFunction:
             return getErrorSpanForArrowFunction(sourceFile, node as ArrowFunction);
         case SyntaxKind.CaseClause:
-        case SyntaxKind.DefaultClause:
+        case SyntaxKind.DefaultClause: {
             const start = skipTrivia(sourceFile.text, (node as CaseOrDefaultClause).pos);
             const end = (node as CaseOrDefaultClause).statements.length > 0 ? (node as CaseOrDefaultClause).statements[0].pos : (node as CaseOrDefaultClause).end;
             return createTextSpanFromBounds(start, end);
+        }
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.YieldExpression: {
+            const pos = skipTrivia(sourceFile.text, (node as ReturnStatement | YieldExpression).pos);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
     }
 
     if (errorNode === undefined) {
@@ -2367,6 +2380,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.SymbolKeyword:
         case SyntaxKind.ObjectKeyword:
         case SyntaxKind.UndefinedKeyword:
+        case SyntaxKind.NullKeyword:
         case SyntaxKind.NeverKeyword:
             return true;
         case SyntaxKind.VoidKeyword:
@@ -4761,6 +4775,16 @@ export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
 }
 
 /** @internal */
+export function isPunctuation(token: SyntaxKind): token is PunctuationSyntaxKind {
+    return SyntaxKind.FirstPunctuation <= token && token <= SyntaxKind.LastPunctuation;
+}
+
+/** @internal */
+export function isKeywordOrPunctuation(token: SyntaxKind): token is PunctuationOrKeywordSyntaxKind {
+    return isKeyword(token) || isPunctuation(token);
+}
+
+/** @internal */
 export function isContextualKeyword(token: SyntaxKind): boolean {
     return SyntaxKind.FirstContextualKeyword <= token && token <= SyntaxKind.LastContextualKeyword;
 }
@@ -5811,12 +5835,16 @@ export function isNightly() {
 
 /** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
-    let output: string;
-    let indent: number;
-    let lineStart: boolean;
-    let lineCount: number;
-    let linePos: number;
-    let hasTrailingComment = false;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var output: string;
+    var indent: number;
+    var lineStart: boolean;
+    var lineCount: number;
+    var linePos: number;
+    var hasTrailingComment = false;
+    /* eslint-enable no-var */
 
     function updateLineCountAndPosFor(s: string) {
         const lineStartsOfS = computeLineStarts(s);
@@ -7476,26 +7504,25 @@ export function isWriteAccess(node: Node) {
 const enum AccessKind {
     /** Only reads from a variable. */
     Read,
-    /** Only writes to a variable without using the result. E.g.: `x++;`. */
+    /** Only writes to a variable without ever reading it. E.g.: `x=1;`. */
     Write,
-    /** Writes to a variable and uses the result as an expression. E.g.: `f(x++);`. */
+    /** Reads from and writes to a variable. E.g.: `f(x++);`, `x/=1`. */
     ReadWrite
 }
 function accessKind(node: Node): AccessKind {
     const { parent } = node;
-    if (!parent) return AccessKind.Read;
 
-    switch (parent.kind) {
+    switch (parent?.kind) {
         case SyntaxKind.ParenthesizedExpression:
             return accessKind(parent);
         case SyntaxKind.PostfixUnaryExpression:
         case SyntaxKind.PrefixUnaryExpression:
             const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
-            return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
+            return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? AccessKind.ReadWrite : AccessKind.Read;
         case SyntaxKind.BinaryExpression:
             const { left, operatorToken } = parent as BinaryExpression;
             return left === node && isAssignmentOperator(operatorToken.kind) ?
-                operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : writeOrReadWrite()
+                operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : AccessKind.ReadWrite
                 : AccessKind.Read;
         case SyntaxKind.PropertyAccessExpression:
             return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
@@ -7511,11 +7538,6 @@ function accessKind(node: Node): AccessKind {
             return accessKind(parent);
         default:
             return AccessKind.Read;
-    }
-
-    function writeOrReadWrite(): AccessKind {
-        // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-        return parent.parent && walkUpParenthesizedExpressions(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
     }
 }
 function reverseAccessKind(a: AccessKind): AccessKind {
@@ -7643,11 +7665,6 @@ export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclar
 /** @internal */
 export function getObjectFlags(type: Type): ObjectFlags {
     return type.flags & TypeFlags.ObjectFlagsType ? (type as ObjectFlagsType).objectFlags : 0;
-}
-
-/** @internal */
-export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
-    return checker.getSignaturesOfType(type, SignatureKind.Call).length !== 0 || checker.getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
 }
 
 /** @internal */
@@ -7934,7 +7951,6 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
     this.skipTrivia = skipTrivia || (pos => pos);
 }
 
-// eslint-disable-next-line prefer-const
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
     getNodeConstructor: () => Node as any,
@@ -7992,7 +8008,7 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithDetachedLocation;
+export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation;
 /** @internal */
 export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
     assertDiagnosticLocation(/*file*/ undefined, start, length);
@@ -8063,7 +8079,7 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 }
 
 /** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
+export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation;
 /** @internal */
 export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
     assertDiagnosticLocation(file, start, length);
@@ -8088,7 +8104,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 }
 
 /** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: (string | number | undefined)[]): string;
+export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: DiagnosticArguments): string;
 /** @internal */
 export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
     let text = getLocaleSpecificMessage(message);
@@ -8101,7 +8117,7 @@ export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
 }
 
 /** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
+export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic;
 /** @internal */
 export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
     let text = getLocaleSpecificMessage(message);
@@ -8138,7 +8154,7 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
+export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain;
 /** @internal */
 export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
@@ -9549,7 +9565,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
     // * a bigint can be scanned, and that when it is scanned, it is
     // * the full length of the input string (so the scanner is one character beyond the augmented input length)
     // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-    return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
+    return success && result === SyntaxKind.BigIntLiteral && scanner.getTokenEnd() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
         && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
 }
 

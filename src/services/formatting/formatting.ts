@@ -529,7 +529,7 @@ function formatSpanWorker(
         }
     }
 
-    if (previousRange! && formattingScanner.getStartPos() >= originalRange.end) {
+    if (previousRange! && formattingScanner.getTokenFullStart() >= originalRange.end) {
         // Formatting edits happen by looking at pairs of contiguous tokens (see `processPair`),
         // typically inserting or deleting whitespace between them. The recursive `processNode`
         // logic above bails out as soon as it encounters a token that is beyond the end of the
@@ -785,7 +785,7 @@ function formatSpanWorker(
             });
 
         // proceed any tokens in the node that are located after child nodes
-        while (formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
+        while (formattingScanner.isOnToken() && formattingScanner.getTokenFullStart() < originalRange.end) {
             const tokenInfo = formattingScanner.readTokenInfo(node);
             if (tokenInfo.token.end > Math.min(node.end, originalRange.end)) {
                 break;
@@ -839,7 +839,7 @@ function formatSpanWorker(
                 return inheritedIndentation;
             }
 
-            while (formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
+            while (formattingScanner.isOnToken() && formattingScanner.getTokenFullStart() < originalRange.end) {
                 // proceed any parent tokens that are located prior to child.getStart()
                 const tokenInfo = formattingScanner.readTokenInfo(node);
                 if (tokenInfo.token.end > originalRange.end) {
@@ -856,7 +856,7 @@ function formatSpanWorker(
                 consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, node);
             }
 
-            if (!formattingScanner.isOnToken() || formattingScanner.getStartPos() >= originalRange.end) {
+            if (!formattingScanner.isOnToken() || formattingScanner.getTokenFullStart() >= originalRange.end) {
                 return inheritedIndentation;
             }
 
@@ -906,7 +906,7 @@ function formatSpanWorker(
 
             if (listStartToken !== SyntaxKind.Unknown) {
                 // introduce a new indentation scope for lists (including list start and end tokens)
-                while (formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
+                while (formattingScanner.isOnToken() && formattingScanner.getTokenFullStart() < originalRange.end) {
                     const tokenInfo = formattingScanner.readTokenInfo(parent);
                     if (tokenInfo.token.end > nodes.pos) {
                         // stop when formatting scanner moves past the beginning of node list
@@ -947,7 +947,7 @@ function formatSpanWorker(
             }
 
             const listEndToken = getCloseTokenForOpenToken(listStartToken);
-            if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
+            if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken() && formattingScanner.getTokenFullStart() < originalRange.end) {
                 let tokenInfo: TokenInfo | undefined = formattingScanner.readTokenInfo(parent);
                 if (tokenInfo.token.kind === SyntaxKind.CommaToken) {
                     // consume the comma

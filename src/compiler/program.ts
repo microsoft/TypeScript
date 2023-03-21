@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String,
     addInternalEmitFlags,
@@ -56,8 +55,8 @@ import {
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
-    DeprecationVersion,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCategory,
     diagnosticCategoryName,
     DiagnosticMessage,
@@ -69,6 +68,7 @@ import {
     DirectoryStructureHost,
     emitFiles,
     EmitHost,
+    emitModuleKindIsNonNodeESM,
     EmitOnly,
     EmitResult,
     emptyArray,
@@ -104,12 +104,15 @@ import {
     forEachEmittedFile,
     forEachEntry,
     forEachKey,
+    forEachResolvedProjectReference as ts_forEachResolvedProjectReference,
     FunctionLikeDeclaration,
     getAllowJSCompilerOption,
     getAutomaticTypeDirectiveNames,
     getBaseFileName,
     GetCanonicalFileName,
+    getCommonSourceDirectory as ts_getCommonSourceDirectory,
     getCommonSourceDirectoryOfConfig,
+    getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitDeclarations,
@@ -304,9 +307,11 @@ import {
     SymlinkCache,
     SyntaxKind,
     sys,
+    System,
     targetOptionDeclaration,
     toFileNameLowerCase,
     tokenToString,
+    toPath as ts_toPath,
     trace,
     tracing,
     trimStringEnd,
@@ -317,6 +322,7 @@ import {
     UnparsedSource,
     VariableDeclaration,
     VariableStatement,
+    Version,
     versionMajorMinor,
     walkUpParenthesizedExpressions,
     WriteFileCallback,
@@ -447,7 +453,7 @@ export function createWriteFileMeasuringIO(
 }
 
 /** @internal */
-export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
+export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system: System = sys): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
     function directoryExists(directoryPath: string): boolean {
@@ -1444,6 +1450,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
 
+    const reportInvalidIgnoreDeprecations = memoize(() => createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations));
+
     let processingDefaultLibFiles: SourceFile[] | undefined;
     let processingOtherFiles: SourceFile[] | undefined;
     let files: SourceFile[];
@@ -1632,7 +1640,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
     let structureIsReused: StructureIsReused;
     tracing?.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
-    structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
+    structureIsReused = tryReuseStructureFromOldProgram();
     tracing?.pop();
     if (structureIsReused !== StructureIsReused.Completely) {
         processingDefaultLibFiles = [];
@@ -1948,13 +1956,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function toPath(fileName: string): Path {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function getCommonSourceDirectory() {
         if (commonSourceDirectory === undefined) {
             const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, program));
-            commonSourceDirectory = ts.getCommonSourceDirectory(
+            commonSourceDirectory = ts_getCommonSourceDirectory(
                 options,
                 () => mapDefined(emittedFiles, file => file.isDeclarationFile ? undefined : file.fileName),
                 currentDirectory,
@@ -3068,15 +3076,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
             }
 
-            function createDiagnosticForNodeArray(nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
+            function createDiagnosticForNodeArray(nodes: NodeArray<Node>, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
                 const start = nodes.pos;
-                return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2);
+                return createFileDiagnostic(sourceFile, start, nodes.end - start, message, ...args);
             }
 
             // Since these are syntactic diagnostics, parent might not have been set
             // this means the sourceFile cannot be infered from the node
-            function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
-                return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
+            function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
+                return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
             }
         });
     }
@@ -3089,7 +3097,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return runWithCancellationToken(() => {
             const resolver = getTypeChecker().getEmitResolver(sourceFile, cancellationToken);
             // Don't actually write any files since we're just getting diagnostics.
-            return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
+            return ts_getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
         });
     }
 
@@ -3654,7 +3662,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function forEachResolvedProjectReference<T>(
         cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined
     ): T | undefined {
-        return ts.forEachResolvedProjectReference(resolvedProjectReferences, cb);
+        return ts_forEachResolvedProjectReference(resolvedProjectReferences, cb);
     }
 
     function getSourceOfProjectReferenceRedirect(path: Path) {
@@ -3778,7 +3786,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                                 existingFile,
                                 reason,
                                 Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName, previousResolution.resolvedFileName]
+                                [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName!, previousResolution.resolvedFileName!]
                             );
                         }
                     }
@@ -3833,11 +3841,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
                 const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
                 const diagnostic = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
+                const args = suggestion ? [libName, suggestion] : [libName];
                 (fileProcessingDiagnostics ||= []).push({
                     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic,
                     reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, },
                     diagnostic,
-                    args: [libName, suggestion]
+                    args,
                 });
             }
         });
@@ -4241,11 +4250,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createDiagnosticForOptionName(Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
         }
 
+        const moduleKind = getEmitModuleKind(options);
         if (options.verbatimModuleSyntax) {
-            const moduleKind = getEmitModuleKind(options);
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
@@ -4266,13 +4275,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const moduleResolution = getEmitModuleResolutionKind(options);
         if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
         }
         if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
         }
         if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+        }
+
+        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind)) {
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "bundler");
         }
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
@@ -4315,100 +4328,115 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function getVersionForDeprecationDiagnostics(reportInvalidIgnoreDeprecations: boolean) {
-        const version = typeScriptVersion || versionMajorMinor;
+    function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
-                return;
+            // While we could do Version.tryParse here to support any version,
+            // for now, only allow "5.0". We aren't planning on deprecating anything
+            // until 6.0.
+            if (ignoreDeprecations === "5.0") {
+                return new Version(ignoreDeprecations);
             }
-            else if (reportInvalidIgnoreDeprecations) {
-                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
-            }
+            reportInvalidIgnoreDeprecations();
         }
-        return version;
+        return Version.zero;
+    }
+
+    function checkDeprecations(
+        deprecatedIn: string,
+        removedIn: string,
+        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) => void,
+        fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
+    ) {
+        const deprecatedInVersion = new Version(deprecatedIn);
+        const removedInVersion = new Version(removedIn);
+        const typescriptVersion = new Version(typeScriptVersion || versionMajorMinor);
+        const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion();
+
+        const mustBeRemoved = !(removedInVersion.compareTo(typescriptVersion) === Comparison.GreaterThan);
+        const canBeSilenced = !mustBeRemoved && ignoreDeprecationsVersion.compareTo(deprecatedInVersion) === Comparison.LessThan;
+
+        if (mustBeRemoved || canBeSilenced) {
+            fn((name, value, useInstead) => {
+                if (mustBeRemoved) {
+                    if (value === undefined) {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_has_been_removed_Please_remove_it_from_your_configuration, name);
+                    }
+                    else {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_has_been_removed_Please_remove_it_from_your_configuration, name, value);
+                    }
+                }
+                else {
+                    if (value === undefined) {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
+                    }
+                    else {
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
+                    }
+                }
+            });
+        }
     }
 
     function verifyDeprecatedCompilerOptions() {
-        const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ true);
-        if (!version) return;
-        if (options.target === ScriptTarget.ES3) {
-            createDeprecatedDiagnosticForOption(version, "target", "ES3");
+        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, message, ...args);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, ...args);
+            }
         }
-        if (options.noImplicitUseStrict) {
-            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
-        }
-        if (options.keyofStringsOnly) {
-            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
-        }
-        if (options.suppressExcessPropertyErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
-        }
-        if (options.suppressImplicitAnyIndexErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
-        }
-        if (options.noStrictGenericChecks) {
-            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
-        }
-        if (options.charset) {
-            createDeprecatedDiagnosticForOption(version, "charset");
-        }
-        if (options.out) {
-            createDeprecatedDiagnosticForOption(version, "out");
-        }
-        if (options.importsNotUsedAsValues) {
-            createDeprecatedDiagnosticForOption(version, "importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
-        }
-        if (options.preserveValueImports) {
-            createDeprecatedDiagnosticForOption(version, "preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
-        }
+
+        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.target === ScriptTarget.ES3) {
+                createDeprecatedDiagnostic("target", "ES3");
+            }
+            if (options.noImplicitUseStrict) {
+                createDeprecatedDiagnostic("noImplicitUseStrict");
+            }
+            if (options.keyofStringsOnly) {
+                createDeprecatedDiagnostic("keyofStringsOnly");
+            }
+            if (options.suppressExcessPropertyErrors) {
+                createDeprecatedDiagnostic("suppressExcessPropertyErrors");
+            }
+            if (options.suppressImplicitAnyIndexErrors) {
+                createDeprecatedDiagnostic("suppressImplicitAnyIndexErrors");
+            }
+            if (options.noStrictGenericChecks) {
+                createDeprecatedDiagnostic("noStrictGenericChecks");
+            }
+            if (options.charset) {
+                createDeprecatedDiagnostic("charset");
+            }
+            if (options.out) {
+                createDeprecatedDiagnostic("out", /*value*/ undefined, "outFile");
+            }
+            if (options.importsNotUsedAsValues) {
+                createDeprecatedDiagnostic("importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+            if (options.preserveValueImports) {
+                createDeprecatedDiagnostic("preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+        });
     }
 
     function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
-        if (ref.prepend) {
-            const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ false);
-            if (version) {
-                createDeprecatedOptionForVersionDiagnostic(
-                    version,
-                    (message, arg0, arg1, arg2) => createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2),
-                    "prepend",
-                );
+        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
+            createDiagnosticForReference(parentFile, index, message, ...args);
+        }
+
+        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
+            if (ref.prepend) {
+                createDeprecatedDiagnostic("prepend");
             }
-        }
+        });
     }
 
-    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string, useInstead?: string) {
-        return createDeprecatedOptionForVersionDiagnostic(
-            version,
-            (message, arg0, arg1, arg2) => {
-                if (useInstead) {
-                    const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
-                    const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2);
-                    createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
-                }
-                else {
-                    createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, arg0, arg1, arg2);
-                }
-            },
-            name,
-            value,
-        );
-    }
-
-    function createDeprecatedOptionForVersionDiagnostic(
-        version: string,
-        createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string) => void,
-        name: string,
-        value?: string) {
-        if (version === DeprecationVersion.v6_0) {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
-        }
-        else {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
-        }
-    }
-
-    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: (string | number | undefined)[] | undefined): Diagnostic {
+    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments | undefined): Diagnostic {
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
         let relatedInfo: Diagnostic[] | undefined;
         let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
@@ -4438,7 +4466,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args?: (string | number | undefined)[]) {
+    function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
         (fileProcessingDiagnostics ||= []).push({
             kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic,
             file: file && file.path,
@@ -4448,7 +4476,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function addProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args?: (string | number | undefined)[]) {
+    function addProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
         programDiagnostics.add(createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args));
     }
 
@@ -4580,7 +4608,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+    function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         let needCompilerDiagnostic = true;
         const pathsSyntax = getOptionPathsSyntax();
         for (const pathProp of pathsSyntax) {
@@ -4588,7 +4616,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 for (const keyProps of getPropertyAssignment(pathProp.initializer, key)) {
                     const initializer = keyProps.initializer;
                     if (isArrayLiteralExpression(initializer) && initializer.elements.length > valueIndex) {
-                        programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, initializer.elements[valueIndex], message, arg0, arg1, arg2));
+                        programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, initializer.elements[valueIndex], message, ...args));
                         needCompilerDiagnostic = false;
                     }
                 }
@@ -4596,23 +4624,23 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
-    function createDiagnosticForOptionPaths(onKey: boolean, key: string, message: DiagnosticMessage, arg0: string | number) {
+    function createDiagnosticForOptionPaths(onKey: boolean, key: string, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         let needCompilerDiagnostic = true;
         const pathsSyntax = getOptionPathsSyntax();
         for (const pathProp of pathsSyntax) {
             if (isObjectLiteralExpression(pathProp.initializer) &&
                 createOptionDiagnosticInObjectLiteralSyntax(
                     pathProp.initializer, onKey, key, /*key2*/ undefined,
-                    message, arg0)) {
+                    message, ...args)) {
                 needCompilerDiagnostic = false;
             }
         }
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0));
+            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
@@ -4636,30 +4664,31 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string, option3?: string) {
-        createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
+        // TODO(jakebailey): this code makes assumptions about the format of the diagnostic messages.
+        createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2!, option3!);
     }
 
-    function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0?: string, arg1?: string) {
-        createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
+    function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, ...args: DiagnosticArguments) {
+        createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, ...args);
     }
 
-    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile || options.configFile, "references"),
             property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
         if (referencesSyntax && referencesSyntax.elements.length > index) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1, arg2));
+            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, ...args));
         }
         else {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
     function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessageChain): void;
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void;
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): void;
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void {
         const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
         const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
-            !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
+            !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, ...args);
 
         if (needCompilerDiagnostic) {
             // eslint-disable-next-line local/no-in-operator
@@ -4667,7 +4696,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
             }
             else {
-                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+                programDiagnostics.add(createCompilerDiagnostic(message, ...args));
             }
         }
     }
@@ -4689,9 +4718,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): boolean {
         const props = getPropertyAssignment(objectLiteral, key1, key2);
         for (const prop of props) {
             // eslint-disable-next-line local/no-in-operator
@@ -4699,7 +4728,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
             }
             else {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, ...args));
             }
         }
         return !!props.length;
