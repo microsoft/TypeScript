@@ -51,7 +51,6 @@ import {
     getLeadingCommentRanges,
     getModeForUsageLocation,
     getModuleSpecifierEndingPreference,
-    getNormalizedAbsolutePath,
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPathComponents,
@@ -846,13 +845,13 @@ function getCompletionEntriesForNonRelativeModules(
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
 
     const projectDir = compilerOptions.project || host.getCurrentDirectory();
+    const absolute = normalizePath(combinePaths(projectDir, baseUrl ?? getPathsBasePath(compilerOptions, host)));
+
     if (baseUrl) {
-        const absolute = normalizePath(combinePaths(projectDir, baseUrl));
         getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
     }
 
     if (paths) {
-        const absolute = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host)!, projectDir);
         addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
     }
 
