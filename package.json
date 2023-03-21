@@ -79,7 +79,7 @@
         "node-fetch": "^3.2.10",
         "source-map-support": "^0.5.21",
         "tslib": "^2.5.0",
-        "typescript": "5.0.1-rc",
+        "typescript": "^5.0.2",
         "which": "^2.0.2"
     },
     "overrides": {

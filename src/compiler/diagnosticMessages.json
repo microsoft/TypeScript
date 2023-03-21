@@ -3611,6 +3611,14 @@
         "category": "Error",
         "code": 2846
     },
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
+        "category": "Error",
+        "code": 2847
+    },
+    "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
+        "category": "Error",
+        "code": 2848
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -5234,7 +5242,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {1}": {
+      "Found 1 error in {0}": {
         "category": "Message",
         "code": 6259
     },
@@ -5261,6 +5269,10 @@
     "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
         "category": "Message",
         "code": 6265
+    },
+    "Option '{0}' can only be specified on command line.": {
+        "category": "Error",
+        "code": 6266
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
@@ -6718,7 +6730,7 @@
         "category": "Suggestion",
         "code": 80010
     },
-    
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
