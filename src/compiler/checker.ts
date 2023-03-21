@@ -6633,9 +6633,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return typeToTypeNodeHelper(type, context);
             }
 
+            function isMappedTypeHomomorphic(type: MappedType) {
+                return !!getHomomorphicTypeVariable(type);
+            }
+
             function isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type: MappedType) {
-                return isMappedTypeWithKeyofConstraintDeclaration(type)
-                    && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter);
+                return !!type.target && isMappedTypeHomomorphic(type.target as MappedType) && !isMappedTypeHomomorphic(type);
             }
 
             function createMappedTypeNodeFromType(type: MappedType) {
