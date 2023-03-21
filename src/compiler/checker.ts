@@ -13573,7 +13573,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getConstraintFromIndexedAccess(type: IndexedAccessType) {
-        if (isMappedTypeGenericIndexedAccess(type)) {
+        if (isMappedTypeGenericIndexedAccess(type) || isGenericMappedType(type.objectType)) {
             // For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
             // we substitute an instantiation of E where P is replaced with X.
             return substituteIndexedMappedType(type.objectType as MappedType, type.indexType);
@@ -16276,6 +16276,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             i--;
             const source = types[i];
             if (hasEmptyObject || source.flags & TypeFlags.StructuredOrInstantiable) {
+                // A type parameter with a union constraint may be a subtype of some union, but not a subtype of the
+                // individual constituents of that union. For example, `T extends A | B` is a subtype of `A | B`, but not
+                // a subtype of just `A` or just `B`. When we encounter such a type parameter, we therefore check if the
+                // type parameter is a subtype of a union of all the other types.
+                if (source.flags & TypeFlags.TypeParameter && getBaseConstraintOrType(source).flags & TypeFlags.Union) {
+                    if (isTypeRelatedTo(source, getUnionType(map(types, t => t === source ? neverType : t)), strictSubtypeRelation)) {
+                        orderedRemoveItemAt(types, i);
+                    }
+                    continue;
+                }
                 // Find the first property with a unit type, if any. When constituents have a property by the same name
                 // but of a different unit type, we can quickly disqualify them from subtype checks. This helps subtype
                 // reduction of large discriminated union types.
@@ -18177,7 +18187,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const declarations = concatenate(leftProp.declarations, rightProp.declarations);
                     const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                     const result = createSymbol(flags, leftProp.escapedName);
-                    result.links.type = getUnionType([getTypeOfSymbol(leftProp), removeMissingOrUndefinedType(rightType)], UnionReduction.Subtype);
+                    // Optimization: avoid calculating the union type if spreading into the exact same type.
+                    // This is common, e.g. spreading one options bag into another where the bags have the
+                    // same type, or have properties which overlap. If the unions are large, it may turn out
+                    // to be expensive to perform subtype reduction.
+                    const leftType = getTypeOfSymbol(leftProp);
+                    const leftTypeWithoutUndefined = removeMissingOrUndefinedType(leftType);
+                    const rightTypeWithoutUndefined = removeMissingOrUndefinedType(rightType);
+                    result.links.type = leftTypeWithoutUndefined === rightTypeWithoutUndefined ? leftType : getUnionType([leftType, rightTypeWithoutUndefined], UnionReduction.Subtype);
                     result.links.leftSpread = leftProp;
                     result.links.rightSpread = rightProp;
                     result.declarations = declarations;
@@ -19813,6 +19830,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const sourceHasMoreParameters = !hasEffectiveRestParameter(target) &&
             (checkMode & SignatureCheckMode.StrictArity ? hasEffectiveRestParameter(source) || getParameterCount(source) > targetCount : getMinArgumentCount(source) > targetCount);
         if (sourceHasMoreParameters) {
+            if (reportErrors && !(checkMode & SignatureCheckMode.StrictArity)) {
+                // the second condition should be redundant, because there is no error reporting when comparing signatures by strict arity
+                // since it is only done for subtype reduction
+                errorReporter!(Diagnostics.Target_signature_provides_too_few_arguments_Expected_0_or_more_but_got_1, getMinArgumentCount(source), targetCount);
+            }
             return Ternary.False;
         }
 
@@ -21569,6 +21591,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                         return result;
                     }
+                    if (sourceFlags & TypeFlags.IndexedAccess) {
+                        const indexType = (source as IndexedAccessType).indexType;
+                        if (indexType.flags & TypeFlags.Index) {
+                            const unresolvedIndexConstraint = getBaseConstraintOfType((indexType as IndexType).type);
+                            const indexConstraint = unresolvedIndexConstraint && unresolvedIndexConstraint !== noConstraintType ? getIndexType(unresolvedIndexConstraint) : keyofConstraintType;
+                            const constraint = getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint);
+                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                                return result;
+                            }
+                        }
+                    }
                     if (isMappedTypeGenericIndexedAccess(source)) {
                         // For an indexed access type { [P in K]: E}[X], above we have already explored an instantiation of E with X
                         // substituted for P. We also want to explore type { [P in K]: E }[C], where C is the constraint of X.
@@ -22897,7 +22930,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type.symbol;
             }
             if (isTupleType(type)) {
-                return type;
+                return type.target;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
@@ -24259,8 +24292,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let inferencePriority: number = InferencePriority.MaxValue;
         let allowComplexConstraintInference = true;
         let visited: Map<string, number>;
-        let sourceStack: object[];
-        let targetStack: object[];
+        let sourceStack: Type[];
+        let targetStack: Type[];
         let expandingFlags = ExpandingFlags.None;
         inferFromTypes(originalSource, originalTarget);
 
@@ -24516,20 +24549,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
             // the source side and the target side.
             const saveExpandingFlags = expandingFlags;
-            const sourceIdentity = getRecursionIdentity(source);
-            const targetIdentity = getRecursionIdentity(target);
-            if (contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
-            if (contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+            (sourceStack ??= []).push(source);
+            (targetStack ??= []).push(target);
+            if (isDeeplyNestedType(source, sourceStack, sourceStack.length, 2)) expandingFlags |= ExpandingFlags.Source;
+            if (isDeeplyNestedType(target, targetStack, targetStack.length, 2)) expandingFlags |= ExpandingFlags.Target;
             if (expandingFlags !== ExpandingFlags.Both) {
-                (sourceStack || (sourceStack = [])).push(sourceIdentity);
-                (targetStack || (targetStack = [])).push(targetIdentity);
                 action(source, target);
-                targetStack.pop();
-                sourceStack.pop();
             }
             else {
                 inferencePriority = InferencePriority.Circularity;
             }
+            targetStack.pop();
+            sourceStack.pop();
             expandingFlags = saveExpandingFlags;
             visited.set(key, inferencePriority);
             inferencePriority = Math.min(inferencePriority, saveInferencePriority);
