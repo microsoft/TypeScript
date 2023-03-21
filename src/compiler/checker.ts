@@ -4865,19 +4865,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
-        const sourceFile = resolvedModule
+        const targetSourceFile = resolvedModule
             && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
             && host.getSourceFile(resolvedModule.resolvedFileName);
-        if (sourceFile) {
+        if (targetSourceFile) {
             // If there's a resolutionDiagnostic we need to report it even if a sourceFile is found.
             if (resolutionDiagnostic) {
                 error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
             }
 
+            const importOrExport =
+                findAncestor(location, isImportDeclaration)?.importClause ||
+                findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
             if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
-                const importOrExport =
-                    findAncestor(location, isImportDeclaration)?.importClause ||
-                    findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
                 if (importOrExport && !importOrExport.isTypeOnly || findAncestor(location, isImportCall)) {
                     error(
                         errorNode,
@@ -4890,17 +4890,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
             }
 
-            if (sourceFile.symbol) {
+            if (targetSourceFile.symbol) {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {
+                if (!importOrExport?.isTypeOnly && !(location.flags & NodeFlags.Ambient) && ModuleResolutionKind.Node16 <= moduleResolutionKind && moduleResolutionKind <= ModuleResolutionKind.NodeNext) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
-                    const overrideClauseHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l)) as ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined;
-                    const overrideClause = overrideClauseHost && isImportTypeNode(overrideClauseHost) ? overrideClauseHost.assertions?.assertClause : overrideClauseHost?.assertClause;
-                    // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
-                    // normal mode restrictions
-                    if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext && !getResolutionModeOverrideForClause(overrideClause)) {
+                    if (isSyncImport && targetSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                         if (findAncestor(location, isImportEqualsDeclaration)) {
                             // ImportEquals in a ESM file resolving to another ESM file
                             error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_with_require_Use_an_ECMAScript_import_instead, moduleReference);
@@ -4949,11 +4945,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 // merged symbol is module declaration symbol combined with all augmentations
-                return getMergedSymbol(sourceFile.symbol);
+                return getMergedSymbol(targetSourceFile.symbol);
             }
             if (moduleNotFoundError) {
                 // report errors only if it was requested
-                error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
+                error(errorNode, Diagnostics.File_0_is_not_a_module, targetSourceFile.fileName);
             }
             return undefined;
         }

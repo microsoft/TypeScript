@@ -338,13 +338,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
-  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
-
-[7m1[0m import type { TheNum } from 'pkg2'
-[7m [0m [91m                            ~~~~~~[0m
-
-[[90m12:01:16 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -365,6 +359,13 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.theNum = void 0;
+exports.theNum = 42;
+
+
 
 Change:: removes those errors when a package file is changed back
 
@@ -375,11 +376,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90m12:01:25 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:26 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -417,7 +418,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -438,7 +439,10 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+export const theNum = 42;
+
+
 
 Change:: reports import errors after change to package file
 
@@ -449,11 +453,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90m12:01:36 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:33 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:37 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -494,13 +498,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
-  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
-
-[7m1[0m import type { TheNum } from 'pkg2'
-[7m [0m [91m                            ~~~~~~[0m
-
-[[90m12:01:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -521,6 +519,13 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.theNum = void 0;
+exports.theNum = 42;
+
+
 
 Change:: removes those errors when a package file is changed to cjs extensions
 
@@ -535,11 +540,11 @@ export type { TheNum } from './const.cjs';
 
 Output::
 >> Screen clear
-[[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
+[[90m12:01:51 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
 
-[[90m12:01:44 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90m12:01:52 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.cts'. ========
 Module resolution kind is not specified, using 'Node16'.
@@ -551,9 +556,9 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:56 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
+[[90m12:02:04 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
 
-[[90m12:01:57 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:02:05 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -591,7 +596,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:10 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -749,13 +754,7 @@ exitCode:: ExitStatus.undefined
   "size": 1064
 }
 
-//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.theNum = void 0;
-exports.theNum = 42;
-
-
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 //// [/user/username/projects/myproject/packages/pkg2/build/index.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
