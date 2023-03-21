@@ -252,7 +252,7 @@ X;`,
                     });
                     changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../nrefs/*"] });
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert config file edit",
@@ -371,7 +371,7 @@ X;`,
                     });
                     changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../nrefs/*"] });
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert config file edit",

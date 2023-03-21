@@ -20,7 +20,6 @@ import {
     Extension,
     extensionIsTS,
     fileExtensionIs,
-    fileExtensionIsOneOf,
     FileReference,
     FileWatcher,
     FileWatcherCallback,
@@ -298,15 +297,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         moduleResolutionCache.getPackageJsonInfoCache(),
     );
 
-    /**
-     * These are the extensions that failed lookup files will have by default,
-     * any other extension of failed lookup will be store that path in custom failed lookup path
-     * This helps in not having to comb through all resolutions when files are added/removed
-     * Note that .d.ts file also has .d.ts extension hence will be part of default extensions
-     */
-    const failedLookupDefaultExtensions = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Json];
-    const customFailedLookupPaths = new Map<string, number>();
-
     const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
     const fileWatchesOfAffectingLocations = new Map<string, FileWatcherOfAffectingLocation>();
     const rootDir = rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
@@ -358,7 +348,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function clear() {
         clearMap(directoryWatchesOfFailedLookups, closeFileWatcherOf);
         clearMap(fileWatchesOfAffectingLocations, closeFileWatcherOf);
-        customFailedLookupPaths.clear();
         nonRelativeExternalModuleResolutions.clear();
         closeTypeRootsWatch();
         resolvedModuleNames.clear();
@@ -763,10 +752,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return canWatchDirectoryOrFile(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
     }
 
-    function isPathWithDefaultFailedLookupExtension(path: Path) {
-        return fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
-    }
-
     function watchFailedLookupLocationsOfExternalModuleResolutions<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
         name: string,
         resolution: T,
@@ -811,12 +796,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 const toWatch = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
                 if (toWatch) {
                     const { dir, dirPath, nonRecursive } = toWatch;
-                    // If the failed lookup location path is not one of the supported extensions,
-                    // store it in the custom path
-                    if (!isPathWithDefaultFailedLookupExtension(failedLookupLocationPath)) {
-                        const refCount = customFailedLookupPaths.get(failedLookupLocationPath) || 0;
-                        customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
-                    }
                     if (dirPath === rootPath) {
                         Debug.assert(!nonRecursive);
                         setAtRoot = true;
@@ -945,17 +924,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 const toWatch = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
                 if (toWatch) {
                     const { dirPath } = toWatch;
-                    const refCount = customFailedLookupPaths.get(failedLookupLocationPath);
-                    if (refCount) {
-                        if (refCount === 1) {
-                            customFailedLookupPaths.delete(failedLookupLocationPath);
-                        }
-                        else {
-                            Debug.assert(refCount > 1);
-                            customFailedLookupPaths.set(failedLookupLocationPath, refCount - 1);
-                        }
-                    }
-
                     if (dirPath === rootPath) {
                         removeAtRoot = true;
                     }
@@ -1088,11 +1056,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 (startsWithPathChecks ||= new Set()).add(fileOrDirectoryPath);
             }
             else {
-                if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
-                    return false;
-                }
                 // Ignore emits from the program
                 if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
+                    return false;
+                }
+                // Ignore .map files
+                if (fileExtensionIs(fileOrDirectoryPath, ".map")) {
                     return false;
                 }
                 // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created

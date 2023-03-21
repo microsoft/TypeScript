@@ -115,7 +115,7 @@ export class A {}`
             host.ensureFileOrFolder(nRefsTs);
             cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
             host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
             host.writeFile(cConfig.path, cConfig.content);
@@ -133,7 +133,7 @@ export class A {}`
             host.ensureFileOrFolder(nRefsTs);
             bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
             host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
             host.writeFile(bConfig.path, bConfig.content);
@@ -230,7 +230,7 @@ export class A {}`
             host.ensureFileOrFolder(nRefsTs);
             cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
             host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
             host.writeFile(cConfig.path, cConfig.content);
@@ -248,7 +248,7 @@ export class A {}`
             host.ensureFileOrFolder(nRefsTs);
             bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
             host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
             host.writeFile(bConfig.path, bConfig.content);
