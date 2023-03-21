@@ -4,8 +4,8 @@ import {
     cast,
     CodeFixAction,
     CodeFixContext,
-    DiagnosticAndArguments,
     DiagnosticMessage,
+    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     factory,
     FileTextChanges,
@@ -221,7 +221,7 @@ function changeInferToUnknown(changes: textChanges.ChangeTracker, sourceFile: So
     changes.replaceNode(sourceFile, token.parent, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword));
 }
 
-function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticAndArguments): CodeFixAction {
+function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticOrDiagnosticAndArguments): CodeFixAction {
     return createCodeFixAction(fixName, changes, diag, fixIdDelete, Diagnostics.Delete_all_unused_declarations);
 }
 

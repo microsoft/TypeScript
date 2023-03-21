@@ -38,14 +38,3 @@ verify.codeFixAll({
     var x: I;
 }`,
 });
-
-function f() {
-   return f();
-   function f(a?: EE) { return a; }
-   type T = number;
-   interface I {}
-   const enum E {}
-   enum EE {}
-   namespace N { export type T = number; }
-   var x: I;
-}

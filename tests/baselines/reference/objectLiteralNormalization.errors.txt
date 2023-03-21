@@ -1,6 +1,7 @@
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(7,14): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(8,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-  Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
+  Type '{ b: string; }' is not assignable to type '{ a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+    Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(9,1): error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
   Type '{ c: true; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, b
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(17,1): error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
@@ -27,7 +28,8 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a1 = { b: "y" };  // Error
     ~~
 !!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-!!! error TS2322:   Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
+!!! error TS2322:   Type '{ b: string; }' is not assignable to type '{ a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+!!! error TS2322:     Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
     a1 = { c: true };  // Error
     ~~
 !!! error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.

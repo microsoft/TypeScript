@@ -3,7 +3,7 @@ tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstra
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(15,5): error TS1244: Abstract methods can only appear within an abstract class.
+tests/cases/compiler/abstractPropertyNegative.ts(15,5): error TS1253: Abstract properties can only appear within an abstract class.
 tests/cases/compiler/abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
 tests/cases/compiler/abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a read-only property.
 tests/cases/compiler/abstractPropertyNegative.ts(25,5): error TS2416: Property 'num' in type 'WrongTypePropertyImpl' is not assignable to the same property in base type 'WrongTypeProperty'.
@@ -45,7 +45,7 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
         readonly ro = "readonly please";
         abstract notAllowed: string;
         ~~~~~~~~
-!!! error TS1244: Abstract methods can only appear within an abstract class.
+!!! error TS1253: Abstract properties can only appear within an abstract class.
         get concreteWithNoBody(): string;
                                         ~
 !!! error TS1005: '{' expected.

@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -18,7 +17,6 @@ import {
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
-    classifier,
     CodeActionCommand,
     codefix,
     CodeFixAction,
@@ -89,6 +87,7 @@ import {
     getContainerNode,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEditsForFileRename as ts_getEditsForFileRename,
     getEmitDeclarations,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
@@ -284,6 +283,7 @@ import {
     symbolName,
     SyntaxKind,
     SyntaxList,
+    sys,
     tagNamesAreEquivalent,
     TextChange,
     TextChangeRange,
@@ -314,6 +314,8 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+import * as classifier from "./classifier";
+import * as classifier2020 from "./classifier2020";
 
 import * as Debug from "../compiler/debug";
 
@@ -2274,10 +2276,10 @@ export function createLanguageService(
 
         const responseFormat = format || SemanticClassificationFormat.Original;
         if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
-            return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            return classifier2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
         else {
-            return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return classifier.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
     }
 
@@ -2286,21 +2288,21 @@ export function createLanguageService(
 
         const responseFormat = format || SemanticClassificationFormat.Original;
         if (responseFormat === SemanticClassificationFormat.Original) {
-            return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return classifier.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
         else {
-            return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            return classifier2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
     }
 
     function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
         // doesn't use compiler - no need to synchronize with host
-        return ts.getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
+        return classifier.getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
     }
 
     function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
         // doesn't use compiler - no need to synchronize with host
-        return ts.getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
+        return classifier.getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
     }
 
     function getOutliningSpans(fileName: string): OutliningSpan[] {
@@ -2401,7 +2403,7 @@ export function createLanguageService(
     }
 
     function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
-        return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
+        return ts_getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
     }
 
     function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
@@ -3188,8 +3190,8 @@ function isArgumentOfElementAccessExpression(node: Node) {
  * The functionality is not supported if the ts module is consumed outside of a node module.
  */
 export function getDefaultLibFilePath(options: CompilerOptions): string {
-    if (ts.sys) {
-        return combinePaths(getDirectoryPath(normalizePath(ts.sys.getExecutingFilePath())), getDefaultLibFileName(options));
+    if (sys) {
+        return combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options));
     }
 
     throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");

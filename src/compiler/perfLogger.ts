@@ -1,5 +1,3 @@
-import { noop } from "./_namespaces/ts";
-
 /** @internal */
 export interface PerfLogger {
     logEvent(msg: string): void;
@@ -24,28 +22,6 @@ export interface PerfLogger {
     logStopScheduledOperation(): void;
 }
 
-const nullLogger: PerfLogger = {
-    logEvent: noop,
-    logErrEvent: noop,
-    logPerfEvent: noop,
-    logInfoEvent: noop,
-    logStartCommand: noop,
-    logStopCommand: noop,
-    logStartUpdateProgram: noop,
-    logStopUpdateProgram: noop,
-    logStartUpdateGraph: noop,
-    logStopUpdateGraph: noop,
-    logStartResolveModule: noop,
-    logStopResolveModule: noop,
-    logStartParseSourceFile: noop,
-    logStopParseSourceFile: noop,
-    logStartReadFile: noop,
-    logStopReadFile: noop,
-    logStartBindFile: noop,
-    logStopBindFile: noop,
-    logStartScheduledOperation: noop,
-    logStopScheduledOperation: noop,
-};
 
 // Load optional module to enable Event Tracing for Windows
 // See https://github.com/microsoft/typescript-etw for more information
@@ -66,4 +42,4 @@ catch (e) {
  *
  * @internal
  */
-export const perfLogger: PerfLogger = etwModule?.logEvent ? etwModule : nullLogger;
+export const perfLogger: PerfLogger | undefined = etwModule?.logEvent ? etwModule : undefined;

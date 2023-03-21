@@ -1814,14 +1814,14 @@ export let sys: System = (() => {
         }
 
         function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger.logStartReadFile(fileName);
+            perfLogger?.logStartReadFile(fileName);
             const file = readFileWorker(fileName, _encoding);
-            perfLogger.logStopReadFile();
+            perfLogger?.logStopReadFile();
             return file;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger.logEvent("WriteFile: " + fileName);
+            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1841,7 +1841,7 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger.logEvent("ReadDir: " + (path || "."));
+            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];

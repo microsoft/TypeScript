@@ -1,0 +1,22 @@
+=== tests/cases/conformance/externalModules/type1.d.ts ===
+declare namespace NS {
+    type A = object;
+>A : object
+}
+
+export = NS;
+>NS : any
+
+export as namespace MyTypes;
+>MyTypes : error
+
+=== tests/cases/conformance/externalModules/type2.d.ts ===
+import type * as NS from './type1';
+>NS : error
+
+export = NS;
+>NS : any
+
+export as namespace ModuleATypes;
+>ModuleATypes : error
+

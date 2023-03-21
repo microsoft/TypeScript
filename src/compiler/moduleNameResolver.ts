@@ -1329,7 +1329,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             }
         }
 
-        perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
+        perfLogger?.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
         switch (moduleResolution) {
             case ModuleResolutionKind.Node16:
                 result = node16ModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
@@ -1349,8 +1349,8 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
         }
-        if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
-        perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
+        if (result && result.resolvedModule) perfLogger?.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+        perfLogger?.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
         cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);
         if (!isExternalModuleNameRelative(moduleName)) {

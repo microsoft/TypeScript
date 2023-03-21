@@ -33,9 +33,9 @@ fx1([...t3, 'a']);
 >'a' : "a"
 
 fx2(['x', 'y', 'z', 'a']);
->fx2(['x', 'y', 'z', 'a']) : ["x", "y", "z", "a"]
+>fx2(['x', 'y', 'z', 'a']) : [string, string, string, "a"]
 >fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
->['x', 'y', 'z', 'a'] : ["x", "y", "z", "a"]
+>['x', 'y', 'z', 'a'] : [string, string, string, "a"]
 >'x' : "x"
 >'y' : "y"
 >'z' : "z"
@@ -56,7 +56,7 @@ const x1: [...string[], '!'] = ['!'];
 
 const x2: [...string[], '!'] = ['a', '!'];
 >x2 : [...string[], "!"]
->['a', '!'] : ["a", "!"]
+>['a', '!'] : [string, "!"]
 >'a' : "a"
 >'!' : "!"
 

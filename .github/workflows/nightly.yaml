@@ -8,6 +8,9 @@ on:
   repository_dispatch:
     types: publish-nightly
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,6 +22,9 @@ jobs:
       with:
         # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
         registry-url: https://registry.npmjs.org/
+    - run: |
+        corepack enable npm
+        npm --version
     - name: Setup and publish nightly
       run: |
         npm whoami

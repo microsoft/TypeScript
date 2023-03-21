@@ -2,11 +2,19 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(30,5): erro
   Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2322: Type '{ p1: "left"; p2: true; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+  Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(83,5): error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithOverlappingOptionals'.
+  Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
+  Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(130,5): error TS2322: Type '"string"' is not assignable to type '"number"'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): error TS2322: Type '"string"' is not assignable to type '"number"'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (3 errors) ====
+==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (8 errors) ====
     // Repro from #32657
     
     interface Base<T> {
@@ -57,12 +65,15 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         p4: "hello"
     };
     
-    // This has no excess error because variant one and three are both applicable.
+    // This has excess error because variant two is not applicable.
     const b: DisjointDiscriminants = {
         p1: 'left',
         p2: true,
         p3: 42,
         p4: "hello"
+        ~~
+!!! error TS2322: Type '{ p1: "left"; p2: true; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+!!! error TS2322:   Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
     };
     
     // This has excess error because variant two is the only applicable case
@@ -74,5 +85,95 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
 !!! error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
 !!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
         p4: "hello"
+    };
+    
+    // Repro from #51873
+    
+    interface Common {
+        type: "A" | "B" | "C" | "D";
+        n: number;
+    }
+    interface A {
+        type: "A";
+        a?: number;
+    }
+    interface B {
+        type: "B";
+        b?: number;
+    }
+    
+    type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+    
+    // Should reject { b } because reduced to Common | (Common & A)
+    const c1: CommonWithOverlappingOptionals = {
+        type: "A",
+        n: 1,
+        a: 1,
+        b: 1  // excess property
+        ~
+!!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithOverlappingOptionals'.
+!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
+    }
+    
+    type CommonWithDisjointOverlappingOptionals = Common | A | B;
+    
+    // Should still reject { b } because reduced to Common | A, even though these are now disjoint
+    const c2: CommonWithDisjointOverlappingOptionals = {
+        type: "A",
+        n: 1,
+        a: 1,
+        b: 1  // excess property
+        ~
+!!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
+!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+    }
+    
+    // Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+    
+    export type BaseAttribute<T> = {
+        type?: string | undefined;
+        required?: boolean | undefined;
+        defaultsTo?: T | undefined;
+    };
+    
+    export type Attribute =
+        | string
+        | StringAttribute
+        | NumberAttribute
+        | OneToOneAttribute
+    
+    export type Attribute2 =
+        | string
+        | StringAttribute
+        | NumberAttribute
+    
+    export type StringAttribute = BaseAttribute<string> & {
+        type: 'string';
+    };
+    
+    export type NumberAttribute = BaseAttribute<number> & {
+        type: 'number';
+        autoIncrement?: boolean | undefined;
+    };
+    
+    export type OneToOneAttribute = BaseAttribute<any> & {
+        model: string;
+    };
+    
+    // both should error due to excess properties
+    const attributes: Attribute = {
+        type: 'string',
+        ~~~~
+!!! error TS2322: Type '"string"' is not assignable to type '"number"'.
+        autoIncrement: true,
+        required: true,
+    };
+    
+    const attributes2: Attribute2 = {
+        type: 'string',
+        ~~~~
+!!! error TS2322: Type '"string"' is not assignable to type '"number"'.
+        autoIncrement: true,
+        required: true,
     };
     

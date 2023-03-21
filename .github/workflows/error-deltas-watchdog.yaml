@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 0 * * 3' # Every Wednesday
 
+permissions:
+  contents: read
+
 jobs:
   check-for-recent:
     runs-on: ubuntu-latest

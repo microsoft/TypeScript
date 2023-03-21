@@ -36,7 +36,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Typ
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
   Type '"2"' is not assignable to type '"0" | "1" | keyof T[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[boolean, false]' is not assignable to type '[...number[], boolean]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'boolean' is not assignable to type 'number'.
 
@@ -498,7 +498,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
     type Unbounded = [...Numbers, boolean];
     const data: Unbounded = [false, false];  // Error
           ~~~~
-!!! error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
+!!! error TS2322: Type '[boolean, false]' is not assignable to type '[...number[], boolean]'.
 !!! error TS2322:   Type at position 0 in source is not compatible with type at position 0 in target.
 !!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
     

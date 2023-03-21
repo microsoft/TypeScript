@@ -1,6 +1,13 @@
-Input:: {
- "compileOnSave": false
-}
+Fs::
+//// [/a.ts]
+
+
+//// [/tsconfig.json]
+{}
+
+
+configFileName:: tsconfig.json
 Result: WatchOptions::
 
-Result: Errors::
+Errors::
+

@@ -4,7 +4,6 @@ import chalk from "chalk";
 import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
-import path from "path";
 import which from "which";
 
 /**
@@ -138,24 +137,6 @@ export function getDiffTool() {
         process.exit(1);
     }
     return program;
-}
-
-/**
- * Find the size of a directory recursively.
- * Symbolic links can cause a loop.
- * @param {string} root
- * @returns {number} bytes
- */
-export function getDirSize(root) {
-    const stats = fs.lstatSync(root);
-
-    if (!stats.isDirectory()) {
-        return stats.size;
-    }
-
-    return fs.readdirSync(root)
-        .map(file => getDirSize(path.join(root, file)))
-        .reduce((acc, num) => acc + num, 0);
 }
 
 /**

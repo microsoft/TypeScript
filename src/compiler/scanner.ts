@@ -19,6 +19,7 @@ import {
     MapLike,
     parsePseudoBigInt,
     positionIsSynthesized,
+    PunctuationOrKeywordSyntaxKind,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -389,6 +390,10 @@ function makeReverseMap(source: Map<string, number>): string[] {
 }
 
 const tokenStrings = makeReverseMap(textToToken);
+
+/** @internal */
+export function tokenToString(t: PunctuationOrKeywordSyntaxKind): string;
+export function tokenToString(t: SyntaxKind): string | undefined;
 export function tokenToString(t: SyntaxKind): string | undefined {
     return tokenStrings[t];
 }

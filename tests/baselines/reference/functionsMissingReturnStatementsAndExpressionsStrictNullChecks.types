@@ -1,0 +1,25 @@
+=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts ===
+function f1(): undefined | number {
+>f1 : () => undefined | number
+
+    // Okay; return type allows implicit return of undefined
+}
+
+function f2(): number {
+>f2 : () => number
+
+    // Error; return type does not include undefined
+}
+
+async function f3(): Promise<undefined | number> {
+>f3 : () => Promise<undefined | number>
+
+    // Okay; return type allows implicit return of undefined
+}
+
+async function f4(): Promise<number> {
+>f4 : () => Promise<number>
+
+    // Error; return type does not include undefined
+}
+

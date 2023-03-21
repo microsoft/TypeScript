@@ -1,0 +1,27 @@
+=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts ===
+function f1(): undefined | number {
+>f1 : Symbol(f1, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 0, 0))
+
+    // Okay; return type allows implicit return of undefined
+}
+
+function f2(): number {
+>f2 : Symbol(f2, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 2, 1))
+
+    // Error; return type does not include undefined
+}
+
+async function f3(): Promise<undefined | number> {
+>f3 : Symbol(f3, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 6, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // Okay; return type allows implicit return of undefined
+}
+
+async function f4(): Promise<number> {
+>f4 : Symbol(f4, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 10, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // Error; return type does not include undefined
+}
+
