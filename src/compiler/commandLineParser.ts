@@ -652,6 +652,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "checkJs",
         type: "boolean",
+        affectsBuildInfo: true,
+        affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,
@@ -664,6 +667,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
         paramType: Diagnostics.KIND,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,

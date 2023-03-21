@@ -135,9 +135,7 @@ Program files::
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/a.js
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (computed .d.ts)
