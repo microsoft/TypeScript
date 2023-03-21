@@ -143,6 +143,8 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
+    GetEditsForMoveToFileRefactor = "getEditsForMoveToFileRefactor",
+    GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -600,6 +602,33 @@ export interface GetApplicableRefactorsResponse extends Response {
 }
 
 /**
+ * Request refactorings at a given position or selection area to move to an existing file.
+ */
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request { //will have to change to FileLocationOrRangeRequestArgs
+    // Pass along the same arguments that we first passed to `GetApplicableRefactorsRequest`
+    command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+    arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+}
+export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+    triggerReason?: RefactorTriggerReason;
+    kind?: string;
+};
+/**
+ * Response is a list of available files.
+ * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+ */
+export interface GetMoveToRefactoringFileSuggestionsResponse extends Response {
+   body?: {
+       /// Suggested name if a new file is created
+       newFileName: string;
+
+      /// List of file paths that the selected text can be moved to
+      // TODO: should this be an object instead so that TS could customize how files are shown in the file picker UI?
+      files: string[];
+   };
+}
+
+/**
  * A set of one or more available refactoring actions, grouped under a parent refactoring.
  */
 export interface ApplicableRefactorInfo {
@@ -673,6 +702,24 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
 export interface GetEditsForRefactorResponse extends Response {
     body?: RefactorEditInfo;
 }
+
+export interface GetEditsForMoveToFileRefactorRequest extends Request {
+    command: CommandTypes.GetEditsForMoveToFileRefactor;
+    arguments: GetEditsForMoveToFileRefactorRequestArgs;
+}
+
+export interface GetEditsForMoveToFileRefactorResponse extends Response {
+    body?: RefactorEditInfo; // TODO: maybe use a new type
+}
+
+export type GetEditsForMoveToFileRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+    /* The 'name' property from the refactoring that offered this action */
+    refactor: string;
+    /* The 'name' property from the refactoring action */
+    action: string;
+    /* Target file path that the user selected (may also be new file) */
+    filepath: string;
+};
 
 export interface RefactorEditInfo {
     edits: FileCodeEdits[];

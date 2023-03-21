@@ -192,3 +192,4 @@ import "./unittests/tsserver/versionCache";
 import "./unittests/tsserver/watchEnvironment";
 import "./unittests/debugDeprecation";
 import "./unittests/tsserver/inconsistentErrorInEditor";
+import "./unittests/tsserver/getMoveToRefactoringFileSuggestions";

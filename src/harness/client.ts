@@ -52,6 +52,7 @@ import {
     Program,
     QuickInfo,
     RefactorEditInfo,
+    RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
     RenameInfo,
@@ -800,6 +801,14 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(protocol.CommandTypes.GetApplicableRefactors, args);
         const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
         return response.body!; // TODO: GH#18217
+    }
+
+    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFilename: string | undefined; files: string[] | undefined; } {
+        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+
+        const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);
+        const response = this.processResponse<protocol.GetMoveToRefactoringFileSuggestionsResponse>(request);
+        return { newFilename: response.body?.newFileName, files:response.body?.files }!; // TODO: GH#18217
     }
 
     getEditsForRefactor(

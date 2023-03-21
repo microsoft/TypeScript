@@ -318,6 +318,7 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+import { createNewFilename } from "./createNewFilename";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -2933,6 +2934,19 @@ export function createLanguageService(
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
     }
 
+    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string): { newFilename: string | undefined, files: string[] | undefined } {
+        synchronizeHostData();
+        const sourceFile = getValidSourceFile(fileName);
+        const program = getProgram();
+        const files = program?.getSourceFiles().filter(sourceFile => !program?.isSourceFileFromExternalLibrary(sourceFile)).map(f => f.fileName);
+        //creating new filename
+        let newFilename;
+        if (program) {
+            newFilename = createNewFilename(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions, triggerReason, kind), host);
+        }
+        return { newFilename, files };
+    }
+
     function getEditsForRefactor(
         fileName: string,
         formatOptions: FormatCodeSettings,
@@ -3053,6 +3067,7 @@ export function createLanguageService(
         getAutoImportProvider,
         updateIsDefinitionOfReferencedSymbols,
         getApplicableRefactors,
+        getMoveToRefactoringFileSuggestions,
         getEditsForRefactor,
         getEditsForMoveToFileRefactor,
         toLineColumnOffset,

@@ -877,7 +877,9 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.ApplyCodeActionCommand,
     protocol.CommandTypes.GetSupportedCodeFixes,
     protocol.CommandTypes.GetApplicableRefactors,
+    protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
     protocol.CommandTypes.GetEditsForRefactor,
+    protocol.CommandTypes.GetEditsForMoveToFileRefactor,
     protocol.CommandTypes.GetEditsForRefactorFull,
     protocol.CommandTypes.OrganizeImports,
     protocol.CommandTypes.OrganizeImportsFull,
@@ -2712,17 +2714,41 @@ export class Session<TMessage = string> implements EventSender {
             return result;
         }
     }
-//@ts-ignore
-    private getEditsForMoveToFileRefactor(args: protocol.GetEditsForRefactorRequestArgs, newFile: string, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
+
+    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFilename: string | undefined, files: string[] | undefined }{
+        const { file } = this.getFileAndProject(args);
+        const allFiles: string[] = [];
+        let filename: string | undefined;
+        this.projectService.forEachEnabledProject(project => {
+            updateProjectIfDirty(project);
+            if (project.containsFile(file)) {
+                const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+                if (scriptInfo) {
+                    const { newFilename, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind);
+                    if (files) {
+                        for (const file of files) {
+                            if (!allFiles.includes(file)) {
+                                allFiles.push(file);
+                            }
+                        }
+                    }
+                    filename = newFilename;
+                }
+            }
+        });
+        return { newFilename: filename, files: allFiles };
+    }
+
+    private getEditsForMoveToFileForRefactor(args: protocol.GetEditsForMoveToFileRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
         const result = project.getLanguageService().getEditsForMoveToFileRefactor(
             file,
-            newFile,
+            args.filepath,
             this.getFormatOptions(file),
             this.extractPositionOrRange(args, scriptInfo),
-            "Move to another file", //args.refactor="Move to another file"
-            "Move to another file",//"args.action =Move to another file"
+            args.refactor,
+            args.action,
             this.getPreferences(file),
         );
 
@@ -3465,6 +3491,12 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
+        },
+        [protocol.CommandTypes.GetEditsForMoveToFileRefactor]: (request: protocol.GetEditsForMoveToFileRefactorRequest) => {
+            return this.requiredResponse(this.getEditsForMoveToFileForRefactor(request.arguments, /*simplifiedResult*/ true));
+        },
+        [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
+            return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
