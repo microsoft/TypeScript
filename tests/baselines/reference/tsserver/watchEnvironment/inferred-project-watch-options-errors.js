@@ -39,9 +39,11 @@ Info 13   [00:00:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 14   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 15   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 16   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 17   [00:00:46.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:00:47.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 19   [00:00:48.000] 	Files (4)
+Info 17   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 18   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 19   [00:00:48.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 20   [00:00:49.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 21   [00:00:50.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/node_modules/bar/foo.d.ts Text-1 "export function foo(): string;"
 	/user/username/projects/myproject/node_modules/bar/index.d.ts Text-1 "export { foo } from \"./foo\";"
@@ -57,15 +59,15 @@ Info 19   [00:00:48.000] 	Files (4)
 	src/main.ts
 	  Root file specified for compilation
 
-Info 20   [00:00:49.000] -----------------------------------------------
-Info 21   [00:00:50.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 21   [00:00:51.000] 	Files (4)
+Info 22   [00:00:51.000] -----------------------------------------------
+Info 23   [00:00:52.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 23   [00:00:53.000] 	Files (4)
 
-Info 21   [00:00:52.000] -----------------------------------------------
-Info 21   [00:00:53.000] Open files: 
-Info 21   [00:00:54.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
-Info 21   [00:00:55.000] 		Projects: /dev/null/inferredProject1*
-Info 21   [00:00:56.000] [
+Info 23   [00:00:54.000] -----------------------------------------------
+Info 23   [00:00:55.000] Open files: 
+Info 23   [00:00:56.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
+Info 23   [00:00:57.000] 		Projects: /dev/null/inferredProject1*
+Info 23   [00:00:58.000] [
   {
     "messageText": "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.",
     "category": 1,

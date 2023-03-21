@@ -40,6 +40,10 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/typescript.ts (used version)
 
+PolledWatches::
+/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 exitCode:: ExitStatus.undefined
 
 //// [/a/username/project/typescript.js]

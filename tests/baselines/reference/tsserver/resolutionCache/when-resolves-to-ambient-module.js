@@ -79,13 +79,15 @@ Info 17   [00:00:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 18   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Info 19   [00:00:52.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Info 20   [00:00:53.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
-Info 21   [00:00:54.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
-Info 22   [00:00:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
-Info 23   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Type roots
-Info 24   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Type roots
-Info 25   [00:00:58.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 26   [00:00:59.000] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
-Info 27   [00:01:00.000] 	Files (5)
+Info 21   [00:00:54.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info 22   [00:00:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info 23   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info 24   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info 25   [00:00:58.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Type roots
+Info 26   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Type roots
+Info 27   [00:01:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 28   [00:01:01.000] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
+Info 29   [00:01:02.000] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/src/somefolder/module1.ts Text-1 "\nexport const x = 10;"
 	/user/username/projects/myproject/src/somefolder/srcfile.ts SVC-1-0 "\nimport { x } from \"somefolder/module1\";\nimport { x } from \"somefolder/module2\";\nconst y = x;"
@@ -105,11 +107,11 @@ Info 27   [00:01:00.000] 	Files (5)
 	typings/node.d.ts
 	  Matched by default include pattern '**/*'
 
-Info 28   [00:01:01.000] -----------------------------------------------
-Info 29   [00:01:02.000] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
-Info 29   [00:01:03.000] 	Files (5)
+Info 30   [00:01:03.000] -----------------------------------------------
+Info 31   [00:01:04.000] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
+Info 31   [00:01:05.000] 	Files (5)
 
-Info 29   [00:01:04.000] -----------------------------------------------
-Info 29   [00:01:05.000] Open files: 
-Info 29   [00:01:06.000] 	FileName: /user/username/projects/myproject/src/somefolder/srcfile.ts ProjectRootPath: /user/username/projects/myproject
-Info 29   [00:01:07.000] 		Projects: /user/username/projects/myproject/src/tsconfig.json
+Info 31   [00:01:06.000] -----------------------------------------------
+Info 31   [00:01:07.000] Open files: 
+Info 31   [00:01:08.000] 	FileName: /user/username/projects/myproject/src/somefolder/srcfile.ts ProjectRootPath: /user/username/projects/myproject
+Info 31   [00:01:09.000] 		Projects: /user/username/projects/myproject/src/tsconfig.json

@@ -119,6 +119,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /users/name/projects/package.json: *new*
   {"pollingInterval":2000}
+/users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /users/name/projects/web/tsconfig.json: *new*

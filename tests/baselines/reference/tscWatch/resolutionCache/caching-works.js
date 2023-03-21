@@ -56,6 +56,10 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (used version)
 /a/d/f0.ts (used version)
 
+PolledWatches::
+/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
 /a/d/f0.ts: *new*
   {}
@@ -172,6 +176,8 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
 PolledWatches::
+/node_modules/@types:
+  {"pollingInterval":500}
 /node_modules: *new*
   {"pollingInterval":500}
 
@@ -242,6 +248,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/f1.ts (computed .d.ts)
 /a/d/f0.ts (computed .d.ts)
+
+PolledWatches::
+/node_modules/@types:
+  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /node_modules:

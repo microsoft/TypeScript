@@ -48,9 +48,11 @@ Info 9    [00:00:31.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 10   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 11   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info 12   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 13   [00:00:35.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 14   [00:00:36.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 15   [00:00:37.000] 	Files (2)
+Info 13   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 14   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 15   [00:00:37.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 16   [00:00:38.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 17   [00:00:39.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/ui.ts SVC-1-0 "const x = async (_action: string) => {\n};"
 
@@ -60,15 +62,15 @@ Info 15   [00:00:37.000] 	Files (2)
 	ui.ts
 	  Matched by default include pattern '**/*'
 
-Info 16   [00:00:38.000] -----------------------------------------------
-Info 17   [00:00:39.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 17   [00:00:40.000] 	Files (2)
+Info 18   [00:00:40.000] -----------------------------------------------
+Info 19   [00:00:41.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 19   [00:00:42.000] 	Files (2)
 
-Info 17   [00:00:41.000] -----------------------------------------------
-Info 17   [00:00:42.000] Open files: 
-Info 17   [00:00:43.000] 	FileName: /user/username/projects/myproject/ui.ts ProjectRootPath: undefined
-Info 17   [00:00:44.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 17   [00:00:45.000] response:
+Info 19   [00:00:43.000] -----------------------------------------------
+Info 19   [00:00:44.000] Open files: 
+Info 19   [00:00:45.000] 	FileName: /user/username/projects/myproject/ui.ts ProjectRootPath: undefined
+Info 19   [00:00:46.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 19   [00:00:47.000] response:
     {
       "responseRequired": false
     }
@@ -76,6 +78,8 @@ After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -90,7 +94,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 18   [00:00:46.000] request:
+Info 20   [00:00:48.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -100,7 +104,7 @@ Info 18   [00:00:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 19   [00:00:47.000] response:
+Info 21   [00:00:49.000] response:
     {
       "response": [],
       "responseRequired": true
@@ -109,7 +113,7 @@ After request
 
 Before request
 
-Info 20   [00:00:48.000] request:
+Info 22   [00:00:50.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -119,7 +123,7 @@ Info 20   [00:00:48.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 21   [00:00:49.000] response:
+Info 23   [00:00:51.000] response:
     {
       "response": [
         {
@@ -142,7 +146,7 @@ After request
 
 Before request
 
-Info 22   [00:00:50.000] request:
+Info 24   [00:00:52.000] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -152,7 +156,7 @@ Info 22   [00:00:50.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 23   [00:00:51.000] response:
+Info 25   [00:00:53.000] response:
     {
       "response": [],
       "responseRequired": true

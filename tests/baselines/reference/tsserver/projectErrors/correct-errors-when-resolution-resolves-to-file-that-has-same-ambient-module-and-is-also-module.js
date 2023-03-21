@@ -67,9 +67,11 @@ Info 14   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:00:48.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 16   [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info 17   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 18   [00:00:51.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 19   [00:00:52.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
-Info 20   [00:00:53.000] 	Files (4)
+Info 18   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 19   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 20   [00:00:53.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 21   [00:00:54.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
+Info 22   [00:00:55.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/users/username/projects/myproject/node_modules/@custom/plugin/proposed.d.ts Text-1 "declare module '@custom/plugin' {\n    export const bar = 10;\n}"
 	/users/username/projects/myproject/node_modules/@custom/plugin/index.d.ts Text-1 "import './proposed';\ndeclare module '@custom/plugin' {\n    export const version: string;\n}"
@@ -85,21 +87,21 @@ Info 20   [00:00:53.000] 	Files (4)
 	src/a.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 21   [00:00:54.000] -----------------------------------------------
-Info 22   [00:00:55.000] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/tsconfig.json"}}
-Info 23   [00:00:56.000] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"49814c247d0e4666719ac54e31c3f19091be4020c5ac046c86474826dc7e4ede","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":73,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":486,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 23   [00:00:56.000] -----------------------------------------------
 Info 24   [00:00:57.000] event:
+    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/tsconfig.json"}}
+Info 25   [00:00:58.000] event:
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"49814c247d0e4666719ac54e31c3f19091be4020c5ac046c86474826dc7e4ede","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":73,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":486,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 26   [00:00:59.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/myproject/src/a.ts","configFile":"/users/username/projects/myproject/tsconfig.json","diagnostics":[]}}
-Info 25   [00:00:58.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
-Info 25   [00:00:59.000] 	Files (4)
+Info 27   [00:01:00.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
+Info 27   [00:01:01.000] 	Files (4)
 
-Info 25   [00:01:00.000] -----------------------------------------------
-Info 25   [00:01:01.000] Open files: 
-Info 25   [00:01:02.000] 	FileName: /users/username/projects/myproject/src/a.ts ProjectRootPath: undefined
-Info 25   [00:01:03.000] 		Projects: /users/username/projects/myproject/tsconfig.json
-Info 25   [00:01:04.000] response:
+Info 27   [00:01:02.000] -----------------------------------------------
+Info 27   [00:01:03.000] Open files: 
+Info 27   [00:01:04.000] 	FileName: /users/username/projects/myproject/src/a.ts ProjectRootPath: undefined
+Info 27   [00:01:05.000] 		Projects: /users/username/projects/myproject/tsconfig.json
+Info 27   [00:01:06.000] response:
     {
       "responseRequired": false
     }
@@ -107,6 +109,8 @@ After request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -125,7 +129,7 @@ Checking timeout queue length: 0
 
 Before request
 
-Info 26   [00:01:05.000] request:
+Info 28   [00:01:07.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -137,7 +141,7 @@ Info 26   [00:01:05.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 27   [00:01:06.000] response:
+Info 29   [00:01:08.000] response:
     {
       "responseRequired": false
     }
@@ -145,27 +149,27 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 28   [00:01:07.000] event:
+Info 30   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 29   [00:01:08.000] event:
+Info 31   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 30   [00:01:09.000] event:
+Info 32   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
-Info 31   [00:01:10.000] event:
+Info 33   [00:01:12.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 Before request
 
-Info 32   [00:01:11.000] request:
+Info 34   [00:01:13.000] request:
     {
       "command": "change",
       "arguments": {
@@ -179,7 +183,7 @@ Info 32   [00:01:11.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 33   [00:01:12.000] response:
+Info 35   [00:01:14.000] response:
     {
       "responseRequired": false
     }
@@ -189,7 +193,7 @@ Checking timeout queue length: 0
 
 Before request
 
-Info 34   [00:01:13.000] request:
+Info 36   [00:01:15.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -201,7 +205,7 @@ Info 34   [00:01:13.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 35   [00:01:14.000] response:
+Info 37   [00:01:16.000] response:
     {
       "responseRequired": false
     }
@@ -209,30 +213,30 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 36   [00:01:15.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
-Info 37   [00:01:16.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 38   [00:01:17.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
-Info 39   [00:01:18.000] 	Files (4)
+Info 38   [00:01:17.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
+Info 39   [00:01:18.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 40   [00:01:19.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
+Info 41   [00:01:20.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/users/username/projects/myproject/node_modules/@custom/plugin/proposed.d.ts Text-1 "declare module '@custom/plugin' {\n    export const bar = 10;\n}"
 	/users/username/projects/myproject/node_modules/@custom/plugin/index.d.ts Text-1 "import './proposed';\ndeclare module '@custom/plugin' {\n    export const version: string;\n}"
 	/users/username/projects/myproject/src/a.ts SVC-1-1 "import * as myModule from \"@custom/plugin\";\nfunction foo() {\n  // heollo\n}"
 
-Info 40   [00:01:19.000] -----------------------------------------------
-Info 41   [00:01:20.000] event:
+Info 42   [00:01:21.000] -----------------------------------------------
+Info 43   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 42   [00:01:21.000] event:
+Info 44   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 43   [00:01:22.000] event:
+Info 45   [00:01:24.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
-Info 44   [00:01:23.000] event:
+Info 46   [00:01:25.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)

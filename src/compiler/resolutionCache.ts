@@ -729,7 +729,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         // If the directory is node_modules use it to watch, always watch it recursively
         if (isNodeModulesDirectory(dirPath)) {
-            return canWatchDirectoryOrFile(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
+            return canWatchDirectoryOrFile(dirPath) ? { dir, dirPath } : undefined;
         }
 
         let nonRecursive = true;
@@ -825,6 +825,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
+    function isInRootPathOrCanWatchDirectoryOrFile(locationToWatch: string) {
+        const path = resolutionHost.toPath(locationToWatch);
+        return isInDirectoryPath(rootPath, path) ||
+            canWatchDirectoryOrFile(resolutionHost.toPath(path));
+    }
+
     function createFileWatcherOfAffectingLocation(affectingLocation: string, forResolution: boolean) {
         const fileWatcher = fileWatchesOfAffectingLocations.get(affectingLocation);
         if (fileWatcher) {
@@ -848,7 +854,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
         const paths = new Set<string>();
         paths.add(locationToWatch);
-        let actualWatcher = canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
+        let actualWatcher = isInRootPathOrCanWatchDirectoryOrFile(locationToWatch) ?
             resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
                 cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
                 const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
@@ -1193,12 +1199,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     function canWatchTypeRootPath(nodeTypesDirectory: string) {
         // If type roots is specified, watch that path
-        if (resolutionHost.getCompilationSettings().typeRoots) return true;
-
-        // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-        const dir = getDirectoryPath(getDirectoryPath(nodeTypesDirectory));
-        const dirPath = resolutionHost.toPath(dir);
-        return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
+        return !!resolutionHost.getCompilationSettings().typeRoots ||
+            // Otherwise can watch directory only if its at rootDir or we can watch the node_modules directory
+            isInRootPathOrCanWatchDirectoryOrFile(getDirectoryPath(nodeTypesDirectory));
     }
 }
 

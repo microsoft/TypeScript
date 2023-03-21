@@ -70,9 +70,11 @@ Info 27   [00:00:56.000] ======== Module name '../module2' was successfully reso
 Info 28   [00:00:57.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 29   [00:00:58.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info 30   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 31   [00:01:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 32   [00:01:01.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 33   [00:01:02.000] 	Files (5)
+Info 31   [00:01:00.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 32   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 33   [00:01:02.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 34   [00:01:03.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 35   [00:01:04.000] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/module2.ts Text-1 "export function module2() {}"
 	/user/username/projects/myproject/src/module1.ts Text-1 "export function module1() {}"
@@ -95,18 +97,18 @@ Info 33   [00:01:02.000] 	Files (5)
 	src/file2.ts
 	  Matched by default include pattern '**/*'
 
-Info 34   [00:01:03.000] -----------------------------------------------
-Info 35   [00:01:04.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 35   [00:01:05.000] 	Files (5)
+Info 36   [00:01:05.000] -----------------------------------------------
+Info 37   [00:01:06.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 37   [00:01:07.000] 	Files (5)
 
-Info 35   [00:01:06.000] -----------------------------------------------
-Info 35   [00:01:07.000] Open files: 
-Info 35   [00:01:08.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
-Info 35   [00:01:09.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 35   [00:01:16.000] FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:01:17.000] Scheduled: /user/username/projects/myproject/tsconfig.json
-Info 37   [00:01:18.000] Scheduled: *ensureProjectForOpenFiles*
-Info 38   [00:01:19.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
+Info 37   [00:01:08.000] -----------------------------------------------
+Info 37   [00:01:09.000] Open files: 
+Info 37   [00:01:10.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
+Info 37   [00:01:11.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 37   [00:01:18.000] FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
+Info 38   [00:01:19.000] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info 39   [00:01:20.000] Scheduled: *ensureProjectForOpenFiles*
+Info 40   [00:01:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
 Before running timeout callbacks
 //// [/user/username/projects/myproject/src/file1.ts]
 import { module1 } from "./module1";import { module2 } from "../module2";import { module1 } from "./module1";import { module2 } from "../module2";
@@ -117,6 +119,8 @@ import { module1 } from "./module1";import { module2 } from "../module2";import 
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -135,37 +139,37 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 39   [00:01:20.000] Running: /user/username/projects/myproject/tsconfig.json
-Info 40   [00:01:21.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 41   [00:01:22.000] Reusing resolution of module './module1' from '/user/username/projects/myproject/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/module1.ts'.
-Info 42   [00:01:23.000] Reusing resolution of module '../module2' from '/user/username/projects/myproject/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/module2.ts'.
-Info 43   [00:01:24.000] Reusing resolution of module './module1' from '/user/username/projects/myproject/src/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/module1.ts'.
-Info 44   [00:01:25.000] Reusing resolution of module '../module2' from '/user/username/projects/myproject/src/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/module2.ts'.
-Info 45   [00:01:26.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 46   [00:01:27.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 47   [00:01:28.000] 	Files (5)
+Info 41   [00:01:22.000] Running: /user/username/projects/myproject/tsconfig.json
+Info 42   [00:01:23.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 43   [00:01:24.000] Reusing resolution of module './module1' from '/user/username/projects/myproject/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/module1.ts'.
+Info 44   [00:01:25.000] Reusing resolution of module '../module2' from '/user/username/projects/myproject/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/module2.ts'.
+Info 45   [00:01:26.000] Reusing resolution of module './module1' from '/user/username/projects/myproject/src/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/module1.ts'.
+Info 46   [00:01:27.000] Reusing resolution of module '../module2' from '/user/username/projects/myproject/src/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/module2.ts'.
+Info 47   [00:01:28.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 48   [00:01:29.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 49   [00:01:30.000] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/module2.ts Text-1 "export function module2() {}"
 	/user/username/projects/myproject/src/module1.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/src/file1.ts SVC-1-0 "import { module1 } from \"./module1\";import { module2 } from \"../module2\";"
 	/user/username/projects/myproject/src/file2.ts Text-2 "import { module1 } from \"./module1\";import { module2 } from \"../module2\";import { module1 } from \"./module1\";import { module2 } from \"../module2\";"
 
-Info 48   [00:01:29.000] -----------------------------------------------
-Info 49   [00:01:30.000] Running: *ensureProjectForOpenFiles*
-Info 50   [00:01:31.000] Before ensureProjectForOpenFiles:
-Info 51   [00:01:32.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 51   [00:01:33.000] 	Files (5)
+Info 50   [00:01:31.000] -----------------------------------------------
+Info 51   [00:01:32.000] Running: *ensureProjectForOpenFiles*
+Info 52   [00:01:33.000] Before ensureProjectForOpenFiles:
+Info 53   [00:01:34.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 53   [00:01:35.000] 	Files (5)
 
-Info 51   [00:01:34.000] -----------------------------------------------
-Info 51   [00:01:35.000] Open files: 
-Info 51   [00:01:36.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
-Info 51   [00:01:37.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 51   [00:01:38.000] After ensureProjectForOpenFiles:
-Info 52   [00:01:39.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 52   [00:01:40.000] 	Files (5)
+Info 53   [00:01:36.000] -----------------------------------------------
+Info 53   [00:01:37.000] Open files: 
+Info 53   [00:01:38.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
+Info 53   [00:01:39.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 53   [00:01:40.000] After ensureProjectForOpenFiles:
+Info 54   [00:01:41.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 54   [00:01:42.000] 	Files (5)
 
-Info 52   [00:01:41.000] -----------------------------------------------
-Info 52   [00:01:42.000] Open files: 
-Info 52   [00:01:43.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
-Info 52   [00:01:44.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 54   [00:01:43.000] -----------------------------------------------
+Info 54   [00:01:44.000] Open files: 
+Info 54   [00:01:45.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
+Info 54   [00:01:46.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running timeout callbacks

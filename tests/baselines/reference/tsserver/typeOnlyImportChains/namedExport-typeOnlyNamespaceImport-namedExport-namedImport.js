@@ -38,9 +38,11 @@ Info 4    [00:00:19.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
 Info 6    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
 Info 7    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 8    [00:00:23.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 9    [00:00:24.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 10   [00:00:25.000] 	Files (4)
+Info 8    [00:00:23.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 9    [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 10   [00:00:25.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 11   [00:00:26.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 12   [00:00:27.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a.ts Text-1 "export class A {}"
 	/b.ts Text-1 "import type * as a from './a'; export { a };"
@@ -56,19 +58,23 @@ Info 10   [00:00:25.000] 	Files (4)
 	c.ts
 	  Root file specified for compilation
 
-Info 11   [00:00:26.000] -----------------------------------------------
-Info 12   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 12   [00:00:28.000] 	Files (4)
+Info 13   [00:00:28.000] -----------------------------------------------
+Info 14   [00:00:29.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 14   [00:00:30.000] 	Files (4)
 
-Info 12   [00:00:29.000] -----------------------------------------------
-Info 12   [00:00:30.000] Open files: 
-Info 12   [00:00:31.000] 	FileName: /c.ts ProjectRootPath: undefined
-Info 12   [00:00:32.000] 		Projects: /dev/null/inferredProject1*
-Info 12   [00:00:33.000] response:
+Info 14   [00:00:31.000] -----------------------------------------------
+Info 14   [00:00:32.000] Open files: 
+Info 14   [00:00:33.000] 	FileName: /c.ts ProjectRootPath: undefined
+Info 14   [00:00:34.000] 		Projects: /dev/null/inferredProject1*
+Info 14   [00:00:35.000] response:
     {
       "responseRequired": false
     }
 After request
+
+PolledWatches::
+/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /b.ts: *new*
@@ -80,7 +86,7 @@ FsWatches::
 
 Before request
 
-Info 13   [00:00:34.000] request:
+Info 15   [00:00:36.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -89,7 +95,7 @@ Info 13   [00:00:34.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 14   [00:00:35.000] response:
+Info 16   [00:00:37.000] response:
     {
       "response": [
         {

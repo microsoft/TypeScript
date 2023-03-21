@@ -30,24 +30,26 @@ Info 6    [00:00:13.000] Config: /tsconfig.json : {
 }
 Info 7    [00:00:14.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 8    [00:00:15.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 9    [00:00:16.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 10   [00:00:17.000] Project '/tsconfig.json' (Configured)
-Info 11   [00:00:18.000] 	Files (1)
+Info 9    [00:00:16.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 10   [00:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 11   [00:00:18.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 12   [00:00:19.000] Project '/tsconfig.json' (Configured)
+Info 13   [00:00:20.000] 	Files (1)
 	/a.ts SVC-1-0 "export const a = 0;"
 
 
 	a.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 12   [00:00:19.000] -----------------------------------------------
-Info 13   [00:00:20.000] Project '/tsconfig.json' (Configured)
-Info 13   [00:00:21.000] 	Files (1)
+Info 14   [00:00:21.000] -----------------------------------------------
+Info 15   [00:00:22.000] Project '/tsconfig.json' (Configured)
+Info 15   [00:00:23.000] 	Files (1)
 
-Info 13   [00:00:22.000] -----------------------------------------------
-Info 13   [00:00:23.000] Open files: 
-Info 13   [00:00:24.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 13   [00:00:25.000] 		Projects: /tsconfig.json
-Info 13   [00:00:26.000] response:
+Info 15   [00:00:24.000] -----------------------------------------------
+Info 15   [00:00:25.000] Open files: 
+Info 15   [00:00:26.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 15   [00:00:27.000] 		Projects: /tsconfig.json
+Info 15   [00:00:28.000] response:
     {
       "responseRequired": false
     }
@@ -56,6 +58,8 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /tsconfig.json: *new*
@@ -63,7 +67,7 @@ FsWatches::
 
 Before request
 
-Info 14   [00:00:27.000] request:
+Info 16   [00:00:29.000] request:
     {
       "command": "getEditsForRefactor",
       "arguments": {
@@ -78,7 +82,7 @@ Info 14   [00:00:27.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 15   [00:00:28.000] response:
+Info 17   [00:00:30.000] response:
     {
       "response": {
         "edits": [

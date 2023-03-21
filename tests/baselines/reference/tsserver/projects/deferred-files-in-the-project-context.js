@@ -97,17 +97,19 @@ Info 15   [00:00:26.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Conf
 Info 16   [00:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info 17   [00:00:28.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 18   [00:00:29.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 19   [00:00:30.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 20   [00:00:31.000] Project '/tsconfig.json' (Configured)
-Info 21   [00:00:32.000] 	Files (1)
+Info 19   [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 20   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 21   [00:00:32.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 22   [00:00:33.000] Project '/tsconfig.json' (Configured)
+Info 23   [00:00:34.000] 	Files (1)
 	/a.deferred Text-1 ""
 
 
 	a.deferred
 	  Matched by default include pattern '**/*'
 
-Info 22   [00:00:33.000] -----------------------------------------------
-Info 23   [00:00:34.000] response:
+Info 24   [00:00:35.000] -----------------------------------------------
+Info 25   [00:00:36.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -116,6 +118,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -126,4 +130,4 @@ FsWatchesRecursive::
 /: *new*
   {}
 
-Info 24   [00:00:35.000] Has allowNonTsExtension: true
+Info 26   [00:00:37.000] Has allowNonTsExtension: true

@@ -34,9 +34,11 @@ Info 8    [00:00:29.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 9    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 10   [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 11   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 12   [00:00:33.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 13   [00:00:34.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 14   [00:00:35.000] 	Files (3)
+Info 12   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 13   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 14   [00:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 15   [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 16   [00:00:37.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/module.d.ts Text-1 "export let x: number"
 	/user/username/projects/myproject/app.ts SVC-1-0 "\n                import {f} from \"./module\"\n                console.log(f)\n                "
@@ -49,11 +51,11 @@ Info 14   [00:00:35.000] 	Files (3)
 	app.ts
 	  Root file specified for compilation
 
-Info 15   [00:00:36.000] -----------------------------------------------
-Info 16   [00:00:37.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 16   [00:00:38.000] 	Files (3)
+Info 17   [00:00:38.000] -----------------------------------------------
+Info 18   [00:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 18   [00:00:40.000] 	Files (3)
 
-Info 16   [00:00:39.000] -----------------------------------------------
-Info 16   [00:00:40.000] Open files: 
-Info 16   [00:00:41.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
-Info 16   [00:00:42.000] 		Projects: /dev/null/inferredProject1*
+Info 18   [00:00:41.000] -----------------------------------------------
+Info 18   [00:00:42.000] Open files: 
+Info 18   [00:00:43.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
+Info 18   [00:00:44.000] 		Projects: /dev/null/inferredProject1*

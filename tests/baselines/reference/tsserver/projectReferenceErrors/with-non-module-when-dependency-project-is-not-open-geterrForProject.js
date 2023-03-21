@@ -87,9 +87,11 @@ Info 17   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 18   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 19   [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 20   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 21   [00:00:50.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 22   [00:00:51.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 23   [00:00:52.000] 	Files (3)
+Info 21   [00:00:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 22   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 23   [00:00:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 24   [00:00:53.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 25   [00:00:54.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "function fn1() { }\nfunction fn2() { }\n// Introduce error for fnErr import in main\n// function fnErr() { }\n// Error in dependency ts file\nlet x: string = 10;"
 	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "fn1();\nfn2();\nfnErr();\n"
@@ -102,23 +104,23 @@ Info 23   [00:00:52.000] 	Files (3)
 	usage.ts
 	  Matched by default include pattern '**/*'
 
-Info 24   [00:00:53.000] -----------------------------------------------
-Info 25   [00:00:54.000] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/usage/tsconfig.json"}}
-Info 26   [00:00:55.000] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"2b96539513e8810fb8ec0c078e4cb28919c0c28cdb8f7646118c5a6f4ff4cb10","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":179,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outFile":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 26   [00:00:55.000] -----------------------------------------------
 Info 27   [00:00:56.000] event:
+    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/usage/tsconfig.json"}}
+Info 28   [00:00:57.000] event:
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"2b96539513e8810fb8ec0c078e4cb28919c0c28cdb8f7646118c5a6f4ff4cb10","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":179,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outFile":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 29   [00:00:58.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/usage/usage.ts","configFile":"/user/username/projects/myproject/usage/tsconfig.json","diagnostics":[]}}
-Info 28   [00:00:57.000] Search path: /user/username/projects/myproject/usage
-Info 29   [00:00:58.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
-Info 30   [00:00:59.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 30   [00:01:00.000] 	Files (3)
+Info 30   [00:00:59.000] Search path: /user/username/projects/myproject/usage
+Info 31   [00:01:00.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
+Info 32   [00:01:01.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 32   [00:01:02.000] 	Files (3)
 
-Info 30   [00:01:01.000] -----------------------------------------------
-Info 30   [00:01:02.000] Open files: 
-Info 30   [00:01:03.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 30   [00:01:04.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 30   [00:01:05.000] response:
+Info 32   [00:01:03.000] -----------------------------------------------
+Info 32   [00:01:04.000] Open files: 
+Info 32   [00:01:05.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 32   [00:01:06.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 32   [00:01:07.000] response:
     {
       "responseRequired": false
     }
@@ -128,6 +130,8 @@ PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -148,7 +152,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 31   [00:01:06.000] request:
+Info 33   [00:01:08.000] request:
     {
       "command": "geterrForProject",
       "arguments": {
@@ -158,7 +162,7 @@ Info 31   [00:01:06.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 32   [00:01:07.000] response:
+Info 34   [00:01:09.000] response:
     {
       "responseRequired": false
     }
@@ -166,45 +170,45 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 33   [00:01:08.000] event:
+Info 35   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 34   [00:01:09.000] event:
+Info 36   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 35   [00:01:10.000] event:
+Info 37   [00:01:12.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before checking timeout queue length (1) and running
 
-Info 36   [00:01:11.000] event:
+Info 38   [00:01:13.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 37   [00:01:12.000] event:
+Info 39   [00:01:14.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 38   [00:01:13.000] event:
+Info 40   [00:01:15.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
-Info 39   [00:01:14.000] event:
+Info 41   [00:01:16.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 Before request
 
-Info 40   [00:01:15.000] request:
+Info 42   [00:01:17.000] request:
     {
       "command": "geterrForProject",
       "arguments": {
@@ -214,7 +218,7 @@ Info 40   [00:01:15.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 41   [00:01:16.000] response:
+Info 43   [00:01:18.000] response:
     {
       "responseRequired": false
     }
@@ -222,38 +226,38 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 42   [00:01:17.000] event:
+Info 44   [00:01:19.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 43   [00:01:18.000] event:
+Info 45   [00:01:20.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 44   [00:01:19.000] event:
+Info 46   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before checking timeout queue length (1) and running
 
-Info 45   [00:01:20.000] event:
+Info 47   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 46   [00:01:21.000] event:
+Info 48   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 47   [00:01:22.000] event:
+Info 49   [00:01:24.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
-Info 48   [00:01:23.000] event:
+Info 50   [00:01:25.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)

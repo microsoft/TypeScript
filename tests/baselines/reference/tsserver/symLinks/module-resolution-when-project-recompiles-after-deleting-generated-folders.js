@@ -73,9 +73,11 @@ Info 22   [00:01:13.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info 23   [00:01:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info 24   [00:01:15.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info 25   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info 26   [00:01:17.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 27   [00:01:18.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 28   [00:01:19.000] 	Files (3)
+Info 26   [00:01:17.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
+Info 27   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
+Info 28   [00:01:19.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 29   [00:01:20.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 30   [00:01:21.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts Text-1 "export class C { method(): number; }"
 	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
@@ -88,21 +90,21 @@ Info 28   [00:01:19.000] 	Files (3)
 	src/datetime/baseDate.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 29   [00:01:20.000] -----------------------------------------------
-Info 30   [00:01:21.000] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json"}}
-Info 31   [00:01:22.000] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"a6bd830f3b019a6f703b938422f5798726d0914f0d6f67c2539798ea5e66fed2","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":55,"tsx":0,"tsxSize":0,"dts":2,"dtsSize":370,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 31   [00:01:22.000] -----------------------------------------------
 Info 32   [00:01:23.000] event:
+    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json"}}
+Info 33   [00:01:24.000] event:
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"a6bd830f3b019a6f703b938422f5798726d0914f0d6f67c2539798ea5e66fed2","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":55,"tsx":0,"tsxSize":0,"dts":2,"dtsSize":370,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 34   [00:01:25.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","configFile":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json","diagnostics":[]}}
-Info 33   [00:01:24.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 33   [00:01:25.000] 	Files (3)
+Info 35   [00:01:26.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 35   [00:01:27.000] 	Files (3)
 
-Info 33   [00:01:26.000] -----------------------------------------------
-Info 33   [00:01:27.000] Open files: 
-Info 33   [00:01:28.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
-Info 33   [00:01:29.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 33   [00:01:30.000] response:
+Info 35   [00:01:28.000] -----------------------------------------------
+Info 35   [00:01:29.000] Open files: 
+Info 35   [00:01:30.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
+Info 35   [00:01:31.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 35   [00:01:32.000] response:
     {
       "responseRequired": false
     }
@@ -116,6 +118,8 @@ PolledWatches::
 /users/username/projects/myproject/javascript/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -136,7 +140,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 34   [00:01:31.000] request:
+Info 36   [00:01:33.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -148,7 +152,7 @@ Info 34   [00:01:31.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 35   [00:01:32.000] response:
+Info 37   [00:01:34.000] response:
     {
       "responseRequired": false
     }
@@ -156,29 +160,29 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 36   [00:01:33.000] event:
+Info 38   [00:01:35.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 37   [00:01:34.000] event:
+Info 39   [00:01:36.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 38   [00:01:35.000] event:
+Info 40   [00:01:37.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
-Info 39   [00:01:36.000] event:
+Info 41   [00:01:38.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
-Info 40   [00:01:38.000] FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 2:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
-Info 41   [00:01:39.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
-Info 42   [00:01:40.000] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 43   [00:01:41.000] Scheduled: *ensureProjectForOpenFiles*
-Info 44   [00:01:42.000] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 2:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
+Info 42   [00:01:40.000] FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 2:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
+Info 43   [00:01:41.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
+Info 44   [00:01:42.000] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 45   [00:01:43.000] Scheduled: *ensureProjectForOpenFiles*
+Info 46   [00:01:44.000] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 2:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
 Before running timeout callbacks
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts] deleted
 
@@ -190,6 +194,8 @@ PolledWatches::
 /users/username/projects/myproject/javascript/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -210,17 +216,19 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
-Info 45   [00:01:45.000] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 46   [00:01:46.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 47   [00:01:47.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
-Info 48   [00:01:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
-Info 49   [00:01:49.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
-Info 50   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
-Info 51   [00:01:51.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
-Info 52   [00:01:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
-Info 53   [00:01:53.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 54   [00:01:54.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 55   [00:01:55.000] 	Files (2)
+Info 47   [00:01:47.000] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 48   [00:01:48.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 49   [00:01:49.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 50   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 51   [00:01:51.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 52   [00:01:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 53   [00:01:53.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 54   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 55   [00:01:55.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 56   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info 57   [00:01:57.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 58   [00:01:58.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 59   [00:01:59.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
@@ -230,26 +238,26 @@ Info 55   [00:01:55.000] 	Files (2)
 	src/datetime/baseDate.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 56   [00:01:56.000] -----------------------------------------------
-Info 57   [00:01:57.000] Running: *ensureProjectForOpenFiles*
-Info 58   [00:01:58.000] Before ensureProjectForOpenFiles:
-Info 59   [00:01:59.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 59   [00:02:00.000] 	Files (2)
+Info 60   [00:02:00.000] -----------------------------------------------
+Info 61   [00:02:01.000] Running: *ensureProjectForOpenFiles*
+Info 62   [00:02:02.000] Before ensureProjectForOpenFiles:
+Info 63   [00:02:03.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 63   [00:02:04.000] 	Files (2)
 
-Info 59   [00:02:01.000] -----------------------------------------------
-Info 59   [00:02:02.000] Open files: 
-Info 59   [00:02:03.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
-Info 59   [00:02:04.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 59   [00:02:05.000] After ensureProjectForOpenFiles:
-Info 60   [00:02:06.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 60   [00:02:07.000] 	Files (2)
+Info 63   [00:02:05.000] -----------------------------------------------
+Info 63   [00:02:06.000] Open files: 
+Info 63   [00:02:07.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
+Info 63   [00:02:08.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 63   [00:02:09.000] After ensureProjectForOpenFiles:
+Info 64   [00:02:10.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 64   [00:02:11.000] 	Files (2)
 
-Info 60   [00:02:08.000] -----------------------------------------------
-Info 60   [00:02:09.000] Open files: 
-Info 60   [00:02:10.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
-Info 60   [00:02:11.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 60   [00:02:12.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
-Info 61   [00:02:13.000] event:
+Info 64   [00:02:12.000] -----------------------------------------------
+Info 64   [00:02:13.000] Open files: 
+Info 64   [00:02:14.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
+Info 64   [00:02:15.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 64   [00:02:16.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+Info 65   [00:02:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
 After running timeout callbacks
 
@@ -262,11 +270,15 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /users/username/projects/myproject/javascript/packages/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/myproject/javascript/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -285,13 +297,13 @@ FsWatchesRecursive::
 
 Before running timeout callbacks
 
-Info 62   [00:02:14.000] event:
+Info 66   [00:02:18.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 After running timeout callbacks
 
 Before request
 
-Info 63   [00:02:15.000] request:
+Info 67   [00:02:19.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -303,7 +315,7 @@ Info 63   [00:02:15.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 64   [00:02:16.000] response:
+Info 68   [00:02:20.000] response:
     {
       "responseRequired": false
     }
@@ -311,21 +323,21 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 65   [00:02:17.000] event:
+Info 69   [00:02:21.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 66   [00:02:18.000] event:
+Info 70   [00:02:22.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":46},"text":"Cannot find module '@microsoft/recognizers-text' or its corresponding type declarations.","code":2307,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 67   [00:02:19.000] event:
+Info 71   [00:02:23.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
-Info 68   [00:02:20.000] event:
+Info 72   [00:02:24.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
 
@@ -342,7 +354,7 @@ After running timeout callbacks
 
 Before request
 
-Info 69   [00:02:27.000] request:
+Info 73   [00:02:31.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -354,7 +366,7 @@ Info 69   [00:02:27.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 70   [00:02:28.000] response:
+Info 74   [00:02:32.000] response:
     {
       "responseRequired": false
     }
@@ -362,20 +374,20 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 71   [00:02:29.000] event:
+Info 75   [00:02:33.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 72   [00:02:30.000] event:
+Info 76   [00:02:34.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":46},"text":"Cannot find module '@microsoft/recognizers-text' or its corresponding type declarations.","code":2307,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 73   [00:02:31.000] event:
+Info 77   [00:02:35.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
-Info 74   [00:02:32.000] event:
+Info 78   [00:02:36.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)

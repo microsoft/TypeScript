@@ -27,6 +27,8 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true}
 FileWatcher:: Added:: WatchInfo: /f.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Type roots
 [[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -45,6 +47,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /f.ts (used version)
+
+PolledWatches::
+/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /f.ts: *new*

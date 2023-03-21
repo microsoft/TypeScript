@@ -297,6 +297,8 @@ Dependencies for::
 PolledWatches::
 /user/username/projects/transitivereferences/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/tsconfig.c.json: *new*

@@ -35,11 +35,15 @@ Info 6    [00:00:25.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 7    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 8    [00:00:27.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 9    [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 10   [00:00:29.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 11   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 12   [00:00:31.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 13   [00:00:32.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 14   [00:00:33.000] 	Files (2)
+Info 10   [00:00:29.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 11   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 12   [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 13   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 14   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 15   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 16   [00:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 18   [00:00:37.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/User/userName/Projects/i/foo.ts SVC-1-0 "import { foo } from \"bar\""
 
@@ -49,15 +53,15 @@ Info 14   [00:00:33.000] 	Files (2)
 	foo.ts
 	  Root file specified for compilation
 
-Info 15   [00:00:34.000] -----------------------------------------------
-Info 16   [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 16   [00:00:36.000] 	Files (2)
+Info 19   [00:00:38.000] -----------------------------------------------
+Info 20   [00:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 20   [00:00:40.000] 	Files (2)
 
-Info 16   [00:00:37.000] -----------------------------------------------
-Info 16   [00:00:38.000] Open files: 
-Info 16   [00:00:39.000] 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
-Info 16   [00:00:40.000] 		Projects: /dev/null/inferredProject1*
-Info 16   [00:00:41.000] response:
+Info 20   [00:00:41.000] -----------------------------------------------
+Info 20   [00:00:42.000] Open files: 
+Info 20   [00:00:43.000] 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
+Info 20   [00:00:44.000] 		Projects: /dev/null/inferredProject1*
+Info 20   [00:00:45.000] response:
     {
       "responseRequired": false
     }
@@ -70,7 +74,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/i/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/i/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

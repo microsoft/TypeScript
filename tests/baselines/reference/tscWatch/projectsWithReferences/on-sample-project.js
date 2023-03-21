@@ -501,6 +501,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/sample1/tests/tsconfig.json: *new*
@@ -1113,6 +1115,8 @@ PolledWatches::
 /user/username/projects/sample1/tests/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

@@ -121,9 +121,11 @@ Info 29   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 30   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info 31   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info 32   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
-Info 33   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 34   [00:01:13.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 35   [00:01:14.000] 	Files (5)
+Info 33   [00:01:12.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
+Info 34   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
+Info 35   [00:01:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 36   [00:01:15.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 37   [00:01:16.000] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
 	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
@@ -142,18 +144,18 @@ Info 35   [00:01:14.000] 	Files (5)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 36   [00:01:15.000] -----------------------------------------------
-Info 37   [00:01:16.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 37   [00:01:17.000] 	Files (5)
+Info 38   [00:01:17.000] -----------------------------------------------
+Info 39   [00:01:18.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 39   [00:01:19.000] 	Files (5)
 
-Info 37   [00:01:18.000] -----------------------------------------------
-Info 37   [00:01:19.000] Open files: 
-Info 37   [00:01:20.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 37   [00:01:21.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-Info 37   [00:01:24.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/index.ts 1:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
-Info 38   [00:01:25.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
-Info 39   [00:01:26.000] Scheduled: *ensureProjectForOpenFiles*
-Info 40   [00:01:27.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/index.ts 1:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
+Info 39   [00:01:20.000] -----------------------------------------------
+Info 39   [00:01:21.000] Open files: 
+Info 39   [00:01:22.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 39   [00:01:23.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 39   [00:01:26.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/index.ts 1:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
+Info 40   [00:01:27.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
+Info 41   [00:01:28.000] Scheduled: *ensureProjectForOpenFiles*
+Info 42   [00:01:29.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/index.ts 1:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
 Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/b/index.ts]
 import {A} from '@ref/a';
@@ -164,6 +166,8 @@ PolledWatches::
 /user/username/projects/myproject/c/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -194,33 +198,33 @@ FsWatchesRecursive::
 /user/username/projects/myproject/refs: *new*
   {}
 
-Info 41   [00:01:28.000] Running: /user/username/projects/myproject/c/tsconfig.json
-Info 42   [00:01:29.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
-Info 43   [00:01:30.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 44   [00:01:31.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 45   [00:01:32.000] 	Files (5)
+Info 43   [00:01:30.000] Running: /user/username/projects/myproject/c/tsconfig.json
+Info 44   [00:01:31.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
+Info 45   [00:01:32.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 46   [00:01:33.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 47   [00:01:34.000] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
 	/user/username/projects/myproject/b/index.ts Text-2 "import {A} from '@ref/a';\nexport const b = new A();export function gFoo() { }"
 	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
 	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
-Info 46   [00:01:33.000] -----------------------------------------------
-Info 47   [00:01:34.000] Running: *ensureProjectForOpenFiles*
-Info 48   [00:01:35.000] Before ensureProjectForOpenFiles:
-Info 49   [00:01:36.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 49   [00:01:37.000] 	Files (5)
+Info 48   [00:01:35.000] -----------------------------------------------
+Info 49   [00:01:36.000] Running: *ensureProjectForOpenFiles*
+Info 50   [00:01:37.000] Before ensureProjectForOpenFiles:
+Info 51   [00:01:38.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 51   [00:01:39.000] 	Files (5)
 
-Info 49   [00:01:38.000] -----------------------------------------------
-Info 49   [00:01:39.000] Open files: 
-Info 49   [00:01:40.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 49   [00:01:41.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-Info 49   [00:01:42.000] After ensureProjectForOpenFiles:
-Info 50   [00:01:43.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 50   [00:01:44.000] 	Files (5)
+Info 51   [00:01:40.000] -----------------------------------------------
+Info 51   [00:01:41.000] Open files: 
+Info 51   [00:01:42.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 51   [00:01:43.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 51   [00:01:44.000] After ensureProjectForOpenFiles:
+Info 52   [00:01:45.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 52   [00:01:46.000] 	Files (5)
 
-Info 50   [00:01:45.000] -----------------------------------------------
-Info 50   [00:01:46.000] Open files: 
-Info 50   [00:01:47.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 50   [00:01:48.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 52   [00:01:47.000] -----------------------------------------------
+Info 52   [00:01:48.000] Open files: 
+Info 52   [00:01:49.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 52   [00:01:50.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
 After checking timeout queue length (2) and running

@@ -54,9 +54,11 @@ Info 12   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allpr
 Info 13   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
 Info 14   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
 Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:38.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
-Info 18   [00:00:39.000] 	Files (3)
+Info 16   [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info 17   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info 18   [00:00:39.000] Finishing updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 19   [00:00:40.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
+Info 20   [00:00:41.000] 	Files (3)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	c:/myfolder/allproject/project/file1.ts SVC-1-0 "let x = 10;"
 	c:/myfolder/allproject/project/file2.ts Text-1 "let y = 10;"
@@ -69,15 +71,15 @@ Info 18   [00:00:39.000] 	Files (3)
 	file2.ts
 	  Matched by default include pattern '**/*'
 
-Info 19   [00:00:40.000] -----------------------------------------------
-Info 20   [00:00:41.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
-Info 20   [00:00:42.000] 	Files (3)
+Info 21   [00:00:42.000] -----------------------------------------------
+Info 22   [00:00:43.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
+Info 22   [00:00:44.000] 	Files (3)
 
-Info 20   [00:00:43.000] -----------------------------------------------
-Info 20   [00:00:44.000] Open files: 
-Info 20   [00:00:45.000] 	FileName: c:/myfolder/allproject/project/file1.ts ProjectRootPath: undefined
-Info 20   [00:00:46.000] 		Projects: c:/myfolder/allproject/project/tsconfig.json
-Info 20   [00:00:47.000] response:
+Info 22   [00:00:45.000] -----------------------------------------------
+Info 22   [00:00:46.000] Open files: 
+Info 22   [00:00:47.000] 	FileName: c:/myfolder/allproject/project/file1.ts ProjectRootPath: undefined
+Info 22   [00:00:48.000] 		Projects: c:/myfolder/allproject/project/tsconfig.json
+Info 22   [00:00:49.000] response:
     {
       "responseRequired": false
     }
@@ -87,6 +89,8 @@ PolledWatches::
 c:/myfolder/allproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
 c:/myfolder/allproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+c:/myfolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

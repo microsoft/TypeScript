@@ -61,9 +61,11 @@ Info 18   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Pr
 Info 19   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
 Info 20   [00:00:49.000] FileWatcher:: Added:: WatchInfo: /b/node_modules/foo/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info 21   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:52.000] Project '/tsconfig.json' (Configured)
-Info 24   [00:00:53.000] 	Files (4)
+Info 22   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 23   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 24   [00:00:53.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:54.000] Project '/tsconfig.json' (Configured)
+Info 26   [00:00:55.000] 	Files (4)
 	/a/node_modules/foo/index.d.ts Text-1 "export const foo: number;"
 	/a/user.ts SVC-1-0 "import(\"foo\");\nfoo"
 	/b/node_modules/foo/index.d.ts Text-1 "export const foo: number;"
@@ -80,15 +82,15 @@ Info 24   [00:00:53.000] 	Files (4)
 	b/user.ts
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:54.000] -----------------------------------------------
-Info 26   [00:00:55.000] Project '/tsconfig.json' (Configured)
-Info 26   [00:00:56.000] 	Files (4)
+Info 27   [00:00:56.000] -----------------------------------------------
+Info 28   [00:00:57.000] Project '/tsconfig.json' (Configured)
+Info 28   [00:00:58.000] 	Files (4)
 
-Info 26   [00:00:57.000] -----------------------------------------------
-Info 26   [00:00:58.000] Open files: 
-Info 26   [00:00:59.000] 	FileName: /a/user.ts ProjectRootPath: undefined
-Info 26   [00:01:00.000] 		Projects: /tsconfig.json
-Info 26   [00:01:01.000] response:
+Info 28   [00:00:59.000] -----------------------------------------------
+Info 28   [00:01:00.000] Open files: 
+Info 28   [00:01:01.000] 	FileName: /a/user.ts ProjectRootPath: undefined
+Info 28   [00:01:02.000] 		Projects: /tsconfig.json
+Info 28   [00:01:03.000] response:
     {
       "responseRequired": false
     }
@@ -96,6 +98,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -122,7 +126,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 27   [00:01:02.000] request:
+Info 29   [00:01:04.000] request:
     {
       "command": "open",
       "arguments": {
@@ -131,19 +135,19 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 28   [00:01:03.000] FileWatcher:: Close:: WatchInfo: /b/user.ts 500 undefined WatchType: Closed Script info
-Info 29   [00:01:04.000] Search path: /b
-Info 30   [00:01:05.000] For info: /b/user.ts :: Config file name: /tsconfig.json
-Info 31   [00:01:06.000] Project '/tsconfig.json' (Configured)
-Info 31   [00:01:07.000] 	Files (4)
+Info 30   [00:01:05.000] FileWatcher:: Close:: WatchInfo: /b/user.ts 500 undefined WatchType: Closed Script info
+Info 31   [00:01:06.000] Search path: /b
+Info 32   [00:01:07.000] For info: /b/user.ts :: Config file name: /tsconfig.json
+Info 33   [00:01:08.000] Project '/tsconfig.json' (Configured)
+Info 33   [00:01:09.000] 	Files (4)
 
-Info 31   [00:01:08.000] -----------------------------------------------
-Info 31   [00:01:09.000] Open files: 
-Info 31   [00:01:10.000] 	FileName: /a/user.ts ProjectRootPath: undefined
-Info 31   [00:01:11.000] 		Projects: /tsconfig.json
-Info 31   [00:01:12.000] 	FileName: /b/user.ts ProjectRootPath: undefined
-Info 31   [00:01:13.000] 		Projects: /tsconfig.json
-Info 31   [00:01:14.000] response:
+Info 33   [00:01:10.000] -----------------------------------------------
+Info 33   [00:01:11.000] Open files: 
+Info 33   [00:01:12.000] 	FileName: /a/user.ts ProjectRootPath: undefined
+Info 33   [00:01:13.000] 		Projects: /tsconfig.json
+Info 33   [00:01:14.000] 	FileName: /b/user.ts ProjectRootPath: undefined
+Info 33   [00:01:15.000] 		Projects: /tsconfig.json
+Info 33   [00:01:16.000] response:
     {
       "responseRequired": false
     }
@@ -151,6 +155,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -179,7 +185,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 32   [00:01:15.000] request:
+Info 34   [00:01:17.000] request:
     {
       "command": "getCodeFixes",
       "arguments": {
@@ -195,7 +201,7 @@ Info 32   [00:01:15.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 33   [00:01:16.000] response:
+Info 35   [00:01:18.000] response:
     {
       "response": [
         {
@@ -227,7 +233,7 @@ After request
 
 Before request
 
-Info 34   [00:01:17.000] request:
+Info 36   [00:01:19.000] request:
     {
       "command": "getCodeFixes",
       "arguments": {
@@ -243,7 +249,7 @@ Info 34   [00:01:17.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 35   [00:01:18.000] response:
+Info 37   [00:01:20.000] response:
     {
       "response": [
         {

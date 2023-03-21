@@ -42,9 +42,11 @@ Info 11   [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 12   [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 13   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 14   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 15   [00:00:38.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [00:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 17   [00:00:40.000] 	Files (3)
+Info 15   [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 16   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 17   [00:00:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 18   [00:00:41.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 19   [00:00:42.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/src/large.ts Text-1 "export var x = 10;"
 	/user/username/projects/myproject/src/file.ts SVC-1-0 "export var y = 10;import {x} from \"./large\""
@@ -57,15 +59,15 @@ Info 17   [00:00:40.000] 	Files (3)
 	file.ts
 	  Root file specified for compilation
 
-Info 18   [00:00:41.000] -----------------------------------------------
-Info 19   [00:00:42.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 19   [00:00:43.000] 	Files (3)
+Info 20   [00:00:43.000] -----------------------------------------------
+Info 21   [00:00:44.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 21   [00:00:45.000] 	Files (3)
 
-Info 19   [00:00:44.000] -----------------------------------------------
-Info 19   [00:00:45.000] Open files: 
-Info 19   [00:00:46.000] 	FileName: /user/username/projects/myproject/src/file.ts ProjectRootPath: undefined
-Info 19   [00:00:47.000] 		Projects: /dev/null/inferredProject1*
-Info 19   [00:00:48.000] response:
+Info 21   [00:00:46.000] -----------------------------------------------
+Info 21   [00:00:47.000] Open files: 
+Info 21   [00:00:48.000] 	FileName: /user/username/projects/myproject/src/file.ts ProjectRootPath: undefined
+Info 21   [00:00:49.000] 		Projects: /dev/null/inferredProject1*
+Info 21   [00:00:50.000] response:
     {
       "responseRequired": false
     }
@@ -83,6 +85,8 @@ PolledWatches::
 /user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

@@ -56,9 +56,11 @@ Info 11   [00:00:36.000] event:
 Info 12   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 13   [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info 14   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 15   [00:00:40.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [00:00:41.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 17   [00:00:42.000] 	Files (3)
+Info 15   [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 16   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 17   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 18   [00:00:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 19   [00:00:44.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/src/file.ts SVC-1-0 "export var y = 10;"
 	/user/username/projects/myproject/src/large.js Text-1 ""
@@ -71,21 +73,21 @@ Info 17   [00:00:42.000] 	Files (3)
 	src/large.js
 	  Part of 'files' list in tsconfig.json
 
-Info 18   [00:00:43.000] -----------------------------------------------
-Info 19   [00:00:44.000] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
-Info 20   [00:00:45.000] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":1,"jsSize":4194305,"jsx":0,"jsxSize":0,"ts":1,"tsSize":18,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 20   [00:00:45.000] -----------------------------------------------
 Info 21   [00:00:46.000] event:
+    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
+Info 22   [00:00:47.000] event:
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":1,"jsSize":4194305,"jsx":0,"jsxSize":0,"ts":1,"tsSize":18,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 23   [00:00:48.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/file.ts","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[{"text":"Cannot write file '/user/username/projects/myproject/src/large.js' because it would overwrite input file.","code":5055,"category":"error"},{"start":{"line":1,"offset":69},"end":{"line":1,"offset":70},"text":"Compiler option 'target' requires a value of type string.","code":5024,"category":"error","fileName":"/user/username/projects/myproject/tsconfig.json"}]}}
-Info 22   [00:00:47.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 22   [00:00:48.000] 	Files (3)
+Info 24   [00:00:49.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 24   [00:00:50.000] 	Files (3)
 
-Info 22   [00:00:49.000] -----------------------------------------------
-Info 22   [00:00:50.000] Open files: 
-Info 22   [00:00:51.000] 	FileName: /user/username/projects/myproject/src/file.ts ProjectRootPath: undefined
-Info 22   [00:00:52.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 22   [00:00:53.000] response:
+Info 24   [00:00:51.000] -----------------------------------------------
+Info 24   [00:00:52.000] Open files: 
+Info 24   [00:00:53.000] 	FileName: /user/username/projects/myproject/src/file.ts ProjectRootPath: undefined
+Info 24   [00:00:54.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 24   [00:00:55.000] response:
     {
       "responseRequired": false
     }
@@ -93,6 +95,8 @@ After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

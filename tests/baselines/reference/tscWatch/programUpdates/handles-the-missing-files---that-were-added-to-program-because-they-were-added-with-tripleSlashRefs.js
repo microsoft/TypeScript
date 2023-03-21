@@ -54,6 +54,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /a/b/commonfile2.ts: *new*
   {"pollingInterval":500}
+/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /a/b/commonfile1.ts: *new*
@@ -75,6 +77,10 @@ Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
 
+
+PolledWatches::
+/node_modules/@types:
+  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/b/commonfile2.ts:
@@ -110,6 +116,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
+
+PolledWatches::
+/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/b/commonfile1.ts:

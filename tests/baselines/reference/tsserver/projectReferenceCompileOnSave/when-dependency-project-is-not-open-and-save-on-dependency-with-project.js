@@ -85,9 +85,11 @@ Info 18   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 19   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 20   [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:52.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 24   [00:00:53.000] 	Files (3)
+Info 22   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 23   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 24   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:54.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 26   [00:00:55.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
 	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\n"
@@ -100,15 +102,15 @@ Info 24   [00:00:53.000] 	Files (3)
 	usage.ts
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:54.000] -----------------------------------------------
-Info 26   [00:00:55.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 26   [00:00:56.000] 	Files (3)
+Info 27   [00:00:56.000] -----------------------------------------------
+Info 28   [00:00:57.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 28   [00:00:58.000] 	Files (3)
 
-Info 26   [00:00:57.000] -----------------------------------------------
-Info 26   [00:00:58.000] Open files: 
-Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 26   [00:01:01.000] response:
+Info 28   [00:00:59.000] -----------------------------------------------
+Info 28   [00:01:00.000] Open files: 
+Info 28   [00:01:01.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 28   [00:01:02.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 28   [00:01:03.000] response:
     {
       "responseRequired": false
     }
@@ -120,6 +122,8 @@ PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -140,7 +144,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 27   [00:01:02.000] request:
+Info 29   [00:01:04.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -150,7 +154,7 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 28   [00:01:03.000] response:
+Info 30   [00:01:05.000] response:
     {
       "response": [
         {
@@ -167,7 +171,7 @@ After request
 
 Before request
 
-Info 29   [00:01:04.000] request:
+Info 31   [00:01:06.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -177,7 +181,7 @@ Info 29   [00:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 30   [00:01:05.000] response:
+Info 32   [00:01:07.000] response:
     {
       "response": false,
       "responseRequired": true
@@ -186,7 +190,7 @@ After request
 
 Before request
 
-Info 31   [00:01:06.000] request:
+Info 33   [00:01:08.000] request:
     {
       "command": "emit-output",
       "arguments": {
@@ -196,7 +200,7 @@ Info 31   [00:01:06.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 32   [00:01:07.000] response:
+Info 34   [00:01:09.000] response:
     {
       "response": {
         "emitSkipped": true,

@@ -152,20 +152,22 @@ Info 28   [00:00:54.000] Config: /b/tsconfig.json : {
 Info 29   [00:00:55.000] FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info 30   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info 31   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
-Info 32   [00:00:58.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 33   [00:00:59.000] Project '/tsconfig.json' (Configured)
-Info 34   [00:01:00.000] 	Files (0)
+Info 32   [00:00:58.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 33   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 34   [00:01:00.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 35   [00:01:01.000] Project '/tsconfig.json' (Configured)
+Info 36   [00:01:02.000] 	Files (0)
 
-Info 35   [00:01:01.000] -----------------------------------------------
-Info 36   [00:01:02.000] Creating configuration project /b/tsconfig.json
-Info 37   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
-Info 38   [00:01:04.000] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info 39   [00:01:05.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-Info 40   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Info 41   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Info 42   [00:01:08.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 43   [00:01:09.000] Project '/b/tsconfig.json' (Configured)
-Info 44   [00:01:10.000] 	Files (2)
+Info 37   [00:01:03.000] -----------------------------------------------
+Info 38   [00:01:04.000] Creating configuration project /b/tsconfig.json
+Info 39   [00:01:05.000] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
+Info 40   [00:01:06.000] Starting updateGraphWorker: Project: /b/tsconfig.json
+Info 41   [00:01:07.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
+Info 42   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
+Info 43   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
+Info 44   [00:01:10.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 45   [00:01:11.000] Project '/b/tsconfig.json' (Configured)
+Info 46   [00:01:12.000] 	Files (2)
 	/a/index.ts SVC-1-0 "export const abcdef = 1;"
 	/b/index.ts Text-1 "import a = require(\"../a\");\nexport const ghijkl = a.abcdef;"
 
@@ -175,8 +177,8 @@ Info 44   [00:01:10.000] 	Files (2)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 45   [00:01:11.000] -----------------------------------------------
-Info 46   [00:01:12.000] response:
+Info 47   [00:01:13.000] -----------------------------------------------
+Info 48   [00:01:14.000] response:
     {
       "response": [
         {
@@ -204,6 +206,8 @@ PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/node_modules/@types:
+  {"pollingInterval":500}
+/node_modules/@types: *new*
   {"pollingInterval":500}
 /b/node_modules/@types: *new*
   {"pollingInterval":500}

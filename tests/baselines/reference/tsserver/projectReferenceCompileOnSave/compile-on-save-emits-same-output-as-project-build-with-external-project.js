@@ -311,9 +311,11 @@ Info 13   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 14   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/SiblingClass/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
 Info 15   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
 Info 16   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
-Info 17   [00:01:10.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/SiblingClass/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:01:11.000] Project '/user/username/projects/myproject/SiblingClass/tsconfig.json' (Configured)
-Info 19   [00:01:12.000] 	Files (3)
+Info 17   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
+Info 18   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
+Info 19   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/SiblingClass/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 20   [00:01:13.000] Project '/user/username/projects/myproject/SiblingClass/tsconfig.json' (Configured)
+Info 21   [00:01:14.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/buttonClass/Source.ts Text-1 "module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"
 	/user/username/projects/myproject/SiblingClass/Source.ts SVC-1-0 "module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"
@@ -326,17 +328,17 @@ Info 19   [00:01:12.000] 	Files (3)
 	Source.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 20   [00:01:13.000] -----------------------------------------------
-Info 21   [00:01:14.000] Search path: /user/username/projects/myproject/SiblingClass
-Info 22   [00:01:15.000] For info: /user/username/projects/myproject/SiblingClass/tsconfig.json :: No config files found.
-Info 23   [00:01:16.000] Project '/user/username/projects/myproject/SiblingClass/tsconfig.json' (Configured)
-Info 23   [00:01:17.000] 	Files (3)
+Info 22   [00:01:15.000] -----------------------------------------------
+Info 23   [00:01:16.000] Search path: /user/username/projects/myproject/SiblingClass
+Info 24   [00:01:17.000] For info: /user/username/projects/myproject/SiblingClass/tsconfig.json :: No config files found.
+Info 25   [00:01:18.000] Project '/user/username/projects/myproject/SiblingClass/tsconfig.json' (Configured)
+Info 25   [00:01:19.000] 	Files (3)
 
-Info 23   [00:01:18.000] -----------------------------------------------
-Info 23   [00:01:19.000] Open files: 
-Info 23   [00:01:20.000] 	FileName: /user/username/projects/myproject/SiblingClass/Source.ts ProjectRootPath: undefined
-Info 23   [00:01:21.000] 		Projects: /user/username/projects/myproject/SiblingClass/tsconfig.json
-Info 23   [00:01:22.000] response:
+Info 25   [00:01:20.000] -----------------------------------------------
+Info 25   [00:01:21.000] Open files: 
+Info 25   [00:01:22.000] 	FileName: /user/username/projects/myproject/SiblingClass/Source.ts ProjectRootPath: undefined
+Info 25   [00:01:23.000] 		Projects: /user/username/projects/myproject/SiblingClass/tsconfig.json
+Info 25   [00:01:24.000] response:
     {
       "responseRequired": false
     }
@@ -346,6 +348,8 @@ PolledWatches::
 /user/username/projects/myproject/SiblingClass/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -362,7 +366,7 @@ FsWatches::
 
 Before request
 
-Info 24   [00:01:23.000] request:
+Info 26   [00:01:25.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -372,7 +376,7 @@ Info 24   [00:01:23.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 25   [00:01:30.000] response:
+Info 27   [00:01:32.000] response:
     {
       "response": true,
       "responseRequired": true

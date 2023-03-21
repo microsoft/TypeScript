@@ -64,9 +64,11 @@ Info 15   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 16   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 17   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 18   [00:00:49.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 19   [00:00:50.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 20   [00:00:51.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 21   [00:00:52.000] 	Files (4)
+Info 19   [00:00:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 20   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 21   [00:00:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 22   [00:00:53.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 23   [00:00:54.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/node_modules/bar/foo.d.ts Text-1 "export function foo(): string;"
 	/user/username/projects/myproject/node_modules/bar/index.d.ts Text-1 "export { foo } from \"./foo\";"
@@ -82,19 +84,23 @@ Info 21   [00:00:52.000] 	Files (4)
 	src/main.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 22   [00:00:53.000] -----------------------------------------------
-Info 23   [00:00:54.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 23   [00:00:55.000] 	Files (4)
+Info 24   [00:00:55.000] -----------------------------------------------
+Info 25   [00:00:56.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 25   [00:00:57.000] 	Files (4)
 
-Info 23   [00:00:56.000] -----------------------------------------------
-Info 23   [00:00:57.000] Open files: 
-Info 23   [00:00:58.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 23   [00:00:59.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 23   [00:01:00.000] response:
+Info 25   [00:00:58.000] -----------------------------------------------
+Info 25   [00:00:59.000] Open files: 
+Info 25   [00:01:00.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 25   [00:01:01.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:01:02.000] response:
     {
       "responseRequired": false
     }
 After request
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*

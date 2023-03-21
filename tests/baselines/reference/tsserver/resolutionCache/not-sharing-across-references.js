@@ -114,10 +114,12 @@ Info 48   [00:01:17.000] Resolving real path for '/src/projects/node_modules/mod
 Info 49   [00:01:18.000] ======== Module name 'moduleX' was successfully resolved to '/src/projects/node_modules/moduleX/index.d.ts'. ========
 Info 50   [00:01:19.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info 51   [00:01:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
-Info 52   [00:01:21.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /src/projects/app/tsconfig.json WatchType: Missing file
-Info 53   [00:01:22.000] Finishing updateGraphWorker: Project: /src/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 54   [00:01:23.000] Project '/src/projects/app/tsconfig.json' (Configured)
-Info 55   [00:01:24.000] 	Files (4)
+Info 52   [00:01:21.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/common/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 53   [00:01:22.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/common/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 54   [00:01:23.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /src/projects/app/tsconfig.json WatchType: Missing file
+Info 55   [00:01:24.000] Finishing updateGraphWorker: Project: /src/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 56   [00:01:25.000] Project '/src/projects/app/tsconfig.json' (Configured)
+Info 57   [00:01:26.000] 	Files (4)
 	/src/projects/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
 	/src/projects/app/appA.ts Text-1 "import { x } from \"moduleX\";\nexport const y = x;\n"
 	/src/projects/common/moduleB.ts Text-1 "import { x } from \"moduleX\";\nexport const b = x;\n"
@@ -134,17 +136,17 @@ Info 55   [00:01:24.000] 	Files (4)
 	appB.ts
 	  Matched by default include pattern '**/*'
 
-Info 56   [00:01:25.000] -----------------------------------------------
-Info 57   [00:01:26.000] Search path: /src/projects/app
-Info 58   [00:01:27.000] For info: /src/projects/app/tsconfig.json :: No config files found.
-Info 59   [00:01:28.000] Project '/src/projects/app/tsconfig.json' (Configured)
-Info 59   [00:01:29.000] 	Files (4)
+Info 58   [00:01:27.000] -----------------------------------------------
+Info 59   [00:01:28.000] Search path: /src/projects/app
+Info 60   [00:01:29.000] For info: /src/projects/app/tsconfig.json :: No config files found.
+Info 61   [00:01:30.000] Project '/src/projects/app/tsconfig.json' (Configured)
+Info 61   [00:01:31.000] 	Files (4)
 
-Info 59   [00:01:30.000] -----------------------------------------------
-Info 59   [00:01:31.000] Open files: 
-Info 59   [00:01:32.000] 	FileName: /src/projects/app/appB.ts ProjectRootPath: undefined
-Info 59   [00:01:33.000] 		Projects: /src/projects/app/tsconfig.json
-Info 59   [00:01:34.000] response:
+Info 61   [00:01:32.000] -----------------------------------------------
+Info 61   [00:01:33.000] Open files: 
+Info 61   [00:01:34.000] 	FileName: /src/projects/app/appB.ts ProjectRootPath: undefined
+Info 61   [00:01:35.000] 		Projects: /src/projects/app/tsconfig.json
+Info 61   [00:01:36.000] response:
     {
       "responseRequired": false
     }
@@ -152,6 +154,8 @@ After request
 
 PolledWatches::
 /src/projects/app/node_modules: *new*
+  {"pollingInterval":500}
+/src/projects/common/node_modules: *new*
   {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}

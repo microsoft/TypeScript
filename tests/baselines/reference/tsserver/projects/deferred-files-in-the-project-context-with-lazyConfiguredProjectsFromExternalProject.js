@@ -110,26 +110,28 @@ Info 18   [00:00:29.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Conf
 Info 19   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info 20   [00:00:31.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 21   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 22   [00:00:33.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:34.000] Project '/tsconfig.json' (Configured)
-Info 24   [00:00:35.000] 	Files (1)
+Info 22   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 23   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info 24   [00:00:35.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:36.000] Project '/tsconfig.json' (Configured)
+Info 26   [00:00:37.000] 	Files (1)
 	/a.deferred Text-1 ""
 
 
 	a.deferred
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:36.000] -----------------------------------------------
-Info 26   [00:00:37.000] Before ensureProjectForOpenFiles:
-Info 27   [00:00:38.000] Project '/tsconfig.json' (Configured)
-Info 27   [00:00:39.000] 	Files (1)
+Info 27   [00:00:38.000] -----------------------------------------------
+Info 28   [00:00:39.000] Before ensureProjectForOpenFiles:
+Info 29   [00:00:40.000] Project '/tsconfig.json' (Configured)
+Info 29   [00:00:41.000] 	Files (1)
 
-Info 27   [00:00:40.000] -----------------------------------------------
-Info 27   [00:00:41.000] Open files: 
-Info 27   [00:00:42.000] After ensureProjectForOpenFiles:
-Info 28   [00:00:43.000] Project '/tsconfig.json' (Configured)
-Info 28   [00:00:44.000] 	Files (1)
+Info 29   [00:00:42.000] -----------------------------------------------
+Info 29   [00:00:43.000] Open files: 
+Info 29   [00:00:44.000] After ensureProjectForOpenFiles:
+Info 30   [00:00:45.000] Project '/tsconfig.json' (Configured)
+Info 30   [00:00:46.000] 	Files (1)
 
-Info 28   [00:00:45.000] -----------------------------------------------
-Info 28   [00:00:46.000] Open files: 
-Info 28   [00:00:47.000] Has allowNonTsExtension: true
+Info 30   [00:00:47.000] -----------------------------------------------
+Info 30   [00:00:48.000] Open files: 
+Info 30   [00:00:49.000] Has allowNonTsExtension: true

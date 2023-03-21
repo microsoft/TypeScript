@@ -85,9 +85,11 @@ Info 18   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 19   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 20   [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:52.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 24   [00:00:53.000] 	Files (3)
+Info 22   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 23   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 24   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:54.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 26   [00:00:55.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
 	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\n"
@@ -100,15 +102,15 @@ Info 24   [00:00:53.000] 	Files (3)
 	usage.ts
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:54.000] -----------------------------------------------
-Info 26   [00:00:55.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 26   [00:00:56.000] 	Files (3)
+Info 27   [00:00:56.000] -----------------------------------------------
+Info 28   [00:00:57.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 28   [00:00:58.000] 	Files (3)
 
-Info 26   [00:00:57.000] -----------------------------------------------
-Info 26   [00:00:58.000] Open files: 
-Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 26   [00:01:01.000] response:
+Info 28   [00:00:59.000] -----------------------------------------------
+Info 28   [00:01:00.000] Open files: 
+Info 28   [00:01:01.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 28   [00:01:02.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 28   [00:01:03.000] response:
     {
       "responseRequired": false
     }
@@ -120,6 +122,8 @@ PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -140,7 +144,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 27   [00:01:02.000] request:
+Info 29   [00:01:04.000] request:
     {
       "command": "open",
       "arguments": {
@@ -149,18 +153,20 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 28   [00:01:03.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
-Info 29   [00:01:04.000] Search path: /user/username/projects/myproject/dependency
-Info 30   [00:01:05.000] For info: /user/username/projects/myproject/dependency/fns.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 31   [00:01:06.000] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
-Info 32   [00:01:07.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info 33   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 34   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 35   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 36   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 37   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 38   [00:01:13.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 39   [00:01:14.000] 	Files (2)
+Info 30   [00:01:05.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
+Info 31   [00:01:06.000] Search path: /user/username/projects/myproject/dependency
+Info 32   [00:01:07.000] For info: /user/username/projects/myproject/dependency/fns.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 33   [00:01:08.000] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
+Info 34   [00:01:09.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
+Info 35   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info 36   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info 37   [00:01:12.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info 38   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info 39   [00:01:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info 40   [00:01:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info 41   [00:01:16.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 42   [00:01:17.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 43   [00:01:18.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
 
@@ -170,23 +176,23 @@ Info 39   [00:01:14.000] 	Files (2)
 	fns.ts
 	  Matched by default include pattern '**/*'
 
-Info 40   [00:01:15.000] -----------------------------------------------
-Info 41   [00:01:16.000] Search path: /user/username/projects/myproject/dependency
-Info 42   [00:01:17.000] For info: /user/username/projects/myproject/dependency/tsconfig.json :: No config files found.
-Info 43   [00:01:18.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 43   [00:01:19.000] 	Files (3)
+Info 44   [00:01:19.000] -----------------------------------------------
+Info 45   [00:01:20.000] Search path: /user/username/projects/myproject/dependency
+Info 46   [00:01:21.000] For info: /user/username/projects/myproject/dependency/tsconfig.json :: No config files found.
+Info 47   [00:01:22.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 47   [00:01:23.000] 	Files (3)
 
-Info 43   [00:01:20.000] -----------------------------------------------
-Info 43   [00:01:21.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 43   [00:01:22.000] 	Files (2)
+Info 47   [00:01:24.000] -----------------------------------------------
+Info 47   [00:01:25.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 47   [00:01:26.000] 	Files (2)
 
-Info 43   [00:01:23.000] -----------------------------------------------
-Info 43   [00:01:24.000] Open files: 
-Info 43   [00:01:25.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 43   [00:01:26.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 43   [00:01:27.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
-Info 43   [00:01:28.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-Info 43   [00:01:29.000] response:
+Info 47   [00:01:27.000] -----------------------------------------------
+Info 47   [00:01:28.000] Open files: 
+Info 47   [00:01:29.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 47   [00:01:30.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 47   [00:01:31.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
+Info 47   [00:01:32.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info 47   [00:01:33.000] response:
     {
       "responseRequired": false
     }
@@ -198,6 +204,8 @@ PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -222,7 +230,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 44   [00:01:30.000] request:
+Info 48   [00:01:34.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -231,35 +239,35 @@ Info 44   [00:01:30.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 45   [00:01:31.000] Before ensureProjectForOpenFiles:
-Info 46   [00:01:32.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 46   [00:01:33.000] 	Files (3)
+Info 49   [00:01:35.000] Before ensureProjectForOpenFiles:
+Info 50   [00:01:36.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 50   [00:01:37.000] 	Files (3)
 
-Info 46   [00:01:34.000] -----------------------------------------------
-Info 46   [00:01:35.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 46   [00:01:36.000] 	Files (2)
+Info 50   [00:01:38.000] -----------------------------------------------
+Info 50   [00:01:39.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 50   [00:01:40.000] 	Files (2)
 
-Info 46   [00:01:37.000] -----------------------------------------------
-Info 46   [00:01:38.000] Open files: 
-Info 46   [00:01:39.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 46   [00:01:40.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 46   [00:01:41.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
-Info 46   [00:01:42.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-Info 46   [00:01:43.000] After ensureProjectForOpenFiles:
-Info 47   [00:01:44.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 47   [00:01:45.000] 	Files (3)
+Info 50   [00:01:41.000] -----------------------------------------------
+Info 50   [00:01:42.000] Open files: 
+Info 50   [00:01:43.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 50   [00:01:44.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 50   [00:01:45.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
+Info 50   [00:01:46.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info 50   [00:01:47.000] After ensureProjectForOpenFiles:
+Info 51   [00:01:48.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 51   [00:01:49.000] 	Files (3)
 
-Info 47   [00:01:46.000] -----------------------------------------------
-Info 47   [00:01:47.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 47   [00:01:48.000] 	Files (2)
+Info 51   [00:01:50.000] -----------------------------------------------
+Info 51   [00:01:51.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 51   [00:01:52.000] 	Files (2)
 
-Info 47   [00:01:49.000] -----------------------------------------------
-Info 47   [00:01:50.000] Open files: 
-Info 47   [00:01:51.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 47   [00:01:52.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 47   [00:01:53.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
-Info 47   [00:01:54.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-Info 47   [00:01:55.000] response:
+Info 51   [00:01:53.000] -----------------------------------------------
+Info 51   [00:01:54.000] Open files: 
+Info 51   [00:01:55.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 51   [00:01:56.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 51   [00:01:57.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
+Info 51   [00:01:58.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info 51   [00:01:59.000] response:
     {
       "response": [
         {
@@ -283,7 +291,7 @@ After request
 
 Before request
 
-Info 48   [00:01:56.000] request:
+Info 52   [00:02:00.000] request:
     {
       "command": "change",
       "arguments": {
@@ -297,7 +305,7 @@ Info 48   [00:01:56.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 49   [00:01:57.000] response:
+Info 53   [00:02:01.000] response:
     {
       "responseRequired": false
     }
@@ -305,7 +313,7 @@ After request
 
 Before request
 
-Info 50   [00:01:58.000] request:
+Info 54   [00:02:02.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -314,44 +322,44 @@ Info 50   [00:01:58.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 51   [00:01:59.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
-Info 52   [00:02:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 53   [00:02:01.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 54   [00:02:02.000] 	Files (3)
+Info 55   [00:02:03.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
+Info 56   [00:02:04.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 57   [00:02:05.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 58   [00:02:06.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
 	/user/username/projects/myproject/usage/usage.ts SVC-1-1 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\nfunction fn3() { }"
 
-Info 55   [00:02:03.000] -----------------------------------------------
-Info 56   [00:02:04.000] Before ensureProjectForOpenFiles:
-Info 57   [00:02:05.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 57   [00:02:06.000] 	Files (3)
+Info 59   [00:02:07.000] -----------------------------------------------
+Info 60   [00:02:08.000] Before ensureProjectForOpenFiles:
+Info 61   [00:02:09.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 61   [00:02:10.000] 	Files (3)
 
-Info 57   [00:02:07.000] -----------------------------------------------
-Info 57   [00:02:08.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 57   [00:02:09.000] 	Files (2)
+Info 61   [00:02:11.000] -----------------------------------------------
+Info 61   [00:02:12.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 61   [00:02:13.000] 	Files (2)
 
-Info 57   [00:02:10.000] -----------------------------------------------
-Info 57   [00:02:11.000] Open files: 
-Info 57   [00:02:12.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 57   [00:02:13.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 57   [00:02:14.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
-Info 57   [00:02:15.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-Info 57   [00:02:16.000] After ensureProjectForOpenFiles:
-Info 58   [00:02:17.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 58   [00:02:18.000] 	Files (3)
+Info 61   [00:02:14.000] -----------------------------------------------
+Info 61   [00:02:15.000] Open files: 
+Info 61   [00:02:16.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 61   [00:02:17.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 61   [00:02:18.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
+Info 61   [00:02:19.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info 61   [00:02:20.000] After ensureProjectForOpenFiles:
+Info 62   [00:02:21.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 62   [00:02:22.000] 	Files (3)
 
-Info 58   [00:02:19.000] -----------------------------------------------
-Info 58   [00:02:20.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 58   [00:02:21.000] 	Files (2)
+Info 62   [00:02:23.000] -----------------------------------------------
+Info 62   [00:02:24.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 62   [00:02:25.000] 	Files (2)
 
-Info 58   [00:02:22.000] -----------------------------------------------
-Info 58   [00:02:23.000] Open files: 
-Info 58   [00:02:24.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 58   [00:02:25.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 58   [00:02:26.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
-Info 58   [00:02:27.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-Info 58   [00:02:28.000] response:
+Info 62   [00:02:26.000] -----------------------------------------------
+Info 62   [00:02:27.000] Open files: 
+Info 62   [00:02:28.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 62   [00:02:29.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 62   [00:02:30.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
+Info 62   [00:02:31.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info 62   [00:02:32.000] response:
     {
       "response": [
         {
@@ -368,7 +376,7 @@ After request
 
 Before request
 
-Info 59   [00:02:29.000] request:
+Info 63   [00:02:33.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -377,10 +385,10 @@ Info 59   [00:02:29.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 60   [00:02:32.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 61   [00:02:33.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
-Info 62   [00:02:34.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 63   [00:02:35.000] response:
+Info 64   [00:02:36.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 65   [00:02:37.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
+Info 66   [00:02:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 67   [00:02:39.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -398,7 +406,7 @@ function fn3() { }
 
 Before request
 
-Info 64   [00:02:36.000] request:
+Info 68   [00:02:40.000] request:
     {
       "command": "emit-output",
       "arguments": {
@@ -407,7 +415,7 @@ Info 64   [00:02:36.000] request:
       "seq": 7,
       "type": "request"
     }
-Info 65   [00:02:37.000] response:
+Info 69   [00:02:41.000] response:
     {
       "response": {
         "outputFiles": [

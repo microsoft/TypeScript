@@ -78,9 +78,11 @@ Info 10   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 11   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/node_modules/@types 1 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Type roots
 Info 12   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Type roots
 Info 13   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Type roots
-Info 14   [00:00:48.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/compiler/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:49.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
-Info 16   [00:00:50.000] 	Files (3)
+Info 14   [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Type roots
+Info 15   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Type roots
+Info 16   [00:00:50.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/compiler/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:51.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
+Info 18   [00:00:52.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/solution/compiler/types.ts Text-1 "\n                namespace ts {\n                    export interface Program {\n                        getSourceFiles(): string[];\n                    }\n                }"
 	/user/username/projects/solution/compiler/program.ts SVC-1-0 "\n                namespace ts {\n                    export const program: Program = {\n                        getSourceFiles: () => [getSourceFile()]\n                    };\n                    function getSourceFile() { return \"something\"; }\n                }"
@@ -93,15 +95,15 @@ Info 16   [00:00:50.000] 	Files (3)
 	program.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 17   [00:00:51.000] -----------------------------------------------
-Info 18   [00:00:52.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
-Info 18   [00:00:53.000] 	Files (3)
+Info 19   [00:00:53.000] -----------------------------------------------
+Info 20   [00:00:54.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
+Info 20   [00:00:55.000] 	Files (3)
 
-Info 18   [00:00:54.000] -----------------------------------------------
-Info 18   [00:00:55.000] Open files: 
-Info 18   [00:00:56.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
-Info 18   [00:00:57.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
-Info 18   [00:00:58.000] response:
+Info 20   [00:00:56.000] -----------------------------------------------
+Info 20   [00:00:57.000] Open files: 
+Info 20   [00:00:58.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
+Info 20   [00:00:59.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
+Info 20   [00:01:00.000] response:
     {
       "responseRequired": false
     }
@@ -111,6 +113,8 @@ PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -123,7 +127,7 @@ FsWatches::
 
 Before request
 
-Info 19   [00:00:59.000] request:
+Info 21   [00:01:01.000] request:
     {
       "command": "references",
       "arguments": {
@@ -134,8 +138,8 @@ Info 19   [00:00:59.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 20   [00:01:00.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
-Info 21   [00:01:01.000] response:
+Info 22   [00:01:02.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
+Info 23   [00:01:03.000] response:
     {
       "response": {
         "refs": [

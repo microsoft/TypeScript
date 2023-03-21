@@ -93,9 +93,11 @@ Info 18   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 19   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
 Info 20   [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
 Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:52.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 24   [00:00:53.000] 	Files (2)
+Info 22   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 23   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 24   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:54.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
+Info 26   [00:00:55.000] 	Files (2)
 	/user/username/projects/myproject/b/lib/index.d.ts Text-1 "export declare class B {\n    M(): void;\n}\n//# sourceMappingURL=index.d.ts.map"
 	/user/username/projects/myproject/a/index.ts SVC-1-0 "import { B } from \"../b/lib\";\n\nconst b: B = new B();"
 
@@ -105,17 +107,17 @@ Info 24   [00:00:53.000] 	Files (2)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:54.000] -----------------------------------------------
-Info 26   [00:00:55.000] Search path: /user/username/projects/myproject/a
-Info 27   [00:00:56.000] For info: /user/username/projects/myproject/a/tsconfig.json :: No config files found.
-Info 28   [00:00:57.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 28   [00:00:58.000] 	Files (2)
+Info 27   [00:00:56.000] -----------------------------------------------
+Info 28   [00:00:57.000] Search path: /user/username/projects/myproject/a
+Info 29   [00:00:58.000] For info: /user/username/projects/myproject/a/tsconfig.json :: No config files found.
+Info 30   [00:00:59.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
+Info 30   [00:01:00.000] 	Files (2)
 
-Info 28   [00:00:59.000] -----------------------------------------------
-Info 28   [00:01:00.000] Open files: 
-Info 28   [00:01:01.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 28   [00:01:02.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 28   [00:01:03.000] response:
+Info 30   [00:01:01.000] -----------------------------------------------
+Info 30   [00:01:02.000] Open files: 
+Info 30   [00:01:03.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
+Info 30   [00:01:04.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
+Info 30   [00:01:05.000] response:
     {
       "responseRequired": false
     }
@@ -127,6 +129,8 @@ PolledWatches::
 /user/username/projects/myproject/a/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -145,7 +149,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 29   [00:01:04.000] request:
+Info 31   [00:01:06.000] request:
     {
       "command": "references",
       "arguments": {
@@ -156,9 +160,9 @@ Info 29   [00:01:04.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 30   [00:01:05.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
-Info 31   [00:01:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 2000 undefined WatchType: Missing source map file
-Info 32   [00:01:07.000] response:
+Info 32   [00:01:07.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
+Info 33   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 2000 undefined WatchType: Missing source map file
+Info 34   [00:01:09.000] response:
     {
       "response": {
         "refs": [
@@ -245,6 +249,8 @@ PolledWatches::
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/lib/index.d.ts.map: *new*
   {"pollingInterval":2000}

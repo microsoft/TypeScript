@@ -53,7 +53,11 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -163,7 +167,11 @@ export const Fragment: unique symbol;
 PolledWatches *deleted*::
 /users/username/projects/project/node_modules:
   {"pollingInterval":500}
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
@@ -204,6 +212,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

@@ -33,9 +33,11 @@ Info 13   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCod
 Info 14   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 15   [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 16   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 17   [00:00:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:00:41.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 19   [00:00:42.000] 	Files (2)
+Info 17   [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 18   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 19   [00:00:42.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 20   [00:00:43.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 21   [00:00:44.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js SVC-1-0 "const x = 10"
 
@@ -45,11 +47,11 @@ Info 19   [00:00:42.000] 	Files (2)
 	x.js
 	  Root file specified for compilation
 
-Info 20   [00:00:43.000] -----------------------------------------------
-Info 21   [00:00:44.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 21   [00:00:45.000] 	Files (2)
+Info 22   [00:00:45.000] -----------------------------------------------
+Info 23   [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 23   [00:00:47.000] 	Files (2)
 
-Info 21   [00:00:46.000] -----------------------------------------------
-Info 21   [00:00:47.000] Open files: 
-Info 21   [00:00:48.000] 	FileName: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js ProjectRootPath: /a/b
-Info 21   [00:00:49.000] 		Projects: /dev/null/inferredProject1*
+Info 23   [00:00:48.000] -----------------------------------------------
+Info 23   [00:00:49.000] Open files: 
+Info 23   [00:00:50.000] 	FileName: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js ProjectRootPath: /a/b
+Info 23   [00:00:51.000] 		Projects: /dev/null/inferredProject1*

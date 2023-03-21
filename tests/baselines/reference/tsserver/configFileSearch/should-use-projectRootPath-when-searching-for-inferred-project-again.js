@@ -43,9 +43,11 @@ Info 10   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/pro
 Info 11   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
 Info 12   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
 Info 13   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info 14   [00:00:37.000] Finishing updateGraphWorker: Project: /a/b/projects/project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:38.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
-Info 16   [00:00:39.000] 	Files (2)
+Info 14   [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 15   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 16   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/projects/project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:40.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
+Info 18   [00:00:41.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/projects/project/src/file1.ts SVC-1-0 ""
 
@@ -55,18 +57,18 @@ Info 16   [00:00:39.000] 	Files (2)
 	file1.ts
 	  Matched by default include pattern '**/*'
 
-Info 17   [00:00:40.000] -----------------------------------------------
-Info 18   [00:00:41.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
-Info 18   [00:00:42.000] 	Files (2)
+Info 19   [00:00:42.000] -----------------------------------------------
+Info 20   [00:00:43.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
+Info 20   [00:00:44.000] 	Files (2)
 
-Info 18   [00:00:43.000] -----------------------------------------------
-Info 18   [00:00:44.000] Open files: 
-Info 18   [00:00:45.000] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
-Info 18   [00:00:46.000] 		Projects: /a/b/projects/project/src/tsconfig.json
-Info 18   [00:00:48.000] FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
-Info 19   [00:00:49.000] `remove Project::
-Info 20   [00:00:50.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
-Info 21   [00:00:51.000] 	Files (2)
+Info 20   [00:00:45.000] -----------------------------------------------
+Info 20   [00:00:46.000] Open files: 
+Info 20   [00:00:47.000] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
+Info 20   [00:00:48.000] 		Projects: /a/b/projects/project/src/tsconfig.json
+Info 20   [00:00:50.000] FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
+Info 21   [00:00:51.000] `remove Project::
+Info 22   [00:00:52.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
+Info 23   [00:00:53.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/a/b/projects/project/src/file1.ts
 
@@ -76,18 +78,20 @@ Info 21   [00:00:51.000] 	Files (2)
 	file1.ts
 	  Matched by default include pattern '**/*'
 
-Info 22   [00:00:52.000] -----------------------------------------------
-Info 23   [00:00:53.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
-Info 24   [00:00:54.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
-Info 25   [00:00:55.000] FileWatcher:: Close:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
-Info 26   [00:00:56.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info 27   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info 28   [00:00:58.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info 29   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info 30   [00:01:00.000] Search path: /a/b/projects/project/src
-Info 31   [00:01:01.000] For info: /a/b/projects/project/src/file1.ts :: No config files found.
-Info 32   [00:01:02.000] Scheduled: *ensureProjectForOpenFiles*
-Info 33   [00:01:03.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
+Info 24   [00:00:54.000] -----------------------------------------------
+Info 25   [00:00:55.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
+Info 26   [00:00:56.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
+Info 27   [00:00:57.000] FileWatcher:: Close:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
+Info 28   [00:00:58.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 29   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 30   [00:01:00.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 31   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 32   [00:01:02.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 33   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
+Info 34   [00:01:04.000] Search path: /a/b/projects/project/src
+Info 35   [00:01:05.000] For info: /a/b/projects/project/src/file1.ts :: No config files found.
+Info 36   [00:01:06.000] Scheduled: *ensureProjectForOpenFiles*
+Info 37   [00:01:07.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
 Before running timeout callbacks
 //// [/a/b/projects/project/src/tsconfig.json] deleted
 
@@ -95,23 +99,25 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 34   [00:01:04.500] Running: *ensureProjectForOpenFiles*
-Info 35   [00:01:05.500] Before ensureProjectForOpenFiles:
-Info 36   [00:01:06.500] Open files: 
-Info 36   [00:01:07.500] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
-Info 36   [00:01:08.500] 		Projects: 
-Info 36   [00:01:09.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 37   [00:01:10.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 38   [00:01:11.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 39   [00:01:12.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 40   [00:01:13.500] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 41   [00:01:14.500] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 42   [00:01:15.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 43   [00:01:16.500] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 44   [00:01:17.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 45   [00:01:18.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 46   [00:01:19.500] Project '/dev/null/inferredProject1*' (Inferred)
-Info 47   [00:01:20.500] 	Files (2)
+Info 38   [00:01:08.500] Running: *ensureProjectForOpenFiles*
+Info 39   [00:01:09.500] Before ensureProjectForOpenFiles:
+Info 40   [00:01:10.500] Open files: 
+Info 40   [00:01:11.500] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
+Info 40   [00:01:12.500] 		Projects: 
+Info 40   [00:01:13.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 41   [00:01:14.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 42   [00:01:15.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 43   [00:01:16.500] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 44   [00:01:17.500] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 45   [00:01:18.500] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 46   [00:01:19.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 47   [00:01:20.500] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 48   [00:01:21.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 49   [00:01:22.500] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 50   [00:01:23.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 51   [00:01:24.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 52   [00:01:25.500] Project '/dev/null/inferredProject1*' (Inferred)
+Info 53   [00:01:26.500] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/projects/project/src/file1.ts SVC-1-0 ""
 
@@ -121,15 +127,15 @@ Info 47   [00:01:20.500] 	Files (2)
 	file1.ts
 	  Root file specified for compilation
 
-Info 48   [00:01:21.500] -----------------------------------------------
-Info 49   [00:01:22.500] After ensureProjectForOpenFiles:
-Info 50   [00:01:23.500] Project '/dev/null/inferredProject1*' (Inferred)
-Info 50   [00:01:24.500] 	Files (2)
+Info 54   [00:01:27.500] -----------------------------------------------
+Info 55   [00:01:28.500] After ensureProjectForOpenFiles:
+Info 56   [00:01:29.500] Project '/dev/null/inferredProject1*' (Inferred)
+Info 56   [00:01:30.500] 	Files (2)
 
-Info 50   [00:01:25.500] -----------------------------------------------
-Info 50   [00:01:26.500] Open files: 
-Info 50   [00:01:27.500] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
-Info 50   [00:01:28.500] 		Projects: /dev/null/inferredProject1*
+Info 56   [00:01:31.500] -----------------------------------------------
+Info 56   [00:01:32.500] Open files: 
+Info 56   [00:01:33.500] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
+Info 56   [00:01:34.500] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks
 
 PolledWatches::
@@ -144,6 +150,8 @@ PolledWatches::
 /a/b/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

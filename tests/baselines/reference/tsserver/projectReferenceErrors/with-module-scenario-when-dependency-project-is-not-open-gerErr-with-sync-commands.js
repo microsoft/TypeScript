@@ -91,9 +91,11 @@ Info 18   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 19   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 20   [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:52.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 24   [00:00:53.000] 	Files (3)
+Info 22   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 23   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 24   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:54.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 26   [00:00:55.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n// Introduce error for fnErr import in main\n// export function fnErr() { }\n// Error in dependency ts file\nexport let x: string = 10;"
 	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fnErr\n} from '../decls/fns'\nfn1();\nfn2();\nfnErr();\n"
@@ -106,17 +108,17 @@ Info 24   [00:00:53.000] 	Files (3)
 	usage.ts
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:54.000] -----------------------------------------------
-Info 26   [00:00:55.000] Search path: /user/username/projects/myproject/usage
-Info 27   [00:00:56.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
-Info 28   [00:00:57.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 28   [00:00:58.000] 	Files (3)
+Info 27   [00:00:56.000] -----------------------------------------------
+Info 28   [00:00:57.000] Search path: /user/username/projects/myproject/usage
+Info 29   [00:00:58.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
+Info 30   [00:00:59.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 30   [00:01:00.000] 	Files (3)
 
-Info 28   [00:00:59.000] -----------------------------------------------
-Info 28   [00:01:00.000] Open files: 
-Info 28   [00:01:01.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 28   [00:01:02.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 28   [00:01:03.000] response:
+Info 30   [00:01:01.000] -----------------------------------------------
+Info 30   [00:01:02.000] Open files: 
+Info 30   [00:01:03.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 30   [00:01:04.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 30   [00:01:05.000] response:
     {
       "responseRequired": false
     }
@@ -128,6 +130,8 @@ PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -148,7 +152,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 29   [00:01:04.000] request:
+Info 31   [00:01:06.000] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -157,7 +161,7 @@ Info 29   [00:01:04.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 30   [00:01:05.000] response:
+Info 32   [00:01:07.000] response:
     {
       "response": [],
       "responseRequired": true
@@ -166,7 +170,7 @@ After request
 
 Before request
 
-Info 31   [00:01:06.000] request:
+Info 33   [00:01:08.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -175,7 +179,7 @@ Info 31   [00:01:06.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 32   [00:01:07.000] response:
+Info 34   [00:01:09.000] response:
     {
       "response": [
         {
@@ -198,31 +202,13 @@ After request
 
 Before request
 
-Info 33   [00:01:08.000] request:
+Info 35   [00:01:10.000] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
       "seq": 4,
-      "type": "request"
-    }
-Info 34   [00:01:09.000] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }
-After request
-
-Before request
-
-Info 35   [00:01:10.000] request:
-    {
-      "command": "syntacticDiagnosticsSync",
-      "arguments": {
-        "file": "/user/username/projects/myproject/dependency/fns.ts"
-      },
-      "seq": 5,
       "type": "request"
     }
 Info 36   [00:01:11.000] response:
@@ -236,11 +222,11 @@ Before request
 
 Info 37   [00:01:12.000] request:
     {
-      "command": "semanticDiagnosticsSync",
+      "command": "syntacticDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 6,
+      "seq": 5,
       "type": "request"
     }
 Info 38   [00:01:13.000] response:
@@ -254,11 +240,11 @@ Before request
 
 Info 39   [00:01:14.000] request:
     {
-      "command": "suggestionDiagnosticsSync",
+      "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 7,
+      "seq": 6,
       "type": "request"
     }
 Info 40   [00:01:15.000] response:
@@ -272,12 +258,11 @@ Before request
 
 Info 41   [00:01:16.000] request:
     {
-      "command": "syntacticDiagnosticsSync",
+      "command": "suggestionDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/myproject/usage/usage.ts",
-        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 8,
+      "seq": 7,
       "type": "request"
     }
 Info 42   [00:01:17.000] response:
@@ -291,6 +276,25 @@ Before request
 
 Info 43   [00:01:18.000] request:
     {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 8,
+      "type": "request"
+    }
+Info 44   [00:01:19.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info 45   [00:01:20.000] request:
+    {
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts",
@@ -299,7 +303,7 @@ Info 43   [00:01:18.000] request:
       "seq": 9,
       "type": "request"
     }
-Info 44   [00:01:19.000] response:
+Info 46   [00:01:21.000] response:
     {
       "response": [
         {
@@ -322,7 +326,7 @@ After request
 
 Before request
 
-Info 45   [00:01:20.000] request:
+Info 47   [00:01:22.000] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -330,25 +334,6 @@ Info 45   [00:01:20.000] request:
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
       "seq": 10,
-      "type": "request"
-    }
-Info 46   [00:01:21.000] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }
-After request
-
-Before request
-
-Info 47   [00:01:22.000] request:
-    {
-      "command": "syntacticDiagnosticsSync",
-      "arguments": {
-        "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
-      },
-      "seq": 11,
       "type": "request"
     }
 Info 48   [00:01:23.000] response:
@@ -362,12 +347,12 @@ Before request
 
 Info 49   [00:01:24.000] request:
     {
-      "command": "semanticDiagnosticsSync",
+      "command": "syntacticDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 12,
+      "seq": 11,
       "type": "request"
     }
 Info 50   [00:01:25.000] response:
@@ -381,6 +366,25 @@ Before request
 
 Info 51   [00:01:26.000] request:
     {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 12,
+      "type": "request"
+    }
+Info 52   [00:01:27.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info 53   [00:01:28.000] request:
+    {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
@@ -389,7 +393,7 @@ Info 51   [00:01:26.000] request:
       "seq": 13,
       "type": "request"
     }
-Info 52   [00:01:27.000] response:
+Info 54   [00:01:29.000] response:
     {
       "response": [],
       "responseRequired": true

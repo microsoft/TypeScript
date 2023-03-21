@@ -144,9 +144,11 @@ Info 109  [00:02:36.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 110  [00:02:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 111  [00:02:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 112  [00:02:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 113  [00:02:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 114  [00:02:41.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 115  [00:02:42.000] 	Files (7)
+Info 113  [00:02:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 114  [00:02:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 115  [00:02:42.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 116  [00:02:43.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 117  [00:02:44.000] 	Files (7)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
@@ -177,26 +179,26 @@ Info 115  [00:02:42.000] 	Files (7)
 	file1.ts
 	  Root file specified for compilation
 
-Info 116  [00:02:43.000] -----------------------------------------------
-Info 117  [00:02:44.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 117  [00:02:45.000] 	Files (7)
+Info 118  [00:02:45.000] -----------------------------------------------
+Info 119  [00:02:46.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 119  [00:02:47.000] 	Files (7)
 
-Info 117  [00:02:46.000] -----------------------------------------------
-Info 117  [00:02:47.000] Open files: 
-Info 117  [00:02:48.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 117  [00:02:49.000] 		Projects: /dev/null/inferredProject1*
-Info 117  [00:02:56.000] FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
-Info 118  [00:02:57.000] Scheduled: /dev/null/inferredProject1*
-Info 119  [00:02:58.000] Scheduled: *ensureProjectForOpenFiles*
-Info 120  [00:02:59.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
-Info 121  [00:03:03.000] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
-Info 122  [00:03:04.000] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
-Info 123  [00:03:05.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 124  [00:03:06.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
-Info 125  [00:03:10.000] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
-Info 126  [00:03:11.000] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
-Info 127  [00:03:12.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 128  [00:03:13.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
+Info 119  [00:02:48.000] -----------------------------------------------
+Info 119  [00:02:49.000] Open files: 
+Info 119  [00:02:50.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 119  [00:02:51.000] 		Projects: /dev/null/inferredProject1*
+Info 119  [00:02:58.000] FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
+Info 120  [00:02:59.000] Scheduled: /dev/null/inferredProject1*
+Info 121  [00:03:00.000] Scheduled: *ensureProjectForOpenFiles*
+Info 122  [00:03:01.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
+Info 123  [00:03:05.000] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
+Info 124  [00:03:06.000] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
+Info 125  [00:03:07.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info 126  [00:03:08.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
+Info 127  [00:03:12.000] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
+Info 128  [00:03:13.000] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
+Info 129  [00:03:14.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info 130  [00:03:15.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
 Before running timeout callbacks
 //// [/user/username/projects/myproject/product/src/file1.ts]
 import "./feature/file2"; import "../test/file4"; import "../test/src/file3"; import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
@@ -236,6 +238,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/product/src/feature/file2.ts: *new*
@@ -255,22 +259,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/product/src/feature: *new*
   {}
 
-Info 129  [00:03:14.000] Running: /dev/null/inferredProject1*
-Info 130  [00:03:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 131  [00:03:16.000] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.
-Info 132  [00:03:17.000] Reusing resolution of module '../test/file4' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/test/file4.ts'.
-Info 133  [00:03:18.000] Reusing resolution of module '../test/src/file3' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/test/src/file3.ts'.
-Info 134  [00:03:19.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
-Info 135  [00:03:20.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
-Info 136  [00:03:21.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/src/feature/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
-Info 137  [00:03:22.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/src/feature/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
-Info 138  [00:03:23.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
-Info 139  [00:03:24.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
-Info 140  [00:03:25.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
-Info 141  [00:03:26.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
-Info 142  [00:03:27.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 143  [00:03:28.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 144  [00:03:29.000] 	Files (7)
+Info 131  [00:03:16.000] Running: /dev/null/inferredProject1*
+Info 132  [00:03:17.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 133  [00:03:18.000] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.
+Info 134  [00:03:19.000] Reusing resolution of module '../test/file4' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/test/file4.ts'.
+Info 135  [00:03:20.000] Reusing resolution of module '../test/src/file3' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/test/src/file3.ts'.
+Info 136  [00:03:21.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
+Info 137  [00:03:22.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
+Info 138  [00:03:23.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/src/feature/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
+Info 139  [00:03:24.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/src/feature/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
+Info 140  [00:03:25.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
+Info 141  [00:03:26.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
+Info 142  [00:03:27.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
+Info 143  [00:03:28.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
+Info 144  [00:03:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 145  [00:03:30.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 146  [00:03:31.000] 	Files (7)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
@@ -279,22 +283,22 @@ Info 144  [00:03:29.000] 	Files (7)
 	/user/username/projects/myproject/product/test/src/file3.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
 	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import \"./feature/file2\"; import \"../test/file4\"; import \"../test/src/file3\"; import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
-Info 145  [00:03:30.000] -----------------------------------------------
-Info 146  [00:03:31.000] Running: *ensureProjectForOpenFiles*
-Info 147  [00:03:32.000] Before ensureProjectForOpenFiles:
-Info 148  [00:03:33.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 148  [00:03:34.000] 	Files (7)
+Info 147  [00:03:32.000] -----------------------------------------------
+Info 148  [00:03:33.000] Running: *ensureProjectForOpenFiles*
+Info 149  [00:03:34.000] Before ensureProjectForOpenFiles:
+Info 150  [00:03:35.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 150  [00:03:36.000] 	Files (7)
 
-Info 148  [00:03:35.000] -----------------------------------------------
-Info 148  [00:03:36.000] Open files: 
-Info 148  [00:03:37.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 148  [00:03:38.000] 		Projects: /dev/null/inferredProject1*
-Info 148  [00:03:39.000] After ensureProjectForOpenFiles:
-Info 149  [00:03:40.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 149  [00:03:41.000] 	Files (7)
+Info 150  [00:03:37.000] -----------------------------------------------
+Info 150  [00:03:38.000] Open files: 
+Info 150  [00:03:39.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 150  [00:03:40.000] 		Projects: /dev/null/inferredProject1*
+Info 150  [00:03:41.000] After ensureProjectForOpenFiles:
+Info 151  [00:03:42.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 151  [00:03:43.000] 	Files (7)
 
-Info 149  [00:03:42.000] -----------------------------------------------
-Info 149  [00:03:43.000] Open files: 
-Info 149  [00:03:44.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 149  [00:03:45.000] 		Projects: /dev/null/inferredProject1*
+Info 151  [00:03:44.000] -----------------------------------------------
+Info 151  [00:03:45.000] Open files: 
+Info 151  [00:03:46.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 151  [00:03:47.000] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks

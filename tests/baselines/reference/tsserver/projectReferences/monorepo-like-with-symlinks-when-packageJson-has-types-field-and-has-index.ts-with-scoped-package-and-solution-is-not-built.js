@@ -105,9 +105,11 @@ Info 29   [00:01:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 30   [00:01:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
 Info 31   [00:01:16.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
 Info 32   [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 33   [00:01:18.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 34   [00:01:19.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
-Info 35   [00:01:20.000] 	Files (4)
+Info 33   [00:01:18.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info 34   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info 35   [00:01:20.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 36   [00:01:21.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info 37   [00:01:22.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
 	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
@@ -123,23 +125,23 @@ Info 35   [00:01:20.000] 	Files (4)
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 36   [00:01:21.000] -----------------------------------------------
-Info 37   [00:01:22.000] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/packages/A/tsconfig.json"}}
-Info 38   [00:01:23.000] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"8c5cfb88fb6a6125ddaca4c198af63d261c8feb2786e348cbf3223fcf8461e16","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":136,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"outDir":"","rootDir":"","composite":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 38   [00:01:23.000] -----------------------------------------------
 Info 39   [00:01:24.000] event:
+    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/packages/A/tsconfig.json"}}
+Info 40   [00:01:25.000] event:
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"8c5cfb88fb6a6125ddaca4c198af63d261c8feb2786e348cbf3223fcf8461e16","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":136,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"outDir":"","rootDir":"","composite":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+Info 41   [00:01:26.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/packages/A/src/index.ts","configFile":"/user/username/projects/myproject/packages/A/tsconfig.json","diagnostics":[]}}
-Info 40   [00:01:25.000] Search path: /user/username/projects/myproject/packages/A
-Info 41   [00:01:26.000] For info: /user/username/projects/myproject/packages/A/tsconfig.json :: No config files found.
-Info 42   [00:01:27.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
-Info 42   [00:01:28.000] 	Files (4)
+Info 42   [00:01:27.000] Search path: /user/username/projects/myproject/packages/A
+Info 43   [00:01:28.000] For info: /user/username/projects/myproject/packages/A/tsconfig.json :: No config files found.
+Info 44   [00:01:29.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info 44   [00:01:30.000] 	Files (4)
 
-Info 42   [00:01:29.000] -----------------------------------------------
-Info 42   [00:01:30.000] Open files: 
-Info 42   [00:01:31.000] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
-Info 42   [00:01:32.000] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
-Info 42   [00:01:33.000] response:
+Info 44   [00:01:31.000] -----------------------------------------------
+Info 44   [00:01:32.000] Open files: 
+Info 44   [00:01:33.000] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
+Info 44   [00:01:34.000] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
+Info 44   [00:01:35.000] response:
     {
       "responseRequired": false
     }
@@ -155,6 +157,8 @@ PolledWatches::
 /user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -181,7 +185,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 43   [00:01:34.000] request:
+Info 45   [00:01:36.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -193,7 +197,7 @@ Info 43   [00:01:34.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 44   [00:01:35.000] response:
+Info 46   [00:01:37.000] response:
     {
       "responseRequired": false
     }
@@ -201,27 +205,27 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 45   [00:01:36.000] event:
+Info 47   [00:01:38.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 46   [00:01:37.000] event:
+Info 48   [00:01:39.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 47   [00:01:38.000] event:
+Info 49   [00:01:40.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
-Info 48   [00:01:39.000] event:
+Info 50   [00:01:41.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 Before request
 
-Info 49   [00:01:40.000] request:
+Info 51   [00:01:42.000] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -247,7 +251,7 @@ Info 49   [00:01:40.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 50   [00:01:41.000] response:
+Info 52   [00:01:43.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -256,7 +260,7 @@ After request
 
 Before request
 
-Info 51   [00:01:42.000] request:
+Info 53   [00:01:44.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -268,7 +272,7 @@ Info 51   [00:01:42.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 52   [00:01:43.000] response:
+Info 54   [00:01:45.000] response:
     {
       "responseRequired": false
     }
@@ -276,30 +280,30 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 53   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
-Info 54   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 55   [00:01:46.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
-Info 56   [00:01:47.000] 	Files (4)
+Info 55   [00:01:46.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
+Info 56   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 57   [00:01:48.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info 58   [00:01:49.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
 	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
 	/user/username/projects/myproject/packages/A/src/index.ts SVC-1-1 "import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n\n"
 
-Info 57   [00:01:48.000] -----------------------------------------------
-Info 58   [00:01:49.000] event:
+Info 59   [00:01:50.000] -----------------------------------------------
+Info 60   [00:01:51.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 59   [00:01:50.000] event:
+Info 61   [00:01:52.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 60   [00:01:51.000] event:
+Info 62   [00:01:53.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
-Info 61   [00:01:52.000] event:
+Info 63   [00:01:54.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
