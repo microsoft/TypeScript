@@ -4170,6 +4170,8 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
         case SyntaxKind.WhileStatement:
         case SyntaxKind.WithStatement:
             return true;
+        case SyntaxKind.BindingElement:
+            return isParameter(getRootDeclaration(node));
         default:
             return false;
     }

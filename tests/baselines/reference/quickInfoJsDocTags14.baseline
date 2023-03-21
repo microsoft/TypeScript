@@ -14,6 +14,8 @@
 // | (parameter) newA: string
 // | - a param
 // | /*
+// | @param a - a param
+// | /*
 // | ----------------------------------------------------------------------
 // }
 
@@ -119,6 +121,25 @@
         {
           "text": "- a param\n/*",
           "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- a param\n/*",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

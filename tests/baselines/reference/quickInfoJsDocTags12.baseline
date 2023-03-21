@@ -18,12 +18,14 @@
 // | ----------------------------------------------------------------------
 // | (parameter) b: string
 // | - b parameter
+// | @param b - b parameter
 // | ----------------------------------------------------------------------
 //     c
 //     ^
 // | ----------------------------------------------------------------------
 // | (parameter) c: string
 // | - c parameter
+// | @param c - c parameter
 // | ----------------------------------------------------------------------
 //     d
 //     ^
@@ -35,6 +37,7 @@
 // | ----------------------------------------------------------------------
 // | (parameter) f: string
 // | - f parameter
+// | @param f - f parameter
 // | ----------------------------------------------------------------------
 // }
 
@@ -165,6 +168,25 @@
           "text": "- b parameter",
           "kind": "text"
         }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- b parameter",
+              "kind": "text"
+            }
+          ]
+        }
       ]
     }
   },
@@ -219,6 +241,25 @@
         {
           "text": "- c parameter",
           "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- c parameter",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -324,6 +365,25 @@
         {
           "text": "- f parameter",
           "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "f",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "- f parameter",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
