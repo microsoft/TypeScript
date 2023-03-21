@@ -159,3 +159,17 @@ export function T11(a: any, b: any, c: any, d: any) {
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 
+export function T12(a: any, b: any, c: any, d: any) {
+>T12 : Symbol(T12, Decl(test.tsx, 46, 1))
+>a : Symbol(a, Decl(test.tsx, 48, 20))
+>b : Symbol(b, Decl(test.tsx, 48, 27))
+>c : Symbol(c, Decl(test.tsx, 48, 35))
+>d : Symbol(d, Decl(test.tsx, 48, 43))
+
+    return <div className={"T12"} { ...{ __proto__ } }>T12</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 49, 15))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 49, 40))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+

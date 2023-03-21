@@ -43,6 +43,10 @@ export function T10(a: any, b: any, c: any, d: any) {
     return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
 }
 
+export function T11(a: any, b: any, c: any, d: any) {
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+}
+
 
 //// [test.js]
 export function T1(a) {
@@ -74,4 +78,7 @@ export function T9(a, b, c, d) {
 }
 export function T10(a, b, c, d) {
     return React.createElement("div", { className: "T10", ["__proto__"]: null }, "T10");
+}
+export function T11(a, b, c, d) {
+    return React.createElement("div", { className: "T11", __proto__ }, "T11");
 }

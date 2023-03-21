@@ -45,3 +45,7 @@ export function T9(a: any, b: any, c: any, d: any) {
 export function T10(a: any, b: any, c: any, d: any) {
     return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
 }
+
+export function T11(a: any, b: any, c: any, d: any) {
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+}

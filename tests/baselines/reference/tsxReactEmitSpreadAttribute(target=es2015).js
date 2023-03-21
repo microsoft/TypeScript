@@ -47,6 +47,10 @@ export function T11(a: any, b: any, c: any, d: any) {
     return <div className={"T11"} { ...{ ["__proto__"]: null } }>T11</div>;
 }
 
+export function T12(a: any, b: any, c: any, d: any) {
+    return <div className={"T12"} { ...{ __proto__ } }>T12</div>;
+}
+
 
 //// [test.js]
 import { jsx as _jsx } from "react/jsx-runtime";
@@ -83,4 +87,7 @@ export function T10(a, b, c, d) {
 }
 export function T11(a, b, c, d) {
     return _jsx("div", { className: "T11", ["__proto__"]: null, children: "T11" });
+}
+export function T12(a, b, c, d) {
+    return _jsx("div", { className: "T12", __proto__, children: "T12" });
 }

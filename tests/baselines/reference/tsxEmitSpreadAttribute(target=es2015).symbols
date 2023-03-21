@@ -128,3 +128,15 @@ export function T10(a: any, b: any, c: any, d: any) {
 >"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 41, 40))
 }
 
+export function T11(a: any, b: any, c: any, d: any) {
+>T11 : Symbol(T11, Decl(test.tsx, 42, 1))
+>a : Symbol(a, Decl(test.tsx, 44, 20))
+>b : Symbol(b, Decl(test.tsx, 44, 27))
+>c : Symbol(c, Decl(test.tsx, 44, 35))
+>d : Symbol(d, Decl(test.tsx, 44, 43))
+
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+>className : Symbol(className, Decl(test.tsx, 45, 15))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 45, 40))
+}
+

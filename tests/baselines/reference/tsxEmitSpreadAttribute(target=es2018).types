@@ -178,3 +178,20 @@ export function T10(a: any, b: any, c: any, d: any) {
 >div : any
 }
 
+export function T11(a: any, b: any, c: any, d: any) {
+>T11 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+><div className={"T11"} { ...{ __proto__ } }>T11</div> : error
+>div : any
+>className : string
+>"T11" : "T11"
+>{ __proto__ } : { __proto__: string; }
+>__proto__ : string
+>div : any
+}
+
