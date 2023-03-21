@@ -1448,7 +1448,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
-    var strictInstanceOfTypeParameters = getStrictOptionValue(compilerOptions, "strictInstanceOfTypeParameters");
+    // Enabling flag by default for testing, do not merge as-is
+    var strictInstanceOfTypeParameters = true;
     var keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
     var freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
