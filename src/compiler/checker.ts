@@ -19425,7 +19425,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!sourcePropType) continue;
             const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
             // Use the expression type, if available
-            const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
+            let specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
+            if (isSpreadAssignment(prop) || isJsxSpreadAttribute(prop)) {
+                specificSource = getIndexedAccessTypeOrUndefined(specificSource, nameType)!;
+            }
             if (!checkTypeRelatedTo(specificSource, targetPropType, relation, /*errorNode*/ undefined)) {
                 const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                 reportedError = true;
@@ -19547,7 +19550,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.Never) {
                 continue;
             }
-            yield { errorNode: node, innerExpression: undefined, nameType: type };
+            yield { errorNode: node, innerExpression: node.expression, nameType: type };
         }
     }
 

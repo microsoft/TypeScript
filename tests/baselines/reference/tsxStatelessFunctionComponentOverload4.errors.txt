@@ -15,6 +15,8 @@ tests/cases/conformance/jsx/file.tsx(14,31): error TS2769: No overload matches t
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
+  Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+    Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(16,31): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes'.
@@ -22,9 +24,11 @@ tests/cases/conformance/jsx/file.tsx(16,31): error TS2769: No overload matches t
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(17,13): error TS2769: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(17,12): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
+  Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+    Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/jsx/file.tsx(25,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
     Type '{ "extra-data": true; }' is not assignable to type '{ "extra-data": string; }'.
@@ -108,6 +112,9 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
 !!! error TS2769:     Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2769:       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:43: The expected type comes from property 'yy1' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
     const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
                                   ~~
@@ -119,10 +126,13 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
 !!! error TS2769:       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
     const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
-                ~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
 !!! error TS2769:     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
+!!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:31: The expected type comes from property 'yy' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
     const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     
