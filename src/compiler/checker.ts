@@ -13573,7 +13573,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getConstraintFromIndexedAccess(type: IndexedAccessType) {
-        if (isMappedTypeGenericIndexedAccess(type)) {
+        if (isMappedTypeGenericIndexedAccess(type) || isGenericMappedType(type.objectType)) {
             // For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
             // we substitute an instantiation of E where P is replaced with X.
             return substituteIndexedMappedType(type.objectType as MappedType, type.indexType);
