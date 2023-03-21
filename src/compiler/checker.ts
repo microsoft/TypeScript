@@ -16339,7 +16339,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
+        // Skip TemplateLiteralTypes which contain intersections; plain string literals can never match these.
+        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t) && !some((t as TemplateLiteralType).types, t2 => !!(t2.flags & TypeFlags.Intersection))) as TemplateLiteralType[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
