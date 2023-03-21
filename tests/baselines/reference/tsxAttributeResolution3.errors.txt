@@ -1,9 +1,10 @@
 tests/cases/conformance/jsx/file.tsx(19,8): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(23,2): error TS2741: Property 'x' is missing in type '{ y: number; }' but required in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(31,8): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(31,15): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -41,6 +42,9 @@ tests/cases/conformance/jsx/file.tsx(31,15): error TS2322: Type 'number' is not 
     // Error
     var obj5 = { x: 32, y: 32 };
     <test1 x="ok" {...obj5} />
+           ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:8:2: The expected type comes from property 'x' which is declared here on type 'Attribs1'
                   ~~~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:8:2: The expected type comes from property 'x' which is declared here on type 'Attribs1'

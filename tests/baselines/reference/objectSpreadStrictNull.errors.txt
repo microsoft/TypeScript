@@ -1,16 +1,28 @@
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(14,58): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(14,78): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(14,97): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
   Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(15,63): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(15,83): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(15,102): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(15,122): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,79): error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,99): error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,119): error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
   Type 'undefined' is not assignable to type 'string | number | boolean'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,20): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,26): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,16): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,16): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,27): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,27): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts (6 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts (16 errors) ====
     function f(
         definiteBoolean: { sn: boolean },
         definiteString: { sn: string },
@@ -25,17 +37,38 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,27): error TS2
     
         // undefined
         let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
+                                                             ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:14:32: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
+                                                                                 ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:14:32: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
                                                                                                     ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
 !!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:14:32: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
         let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
+                                                                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:15:37: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
+                                                                                      ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:15:37: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:15:37: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
                                                                                                                              ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
 !!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:15:37: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
         let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
     
         let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
+                                                                                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:18:43: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number | boolean; }'
+                                                                                                      ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:18:43: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number | boolean; }'
                                                                                                                           ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string | number | boolean'.
@@ -50,6 +83,9 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,27): error TS2
     const m = { title: "The Matrix", yearReleased: 1999 };
     // should error here because title: undefined is not assignable to string
     const x: Movie = { ...m, title: undefined };
+                       ~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:22:5: The expected type comes from property 'title' which is declared here on type 'Movie'
                              ~~~~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:22:5: The expected type comes from property 'title' which is declared here on type 'Movie'
@@ -67,6 +103,14 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,27): error TS2
         fields = { ...fields, ...partialFields };
         // error: not optional, undefined remains
         fields = { ...fields, ...nearlyPartialFields };
+                   ~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:31:5: The expected type comes from property 'foo' which is declared here on type 'Fields'
+                   ~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:32:5: The expected type comes from property 'bar' which is declared here on type 'Fields'
                               ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'number'.

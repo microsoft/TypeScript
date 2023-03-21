@@ -342,10 +342,25 @@ declare const result: Partial<Record<'attribute', string | null>>;
 >result : Partial<Record<"attribute", string | null>>
 >null : null
 
-const item: Item = { attribute: "", ...result }; // error reported on spread and not on the compatible property
+const item: Item = { attribute: "", ...result }; // error reported on both spread and the overriden property
 >item : Item
 >{ attribute: "", ...result } : { attribute: string | null; }
 >attribute : string
 >"" : ""
 >result : Partial<Record<"attribute", string | null>>
+
+// repro from #52850#discussion_r1136291508
+interface A { a?: string; }
+>a : string | undefined
+
+declare var a: A;
+>a : A
+
+const o5: { a: boolean; } = { a: 12, ...a }; // error reported on both spread and the overriden property
+>o5 : { a: boolean; }
+>a : boolean
+>{ a: 12, ...a } : { a: string | number; }
+>a : number
+>12 : 12
+>a : A
 

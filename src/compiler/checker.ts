@@ -19339,16 +19339,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
-        const seen = new Set<Type>();
         // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
         let reportedError = false;
         for (const value of iterator) {
             const { errorNode: prop, innerExpression: next, nameType, errorMessage } = value;
-
-            if (seen.has(nameType)) {
-                continue;
-            }
-            seen.add(nameType);
 
             let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
             if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables

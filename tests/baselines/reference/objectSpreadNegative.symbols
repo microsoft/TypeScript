@@ -256,9 +256,24 @@ declare const result: Partial<Record<'attribute', string | null>>;
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
-const item: Item = { attribute: "", ...result }; // error reported on spread and not on the compatible property
+const item: Item = { attribute: "", ...result }; // error reported on both spread and the overriden property
 >item : Symbol(item, Decl(objectSpreadNegative.ts, 78, 5))
 >Item : Symbol(Item, Decl(objectSpreadNegative.ts, 73, 12))
 >attribute : Symbol(attribute, Decl(objectSpreadNegative.ts, 78, 20))
 >result : Symbol(result, Decl(objectSpreadNegative.ts, 77, 13))
+
+// repro from #52850#discussion_r1136291508
+interface A { a?: string; }
+>A : Symbol(A, Decl(objectSpreadNegative.ts, 78, 48))
+>a : Symbol(A.a, Decl(objectSpreadNegative.ts, 81, 13))
+
+declare var a: A;
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 82, 11))
+>A : Symbol(A, Decl(objectSpreadNegative.ts, 78, 48))
+
+const o5: { a: boolean; } = { a: 12, ...a }; // error reported on both spread and the overriden property
+>o5 : Symbol(o5, Decl(objectSpreadNegative.ts, 83, 5))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 83, 11))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 83, 29))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 82, 11))
 
