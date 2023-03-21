@@ -1491,7 +1491,7 @@ function f1(thing: Thing) {
 >path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >thing : Thing
 >...['a', 'x'] : string
->['a', 'x'] : string[]
+>['a', 'x'] : readonly [string, string]
 >'a' : "a"
 >'x' : "x"
 }

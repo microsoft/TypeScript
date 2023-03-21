@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     arrayToMap,
     CachedDirectoryStructureHost,
@@ -63,6 +62,7 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    resolveModuleName as ts_resolveModuleName,
     returnTrue,
     some,
     SourceFile,
@@ -463,7 +463,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, redirectedReference?: ResolvedProjectReference, mode?: ResolutionMode): CachedResolvedModuleWithFailedLookupLocations {
         const host = resolutionHost.getCompilerHost?.() || resolutionHost;
-        const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
+        const primaryResult = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
         // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
         if (!resolutionHost.getGlobalCache) {
             return primaryResult;

@@ -217,6 +217,7 @@ import {
     isExportAssignment,
     isExportSpecifier,
     isExpression,
+    isFileLevelUniqueName,
     isFunctionLike,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
@@ -446,6 +447,7 @@ import {
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
+    version,
     VoidExpression,
     WhileStatement,
     WithStatement,
@@ -1110,7 +1112,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
 /** @internal */
 export function createBuildInfo(program: ProgramBuildInfo | undefined, bundle: BundleBuildInfo | undefined): BuildInfo {
-    const version = ts.version; // Extracted into a const so the form is stable between namespace and module
     return { bundle, program, version };
 }
 
@@ -1212,10 +1213,10 @@ export function emitUsingBuildInfo(
     customTransformers?: CustomTransformers
 ): EmitUsingBuildInfoResult {
     tracing?.push(tracing.Phase.Emit, "emitUsingBuildInfo", {}, /*separateBeginAndEnd*/ true);
-    ts.performance.mark("beforeEmit");
+    performance.mark("beforeEmit");
     const result = emitUsingBuildInfoWorker(config, host, getCommandLine, customTransformers);
-    ts.performance.mark("afterEmit");
-    ts.performance.measure("Emit", "beforeEmit", "afterEmit");
+    performance.mark("afterEmit");
+    performance.measure("Emit", "beforeEmit", "afterEmit");
     tracing?.pop();
     return result;
 }
@@ -5758,7 +5759,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * or within the NameGenerator.
      */
     function isUniqueName(name: string, privateName: boolean): boolean {
-        return isFileLevelUniqueName(name, privateName)
+        return isFileLevelUniqueNameInCurrentFile(name, privateName)
             && !isReservedName(name, privateName)
             && !generatedNames.has(name);
     }
@@ -5773,8 +5774,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * @param _isPrivate (unused) this parameter exists to avoid an unnecessary adaptor frame in v8
      * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
-    function isFileLevelUniqueName(name: string, _isPrivate: boolean) {
-        return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
+    function isFileLevelUniqueNameInCurrentFile(name: string, _isPrivate: boolean) {
+        return currentSourceFile ? isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
     }
 
     /**
@@ -5925,7 +5926,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function makeFileLevelOptimisticUniqueName(name: string) {
-        return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
+        return makeUniqueName(name, isFileLevelUniqueNameInCurrentFile, /*optimistic*/ true, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
     }
 
     /**
@@ -6034,7 +6035,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case GeneratedIdentifierFlags.Unique:
                 return makeUniqueName(
                     idText(name),
-                    (autoGenerate.flags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                    (autoGenerate.flags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueNameInCurrentFile : isUniqueName,
                     !!(autoGenerate.flags & GeneratedIdentifierFlags.Optimistic),
                     !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
                     isPrivateIdentifier(name),

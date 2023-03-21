@@ -42,6 +42,8 @@ import {
     defaultMaximumTruncationLength,
     DeleteExpression,
     Diagnostic,
+    DiagnosticAndArguments,
+    DiagnosticArguments,
     DiagnosticMessage,
     DiagnosticWithLocation,
     directoryProbablyExists,
@@ -2165,6 +2167,10 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
     return false;
 }
 
+function areIntersectedTypesAvoidingStringReduction(checker: TypeChecker, t1: Type, t2: Type) {
+    return !!(t1.flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(t2);
+}
+
 /** @internal */
 export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     if (!type.isIntersection()) {
@@ -2172,13 +2178,8 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     }
 
     const { types, checker } = type;
-    return types.length === 2
-        && (types[0].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[1]);
-}
-
-/** @internal */
-export function isPunctuation(kind: SyntaxKind): boolean {
-    return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
+    return types.length === 2 &&
+        (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) || areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
 }
 
 /** @internal */
@@ -4054,11 +4055,11 @@ export function getNewLineKind(newLineCharacter: string): NewLineKind {
 }
 
 /** @internal */
-export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+export type DiagnosticOrDiagnosticAndArguments = DiagnosticMessage | DiagnosticAndArguments;
 /** @internal */
-export function diagnosticToString(diag: DiagnosticAndArguments): string {
+export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): string {
     return isArray(diag)
-        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as DiagnosticArguments)
         : getLocaleSpecificMessage(diag);
 }
 

@@ -90,6 +90,7 @@ import {
     DefaultClause,
     DestructuringAssignment,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticMessageChain,
@@ -440,6 +441,8 @@ import {
     PropertyNameLiteral,
     PropertySignature,
     PseudoBigInt,
+    PunctuationOrKeywordSyntaxKind,
+    PunctuationSyntaxKind,
     QualifiedName,
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
@@ -2058,21 +2061,21 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
 }
 
 /** @internal */
-export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const sourceFile = getSourceFileOfNode(node);
-    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
+    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const start = skipTrivia(sourceFile.text, nodes.pos);
-    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
+    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
-    return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
+    return createFileDiagnostic(sourceFile, span.start, span.length, message, ...args);
 }
 
 /** @internal */
@@ -4769,6 +4772,16 @@ export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | un
 /** @internal */
 export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
     return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+}
+
+/** @internal */
+export function isPunctuation(token: SyntaxKind): token is PunctuationSyntaxKind {
+    return SyntaxKind.FirstPunctuation <= token && token <= SyntaxKind.LastPunctuation;
+}
+
+/** @internal */
+export function isKeywordOrPunctuation(token: SyntaxKind): token is PunctuationOrKeywordSyntaxKind {
+    return isKeyword(token) || isPunctuation(token);
 }
 
 /** @internal */
@@ -7491,26 +7504,25 @@ export function isWriteAccess(node: Node) {
 const enum AccessKind {
     /** Only reads from a variable. */
     Read,
-    /** Only writes to a variable without using the result. E.g.: `x++;`. */
+    /** Only writes to a variable without ever reading it. E.g.: `x=1;`. */
     Write,
-    /** Writes to a variable and uses the result as an expression. E.g.: `f(x++);`. */
+    /** Reads from and writes to a variable. E.g.: `f(x++);`, `x/=1`. */
     ReadWrite
 }
 function accessKind(node: Node): AccessKind {
     const { parent } = node;
-    if (!parent) return AccessKind.Read;
 
-    switch (parent.kind) {
+    switch (parent?.kind) {
         case SyntaxKind.ParenthesizedExpression:
             return accessKind(parent);
         case SyntaxKind.PostfixUnaryExpression:
         case SyntaxKind.PrefixUnaryExpression:
             const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
-            return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
+            return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? AccessKind.ReadWrite : AccessKind.Read;
         case SyntaxKind.BinaryExpression:
             const { left, operatorToken } = parent as BinaryExpression;
             return left === node && isAssignmentOperator(operatorToken.kind) ?
-                operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : writeOrReadWrite()
+                operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : AccessKind.ReadWrite
                 : AccessKind.Read;
         case SyntaxKind.PropertyAccessExpression:
             return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
@@ -7526,11 +7538,6 @@ function accessKind(node: Node): AccessKind {
             return accessKind(parent);
         default:
             return AccessKind.Read;
-    }
-
-    function writeOrReadWrite(): AccessKind {
-        // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-        return parent.parent && walkUpParenthesizedExpressions(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
     }
 }
 function reverseAccessKind(a: AccessKind): AccessKind {
@@ -8001,7 +8008,7 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithDetachedLocation;
+export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation;
 /** @internal */
 export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
     assertDiagnosticLocation(/*file*/ undefined, start, length);
@@ -8072,7 +8079,7 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 }
 
 /** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
+export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation;
 /** @internal */
 export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
     assertDiagnosticLocation(file, start, length);
@@ -8097,7 +8104,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 }
 
 /** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: (string | number | undefined)[]): string;
+export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: DiagnosticArguments): string;
 /** @internal */
 export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
     let text = getLocaleSpecificMessage(message);
@@ -8110,7 +8117,7 @@ export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
 }
 
 /** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
+export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic;
 /** @internal */
 export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
     let text = getLocaleSpecificMessage(message);
@@ -8147,7 +8154,7 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
+export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain;
 /** @internal */
 export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);

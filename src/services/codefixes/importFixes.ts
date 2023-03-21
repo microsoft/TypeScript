@@ -18,7 +18,7 @@ import {
     createMultiMap,
     createPackageJsonImportFilter,
     Debug,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     DiagnosticWithLocation,
     emptyArray,
@@ -1212,13 +1212,13 @@ function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: C
 }
 
 function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): CodeFixAction {
-    let diag!: DiagnosticAndArguments;
+    let diag!: DiagnosticOrDiagnosticAndArguments;
     const changes = textChanges.ChangeTracker.with(context, tracker => {
         diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences);
     });
     return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
 }
-function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticAndArguments {
+function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticOrDiagnosticAndArguments {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     switch (fix.kind) {
         case ImportFixKind.UseNamespace:

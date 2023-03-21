@@ -18,12 +18,33 @@ interface CSSKeyframesRule {
     [Symbol.iterator](): IterableIterator<CSSKeyframeRule>;
 }
 
+interface CSSNumericArray {
+    [Symbol.iterator](): IterableIterator<CSSNumericValue>;
+    entries(): IterableIterator<[number, CSSNumericValue]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<CSSNumericValue>;
+}
+
 interface CSSRuleList {
     [Symbol.iterator](): IterableIterator<CSSRule>;
 }
 
 interface CSSStyleDeclaration {
     [Symbol.iterator](): IterableIterator<string>;
+}
+
+interface CSSTransformValue {
+    [Symbol.iterator](): IterableIterator<CSSTransformComponent>;
+    entries(): IterableIterator<[number, CSSTransformComponent]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<CSSTransformComponent>;
+}
+
+interface CSSUnparsedValue {
+    [Symbol.iterator](): IterableIterator<CSSUnparsedSegment>;
+    entries(): IterableIterator<[number, CSSUnparsedSegment]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<CSSUnparsedSegment>;
 }
 
 interface Cache {
@@ -226,6 +247,13 @@ interface SpeechRecognitionResult {
 
 interface SpeechRecognitionResultList {
     [Symbol.iterator](): IterableIterator<SpeechRecognitionResult>;
+}
+
+interface StylePropertyMapReadOnly {
+    [Symbol.iterator](): IterableIterator<[string, Iterable<CSSStyleValue>]>;
+    entries(): IterableIterator<[string, Iterable<CSSStyleValue>]>;
+    keys(): IterableIterator<string>;
+    values(): IterableIterator<Iterable<CSSStyleValue>>;
 }
 
 interface StyleSheetList {

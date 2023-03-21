@@ -129,6 +129,11 @@ export const enum SyntaxKind {
     // Identifiers and PrivateIdentifiers
     Identifier,
     PrivateIdentifier,
+    /**
+     * Only the special JSDoc comment text scanner produces JSDocCommentTextTokes. One of these tokens spans all text after a tag comment's start and before the next @
+     * @internal
+     */
+    JSDocCommentTextToken,
     // Reserved words
     BreakKeyword,
     CaseKeyword,
@@ -573,6 +578,9 @@ export type PunctuationSyntaxKind =
     | SyntaxKind.BarEqualsToken
     | SyntaxKind.CaretEqualsToken
     ;
+
+/** @internal */
+export type PunctuationOrKeywordSyntaxKind = PunctuationSyntaxKind | KeywordSyntaxKind;
 
 export type KeywordSyntaxKind =
     | SyntaxKind.AbstractKeyword
@@ -4660,7 +4668,7 @@ export interface FilePreprocessingReferencedDiagnostic {
     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
     reason: ReferencedFile;
     diagnostic: DiagnosticMessage;
-    args?: (string | number | undefined)[];
+    args?: DiagnosticArguments;
 }
 
 /** @internal */
@@ -4669,7 +4677,7 @@ export interface FilePreprocessingFileExplainingDiagnostic {
     file?: Path;
     fileProcessingReason: FileIncludeReason;
     diagnostic: DiagnosticMessage;
-    args?: (string | number | undefined)[];
+    args?: DiagnosticArguments;
 }
 
 /** @internal */
@@ -5654,7 +5662,7 @@ export interface EmitResolver {
     isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -6023,7 +6031,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    firstSpreadIndex?: number;          // Index of first spread element in array literal (-1 for none)
+    spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
 }
@@ -6081,8 +6089,6 @@ export const enum TypeFlags {
     PossiblyFalsy = DefinitelyFalsy | String | Number | BigInt | Boolean,
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
-    /** @internal */
-    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol | TemplateLiteral,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
     NumberLike = Number | NumberLiteral | Enum,
     BigIntLike = BigInt | BigIntLiteral,
@@ -6090,6 +6096,8 @@ export const enum TypeFlags {
     EnumLike = Enum | EnumLiteral,
     ESSymbolLike = ESSymbol | UniqueESSymbol,
     VoidLike = Void | Undefined,
+    /** @internal */
+    Primitive = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | VoidLike | Null,
     /** @internal */
     DefinitelyNonNullable = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | Object | NonPrimitive,
     /** @internal */
@@ -6102,7 +6110,7 @@ export const enum TypeFlags {
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
-    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
+    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection | TemplateLiteral,
     /** @internal */
     Simplifiable = IndexedAccess | Conditional,
     /** @internal */
@@ -6125,7 +6133,7 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
-    NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
+    NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -6146,8 +6154,6 @@ export interface Type {
     permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
     /** @internal */
     restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
-    /** @internal */
-    uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
     /** @internal */
     immediateBaseConstraint?: Type;  // Immediate base constraint cache
     /** @internal */
@@ -6258,7 +6264,7 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-    // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
+    // Flags that require TypeFlags.UnionOrIntersection, TypeFlags.Substitution, or TypeFlags.TemplateLiteral
     /** @internal */
     IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
     /** @internal */
@@ -6285,7 +6291,7 @@ export const enum ObjectFlags {
 }
 
 /** @internal */
-export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
+export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
 
 // Object types (TypeFlags.ObjectType)
 export interface ObjectType extends Type {
@@ -6437,6 +6443,8 @@ export interface UnionType extends UnionOrIntersectionType {
 export interface IntersectionType extends UnionOrIntersectionType {
     /** @internal */
     resolvedApparentType: Type;
+    /** @internal */
+    uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
 }
 
 export type StructuredType = ObjectType | UnionType | IntersectionType;
@@ -6586,11 +6594,19 @@ export interface IndexedAccessType extends InstantiableType {
 
 export type TypeVariable = TypeParameter | IndexedAccessType;
 
+/** @internal */
+export const enum IndexFlags {
+    None = 0,
+    StringsOnly = 1 << 0,
+    NoIndexSignatures = 1 << 1,
+    NoReducibleCheck = 1 << 2,
+}
+
 // keyof T types (TypeFlags.Index)
 export interface IndexType extends InstantiableType {
     type: InstantiableType | UnionOrIntersectionType;
     /** @internal */
-    stringsOnly: boolean;
+    indexFlags: IndexFlags;
 }
 
 export interface ConditionalRoot {
@@ -6623,6 +6639,8 @@ export interface ConditionalType extends InstantiableType {
 }
 
 export interface TemplateLiteralType extends InstantiableType {
+    /** @internal */
+    objectFlags: ObjectFlags;
     texts: readonly string[];  // Always one element longer than types
     types: readonly Type[];  // Always at least one element
 }
@@ -6902,6 +6920,12 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     relatedInformation?: DiagnosticRelatedInformation[];
     /** @internal */ skippedOn?: keyof CompilerOptions;
 }
+
+/** @internal */
+export type DiagnosticArguments = (string | number)[];
+
+/** @internal */
+export type DiagnosticAndArguments = [message: DiagnosticMessage, ...args: DiagnosticArguments];
 
 export interface DiagnosticRelatedInformation {
     category: DiagnosticCategory;
@@ -7341,6 +7365,7 @@ export interface CommandLineOptionBase {
     affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
+    disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
 }
 
 /** @internal */
