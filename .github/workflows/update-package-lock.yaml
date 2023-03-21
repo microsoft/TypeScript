@@ -7,10 +7,16 @@ on:
         - cron: '0 6 * * *'
     workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
+
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v3
@@ -27,7 +33,6 @@ jobs:
       run: |
         rm package-lock.json
         npm install
-        git add -f package-lock.json
 
         if git diff --exit-code --name-only package-lock.json; then
           echo "No change."
@@ -36,6 +41,7 @@ jobs:
           npx hereby lkg
           git config user.email "typescriptbot@microsoft.com"
           git config user.name "TypeScript Bot"
+          git add -f package-lock.json
           git commit -m "Update package-lock.json"
           git push
         fi

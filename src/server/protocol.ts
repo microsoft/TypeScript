@@ -19,7 +19,7 @@ import {
     TodoComment,
     TodoCommentDescriptor,
 } from "../services/types";
-import * as ts from "./_namespaces/ts";
+import type * as ts from "./_namespaces/ts";
 
 // Declaration module describing the TypeScript Server protocol
 

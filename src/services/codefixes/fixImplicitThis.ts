@@ -22,7 +22,7 @@ import { Core as FindAllReferences } from "../findAllReferences";
 import { ChangeTracker } from "../textChanges";
 import {
     ANONYMOUS,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     findChildOfKind,
     getTokenAtPosition,
     isThis,
@@ -34,7 +34,7 @@ registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixImplicitThis(context) {
         const { sourceFile, program, span } = context;
-        let diagnostic: DiagnosticAndArguments | undefined;
+        let diagnostic: DiagnosticOrDiagnosticAndArguments | undefined;
         const changes = ChangeTracker.with(context, t => {
             diagnostic = doChange(t, sourceFile, span.start, program.getTypeChecker());
         });
@@ -46,7 +46,7 @@ registerCodeFix({
     }),
 });
 
-function doChange(changes: ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticAndArguments | undefined {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticOrDiagnosticAndArguments | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (!isThis(token)) return undefined;
 

@@ -62,6 +62,7 @@ import {
 } from "../compiler/types";
 import {
     isKeyword,
+    isPunctuation,
     isThisIdentifier,
     isTrivia,
     nodeIsMissing,
@@ -89,7 +90,6 @@ import {
     getMeaningFromLocation,
     getTypeArgumentOrTypeParameterList,
     isAccessibilityModifier,
-    isPunctuation,
     SemanticMeaning,
 } from "./utilities";
 

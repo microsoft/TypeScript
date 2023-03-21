@@ -148,7 +148,7 @@ import {
 import {
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
     getNameForExportedSymbol,
@@ -441,7 +441,7 @@ export function getFixInfos(context: CodeFixContextBase, errorCode: number, pos:
 
 /** @internal */
 export function codeActionForFix(context: TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): CodeFixAction {
-    let diag!: DiagnosticAndArguments;
+    let diag!: DiagnosticOrDiagnosticAndArguments;
     const changes = ChangeTracker.with(context, tracker => {
         diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences);
     });
@@ -1283,7 +1283,7 @@ function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: C
     return allowSyntheticDefaults ? ImportKind.Default : ImportKind.CommonJS;
 }
 
-function codeActionForFixWorker(changes: ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticAndArguments {
+function codeActionForFixWorker(changes: ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticOrDiagnosticAndArguments {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     switch (fix.kind) {
         case ImportFixKind.UseNamespace:
