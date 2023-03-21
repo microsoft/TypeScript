@@ -7,9 +7,9 @@ type R = `${number}a` & {
     _thing: true;
 };
 
-type _S = "1" | "2" | "3" | "4" | "5" | "6";
+type _S = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
 
-type S = `${_S}${_S}${_S}`;
+type S = `${_S}${_S}`;
 
 
 type T = R | S;
