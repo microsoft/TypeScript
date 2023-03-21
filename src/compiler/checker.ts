@@ -18176,7 +18176,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const declarations = concatenate(leftProp.declarations, rightProp.declarations);
                     const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                     const result = createSymbol(flags, leftProp.escapedName);
-                    result.links.type = getUnionType([getTypeOfSymbol(leftProp), removeMissingOrUndefinedType(rightType)], UnionReduction.Subtype);
+                    // Optimization: avoid calculating the union type if spreading into the exact same type.
+                    // This is common, e.g. spreading one options bag into another where the bags have the
+                    // same type, or have properties which overlap. If the unions are large, it may turn out
+                    // to be expensive to perform subtype reduction.
+                    const leftType = getTypeOfSymbol(leftProp);
+                    const leftTypeWithoutUndefined = removeMissingOrUndefinedType(leftType);
+                    const rightTypeWithoutUndefined = removeMissingOrUndefinedType(rightType);
+                    result.links.type = leftTypeWithoutUndefined === rightTypeWithoutUndefined ? leftType : getUnionType([leftType, rightTypeWithoutUndefined], UnionReduction.Subtype);
                     result.links.leftSpread = leftProp;
                     result.links.rightSpread = rightProp;
                     result.declarations = declarations;
