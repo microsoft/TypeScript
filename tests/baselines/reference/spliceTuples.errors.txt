@@ -1,5 +1,5 @@
-tests/cases/compiler/spliceTuples.ts(23,1): error TS2322: Type '[number, string, boolean, ...boolean[]]' is not assignable to type '[number, string, boolean, boolean, ...boolean[]]'.
-  Source provides no match for required element at position 3 in target.
+tests/cases/compiler/spliceTuples.ts(23,10): error TS2322: Type 'string | boolean' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/spliceTuples.ts (1 errors) ====
@@ -26,7 +26,7 @@ tests/cases/compiler/spliceTuples.ts(23,1): error TS2322: Type '[number, string,
     
     let k6: [number, string, boolean, boolean, ...boolean[]];
     k6 = [1, ...sbb_];
-    ~~
-!!! error TS2322: Type '[number, string, boolean, ...boolean[]]' is not assignable to type '[number, string, boolean, boolean, ...boolean[]]'.
-!!! error TS2322:   Source provides no match for required element at position 3 in target.
+             ~~~~~~~
+!!! error TS2322: Type 'string | boolean' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
     

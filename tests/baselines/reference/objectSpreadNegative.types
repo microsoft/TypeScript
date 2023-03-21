@@ -340,9 +340,8 @@ type Item = { attribute: string; };
 
 declare const result: Partial<Record<'attribute', string | null>>;
 >result : Partial<Record<"attribute", string | null>>
->null : null
 
-const item: Item = { attribute: "", ...result }; // error reported on both spread and the overriden property
+const item: Item = { attribute: "", ...result }; // error reported only on spread and not on the compatible property
 >item : Item
 >{ attribute: "", ...result } : { attribute: string | null; }
 >attribute : string

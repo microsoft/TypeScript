@@ -256,7 +256,7 @@ declare const result: Partial<Record<'attribute', string | null>>;
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
-const item: Item = { attribute: "", ...result }; // error reported on both spread and the overriden property
+const item: Item = { attribute: "", ...result }; // error reported only on spread and not on the compatible property
 >item : Symbol(item, Decl(objectSpreadNegative.ts, 78, 5))
 >Item : Symbol(Item, Decl(objectSpreadNegative.ts, 73, 12))
 >attribute : Symbol(attribute, Decl(objectSpreadNegative.ts, 78, 20))

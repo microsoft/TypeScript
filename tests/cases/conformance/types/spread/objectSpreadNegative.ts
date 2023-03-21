@@ -78,7 +78,7 @@ spreadObj.a; // error 'a' is not in {}
 // repro from #51376
 type Item = { attribute: string; };
 declare const result: Partial<Record<'attribute', string | null>>;
-const item: Item = { attribute: "", ...result }; // error reported on both spread and the overriden property
+const item: Item = { attribute: "", ...result }; // error reported only on spread and not on the compatible property
 
 // repro from #52850#discussion_r1136291508
 interface A { a?: string; }

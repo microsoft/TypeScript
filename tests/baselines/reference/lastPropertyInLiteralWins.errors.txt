@@ -1,4 +1,3 @@
-tests/cases/compiler/lastPropertyInLiteralWins.ts(8,5): error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
   Types of parameters 'num' and 'str' are incompatible.
@@ -6,7 +5,7 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2322: Type '(num
 tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/lastPropertyInLiteralWins.ts (4 errors) ====
+==== tests/cases/compiler/lastPropertyInLiteralWins.ts (3 errors) ====
     interface Thing {
         thunk: (str: string) => void;
     }
@@ -15,9 +14,6 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS1117: An object
     }
     test({ // Should error, as last one wins, and is wrong type
         thunk: (str: string) => {},
-        ~~~~~
-!!! error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
-!!! related TS6500 tests/cases/compiler/lastPropertyInLiteralWins.ts:2:5: The expected type comes from property 'thunk' which is declared here on type 'Thing'
         thunk: (num: number) => {}
         ~~~~~
 !!! error TS1117: An object literal cannot have multiple properties with the same name.
