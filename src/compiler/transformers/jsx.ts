@@ -36,9 +36,11 @@ import {
     isJsxSpreadAttribute,
     isLineBreak,
     isObjectLiteralExpression,
+    isPropertyAssignment,
     isSourceFile,
     isSpreadAssignment,
     isStringDoubleQuoted,
+    isStringLiteral,
     isWhiteSpaceSingleLine,
     JsxAttribute,
     JsxAttributeValue,
@@ -58,6 +60,7 @@ import {
     Node,
     NodeFlags,
     ObjectLiteralElementLike,
+    ObjectLiteralExpression,
     PropertyAssignment,
     ScriptTarget,
     setIdentifierGeneratedImportReference,
@@ -245,6 +248,11 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
     }
 
+    function hasProto(obj: ObjectLiteralExpression) {
+        return obj.properties.some(p => isPropertyAssignment(p) &&
+            (isIdentifier(p.name) && idText(p.name) === "__proto__" || isStringLiteral(p.name) && p.name.text === "__proto__"));
+    }
+
     /**
      * The react jsx/jsxs transform falls back to `createElement` when an explicit `key` argument comes after a spread
      */
@@ -430,7 +438,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxSpreadAttributeToProps(node: JsxSpreadAttribute) {
-        if (isObjectLiteralExpression(node.expression)) {
+        if (isObjectLiteralExpression(node.expression) && !hasProto(node.expression)) {
             return node.expression.properties;
         }
         return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
@@ -459,7 +467,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             if (isJsxSpreadAttribute(attr)) {
                 // as an optimization we try to flatten the first level of spread inline object
                 // as if its props would be passed as JSX attributes
-                if (isObjectLiteralExpression(attr.expression)) {
+                if (isObjectLiteralExpression(attr.expression) && !hasProto(attr.expression)) {
                     for (const prop of attr.expression.properties) {
                         if (isSpreadAssignment(prop)) {
                             finishObjectLiteralIfNeeded();

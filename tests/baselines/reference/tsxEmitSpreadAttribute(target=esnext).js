@@ -25,6 +25,24 @@ export function T6(a: any, b: any, c: any, d: any) {
     return <div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div>;
 }
 
+export function T7(a: any, b: any, c: any, d: any) {
+    return <div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div>;
+}
+
+export function T8(a: any, b: any, c: any, d: any) {
+    return <div className={"T8"} { ...{ "__proto__": null } }>T8</div>;
+}
+
+declare const __proto__: string;
+
+export function T9(a: any, b: any, c: any, d: any) {
+    return <div className={"T9"} { ...{ [__proto__]: null } }>T9</div>;
+}
+
+export function T10(a: any, b: any, c: any, d: any) {
+    return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
+}
+
 
 //// [test.js]
 export function T1(a) {
@@ -44,4 +62,16 @@ export function T5(a, b, c, d) {
 }
 export function T6(a, b, c, d) {
     return React.createElement("div", { className: "T6", ...a, ...b, ...{ ...c, ...d } }, "T6");
+}
+export function T7(a, b, c, d) {
+    return React.createElement("div", { className: "T7", ...{ __proto__: null, dir: 'rtl' } }, "T7");
+}
+export function T8(a, b, c, d) {
+    return React.createElement("div", { className: "T8", ...{ "__proto__": null } }, "T8");
+}
+export function T9(a, b, c, d) {
+    return React.createElement("div", { className: "T9", [__proto__]: null }, "T9");
+}
+export function T10(a, b, c, d) {
+    return React.createElement("div", { className: "T10", ["__proto__"]: null }, "T10");
 }
