@@ -34320,7 +34320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
         }
 
-        const exprType = checkExpressionCached(expression, checkMode);
+        const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
@@ -34349,7 +34349,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 errNode = type;
                 break;
         }
-        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpressionCached(expression)));
+        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression)));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
             addLazyDiagnostic(() => {
