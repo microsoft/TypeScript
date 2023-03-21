@@ -2683,22 +2683,23 @@ export function isThisTypePredicate(predicate: TypePredicate): predicate is This
 }
 
 /** @internal */
-export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): readonly PropertyAssignment[] {
-    return objectLiteral.properties.filter((property): property is PropertyAssignment => {
-        if (property.kind === SyntaxKind.PropertyAssignment) {
-            const propName = tryGetTextOfPropertyName(property.name);
-            return key === propName || (!!key2 && key2 === propName);
-        }
-        return false;
+export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpression | undefined, key: string, callback: (property: PropertyAssignment) => T | undefined, key2?: string) {
+    return forEach(objectLiteral?.properties, property => {
+        if (!isPropertyAssignment(property)) return undefined;
+        const propName = tryGetTextOfPropertyName(property.name);
+        return key === propName || (key2 && key2 === propName) ?
+            callback(property) :
+            undefined;
     });
 }
 
 /** @internal */
 export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
-    return firstDefined(getPropertyAssignment(objectLiteral, propKey), property =>
+    return forEachPropertyAssignment(objectLiteral, propKey, property =>
         isArrayLiteralExpression(property.initializer) ?
             find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-            undefined);
+            undefined
+    );
 }
 
 /** @internal */
@@ -2711,16 +2712,15 @@ export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigS
 
 /** @internal */
 export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
-    return firstDefined(getTsConfigPropArray(tsConfigSourceFile, propKey), property =>
+    return forEachTsConfigPropArray(tsConfigSourceFile, propKey, property =>
         isArrayLiteralExpression(property.initializer) ?
             find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
             undefined);
 }
 
 /** @internal */
-export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): readonly PropertyAssignment[] {
-    const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-    return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
+export function forEachTsConfigPropArray<T>(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, callback: (property: PropertyAssignment) => T | undefined) {
+    return forEachPropertyAssignment(getTsConfigObjectLiteralExpression(tsConfigSourceFile), propKey, callback);
 }
 
 /** @internal */
