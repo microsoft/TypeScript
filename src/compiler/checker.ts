@@ -4736,7 +4736,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else {
-            throw Debug.assertNever(name, "Unknown entity name kind.");
+            Debug.assertNever(name, "Unknown entity name kind.");
         }
         Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
         if (!nodeIsSynthesized(name) && isEntityName(name) && (symbol.flags & SymbolFlags.Alias || name.parent.kind === SyntaxKind.ExportAssignment)) {
@@ -17040,7 +17040,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.resolvedType = getTypeFromTypeNode(node.type);
                     break;
                 default:
-                    throw Debug.assertNever(node.operator);
+                    Debug.assertNever(node.operator);
             }
         }
         return links.resolvedType;
@@ -33962,7 +33962,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxSelfClosingElement:
                 return resolveJsxOpeningLikeElement(node, candidatesOutArray, checkMode);
         }
-        throw Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
+        Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
     }
 
     /**
@@ -47701,7 +47701,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     currentKind = DeclarationMeaning.SetAccessor;
                     break;
                 default:
-                    throw Debug.assertNever(prop, "Unexpected syntax kind:" + (prop as Node).kind);
+                    Debug.assertNever(prop, "Unexpected syntax kind:" + (prop as Node).kind);
             }
 
             if (!inDestructuring) {
