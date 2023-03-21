@@ -20183,9 +20183,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
+        const cache = writing ? "normalizedForWriting" : "normalizedForReading";
+        if (type[cache]) {
+            return type[cache]!;
+        }
         const elements = getTypeArguments(type);
         const normalizedElements = sameMap(elements, t => t.flags & TypeFlags.Simplifiable ? getSimplifiedType(t, writing) : t);
-        return elements !== normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
+        return type[cache] = (elements !== normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type);
     }
 
     /**

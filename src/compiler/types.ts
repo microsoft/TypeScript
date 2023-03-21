@@ -6407,6 +6407,10 @@ export interface TupleType extends GenericType {
 
 export interface TupleTypeReference extends TypeReference {
     target: TupleType;
+    /** @internal */
+    normalizedForReading?: Type;
+    /** @internal */
+    normalizedForWriting?: Type;
 }
 
 export interface UnionOrIntersectionType extends Type {
