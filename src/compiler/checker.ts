@@ -20889,7 +20889,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // the union contains the base primitive type or the literal type in one of its fresh/regular forms.
                     // We exclude numeric literals for non-subtype relations because numeric literals are assignable to
                     // numeric enum literals with the same value. Similarly, we exclude enum literal types because
-                    // identically named enum types are related (see isEmumTypeRelatedTo). We exclude the comparable
+                    // identically named enum types are related (see isEnumTypeRelatedTo). We exclude the comparable
                     // relation in entirety because it needs to be checked in both directions.
                     const alternateForm = source === (source as StringLiteralType).regularType ? (source as StringLiteralType).freshType : (source as StringLiteralType).regularType;
                     const primitive = source.flags & TypeFlags.StringLiteral ? stringType :
