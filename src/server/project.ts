@@ -1182,6 +1182,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean) {
+        this.log(`Removing file:: ${info.fileName}`);
         if (this.isRoot(info)) {
             this.removeRoot(info);
         }
@@ -1312,6 +1313,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+        this.log(`Typing files:: ${typingFiles}`);
         if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
             /*inserted*/ noop,
             removed => this.detachScriptInfoFromProject(removed)
@@ -1486,6 +1488,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
         const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
         if (scriptInfoToDetach) {
+            this.log(`Detaching script info from project:: ${scriptInfoToDetach.fileName} from ${this.projectName}`);
             scriptInfoToDetach.detachFromProject(this);
             if (!noRemoveResolution) {
                 this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);

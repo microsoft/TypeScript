@@ -1773,6 +1773,7 @@ export function parseCommandLineWorker(
     const errors: Diagnostic[] = [];
 
     parseStrings(commandLine);
+    options.traceResolution = true;
     return {
         options,
         watchOptions,
@@ -2855,6 +2856,7 @@ function parseJsonConfigFileContentWorker(
         parsedConfig.watchOptions || existingWatchOptions;
 
     options.configFilePath = configFileName && normalizeSlashes(configFileName);
+    options.traceResolution = true;
     const configFileSpecs = getConfigFileSpecs();
     if (sourceFile) sourceFile.configFileSpecs = configFileSpecs;
     setConfigFileInOptions(options, sourceFile);

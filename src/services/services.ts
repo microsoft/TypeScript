@@ -1626,6 +1626,7 @@ export function createLanguageService(
         // so we need to make a copy in case the host mutates the underlying array - otherwise it would look
         // like every program always has the host's current list of root files.
         const rootFileNames = host.getScriptFileNames().slice();
+        log(`rootFileNames: ${rootFileNames}`);
 
         // Get a fresh cache of the host information
         const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
@@ -1702,6 +1703,7 @@ export function createLanguageService(
 
         // If the program is already up-to-date, we can reuse it
         if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            log(`Program is upto date`);
             return;
         }
 
