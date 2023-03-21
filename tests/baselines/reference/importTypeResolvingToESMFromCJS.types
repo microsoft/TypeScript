@@ -1,0 +1,8 @@
+=== /types.d.mts ===
+
+export interface A {}
+
+=== /main.cts ===
+type A = import("./types.mjs").A;
+>A : import("/types", { assert: { "resolution-mode": "import" } }).A
+

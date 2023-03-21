@@ -4894,7 +4894,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (!importOrExport?.isTypeOnly && !(location.flags & NodeFlags.Ambient) && ModuleResolutionKind.Node16 <= moduleResolutionKind && moduleResolutionKind <= ModuleResolutionKind.NodeNext) {
+                if (ModuleResolutionKind.Node16 <= moduleResolutionKind && moduleResolutionKind <= ModuleResolutionKind.NodeNext && !importOrExport?.isTypeOnly && !(location.flags & NodeFlags.Ambient) && !findAncestor(location, isImportTypeNode)) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                     if (isSyncImport && targetSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                         if (findAncestor(location, isImportEqualsDeclaration)) {

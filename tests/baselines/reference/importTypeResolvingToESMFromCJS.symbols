@@ -1,0 +1,9 @@
+=== /types.d.mts ===
+export interface A {}
+>A : Symbol(A, Decl(types.d.mts, 0, 0))
+
+=== /main.cts ===
+type A = import("./types.mjs").A;
+>A : Symbol(A, Decl(main.cts, 0, 0))
+>A : Symbol(A, Decl(types.d.mts, 0, 0))
+
