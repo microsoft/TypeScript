@@ -153,9 +153,7 @@ module.exports = createRule({
                         data: { got, want: expectedName },
                         node: comment,
                         fix: (fixer) => {
-                            // Try and preserve whitespace.
-                            const newComment = comment.value.replace(got, expectedName);
-                            return fixer.replaceText(comment, `/*${newComment}*/`);
+                            return fixer.replaceText(comment, `/*${expectedName}*/`);
                         },
                     });
                     return;
