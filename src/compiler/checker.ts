@@ -800,7 +800,6 @@ import {
     LiteralTypeNode,
     mangleScopedPackageName,
     map,
-    mapAllOrFail,
     mapDefined,
     MappedSymbol,
     MappedType,
@@ -15998,7 +15997,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
-        const memberIds = namedMemberDeclarations?.length && mapAllOrFail(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
+        const memberIds = namedMemberDeclarations?.length && map(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
         const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
             (readonly ? "R" : "") +
             (memberIds ? "," + memberIds.join(",") : "");
