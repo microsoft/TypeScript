@@ -253,3 +253,127 @@ function example(x: Union) {
 >x : Union
 }
 
+function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
+>checksArrayOrObject1 : (obj: Record<string, any> | Record<string, any>[]) => void
+>obj : Record<string, any> | Record<string, any>[]
+
+    // "accidentally" guards the first branch on the length
+    if (Array.isArray(obj) && obj.length) {
+>Array.isArray(obj) && obj.length : number | false
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : Record<string, any> | Record<string, any>[]
+>obj.length : number
+>obj : any[] | Record<string, any>[]
+>length : number
+
+        for (let key in obj) {
+>key : string
+>obj : any[] | Record<string, any>[]
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+>key : string
+>obj : any[] | Record<string, any>
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : any[] | Record<string, any>
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : any[] | Record<string, any>
+>key : string
+            }
+        }
+    }
+}
+
+function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
+>checksArrayOrObject2 : (obj: Record<string, any> | Record<string, any>[]) => void
+>obj : Record<string, any> | Record<string, any>[]
+
+    if (Array.isArray(obj)) {
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : Record<string, any> | Record<string, any>[]
+
+        // obj should only be an array type here
+        for (let key in obj) {
+>key : string
+>obj : any[] | Record<string, any>[]
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+>key : string
+>obj : Record<string, any>
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : Record<string, any>
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : Record<string, any>
+>key : string
+            }
+        }
+    }
+}
+

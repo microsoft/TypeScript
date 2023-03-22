@@ -253,3 +253,112 @@ function example(x: Union) {
 >x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 92, 17))
 }
 
+function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
+>checksArrayOrObject1 : Symbol(checksArrayOrObject1, Decl(narrowingMutualSubtypes.ts, 102, 1))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    // "accidentally" guards the first branch on the length
+    if (Array.isArray(obj) && obj.length) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>obj.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        for (let key in obj) {
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 107, 16))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+
+            if (obj[key] !== undefined) {
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 107, 16))
+>undefined : Symbol(undefined)
+
+                console.log(obj[key])
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 107, 16))
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 115, 16))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+
+            if (obj[key] !== undefined) {
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 115, 16))
+>undefined : Symbol(undefined)
+
+                console.log(obj[key])
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 115, 16))
+            }
+        }
+    }
+}
+
+function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
+>checksArrayOrObject2 : Symbol(checksArrayOrObject2, Decl(narrowingMutualSubtypes.ts, 121, 1))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    if (Array.isArray(obj)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+
+        // obj should only be an array type here
+        for (let key in obj) {
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 126, 16))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+
+            if (obj[key] !== undefined) {
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 126, 16))
+>undefined : Symbol(undefined)
+
+                console.log(obj[key])
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 126, 16))
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 134, 16))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+
+            if (obj[key] !== undefined) {
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 134, 16))
+>undefined : Symbol(undefined)
+
+                console.log(obj[key])
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+>key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 134, 16))
+            }
+        }
+    }
+}
+
