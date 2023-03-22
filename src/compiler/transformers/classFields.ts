@@ -156,6 +156,7 @@ import {
     nodeIsSynthesized,
     ObjectLiteralElement,
     OmittedExpression,
+    OuterExpressionKinds,
     ParameterDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
@@ -1489,13 +1490,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return factory.updateBinaryExpression(node, left, node.operatorToken, right);
             }
 
-            if (isPrivateIdentifierPropertyAccessExpression(node.left)) {
+            const left = skipOuterExpressions(node.left, OuterExpressionKinds.PartiallyEmittedExpressions | OuterExpressionKinds.Parentheses);
+            if (isPrivateIdentifierPropertyAccessExpression(left)) {
                 // obj.#x = ...
-                const info = accessPrivateIdentifier(node.left.name);
+                const info = accessPrivateIdentifier(left.name);
                 if (info) {
                     return setTextRange(
                         setOriginalNode(
-                            createPrivateIdentifierAssignment(info, node.left.expression, node.right, node.operatorToken.kind),
+                            createPrivateIdentifierAssignment(info, left.expression, node.right, node.operatorToken.kind),
                             node
                         ),
                         node
