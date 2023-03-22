@@ -21,7 +21,6 @@ declare const otherProps: { bar: string, qwe: boolean }
 declare function GenericComponent<T>(props: T): null
 >GenericComponent : <T>(props: T) => null
 >props : T
->null : null
 
 <GenericComponent {...omit(['bar'], otherProps)} />; // no error
 ><GenericComponent {...omit(['bar'], otherProps)} /> : JSX.Element
