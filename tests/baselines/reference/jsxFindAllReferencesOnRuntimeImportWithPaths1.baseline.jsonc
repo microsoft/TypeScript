@@ -1,8 +1,18 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/project/src/dir/jsx-runtime.ts ===
 // [|export {}|]
 
 // === /tests/cases/fourslash/project/src/foo.ts ===
-// [|import * as x from /*FIND ALL REFS*/"@foo/dir/jsx-runtime";|][|@foo/dir/jsx-runtime|]";
+// [|<|import * as x from /*FIND ALL REFS*/"[|@foo/dir/jsx-runtime|]";|]|>
+
+// === /tests/cases/fourslash/project/src/bar.tsx ===
+// <|export default [|<div></div>|];|>
+
+// === /tests/cases/fourslash/project/src/baz.tsx ===
+// <|export default [|<></>|];|>
+
+// === /tests/cases/fourslash/project/src/bam.tsx ===
+// <|export default [|<script src=""/>|];|>
 
 // === /tests/cases/fourslash/project/src/bat.tsx ===
 // [|export const a = 1;|]
@@ -10,123 +20,30 @@
 // === /tests/cases/fourslash/project/src/bal.tsx ===
 // [||]
 
-// === /tests/cases/fourslash/project/src/bar.tsx ===
-// export default [|<div></div>|];
+  // === Definitions ===
+  // === /tests/cases/fourslash/project/src/dir/jsx-runtime.ts ===
+  // [|export {}|]
 
-// === /tests/cases/fourslash/project/src/baz.tsx ===
-// export default [|<></>|];
-
-// === /tests/cases/fourslash/project/src/bam.tsx ===
-// export default [|<script src=""/>|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/project/src/dir/jsx-runtime.ts",
-      "kind": "module",
-      "name": "module \"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
-      "textSpan": {
-        "start": 0,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/project/src/dir/jsx-runtime.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 42
-        },
-        "fileName": "/tests/cases/fourslash/project/src/foo.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/project/src/foo.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 42
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/project/src/bar.tsx",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/project/src/baz.tsx",
-        "contextSpan": {
-          "start": 0,
-          "length": 21
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 16
-        },
-        "fileName": "/tests/cases/fourslash/project/src/bam.tsx",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "fileName": "/tests/cases/fourslash/project/src/bat.tsx",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 0
-        },
-        "fileName": "/tests/cases/fourslash/project/src/bal.tsx",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
