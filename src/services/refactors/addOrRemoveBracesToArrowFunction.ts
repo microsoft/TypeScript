@@ -100,15 +100,15 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
 
     if (actionName === addBracesAction.name) {
         const returnStatement = factory.createReturnStatement(expression);
-        body = factory.createBlock([returnStatement], /* multiLine */ true);
-        copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
+        body = factory.createBlock([returnStatement], /*multiLine*/ true);
+        copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ true);
     }
     else if (actionName === removeBracesAction.name && returnStatement) {
         const actualExpression = expression || factory.createVoidZero();
         body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
-        copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-        copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-        copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+        copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+        copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+        copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
     }
     else {
         Debug.fail("invalid action");

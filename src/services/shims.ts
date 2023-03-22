@@ -1279,7 +1279,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             `getPreProcessedFileInfo('${fileName}')`,
             () => {
                 // for now treat files as JavaScript
-                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /*readImportFiles*/ true, /*detectJavaScriptImports*/ true);
                 return {
                     referencedFiles: this.convertFileReferences(result.referencedFiles),
                     importedFiles: this.convertFileReferences(result.importedFiles),

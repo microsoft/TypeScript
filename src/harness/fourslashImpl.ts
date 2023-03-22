@@ -316,7 +316,7 @@ export class TestState {
             ts.forEach(referencedFiles, referenceFile => {
                 // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
                 const referenceFilePath = this.basePath + "/" + referenceFile.fileName;
-                this.addMatchedInputFile(referenceFilePath, /* extensions */ undefined);
+                this.addMatchedInputFile(referenceFilePath, /*extensions*/ undefined);
             });
 
             const exts = ts.flatten(ts.getSupportedExtensions(compilationOptions));
@@ -2741,7 +2741,7 @@ export class TestState {
     public verifyCurrentLineContent(text: string) {
         const actual = this.getCurrentLineContent();
         if (actual !== text) {
-            throw new Error("verifyCurrentLineContent\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
+            throw new Error("verifyCurrentLineContent\n" + displayExpectedAndActualString(text, actual, /*quoted*/ true));
         }
     }
 
@@ -2766,7 +2766,7 @@ export class TestState {
     public verifyTextAtCaretIs(text: string) {
         const actual = this.getFileContent(this.activeFile.fileName).substring(this.currentCaretPosition, this.currentCaretPosition + text.length);
         if (actual !== text) {
-            throw new Error("verifyTextAtCaretIs\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
+            throw new Error("verifyTextAtCaretIs\n" + displayExpectedAndActualString(text, actual, /*quoted*/ true));
         }
     }
 
@@ -2778,7 +2778,7 @@ export class TestState {
 
         const actual = this.getFileContent(this.activeFile.fileName).substring(span.start, ts.textSpanEnd(span));
         if (actual !== text) {
-            this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
+            this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString(text, actual, /*quoted*/ true));
         }
     }
 
@@ -2892,7 +2892,7 @@ export class TestState {
         if (this.testType === FourSlashTestType.Server) {
             const actual = (this.languageService as ts.server.SessionClient).getProjectInfo(
                 this.activeFile.fileName,
-                /* needFileNameList */ true
+                /*needFileNameList*/ true
             );
             assert.equal(
                 expected.join(","),

@@ -123,7 +123,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                         isObjectLiteralExpression(firstDeclaration.parent.right)
                     ) {
                         const prototypes = firstDeclaration.parent.right;
-                        createClassElement(prototypes.symbol, /*modifiers */ undefined, memberElements);
+                        createClassElement(prototypes.symbol, /*modifiers*/ undefined, memberElements);
                     }
                 }
                 else {
