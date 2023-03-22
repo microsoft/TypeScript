@@ -11,7 +11,7 @@
     "Trying other entries in 'rootDirs'.",
     "Loading 'project/file3' from the root dir 'c:/root/generated/src', candidate location 'c:/root/generated/src/project/file3'.",
     "Loading module as file / folder, candidate module location 'c:/root/generated/src/project/file3', target file types: TypeScript, Declaration.",
-    "File 'c:/root/generated/src/project/file3.ts' exist - use it as a name resolution result.",
+    "File 'c:/root/generated/src/project/file3.ts' exists - use it as a name resolution result.",
     "======== Module name './project/file3' was successfully resolved to 'c:/root/generated/src/project/file3.ts'. ========",
     "======== Resolving module '../file2' from 'c:/root/generated/src/project/file3.ts'. ========",
     "Module resolution kind is not specified, using 'Node10'.",
@@ -34,6 +34,6 @@
     "File 'c:/root/src/file2/package.json' does not exist.",
     "File 'c:/root/src/file2/index.ts' does not exist.",
     "File 'c:/root/src/file2/index.tsx' does not exist.",
-    "File 'c:/root/src/file2/index.d.ts' exist - use it as a name resolution result.",
+    "File 'c:/root/src/file2/index.d.ts' exists - use it as a name resolution result.",
     "======== Module name '../file2' was successfully resolved to 'c:/root/src/file2/index.d.ts'. ========"
 ]

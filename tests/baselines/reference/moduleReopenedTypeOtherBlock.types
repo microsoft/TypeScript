@@ -14,6 +14,5 @@ module M {
     export class C2 { f(): I { return null; } }
 >C2 : C2
 >f : () => I
->null : null
 }
 

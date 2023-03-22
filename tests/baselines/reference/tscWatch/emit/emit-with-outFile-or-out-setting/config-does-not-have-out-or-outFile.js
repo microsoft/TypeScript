@@ -50,21 +50,21 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 PolledWatches::
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
-/a/a.ts:
+/a/a.ts: *new*
   {}
-/a/b.ts:
+/a/b.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -110,24 +110,6 @@ Shape signatures in builder refreshed for::
 /a/a.ts (computed .d.ts)
 /a/b.ts (computed .d.ts)
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/a.js]
@@ -167,24 +149,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/a.ts (computed .d.ts)
 /a/b.ts (computed .d.ts)
-
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 exitCode:: ExitStatus.undefined
 

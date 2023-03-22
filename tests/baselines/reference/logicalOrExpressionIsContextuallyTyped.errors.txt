@@ -10,7 +10,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrE
     // operand types.
     
     var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
-                                    ~~~~~~
+                                    ~
 !!! error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
 !!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type '{ a: string; }'.
 !!! error TS2322:     Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.

@@ -709,12 +709,11 @@ function notFirst(a: number, this: C): number { return this.n; }
 
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
->modifiers : (: any, this: C) => number
-> : any
+>modifiers : (this: C) => number
 >this : C
->this.n : any
->this : any
->n : any
+>this.n : number
+>this : C
+>n : number
 
 function restParam(...this: C): number { return this.n; }
 >restParam : (...: any[], this: C) => number

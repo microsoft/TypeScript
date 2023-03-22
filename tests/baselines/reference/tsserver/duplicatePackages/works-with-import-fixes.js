@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/user.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/node_modules/foo/index.d.ts]
 export const foo: number;
@@ -33,12 +24,15 @@ foo
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/user.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /a
 Info 3    [00:00:32.000] For info: /a/user.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /tsconfig.json
@@ -70,10 +64,10 @@ Info 21   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:52.000] Project '/tsconfig.json' (Configured)
 Info 24   [00:00:53.000] 	Files (4)
-	/a/node_modules/foo/index.d.ts
-	/a/user.ts
-	/b/node_modules/foo/index.d.ts
-	/b/user.ts
+	/a/node_modules/foo/index.d.ts Text-1 "export const foo: number;"
+	/a/user.ts SVC-1-0 "import(\"foo\");\nfoo"
+	/b/node_modules/foo/index.d.ts Text-1 "export const foo: number;"
+	/b/user.ts Text-1 "import(\"foo\");\nfoo"
 
 
 	a/node_modules/foo/index.d.ts
@@ -94,38 +88,40 @@ Info 26   [00:00:57.000] -----------------------------------------------
 Info 26   [00:00:58.000] Open files: 
 Info 26   [00:00:59.000] 	FileName: /a/user.ts ProjectRootPath: undefined
 Info 26   [00:01:00.000] 		Projects: /tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/b/user.ts:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
 Info 26   [00:01:01.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+/b/user.ts: *new*
+  {}
+/a/node_modules/foo/package.json: *new*
+  {}
+/b/node_modules/foo/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+/a/node_modules: *new*
+  {}
+/b/node_modules: *new*
+  {}
+/a: *new*
+  {}
+/b: *new*
+  {}
+
+Before request
+
 Info 27   [00:01:02.000] request:
     {
       "command": "open",
@@ -135,34 +131,6 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/b/user.ts:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
 Info 28   [00:01:03.000] FileWatcher:: Close:: WatchInfo: /b/user.ts 500 undefined WatchType: Closed Script info
 Info 29   [00:01:04.000] Search path: /b
 Info 30   [00:01:05.000] For info: /b/user.ts :: Config file name: /tsconfig.json
@@ -175,6 +143,10 @@ Info 31   [00:01:10.000] 	FileName: /a/user.ts ProjectRootPath: undefined
 Info 31   [00:01:11.000] 		Projects: /tsconfig.json
 Info 31   [00:01:12.000] 	FileName: /b/user.ts ProjectRootPath: undefined
 Info 31   [00:01:13.000] 		Projects: /tsconfig.json
+Info 31   [00:01:14.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -189,6 +161,10 @@ FsWatches::
 /b/node_modules/foo/package.json:
   {}
 
+FsWatches *deleted*::
+/b/user.ts:
+  {}
+
 FsWatchesRecursive::
 /:
   {}
@@ -201,10 +177,8 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 31   [00:01:14.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 32   [00:01:15.000] request:
     {
       "command": "getCodeFixes",
@@ -221,58 +195,6 @@ Info 32   [00:01:15.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
 Info 33   [00:01:16.000] response:
     {
       "response": [
@@ -301,6 +223,10 @@ Info 33   [00:01:16.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 34   [00:01:17.000] request:
     {
       "command": "getCodeFixes",
@@ -317,58 +243,6 @@ Info 34   [00:01:17.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
 Info 35   [00:01:18.000] response:
     {
       "response": [
@@ -397,3 +271,4 @@ Info 35   [00:01:18.000] response:
       ],
       "responseRequired": true
     }
+After request

@@ -1,5 +1,4 @@
 import * as ts from "../_namespaces/ts";
-import { setEnableDeprecationWarnings } from "../../deprecatedCompat/deprecate";
 
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
@@ -81,40 +80,6 @@ describe("unittests:: FactoryAPI", () => {
             checkRhs(ts.SyntaxKind.BarBarEqualsToken, /*expectParens*/ false);
             checkRhs(ts.SyntaxKind.AmpersandAmpersandEqualsToken, /*expectParens*/ false);
             checkRhs(ts.SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
-        });
-    });
-
-    describe("deprecations", () => {
-        beforeEach(() => {
-            setEnableDeprecationWarnings(false);
-        });
-
-        afterEach(() => {
-            setEnableDeprecationWarnings(true);
-        });
-
-        // https://github.com/microsoft/TypeScript/issues/50259
-        it("deprecated createConstructorDeclaration overload does not throw", () => {
-            const body = ts.factory.createBlock([]);
-            assert.doesNotThrow(() => ts.factory.createConstructorDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*parameters*/ [],
-                body,
-            ));
-        });
-
-        // https://github.com/microsoft/TypeScript/issues/50259
-        it("deprecated updateConstructorDeclaration overload does not throw", () => {
-            const body = ts.factory.createBlock([]);
-            const ctor = ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [], body);
-            assert.doesNotThrow(() => ts.factory.updateConstructorDeclaration(
-                ctor,
-                ctor.decorators,
-                ctor.modifiers,
-                ctor.parameters,
-                ctor.body,
-            ));
         });
     });
 

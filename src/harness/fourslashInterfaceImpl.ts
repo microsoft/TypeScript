@@ -252,9 +252,17 @@ export class Verify extends VerifyNegatable {
     }
 
     public completions(...optionsArray: VerifyCompletionsOptions[]) {
+        if (optionsArray.length === 1) {
+            return this.state.verifyCompletions(optionsArray[0]);
+        }
         for (const options of optionsArray) {
             this.state.verifyCompletions(options);
         }
+        return {
+            andApplyCodeAction: () => {
+                throw new Error("Cannot call andApplyCodeAction on multiple completions requests");
+            },
+        };
     }
 
     public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
@@ -452,7 +460,7 @@ export class Verify extends VerifyNegatable {
 
     public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
         this.state.goToMarker(marker);
-        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
+        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset }, options);
     }
 
     public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
@@ -480,7 +488,7 @@ export class Verify extends VerifyNegatable {
         this.state.getAndApplyCodeActions(errorCode, index);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: VerifyCompletionActionOptions): void {
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: VerifyCompletionActionOptions): void {
         this.state.applyCodeActionFromCompletion(markerName, options);
     }
 
@@ -492,8 +500,8 @@ export class Verify extends VerifyNegatable {
         this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
     }
 
-    public baselineAutoImports(marker: string, preferences?: ts.UserPreferences) {
-        this.state.baselineAutoImports(marker, preferences);
+    public baselineAutoImports(marker: string, fullNamesForCodeFix?: string[], options?: ts.UserPreferences) {
+        this.state.baselineAutoImports(marker, fullNamesForCodeFix, options);
     }
 
     public navigationBar(json: any, options?: { checkSpans?: boolean }) {
@@ -1092,6 +1100,7 @@ export namespace Completion {
         "string",
         "symbol",
         "true",
+        "typeof",
         "undefined",
         "unique",
         "unknown",
@@ -1174,6 +1183,16 @@ export namespace Completion {
         typeEntry("PropertyDecorator"),
         typeEntry("MethodDecorator"),
         typeEntry("ParameterDecorator"),
+        typeEntry("ClassMemberDecoratorContext"),
+        typeEntry("DecoratorContext"),
+        interfaceEntry("ClassDecoratorContext"),
+        interfaceEntry("ClassMethodDecoratorContext"),
+        interfaceEntry("ClassGetterDecoratorContext"),
+        interfaceEntry("ClassSetterDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorTarget"),
+        interfaceEntry("ClassAccessorDecoratorResult"),
+        interfaceEntry("ClassFieldDecoratorContext"),
         typeEntry("PromiseConstructorLike"),
         interfaceEntry("PromiseLike"),
         interfaceEntry("Promise"),

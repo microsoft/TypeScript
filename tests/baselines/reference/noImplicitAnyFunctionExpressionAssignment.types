@@ -6,8 +6,6 @@ var x: (a: any) => void = function <T>(x: T) {
 >x : T
 
     return null;
->null : null
-
 };
 
 var x2: (a: any) => void = function f<T>(x: T) {
@@ -18,6 +16,4 @@ var x2: (a: any) => void = function f<T>(x: T) {
 >x : T
 
     return null;
->null : null
-
 };

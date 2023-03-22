@@ -1,28 +1,5 @@
 import * as ts from "./_namespaces/ts";
 import {
-    asNormalizedPath,
-    createModuleSpecifierCache,
-    emptyArray,
-    Errors,
-    FileStats,
-    forEachResolvedProjectReferenceProject,
-    LogLevel,
-    ModuleImportResult,
-    Msg,
-    NormalizedPath,
-    projectContainsInfoDirectly,
-    ProjectOptions,
-    ProjectReferenceProjectLoadKind,
-    ProjectService,
-    protocol,
-    ScriptInfo,
-    ServerHost,
-    Session,
-    toNormalizedPath,
-    TypingsCache,
-    updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import {
     addRange,
     append,
     ApplyCodeActionCommandResult,
@@ -148,6 +125,29 @@ import {
     WatchOptions,
     WatchType,
 } from "./_namespaces/ts";
+import {
+    asNormalizedPath,
+    createModuleSpecifierCache,
+    emptyArray,
+    Errors,
+    FileStats,
+    forEachResolvedProjectReferenceProject,
+    LogLevel,
+    ModuleImportResult,
+    Msg,
+    NormalizedPath,
+    projectContainsInfoDirectly,
+    ProjectOptions,
+    ProjectReferenceProjectLoadKind,
+    ProjectService,
+    ScriptInfo,
+    ServerHost,
+    Session,
+    toNormalizedPath,
+    TypingsCache,
+    updateProjectIfDirty,
+} from "./_namespaces/ts.server";
+import * as protocol from "./protocol";
 
 export enum ProjectKind {
     Inferred,
@@ -171,7 +171,7 @@ export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): F
         deferred: 0, deferredSize: 0,
     };
     for (const info of infos) {
-        const fileSize = includeSizes ? info.getTelemetryFileSize() : 0;
+        const fileSize = includeSizes ? info.textStorage.getTelemetryFileSize() : 0;
         switch (info.scriptKind) {
             case ScriptKind.JS:
                 result.js += 1;
@@ -1259,7 +1259,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        perfLogger.logStartUpdateGraph();
+        perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
@@ -1305,7 +1305,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Preload auto import provider so it's not created during completions request
             this.getPackageJsonAutoImportProvider();
         }
-        perfLogger.logStopUpdateGraph();
+        perfLogger?.logStopUpdateGraph();
         tracing?.pop();
         return !hasNewProgram;
     }
@@ -1461,8 +1461,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const elapsed = timestamp() - start;
         this.sendPerformanceEvent("UpdateGraph", elapsed);
         this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
-        if (this.hasAddedorRemovedFiles) {
-            this.print(/*writeProjectFileNames*/ true);
+        if (this.projectService.logger.isTestLogger) {
+            if (this.program !== oldProgram) {
+                this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
+            }
+            else {
+                this.writeLog(`Same program as before`);
+            }
+        }
+        else if (this.hasAddedorRemovedFiles) {
+            this.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
         }
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
@@ -1589,27 +1597,38 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     filesToString(writeProjectFileNames: boolean) {
+        return this.filesToStringWorker(writeProjectFileNames, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
+    }
+
+    /** @internal */
+    private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
         const sourceFiles = this.program.getSourceFiles();
         let strBuilder = `\tFiles (${sourceFiles.length})\n`;
         if (writeProjectFileNames) {
             for (const file of sourceFiles) {
-                strBuilder += `\t${file.fileName}\n`;
+                strBuilder += `\t${file.fileName}${writeFileVersionAndText?` ${file.version} ${JSON.stringify(file.text)}` : ""}\n`;
             }
-            strBuilder += "\n\n";
-            explainFiles(this.program, s => strBuilder += `\t${s}\n`);
+            if (writeFileExplaination) {
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
+            }
         }
         return strBuilder;
     }
 
     /** @internal */
-    print(writeProjectFileNames: boolean) {
+    print(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
-        this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
+        this.writeLog(this.filesToStringWorker(
+            writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose),
+            writeFileExplaination && this.projectService.logger.hasLevel(LogLevel.verbose),
+            writeFileVersionAndText && this.projectService.logger.hasLevel(LogLevel.verbose),
+        ));
         this.writeLog("-----------------------------------------------");
         if (this.autoImportProviderHost) {
-            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false);
+            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
         }
     }
 
@@ -2124,7 +2143,7 @@ export class InferredProject extends Project {
         }
     }
 
-    setCompilerOptions(options?: CompilerOptions) {
+    override setCompilerOptions(options?: CompilerOptions) {
         // Avoid manipulating the given options directly
         if (!options && !this.getCompilationSettings()) {
             return;
@@ -2180,7 +2199,7 @@ export class InferredProject extends Project {
         this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
     }
 
-    addRoot(info: ScriptInfo) {
+    override addRoot(info: ScriptInfo) {
         Debug.assert(info.isScriptOpen());
         this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
         if (!this._isJsInferredProject && info.isJavaScript()) {
@@ -2189,7 +2208,7 @@ export class InferredProject extends Project {
         super.addRoot(info);
     }
 
-    removeRoot(info: ScriptInfo) {
+    override removeRoot(info: ScriptInfo) {
         this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info);
         super.removeRoot(info);
         if (this._isJsInferredProject && info.isJavaScript()) {
@@ -2200,7 +2219,7 @@ export class InferredProject extends Project {
     }
 
     /** @internal */
-    isOrphan() {
+    override isOrphan() {
         return !this.hasRoots();
     }
 
@@ -2212,12 +2231,12 @@ export class InferredProject extends Project {
             this.getRootScriptInfos().length === 1;
     }
 
-    close() {
+    override close() {
         forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info));
         super.close();
     }
 
-    getTypeAcquisition(): TypeAcquisition {
+    override getTypeAcquisition(): TypeAcquisition {
         return this.typeAcquisition || {
             enable: allRootFilesAreJsOrDts(this),
             include: ts.emptyArray,
@@ -2241,12 +2260,12 @@ class AuxiliaryProject extends Project {
             /*currentDirectory*/ undefined);
     }
 
-    isOrphan(): boolean {
+    override isOrphan(): boolean {
         return true;
     }
 
     /** @internal */
-    scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
+    override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;
     }
@@ -2436,11 +2455,11 @@ export class AutoImportProviderProject extends Project {
         return !some(this.rootFileNames);
     }
 
-    isOrphan() {
+    override isOrphan() {
         return true;
     }
 
-    updateGraph() {
+    override updateGraph() {
         let rootFileNames = this.rootFileNames;
         if (!rootFileNames) {
             rootFileNames = AutoImportProviderProject.getRootFileNames(
@@ -2461,62 +2480,62 @@ export class AutoImportProviderProject extends Project {
     }
 
     /** @internal */
-    scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
+    override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;
     }
 
-    hasRoots() {
+    override hasRoots() {
         return !!this.rootFileNames?.length;
     }
 
-    markAsDirty() {
+    override markAsDirty() {
         this.rootFileNames = undefined;
         super.markAsDirty();
     }
 
-    getScriptFileNames() {
+    override getScriptFileNames() {
         return this.rootFileNames || ts.emptyArray;
     }
 
-    getLanguageService(): never {
+    override getLanguageService(): never {
         throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
     }
 
     /** @internal */
-    onAutoImportProviderSettingsChanged(): never {
+    override onAutoImportProviderSettingsChanged(): never {
         throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
     }
 
     /** @internal */
-    onPackageJsonChange(): never {
+    override onPackageJsonChange(): never {
         throw new Error("package.json changes should be notified on an AutoImportProvider's host project");
     }
 
-    getModuleResolutionHostForAutoImportProvider(): never {
+    override getModuleResolutionHostForAutoImportProvider(): never {
         throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
     }
 
-    getProjectReferences() {
+    override getProjectReferences() {
         return this.hostProject.getProjectReferences();
     }
 
     /** @internal */
-    includePackageJsonAutoImports() {
+    override includePackageJsonAutoImports() {
         return PackageJsonAutoImportPreference.Off;
     }
 
-    getTypeAcquisition(): TypeAcquisition {
+    override getTypeAcquisition(): TypeAcquisition {
         return { enable: false };
     }
 
     /** @internal */
-    getSymlinkCache() {
+    override getSymlinkCache() {
         return this.hostProject.getSymlinkCache();
     }
 
     /** @internal */
-    getModuleResolutionCache() {
+    override getModuleResolutionCache() {
         return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
     }
 }
@@ -2548,13 +2567,13 @@ export class ConfiguredProject extends Project {
      *
      * @internal
      */
-    potentialProjectReferences: Set<string> | undefined;
+    potentialProjectReferences: Set<NormalizedPath> | undefined;
 
     /** @internal */
     projectOptions?: ProjectOptions | true;
 
     /** @internal */
-    isInitialLoadPending: () => boolean = returnTrue;
+    override isInitialLoadPending: () => boolean = returnTrue;
 
     /** @internal */
     sendLoadingProjectFinish = false;
@@ -2593,12 +2612,12 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    useSourceOfProjectReferenceRedirect() {
+    override useSourceOfProjectReferenceRedirect() {
         return this.languageServiceEnabled;
     }
 
     /** @internal */
-    getParsedCommandLine(fileName: string) {
+    override getParsedCommandLine(fileName: string) {
         const configFileName = asNormalizedPath(normalizePath(fileName));
         const canonicalConfigFilePath = asNormalizedPath(this.projectService.toCanonicalFileName(configFileName));
         // Ensure the config file existience info is cached
@@ -2630,7 +2649,7 @@ export class ConfiguredProject extends Project {
      * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
      * @returns: true if set of files in the project stays the same and false - otherwise.
      */
-    updateGraph(): boolean {
+    override updateGraph(): boolean {
         const isInitialLoad = this.isInitialLoadPending();
         this.isInitialLoadPending = returnFalse;
         const reloadLevel = this.pendingReload;
@@ -2658,7 +2677,7 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    getCachedDirectoryStructureHost() {
+    override getCachedDirectoryStructureHost() {
         return this.directoryStructureHost as CachedDirectoryStructureHost;
     }
 
@@ -2666,7 +2685,7 @@ export class ConfiguredProject extends Project {
         return asNormalizedPath(this.getProjectName());
     }
 
-    getProjectReferences(): readonly ProjectReference[] | undefined {
+    override getProjectReferences(): readonly ProjectReference[] | undefined {
         return this.projectReferences;
     }
 
@@ -2682,7 +2701,7 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined {
+    override getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined {
         const program = this.getCurrentProgram();
         return program && program.getResolvedProjectReferenceToRedirect(fileName);
     }
@@ -2724,22 +2743,22 @@ export class ConfiguredProject extends Project {
     /**
      * Get the errors that dont have any file name associated
      */
-    getGlobalProjectErrors(): readonly Diagnostic[] {
+    override getGlobalProjectErrors(): readonly Diagnostic[] {
         return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
     }
 
     /**
      * Get all the project errors
      */
-    getAllProjectErrors(): readonly Diagnostic[] {
+    override getAllProjectErrors(): readonly Diagnostic[] {
         return this.projectErrors || emptyArray;
     }
 
-    setProjectErrors(projectErrors: Diagnostic[]) {
+    override setProjectErrors(projectErrors: Diagnostic[]) {
         this.projectErrors = projectErrors;
     }
 
-    close() {
+    override close() {
         this.projectService.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) =>
             this.releaseParsedConfig(canonicalConfigFilePath));
         this.projectErrors = undefined;
@@ -2827,7 +2846,7 @@ export class ConfiguredProject extends Project {
     }
 
     getEffectiveTypeRoots() {
-        return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
+        return getEffectiveTypeRoots(this.getCompilationSettings(), this) || [];
     }
 
     /** @internal */
@@ -2848,7 +2867,7 @@ export class ExternalProject extends Project {
         documentRegistry: DocumentRegistry,
         compilerOptions: CompilerOptions,
         lastFileExceededProgramSize: string | undefined,
-        public compileOnSaveEnabled: boolean,
+        public override compileOnSaveEnabled: boolean,
         projectFilePath?: string,
         pluginConfigOverrides?: Map<string, any>,
         watchOptions?: WatchOptions) {
@@ -2866,13 +2885,13 @@ export class ExternalProject extends Project {
         this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
     }
 
-    updateGraph() {
+    override updateGraph() {
         const result = super.updateGraph();
         this.projectService.sendProjectTelemetry(this);
         return result;
     }
 
-    getExcludedFiles() {
+    override getExcludedFiles() {
         return this.excludedFiles;
     }
 }
