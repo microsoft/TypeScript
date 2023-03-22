@@ -656,7 +656,7 @@ function getClassificationTypeName(type: ClassificationType): ClassificationType
         case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
         case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
         case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
-        default: return undefined!; // TODO: GH#18217 throw Debug.assertNever(type);
+        default: return undefined!; // TODO: GH#18217 Debug.assertNever(type);
     }
 }
 

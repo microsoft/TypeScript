@@ -1,5 +1,6 @@
+// === findAllReferences ===
 // === /foo/types/types.ts ===
-// export type /*FIND ALL REFS*/[|Full|] = { prop: string; };
+// <|export type /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Full|] = { prop: string; };|>
 
 // === /app.ts ===
 // import { foo } from './foo/types';
@@ -7,127 +8,91 @@
 // type namespaceImport = typeof import('./foo/types');
 // type fullType2 = import('./foo/types').foo.[|Full|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/types.ts",
-      "kind": "type",
-      "name": "type Full = {\n    prop: string;\n}",
-      "textSpan": {
-        "start": 12,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Full",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prop",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 37
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 4
-        },
-        "fileName": "/foo/types/types.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 37
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 62,
-          "length": 4
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 164,
-          "length": 4
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /foo/types/types.ts ===
+  // <|export type /*FIND ALL REFS*/[|Full|] = { prop: string; };|>
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Full = {\n    prop: string;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Full",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "prop",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /foo/types/types.ts ===
-// export type [|Full|] = { prop: string; };
+// <|export type [|{| isWriteAccess: true |}Full|] = { prop: string; };|>
 
 // === /app.ts ===
 // import { foo } from './foo/types';
@@ -135,124 +100,91 @@
 // type namespaceImport = typeof import('./foo/types');
 // type fullType2 = import('./foo/types').foo.[|Full|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/types.ts",
-      "kind": "type",
-      "name": "type Full = {\n    prop: string;\n}",
-      "textSpan": {
-        "start": 12,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Full",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prop",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 37
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 4
-        },
-        "fileName": "/foo/types/types.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 37
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 62,
-          "length": 4
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 164,
-          "length": 4
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /foo/types/types.ts ===
+  // <|export type [|Full|] = { prop: string; };|>
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Full = {\n    prop: string;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Full",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "prop",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /foo/types/types.ts ===
-// export type [|Full|] = { prop: string; };
+// <|export type [|{| isWriteAccess: true |}Full|] = { prop: string; };|>
 
 // === /app.ts ===
 // import { foo } from './foo/types';
@@ -260,953 +192,699 @@
 // type namespaceImport = typeof import('./foo/types');
 // type fullType2 = import('./foo/types').foo./*FIND ALL REFS*/[|Full|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/types.ts",
-      "kind": "type",
-      "name": "type Full = {\n    prop: string;\n}",
-      "textSpan": {
-        "start": 12,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Full",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prop",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 37
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 4
-        },
-        "fileName": "/foo/types/types.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 37
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 62,
-          "length": 4
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 164,
-          "length": 4
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /foo/types/types.ts ===
+  // <|export type [|Full|] = { prop: string; };|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Full = {\n    prop: string;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Full",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "prop",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo/types/index.ts ===
+// <|import * as /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|] from './types';|>
+// <|export { [|{| defId: 0, isWriteAccess: true |}foo|] };|>
 
 // === /app.ts ===
-// import { [|foo|] } from './foo/types';
-// export type fullType = [|foo|].Full;
+// <|import { [|{| defId: 2, isWriteAccess: true |}foo|] } from './foo/types';|>
+// export type fullType = [|{| defId: 2 |}foo|].Full;
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types').[|foo|].Full;
+// type fullType2 = import('./foo/types').[|{| defId: 1 |}foo|].Full;
 
+  // === Definitions ===
+  // === /foo/types/index.ts ===
+  // <|import * as /*FIND ALL REFS*/[|{| defId: 0 |}foo|] from './types';|>
+  // <|export { [|{| defId: 1 |}foo|] };|>
+
+  // === /app.ts ===
+  // <|import { [|{| defId: 2 |}foo|] } from './foo/types';|>
+  // export type fullType = foo.Full;
+  // type namespaceImport = typeof import('./foo/types');
+  // type fullType2 = import('./foo/types').foo.Full;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /foo/types/index.ts ===
-// import * as /*FIND ALL REFS*/[|foo|] from './types';
-// export { [|foo|] };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 15
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "export foo",
-      "textSpan": {
-        "start": 41,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 160,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/app.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// <|import * as [|{| defId: 0, isWriteAccess: true |}foo|] from './types';|>
+// <|export { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|] };|>
 
 // === /app.ts ===
-// import { [|foo|] } from './foo/types';
-// export type fullType = [|foo|].Full;
+// <|import { [|{| defId: 2, isWriteAccess: true |}foo|] } from './foo/types';|>
+// export type fullType = [|{| defId: 2 |}foo|].Full;
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types').[|foo|].Full;
+// type fullType2 = import('./foo/types').[|{| defId: 1 |}foo|].Full;
+
+  // === Definitions ===
+  // === /foo/types/index.ts ===
+  // <|import * as [|{| defId: 0 |}foo|] from './types';|>
+  // <|export { /*FIND ALL REFS*/[|{| defId: 1 |}foo|] };|>
+
+  // === /app.ts ===
+  // <|import { [|{| defId: 2 |}foo|] } from './foo/types';|>
+  // export type fullType = foo.Full;
+  // type namespaceImport = typeof import('./foo/types');
+  // type fullType2 = import('./foo/types').foo.Full;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|] } from './foo/types';|>
+// export type fullType = [|{| defId: 0 |}foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|{| defId: 2 |}foo|].Full;
 
 // === /foo/types/index.ts ===
-// import * as [|foo|] from './types';
-// export { /*FIND ALL REFS*/[|foo|] };
+// <|import * as [|{| defId: 1, isWriteAccess: true |}foo|] from './types';|>
+// <|export { [|{| defId: 1, isWriteAccess: true |}foo|] };|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 15
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /app.ts ===
+  // <|import { /*FIND ALL REFS*/[|{| defId: 0 |}foo|] } from './foo/types';|>
+  // export type fullType = foo.Full;
+  // type namespaceImport = typeof import('./foo/types');
+  // type fullType2 = import('./foo/types').foo.Full;
+
+  // === /foo/types/index.ts ===
+  // <|import * as [|{| defId: 1 |}foo|] from './types';|>
+  // <|export { [|{| defId: 2 |}foo|] };|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "export foo",
-      "textSpan": {
-        "start": 41,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 160,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/app.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// <|import { [|{| defId: 0, isWriteAccess: true |}foo|] } from './foo/types';|>
+// export type fullType = /*FIND ALL REFS*/[|{| defId: 0 |}foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|{| defId: 2 |}foo|].Full;
+
+// === /foo/types/index.ts ===
+// <|import * as [|{| defId: 1, isWriteAccess: true |}foo|] from './types';|>
+// <|export { [|{| defId: 1, isWriteAccess: true |}foo|] };|>
+
+  // === Definitions ===
+  // === /app.ts ===
+  // <|import { [|{| defId: 0 |}foo|] } from './foo/types';|>
+  // export type fullType = /*FIND ALL REFS*/foo.Full;
+  // type namespaceImport = typeof import('./foo/types');
+  // type fullType2 = import('./foo/types').foo.Full;
+
+  // === /foo/types/index.ts ===
+  // <|import * as [|{| defId: 1 |}foo|] from './types';|>
+  // <|export { [|{| defId: 2 |}foo|] };|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo/types/index.ts ===
+// <|import * as [|{| defId: 0, isWriteAccess: true |}foo|] from './types';|>
+// <|export { [|{| defId: 0, isWriteAccess: true |}foo|] };|>
 
 // === /app.ts ===
-// import { /*FIND ALL REFS*/[|foo|] } from './foo/types';
-// export type fullType = [|foo|].Full;
+// <|import { [|{| defId: 2, isWriteAccess: true |}foo|] } from './foo/types';|>
+// export type fullType = [|{| defId: 2 |}foo|].Full;
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types').[|foo|].Full;
+// type fullType2 = import('./foo/types')./*FIND ALL REFS*/[|{| defId: 1 |}foo|].Full;
 
-// === /foo/types/index.ts ===
-// import * as [|foo|] from './types';
-// export { [|foo|] };
+  // === Definitions ===
+  // === /foo/types/index.ts ===
+  // <|import * as [|{| defId: 0 |}foo|] from './types';|>
+  // <|export { [|{| defId: 1 |}foo|] };|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/app.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === /app.ts ===
+  // <|import { [|{| defId: 2 |}foo|] } from './foo/types';|>
+  // export type fullType = foo.Full;
+  // type namespaceImport = typeof import('./foo/types');
+  // type fullType2 = import('./foo/types')./*FIND ALL REFS*/foo.Full;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 15
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "export foo",
-      "textSpan": {
-        "start": 41,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 160,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /foo/types/types.ts ===
+// <|export type /*RENAME*/[|FullRENAME|] = { prop: string; };|>
 
 // === /app.ts ===
-// import { [|foo|] } from './foo/types';
-// export type fullType = /*FIND ALL REFS*/[|foo|].Full;
+// import { foo } from './foo/types';
+// export type fullType = foo.[|FullRENAME|];
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types').[|foo|].Full;
+// type fullType2 = import('./foo/types').foo.[|FullRENAME|];
 
-// === /foo/types/index.ts ===
-// import * as [|foo|] from './types';
-// export { [|foo|] };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/app.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 34
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 15
-        },
-        "isWriteAccess": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "export foo",
-      "textSpan": {
-        "start": 41,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 160,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+
+// === findRenameLocations ===
+// === /foo/types/types.ts ===
+// <|export type [|FullRENAME|] = { prop: string; };|>
 
 // === /app.ts ===
-// import { [|foo|] } from './foo/types';
-// export type fullType = [|foo|].Full;
+// import { foo } from './foo/types';
+// export type fullType = foo./*RENAME*/[|FullRENAME|];
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types')./*FIND ALL REFS*/[|foo|].Full;
+// type fullType2 = import('./foo/types').foo.[|FullRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /foo/types/types.ts ===
+// <|export type [|FullRENAME|] = { prop: string; };|>
+
+// === /app.ts ===
+// import { foo } from './foo/types';
+// export type fullType = foo.[|FullRENAME|];
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').foo./*RENAME*/[|FullRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /foo/types/index.ts ===
+// <|import * as /*RENAME*/[|fooRENAME|] from './types';|>
+// <|export { [|fooRENAME|] as foo/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /foo/types/index.ts ===
+// import * as foo from './types';
+// <|export { /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|] };|>
+
+// === /app.ts ===
+// <|import { [|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
+
+
+
+// === findRenameLocations ===
+// === /foo/types/index.ts ===
+// import * as foo from './types';
+// <|export { /*START PREFIX*/foo as [|fooRENAME|] };|>
+
+// === /app.ts ===
+// <|import { [|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types')./*RENAME*/[|fooRENAME|].Full;
+
+
+
+// === findRenameLocations ===
+// === /app.ts ===
+// <|import { /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').foo.Full;
+
+
+
+// === findRenameLocations ===
+// === /app.ts ===
+// <|import { /*START PREFIX*/foo as [|fooRENAME|] } from './foo/types';|>
+// export type fullType = /*RENAME*/[|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').foo.Full;
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /app.ts ===
+// <|import { /*RENAME*/[|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
 
 // === /foo/types/index.ts ===
-// import * as [|foo|] from './types';
-// export { [|foo|] };
+// <|import * as [|fooRENAME|] from './types';|>
+// <|export { [|fooRENAME|] };|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 3
-        },
-        "fileName": "/foo/types/index.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 15
-        },
-        "isWriteAccess": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo/types/index.ts",
-      "kind": "alias",
-      "name": "export foo",
-      "textSpan": {
-        "start": 41,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 160,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/app.ts",
-      "kind": "alias",
-      "name": "import foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 34
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 3
-        },
-        "fileName": "/app.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /app.ts ===
+// <|import { [|fooRENAME|] } from './foo/types';|>
+// export type fullType = /*RENAME*/[|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
+
+// === /foo/types/index.ts ===
+// <|import * as [|fooRENAME|] from './types';|>
+// <|export { [|fooRENAME|] };|>
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /foo/types/index.ts ===
+// <|import * as [|fooRENAME|] from './types';|>
+// <|export { [|fooRENAME|] };|>
+
+// === /app.ts ===
+// <|import { [|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types')./*RENAME*/[|fooRENAME|].Full;
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /foo/types/index.ts ===
+// <|import * as /*RENAME*/[|fooRENAME|] from './types';|>
+// <|export { [|fooRENAME|] };|>
+
+// === /app.ts ===
+// <|import { [|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /foo/types/index.ts ===
+// <|import * as [|fooRENAME|] from './types';|>
+// <|export { /*RENAME*/[|fooRENAME|] };|>
+
+// === /app.ts ===
+// <|import { [|fooRENAME|] } from './foo/types';|>
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
