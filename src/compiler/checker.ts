@@ -34306,20 +34306,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression, checkMode: CheckMode | undefined) {
-        let type: TypeNode;
-        let expression: Expression;
-        switch (node.kind) {
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.TypeAssertionExpression:
-                type = node.type;
-                expression = node.expression;
-                break;
-            case SyntaxKind.ParenthesizedExpression:
-                type = getJSDocTypeAssertionType(node);
-                expression = node.expression;
-                break;
-        }
-
+        const { type, expression } = getAssertionTypeAndExpression(node);
         const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
@@ -34332,23 +34319,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTypeFromTypeNode(type);
     }
 
-    function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
+    function getAssertionTypeAndExpression(node: JSDocTypeAssertion | AssertionExpression) {
         let type: TypeNode;
         let expression: Expression;
-        let errNode: Node;
         switch (node.kind) {
             case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
                 type = node.type;
                 expression = node.expression;
-                errNode = node;
                 break;
             case SyntaxKind.ParenthesizedExpression:
                 type = getJSDocTypeAssertionType(node);
                 expression = node.expression;
-                errNode = type;
                 break;
         }
+
+        return { type, expression };
+    }
+
+    function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
+        const { type, expression } = getAssertionTypeAndExpression(node);
+        const errNode = isParenthesizedExpression(node) ? type : node;
         const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression)));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
