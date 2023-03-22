@@ -10015,10 +10015,7 @@ declare namespace ts {
         readonly newText: string;
     }
     interface JsxLinkedEditInfo {
-        readonly ranges: {
-            start: number;
-            end: number;
-        }[];
+        readonly ranges: TextSpan[];
         wordPattern?: string;
     }
     interface CombinedCodeFixScope {

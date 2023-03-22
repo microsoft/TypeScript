@@ -2500,7 +2500,7 @@ export function createLanguageService(
             // only allows mirroring right after opening bracket: <| ></| >
             if ((position !== openPos) && (position !== closePos)) return undefined;
 
-            const ranges = [{ start: openPos, end: openPos }, { start: closePos, end: closePos }];
+            const ranges = [{ start: openPos, length: 0 }, { start: closePos, length: 0 }];
             const wordPattern = undefined;
             return { ranges, wordPattern };
         }
@@ -2530,7 +2530,7 @@ export function createLanguageService(
             if (!(openTag.start <= position && position <= openTag.end || endTag.start <= position && position <= endTag.end)) return undefined;
             if (element.parent.openingElement.tagName.getText(sourceFile) !== element.parent.closingElement.tagName.getText(sourceFile)) return undefined;
 
-            const ranges = [openTag, endTag];
+            const ranges = [{ start: openTag.start, length: openTag.end - openTag.start }, { start: endTag.start, length: endTag.end - endTag.start }];
             const wordPattern = element.tagName.getText(sourceFile);
             return { ranges, wordPattern };
         }
