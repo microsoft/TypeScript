@@ -2453,10 +2453,8 @@ export function isPartOfTypeNode(node: Node): boolean {
                     return node === (parent as TypeAssertion).type;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return contains((parent as CallExpression).typeArguments, node);
                 case SyntaxKind.TaggedTemplateExpression:
-                    // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
-                    return false;
+                    return contains((parent as CallExpression | TaggedTemplateExpression).typeArguments, node);
             }
         }
     }
