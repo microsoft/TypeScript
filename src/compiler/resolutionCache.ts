@@ -1197,12 +1197,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function canWatchTypeRootPath(nodeTypesDirectory: string) {
+    function canWatchTypeRootPath(typeRoot: string) {
         // If type roots is specified, watch that path
         return !!resolutionHost.getCompilationSettings().typeRoots ||
             // Otherwise we'll only watch this path if it falls within `rootDir` or
             // the path is not disqualified by other criteria ("not `C:\Users\Name\Dir`").
-            isInRootPathOrCanWatchDirectoryOrFile(getDirectoryPath(nodeTypesDirectory));
+            isInRootPathOrCanWatchDirectoryOrFile(getDirectoryPath(typeRoot));
     }
 }
 
