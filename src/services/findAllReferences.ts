@@ -27,9 +27,9 @@ import {
     emptyArray,
     emptyOptions,
     escapeLeadingUnderscores,
-    externalHelpersModuleNameText,
     ExportSpecifier,
     Expression,
+    externalHelpersModuleNameText,
     FileIncludeReason,
     FileReference,
     filter,
@@ -1131,7 +1131,7 @@ export namespace Core {
                 return nodeEntry(reference.literal);
             }
             else if (reference.kind === "implicit") {
-                // Return either: The first JSX node in the  (if not a tslib import), the first statement of the file, or the whole file if neither of those exist
+                // Return either: The first JSX node in the (if not a tslib import), the first statement of the file, or the whole file if neither of those exist
                 const range = reference.literal.text !== externalHelpersModuleNameText && forEachChildRecursively(
                     reference.referencingFile,
                     n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined
