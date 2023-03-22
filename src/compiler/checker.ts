@@ -19418,7 +19418,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let reportedError = false;
         for (const value of iterator) {
             const { errorNode: prop, innerExpression: next, nameType, errorMessage } = value;
-
             let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
             if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
             let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
@@ -19558,8 +19557,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
         const len = length(node.properties);
         if (!len) return;
-        for (let i = len - 1; i >= 0; i--) {
-            const prop = node.properties[i];
+        for (const prop of node.properties) {
             if (isJsxSpreadAttribute(prop)) {
                 yield *generateSpreadProperties(prop);
                 continue;
@@ -19743,9 +19741,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
         const len = length(node.properties);
         if (!len) return;
-        for (let i = len - 1; i >= 0; i--) {
-            const prop = node.properties[i];
-
+        for (const prop of node.properties) {
             if (isSpreadAssignment(prop)) {
                 yield *generateSpreadProperties(prop);
                 continue;
