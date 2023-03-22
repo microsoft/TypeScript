@@ -42,6 +42,7 @@ import {
     getNodeId,
     getOriginalNode,
     insertStatementsAfterStandardPrologue,
+    isAwaitKeyword,
     isBlock,
     isConciseBody,
     isEffectiveStrictModeSourceFile,
@@ -51,13 +52,13 @@ import {
     isFunctionLike,
     isFunctionLikeDeclaration,
     isIdentifier,
+    isModifier,
     isModifierLike,
     isNodeWithPossibleHoistedDeclaration,
     isOmittedExpression,
     isPropertyAccessExpression,
     isStatement,
     isSuperProperty,
-    isToken,
     isVariableDeclarationList,
     LeftHandSideExpression,
     map,
@@ -202,7 +203,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
             return node;
         }
@@ -253,7 +254,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function asyncBodyVisitor(node: Node): VisitResult<Node> {
+    function asyncBodyVisitor(node: Node): VisitResult<Node | undefined> {
         if (isNodeWithPossibleHoistedDeclaration(node)) {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
@@ -325,8 +326,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node,
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
+                : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
@@ -334,11 +335,11 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitForOfStatementInAsyncBody(node: ForOfStatement) {
         return factory.updateForOfStatement(
             node,
-            visitNode(node.awaitModifier, visitor, isToken),
+            visitNode(node.awaitModifier, visitor, isAwaitKeyword),
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
+                : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
@@ -383,7 +384,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitConstructorDeclaration(node: ConstructorDeclaration) {
         return factory.updateConstructorDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            visitNodes(node.modifiers, visitor, isModifier),
             visitParameterList(node.parameters, visitor, context),
             transformMethodBody(node)
         );
@@ -468,7 +469,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitFunctionExpression(node: FunctionExpression): Expression {
         return factory.updateFunctionExpression(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            visitNodes(node.modifiers, visitor, isModifier),
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
@@ -491,7 +492,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitArrowFunction(node: ArrowFunction) {
         return factory.updateArrowFunction(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            visitNodes(node.modifiers, visitor, isModifier),
             /*typeParameters*/ undefined,
             visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
@@ -561,7 +562,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             ),
             node
         );
-        return visitNode(converted, visitor, isExpression);
+        return Debug.checkDefined(visitNode(converted, visitor, isExpression));
     }
 
     function collidesWithParameterName({ name }: VariableDeclaration | BindingElement): boolean {
@@ -728,7 +729,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             return factory.updateBlock(body, visitNodes(body.statements, asyncBodyVisitor, isStatement, start));
         }
         else {
-            return factory.converters.convertToFunctionBlock(visitNode(body, asyncBodyVisitor, isConciseBody));
+            return factory.converters.convertToFunctionBlock(Debug.checkDefined(visitNode(body, asyncBodyVisitor, isConciseBody)));
         }
     }
 

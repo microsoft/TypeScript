@@ -3,7 +3,7 @@ enum TopLevelEnum {
 >TopLevelEnum : TopLevelEnum
 
     ThisWasAllowedButShouldNotBe = this // Should not be allowed
->ThisWasAllowedButShouldNotBe : TopLevelEnum
+>ThisWasAllowedButShouldNotBe : TopLevelEnum.ThisWasAllowedButShouldNotBe
 >this : any
 }
 
@@ -14,7 +14,7 @@ module ModuleEnum {
 >EnumInModule : EnumInModule
 
         WasADifferentError = this // this was handled as if this was in a module
->WasADifferentError : EnumInModule
+>WasADifferentError : EnumInModule.WasADifferentError
 >this : any
     }
 }

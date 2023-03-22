@@ -1,3 +1,6 @@
+/// <reference lib="decorators" />
+/// <reference lib="decorators.legacy" />
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -1120,13 +1123,6 @@ interface JSON {
     /**
      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
      * @param value A JavaScript value, usually an object or array, to be converted.
-     * @param replacer An array of strings and numbers that acts as an approved list for selecting the object properties that will be stringified.
-     * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
-     */
-    stringify(value: Function | Symbol | undefined, replacer?: (number | string)[] | null, space?: string | number): undefined;
-    /**
-     * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
-     * @param value A JavaScript value, usually an object or array, to be converted.
      * @param replacer A function that transforms the results.
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
      */
@@ -1489,11 +1485,6 @@ interface TypedPropertyDescriptor<T> {
     get?: () => T;
     set?: (value: T) => void;
 }
-
-declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
-declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
-declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
 declare type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
@@ -1858,10 +1849,10 @@ interface Int8Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2140,10 +2131,10 @@ interface Uint8Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2422,10 +2413,10 @@ interface Uint8ClampedArray {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2703,10 +2694,10 @@ interface Int16Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2985,10 +2976,10 @@ interface Uint16Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3267,10 +3258,10 @@ interface Int32Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3549,10 +3540,10 @@ interface Uint32Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3830,10 +3821,10 @@ interface Float32Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -4113,10 +4104,10 @@ interface Float64Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.

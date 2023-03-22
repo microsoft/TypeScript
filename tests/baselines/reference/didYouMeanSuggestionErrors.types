@@ -104,22 +104,18 @@ suite("another suite", () => {
         const i: Iterator<any> = null as any;
 >i : Iterator<any>
 >null as any : any
->null : null
 
         const j: AsyncIterator<any> = null as any;
 >j : AsyncIterator<any>
 >null as any : any
->null : null
 
         const k: Symbol = null as any;
 >k : Symbol
 >null as any : any
->null : null
 
         const l: Promise<any> = null as any;
 >l : Promise<any>
 >null as any : any
->null : null
 
     });
 });

@@ -19,6 +19,6 @@
     "Loading module as file / folder, candidate module location '/a/ts3.1/index', target file types: TypeScript, Declaration.",
     "File '/a/ts3.1/index.ts' does not exist.",
     "File '/a/ts3.1/index.tsx' does not exist.",
-    "File '/a/ts3.1/index.d.ts' exist - use it as a name resolution result.",
+    "File '/a/ts3.1/index.d.ts' exists - use it as a name resolution result.",
     "======== Module name 'a' was successfully resolved to '/a/ts3.1/index.d.ts'. ========"
 ]

@@ -1,7 +1,6 @@
 === tests/cases/compiler/objectCreate.ts ===
 declare var union: null | { a: number, b: string };
 >union : { a: number; b: string; } | null
->null : null
 >a : number
 >b : string
 
@@ -11,7 +10,6 @@ var n = Object.create(null);             // object
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
 
 var t = Object.create({ a: 1, b: "" });  // {a: number, b: string }
 >t : any
@@ -56,7 +54,6 @@ var a = Object.create(null, {});           // any
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
 >{} : {}
 
 var a = Object.create({ a: 1, b: "" }, {});

@@ -204,7 +204,6 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     punctuationPart,
-    Push,
     rangeIsOnSingleLine,
     ReferencedSymbol,
     ReferencedSymbolDefinitionInfo,
@@ -1392,7 +1391,7 @@ export namespace Core {
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
-            private readonly result: Push<SymbolAndEntries>) {
+            private readonly result: SymbolAndEntries[]) {
         }
 
         includesSourceFile(sourceFile: SourceFile): boolean {
@@ -1952,8 +1951,8 @@ export namespace Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences) {
-            const isDefaultExport = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword
-                || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
+            const isDefaultExport = referenceLocation.escapedText === "default"
+                || exportSpecifier.name.escapedText === "default";
             const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.checkDefined(exportSpecifier.symbol);
             const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);

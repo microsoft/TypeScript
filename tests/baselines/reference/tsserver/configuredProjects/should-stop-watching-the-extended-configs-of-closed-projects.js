@@ -25,12 +25,6 @@ let dummy = 1;
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:36.000] Search path: /user/username/projects/myproject/a
 Info 2    [00:00:37.000] For info: /user/username/projects/myproject/a/a.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 3    [00:00:38.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
@@ -53,7 +47,7 @@ Info 12   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 13   [00:00:48.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:49.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info 15   [00:00:50.000] 	Files (1)
-	/user/username/projects/myproject/a/a.ts
+	/user/username/projects/myproject/a/a.ts SVC-1-0 "let a = 1;"
 
 
 	a.ts
@@ -89,7 +83,7 @@ Info 28   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 29   [00:01:10.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:01:11.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 Info 31   [00:01:12.000] 	Files (1)
-	/user/username/projects/myproject/b/b.ts
+	/user/username/projects/myproject/b/b.ts SVC-1-0 "let b = 1;"
 
 
 	b.ts
@@ -132,7 +126,7 @@ Info 45   [00:01:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 46   [00:01:38.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dummy/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 47   [00:01:39.000] Project '/user/username/projects/myproject/dummy/tsconfig.json' (Configured)
 Info 48   [00:01:40.000] 	Files (1)
-	/user/username/projects/myproject/dummy/dummy.ts
+	/user/username/projects/myproject/dummy/dummy.ts SVC-1-0 "let dummy = 1;"
 
 
 	dummy.ts

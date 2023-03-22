@@ -173,6 +173,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function foo0() {
     var a = x;
     var x;
@@ -238,6 +242,7 @@ function foo9() {
             }
             return class_2;
         }()),
+        __setFunctionName(_a, "y"),
         _a.a = x,
         _a);
     var x;
@@ -259,6 +264,7 @@ function foo11() {
                 }
                 return class_3;
             }()),
+            __setFunctionName(_a, "y"),
             _a.a = x,
             _a);
     }
