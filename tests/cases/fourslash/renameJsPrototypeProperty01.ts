@@ -8,4 +8,4 @@
 ////var t = new bar();
 ////[|t.[|{| "contextRangeIndex": 2 |}x|] = 11;|]
 
-verify.rangesWithSameTextAreRenameLocations("x");
+verify.baselineRenameAtRangesWithText("x");

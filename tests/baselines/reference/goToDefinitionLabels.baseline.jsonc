@@ -1,0 +1,79 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionLabels.ts ===
+// [|label1|]: while (true) {
+//     label2: while (true) {
+//         break /*GOTO DEF*/label1;
+//         continue label2;
+//         () => { break label1; }
+//         continue unknownLabel;
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "label",
+    "name": "label1",
+    "isLocal": true,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionLabels.ts ===
+// label1: while (true) {
+//     [|label2|]: while (true) {
+//         break label1;
+//         continue /*GOTO DEF*/label2;
+//         () => { break label1; }
+//         continue unknownLabel;
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "label",
+    "name": "label2",
+    "isLocal": true,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionLabels.ts ===
+// [|label1|]: while (true) {
+//     label2: while (true) {
+//         break label1;
+//         continue label2;
+//         () => { break /*GOTO DEF*/label1; }
+//         continue unknownLabel;
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "label",
+    "name": "label1",
+    "isLocal": true,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionLabels.ts ===
+// label1: while (true) {
+//     label2: while (true) {
+//         break label1;
+//         continue label2;
+//         () => { break label1; }
+//         continue /*GOTO DEF*/unknownLabel;
+//     }
+// }

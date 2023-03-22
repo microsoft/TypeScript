@@ -25,17 +25,4 @@
 //// /** @see /*use5*/[|d|] dd*/
 //// const e = ""
 
-goTo.marker("use1");
-verify.goToDefinitionIs("def1");
-
-goTo.marker("use2");
-verify.goToDefinitionIs("def2");
-
-goTo.marker("use3");
-verify.goToDefinitionIs("def1");
-
-goTo.marker("use4");
-verify.goToDefinitionIs("def2");
-
-goTo.marker("use5");
-verify.goToDefinitionIs("def3");
+verify.baselineGetDefinitionAtPosition("use1", "use2", "use3", "use4", "use5");
