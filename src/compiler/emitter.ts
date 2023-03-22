@@ -829,8 +829,13 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             return;
         }
         const buildInfo = host.getBuildInfo(bundle) || createBuildInfo(/*program*/ undefined, bundle);
+        performance.mark("beforeBuildInfoStringify");
+        const buildInfoText = getBuildInfoText(buildInfo);
+        performance.mark("afterBuildInfoStringify");
+        performance.measure("BuildInfo stringify", "beforeBuildInfoStringify", "afterBuildInfoStringify");
+        host.buildInfoCallbacks?.onWrite(buildInfoText.length);
         // Pass buildinfo as additional data to avoid having to reparse
-        writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
+        writeFile(host, emitterDiagnostics, buildInfoPath, buildInfoText, /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
     }
 
     function emitJsFileOrBundle(
@@ -1229,7 +1234,7 @@ function emitUsingBuildInfoWorker(
 ): EmitUsingBuildInfoResult {
     const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
     // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
-    const buildInfo = host.getBuildInfo!(buildInfoPath!, config.options.configFilePath);
+    const buildInfo = host.getBuildInfo!(buildInfoPath!, config.options);
     if (!buildInfo) return buildInfoPath!;
     if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationFilePath && !buildInfo.bundle.dts)) return buildInfoPath!;
 
@@ -1330,6 +1335,7 @@ function emitUsingBuildInfoWorker(
         redirectTargetsMap: createMultiMap(),
         getFileIncludeReasons: notImplemented,
         createHash: maybeBind(host, host.createHash),
+        buildInfoCallbacks: host.buildInfoCallbacks,
     };
     emitFiles(
         notImplementedResolver,

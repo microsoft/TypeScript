@@ -5703,7 +5703,7 @@ declare namespace ts {
         /** If provided, use this method to get parsed command lines for referenced projects */
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /** If provided, callback to invoke after every new program creation */
-        afterProgramCreate?(program: T): void;
+        afterProgramCreate?(program: T, host?: CompilerHost): void;
     }
     /**
      * Host to create watch with root files and options
@@ -5792,7 +5792,7 @@ declare namespace ts {
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         reportDiagnostic: DiagnosticReporter;
         reportSolutionBuilderStatus: DiagnosticReporter;
-        afterProgramEmitAndDiagnostics?(program: T): void;
+        afterProgramEmitAndDiagnostics?(program: T, host?: CompilerHost): void;
     }
     interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
         reportErrorSummary?: ReportEmitErrorSummary;

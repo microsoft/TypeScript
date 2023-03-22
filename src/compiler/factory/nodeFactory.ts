@@ -7514,11 +7514,14 @@ export function createInputFilesWithFilePaths(
     const getAndCacheBuildInfo = () => {
         if (buildInfo === undefined && buildInfoPath) {
             if (host?.getBuildInfo) {
-                buildInfo = host.getBuildInfo(buildInfoPath, options!.configFilePath) ?? false;
+                buildInfo = host.getBuildInfo(buildInfoPath, options!) ?? false;
             }
             else {
+                host?.buildInfoCallbacks?.onReadStart(options);
                 const result = textGetter(buildInfoPath);
+                host?.buildInfoCallbacks?.onReadText(result);
                 buildInfo = result !== undefined ? getBuildInfo(buildInfoPath, result) ?? false : false;
+                host?.buildInfoCallbacks?.onReadEnd();
             }
         }
         return buildInfo || undefined;

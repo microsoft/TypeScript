@@ -7706,6 +7706,16 @@ export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
 /** @internal */
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
+/** @internal */
+export interface BuildInfoCallbacks {
+    onReadStart(compilerOptions: CompilerOptions | undefined): void;
+    onReadText(text: string | undefined): void;
+    onReadEnd(): void;
+    onWrite(size: number): void;
+    revertLastWrite(): void;
+    clearLastWrite(): void;
+}
+
 export interface CompilerHost extends ModuleResolutionHost {
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
     getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -7770,7 +7780,8 @@ export interface CompilerHost extends ModuleResolutionHost {
 
     // For testing:
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
-    /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+    /** @internal */ getBuildInfo?(fileName: string, options: CompilerOptions): BuildInfo | undefined;
+    /** @internal */ buildInfoCallbacks?: BuildInfoCallbacks;
 }
 
 /** true if --out otherwise source file name *
@@ -8091,6 +8102,7 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     getSourceFileFromReference: Program["getSourceFileFromReference"];
     readonly redirectTargetsMap: RedirectTargetsMap;
     createHash?(data: string): string;
+    buildInfoCallbacks: BuildInfoCallbacks | undefined;
 }
 
 /** @internal */
