@@ -659,3 +659,45 @@ branch({
   }
 })
 
+interface Props<T> {
+  a: (x: string) => T;
+>a : (x: string) => T
+>x : string
+
+  b: (arg: T) => void;
+>b : (arg: T) => void
+>arg : T
+}
+
+declare function Foo<T>(props: Props<T>): null;
+>Foo : <T>(props: Props<T>) => null
+>props : Props<T>
+
+Foo({
+>Foo({  ...{    a: (x) => 10,    b: (arg) => {      arg.toString();    },  },}) : null
+>Foo : <T>(props: Props<T>) => null
+>{  ...{    a: (x) => 10,    b: (arg) => {      arg.toString();    },  },} : { a: (x: string) => number; b: (arg: number) => void; }
+
+  ...{
+>{    a: (x) => 10,    b: (arg) => {      arg.toString();    },  } : { a: (x: string) => number; b: (arg: number) => void; }
+
+    a: (x) => 10,
+>a : (x: string) => number
+>(x) => 10 : (x: string) => number
+>x : string
+>10 : 10
+
+    b: (arg) => {
+>b : (arg: number) => void
+>(arg) => {      arg.toString();    } : (arg: number) => void
+>arg : number
+
+      arg.toString();
+>arg.toString() : string
+>arg.toString : (radix?: number | undefined) => string
+>arg : number
+>toString : (radix?: number | undefined) => string
+
+    },
+  },
+});
