@@ -1200,7 +1200,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function canWatchTypeRootPath(nodeTypesDirectory: string) {
         // If type roots is specified, watch that path
         return !!resolutionHost.getCompilationSettings().typeRoots ||
-            // Otherwise can watch directory only if its at rootDir or we can watch the node_modules directory
+            // Otherwise we'll only watch this path if it falls within `rootDir` or
+            // the path is not disqualified by other criteria ("not `C:\Users\Name\Dir`").
             isInRootPathOrCanWatchDirectoryOrFile(getDirectoryPath(nodeTypesDirectory));
     }
 }
