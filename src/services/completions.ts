@@ -165,6 +165,7 @@ import {
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
     isInString,
+    isInterfaceDeclaration,
     isIntersectionTypeNode,
     isJSDoc,
     isJSDocAugmentsTag,
@@ -1990,7 +1991,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
 
 function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
-    const quotedModuleSpecifier = quote(sourceFile, preferences, escapeSnippetText(origin.moduleSpecifier));
+    const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind =
         origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
@@ -4263,9 +4264,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/`.
-            && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {

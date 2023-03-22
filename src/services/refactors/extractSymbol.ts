@@ -1001,7 +1001,7 @@ function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration
         case SyntaxKind.SetAccessor:
             return `'set ${scope.name.getText()}'`;
         default:
-            throw Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
+            Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
     }
 }
 function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
