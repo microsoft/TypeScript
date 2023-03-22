@@ -19425,10 +19425,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!sourcePropType) continue;
             const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
             // Use the expression type, if available
-            let specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
-            if (isSpreadAssignment(prop) || isJsxSpreadAttribute(prop)) {
-                specificSource = getIndexedAccessTypeOrUndefined(specificSource, nameType)!;
-            }
+            const specificSource = next
+                ? isSpreadAssignment(prop) || isJsxSpreadAttribute(prop)
+                    ? getIndexedAccessType(checkExpressionForMutableLocation(next, CheckMode.Contextual), nameType)
+                    : checkExpressionForMutableLocationWithContextualType(next, sourcePropType)
+                : sourcePropType;
             if (!checkTypeRelatedTo(specificSource, targetPropType, relation, /*errorNode*/ undefined)) {
                 const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                 reportedError = true;
