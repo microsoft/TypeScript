@@ -86,7 +86,7 @@ tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(131,
     
     function* g204() { // Generator<number, void, any>
     	const x = f2(yield 1);
-    	             ~~~~~~~
+    	             ~~~~~
 !!! error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
     }
     

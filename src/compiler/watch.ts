@@ -22,6 +22,7 @@ import {
     CustomTransformers,
     Debug,
     Diagnostic,
+    DiagnosticAndArguments,
     DiagnosticCategory,
     DiagnosticMessage,
     DiagnosticMessageChain,
@@ -283,22 +284,18 @@ export function getErrorSummaryText(
 
     const firstFileReference = nonNilFiles[0] && prettyPathForFileError(nonNilFiles[0], host.getCurrentDirectory());
 
-    const d = errorCount === 1 ?
-        createCompilerDiagnostic(
-            filesInError[0] !== undefined ?
-                Diagnostics.Found_1_error_in_1 :
-                Diagnostics.Found_1_error,
-            errorCount,
-            firstFileReference) :
-        createCompilerDiagnostic(
-            distinctFileNamesWithLines.length === 0 ?
-                Diagnostics.Found_0_errors :
-                distinctFileNamesWithLines.length === 1 ?
-                    Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1 :
-                    Diagnostics.Found_0_errors_in_1_files,
-            errorCount,
-            distinctFileNamesWithLines.length === 1 ? firstFileReference : distinctFileNamesWithLines.length);
+    let messageAndArgs: DiagnosticAndArguments;
+    if (errorCount === 1) {
+        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!] : [Diagnostics.Found_1_error];
+    }
+    else {
+        messageAndArgs =
+            distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
+            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
+            [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
+    }
 
+    const d = createCompilerDiagnostic(...messageAndArgs);
     const suffix = distinctFileNamesWithLines.length > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : "";
     return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${suffix}`;
 }
@@ -489,7 +486,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             message,
             referenceText,
             toFileName(referenceLocation.file, fileNameConvertor),
-            referenceLocation.packageId && packageIdToString(referenceLocation.packageId)
+            (referenceLocation.packageId && packageIdToString(referenceLocation.packageId))!
         );
     }
     switch (reason.kind) {
@@ -527,29 +524,23 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                 toFileName(referencedResolvedRef.sourceFile.fileName, fileNameConvertor),
                 options.outFile ? "--outFile" : "--out",
             );
-        case FileIncludeKind.AutomaticTypeDirectiveFile:
-            return chainDiagnosticMessages(
-                /*details*/ undefined,
-                options.types ?
-                    reason.packageId ?
-                        Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1 :
-                        Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions :
-                    reason.packageId ?
-                        Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1 :
-                        Diagnostics.Entry_point_for_implicit_type_library_0,
-                reason.typeReference,
-                reason.packageId && packageIdToString(reason.packageId),
-            );
-        case FileIncludeKind.LibFile:
+        case FileIncludeKind.AutomaticTypeDirectiveFile: {
+            const messageAndArgs: DiagnosticAndArguments = options.types ?
+                reason.packageId ?
+                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
+                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :
+                reason.packageId ?
+                    [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
+                    [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
+
+            return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
+        }
+        case FileIncludeKind.LibFile: {
             if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
             const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
-            return chainDiagnosticMessages(
-                /*details*/ undefined,
-                target ?
-                    Diagnostics.Default_library_for_target_0 :
-                    Diagnostics.Default_library,
-                target,
-            );
+            const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target] : [Diagnostics.Default_library];
+            return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
+        }
         default:
             Debug.assertNever(reason);
     }

@@ -6,11 +6,9 @@ import {
 } from "../../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createProjectService,
-    createSessionWithEventTracking,
+    createSession,
 } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
@@ -36,30 +34,19 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         host.getFileSize = (filePath: string) =>
             filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
-        const { session, events } = createSessionWithEventTracking<ts.server.ProjectLanguageServiceStateEvent>(host, ts.server.ProjectLanguageServiceStateEvent);
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         session.executeCommand({
             seq: 0,
             type: "request",
             command: "open",
             arguments: { file: f1.path }
         } as ts.server.protocol.OpenRequest);
-        const projectService = session.getProjectService();
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        const project = configuredProjectAt(projectService, 0);
-        assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-        assert.equal(events.length, 1, "should receive event");
-        assert.equal(events[0].data.project, project, "project name");
-        assert.equal(events[0].data.project.getProjectName(), config.path, "config path");
-        assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
+        session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
 
         host.writeFile(configWithExclude.path, configWithExclude.content);
         host.checkTimeoutQueueLengthAndRun(2);
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        assert.isTrue(project.languageServiceEnabled, "Language service enabled");
-        assert.equal(events.length, 2, "should receive event");
-        assert.equal(events[1].data.project, project, "project");
-        assert.equal(events[1].data.project.getProjectName(), config.path, "config path");
-        assert.isTrue(events[1].data.languageServiceEnabled, "Language service state");
+        session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
+        baselineTsserverLogs("events/projectLanguageServiceState", "language service disabled events are triggered", session);
     });
 
     it("Large file size is determined correctly", () => {
@@ -87,6 +74,6 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         const project = service.configuredProjects.get(config.path)!;
         service.logger.info(`languageServiceEnabled: ${project.languageServiceEnabled}`);
         service.logger.info(`lastFileExceededProgramSize: ${project.lastFileExceededProgramSize}`);
-        baselineTsserverLogs("projectLanguageServiceStateEvent", "large file size is determined correctly", service);
+        baselineTsserverLogs("events/projectLanguageServiceState", "large file size is determined correctly", service);
     });
 });

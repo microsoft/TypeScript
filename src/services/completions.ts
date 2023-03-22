@@ -165,6 +165,7 @@ import {
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
     isInString,
+    isInterfaceDeclaration,
     isIntersectionTypeNode,
     isJSDoc,
     isJSDocAugmentsTag,
@@ -1990,7 +1991,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
 
 function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
-    const quotedModuleSpecifier = quote(sourceFile, preferences, escapeSnippetText(origin.moduleSpecifier));
+    const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind =
         origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
@@ -3005,8 +3006,7 @@ function getCompletionData(
 
         // Since this is qualified name check it's a type node location
         const isImportType = isLiteralImportTypeNode(node);
-        const isTypeLocation = insideJsDocTagTypeExpression
-            || (isImportType && !(node as ImportTypeNode).isTypeOf)
+        const isTypeLocation = (isImportType && !(node as ImportTypeNode).isTypeOf)
             || isPartOfTypeNode(node.parent)
             || isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
@@ -3029,7 +3029,7 @@ function getCompletionData(
                             : isRhsOfImportDeclaration ?
                                 // Any kind is allowed when dotting off namespace in internal import equals declaration
                                 symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
-                                isTypeLocation ? isValidTypeAccess : isValidValueAccess;
+                                isTypeLocation || insideJsDocTagTypeExpression ? isValidTypeAccess : isValidValueAccess;
                     for (const exportedSymbol of exportedSymbols) {
                         if (isValidAccess(exportedSymbol)) {
                             symbols.push(exportedSymbol);
@@ -3038,6 +3038,7 @@ function getCompletionData(
 
                     // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
                     if (!isTypeLocation &&
+                        !insideJsDocTagTypeExpression &&
                         symbol.declarations &&
                         symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                         let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
@@ -4263,9 +4264,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/`.
-            && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
@@ -4500,6 +4501,8 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+            case SyntaxKind.AsyncKeyword:
+                return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;

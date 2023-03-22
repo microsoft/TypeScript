@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     BuilderProgram,
     BuildInfo,
@@ -81,6 +80,7 @@ import {
     sys,
     System,
     toPath,
+    toPath as ts_toPath,
     updateErrorForNoInputFiles,
     updateMissingFilePathsWatch,
     updateSharedExtendedConfigFileWatcher,
@@ -672,7 +672,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function toPath(fileName: string) {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function isFileMissingOnHost(hostSourceFile: HostFileInfo | undefined): hostSourceFile is FileMissingOnHost {
@@ -843,19 +843,19 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     function updateProgram() {
         switch (reloadLevel) {
             case ConfigFileProgramReloadLevel.Partial:
-                perfLogger.logStartUpdateProgram("PartialConfigReload");
+                perfLogger?.logStartUpdateProgram("PartialConfigReload");
                 reloadFileNamesFromConfigFile();
                 break;
             case ConfigFileProgramReloadLevel.Full:
-                perfLogger.logStartUpdateProgram("FullConfigReload");
+                perfLogger?.logStartUpdateProgram("FullConfigReload");
                 reloadConfigFile();
                 break;
             default:
-                perfLogger.logStartUpdateProgram("SynchronizeProgram");
+                perfLogger?.logStartUpdateProgram("SynchronizeProgram");
                 synchronizeProgram();
                 break;
         }
-        perfLogger.logStopUpdateProgram("Done");
+        perfLogger?.logStopUpdateProgram("Done");
         return getCurrentBuilderProgram();
     }
 

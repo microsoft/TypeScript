@@ -25,11 +25,11 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
 !!! error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
 !!! related TS2728 tests/cases/compiler/typeMatch2.ts:2:18: 'y' is declared here.
     	a = { x: 1, y: 2, z: 3 };
-    	                  ~~~~
+    	                  ~
 !!! error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1, z: 3 };  // error
-                    ~~~~
+                    ~
 !!! error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
     }
@@ -68,7 +68,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
         a = { x: 1, y: undefined }; 
         a = { x: 1, y: _any }; 
         a = { x: 1, y: _any, z:1 }; 
-                             ~~~
+                             ~
 !!! error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1 }; // error

@@ -3,12 +3,10 @@
 
 type MyType = {} | null | undefined;
 >MyType : {} | null | undefined
->null : null
 
 const myVar: MyType = null as MyType;
 >myVar : MyType
 >null as MyType : MyType
->null : null
 
 myVar?.toLocaleString;
 >myVar?.toLocaleString : (() => string) | undefined

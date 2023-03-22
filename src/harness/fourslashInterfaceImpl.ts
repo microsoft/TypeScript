@@ -1071,6 +1071,7 @@ export namespace Completion {
         "string",
         "symbol",
         "true",
+        "typeof",
         "undefined",
         "unique",
         "unknown",

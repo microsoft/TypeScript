@@ -2,16 +2,13 @@
 // Repro from #20873
 
 let [] = null;
->null : null
 
 let { } = null;
->null : null
 
 ({} = null);
 >({} = null) : any
 >{} = null : any
 >{} : {}
->null : null
 
 let { } = undefined;
 >undefined : undefined
@@ -29,7 +26,6 @@ let { } = Math.random() ? {} : null;
 >Math : Math
 >random : () => number
 >{} : {}
->null : null
 
 ({} = Math.random() ? {} : null);
 >({} = Math.random() ? {} : null) : {}
@@ -41,7 +37,6 @@ let { } = Math.random() ? {} : null;
 >Math : Math
 >random : () => number
 >{} : {}
->null : null
 
 let { } = Math.random() ? {} : undefined;
 >Math.random() ? {} : undefined : {} | undefined
@@ -70,7 +65,6 @@ let { } = Math.random() ? null : undefined;
 >Math.random : () => number
 >Math : Math
 >random : () => number
->null : null
 >undefined : undefined
 
 ({} = Math.random() ? null : undefined);
@@ -82,6 +76,5 @@ let { } = Math.random() ? null : undefined;
 >Math.random : () => number
 >Math : Math
 >random : () => number
->null : null
 >undefined : undefined
 

@@ -38,7 +38,7 @@ export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
 export declare function doSomething_Actual<T extends {
     prop: string;
-}>(a: T): PartialProperties<T, "prop"> extends infer T_1 ? { [P in keyof T_1]: PartialProperties<T, "prop">[P]; } : never;
+}>(a: T): { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; };
 export declare function doSomething_Expected<T extends {
     prop: string;
 }>(a: T): {

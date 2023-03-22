@@ -1,9 +1,0 @@
-Exit Code: 2
-Standard output:
-test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: Type annotations can only be used in TypeScript files.
-test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1442: Expected '=' for property initializer.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(7,10): error TS17008: JSX element 'span' has no corresponding closing tag.
-
-
-
-Standard error:
