@@ -2497,13 +2497,15 @@ export function createLanguageService(
         if ((isJsxOpeningFragment(token.parent) && token.kind === SyntaxKind.LessThanToken)
             || (isJsxClosingFragment(token.parent) && token.kind === SyntaxKind.SlashToken)){
 
-            const openPos = token.parent.parent.openingFragment.pos + 1;
-            const closePos = token.parent.parent.closingFragment.pos + 2;
+            const openPos = token.parent.parent.openingFragment.getStart(sourceFile) + "<".length;
+            const closePos = token.parent.parent.closingFragment.getStart(sourceFile) + "</".length;
 
-            //TODO: fragments with whitespace?
-            ranges = ranges.concat({ start: openPos, end: openPos });
-            ranges = ranges.concat({ start: closePos, end: closePos });
+            // only allows mirroring right after opening bracket: <| ></| >
+            if ((position !== openPos) && (position !== closePos)) return undefined;
+
+            ranges = [{ start: openPos, end: openPos }, { start: closePos, end: closePos }];
             wordPattern = undefined;
+            return { ranges, wordPattern };
         }
         else if (isJsxFragment(token.parent.parent)) {
             return undefined;
