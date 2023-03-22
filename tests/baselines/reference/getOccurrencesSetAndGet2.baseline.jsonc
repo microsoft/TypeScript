@@ -1,0 +1,51 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSetAndGet2.ts ===
+// class Foo {
+//     set bar(b: any) {
+//     }
+// 
+//     public get bar(): any {
+//         return undefined;
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}set|] set(s: any) {
+//     }
+// 
+//     public [|{| kind: "none" |}get|] set(): any {
+//         return undefined;
+//     }
+// 
+//     public set get(g: any) {
+//     }
+// 
+//     public get get(): any {
+//         return undefined;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSetAndGet2.ts ===
+// class Foo {
+//     set bar(b: any) {
+//     }
+// 
+//     public get bar(): any {
+//         return undefined;
+//     }
+// 
+//     public [|{| kind: "none" |}set|] set(s: any) {
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}get|] set(): any {
+//         return undefined;
+//     }
+// 
+//     public set get(g: any) {
+//     }
+// 
+//     public get get(): any {
+//         return undefined;
+//     }
+// }
