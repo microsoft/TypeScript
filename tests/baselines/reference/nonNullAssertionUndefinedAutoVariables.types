@@ -1,0 +1,32 @@
+=== tests/cases/compiler/nonNullAssertionUndefinedAutoVariables.ts ===
+// repro from #52439
+
+
+//@ts-ignore
+let foo;
+>foo : any
+
+if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+  foo = "hello";
+>foo = "hello" : "hello"
+>foo : any
+>"hello" : "hello"
+}
+// bar: string | undefined
+let bar = foo;
+>bar : string | undefined
+>foo : string | undefined
+
+// baz: string
+let baz = foo!;
+>baz : string
+>foo! : string
+>foo : string | undefined
+

@@ -1,0 +1,26 @@
+=== tests/cases/compiler/nonNullAssertionUndefinedAutoVariables.ts ===
+// repro from #52439
+
+
+//@ts-ignore
+let foo;
+>foo : Symbol(foo, Decl(nonNullAssertionUndefinedAutoVariables.ts, 4, 3))
+
+if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  foo = "hello";
+>foo : Symbol(foo, Decl(nonNullAssertionUndefinedAutoVariables.ts, 4, 3))
+}
+// bar: string | undefined
+let bar = foo;
+>bar : Symbol(bar, Decl(nonNullAssertionUndefinedAutoVariables.ts, 9, 3))
+>foo : Symbol(foo, Decl(nonNullAssertionUndefinedAutoVariables.ts, 4, 3))
+
+// baz: string
+let baz = foo!;
+>baz : Symbol(baz, Decl(nonNullAssertionUndefinedAutoVariables.ts, 12, 3))
+>foo : Symbol(foo, Decl(nonNullAssertionUndefinedAutoVariables.ts, 4, 3))
+

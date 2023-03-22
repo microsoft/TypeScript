@@ -27942,7 +27942,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.parent.kind === SyntaxKind.NonNullExpression ||
             declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
             declaration.flags & NodeFlags.Ambient;
-        const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
+        const initialType = (assumeInitialized && !(type === autoType && node.parent.kind === SyntaxKind.NonNullExpression)) ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
             type === autoType || type === autoArrayType ? undefinedType :
             getOptionalType(type);
         const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer);
