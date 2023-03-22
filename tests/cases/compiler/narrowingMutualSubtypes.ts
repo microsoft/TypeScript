@@ -103,3 +103,41 @@ function example(x: Union) {
     if (is(x)) {}
     x;  // Union
 }
+
+function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
+    // "accidentally" guards the first branch on the length
+    if (Array.isArray(obj) && obj.length) {
+        for (let key in obj) {
+            if (obj[key] !== undefined) {
+                console.log(obj[key])
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+            if (obj[key] !== undefined) {
+                console.log(obj[key])
+            }
+        }
+    }
+}
+
+function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
+    if (Array.isArray(obj)) {
+        // obj should only be an array type here
+        for (let key in obj) {
+            if (obj[key] !== undefined) {
+                console.log(obj[key])
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+            if (obj[key] !== undefined) {
+                console.log(obj[key])
+            }
+        }
+    }
+}
