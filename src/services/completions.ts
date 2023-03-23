@@ -1529,11 +1529,11 @@ function getEntryForMemberCompletion(
         // if it has one, so that the cursor ends up in the body once the completion is inserted.
         // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
         const emptyStmt = factory.createEmptyStatement();
-        body = factory.createBlock([emptyStmt], /* multiline */ true);
+        body = factory.createBlock([emptyStmt], /*multiLine*/ true);
         setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
     }
     else {
-        body = factory.createBlock([], /* multiline */ true);
+        body = factory.createBlock([], /*multiLine*/ true);
     }
 
     let modifiers = ModifierFlags.None;
@@ -1762,11 +1762,11 @@ function createObjectLiteralMethod(
             let body;
             if (preferences.includeCompletionsWithSnippetText) {
                 const emptyStmt = factory.createEmptyStatement();
-                body = factory.createBlock([emptyStmt], /* multiline */ true);
+                body = factory.createBlock([emptyStmt], /*multiLine*/ true);
                 setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
             }
             else {
-                body = factory.createBlock([], /* multiline */ true);
+                body = factory.createBlock([], /*multiLine*/ true);
             }
 
             const parameters = typeNode.parameters.map(typedParam =>
@@ -3099,7 +3099,7 @@ function getCompletionData(
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                    addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
+                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                 }
             }
         }
@@ -3117,7 +3117,7 @@ function getCompletionData(
             if (promiseType) {
                 for (const symbol of promiseType.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                        addPropertySymbol(symbol, /* insertAwait */ true, insertQuestionDot);
+                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot);
                     }
                 }
             }
@@ -3822,7 +3822,7 @@ function getCompletionData(
                 const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(propertySymbol => {
-                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*writing*/ false, typeForObject, propertySymbol);
+                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*isWrite*/ false, typeForObject, propertySymbol);
                 });
                 existingMembers = objectLikeContainer.elements;
             }

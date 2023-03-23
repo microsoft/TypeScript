@@ -917,11 +917,11 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
         getterAndSetter.push(factory.createPropertyAssignment(
             "get",
             factory.createArrowFunction(
-                /* modifiers */ undefined,
-                /* typeParameters */ undefined,
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
                 /* parameters */[],
-                /* type */ undefined,
-                /* equalsGreaterThanToken */ undefined,
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
                 setEmitFlags(
                     factory.createPropertyAccessExpression(
                         setEmitFlags(
@@ -939,20 +939,20 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                 factory.createPropertyAssignment(
                     "set",
                     factory.createArrowFunction(
-                        /* modifiers */ undefined,
-                        /* typeParameters */ undefined,
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
                         /* parameters */[
                             factory.createParameterDeclaration(
-                                /* modifiers */ undefined,
-                                /* dotDotDotToken */ undefined,
+                                /*modifiers*/ undefined,
+                                /*dotDotDotToken*/ undefined,
                                 "v",
-                                /* questionToken */ undefined,
-                                /* type */ undefined,
-                                /* initializer */ undefined
+                                /*questionToken*/ undefined,
+                                /*type*/ undefined,
+                                /*initializer*/ undefined
                             )
                         ],
-                        /* type */ undefined,
-                        /* equalsGreaterThanToken */ undefined,
+                        /*type*/ undefined,
+                        /*equalsGreaterThanToken*/ undefined,
                         factory.createAssignment(
                             setEmitFlags(
                                 factory.createPropertyAccessExpression(
@@ -978,22 +978,22 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
         );
     });
     return factory.createVariableStatement(
-        /* modifiers */ undefined,
+        /*modifiers*/ undefined,
         factory.createVariableDeclarationList(
             [
                 factory.createVariableDeclaration(
                     factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                     /*exclamationToken*/ undefined,
-                    /* type */ undefined,
+                    /*type*/ undefined,
                     factory.createCallExpression(
                         factory.createPropertyAccessExpression(
                             factory.createIdentifier("Object"),
                             "create"
                         ),
-                        /* typeArguments */ undefined,
+                        /*typeArguments*/ undefined,
                         [
                             factory.createNull(),
-                            factory.createObjectLiteralExpression(accessors, /* multiline */ true)
+                            factory.createObjectLiteralExpression(accessors, /*multiLine*/ true)
                         ]
                     )
                 )

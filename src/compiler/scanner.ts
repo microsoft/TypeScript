@@ -1743,7 +1743,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     tokenValue = scanString();
                     return token = SyntaxKind.StringLiteral;
                 case CharacterCodes.backtick:
-                    return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
+                    return token = scanTemplateAndSetTokenValue(/*isTaggedTemplate*/ false);
                 case CharacterCodes.percent:
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -2314,7 +2314,7 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
         pos = tokenStart;
-        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
+        return token = scanTemplateAndSetTokenValue(/*isTaggedTemplate*/ true);
     }
 
     function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {

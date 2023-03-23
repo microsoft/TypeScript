@@ -905,7 +905,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             resolutions.forEach(watchFailedLookupLocationOfResolution);
         }
         else {
-            resolutions.forEach(resolution => watchAffectingLocationsOfResolution(resolution, /*addToResolutionWithOnlyAffectingLocations*/ true));
+            resolutions.forEach(resolution => watchAffectingLocationsOfResolution(resolution, /*addToResolutionsWithOnlyAffectingLocations*/ true));
         }
     }
 

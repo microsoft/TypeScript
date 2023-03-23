@@ -129,7 +129,7 @@ export class VerifyNegatable {
 
     constructor(protected state: FourSlash.TestState, private negative = false) {
         if (!negative) {
-            this.not = new VerifyNegatable(state, true);
+            this.not = new VerifyNegatable(state, /*negative*/ true);
         }
     }
 

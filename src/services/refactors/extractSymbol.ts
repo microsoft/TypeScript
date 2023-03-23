@@ -633,7 +633,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+            const container = getThisContainer(nodeToCheck, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
             if (
                 container.kind === SyntaxKind.FunctionDeclaration ||
                 (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
@@ -1317,7 +1317,7 @@ function extractFunctionInScope(
     const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
 
     const renameFilename = renameRange.getSourceFile().fileName;
-    const renameLocation = getRenameLocation(edits, renameFilename, functionNameText, /*isDeclaredBeforeUse*/ false);
+    const renameLocation = getRenameLocation(edits, renameFilename, functionNameText, /*preferLastLocation*/ false);
     return { renameFilename, renameLocation, edits };
 
     function getTypeDeepCloneUnionUndefined(typeNode: TypeNode | undefined): TypeNode | undefined {
@@ -1380,7 +1380,7 @@ function extractConstantInScope(
         const newVariable = factory.createPropertyDeclaration(
             modifiers,
             localNameText,
-            /*questionToken*/ undefined,
+            /*questionOrExclamationToken*/ undefined,
             variableType,
             initializer);
 
@@ -1461,7 +1461,7 @@ function extractConstantInScope(
     const edits = changeTracker.getChanges();
 
     const renameFilename = node.getSourceFile().fileName;
-    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
+    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*preferLastLocation*/ true);
     return { renameFilename, renameLocation, edits };
 
     function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
@@ -1513,10 +1513,10 @@ function extractConstantInScope(
                 if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
                     const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
                     parameters.splice(0, 0, factory.createParameterDeclaration(
-                        /* modifiers */ undefined,
-                        /* dotDotDotToken */ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
                         "this",
-                        /* questionToken */ undefined,
+                        /*questionToken*/ undefined,
                         checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
                     ));
                 }
@@ -1588,7 +1588,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
     if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is
-        return { body: factory.createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
+        return { body: factory.createBlock(body.statements, /*multiLine*/ true), returnValueProperty: undefined };
     }
     let returnValueProperty: string | undefined;
     let ignoreReturns = false;

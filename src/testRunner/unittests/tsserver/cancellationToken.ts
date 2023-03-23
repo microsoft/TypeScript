@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             isCancellationRequested: () => false,
             setRequest: requestId => {
                 if (expectedRequestId === undefined) {
-                    assert.isTrue(false, "unexpected call");
+                    assert.fail("unexpected call");
                 }
                 assert.equal(requestId, expectedRequestId);
             },
