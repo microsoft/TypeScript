@@ -45309,7 +45309,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             meaning |= SymbolFlags.Alias;
-            const entityNameSymbol = isEntityNameExpression(name) ? resolveEntityName(name, meaning) : undefined;
+            const entityNameSymbol = isEntityNameExpression(name) ? resolveEntityName(name, meaning, /*ignoreErrors*/ true) : undefined;
             if (entityNameSymbol) {
                 return entityNameSymbol;
             }
