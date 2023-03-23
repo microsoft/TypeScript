@@ -9,7 +9,6 @@
 //   </div>
 //);
 
-
 // @Filename: /typeTag.tsx
 ////const jsx = (
 ////   </*0*/div/*1*/</*2*/T/*3*/>/*4*/>/*5*/
@@ -19,8 +18,8 @@
 ////   </di/*6*/v>
 ////);
 
-const linkedCursors4 = {ranges: [{start: 18, end: 21}, 
-                            {start: 69, end: 72}],
+const linkedCursors4 = {ranges: [{start: 18, length: 3}, 
+                            {start: 69, length: 3}],
                         wordPattern : 'div'};
 
 verify.jsxLinkedEdit( {

@@ -9,8 +9,8 @@
 ////   /*7*/</div>
 ////);
 
-// const linkedCursors3 = {ranges: [{start: 18, end: 21}, 
-//                                  {start: 91, end: 94}],
+// const linkedCursors3 = {ranges: [{start: 18, length: 3}, 
+//                                  {start: 91,  length: 3}],
 //                         wordPattern : 'div'};
 
 verify.jsxLinkedEdit( {

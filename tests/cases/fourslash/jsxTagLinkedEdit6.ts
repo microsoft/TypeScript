@@ -6,8 +6,8 @@
 ////    </someNamespace/*1*/.Thing>
 ////);
 
-const linkedCursors6 = {ranges: [{start: 19, end: 38}, 
-                            {start: 46, end: 65}],
+const linkedCursors6 = {ranges: [{start: 19, length: 19}, 
+                            {start: 46,  length: 19}],
                         wordPattern : 'someNamespace.Thing'};
 
 verify.jsxLinkedEdit( {

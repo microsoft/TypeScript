@@ -37,12 +37,12 @@
 ////    </>
 ////);
 
-const linkedCursors7 = {ranges: [{start: 19, end: 19}, 
-                            {start: 43, end: 43}],
+const linkedCursors7 = {ranges: [{start: 19, length: 0}, 
+                            {start: 43, length: 0}],
                         wordPattern : undefined};
 
-const linkedCursors7jsx3 = {ranges: [{start: 122, end: 122}, 
-                            {start: 153, end: 153}],
+const linkedCursors7jsx3 = {ranges: [{start: 122, length: 0}, 
+                            {start: 153, length: 0}],
                         wordPattern : undefined};
 
 verify.jsxLinkedEdit({

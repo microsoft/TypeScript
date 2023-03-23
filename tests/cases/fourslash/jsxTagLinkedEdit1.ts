@@ -30,10 +30,8 @@
 ////   <//*15*/ /*16*/div/*17*/ /*18*/> /*19*/
 ////);
 
-
-
-const linkedCursors1 = {ranges: [{start: 19, end: 22}, 
-                                 {start: 30, end: 33}],
+const linkedCursors1 = {ranges: [{start: 19, length: 3}, 
+                                 {start: 30, length: 3}],
                         wordPattern : 'div'};
 
 verify.jsxLinkedEdit( {

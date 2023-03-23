@@ -7,8 +7,8 @@
 ////    </div/*6*/>
 ////);
 
-const linkedCursors5 = {ranges: [{start: 33, end: 36}, 
-                            {start: 44, end: 47}],
+const linkedCursors5 = {ranges: [{start: 33, length: 3}, 
+                            {start: 44, length: 3}],
                         wordPattern : 'div'};
 
 verify.jsxLinkedEdit( {

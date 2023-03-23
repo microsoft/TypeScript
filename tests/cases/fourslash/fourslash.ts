@@ -261,7 +261,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         jsxLinkedEdit(map: { [markerName: string]: {
-            readonly ranges : TextSpan[],
+            readonly ranges : { start: number, length: number }[],
             wordPattern? : string ;} | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
