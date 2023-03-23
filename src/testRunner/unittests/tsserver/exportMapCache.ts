@@ -4,7 +4,10 @@ import {
     File,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
     configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
     createSession,
     openFilesForSession,
 } from "./helpers";
@@ -150,7 +153,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             }`
         };
         const host = createServerHost([utilsTs, classesTs, tsconfig]);
-        const session = createSession(host);
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const projectService = session.getProjectService();
         openFilesForSession([classesTs], session);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -174,7 +178,6 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             }
         });
 
-        const projectService = session.getProjectService();
         const project = configuredProjectAt(projectService, 0);
         const exportMapCache = project.getCachedExportInfoMap();
         assert.ok(exportMapCache.isUsableByFile(classesTs.path as ts.Path));
@@ -214,6 +217,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
                 includeInsertTextCompletions: true,
             }
         });
+
+        baselineTsserverLogs("exportMapCache", "invalidates the cache when a file is opened with different contents", session);
     });
 });
 
