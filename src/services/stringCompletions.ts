@@ -844,14 +844,13 @@ function getCompletionEntriesForNonRelativeModules(
     const result = createNameAndKindSet();
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
 
-    const projectDir = compilerOptions.project || host.getCurrentDirectory();
-    const absolute = normalizePath(combinePaths(projectDir, baseUrl ?? getPathsBasePath(compilerOptions, host)));
-
     if (baseUrl) {
+        const absolute = normalizePath(combinePaths(host.getCurrentDirectory(), baseUrl));
         getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
     }
 
     if (paths) {
+        const absolute = getPathsBasePath(compilerOptions, host)!;
         addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
     }
 
