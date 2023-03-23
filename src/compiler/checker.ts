@@ -1066,6 +1066,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    isDefined,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
@@ -15997,7 +15998,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
-        const memberIds = namedMemberDeclarations?.length && map(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
+        const memberIds = some(namedMemberDeclarations, isDefined) && map(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
         const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
             (readonly ? "R" : "") +
             (memberIds ? "," + memberIds.join(",") : "");
