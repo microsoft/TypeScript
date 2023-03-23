@@ -4325,7 +4325,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     // JS identifier-declarations that are intended to merge with globals
     /** @internal */ jsGlobalAugmentations?: SymbolTable;
 
-    /** @internal */ identifiers: ReadonlyMap<string, string>; // Map from a string to an interned string
+    /** @internal */ identifiers: Record<string, string>; // Map from a string to an interned string
     /** @internal */ nodeCount: number;
     /** @internal */ identifierCount: number;
     /** @internal */ symbolCount: number;

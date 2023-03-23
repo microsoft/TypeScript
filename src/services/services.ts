@@ -1028,7 +1028,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public scriptKind!: ScriptKind;
     public languageVersion!: ScriptTarget;
     public languageVariant!: LanguageVariant;
-    public identifiers!: Map<string, string>;
+    public identifiers!: Record<string, string>;
     public nameTable: Map<__String, number> | undefined;
     public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;

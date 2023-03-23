@@ -1483,7 +1483,7 @@ namespace Parser {
 
     var currentToken: SyntaxKind;
     var nodeCount: number;
-    var identifiers: Map<string, string>;
+    var identifiers: Record<string, string>;
     var identifierCount: number;
 
     var parsingContext: ParsingContext;
@@ -1710,7 +1710,8 @@ namespace Parser {
 
         parseDiagnostics = [];
         parsingContext = 0;
-        identifiers = new Map<string, string>();
+        // eslint-disable-next-line no-null/no-null
+        identifiers = Object.create(/** o */ null);
         identifierCount = 0;
         nodeCount = 0;
         sourceFlags = 0;
@@ -2595,11 +2596,7 @@ namespace Parser {
     }
 
     function internIdentifier(text: string): string {
-        let identifier = identifiers.get(text);
-        if (identifier === undefined) {
-            identifiers.set(text, identifier = text);
-        }
-        return identifier;
+        return identifiers[text] ??= text;
     }
 
     // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
