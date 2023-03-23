@@ -828,7 +828,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function isInRootPathOrCanWatchDirectoryOrFile(locationToWatch: string) {
         const path = resolutionHost.toPath(locationToWatch);
         return isInDirectoryPath(rootPath, path) ||
-            canWatchDirectoryOrFile(resolutionHost.toPath(path));
+            canWatchDirectoryOrFile(path);
     }
 
     function createFileWatcherOfAffectingLocation(affectingLocation: string, forResolution: boolean) {
