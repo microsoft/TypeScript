@@ -33984,10 +33984,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return cached;
         }
         links.resolvedSignature = resolvingSignature;
-        const result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
+        let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
         // When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
         // resolution should be deferred.
         if (result !== resolvingSignature) {
+            // if the signature resolution originated on a node that itself depends on the contextual type
+            // then it's possible that the resolved signature might not be the same as the one that would be computed in source order
+            // since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
+            // it's possible that this inner resolution sets the resolvedSignature first.
+            // In such a case we ignore the local result and reuse the correct one that was cached.
+            if (links.resolvedSignature !== resolvingSignature) {
+                result = links.resolvedSignature;
+            }
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
