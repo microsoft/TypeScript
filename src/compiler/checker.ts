@@ -22485,7 +22485,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const targetHasStringIndex = some(indexInfos, info => info.keyType === stringType);
             let result = Ternary.True;
             for (const targetInfo of indexInfos) {
-                const related = !sourceIsPrimitive && targetHasStringIndex && targetInfo.type.flags & TypeFlags.Any ? Ternary.True :
+                const related = relation !== strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.type.flags & TypeFlags.Any ? Ternary.True :
                     isGenericMappedType(source) && targetHasStringIndex ? isRelatedTo(getTemplateTypeFromMappedType(source), targetInfo.type, RecursionFlags.Both, reportErrors) :
                     typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState);
                 if (!related) {
