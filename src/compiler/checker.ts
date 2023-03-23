@@ -20899,14 +20899,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (containsType(targetTypes, source)) {
                     return Ternary.True;
                 }
-                if (getObjectFlags(target) & ObjectFlags.PrimitiveUnion && !(source.flags & TypeFlags.EnumLiteral) && (
+                if (relation !== comparableRelation && getObjectFlags(target) & ObjectFlags.PrimitiveUnion && !(source.flags & TypeFlags.EnumLiteral) && (
                     source.flags & (TypeFlags.StringLiteral | TypeFlags.BooleanLiteral | TypeFlags.BigIntLiteral) ||
                     (relation === subtypeRelation || relation === strictSubtypeRelation) && source.flags & TypeFlags.NumberLiteral)) {
                     // When relating a literal type to a union of primitive types, we know the relation is false unless
                     // the union contains the base primitive type or the literal type in one of its fresh/regular forms.
                     // We exclude numeric literals for non-subtype relations because numeric literals are assignable to
                     // numeric enum literals with the same value. Similarly, we exclude enum literal types because
-                    // identically named enum types are related (see isEmumTypeRelatedTo).
+                    // identically named enum types are related (see isEnumTypeRelatedTo). We exclude the comparable
+                    // relation in entirety because it needs to be checked in both directions.
                     const alternateForm = source === (source as StringLiteralType).regularType ? (source as StringLiteralType).freshType : (source as StringLiteralType).regularType;
                     const primitive = source.flags & TypeFlags.StringLiteral ? stringType :
                         source.flags & TypeFlags.NumberLiteral ? numberType :
