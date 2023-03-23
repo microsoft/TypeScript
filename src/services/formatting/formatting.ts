@@ -512,7 +512,8 @@ function formatSpanWorker(
             undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
         }
 
-        processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
+        const nodeSet = new Set<Node | NodeArray<Node>>();
+        processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta, nodeSet);
     }
 
     if (!formattingScanner.isOnToken()) {
@@ -752,7 +753,7 @@ function formatSpanWorker(
         }
     }
 
-    function processNode(node: Node, contextNode: Node, nodeStartLine: number, undecoratedNodeStartLine: number, indentation: number, delta: number) {
+    function processNode(node: Node, contextNode: Node, nodeStartLine: number, undecoratedNodeStartLine: number, indentation: number, delta: number, nodeSet: Set<Node | NodeArray<Node>>) {
         if (!rangeOverlapsWithStartEnd(originalRange, node.getStart(sourceFile), node.getEnd())) {
             return;
         }
@@ -778,10 +779,10 @@ function formatSpanWorker(
         forEachChild(
             node,
             child => {
-                processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListItem*/ false);
+                processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListItem*/ false, /** isFirstListItem */ undefined, nodeSet);
             },
             nodes => {
-                processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
+                processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation, nodeSet);
             });
 
         // proceed any tokens in the node that are located after child nodes
@@ -801,7 +802,10 @@ function formatSpanWorker(
             parentStartLine: number,
             undecoratedParentStartLine: number,
             isListItem: boolean,
-            isFirstListItem?: boolean): number {
+            isFirstListItem: boolean | undefined,
+            nodeSet: Set<Node | NodeArray<Node>>): number {
+            Debug.assert(!nodeSet.has(child), "Node was already used in multiple locations in tree");
+            nodeSet.add(child);
             Debug.assert(!nodeIsSynthesized(child));
 
             if (nodeIsMissing(child) || isGrammarError(parent, child)) {
@@ -874,7 +878,7 @@ function formatSpanWorker(
             const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
             const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
-            processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
+            processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta, nodeSet);
 
             childContextNode = node;
 
@@ -888,7 +892,10 @@ function formatSpanWorker(
         function processChildNodes(nodes: NodeArray<Node>,
             parent: Node,
             parentStartLine: number,
-            parentDynamicIndentation: DynamicIndentation): void {
+            parentDynamicIndentation: DynamicIndentation,
+            nodeSet: Set<Node | NodeArray<Node>>): void {
+            Debug.assert(!nodeSet.has(nodes), "NodeArray was reused in multiple locations in tree.");
+            nodeSet.add(nodes);
             Debug.assert(isNodeArray(nodes));
             Debug.assert(!nodeIsSynthesized(nodes));
 
@@ -943,7 +950,7 @@ function formatSpanWorker(
             let inheritedIndentation = Constants.Unknown;
             for (let i = 0; i < nodes.length; i++) {
                 const child = nodes[i];
-                inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
+                inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0, nodeSet);
             }
 
             const listEndToken = getCloseTokenForOpenToken(listStartToken);
