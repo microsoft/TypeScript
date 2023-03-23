@@ -230,9 +230,6 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project1/ty
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -379,9 +376,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-e
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -628,9 +622,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-e
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -815,9 +806,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project1/typeroot1/sometype/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1004,9 +992,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project1/typeroot1/sometype/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1193,9 +1178,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-e
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.

@@ -4826,6 +4826,11 @@ export interface Program extends ScriptReferenceHost {
      */
     readonly usesUriStyleNodeCoreModules: boolean;
     /**
+     * Map from libFileName to actual resolved location of the lib
+     * @internal
+     */
+    resolvedLibReferences: Map<string, string> | undefined;
+    /**
      * Is the file emitted file
      *
      * @internal

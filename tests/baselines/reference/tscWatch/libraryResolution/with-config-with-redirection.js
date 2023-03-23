@@ -203,9 +203,6 @@ Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Failed Lookup Locations
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -223,15 +220,6 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/ind
 FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Type roots
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -559,9 +547,6 @@ File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - u
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -594,24 +579,6 @@ Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ../lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
@@ -1126,9 +1093,6 @@ File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - u
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1448,9 +1412,6 @@ File '/home/src/projects/project1/typeroot1/sometype/package.json' does not exis
 File '/home/src/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1469,24 +1430,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib
 FileWatcher:: Close:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Type roots
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -1786,9 +1729,6 @@ File '/home/src/projects/project1/typeroot1/sometype/package.json' does not exis
 File '/home/src/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1824,24 +1764,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source
 FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Type roots
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ../lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
@@ -2147,9 +2069,6 @@ File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - u
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -2181,24 +2100,6 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was not resolved. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-webworker' was not resolved. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-scripthost' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects/project1'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ../lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 ../lib/lib.webworker.d.ts

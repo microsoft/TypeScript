@@ -98,9 +98,6 @@
     "Directory 'node_modules' does not exist, skipping all lookups in it.",
     "Directory '/node_modules' does not exist, skipping all lookups in it.",
     "======== Module name '@typescript/lib-es2015/generator' was not resolved. ========",
-    "======== Resolving module '@typescript/lib-es2015/iterable' from '__lib_node_modules_lookup_lib.es2015.iterable.d.ts__.ts'. ========",
-    "Resolution for module '@typescript/lib-es2015/iterable' was found in cache from location '/.src'.",
-    "======== Module name '@typescript/lib-es2015/iterable' was not resolved. ========",
     "======== Resolving module '@typescript/lib-es2015/promise' from '__lib_node_modules_lookup_lib.es2015.promise.d.ts__.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module '@typescript/lib-es2015/promise' from 'node_modules' folder, target file types: TypeScript, Declaration.",
@@ -134,9 +131,6 @@
     "Directory 'node_modules' does not exist, skipping all lookups in it.",
     "Directory '/node_modules' does not exist, skipping all lookups in it.",
     "======== Module name '@typescript/lib-es2015/reflect' was not resolved. ========",
-    "======== Resolving module '@typescript/lib-es2015/symbol' from '__lib_node_modules_lookup_lib.es2015.symbol.d.ts__.ts'. ========",
-    "Resolution for module '@typescript/lib-es2015/symbol' was found in cache from location '/.src'.",
-    "======== Module name '@typescript/lib-es2015/symbol' was not resolved. ========",
     "======== Resolving module '@typescript/lib-es2015/symbol-wellknown' from '__lib_node_modules_lookup_lib.es2015.symbol.wellknown.d.ts__.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module '@typescript/lib-es2015/symbol-wellknown' from 'node_modules' folder, target file types: TypeScript, Declaration.",
@@ -147,8 +141,5 @@
     "Loading module '@typescript/lib-es2015/symbol-wellknown' from 'node_modules' folder, target file types: JavaScript.",
     "Directory 'node_modules' does not exist, skipping all lookups in it.",
     "Directory '/node_modules' does not exist, skipping all lookups in it.",
-    "======== Module name '@typescript/lib-es2015/symbol-wellknown' was not resolved. ========",
-    "======== Resolving module '@typescript/lib-es2015/symbol' from '__lib_node_modules_lookup_lib.es2015.symbol.d.ts__.ts'. ========",
-    "Resolution for module '@typescript/lib-es2015/symbol' was found in cache from location '/.src'.",
-    "======== Module name '@typescript/lib-es2015/symbol' was not resolved. ========"
+    "======== Module name '@typescript/lib-es2015/symbol-wellknown' was not resolved. ========"
 ]

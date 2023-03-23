@@ -187,9 +187,6 @@ File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not ex
 File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.

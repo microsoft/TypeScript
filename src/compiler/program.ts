@@ -1469,6 +1469,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let automaticTypeDirectiveNames: string[] | undefined;
     let automaticTypeDirectiveResolutions: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
 
+    let resolvedLibReferences: Map<string, string> | undefined;
+
     // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
     // This works as imported modules are discovered recursively in a depth first manner, specifically:
     // - For each root file, findSourceFile is called.
@@ -1813,6 +1815,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         sourceFileToPackageName,
         redirectTargetsMap,
         usesUriStyleNodeCoreModules,
+        resolvedLibReferences,
         isEmittedFile,
         getConfigFileParsingDiagnostics,
         getProjectReferences,
@@ -2481,6 +2484,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         sourceFileToPackageName = oldProgram.sourceFileToPackageName;
         redirectTargetsMap = oldProgram.redirectTargetsMap;
         usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
+        resolvedLibReferences = oldProgram.resolvedLibReferences;
 
         return StructureIsReused.Completely;
     }
@@ -2596,7 +2600,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return equalityComparer(file.fileName, getDefaultLibraryFileName());
         }
         else {
-            return some(options.lib, libFileName => equalityComparer(file.fileName, pathForLibFile(libFileName)));
+            return some(options.lib, libFileName => equalityComparer(file.fileName, resolvedLibReferences!.get(libFileName)!));
         }
     }
 
@@ -3313,7 +3317,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const libName = toFileNameLowerCase(ref.fileName);
         const libFileName = libMap.get(libName);
         if (libFileName) {
-            return getSourceFile(pathForLibFile(libFileName));
+            return getSourceFile(resolvedLibReferences?.get(libFileName)!);
         }
     }
 
@@ -3810,6 +3814,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function pathForLibFile(libFileName: string): string {
+        const existing = resolvedLibReferences?.get(libFileName);
+        if (existing) return existing;
         // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
         //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
         //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
@@ -3823,10 +3829,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
         const resolveFrom = combinePaths(containingDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
         const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution }, host, moduleResolutionCache);
-        if (localOverrideModuleResult?.resolvedModule) {
-            return localOverrideModuleResult.resolvedModule.resolvedFileName;
-        }
-        return combinePaths(defaultLibraryPath, libFileName);
+        const result = localOverrideModuleResult?.resolvedModule ?
+            localOverrideModuleResult.resolvedModule.resolvedFileName :
+            combinePaths(defaultLibraryPath, libFileName);
+        (resolvedLibReferences ??= new Map()).set(libFileName, result);
+        return result;
     }
 
     function processLibReferenceDirectives(file: SourceFile) {
