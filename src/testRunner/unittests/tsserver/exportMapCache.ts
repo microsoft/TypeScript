@@ -7,7 +7,6 @@ import {
     baselineTsserverLogs,
     configuredProjectAt,
     createLoggerWithInMemoryLogs,
-    createProjectService,
     createSession,
     openFilesForSession,
 } from "./helpers";
