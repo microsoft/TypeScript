@@ -63,6 +63,7 @@ import {
     NamedImportsOrExports,
     NamespaceImport,
     Node,
+    nodeIsSynthesized,
     nodeSeenTracker,
     Program,
     some,
@@ -450,7 +451,10 @@ export type ModuleReference =
     /** "import" also includes require() calls. */
     | { kind: "import", literal: StringLiteralLike }
     /** <reference path> or <reference types> */
-    | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
+    | { kind: "reference", referencingFile: SourceFile, ref: FileReference }
+    /** Containing file implicitly references the module (eg, via implicit jsx runtime import) */
+    | { kind: "implicit", literal: StringLiteralLike, referencingFile: SourceFile };
+
 /** @internal */
 export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
     const refs: ModuleReference[] = [];
@@ -471,10 +475,10 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
             }
         }
 
-        forEachImport(referencingFile, (_importDecl, moduleSpecifier) => {
+        forEachImport(referencingFile, (importDecl, moduleSpecifier) => {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
             if (moduleSymbol === searchModuleSymbol) {
-                refs.push({ kind: "import", literal: moduleSpecifier });
+                refs.push(nodeIsSynthesized(importDecl) ? { kind: "implicit", literal: moduleSpecifier, referencingFile } : { kind: "import", literal: moduleSpecifier });
             }
         });
     }
