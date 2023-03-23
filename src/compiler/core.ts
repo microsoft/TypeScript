@@ -2833,11 +2833,6 @@ export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predi
     }
 }
 
-/** @internal */
-export function isDefined<T>(x: T): x is NonNullable<T> {
-    return x !== undefined;
-}
-
 /**
  * Removes the leading and trailing white space and line terminator characters from a string.
  *
