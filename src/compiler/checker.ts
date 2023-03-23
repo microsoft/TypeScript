@@ -25891,7 +25891,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeSubsetOf(source: Type, target: Type) {
-        return source === target || target.flags & TypeFlags.Union && isTypeSubsetOfUnion(source, target as UnionType);
+        return !!(source === target || source.flags & TypeFlags.Never || target.flags & TypeFlags.Union && isTypeSubsetOfUnion(source, target as UnionType));
     }
 
     function isTypeSubsetOfUnion(source: Type, target: UnionType) {
@@ -26715,7 +26715,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If an antecedent type is not a subset of the declared type, we need to perform
                 // subtype reduction. This happens when a "foreign" type is injected into the control
                 // flow using the instanceof operator or a user defined type predicate.
-                if (!isTypeSubsetOf(type, declaredType)) {
+                if (!isTypeSubsetOf(type, initialType)) {
                     subtypeReduction = true;
                 }
                 if (isIncomplete(flowType)) {
@@ -26733,7 +26733,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return type;
                     }
                     antecedentTypes.push(type);
-                    if (!isTypeSubsetOf(type, declaredType)) {
+                    if (!isTypeSubsetOf(type, initialType)) {
                         subtypeReduction = true;
                     }
                     if (isIncomplete(flowType)) {
@@ -26808,7 +26808,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If an antecedent type is not a subset of the declared type, we need to perform
                 // subtype reduction. This happens when a "foreign" type is injected into the control
                 // flow using the instanceof operator or a user defined type predicate.
-                if (!isTypeSubsetOf(type, declaredType)) {
+                if (!isTypeSubsetOf(type, initialType)) {
                     subtypeReduction = true;
                 }
                 // If the type at a particular antecedent path is the declared type there is no
