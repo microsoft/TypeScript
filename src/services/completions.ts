@@ -2595,7 +2595,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                     // completion at `x ===/**/` should be for the right side
                     checker.getTypeAtLocation(parent.left) :
-                    checker.getContextualType(previousToken as Expression);
+                    checker.getContextualType(previousToken as Expression, ContextFlags.Completions) || checker.getContextualType(previousToken as Expression);
     }
 }
 
