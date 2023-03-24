@@ -145,6 +145,7 @@ function sanitizeLog(s: string) {
 export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
     const logger = createHasErrorMessageLogger();
     const logs: string[] = [];
+    if (host) logs.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
     return handleLoggerGroup({
         ...logger,
         logs,

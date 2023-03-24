@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Creating project service
 //// [/a/b/lodash.js]
 
