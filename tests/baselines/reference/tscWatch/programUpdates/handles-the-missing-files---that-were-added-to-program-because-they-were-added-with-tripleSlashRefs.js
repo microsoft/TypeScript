@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>

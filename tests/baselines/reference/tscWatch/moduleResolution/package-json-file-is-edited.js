@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/src/tsconfig.json]
 {"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out"}}

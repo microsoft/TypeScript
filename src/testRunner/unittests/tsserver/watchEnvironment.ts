@@ -194,6 +194,7 @@ it("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching fil
         );
         logger.host = host;
         logger.info(`For files of style ${path}`);
+        logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
         const session = createSession(host, { logger });
         openFilesForSession([file], session);
     }

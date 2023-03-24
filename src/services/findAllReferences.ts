@@ -2313,7 +2313,7 @@ export namespace Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
-        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;
@@ -2355,7 +2355,7 @@ export namespace Core {
                 if (!isThis(node)) {
                     return false;
                 }
-                const container = getThisContainer(node, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+                const container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
                 if (!canHaveSymbol(container)) return false;
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:

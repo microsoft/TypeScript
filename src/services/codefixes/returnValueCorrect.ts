@@ -107,7 +107,7 @@ registerCodeFix({
                 break;
             case fixRemoveBracesFromArrowFunctionBody:
                 if (!isArrowFunction(info.declaration)) return undefined;
-                removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, info.commentSource, /* withParen */ false);
+                removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, info.commentSource, /*withParen*/ false);
                 break;
             case fixIdWrapTheBlockWithParen:
                 if (!isArrowFunction(info.declaration)) return undefined;
@@ -217,18 +217,18 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
         case Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value.code:
         case Diagnostics.A_function_whose_declared_type_is_neither_undefined_void_nor_any_must_return_a_value.code:
             if (!declaration || !declaration.body || !declaration.type || !rangeContainsRange(declaration.type, node)) return undefined;
-            return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /* isFunctionType */ false);
+            return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /*isFunctionType*/ false);
         case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:
             if (!declaration || !isCallExpression(declaration.parent) || !declaration.body) return undefined;
             const pos = declaration.parent.arguments.indexOf(declaration as Expression);
             const type = checker.getContextualTypeForArgumentAtIndex(declaration.parent, pos);
             if (!type) return undefined;
-            return getFixInfo(checker, declaration, type, /* isFunctionType */ true);
+            return getFixInfo(checker, declaration, type, /*isFunctionType*/ true);
         case Diagnostics.Type_0_is_not_assignable_to_type_1.code:
             if (!isDeclarationName(node) || !isVariableLike(node.parent) && !isJsxAttribute(node.parent)) return undefined;
             const initializer = getVariableLikeInitializer(node.parent);
             if (!initializer || !isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
-            return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /* isFunctionType */ true);
+            return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /*isFunctionType*/ true);
     }
     return undefined;
 }
@@ -280,7 +280,7 @@ function getActionForfixAddReturnStatement(context: CodeFixContext, expression: 
 }
 
 function getActionForFixRemoveBracesFromArrowFunctionBody(context: CodeFixContext, declaration: ArrowFunction, expression: Expression, commentSource: Node) {
-    const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /* withParen */ false));
+    const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /*withParen*/ false));
     return createCodeFixAction(fixId, changes, Diagnostics.Remove_braces_from_arrow_function_body, fixRemoveBracesFromArrowFunctionBody, Diagnostics.Remove_braces_from_all_arrow_function_bodies_with_relevant_issues);
 }
 

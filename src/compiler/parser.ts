@@ -1675,7 +1675,7 @@ namespace Parser {
         }
 
         // Set source file so that errors will be reported with this file name
-        const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken, sourceFlags, noop);
+        const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclarationFile*/ false, statements, endOfFileToken, sourceFlags, noop);
 
         if (setParentNodes) {
             fixupParentReferences(sourceFile);
@@ -3501,7 +3501,7 @@ namespace Parser {
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
-                    parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
+                    parseRightSideOfDot(allowReservedWords, /*allowPrivateIdentifiers*/ false) as Identifier
                 ),
                 pos
             );
@@ -6088,7 +6088,7 @@ namespace Parser {
         }
         else {
             parseExpected(SyntaxKind.SlashToken);
-            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
                 // manually advance the scanner in order to look for jsx text inside jsx
                 if (inExpressionContext) {
                     nextToken();
@@ -6138,7 +6138,7 @@ namespace Parser {
             parseExpected(SyntaxKind.CloseBraceToken);
         }
         else {
-            if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+            if (parseExpected(SyntaxKind.CloseBraceToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
                 scanJsxText();
             }
         }
@@ -6185,7 +6185,7 @@ namespace Parser {
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanSlashToken);
         const tagName = parseJsxElementName();
-        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
             // manually advance the scanner in order to look for jsx text inside jsx
             if (inExpressionContext || !tagNamesAreEquivalent(open.tagName, tagName)) {
                 nextToken();
@@ -6492,7 +6492,7 @@ namespace Parser {
                 }
                 break;
             case SyntaxKind.TemplateHead:
-                return parseTemplateExpression(/* isTaggedTemplate */ false);
+                return parseTemplateExpression(/*isTaggedTemplate*/ false);
             case SyntaxKind.PrivateIdentifier:
                 return parsePrivateIdentifier();
         }
@@ -8476,7 +8476,7 @@ namespace Parser {
 
     export namespace JSDocParser {
         export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
-            initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            initializeState("file.js", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS);
             scanner.setText(content, start, length);
             currentToken = scanner.scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -8510,7 +8510,7 @@ namespace Parser {
             const pos = getNodePos();
             const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
             const p2 = getNodePos();
-            let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
+            let entityName: EntityName | JSDocMemberName = parseEntityName(/*allowReservedWords*/ false);
             while (token() === SyntaxKind.PrivateIdentifier) {
                 reScanHashToken(); // rescan #id as # id
                 nextTokenJSDoc(); // then skip the #
@@ -8526,7 +8526,7 @@ namespace Parser {
         }
 
         export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
-            initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            initializeState("", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS);
             const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
             const sourceFile = { languageVariant: LanguageVariant.Standard, text: content } as SourceFile;

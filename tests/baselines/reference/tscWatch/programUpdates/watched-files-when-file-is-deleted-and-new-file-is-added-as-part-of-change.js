@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/home/username/project/src/file1.ts]
 var a = 10;

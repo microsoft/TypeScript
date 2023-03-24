@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:59.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:00.000] Search path: /user/username/projects/myproject/src
 Info 2    [00:01:01.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json

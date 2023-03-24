@@ -1,3 +1,4 @@
+currentDirectory:: /a/b/projects/myProject/ useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/projects/myProject/src/file1.ts]
 import module1 = require("module1");

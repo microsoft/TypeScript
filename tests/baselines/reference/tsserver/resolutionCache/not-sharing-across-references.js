@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/src/projects/node_modules/moduleX/index.d.ts]

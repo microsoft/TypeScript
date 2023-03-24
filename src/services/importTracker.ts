@@ -223,7 +223,7 @@ function getImportersForExport(
                         }
                         else if (direct.exportClause.kind === SyntaxKind.NamespaceExport) {
                             // `export * as foo from "foo"` add to indirect uses
-                            addIndirectUser(getSourceFileLikeForImportDeclaration(direct), /** addTransitiveDependencies */ true);
+                            addIndirectUser(getSourceFileLikeForImportDeclaration(direct), /*addTransitiveDependencies*/ true);
                         }
                         else {
                             // This is `export { foo } from "foo"` and creates an alias symbol, so recursive search will get handle re-exports.
@@ -234,7 +234,7 @@ function getImportersForExport(
                     case SyntaxKind.ImportType:
                         // Only check for typeof import('xyz')
                         if (!isAvailableThroughGlobal && direct.isTypeOf && !direct.qualifier && isExported(direct)) {
-                            addIndirectUser(direct.getSourceFile(), /** addTransitiveDependencies */ true);
+                            addIndirectUser(direct.getSourceFile(), /*addTransitiveDependencies*/ true);
                         }
                         directImports.push(direct);
                         break;
@@ -248,7 +248,7 @@ function getImportersForExport(
 
     function handleImportCall(importCall: ImportCall) {
         const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
-        addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /** stopAtAmbientModule */ true));
+        addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /*stopAtAmbientModule*/ true));
     }
 
     function isExported(node: Node, stopAtAmbientModule = false) {
@@ -267,7 +267,7 @@ function getImportersForExport(
             const sourceFileLike = getSourceFileLikeForImportDeclaration(importDeclaration);
             Debug.assert(sourceFileLike.kind === SyntaxKind.SourceFile || sourceFileLike.kind === SyntaxKind.ModuleDeclaration);
             if (isReExport || findNamespaceReExports(sourceFileLike, name, checker)) {
-                addIndirectUser(sourceFileLike, /** addTransitiveDependencies */ true);
+                addIndirectUser(sourceFileLike, /*addTransitiveDependencies*/ true);
             }
             else {
                 addIndirectUser(sourceFileLike);
@@ -290,7 +290,7 @@ function getImportersForExport(
         if (directImports) {
             for (const directImport of directImports) {
                 if (!isImportTypeNode(directImport)) {
-                    addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), /** addTransitiveDependencies */ true);
+                    addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), /*addTransitiveDependencies*/ true);
                 }
             }
         }

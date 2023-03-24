@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/someone/projects/myproject/file1.ts]
 export const enum E1 { V = 1 }

@@ -800,7 +800,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(getProperties(node, /*requireInitialized*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
         if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;

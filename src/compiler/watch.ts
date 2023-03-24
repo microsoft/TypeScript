@@ -264,7 +264,7 @@ export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
 function prettyPathForFileError(error: ReportFileInError, cwd: string) {
     const line = formatColorAndReset(":" + error.line, ForegroundColorEscapeSequences.Grey);
     if (pathIsAbsolute(error.fileName) && pathIsAbsolute(cwd)) {
-        return getRelativePathFromDirectory(cwd, error.fileName, /* ignoreCase */ false) + line;
+        return getRelativePathFromDirectory(cwd, error.fileName, /*ignoreCase*/ false) + line;
     }
 
     return error.fileName + line;

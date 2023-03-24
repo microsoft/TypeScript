@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/package.json]
 {"name":"@this/package","type":"module","exports":{".":"./dist/index.js"}}

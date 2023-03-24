@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/lib-boilerplate/package.json]
 {"name":"lib-boilerplate","version":"0.0.2","type":"module","exports":"./src/index.ts"}

@@ -866,9 +866,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         filter(node.modifiers, (m): m is Modifier => isModifier(m) && !isStaticModifier(m) && !isAccessorModifier(m)),
                         node.asteriskToken,
                         functionName,
-                        /* typeParameters */ undefined,
+                        /*typeParameters*/ undefined,
                         visitParameterList(node.parameters, visitor, context),
-                        /* type */ undefined,
+                        /*type*/ undefined,
                         visitFunctionBody(node.body!, visitor, context)
                     )
                 )
@@ -1666,7 +1666,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     info.brandCheckIdentifier,
                     right,
                     info.kind,
-                    /* f */ undefined
+                    /*f*/ undefined
                 );
             case PrivateIdentifierKind.Field:
                 return emitHelpers().createClassPrivateFieldSetHelper(
@@ -1750,7 +1750,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function visitExpressionWithTypeArgumentsInHeritageClause(node: ExpressionWithTypeArguments) {
         const facts = lexicalEnvironment?.data?.facts || ClassFacts.None;
         if (facts & ClassFacts.NeedsClassSuperReference) {
-            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reserveInNestedScopes*/ true);
+            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().superClassReference = temp;
             return factory.updateExpressionWithTypeArguments(
                 node,
@@ -2857,7 +2857,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const identifier =
             typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
-            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reserveInNestedScopes*/ true, prefix, suffix);
+            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 
         if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
             addBlockScopedVariable(identifier);

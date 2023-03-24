@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}

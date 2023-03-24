@@ -105,7 +105,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (currentFileState.filenameDeclaration) {
             return currentFileState.filenameDeclaration.name;
         }
-        const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclaimationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
+        const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
         currentFileState.filenameDeclaration = declaration as VariableDeclaration & { name: Identifier };
         return currentFileState.filenameDeclaration.name;
     }
@@ -169,7 +169,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
+                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
                     setParentRecursive(importStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                 }
@@ -177,8 +177,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
-                            /*exclaimationToken*/ undefined,
+                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name))),
+                            /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
                         )

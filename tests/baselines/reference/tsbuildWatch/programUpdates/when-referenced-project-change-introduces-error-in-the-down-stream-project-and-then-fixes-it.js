@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

@@ -213,7 +213,7 @@ export function createClassifier(): Classifier {
                         const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                         if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                            token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
+                            token = scanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
 
                             // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                             if (token === SyntaxKind.TemplateTail) {
