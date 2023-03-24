@@ -80,6 +80,7 @@ import {
     isStringANonContextualKeyword,
     isStringLiteral,
     isStringLiteralLike,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isUMDExportSymbol,
     isValidTypeOnlyAliasUseSite,
@@ -690,7 +691,24 @@ function getAddAsTypeOnly(
 }
 
 function tryAddToExistingImport(existingImports: readonly FixAddToExistingImportInfo[], isValidTypeOnlyUseSite: boolean, checker: TypeChecker, compilerOptions: CompilerOptions): FixAddToExistingImport | undefined {
-    return firstDefined(existingImports, ({ declaration, importKind, symbol, targetFlags }): FixAddToExistingImport | undefined => {
+    let best: FixAddToExistingImport | undefined;
+    for (const existingImport of existingImports) {
+        const fix = getAddToExistingImportFix(existingImport);
+        if (!fix) continue;
+        const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
+        if (
+            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
+            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
+        ) {
+            // Give preference to putting types in existing type-only imports and avoiding conversions
+            // of import statements to/from type-only.
+            return fix;
+        }
+        best ??= fix;
+    }
+    return best;
+
+    function getAddToExistingImportFix({ declaration, importKind, symbol, targetFlags }: FixAddToExistingImportInfo): FixAddToExistingImport | undefined {
         if (importKind === ImportKind.CommonJS || importKind === ImportKind.Namespace || declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
             // These kinds of imports are not combinable with anything
             return undefined;
@@ -703,11 +721,15 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         }
 
         const { importClause } = declaration;
-        if (!importClause || !isStringLiteralLike(declaration.moduleSpecifier)) return undefined;
+        if (!importClause || !isStringLiteralLike(declaration.moduleSpecifier)) {
+            return undefined;
+        }
         const { name, namedBindings } = importClause;
         // A type-only import may not have both a default and named imports, so the only way a name can
         // be added to an existing type-only import is adding a named import to existing named bindings.
-        if (importClause.isTypeOnly && !(importKind === ImportKind.Named && namedBindings)) return undefined;
+        if (importClause.isTypeOnly && !(importKind === ImportKind.Named && namedBindings)) {
+            return undefined;
+        }
 
         // N.B. we don't have to figure out whether to use the main program checker
         // or the AutoImportProvider checker because we're adding to an existing import; the existence of
@@ -715,13 +737,16 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ false, symbol, targetFlags, checker, compilerOptions);
 
         if (importKind === ImportKind.Default && (
-            name ||                                                   // Cannot add a default import to a declaration that already has one
+            name || // Cannot add a default import to a declaration that already has one
             addAsTypeOnly === AddAsTypeOnly.Required && namedBindings // Cannot add a default import as type-only if the import already has named bindings
-        )) return undefined;
-        if (
-            importKind === ImportKind.Named &&
-            namedBindings?.kind === SyntaxKind.NamespaceImport        // Cannot add a named import to a declaration that has a namespace import
-        ) return undefined;
+        )) {
+            return undefined;
+        }
+        if (importKind === ImportKind.Named &&
+            namedBindings?.kind === SyntaxKind.NamespaceImport // Cannot add a named import to a declaration that has a namespace import
+        ) {
+            return undefined;
+        }
 
         return {
             kind: ImportFixKind.AddToExisting,
@@ -730,7 +755,7 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
             moduleSpecifier: declaration.moduleSpecifier.text,
             addAsTypeOnly,
         };
-    });
+    }
 }
 
 function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile, compilerOptions: CompilerOptions) {
