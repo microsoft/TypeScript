@@ -1,0 +1,54 @@
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(15,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(21,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(28,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(34,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+
+
+==== tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts (4 errors) ====
+    function f1(): unknown {
+        if (Math.random() < 0.5) return true;
+    
+        // Implicit return, but undefined is always assignable to unknown.
+    }
+    
+    function f2(): any {
+        // Implicit return, but undefined is always assignable to any.
+    }
+    
+    function f3(): void {
+        // Implicit return, but undefined is always assignable to void.
+    }
+    
+    function f4(): {} {
+                   ~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+        if (Math.random() < 0.5) return {};
+    
+        // Implicit return, but undefined is assignable to object when strictNullChecks is off.
+    }
+    
+    function f5(): Record<string, any> {
+                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+        if (Math.random() < 0.5) return { "foo": true };
+    
+        // Implicit return, but undefined is assignable to records (which are just fancy objects)
+        // when strictNullChecks is off.
+    }
+    
+    function f6(): null {
+                   ~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+        if (Math.random() < 0.5) return null;
+    
+        // Implicit return, but undefined is assignable to null when strictNullChecks is off.
+    }
+    
+    function f7(): string | null {
+                   ~~~~~~~~~~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+        if (Math.random() < 0.5) return "foo";
+    
+        // Implicit return, but undefined is assignable to null when strictNullChecks is off.
+    }
+    
