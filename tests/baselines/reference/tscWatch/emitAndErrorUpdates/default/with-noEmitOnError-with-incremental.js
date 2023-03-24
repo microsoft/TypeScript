@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {

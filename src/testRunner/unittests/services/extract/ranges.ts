@@ -9,7 +9,7 @@ function testExtractRangeFailed(caption: string, s: string, expectedErrors: stri
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
-        const result = ts.refactor.extractSymbol.getRangeToExtract(file, ts.createTextSpanFromRange(selectionRange), /*userRequested*/ false);
+        const result = ts.refactor.extractSymbol.getRangeToExtract(file, ts.createTextSpanFromRange(selectionRange), /*invoked*/ false);
         assert(result.targetRange === undefined, "failure expected");
         const sortedErrors = result.errors.map(e => e.messageText as string).sort();
         assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");

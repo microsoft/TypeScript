@@ -107,6 +107,7 @@ export function createBaseline(system: TestServerHost, modifySystem?: (sys: Test
     modifySystem?.(initialSys, originalRead);
     const sys = changeToHostTrackingWrittenFiles(initialSys);
     const baseline: string[] = [];
+    baseline.push(`currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}`);
     baseline.push("Input::");
     sys.diff(baseline);
     const { cb, getPrograms } = commandLineCallbacks(sys);

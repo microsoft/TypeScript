@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/main.ts]
 import data from "./data.json"; let x: string = data;

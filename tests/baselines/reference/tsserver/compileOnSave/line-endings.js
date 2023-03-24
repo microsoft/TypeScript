@@ -1,3 +1,5 @@
+currentDirectory:: / useCaseSensitiveFileNames: false newLine: 
+
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/app.ts]
@@ -71,6 +73,8 @@ var x = 1;
 var y = 2;
 
 
+
+currentDirectory:: / useCaseSensitiveFileNames: false newLine: 
 
 Info 15   [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request

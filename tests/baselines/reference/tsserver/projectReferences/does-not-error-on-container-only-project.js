@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:01:10.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:11.000] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
 Info 2    [00:01:12.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file

@@ -1259,7 +1259,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        perfLogger.logStartUpdateGraph();
+        perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
@@ -1305,7 +1305,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Preload auto import provider so it's not created during completions request
             this.getPackageJsonAutoImportProvider();
         }
-        perfLogger.logStopUpdateGraph();
+        perfLogger?.logStopUpdateGraph();
         tracing?.pop();
         return !hasNewProgram;
     }
@@ -2350,7 +2350,7 @@ export class AutoImportProviderProject extends Project {
                 //    allow processing JS from node_modules, go back to the implementation
                 //    package and load the JS.
                 if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*allowJs*/ true);
+                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*resolveJs*/ true);
                     rootNames = concatenate(rootNames, entrypoints);
                     dependenciesAdded += entrypoints?.length ? 1 : 0;
                 }

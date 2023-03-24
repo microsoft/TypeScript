@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/compiler/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>

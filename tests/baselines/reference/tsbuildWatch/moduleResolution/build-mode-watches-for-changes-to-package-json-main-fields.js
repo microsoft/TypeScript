@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js"}

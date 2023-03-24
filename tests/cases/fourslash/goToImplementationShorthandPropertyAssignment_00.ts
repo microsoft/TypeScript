@@ -34,10 +34,4 @@
 ////     };
 //// }
 
-goTo.marker("classExpressionRef");
-goTo.implementation();
-verify.caretAtMarker("classExpression");
-
-goTo.marker("declaredClassRef");
-goTo.implementation();
-verify.caretAtMarker("declaredClass");
+verify.baselineGoToImplementation("classExpressionRef", "declaredClassRef");

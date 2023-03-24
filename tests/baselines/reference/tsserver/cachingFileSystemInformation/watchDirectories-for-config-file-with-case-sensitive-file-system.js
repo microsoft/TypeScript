@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: true
 Info 0    [00:00:33.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts]

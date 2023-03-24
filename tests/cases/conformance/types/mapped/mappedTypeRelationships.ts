@@ -192,3 +192,21 @@ function f90<T extends { x: number }>() {
 function f<T extends { x: {} }>(): Partial<T> {
     return undefined! as T;
 }
+
+// #32365
+interface SettingsTypes {
+  audio: {
+    volume: string;
+  };
+  video: {
+    resolution: string;
+  };
+}
+interface Settings<Params extends { [K in keyof Params]?: string }> {
+  config: Params;
+}
+type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
+type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
+type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;

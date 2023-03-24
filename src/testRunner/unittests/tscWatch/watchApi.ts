@@ -1,6 +1,7 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { commandLineCallbacks } from "../tsc/helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { commandLineCallbacks, libContent } from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -11,6 +12,7 @@ import {
     applyEdit,
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
+    createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
     watchBaseline,
 } from "./helpers";
@@ -470,7 +472,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
             diagnostics.forEach(reportDiagnostic);
             // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
-            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDts*/ true);
+            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
             reportWatchStatus(
                 ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
                 sys.newLine,
@@ -717,4 +719,104 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
     }
     verify("when emitting with emitOnlyDtsFiles");
     verify("when emitting with emitOnlyDtsFiles with outFile", "outFile.js");
+});
+
+describe("unittests:: tsc-watch:: watchAPI:: when creating program with project references but not config file", () => {
+    function setup(libExtends: boolean) {
+        const system = createWatchedSystem({
+            "/user/username/projects/project/tsconfig.json": JSON.stringify({
+                compilerOptions: { types: [] },
+                files: ["app.ts"],
+                references: [{ path: "./lib" }]
+            }),
+            "/user/username/projects/project/app.ts": dedent`
+                import { one } from './lib';
+                console.log(one);
+            `,
+            "/user/username/projects/project/lib/tsconfig.json": JSON.stringify({
+                extends: libExtends ? "./tsconfig.base.json" : undefined,
+                compilerOptions: libExtends ? undefined : { composite: true, types: [] },
+                files: ["index.ts"],
+            }),
+            "/user/username/projects/project/lib/tsconfig.base.json": JSON.stringify({
+                compilerOptions: { composite: true, types: [] },
+            }),
+            "/user/username/projects/project/lib/index.ts": "export const one = 1;",
+            "/user/username/projects/project/lib/index.d.ts": "export const one = 1;",
+            [libFile.path]: libContent,
+        });
+        const baseline = createBaseline(system);
+        const commandLine = ts.getParsedCommandLineOfConfigFile(
+            "/user/username/projects/project/tsconfig.json",
+            { extendedDiagnostics: true },
+            {
+                useCaseSensitiveFileNames: true,
+                fileExists: path => system.fileExists(path),
+                readFile: path => system.readFile(path),
+                getCurrentDirectory: () => system.getCurrentDirectory(),
+                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                onUnRecoverableConfigFileDiagnostic: ts.noop,
+            }
+        )!;
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+            cb: baseline.cb,
+            system,
+            rootFiles: commandLine.fileNames,
+            options: commandLine.options,
+            projectReferences: commandLine.projectReferences,
+            watchOptions: commandLine.watchOptions,
+        });
+        const watch = ts.createWatchProgram(compilerHost);
+        return { watch, baseline };
+    }
+
+    it("when watching referenced project when there is no config file name", () => {
+        const { watch, baseline } = setup(/*libExtends*/ false);
+        runWatchBaseline({
+            scenario: "watchApi",
+            subScenario: "when watching referenced project when there is no config file name",
+            commandLineArgs: ["--w", "-p", ".", "--extendedDiagnostics"],
+            ...baseline,
+            edits: [
+                {
+                    caption: "Modify lib tsconfig",
+                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.json`, JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["index.ts"],
+                    })),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ],
+            watchOrSolution: watch
+        });
+    });
+
+    it("when watching referenced project with extends when there is no config file name", () => {
+        const { watch, baseline } = setup(/*libExtends*/ true);
+        runWatchBaseline({
+            scenario: "watchApi",
+            subScenario: "when watching referenced project with extends when there is no config file name",
+            commandLineArgs: ["--w", "-p", ".", "--extendedDiagnostics"],
+            ...baseline,
+            edits: [
+                {
+                    caption: "Modify lib tsconfig",
+                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.json`, JSON.stringify({
+                        extends: "./tsconfig.base.json",
+                        compilerOptions: { typeRoots: [] },
+                        files: ["index.ts"],
+                    })),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "Modify lib extends",
+                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.base.json`, JSON.stringify({
+                        compilerOptions: { composite: true },
+                    })),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ],
+            watchOrSolution: watch
+        });
+    });
 });

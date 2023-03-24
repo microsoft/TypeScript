@@ -36,6 +36,7 @@ import {
     Expression,
     ExpressionStatement,
     findComputedPropertyNameCacheAssignment,
+    findSuperStatementIndex,
     firstOrUndefined,
     forEachEntry,
     ForStatement,
@@ -444,7 +445,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discard*/ false);
+                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ false);
             case SyntaxKind.PropertyAccessExpression:
                 return visitPropertyAccessExpression(node as PropertyAccessExpression);
             case SyntaxKind.ElementAccessExpression:
@@ -576,7 +577,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // as we descend.
 
         for (const member of node.members) {
-            if (isNamedClassElement(member) && nodeOrChildIsDecorated(/*legacyDecorators*/ false, member, node)) {
+            if (isNamedClassElement(member) && nodeOrChildIsDecorated(/*useLegacyDecorators*/ false, member, node)) {
                 if (hasStaticModifier(member)) {
                     staticExtraInitializersName ??= factory.createUniqueName("_staticExtraInitializers", GeneratedIdentifierFlags.Optimistic);
                 }
@@ -892,7 +893,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //      static { ... }
             //      ...
             //  }
-            const leadingStaticBlockBody = factory.createBlock(leadingBlockStatements, /*multiline*/ true);
+            const leadingStaticBlockBody = factory.createBlock(leadingBlockStatements, /*multiLine*/ true);
             const leadingStaticBlock = factory.createClassStaticBlockDeclaration(leadingStaticBlockBody);
             if (shouldTransformPrivateStaticElementsInClass) {
                 // We use `InternalEmitFlags.TransformPrivateStaticElements` as a marker on a class static block
@@ -914,7 +915,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //      ...
             //      static { ... }
             //  }
-            const trailingStaticBlockBody = factory.createBlock(trailingBlockStatements, /*multiline*/ true);
+            const trailingStaticBlockBody = factory.createBlock(trailingBlockStatements, /*multiLine*/ true);
             const trailingStaticBlock = factory.createClassStaticBlockDeclaration(trailingStaticBlockBody);
             newMembers = [...newMembers, trailingStaticBlock];
         }
@@ -979,8 +980,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function isDecoratedClassLike(node: ClassLikeDeclaration) {
-        return classOrConstructorParameterIsDecorated(/*legacyDecorators*/ false, node) ||
-            childIsDecorated(/*legacyDecorators*/ false, node);
+        return classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node) ||
+            childIsDecorated(/*useLegacyDecorators*/ false, node);
     }
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
@@ -1072,8 +1073,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             if (initializerStatements) {
                 const statements: Statement[] = [];
                 const nonPrologueStart = factory.copyPrologue(node.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+                const superStatementIndex = findSuperStatementIndex(node.body.statements, nonPrologueStart);
+                const indexOfFirstStatementAfterSuper = superStatementIndex >= 0 ? superStatementIndex + 1 : undefined;
+                addRange(statements, visitNodes(node.body.statements, visitor, isStatement, nonPrologueStart, indexOfFirstStatementAfterSuper ? indexOfFirstStatementAfterSuper - nonPrologueStart : undefined));
                 addRange(statements, initializerStatements);
-                addRange(statements, visitNodes(node.body.statements, visitor, isStatement, nonPrologueStart));
+                addRange(statements, visitNodes(node.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper));
                 body = factory.createBlock(statements, /*multiLine*/ true);
                 setOriginalNode(body, node.body);
                 setTextRange(body, node.body);

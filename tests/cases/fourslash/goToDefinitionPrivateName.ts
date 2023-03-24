@@ -12,8 +12,8 @@
 ////     }
 //// }
 
-verify.goToDefinition({
-    pnFieldUse: "pnFieldDecl",
-    pnMethodUse: "pnMethodDecl",
-    pnPropUse: ["pnPropGetDecl", "pnPropSetDecl"]
-});
+verify.baselineGoToDefinition(
+    "pnFieldUse",
+    "pnMethodUse",
+    "pnPropUse",
+);
