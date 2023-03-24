@@ -7,6 +7,7 @@ import {
     createServerHost,
     File,
     libFile,
+    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
@@ -771,21 +772,18 @@ describe("unittests:: tsserver:: Projects", () => {
             content: JSON.stringify({ compilerOptions: { allowJs: true } })
         };
 
-        let host = createServerHost([file1, file2, config1, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        const logger = createLoggerWithInMemoryLogs(host);
+        const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); // Special
 
         // Specify .html extension as mixed content in a configure host request
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        verfiy(config1);
+        verfiy(config1, createServerHost([file1, file2, config1, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
 
         //  #2. Ensure no errors when allowJs is false
         const config2 = {
             path: "/a/b/tsconfig.json",
             content: JSON.stringify({ compilerOptions: { allowJs: false } })
         };
-
-        host = createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        verfiy(config2);
+        verfiy(config2, createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
 
         //  #3. Ensure no errors when compiler options aren't specified
         const config3 = {
@@ -793,8 +791,7 @@ describe("unittests:: tsserver:: Projects", () => {
             content: JSON.stringify({})
         };
 
-        host = createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        verfiy(config3);
+        verfiy(config3, createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
 
         //  #4. Ensure no errors when files are explicitly specified in tsconfig
         const config4 = {
@@ -802,8 +799,7 @@ describe("unittests:: tsserver:: Projects", () => {
             content: JSON.stringify({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] })
         };
 
-        host = createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        verfiy(config4);
+        verfiy(config4, createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
 
         //  #4. Ensure no errors when files are explicitly excluded in tsconfig
         const config5 = {
@@ -811,12 +807,12 @@ describe("unittests:: tsserver:: Projects", () => {
             content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: [file2.path] })
         };
 
-        host = createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        const session = verfiy(config5);
+        const session = verfiy(config5, createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
         baselineTsserverLogs("projects", "no tsconfig script block diagnostic errors", session);
 
-        function verfiy(config: File) {
+        function verfiy(config: File, host: TestServerHost) {
             logger.host = host;
+            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
             const session = createSession(host, { logger });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,

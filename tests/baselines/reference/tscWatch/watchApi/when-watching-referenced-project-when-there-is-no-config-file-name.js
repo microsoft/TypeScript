@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/project/tsconfig.json]
 {"compilerOptions":{"types":[]},"files":["app.ts"],"references":[{"path":"./lib"}]}

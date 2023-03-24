@@ -1,3 +1,4 @@
+currentDirectory:: /a/b useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/foo.ts]
 

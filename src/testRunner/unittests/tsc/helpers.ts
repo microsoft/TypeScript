@@ -967,7 +967,11 @@ export function verifyTsc({
                     texts.push(`Change:: ${incrementalScenario.caption}`);
                     texts.push(sys.baseLine().text);
                 });
-                return { file, text: texts.join("\r\n") };
+                return {
+                    file,
+                    text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
+                        texts.join("\r\n"),
+                };
             }
         }));
         if (edits?.length) {
