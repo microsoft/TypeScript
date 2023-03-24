@@ -1,6 +1,6 @@
 error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(2,7): error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '-0o1'.
-tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(3,7): error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '0o2'.
+tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(2,7): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(3,7): error TS1121: Octal literals are not allowed. Use the syntax '0o2'.
 
 
 !!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
@@ -8,8 +8,8 @@ tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(3,7): error TS8018: Octa
     enum E {
       x = -01,
           ~~~
-!!! error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '-0o1'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
       y = 02,
           ~~
-!!! error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '0o2'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o2'.
     }

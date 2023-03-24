@@ -12,7 +12,6 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(12,21)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(13,19): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(14,19): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(15,19): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,23): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(18,22): error TS1117: An object literal cannot have multiple properties with the same name.
@@ -61,7 +60,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(35,23)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(35,23): error TS2300: Duplicate identifier '0x0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,13): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,23): error TS1119: An object literal cannot have property and accessor with the same name.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,23): error TS2300: Duplicate identifier '000'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,23): error TS2300: Duplicate identifier '0o0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,13): error TS2300: Duplicate identifier '"100"'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,27): error TS1119: An object literal cannot have property and accessor with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,27): error TS2300: Duplicate identifier '1e2'.
@@ -79,7 +78,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(49,7):
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (79 errors) ====
+==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (78 errors) ====
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
                      ~
@@ -123,9 +122,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(50,5):
     var e14 = { 0: 0, 0x0: 0 };
                       ~~~
 !!! error TS1117: An object literal cannot have multiple properties with the same name.
-    var e14 = { 0: 0, 000: 0 };
-                      ~~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o0'.
+    var e14 = { 0: 0, 0o0: 0 };
                       ~~~
 !!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e15 = { "100": 0, 1e2: 0 };
@@ -237,13 +234,13 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(50,5):
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~~~
 !!! error TS2300: Duplicate identifier '0x0'.
-    var f14 = { 0: 0, get 000() { return 0; } };
+    var f14 = { 0: 0, get 0o0() { return 0; } };
                 ~
 !!! error TS2300: Duplicate identifier '0'.
                           ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~~~
-!!! error TS2300: Duplicate identifier '000'.
+!!! error TS2300: Duplicate identifier '0o0'.
     var f15 = { "100": 0, get 1e2() { return 0; } };
                 ~~~~~
 !!! error TS2300: Duplicate identifier '"100"'.
