@@ -66,6 +66,7 @@ import {
     ExpressionStatement,
     findAncestor,
     FlowFlags,
+    FlowImpactingCallLikeExpression,
     FlowLabel,
     FlowNode,
     FlowReduceLabel,
@@ -294,6 +295,7 @@ import {
     symbolName,
     SymbolTable,
     SyntaxKind,
+    TaggedTemplateExpression,
     TextRange,
     ThisExpression,
     ThrowStatement,
@@ -1344,7 +1346,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return result;
     }
 
-    function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
+    function createFlowCall(antecedent: FlowNode, node: FlowImpactingCallLikeExpression): FlowNode {
         setFlowNodeReferenced(antecedent);
         return initFlowNode({ flags: FlowFlags.Call, antecedent, node });
     }
@@ -1695,11 +1697,19 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function maybeBindExpressionFlowIfCall(node: Expression) {
         // A top level or comma expression call expression with a dotted function name and at least one argument
         // is potentially an assertion and is therefore included in the control flow.
-        if (node.kind === SyntaxKind.CallExpression) {
-            const call = node as CallExpression;
-            if (call.expression.kind !== SyntaxKind.SuperKeyword && isDottedName(call.expression)) {
-                currentFlow = createFlowCall(currentFlow, call);
-            }
+        switch (node.kind) {
+            case SyntaxKind.CallExpression:
+                const call = node as CallExpression;
+                if (call.expression.kind !== SyntaxKind.SuperKeyword && isDottedName(call.expression)) {
+                    currentFlow = createFlowCall(currentFlow, call);
+                }
+                break;
+            case SyntaxKind.TaggedTemplateExpression:
+                const taggedTemplate = node as TaggedTemplateExpression;
+                if (isDottedName(taggedTemplate.tag)) {
+                    currentFlow = createFlowCall(currentFlow, taggedTemplate);
+                }
+                break;
         }
     }
 

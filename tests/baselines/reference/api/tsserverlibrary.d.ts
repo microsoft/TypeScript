@@ -5254,6 +5254,7 @@ declare namespace ts {
         readonly template: TemplateLiteral;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    type FlowImpactingCallLikeExpression = CallExpression | TaggedTemplateExpression;
     interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;
@@ -5976,7 +5977,7 @@ declare namespace ts {
         antecedent: FlowNode;
     }
     interface FlowCall extends FlowNodeBase {
-        node: CallExpression;
+        node: FlowImpactingCallLikeExpression;
         antecedent: FlowNode;
     }
     interface FlowCondition extends FlowNodeBase {

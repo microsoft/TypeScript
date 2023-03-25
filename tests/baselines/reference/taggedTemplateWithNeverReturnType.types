@@ -1,0 +1,28 @@
+=== tests/cases/compiler/taggedTemplateWithNeverReturnType.ts ===
+function fail(strings?: TemplateStringsArray): never {
+>fail : (strings?: TemplateStringsArray) => never
+>strings : TemplateStringsArray
+
+  throw "";
+>"" : ""
+}
+
+let a!: number | string;
+>a : string | number
+
+if (typeof a === "string") {
+>typeof a === "string" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : string | number
+>"string" : "string"
+
+  fail``;
+>fail`` : never
+>fail : (strings?: TemplateStringsArray) => never
+>`` : ""
+}
+
+const b: number = a;
+>b : number
+>a : number
+

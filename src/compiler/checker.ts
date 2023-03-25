@@ -199,6 +199,7 @@ import {
     FlowCall,
     FlowCondition,
     FlowFlags,
+    FlowImpactingCallLikeExpression,
     FlowLabel,
     FlowNode,
     FlowReduceLabel,
@@ -26185,19 +26186,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getEffectsSignature(node: CallExpression) {
+    function getEffectsSignature(node: FlowImpactingCallLikeExpression) {
         const links = getNodeLinks(node);
         let signature = links.effectsSignature;
         if (signature === undefined) {
+            const expression = getFlowCallNodeExpression(node);
             // A call expression parented by an expression statement is a potential assertion. Other call
             // expressions are potential type predicate function calls. In order to avoid triggering
             // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
             // target expression of an assertion.
             let funcType: Type | undefined;
             if (node.parent.kind === SyntaxKind.ExpressionStatement) {
-                funcType = getTypeOfDottedName(node.expression, /*diagnostic*/ undefined);
+                funcType = getTypeOfDottedName(expression, /*diagnostic*/ undefined);
             }
-            else if (node.expression.kind !== SyntaxKind.SuperKeyword) {
+            else if (expression.kind !== SyntaxKind.SuperKeyword) {
                 if (isOptionalChain(node)) {
                     funcType = checkNonNullType(
                         getOptionalExpressionType(checkExpression(node.expression), node.expression),
@@ -26205,7 +26207,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 else {
-                    funcType = checkNonNullExpression(node.expression);
+                    funcType = checkNonNullExpression(expression);
                 }
             }
             const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
@@ -26222,11 +26224,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             signature.declaration && (getReturnTypeFromAnnotation(signature.declaration) || unknownType).flags & TypeFlags.Never);
     }
 
-    function getTypePredicateArgument(predicate: TypePredicate, callExpression: CallExpression) {
+    function getTypePredicateArgument(predicate: TypePredicate, expression: FlowImpactingCallLikeExpression) {
         if (predicate.kind === TypePredicateKind.Identifier || predicate.kind === TypePredicateKind.AssertsIdentifier) {
-            return callExpression.arguments[predicate.parameterIndex];
+            return getFlowCallNodeArguments(expression)[predicate.parameterIndex];
         }
-        const invokedExpression = skipParentheses(callExpression.expression);
+        const invokedExpression = skipParentheses(getFlowCallNodeExpression(expression));
         return isAccessExpression(invokedExpression) ? skipParentheses(invokedExpression.expression) : undefined;
     }
 
@@ -26273,7 +26275,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (signature) {
                     const predicate = getTypePredicateOfSignature(signature);
                     if (predicate && predicate.kind === TypePredicateKind.AssertsIdentifier && !predicate.type) {
-                        const predicateArgument = (flow as FlowCall).node.arguments[predicate.parameterIndex];
+                        const predicateArgument = getFlowCallNodeArguments((flow as FlowCall).node)[predicate.parameterIndex];
                         if (predicateArgument && isFalseExpression(predicateArgument)) {
                             return false;
                         }
@@ -26337,7 +26339,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause).antecedent;
             }
             else if (flags & FlowFlags.Call) {
-                if ((flow as FlowCall).node.expression.kind === SyntaxKind.SuperKeyword) {
+                const node = (flow as FlowCall).node;
+                if (node.kind === SyntaxKind.CallExpression && node.expression.kind === SyntaxKind.SuperKeyword) {
                     return true;
                 }
                 flow = (flow as FlowCall).antecedent;
@@ -26596,8 +26599,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (predicate && (predicate.kind === TypePredicateKind.AssertsThis || predicate.kind === TypePredicateKind.AssertsIdentifier)) {
                     const flowType = getTypeAtFlowNode(flow.antecedent);
                     const type = finalizeEvolvingArrayType(getTypeFromFlowType(flowType));
+                    let callArguments: readonly Expression[];
                     const narrowedType = predicate.type ? narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
-                        predicate.kind === TypePredicateKind.AssertsIdentifier && predicate.parameterIndex >= 0 && predicate.parameterIndex < flow.node.arguments.length ? narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]) :
+                        predicate.kind === TypePredicateKind.AssertsIdentifier && predicate.parameterIndex >= 0 && predicate.parameterIndex < (callArguments = getFlowCallNodeArguments(flow.node)).length ? narrowTypeByAssertion(type, callArguments[predicate.parameterIndex]) :
                         type;
                     return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
                 }
@@ -27419,7 +27423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type;
         }
 
-        function narrowTypeByTypePredicate(type: Type, predicate: TypePredicate, callExpression: CallExpression, assumeTrue: boolean): Type {
+        function narrowTypeByTypePredicate(type: Type, predicate: TypePredicate, callExpression: FlowImpactingCallLikeExpression, assumeTrue: boolean): Type {
             // Don't narrow from 'any' if the predicate type is exactly 'Object' or 'Function'
             if (predicate.type && !(isTypeAny(type) && (predicate.type === globalObjectType || predicate.type === globalFunctionType))) {
                 const predicateArgument = getTypePredicateArgument(predicate, callExpression);
@@ -32674,6 +32678,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         setTextRange(result, parent);
         setParent(result, parent);
         return result;
+    }
+
+    /**
+     * Returns the called expression of the node, i.e. its {@link CallExpression.expression expression}
+     * or its {@link TaggedTemplateExpression.tag tag}.
+     */
+    function getFlowCallNodeExpression(node: FlowImpactingCallLikeExpression): LeftHandSideExpression {
+        return node.kind === SyntaxKind.CallExpression ? node.expression : node.tag;
+    }
+
+    /**
+     * Returns the arguments of the node, i.e. its direct {@link CallExpression.arguments arguments}
+     * or the {@link getEffectiveCallArguments effective arguments} of the template literal.
+     */
+    function getFlowCallNodeArguments(node: FlowImpactingCallLikeExpression): readonly Expression[] {
+        return node.kind === SyntaxKind.CallExpression ? node.arguments : getEffectiveCallArguments(node);
     }
 
     /**

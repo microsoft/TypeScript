@@ -3109,6 +3109,11 @@ export type CallLikeExpression =
     | JsxOpeningLikeElement
     ;
 
+export type FlowImpactingCallLikeExpression =
+    | CallExpression
+    | TaggedTemplateExpression
+    ;
+
 export interface AsExpression extends Expression {
     readonly kind: SyntaxKind.AsExpression;
     readonly expression: Expression;
@@ -4163,7 +4168,7 @@ export interface FlowAssignment extends FlowNodeBase {
 }
 
 export interface FlowCall extends FlowNodeBase {
-    node: CallExpression;
+    node: FlowImpactingCallLikeExpression;
     antecedent: FlowNode;
 }
 

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/taggedTemplateWithNeverReturnType.ts ===
+function fail(strings?: TemplateStringsArray): never {
+>fail : Symbol(fail, Decl(taggedTemplateWithNeverReturnType.ts, 0, 0))
+>strings : Symbol(strings, Decl(taggedTemplateWithNeverReturnType.ts, 0, 14))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+
+  throw "";
+}
+
+let a!: number | string;
+>a : Symbol(a, Decl(taggedTemplateWithNeverReturnType.ts, 4, 3))
+
+if (typeof a === "string") {
+>a : Symbol(a, Decl(taggedTemplateWithNeverReturnType.ts, 4, 3))
+
+  fail``;
+>fail : Symbol(fail, Decl(taggedTemplateWithNeverReturnType.ts, 0, 0))
+}
+
+const b: number = a;
+>b : Symbol(b, Decl(taggedTemplateWithNeverReturnType.ts, 10, 5))
+>a : Symbol(a, Decl(taggedTemplateWithNeverReturnType.ts, 4, 3))
+

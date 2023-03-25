@@ -1,0 +1,26 @@
+=== tests/cases/compiler/taggedTemplateWithAssertion.ts ===
+function assert(strings: TemplateStringsArray, condition: boolean): asserts condition {}
+>assert : (strings: TemplateStringsArray, condition: boolean) => asserts condition
+>strings : TemplateStringsArray
+>condition : boolean
+
+let a!: number | string;
+>a : string | number
+
+if (typeof a === "string") {
+>typeof a === "string" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : string | number
+>"string" : "string"
+
+  assert`uh-oh: ${false}`;
+>assert`uh-oh: ${false}` : void
+>assert : (strings: TemplateStringsArray, condition: boolean) => asserts condition
+>`uh-oh: ${false}` : string
+>false : false
+}
+
+const b: number = a;
+>b : number
+>a : number
+

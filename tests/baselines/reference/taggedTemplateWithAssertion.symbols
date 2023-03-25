@@ -1,0 +1,22 @@
+=== tests/cases/compiler/taggedTemplateWithAssertion.ts ===
+function assert(strings: TemplateStringsArray, condition: boolean): asserts condition {}
+>assert : Symbol(assert, Decl(taggedTemplateWithAssertion.ts, 0, 0))
+>strings : Symbol(strings, Decl(taggedTemplateWithAssertion.ts, 0, 16))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>condition : Symbol(condition, Decl(taggedTemplateWithAssertion.ts, 0, 46))
+>condition : Symbol(condition, Decl(taggedTemplateWithAssertion.ts, 0, 46))
+
+let a!: number | string;
+>a : Symbol(a, Decl(taggedTemplateWithAssertion.ts, 2, 3))
+
+if (typeof a === "string") {
+>a : Symbol(a, Decl(taggedTemplateWithAssertion.ts, 2, 3))
+
+  assert`uh-oh: ${false}`;
+>assert : Symbol(assert, Decl(taggedTemplateWithAssertion.ts, 0, 0))
+}
+
+const b: number = a;
+>b : Symbol(b, Decl(taggedTemplateWithAssertion.ts, 8, 5))
+>a : Symbol(a, Decl(taggedTemplateWithAssertion.ts, 2, 3))
+
