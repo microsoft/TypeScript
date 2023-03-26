@@ -64,6 +64,9 @@ import {
     EntityName,
     equateValues,
     ExportDeclaration,
+    extensionFromPath,
+    extensionIsTS,
+    fileExtensionIs,
     FileReference,
     FileTextChanges,
     filter,
@@ -118,6 +121,7 @@ import {
     hasStaticModifier,
     hasSyntacticModifier,
     hasTabstop,
+    hasTSFileExtension,
     HostCancellationToken,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -2925,14 +2929,14 @@ export function createLanguageService(
         const sourceFile = getValidSourceFile(fileName);
         const program = getProgram();
         const allFiles = program?.getSourceFiles().filter(sourceFile => !program?.isSourceFileFromExternalLibrary(sourceFile)).map(f => f.fileName);
-        const extension = ts.extensionFromPath(fileName);
+        const extension = extensionFromPath(fileName);
         const files: string[] = [];
         if (allFiles) {
             for (const file of allFiles) {
-                if (ts.extensionIsTS(extension) && ts.hasTSFileExtension(file)) {
+                if (extensionIsTS(extension) && hasTSFileExtension(file)) {
                     files.push(file);
                 }
-                else if (ts.fileExtensionIs(file, extension)){
+                else if (fileExtensionIs(file, extension)){
                     files.push(file);
                 }
             }

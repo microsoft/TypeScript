@@ -7602,7 +7602,7 @@
     },
     "Move to file": {
         "category": "Message",
-        "code": 95176
+        "code": 95178
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
