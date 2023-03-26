@@ -28,6 +28,12 @@ type NamedToMixed = ToAnonymousTuple<[first: boolean, second: number]>;
 
 type MixedSpread = [first: boolean, ...[second: string]];
 
+type ConditionalTuple = [
+  //      ^?
+  first: boolean,
+  ...(0 extends 0 ? [second: string] : [])
+];
+
 type AddMixedConditional<T> = [
   first: boolean,
   null,
