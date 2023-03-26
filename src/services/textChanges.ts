@@ -483,7 +483,7 @@ export class ChangeTracker {
     private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
-    private readonly changeExistingFile: { readonly oldFile: SourceFile, readonly newFile: SourceFile, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
+    private readonly changeExistingFile: { readonly oldFile: SourceFile, readonly newFile: SourceFile | undefined, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
 
     public static fromContext(context: TextChangesContext): ChangeTracker {
         return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -1145,7 +1145,7 @@ export class ChangeTracker {
     public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
         this.newFiles.push({ oldFile, fileName, statements });
     }
-    public addStatementsToNewFile(oldFile: SourceFile, newFile: SourceFile, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
+    public addStatementsToNewFile(oldFile: SourceFile, newFile: SourceFile | undefined, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
         this.changeExistingFile.push({ oldFile, newFile, statements });
     }
 }

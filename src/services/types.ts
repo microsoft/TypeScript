@@ -1755,7 +1755,7 @@ export interface Refactor {
     kinds?: string[];
 
     /** Compute the associated code actions */
-    getEditsForAction(context: RefactorContext, actionName: string, newFile?: SourceFile): RefactorEditInfo | undefined;
+    getEditsForAction(context: RefactorContext, actionName: string, newFile?: string): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
     getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[];

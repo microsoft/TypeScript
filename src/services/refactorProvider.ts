@@ -5,7 +5,6 @@ import {
     Refactor,
     RefactorContext,
     RefactorEditInfo,
-    SourceFile,
 } from "./_namespaces/ts";
 import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
 
@@ -37,7 +36,7 @@ export function getEditsForRefactor(context: RefactorContext, refactorName: stri
 }
 
 /** @internal */
-export function getEditsForMoveToFileRefactor(context: RefactorContext, newFile: SourceFile, refactorName: string, actionName: string): RefactorEditInfo | undefined {
+export function getEditsForMoveToFileRefactor(context: RefactorContext, newFile: string, refactorName: string, actionName: string): RefactorEditInfo | undefined {
     const refactor = refactors.get(refactorName);
     return refactor && refactor.getEditsForAction(context, actionName, newFile);
 }

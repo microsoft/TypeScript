@@ -2938,7 +2938,19 @@ export function createLanguageService(
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const program = getProgram();
-        const files = program?.getSourceFiles().filter(sourceFile => !program?.isSourceFileFromExternalLibrary(sourceFile)).map(f => f.fileName);
+        const allFiles = program?.getSourceFiles().filter(sourceFile => !program?.isSourceFileFromExternalLibrary(sourceFile)).map(f => f.fileName);
+        const extension = ts.extensionFromPath(fileName);
+        const files: string[] = [];
+        if (allFiles) {
+            for (const file of allFiles) {
+                if (ts.extensionIsTS(extension) && ts.hasTSFileExtension(file)) {
+                    files.push(file);
+                }
+                else if (ts.fileExtensionIs(file, extension)){
+                    files.push(file);
+                }
+            }
+        }
         //creating new filename
         let newFilename;
         if (program) {
@@ -2971,7 +2983,7 @@ export function createLanguageService(
     ): RefactorEditInfo | undefined {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getEditsForMoveToFileRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), getValidSourceFile(newFile), refactorName, actionName);
+        return refactor.getEditsForMoveToFileRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), newFile, refactorName, actionName);
     }
 
     function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {

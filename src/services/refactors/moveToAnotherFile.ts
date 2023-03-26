@@ -13,7 +13,7 @@ import {
     canHaveSymbol, cast,
     ClassDeclaration,
     codefix,
-    //combinePaths,
+    combinePaths,
     concatenate,
     contains,
     copyEntries,
@@ -39,6 +39,7 @@ import {
     FunctionDeclaration,
     getAssignmentDeclarationKind,
     getBaseFileName,
+    GetCanonicalFileName,
     getDecorators,
     getDirectoryPath,
     getLocaleSpecificMessage,
@@ -47,15 +48,18 @@ import {
     getQuotePreference,
     getRangesWhere,
     getRefactorContextSpan,
+    getRelativePathFromFile,
     getSymbolId,
     getUniqueName,
     hasSyntacticModifier,
+    hostGetCanonicalFileName,
     Identifier,
     ImportDeclaration,
     ImportEqualsDeclaration,
     insertImports,
     InterfaceDeclaration,
     InternalSymbolName,
+    isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
     isDeclarationName,
@@ -65,9 +69,11 @@ import {
     isImportDeclaration,
     isImportEqualsDeclaration,
     isNamedDeclaration,
+    isObjectLiteralExpression,
     isOmittedExpression,
     isPrologueDirective,
     isPropertyAccessExpression,
+    isPropertyAssignment,
     isRequireCall,
     isSourceFile,
     isStringLiteral,
@@ -76,6 +82,7 @@ import {
     isVariableDeclarationList,
     isVariableStatement,
     LanguageServiceHost,
+    last,
     length,
     makeImportIfNecessary,
     mapDefined,
@@ -86,9 +93,11 @@ import {
     Node,
     NodeFlags,
     nodeSeenTracker,
+    normalizePath,
     ObjectBindingElementWithoutPropertyName,
     Program,
     PropertyAccessExpression,
+    PropertyAssignment,
     QuotePreference,
     rangeContainsRange,
     RefactorContext,
@@ -146,8 +155,7 @@ registerRefactor(refactorNameForAnotherFile, {
         Debug.assert(actionName === refactorNameForAnotherFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
         if (newFile) {
-            const newFileImportAdder = codefix.createImportAdder(newFile, context.program, context.preferences, context.host);
-            const edits = textChanges.ChangeTracker.with(context, t => doChangeToAnotherFile(context.file, newFile, newFileImportAdder, context.program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(context, t => doChangeToAnotherFile(context, context.file, newFile, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return undefined;
@@ -180,10 +188,37 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     };
 }
 
-function doChangeToAnotherFile(oldFile: SourceFile, newFile: SourceFile, newFileImportAdder: codefix.ImportAdder, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChangeToAnotherFile(context: RefactorContext, oldFile: SourceFile, newFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    changes.addStatementsToNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, newFileImportAdder, usage, changes, toMove, program, host, newFile.fileName, preferences));
+    //creating a new file
+    if (!host.fileExists(newFile)) {
+        const newFilename = newFile;
+        changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFilename, preferences, /*newFileExists*/ false));
+        addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
+    }
+    else {
+        const sourceFile = program.getSourceFile(newFile);
+        if (sourceFile) {
+            const newFileImportAdder = codefix.createImportAdder(sourceFile, context.program, context.preferences, context.host);
+            changes.addStatementsToNewFile(oldFile, program.getSourceFile(newFile), getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ true, newFileImportAdder));
+        }
+    }
+}
+
+function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
+    const cfg = program.getCompilerOptions().configFile;
+    if (!cfg) return;
+
+    const newFileAbsolutePath = normalizePath(combinePaths(oldFileName, "..", newFileNameWithExtension));
+    const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
+
+    const cfgObject = cfg.statements[0] && tryCast(cfg.statements[0].expression, isObjectLiteralExpression);
+    const filesProp = cfgObject && find(cfgObject.properties, (prop): prop is PropertyAssignment =>
+        isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
+    if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
+        changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), factory.createStringLiteral(newFilePath), filesProp.initializer.elements);
+    }
 }
 
 interface StatementRange {
@@ -245,17 +280,18 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
             movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
         });
     }
+
     for (const statement of toMove) {
         forEachReference(statement, checker, symbol => {
             if (!symbol.declarations) return;
-            for (const decl of symbol.declarations) {
-                if (isInImport(decl)) {
-                    oldImportsNeededByNewFile.add(symbol);
+                for (const decl of symbol.declarations) {//not needed
+                    if (isInImport(decl)) {
+                        oldImportsNeededByNewFile.add(symbol);
+                    }
+                    else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
+                        newFileImportsFromOldFile.add(symbol);
+                    }
                 }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
-                    newFileImportsFromOldFile.add(symbol);
-                }
-            }
         });
     }
 
@@ -297,7 +333,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, newFile: SourceFile, _newFileImportAdder: codefix.ImportAdder, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
+    oldFile: SourceFile, newFile: string, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences, newFileExists: boolean, newFileImportAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -317,27 +353,20 @@ function getNewStatementsAndRemoveFromOldFile(
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename);
 
-    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
-    //insertImports(changes, newFile, imports, /*blankLineBetween*/ true, preferences);
-    //trial
-    // const changeTracker = textChanges.ChangeTracker.fromContext(context);
-    // const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
-    // const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
-    // if (nodeToInsertBefore) {
-    //     changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, /*blankLineBetween*/ true);
-    // }
-    // else {
-    //     changeTracker.insertNodeAtEndOfScope(context.file, scope, newFunction);
-    // }
-
-    //changes.insertNodesAtTopOfFile(newFile, imports, /*blankLineBetween*/ false);
-    //newFileImportAdder.writeFixes(changes);  //insert import statements in new file
-    if (imports.length > 0) {
-        insertImports(changes, newFile, imports,/*blankLineBetween*/ true, preferences);
-    }
+    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, newFileImportAdder);
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
-    changes.insertNodesAfter(newFile, newFile.statements[newFile.statements.length-1], body);
-
+    if (newFileExists) {
+        const newFileSourceFile = program.getSourceFile(newFile);
+        if (newFileSourceFile && newFileSourceFile.statements.length > 0) {
+            changes.insertNodesAfter(newFileSourceFile, newFileSourceFile.statements[newFileSourceFile.statements.length - 1], body);
+        }
+        if (imports.length > 0 && newFileSourceFile) {
+            insertImports(changes, newFileSourceFile, imports, /*blankLineBetween*/ true, preferences);
+        }
+    }
+    if (newFileImportAdder) {
+        newFileImportAdder.writeFixes(changes);
+    }
     if (imports.length && body.length) {
         return [
             ...prologueDirectives,
@@ -648,6 +677,7 @@ function getNewFileImportsAndAddExportInOldFile(
     host: LanguageServiceHost,
     useEsModuleSyntax: boolean,
     quotePreference: QuotePreference,
+    newFileImportAdder?: codefix.ImportAdder,
 ): readonly AnyImportOrRequireStatement[] {
     const copiedOldImports: AnyImportOrRequireStatement[] = [];
     for (const oldStatement of oldFile.statements) {
@@ -656,7 +686,7 @@ function getNewFileImportsAndAddExportInOldFile(
         });
     }
 
-    // Also, import things used from the old file, and insert 'export' modifiers as necessary in the old file.
+    //Also, import things used from the old file, and insert 'export' modifiers as necessary in the old file.
     let oldFileDefault: Identifier | undefined;
     const oldFileNamedImports: string[] = [];
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
@@ -673,11 +703,16 @@ function getNewFileImportsAndAddExportInOldFile(
             if (markSeenTop(top)) {
                 addExportToChanges(oldFile, top, name, changes, useEsModuleSyntax);
             }
-            if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
-                oldFileDefault = name;
+            if (newFileImportAdder && symbol.parent !== undefined) { //exported
+                newFileImportAdder.addImportFromExportedSymbol(skipAlias(symbol, checker));
             }
             else {
-                oldFileNamedImports.push(name.text);
+                if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
+                    oldFileDefault = name;
+                }
+                else {
+                    oldFileNamedImports.push(name.text);
+                }
             }
         }
     });
@@ -685,19 +720,6 @@ function getNewFileImportsAndAddExportInOldFile(
     append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, getBaseFileName(oldFile.fileName), program, host, useEsModuleSyntax, quotePreference));
     return copiedOldImports;
 }
-
-// function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
-//     let newFilename = proposedFilename;
-//     for (let i = 1; ; i++) {
-//         const name = combinePaths(inDirectory, newFilename + extension);
-//         if (!host.fileExists(name)) return newFilename;
-//         newFilename = `${proposedFilename}.${i}`;
-//     }
-// }
-
-// function inferNewFilename(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
-//     return importsFromNewFile.forEachEntry(symbolNameNoDefault) || movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
-// }
 
 interface UsageInfo {
     // Symbols whose declarations are moved from the old file to the new file.

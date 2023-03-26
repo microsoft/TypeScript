@@ -52,7 +52,6 @@ import {
     Program,
     QuickInfo,
     RefactorEditInfo,
-    RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
     RenameInfo,

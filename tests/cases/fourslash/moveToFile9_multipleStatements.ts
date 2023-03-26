@@ -11,26 +11,41 @@
 ////
 ////import './foo';
 ////import { a, b, alreadyUnused } from './other';
-////import { p } from './other2';
-////[|const y: Date = p + b;|]
+////const p = 0;
+////[|const x = 0;
+////const t = 2;
+////function f() {}
+////class C {}
+////enum E {}
+////namespace N { export const x = 0; }
+////type T = number;
+////interface I {}|]
+////t;
 
 verify.moveToAnotherFile({
     newFileContents: {
         "/a.ts":
 `// header comment
 
+import { t } from './bar';
 import './foo';
-import { a, alreadyUnused } from './other';
-`,
+import { a, b, alreadyUnused } from './other';
+const p = 0;
+t;`,
 
         "/bar.ts":
 `import './blah';
 import './blah2';
-import { b } from './other';
-import { p } from './other2';
 const a = 2;
 a;
-const y: Date = p + b;
+const x = 0;
+    export const t = 2;
+    function f() { }
+    class C { }
+    enum E { }
+    namespace N { export const x = 0; }
+    type T = number;
+    interface I { }
 `,
     },
     newFile: "/bar.ts",
