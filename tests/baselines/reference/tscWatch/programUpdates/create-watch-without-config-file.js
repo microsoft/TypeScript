@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/c/app.ts]
 
@@ -59,18 +60,16 @@ Shape signatures in builder refreshed for::
 /a/b/c/module.d.ts (used version)
 /a/b/c/app.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/c/app.ts:
+/a/b/c/app.ts: *new*
   {}
-/a/b/c/module.d.ts:
+/a/b/c/module.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined

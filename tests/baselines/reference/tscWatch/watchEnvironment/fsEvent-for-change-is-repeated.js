@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/project/main.ts]
 let a: string = "Hello"
@@ -49,16 +50,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/project/main.ts (used version)
 
 PolledWatches::
-/user/username/projects/project/node_modules/@types:
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/main.ts:
+/user/username/projects/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -102,18 +101,6 @@ main.ts
 Shape signatures in builder refreshed for::
 /user/username/projects/project/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/project/main.js]
@@ -131,18 +118,6 @@ Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Synchronizing program
 
-
-PolledWatches::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -181,18 +156,6 @@ main.ts
 Shape signatures in builder refreshed for::
 /user/username/projects/project/main.ts (used version)
 
-PolledWatches::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/project/main.js]
@@ -209,18 +172,6 @@ Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Synchronizing program
 
-
-PolledWatches::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

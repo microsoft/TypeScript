@@ -112,12 +112,12 @@ var e14 = { 0: 0, 0x0: 0 };
 >0x0 : number
 >0 : 0
 
-var e14 = { 0: 0, 000: 0 };
+var e14 = { 0: 0, 0o0: 0 };
 >e14 : { 0: number; }
->{ 0: 0, 000: 0 } : { 0: number; }
+>{ 0: 0, 0o0: 0 } : { 0: number; }
 >0 : number
 >0 : 0
->000 : number
+>0o0 : number
 >0 : 0
 
 var e15 = { "100": 0, 1e2: 0 };
@@ -259,12 +259,12 @@ var f14 = { 0: 0, get 0x0() { return 0; } };
 >0x0 : number
 >0 : 0
 
-var f14 = { 0: 0, get 000() { return 0; } };
+var f14 = { 0: 0, get 0o0() { return 0; } };
 >f14 : { readonly 0: number; }
->{ 0: 0, get 000() { return 0; } } : { readonly 0: number; }
+>{ 0: 0, get 0o0() { return 0; } } : { readonly 0: number; }
 >0 : number
 >0 : 0
->000 : number
+>0o0 : number
 >0 : 0
 
 var f15 = { "100": 0, get 1e2() { return 0; } };

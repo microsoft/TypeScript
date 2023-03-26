@@ -1,14 +1,9 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:07.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/c/foo.ts]
 import {y} from "bar"
 
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 1    [00:00:08.000] Search path: /c
 Info 2    [00:00:09.000] For info: /c/foo.ts :: No config files found.
@@ -22,7 +17,7 @@ Info 9    [00:00:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c/
 Info 10   [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:19.000] 	Files (1)
-	/c/foo.ts
+	/c/foo.ts SVC-1-0 "import {y} from \"bar\""
 
 
 	foo.ts
@@ -53,33 +48,19 @@ export var y = 1
 
 
 PolledWatches::
-/c/node_modules:
+/c/node_modules: *new*
   {"pollingInterval":500}
-/c/node_modules/@types:
+/c/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/c:
+/c: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 24   [00:00:39.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 25   [00:00:40.000] Scheduled: /dev/null/inferredProject1*
 Info 26   [00:00:41.000] Scheduled: *ensureProjectForOpenFiles*
 After running timeout callbacks
-
-PolledWatches::
-/c/node_modules:
-  {"pollingInterval":500}
-/c/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/c:
-  {}
-
-FsWatchesRecursive::
 
 Info 27   [00:00:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 28   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /c/bar.d.ts 500 undefined WatchType: Closed Script info
@@ -88,8 +69,8 @@ Info 30   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /c/
 Info 31   [00:00:46.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 32   [00:00:47.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 33   [00:00:48.000] 	Files (2)
-	/c/bar.d.ts
-	/c/foo.ts
+	/c/bar.d.ts Text-1 "export var y = 1"
+	/c/foo.ts SVC-1-0 "import {y} from \"bar\""
 
 
 	bar.d.ts

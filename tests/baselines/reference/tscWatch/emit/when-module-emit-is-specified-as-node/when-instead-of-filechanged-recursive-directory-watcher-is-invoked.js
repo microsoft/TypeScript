@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/rootFolder/project/tsconfig.json]
 {"compilerOptions":{"module":"none","allowJs":true,"outDir":"Static/scripts/"},"include":["Scripts/**/*"]}
@@ -50,21 +51,21 @@ Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/typescript.ts (used version)
 
 PolledWatches::
-/a/rootfolder/project/node_modules/@types:
+/a/rootfolder/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/rootfolder/project/tsconfig.json:
+/a/rootfolder/project/tsconfig.json: *new*
   {}
-/a/rootfolder/project/scripts/javascript.js:
+/a/rootfolder/project/scripts/javascript.js: *new*
   {}
-/a/rootfolder/project/scripts/typescript.ts:
+/a/rootfolder/project/scripts/typescript.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/rootfolder/project/scripts:
+/a/rootfolder/project/scripts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -109,24 +110,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
 /a/rootfolder/project/scripts/javascript.js (computed .d.ts)
-
-PolledWatches::
-/a/rootfolder/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/rootfolder/project/tsconfig.json:
-  {}
-/a/rootfolder/project/scripts/javascript.js:
-  {}
-/a/rootfolder/project/scripts/typescript.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/rootfolder/project/scripts:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -131,7 +132,7 @@ Output::
 
 [[90m12:00:29 AM[0m] Building project '/src/tests/tsconfig.json'...
 
-[91merror[0m[90m TS5101: [0mFlag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[91merror[0m[90m TS5107: [0mOption 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 
 Found 1 error.

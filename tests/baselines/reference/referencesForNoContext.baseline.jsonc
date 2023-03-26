@@ -1,7 +1,97 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+//     /*FIND ALL REFS*/
+// 
+//     //Increments
+//     modVar++;
+// 
+//     class testCls{
+//         
+//     }
+// 
+//     function testFn(){
+//         //Increments
+//         modVar++;
+//     }  
+// 
+//     module testMod {
+//     }
+// }
 
-undefined
 
-undefined
 
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+//     
+// 
+//     //Increments
+//     modVar++;
+// 
+//     class testCls{
+//         /*FIND ALL REFS*/
+//     }
+// 
+//     function testFn(){
+//         //Increments
+//         modVar++;
+//     }  
+// 
+//     module testMod {
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+//     
+// 
+//     //Increments
+//     modVar++;
+// 
+//     class testCls{
+//         
+//     }
+// 
+//     function testFn(){
+//         //Increments
+//         modVar++;
+//     }  /*FIND ALL REFS*/
+// 
+//     module testMod {
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+//     
+// 
+//     //Increments
+//     modVar++;
+// 
+//     class testCls{
+//         
+//     }
+// 
+//     function testFn(){
+//         //Increments
+//         modVar++;
+//     }  
+// /*FIND ALL REFS*/
+//     module testMod {
+//     }
+// }

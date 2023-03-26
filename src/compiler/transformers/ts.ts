@@ -186,7 +186,6 @@ import {
     TextRange,
     TransformationContext,
     TransformFlags,
-    UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
     visitEachChild,
@@ -260,7 +259,7 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespace: ModuleDeclaration;
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
-    let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
+    let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
     let currentClassHasParameterProperties: boolean | undefined;
 
     /**
@@ -801,7 +800,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(getProperties(node, /*requireInitialized*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
         if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;

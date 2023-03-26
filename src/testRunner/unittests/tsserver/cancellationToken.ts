@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             isCancellationRequested: () => false,
             setRequest: requestId => {
                 if (expectedRequestId === undefined) {
-                    assert.isTrue(false, "unexpected call");
+                    assert.fail("unexpected call");
                 }
                 assert.equal(requestId, expectedRequestId);
             },
@@ -51,9 +51,9 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         });
 
         expectedRequestId = session.getNextSeq();
-        session.executeCommandSeq<ts.server.protocol.OccurrencesRequest>({
-            command: ts.server.protocol.CommandTypes.Occurrences,
-            arguments: { file: f1.path, line: 1, offset: 6 }
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: f1.path, line: 1, offset: 6, filesToSearch: [f1.path] }
         });
 
         expectedRequestId = 2;

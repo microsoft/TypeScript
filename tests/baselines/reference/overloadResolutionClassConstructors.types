@@ -220,26 +220,21 @@ new fn4('', null);
 >new fn4('', null) : fn4<"", any>
 >fn4 : typeof fn4
 >'' : ""
->null : null
 
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
 new fn4<boolean, Date>(null, null); // Error
 >new fn4<boolean, Date>(null, null) : fn4<boolean, Date>
 >fn4 : typeof fn4
->null : null
->null : null
 
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 new fn4(true, null); // Error
 >new fn4(true, null) : fn4<string, any>
 >fn4 : typeof fn4
 >true : true
->null : null
 
 new fn4(null, true); // Error
 >new fn4(null, true) : fn4<any, number>
 >fn4 : typeof fn4
->null : null
 >true : true
 
 // Non - generic overloads where contextual typing of function arguments has errors

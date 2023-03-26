@@ -31,7 +31,6 @@ var r = _.all([true, 1, null, 'yes'], _.identity);
 >[true, 1, null, 'yes'] : (string | number | true)[]
 >true : true
 >1 : 1
->null : null
 >'yes' : "yes"
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static

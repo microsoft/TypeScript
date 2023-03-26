@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/username/project/typescript.ts]
 var z = 10;
@@ -40,12 +41,6 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/typescript.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/username/project/typescript.js]
@@ -59,12 +54,6 @@ Input::
 
 Output::
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -76,12 +65,6 @@ var zz30 = 100;
 
 
 Output::
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -112,12 +95,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/username/project/typescript.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/username/project/typescript.js]
@@ -130,12 +107,6 @@ Change:: Polling queues polled and everything is in the high polling queue
 Input::
 
 Output::
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
