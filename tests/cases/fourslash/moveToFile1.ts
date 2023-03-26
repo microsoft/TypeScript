@@ -17,7 +17,7 @@
 ////export const t = 2;
 
 
-verify.moveToAnotherFile({
+verify.moveToFile({
     newFileContents: {
         "/a.ts":
 `// header comment

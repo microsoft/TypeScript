@@ -129,33 +129,33 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorNameForAnotherFile = "Move to another file";
-const description = getLocaleSpecificMessage(Diagnostics.Move_to_another_file);
+const refactorNameForMoveToFile = "Move to file";
+const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
 
-const moveToAnotherFileAction = {
-    name: "Move to another file", //needs to change for it to have refactorName = "Move to another file"
+const moveToFileAction = {
+    name: "Move to file",
     description,
-    kind: "refactor.move.anotherFile",
+    kind: "refactor.move.file",
 };
-registerRefactor(refactorNameForAnotherFile, {
-    kinds: [moveToAnotherFileAction.kind],
-    getAvailableActions: function getRefactorActionsToMoveToAnotherFile(context): readonly ApplicableRefactorInfo[] {
+registerRefactor(refactorNameForMoveToFile, {
+    kinds: [moveToFileAction.kind],
+    getAvailableActions: function getRefactorActionsToMoveToFile(context): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
         if (context.preferences.allowTextChangesInNewFiles && statements) {
-            return [{ name: refactorNameForAnotherFile, description, actions: [moveToAnotherFileAction] }];
+            return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
-            return [{ name: refactorNameForAnotherFile, description, actions:
-                [{ ...moveToAnotherFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
+            return [{ name: refactorNameForMoveToFile, description, actions:
+                [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
             }];
         }
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToMoveToAnotherFile(context, actionName, newFile): RefactorEditInfo | undefined {
-        Debug.assert(actionName === refactorNameForAnotherFile, "Wrong refactor invoked");
+    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, newFile): RefactorEditInfo | undefined {
+        Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
         if (newFile) {
-            const edits = textChanges.ChangeTracker.with(context, t => doChangeToAnotherFile(context, context.file, newFile, context.program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, newFile, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return undefined;
@@ -188,14 +188,13 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     };
 }
 
-function doChangeToAnotherFile(context: RefactorContext, oldFile: SourceFile, newFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(context: RefactorContext, oldFile: SourceFile, newFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
     //creating a new file
     if (!host.fileExists(newFile)) {
-        const newFilename = newFile;
-        changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFilename, preferences, /*newFileExists*/ false));
-        addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
+        changes.createNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ false));
+        addNewFileToTsconfig(program, changes, oldFile.fileName, newFile, hostGetCanonicalFileName(host));
     }
     else {
         const sourceFile = program.getSourceFile(newFile);
@@ -333,7 +332,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, newFile: string, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences, newFileExists: boolean, newFileImportAdder?: codefix.ImportAdder
+    oldFile: SourceFile, newFile: string, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences, newFileExists: boolean, importAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -353,19 +352,19 @@ function getNewStatementsAndRemoveFromOldFile(
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename);
 
-    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, newFileImportAdder);
+    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, importAdder);
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
     if (newFileExists) {
-        const newFileSourceFile = program.getSourceFile(newFile);
-        if (newFileSourceFile && newFileSourceFile.statements.length > 0) {
-            changes.insertNodesAfter(newFileSourceFile, newFileSourceFile.statements[newFileSourceFile.statements.length - 1], body);
+        const sourceFile = program.getSourceFile(newFile);
+        if (sourceFile && sourceFile.statements.length > 0) {
+            changes.insertNodesAfter(sourceFile, sourceFile.statements[sourceFile.statements.length - 1], body);
         }
-        if (imports.length > 0 && newFileSourceFile) {
-            insertImports(changes, newFileSourceFile, imports, /*blankLineBetween*/ true, preferences);
+        if (imports.length > 0 && sourceFile) {
+            insertImports(changes, sourceFile, imports, /*blankLineBetween*/ true, preferences);
         }
     }
-    if (newFileImportAdder) {
-        newFileImportAdder.writeFixes(changes);
+    if (importAdder) {
+        importAdder.writeFixes(changes);
     }
     if (imports.length && body.length) {
         return [
@@ -703,7 +702,7 @@ function getNewFileImportsAndAddExportInOldFile(
             if (markSeenTop(top)) {
                 addExportToChanges(oldFile, top, name, changes, useEsModuleSyntax);
             }
-            if (newFileImportAdder && symbol.parent !== undefined) { //exported
+            if (newFileImportAdder && symbol.parent !== undefined) {
                 newFileImportAdder.addImportFromExportedSymbol(skipAlias(symbol, checker));
             }
             else {

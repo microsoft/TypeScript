@@ -3873,13 +3873,13 @@ export class TestState {
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
-    public moveToAnotherFile(options: FourSlashInterface.MoveToAnotherFileOptions): void {
+    public moveToFile(options: FourSlashInterface.MoveToFileOptions): void {
         assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
         const range = this.getRanges()[0];
-        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to another file")!;
+        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to file")!;
         assert(refactor.actions.length === 1);
         const action = ts.first(refactor.actions);
-        assert(action.name === "Move to another file" && action.description === "Move to another file");
+        assert(action.name === "Move to file" && action.description === "Move to file");
 
         const editInfo = this.languageService.getEditsForMoveToFileRefactor(range.fileName, options.newFile, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);

@@ -13,7 +13,7 @@
 ////const p = 0;
 ////[|const y: Date = p + b;|]
 
-verify.moveToAnotherFile({
+verify.moveToFile({
     newFileContents: {
         "/a.ts":
 `// header comment

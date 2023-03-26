@@ -9,7 +9,7 @@
 ////[|const y: Date = p + b;|]
 ////a; y;
 
-verify.moveToAnotherFile({
+verify.moveToFile({
     newFileContents: {
         "/a.ts":
 `// header comment

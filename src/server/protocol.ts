@@ -604,8 +604,7 @@ export interface GetApplicableRefactorsResponse extends Response {
 /**
  * Request refactorings at a given position or selection area to move to an existing file.
  */
-export interface GetMoveToRefactoringFileSuggestionsRequest extends Request { //will have to change to FileLocationOrRangeRequestArgs
-    // Pass along the same arguments that we first passed to `GetApplicableRefactorsRequest`
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
     command: CommandTypes.GetMoveToRefactoringFileSuggestions;
     arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
 }

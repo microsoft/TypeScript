@@ -22,7 +22,7 @@
 ////interface I {}|]
 ////t;
 
-verify.moveToAnotherFile({
+verify.moveToFile({
     newFileContents: {
         "/a.ts":
 `// header comment

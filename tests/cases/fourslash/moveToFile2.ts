@@ -15,7 +15,7 @@
 ////}
 
 
-verify.moveToAnotherFile({
+verify.moveToFile({
     newFileContents: {
         "/a.ts":"",
         "/bar.ts":
