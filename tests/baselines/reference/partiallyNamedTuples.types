@@ -64,7 +64,6 @@ type MixedSpread = [first: boolean, ...[second: string]];
 type ConditionalTuple = [
 >ConditionalTuple : [first: boolean, second: string]
 
-  //      ^?
   first: boolean,
   ...(0 extends 0 ? [second: string] : [])
 ];

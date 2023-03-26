@@ -97,34 +97,33 @@ type MixedSpread = [first: boolean, ...[second: string]];
 type ConditionalTuple = [
 >ConditionalTuple : Symbol(ConditionalTuple, Decl(partiallyNamedTuples.ts, 27, 57))
 
-  //      ^?
   first: boolean,
   ...(0 extends 0 ? [second: string] : [])
 ];
 
 type AddMixedConditional<T> = [
->AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 33, 2))
->T : Symbol(T, Decl(partiallyNamedTuples.ts, 35, 25))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 32, 2))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 34, 25))
 
   first: boolean,
   null,
   third: T extends number ? "a" : "b",
->T : Symbol(T, Decl(partiallyNamedTuples.ts, 35, 25))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 34, 25))
 
   ...(T extends 0 ? [fourth: "c"] : [])
->T : Symbol(T, Decl(partiallyNamedTuples.ts, 35, 25))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 34, 25))
 
 ];
 
 type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
->AddMixedConditionalBoolean : Symbol(AddMixedConditionalBoolean, Decl(partiallyNamedTuples.ts, 40, 2))
->AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 33, 2))
+>AddMixedConditionalBoolean : Symbol(AddMixedConditionalBoolean, Decl(partiallyNamedTuples.ts, 39, 2))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 32, 2))
 
 type AddMixedConditionalLiteral = AddMixedConditional<0>;
->AddMixedConditionalLiteral : Symbol(AddMixedConditionalLiteral, Decl(partiallyNamedTuples.ts, 42, 63))
->AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 33, 2))
+>AddMixedConditionalLiteral : Symbol(AddMixedConditionalLiteral, Decl(partiallyNamedTuples.ts, 41, 63))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 32, 2))
 
 type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
->AddMixedConditionalNumberPrimitive : Symbol(AddMixedConditionalNumberPrimitive, Decl(partiallyNamedTuples.ts, 43, 57))
->AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 33, 2))
+>AddMixedConditionalNumberPrimitive : Symbol(AddMixedConditionalNumberPrimitive, Decl(partiallyNamedTuples.ts, 42, 57))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 32, 2))
 
