@@ -28,3 +28,54 @@ function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
 >a : NamedAnonymousMixed
 >args : NamedAndAnonymous
 
+type ToAnonymousTuple<T extends unknown[]> = {
+>ToAnonymousTuple : ToAnonymousTuple<T>
+
+  [K in keyof T]: [K, T[K], keyof T, T];
+};
+
+type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
+>AnonymousToAnonymous : [["0", boolean, keyof [boolean, number], [boolean, number]], ["1", number, keyof [boolean, number], [boolean, number]]]
+
+type MixedToAnonymous = ToAnonymousTuple<[boolean, second: number]>;
+>MixedToAnonymous : [["0", boolean, keyof [boolean, second: number], [boolean, second: number]], second: ["1", number, keyof [boolean, second: number], [boolean, second: number]]]
+
+type NamedToAnonymous = ToAnonymousTuple<[first: boolean, second: number]>;
+>NamedToAnonymous : [first: ["0", boolean, keyof [first: boolean, second: number], [first: boolean, second: number]], second: ["1", number, keyof [first: boolean, second: number], [first: boolean, second: number]]]
+
+type ToMixedTuple<T extends unknown[]> = {
+>ToMixedTuple : ToMixedTuple<T>
+
+  [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
+};
+
+type AnonymousToMixed = ToAnonymousTuple<[boolean, number]>;
+>AnonymousToMixed : [["0", boolean, keyof [boolean, number], [boolean, number]], ["1", number, keyof [boolean, number], [boolean, number]]]
+
+type MixedToMixed = ToAnonymousTuple<[boolean, second: number]>;
+>MixedToMixed : [["0", boolean, keyof [boolean, second: number], [boolean, second: number]], second: ["1", number, keyof [boolean, second: number], [boolean, second: number]]]
+
+type NamedToMixed = ToAnonymousTuple<[first: boolean, second: number]>;
+>NamedToMixed : [first: ["0", boolean, keyof [first: boolean, second: number], [first: boolean, second: number]], second: ["1", number, keyof [first: boolean, second: number], [first: boolean, second: number]]]
+
+type MixedSpread = [first: boolean, ...[second: string]];
+>MixedSpread : [first: boolean, second: string]
+
+type AddMixedConditional<T> = [
+>AddMixedConditional : [boolean, null, T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
+
+  first: boolean,
+  null,
+  third: T extends number ? "a" : "b",
+  ...(T extends 0 ? [fourth: "c"] : [])
+];
+
+type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
+>AddMixedConditionalBoolean : [boolean, null, "b"]
+
+type AddMixedConditionalLiteral = AddMixedConditional<0>;
+>AddMixedConditionalLiteral : [boolean, null, "a", "c"]
+
+type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
+>AddMixedConditionalNumberPrimitive : [boolean, null, "a"]
+

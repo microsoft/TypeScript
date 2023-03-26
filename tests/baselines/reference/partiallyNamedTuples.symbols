@@ -37,3 +37,86 @@ function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
 >args : Symbol(args, Decl(partiallyNamedTuples.ts, 9, 36))
 >NamedAnonymousMixed : Symbol(NamedAnonymousMixed, Decl(partiallyNamedTuples.ts, 3, 65))
 
+type ToAnonymousTuple<T extends unknown[]> = {
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 11, 22))
+
+  [K in keyof T]: [K, T[K], keyof T, T];
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 12, 3))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 11, 22))
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 12, 3))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 11, 22))
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 12, 3))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 11, 22))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 11, 22))
+
+};
+
+type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
+>AnonymousToAnonymous : Symbol(AnonymousToAnonymous, Decl(partiallyNamedTuples.ts, 13, 2))
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+
+type MixedToAnonymous = ToAnonymousTuple<[boolean, second: number]>;
+>MixedToAnonymous : Symbol(MixedToAnonymous, Decl(partiallyNamedTuples.ts, 15, 64))
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+
+type NamedToAnonymous = ToAnonymousTuple<[first: boolean, second: number]>;
+>NamedToAnonymous : Symbol(NamedToAnonymous, Decl(partiallyNamedTuples.ts, 16, 68))
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+
+type ToMixedTuple<T extends unknown[]> = {
+>ToMixedTuple : Symbol(ToMixedTuple, Decl(partiallyNamedTuples.ts, 17, 75))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 19, 18))
+
+  [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 20, 3))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 19, 18))
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 20, 3))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 19, 18))
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 20, 3))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 19, 18))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 19, 18))
+
+};
+
+type AnonymousToMixed = ToAnonymousTuple<[boolean, number]>;
+>AnonymousToMixed : Symbol(AnonymousToMixed, Decl(partiallyNamedTuples.ts, 21, 2))
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+
+type MixedToMixed = ToAnonymousTuple<[boolean, second: number]>;
+>MixedToMixed : Symbol(MixedToMixed, Decl(partiallyNamedTuples.ts, 23, 60))
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+
+type NamedToMixed = ToAnonymousTuple<[first: boolean, second: number]>;
+>NamedToMixed : Symbol(NamedToMixed, Decl(partiallyNamedTuples.ts, 24, 64))
+>ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+
+type MixedSpread = [first: boolean, ...[second: string]];
+>MixedSpread : Symbol(MixedSpread, Decl(partiallyNamedTuples.ts, 25, 71))
+
+type AddMixedConditional<T> = [
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 27, 57))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 29, 25))
+
+  first: boolean,
+  null,
+  third: T extends number ? "a" : "b",
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 29, 25))
+
+  ...(T extends 0 ? [fourth: "c"] : [])
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 29, 25))
+
+];
+
+type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
+>AddMixedConditionalBoolean : Symbol(AddMixedConditionalBoolean, Decl(partiallyNamedTuples.ts, 34, 2))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 27, 57))
+
+type AddMixedConditionalLiteral = AddMixedConditional<0>;
+>AddMixedConditionalLiteral : Symbol(AddMixedConditionalLiteral, Decl(partiallyNamedTuples.ts, 36, 63))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 27, 57))
+
+type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
+>AddMixedConditionalNumberPrimitive : Symbol(AddMixedConditionalNumberPrimitive, Decl(partiallyNamedTuples.ts, 37, 57))
+>AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 27, 57))
+

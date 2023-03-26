@@ -10,6 +10,35 @@ function fb1(...args: NamedAnonymousMixed) {}
 function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
 function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
 
+type ToAnonymousTuple<T extends unknown[]> = {
+  [K in keyof T]: [K, T[K], keyof T, T];
+};
+
+type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
+type MixedToAnonymous = ToAnonymousTuple<[boolean, second: number]>;
+type NamedToAnonymous = ToAnonymousTuple<[first: boolean, second: number]>;
+
+type ToMixedTuple<T extends unknown[]> = {
+  [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
+};
+
+type AnonymousToMixed = ToAnonymousTuple<[boolean, number]>;
+type MixedToMixed = ToAnonymousTuple<[boolean, second: number]>;
+type NamedToMixed = ToAnonymousTuple<[first: boolean, second: number]>;
+
+type MixedSpread = [first: boolean, ...[second: string]];
+
+type AddMixedConditional<T> = [
+  first: boolean,
+  null,
+  third: T extends number ? "a" : "b",
+  ...(T extends 0 ? [fourth: "c"] : [])
+];
+
+type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
+type AddMixedConditionalLiteral = AddMixedConditional<0>;
+type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
+
 
 //// [partiallyNamedTuples.js]
 function fa1() {
