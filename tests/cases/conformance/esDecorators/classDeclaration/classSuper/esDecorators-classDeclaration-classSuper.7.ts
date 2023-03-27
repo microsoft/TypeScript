@@ -32,3 +32,12 @@ class C {
 	@foo
 	public get val(): number { return 3; }
 }
+class D extends A {
+	public constructor() {
+		super();
+		this.val;
+	}
+
+	@foo
+	public get val(): number { return 3; }
+}

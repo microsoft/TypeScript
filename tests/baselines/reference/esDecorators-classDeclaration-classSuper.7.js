@@ -29,6 +29,15 @@ class C {
 	@foo
 	public get val(): number { return 3; }
 }
+class D extends A {
+	public constructor() {
+		super();
+		this.val;
+	}
+
+	@foo
+	public get val(): number { return 3; }
+}
 
 
 //// [esDecorators-classDeclaration-classSuper.7.js]
@@ -69,6 +78,22 @@ let C = (() => {
         }
         constructor() {
             __runInitializers(this, _instanceExtraInitializers_1);
+            this.val;
+        }
+        get val() { return 3; }
+    };
+})();
+let D = (() => {
+    let _instanceExtraInitializers_2 = [];
+    let _get_val_decorators;
+    return class D extends A {
+        static {
+            _get_val_decorators = [foo];
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers_2);
+        }
+        constructor() {
+            super();
+            __runInitializers(this, _instanceExtraInitializers_2);
             this.val;
         }
         get val() { return 3; }
