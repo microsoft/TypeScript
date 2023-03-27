@@ -22,3 +22,13 @@ function foo(method: any, _context: any): any {
 }
 
 new B();
+
+// https://github.com/microsoft/TypeScript/issues/53448
+class C {
+	public constructor() {
+		this.val;
+	}
+
+	@foo
+	public get val(): number { return 3; }
+}

@@ -1,4 +1,4 @@
-//// [esDecorators-classExpression-classSuper.7.ts]
+//// [esDecorators-classDeclaration-classSuper.7.ts]
 class A {}
 class B extends A {
 	public constructor() {
@@ -20,8 +20,18 @@ function foo(method: any, _context: any): any {
 
 new B();
 
+// https://github.com/microsoft/TypeScript/issues/53448
+class C {
+	public constructor() {
+		this.val;
+	}
 
-//// [esDecorators-classExpression-classSuper.7.js]
+	@foo
+	public get val(): number { return 3; }
+}
+
+
+//// [esDecorators-classDeclaration-classSuper.7.js]
 class A {
 }
 let B = (() => {
@@ -48,3 +58,19 @@ function foo(method, _context) {
     };
 }
 new B();
+// https://github.com/microsoft/TypeScript/issues/53448
+let C = (() => {
+    let _instanceExtraInitializers_1 = [];
+    let _get_val_decorators;
+    return class C {
+        static {
+            _get_val_decorators = [foo];
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers_1);
+        }
+        constructor() {
+            __runInitializers(this, _instanceExtraInitializers_1);
+            this.val;
+        }
+        get val() { return 3; }
+    };
+})();
