@@ -9,13 +9,9 @@
 ////// header comment
 ////
 ////import './foo';
-////import { a, b } from './other';
+////import { a, b, alreadyUnused } from './other';
 ////const p = 0;
 ////[|const y: Date = p + b;|]
-
-// @Filename: /other.ts
-////export const b = 2;
-////export const a = 1;
 
 verify.moveToFile({
     newFileContents: {
@@ -23,7 +19,7 @@ verify.moveToFile({
 `// header comment
 
 import './foo';
-import { a } from './other';
+import { a, alreadyUnused } from './other';
 export const p = 0;
 `,
 

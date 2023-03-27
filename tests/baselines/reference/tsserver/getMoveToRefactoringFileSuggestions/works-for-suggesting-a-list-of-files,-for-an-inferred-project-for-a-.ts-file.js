@@ -1,13 +1,5 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:10.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/file2.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/file1.ts]
 import {} from "./file.ts";
@@ -22,12 +14,15 @@ interface ka {
 {"files":["./file1.ts","./file.ts"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:10.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/file2.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /file2.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -52,7 +47,7 @@ Info 14   [00:00:23.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 15   [00:00:24.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:25.000] Project '/tsconfig.json' (Configured)
 Info 17   [00:00:26.000] 	Files (1)
-	/file1.ts
+	/file1.ts Text-1 "import {} from \"./file.ts\";"
 
 
 	file1.ts
@@ -64,7 +59,7 @@ Info 20   [00:00:29.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 21   [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 22   [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 23   [00:00:32.000] 	Files (1)
-	/file2.ts
+	/file2.ts SVC-1-0 "interface ka {\n                name: string;\n            }\n            "
 
 
 	file2.ts
@@ -82,28 +77,28 @@ Info 25   [00:00:39.000] -----------------------------------------------
 Info 25   [00:00:40.000] Open files: 
 Info 25   [00:00:41.000] 	FileName: /file2.ts ProjectRootPath: undefined
 Info 25   [00:00:42.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/file.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/file1.ts:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
-
 Info 25   [00:00:43.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/file.ts: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+/file1.ts: *new*
+  {}
+/: *new*
+  {}
+
+Before request
+
 Info 26   [00:00:44.000] request:
     {
       "command": "getMoveToRefactoringFileSuggestions",
@@ -115,42 +110,6 @@ Info 26   [00:00:44.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/file.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/file1.ts:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/file.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/file1.ts:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
-
 Info 27   [00:00:45.000] response:
     {
       "response": {
@@ -161,3 +120,4 @@ Info 27   [00:00:45.000] response:
       },
       "responseRequired": true
     }
+After request

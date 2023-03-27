@@ -127,7 +127,7 @@ function isPureImport(node: Node): boolean {
         case SyntaxKind.ImportEqualsDeclaration:
             return !hasSyntacticModifier(node, ModifierFlags.Export);
         case SyntaxKind.VariableStatement:
-            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
+            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true));
         default:
             return false;
     }
@@ -265,7 +265,7 @@ function isInImport(decl: Declaration) {
 }
 function isVariableDeclarationInImport(decl: VariableDeclaration) {
     return isSourceFile(decl.parent.parent.parent) &&
-        !!decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
+        !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
 }
 
 function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {

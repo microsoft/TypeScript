@@ -1,13 +1,5 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/file1.ts]
 interface ka {
@@ -34,12 +26,15 @@ interface ka {
 {"files":["./file1.ts","./file2.tsx","./file3.mts","./file4.cts","./file5.js","./file6.d.ts"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /
 Info 3    [00:00:20.000] For info: /file1.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /tsconfig.json
@@ -67,12 +62,12 @@ Info 13   [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 14   [00:00:31.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:32.000] Project '/tsconfig.json' (Configured)
 Info 16   [00:00:33.000] 	Files (6)
-	/file1.ts
-	/file2.tsx
-	/file3.mts
-	/file4.cts
-	/file5.js
-	/file6.d.ts
+	/file1.ts SVC-1-0 "interface ka {\n                name: string;\n            }\n            "
+	/file2.tsx Text-1 ""
+	/file3.mts Text-1 ""
+	/file4.cts Text-1 ""
+	/file5.js Text-1 ""
+	/file6.d.ts Text-1 ""
 
 
 	file1.ts
@@ -96,32 +91,32 @@ Info 18   [00:00:37.000] -----------------------------------------------
 Info 18   [00:00:38.000] Open files: 
 Info 18   [00:00:39.000] 	FileName: /file1.ts ProjectRootPath: undefined
 Info 18   [00:00:40.000] 		Projects: /tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/file2.tsx:
-  {}
-/file3.mts:
-  {}
-/file4.cts:
-  {}
-/file5.js:
-  {}
-/file6.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 18   [00:00:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+/file2.tsx: *new*
+  {}
+/file3.mts: *new*
+  {}
+/file4.cts: *new*
+  {}
+/file5.js: *new*
+  {}
+/file6.d.ts: *new*
+  {}
+
+Before request
+
 Info 19   [00:00:42.000] request:
     {
       "command": "getMoveToRefactoringFileSuggestions",
@@ -133,50 +128,6 @@ Info 19   [00:00:42.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/file2.tsx:
-  {}
-/file3.mts:
-  {}
-/file4.cts:
-  {}
-/file5.js:
-  {}
-/file6.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/file2.tsx:
-  {}
-/file3.mts:
-  {}
-/file4.cts:
-  {}
-/file5.js:
-  {}
-/file6.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 20   [00:00:43.000] response:
     {
       "response": {
@@ -191,3 +142,4 @@ Info 20   [00:00:43.000] response:
       },
       "responseRequired": true
     }
+After request

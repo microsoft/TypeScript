@@ -19,10 +19,10 @@ verify.moveToFile({
     newFileContents: {
         "/a.ts":"",
         "/bar.ts":
-` import { type A } from "./other";
+`import { type A } from "./other";
 
- const q = 0;
- function f(a: A) { }
+const q = 0;
+function f(a: A) { }
 `,
     },
     newFile: "/bar.ts",

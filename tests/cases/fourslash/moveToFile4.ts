@@ -1,34 +1,39 @@
-
 /// <reference path='fourslash.ts' />
 
-// @Filename: /bar.ts
-//// import { b } from './a';
+//@Filename: /bar.ts
+////import './someFile';
 ////
-////const q = 0;
+////const q = 20;
 
 // @Filename: /a.ts
 ////// header comment
 ////
-////export const p = 0;
-////export const b = 1;
-////[|const y = p + b;|]
+////import './foo';
+////import { a, b } from './other';
+////const p = 0;
+////[|const y: Date = p + b;|]
 
-
+// @Filename: /other.ts
+////export const b = 2;
+////export const a = 1;
 
 verify.moveToFile({
     newFileContents: {
         "/a.ts":
 `// header comment
 
+import './foo';
+import { a } from './other';
 export const p = 0;
-export const b = 1;
 `,
 
         "/bar.ts":
-` import { b, p } from './a';
+`import { p } from './a';
+import { b } from './other';
+import './someFile';
 
-const q = 0;
-const y = p + b;
+const q = 20;
+const y: Date = p + b;
 `,
     },
     newFile: "/bar.ts",
