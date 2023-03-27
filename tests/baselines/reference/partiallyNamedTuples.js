@@ -22,9 +22,9 @@ type ToMixedTuple<T extends unknown[]> = {
   [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
 };
 
-type AnonymousToMixed = ToAnonymousTuple<[boolean, number]>;
-type MixedToMixed = ToAnonymousTuple<[boolean, second: number]>;
-type NamedToMixed = ToAnonymousTuple<[first: boolean, second: number]>;
+type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
+type MixedToMixed = ToMixedTuple<[boolean, second: number]>;
+type NamedToMixed = ToMixedTuple<[first: boolean, second: number]>;
 
 type MixedSpread = [first: boolean, ...[second: string]];
 

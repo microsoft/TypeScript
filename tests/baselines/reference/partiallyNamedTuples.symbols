@@ -79,20 +79,20 @@ type ToMixedTuple<T extends unknown[]> = {
 
 };
 
-type AnonymousToMixed = ToAnonymousTuple<[boolean, number]>;
+type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
 >AnonymousToMixed : Symbol(AnonymousToMixed, Decl(partiallyNamedTuples.ts, 21, 2))
->ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+>ToMixedTuple : Symbol(ToMixedTuple, Decl(partiallyNamedTuples.ts, 17, 75))
 
-type MixedToMixed = ToAnonymousTuple<[boolean, second: number]>;
->MixedToMixed : Symbol(MixedToMixed, Decl(partiallyNamedTuples.ts, 23, 60))
->ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+type MixedToMixed = ToMixedTuple<[boolean, second: number]>;
+>MixedToMixed : Symbol(MixedToMixed, Decl(partiallyNamedTuples.ts, 23, 56))
+>ToMixedTuple : Symbol(ToMixedTuple, Decl(partiallyNamedTuples.ts, 17, 75))
 
-type NamedToMixed = ToAnonymousTuple<[first: boolean, second: number]>;
->NamedToMixed : Symbol(NamedToMixed, Decl(partiallyNamedTuples.ts, 24, 64))
->ToAnonymousTuple : Symbol(ToAnonymousTuple, Decl(partiallyNamedTuples.ts, 9, 72))
+type NamedToMixed = ToMixedTuple<[first: boolean, second: number]>;
+>NamedToMixed : Symbol(NamedToMixed, Decl(partiallyNamedTuples.ts, 24, 60))
+>ToMixedTuple : Symbol(ToMixedTuple, Decl(partiallyNamedTuples.ts, 17, 75))
 
 type MixedSpread = [first: boolean, ...[second: string]];
->MixedSpread : Symbol(MixedSpread, Decl(partiallyNamedTuples.ts, 25, 71))
+>MixedSpread : Symbol(MixedSpread, Decl(partiallyNamedTuples.ts, 25, 67))
 
 type ConditionalTuple = [
 >ConditionalTuple : Symbol(ConditionalTuple, Decl(partiallyNamedTuples.ts, 27, 57))
