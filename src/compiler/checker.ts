@@ -9460,7 +9460,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                             factory.createVariableDeclaration(varName, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, typeToSerialize, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
-                        ], NodeFlags.Const));
+                        ], context.enclosingDeclaration?.kind === SyntaxKind.ModuleDeclaration ? NodeFlags.Let : NodeFlags.Const));
                         // Inlined JSON types exported with [module.]exports= will already emit an export=, so should use `declare`.
                         // Otherwise, the type itself should be exported.
                         addResult(statement,
