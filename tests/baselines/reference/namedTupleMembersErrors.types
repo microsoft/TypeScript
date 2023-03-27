@@ -6,10 +6,10 @@ export type Segment2 = [number, size: number];
 >Segment2 : [number, size: number]
 
 export type List = [item: any, ...any]; 
->List : [any, ...any[]]
+>List : [item: any, ...any[]]
 
 export type List2 = [any, ...remainder: any]; 
->List2 : [any, ...any[]]
+>List2 : [any, ...remainder: any[]]
 
 export type Pair = [item: any, any?]; 
 >Pair : [item: any, any?]

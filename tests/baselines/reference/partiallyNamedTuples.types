@@ -69,7 +69,7 @@ type ConditionalTuple = [
 ];
 
 type AddMixedConditional<T> = [
->AddMixedConditional : [boolean, null, T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
+>AddMixedConditional : [first: boolean, null, third: T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
 
   first: boolean,
   null,
@@ -78,11 +78,11 @@ type AddMixedConditional<T> = [
 ];
 
 type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
->AddMixedConditionalBoolean : [boolean, null, "b"]
+>AddMixedConditionalBoolean : [first: boolean, null, third: "b"]
 
 type AddMixedConditionalLiteral = AddMixedConditional<0>;
->AddMixedConditionalLiteral : [boolean, null, "a", "c"]
+>AddMixedConditionalLiteral : [first: boolean, null, third: "a", fourth: "c"]
 
 type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
->AddMixedConditionalNumberPrimitive : [boolean, null, "a"]
+>AddMixedConditionalNumberPrimitive : [first: boolean, null, third: "a"]
 
