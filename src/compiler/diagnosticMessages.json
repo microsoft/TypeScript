@@ -1880,10 +1880,6 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
-        "category": "Error",
-        "code": 2355
-    },
     "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2356
@@ -3619,7 +3615,7 @@
         "category": "Error",
         "code": 2846
     },
-    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
+    "A function with this return type needs to explicitly return a value.": {
         "category": "Error",
         "code": 2847
     },
