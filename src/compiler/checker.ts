@@ -35659,8 +35659,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const functionFlags = getFunctionFlags(func);
             const type = returnType && unwrapReturnType(returnType, functionFlags);
 
-            // Functions with an explicitly specified 'undefined, 'void' or 'any' return type don't need any return expressions.
-            // 'unknown' is also fine because it is always assignable to 'undefined'.
+            // Functions with an explicitly specified 'undefined, 'void', 'any' or 'unknown' return type don't need any return expressions.
             if (type && maybeTypeOfKind(type, TypeFlags.Undefined | TypeFlags.Void | TypeFlags.Any | TypeFlags.Unknown)) {
                 return;
             }
