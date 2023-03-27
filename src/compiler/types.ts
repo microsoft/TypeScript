@@ -6649,6 +6649,8 @@ export interface ConditionalType extends InstantiableType {
     /** @internal */
     resolvedDefaultConstraint?: Type;
     /** @internal */
+    resolvedConstraintOfDistributive?: Type | false;
+    /** @internal */
     mapper?: TypeMapper;
     /** @internal */
     combinedMapper?: TypeMapper;
