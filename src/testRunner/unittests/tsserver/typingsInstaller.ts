@@ -7,8 +7,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
@@ -16,6 +14,7 @@ import {
     customTypesMap,
     Logger,
     TestSessionAndServiceHost,
+    TestSessionRequest,
     TestTypingsInstaller,
     TestTypingsInstallerWorker,
     toExternalFile,
@@ -1120,7 +1119,6 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
-        projectService.checkNumberOfProjects({ inferredProjects: 1 });
 
         const proj = projectService.inferredProjects[0];
         proj.updateGraph();
@@ -1136,7 +1134,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
     it("cached unresolved typings are not recomputed if program structure did not change", () => {
         const host = createServerHost([]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         const f = {
             path: "/a/app.js",
             content: `
@@ -1144,25 +1142,20 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 import * as cmd from "commander
                 `
         };
-        const openRequest: ts.server.protocol.OpenRequest = {
-            seq: 1,
-            type: "request",
+        const openRequest: TestSessionRequest<ts.server.protocol.OpenRequest> = {
             command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: f.path,
                 fileContent: f.content
             }
         };
-        session.executeCommand(openRequest);
+        session.executeCommandSeq(openRequest);
         const projectService = session.getProjectService();
-        checkNumberOfProjects(projectService, { inferredProjects: 1 });
         const proj = projectService.inferredProjects[0];
         const version1 = proj.lastCachedUnresolvedImportsList;
 
         // make a change that should not affect the structure of the program
-        const changeRequest: ts.server.protocol.ChangeRequest = {
-            seq: 2,
-            type: "request",
+        const changeRequest: TestSessionRequest< ts.server.protocol.ChangeRequest> = {
             command: ts.server.protocol.CommandTypes.Change,
             arguments: {
                 file: f.path,
@@ -1173,11 +1166,12 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 endOffset: 0
             }
         };
-        session.executeCommand(changeRequest);
+        session.executeCommandSeq(changeRequest);
         host.checkTimeoutQueueLength(0);
         proj.updateGraph();
         const version2 = proj.lastCachedUnresolvedImportsList;
         assert.strictEqual(version1, version2, "set of unresolved imports should change");
+        baselineTsserverLogs("typingsInstaller", "cached unresolved typings are not recomputed if program structure did not change", session);
     });
 
     it("expired cache entry (inferred project, should install typings)", () => {
@@ -1847,7 +1841,6 @@ declare module "stream" {
         projectService.openClientFile(file.path);
 
         const proj = projectService.inferredProjects[0];
-        checkProjectActualFiles(proj, [file.path, libFile.path]);
         typingsInstaller.installer.executePendingCommands();
         host.checkTimeoutQueueLengthAndRun(2);
         projectService.applyChangesInOpenFiles(

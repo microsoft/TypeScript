@@ -6,9 +6,7 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
     closeFilesForSession,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
@@ -48,15 +46,16 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
 
         const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([file1], session);
-        const projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        const diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+            arguments: {
+                projectFileName: tsconfig.path
+            }
+        });
+        baselineTsserverLogs("forceConsistentCasingInFileNames", "works when extends is specified with a case insensitive file system", session);
     });
 
     it("works when renaming file with different casing", () => {

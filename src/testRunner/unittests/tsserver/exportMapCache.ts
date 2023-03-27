@@ -5,7 +5,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
@@ -49,44 +48,49 @@ const exportEqualsMappedType: File = {
 
 describe("unittests:: tsserver:: exportMapCache", () => {
     it("caches auto-imports in the same file", () => {
-        const { exportMapCache } = setup();
+        const { exportMapCache, session } = setup();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
+        baselineTsserverLogs("exportMapCache", "caches auto-imports in the same file", session);
     });
 
     it("invalidates the cache when new files are added", () => {
-        const { host, exportMapCache } = setup();
+        const { host, exportMapCache, session } = setup();
         host.writeFile("/src/a2.ts", aTs.content);
         host.runQueuedTimeoutCallbacks();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
+        baselineTsserverLogs("exportMapCache", "invalidates the cache when new files are added", session);
     });
 
     it("invalidates the cache when files are deleted", () => {
-        const { host, projectService, exportMapCache } = setup();
+        const { host, projectService, exportMapCache, session } = setup();
         projectService.closeClientFile(aTs.path);
         host.deleteFile(aTs.path);
         host.runQueuedTimeoutCallbacks();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
+        baselineTsserverLogs("exportMapCache", "invalidates the cache when files are deleted", session);
     });
 
     it("does not invalidate the cache when package.json is changed inconsequentially", () => {
-        const { host, exportMapCache, project } = setup();
+        const { host, exportMapCache, project, session } = setup();
         host.writeFile("/package.json", `{ "name": "blah", "dependencies": { "mobx": "*" } }`);
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
+        baselineTsserverLogs("exportMapCache", "does not invalidate the cache when package.json is changed inconsequentially", session);
     });
 
     it("invalidates the cache when package.json change results in AutoImportProvider change", () => {
-        const { host, exportMapCache, project } = setup();
+        const { host, exportMapCache, project, session } = setup();
         host.writeFile("/package.json", `{}`);
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
+        baselineTsserverLogs("exportMapCache", "invalidates the cache when package.json change results in AutoImportProvider change", session);
     });
 
     it("does not store transient symbols through program updates", () => {
@@ -130,6 +134,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         });
         assert.ok(sigintPropAfter);
         assert.notEqual(symbolIdBefore, ts.getSymbolId(sigintPropAfter![0].symbol));
+        baselineTsserverLogs("exportMapCache", "does not store transient symbols through program updates", session);
     });
 
     it("invalidates the cache when a file is opened with different contents", () => {
@@ -177,7 +182,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             }
         });
 
-        const project = configuredProjectAt(projectService, 0);
+        const project = projectService.configuredProjects.get(tsconfig.path)!;
         const exportMapCache = project.getCachedExportInfoMap();
         assert.ok(exportMapCache.isUsableByFile(classesTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
@@ -223,10 +228,10 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 
 function setup() {
     const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
-    const session = createSession(host);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     openFilesForSession([aTs, bTs], session);
     const projectService = session.getProjectService();
-    const project = configuredProjectAt(projectService, 0);
+    const project = projectService.configuredProjects.get(tsconfig.path)!;
     triggerCompletions();
     const checker = project.getLanguageService().getProgram()!.getTypeChecker();
     return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };

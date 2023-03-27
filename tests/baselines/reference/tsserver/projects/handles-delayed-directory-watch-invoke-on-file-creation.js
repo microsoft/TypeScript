@@ -536,13 +536,13 @@ Before running immediate callbacks and checking length (1)
 
 Info 114  [00:03:51.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
 Info 115  [00:03:52.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Checking timeout queue length: 3
 
@@ -556,7 +556,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 117  [00:03:54.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -564,4 +564,4 @@ Info 118  [00:03:55.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
 Info 119  [00:03:56.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

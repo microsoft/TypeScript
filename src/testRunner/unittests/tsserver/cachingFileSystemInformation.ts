@@ -9,11 +9,10 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
+    logDiagnostics,
     Logger,
     openFilesForSession,
     TestProjectService,
@@ -78,9 +77,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     }
 
     function logSemanticDiagnostics(projectService: TestProjectService, project: ts.server.Project, file: File) {
-        const diags = project.getLanguageService().getSemanticDiagnostics(file.path);
-        projectService.logger.info(`getSemanticDiagnostics:: ${file.path}:: ${diags.length}`);
-        diags.forEach(d => projectService.logger.info(ts.formatDiagnostic(d, project)));
+        logDiagnostics(
+            projectService,
+            `getSemanticDiagnostics:: ${file.path}`,
+            project,
+            project.getLanguageService().getSemanticDiagnostics(file.path),
+        );
     }
 
     it("works using legacy resolution logic", () => {
@@ -335,25 +337,24 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
             const files = [file1, file2, tsconfig, libFile];
             const host = createServerHost(files);
-            const service = createProjectService(host);
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(file1.path);
 
             const project = service.configuredProjects.get(tsconfig.path)!;
-            checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+            logSemanticDiagnostics(service, project, file1);
+            logSemanticDiagnostics(service, project, file2);
 
             const debugTypesFile: File = {
                 path: `${projectLocation}/node_modules/debug/index.d.ts`,
                 content: "export {}"
             };
-            files.push(debugTypesFile);
             host.writeFile(debugTypesFile.path, debugTypesFile.content);
             host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
             host.runQueuedTimeoutCallbacks(); // Actual update
-            checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
+
+            logSemanticDiagnostics(service, project, file1);
+            logSemanticDiagnostics(service, project, file2);
+            baselineTsserverLogs("cachingFileSystemInformation", `includes the parent folder FLLs in ${resolution} module resolution mode`, service);
         }
 
         it("Includes the parent folder FLLs in node module resolution mode", () => {
@@ -535,18 +536,16 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
         const files = [app, tsconfig, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(app.path);
 
         const project = service.configuredProjects.get(tsconfig.path)!;
-        checkProjectActualFiles(project, files.map(f => f.path));
-        assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+        logSemanticDiagnostics(service, project, app);
 
         const debugTypesFile: File = {
             path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
             content: "export {}"
         };
-        files.push(debugTypesFile);
         // Do not invoke recursive directory watcher for anything other than node_module/@types
         const invoker = host.invokeFsWatchesRecursiveCallbacks;
         host.invokeFsWatchesRecursiveCallbacks = (fullPath, eventName, entryFullPath) => {
@@ -556,8 +555,8 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         host.writeFile(debugTypesFile.path, debugTypesFile.content);
         host.runQueuedTimeoutCallbacks();
-        checkProjectActualFiles(project, files.map(f => f.path));
-        assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
+        logSemanticDiagnostics(service, project, app);
+        baselineTsserverLogs("cachingFileSystemInformation", "when node_modules dont receive event for the @types file addition", service);
     });
 
     it("when creating new file in symlinked folder", () => {
@@ -584,14 +583,10 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             })
         };
         const host = createServerHost([module1, module2, symlink, config, libFile]);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(`${symlink.path}/module2.ts`);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = ts.Debug.checkDefined(service.configuredProjects.get(config.path));
-        checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path]);
         host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);
         host.runQueuedTimeoutCallbacks();
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path, `${symlink.path}/module3.ts`]);
+        baselineTsserverLogs("cachingFileSystemInformation", "when creating new file in symlinked folder", service);
     });
 });

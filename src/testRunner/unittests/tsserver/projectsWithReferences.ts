@@ -6,7 +6,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
     createLoggerWithInMemoryLogs,
     createProjectService,
 } from "./helpers";
@@ -97,7 +96,6 @@ export class A {}`
 
         it("non local edit", () => {
             const { host, service, bTs } = createService();
-            checkNumberOfProjects(service, { configuredProjects: 1 });
 
             // non local edit
             host.appendFile(bTs.path, `export function gFoo() { }`);
