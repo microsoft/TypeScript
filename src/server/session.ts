@@ -81,6 +81,7 @@ import {
     isStringLiteralLike,
     JSDocLinkDisplayPart,
     JSDocTagInfo,
+    JsxLinkedEditInfo,
     LanguageServiceMode,
     LineAndCharacter,
     map,
@@ -1800,6 +1801,12 @@ export class Session<TMessage = string> implements EventSender {
         const position = this.getPositionInFile(args, file);
         const tag = languageService.getJsxClosingTagAtPosition(file, position);
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
+    }
+
+    private getJsxLinkedEdit(args: protocol.FileLocationRequestArgs): JsxLinkedEditInfo | undefined {
+        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        const position = this.getPositionInFile(args, file);
+        return languageService.getJsxLinkedEditAtPosition(file, position);
     }
 
     private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
