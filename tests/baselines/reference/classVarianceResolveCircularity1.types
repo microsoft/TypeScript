@@ -1,14 +1,14 @@
-=== tests/cases/compiler/classVarianceResolveCircularity.ts ===
+=== tests/cases/compiler/classVarianceResolveCircularity1.ts ===
 // Issue #52813
 
 class Bar<T> {
 >Bar : Bar<T>
 
-    num!: number;    // Swap to remove error
+    num!: number;
 >num : number
 
     Value = callme(this).num;
->Value : any
+>Value : number
 >callme(this).num : number
 >callme(this) : Bar<any>
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
