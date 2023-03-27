@@ -1,5 +1,5 @@
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(5,16): error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(13,22): error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(5,16): error TS2847: A function with this return type needs to explicitly return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(13,22): error TS2847: A function with this return type needs to explicitly return a value.
 
 
 ==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (2 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChe
     
     function f2(): number {
                    ~~~~~~
-!!! error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+!!! error TS2847: A function with this return type needs to explicitly return a value.
         // Error; return type does not include undefined
     }
     
@@ -19,7 +19,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChe
     
     async function f4(): Promise<number> {
                          ~~~~~~~~~~~~~~~
-!!! error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+!!! error TS2847: A function with this return type needs to explicitly return a value.
         // Error; return type does not include undefined
     }
     
