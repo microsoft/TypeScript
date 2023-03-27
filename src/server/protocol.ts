@@ -616,11 +616,7 @@ export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRange
  */
 export interface GetMoveToRefactoringFileSuggestionsResponse extends Response {
    body?: {
-       /// Suggested name if a new file is created
        newFileName: string;
-
-      /// List of file paths that the selected text can be moved to
-      // TODO: should this be an object instead so that TS could customize how files are shown in the file picker UI?
       files: string[];
    };
 }

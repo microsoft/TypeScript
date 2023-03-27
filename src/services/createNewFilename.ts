@@ -5,24 +5,28 @@ import { copyEntries, extensionFromPath, forEachEntry, getAssignmentDeclarationK
 import { createTextRangeFromSpan, Debug, getRefactorContextSpan, getSymbolId, isBinaryExpression, isBindingElement, isExpressionStatement, isIdentifier, isNamedDeclaration, isOmittedExpression, isSourceFile, isVariableDeclaration, rangeContainsRange, Symbol, symbolNameNoDefault } from "./_namespaces/ts";
 import { LanguageServiceHost, RefactorContext } from "./types";
 
-interface ToMove {
+/**@internal */
+export interface ToMove {
     readonly all: readonly Statement[];
     readonly ranges: readonly StatementRange[];
 }
 
-interface StatementRange {
+/**@internal */
+export interface StatementRange {
     readonly first: Statement;
     readonly afterLast: Statement | undefined;
 }
 
-interface ReadonlySymbolSet {
+/**@internal */
+export interface ReadonlySymbolSet {
     size(): number;
     has(symbol: Symbol): boolean;
     forEach(cb: (symbol: Symbol) => void): void;
     forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
 }
 
-interface UsageInfo {
+/**@internal */
+export interface UsageInfo {
     // Symbols whose declarations are moved from the old file to the new file.
     readonly movedSymbols: ReadonlySymbolSet;
 
@@ -36,7 +40,8 @@ interface UsageInfo {
     readonly unusedImportsFromOldFile: ReadonlySymbolSet;
 }
 type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
-type NonVariableTopLevelDeclaration =
+/**@internal */
+export type NonVariableTopLevelDeclaration =
     | FunctionDeclaration
     | ClassDeclaration
     | EnumDeclaration
@@ -45,8 +50,11 @@ type NonVariableTopLevelDeclaration =
     | ModuleDeclaration
     | TopLevelExpressionStatement
     | ImportEqualsDeclaration;
-interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
-type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
+
+/**@internal */
+export interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
+ /**@internal */
+export type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
 
 /** @internal */
 export function createNewFilename(oldFile: SourceFile, program: Program, context: RefactorContext, host: LanguageServiceHost): string {
@@ -74,8 +82,11 @@ export function createNewFilename(oldFile: SourceFile, program: Program, context
     return "";
 }
 
-interface RangeToMove { readonly toMove: readonly Statement[]; readonly afterLast: Statement | undefined; }
-function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
+/**@internal */
+export interface RangeToMove { readonly toMove: readonly Statement[]; readonly afterLast: Statement | undefined; }
+
+/**@internal */
+export function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const { file } = context;
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const { statements } = file;
@@ -100,7 +111,8 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     };
 }
 
-function getStatementsToMove(context: RefactorContext): ToMove | undefined {
+/**@internal */
+export function getStatementsToMove(context: RefactorContext): ToMove | undefined {
     const rangeToMove = getRangeToMove(context);
     if (rangeToMove === undefined) return undefined;
     const all: Statement[] = [];
@@ -133,7 +145,8 @@ function isPureImport(node: Node): boolean {
     }
 }
 
-function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
+/** @internal */
+export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
     const movedSymbols = new SymbolSet();
     const oldImportsNeededByNewFile = new SymbolSet();
     const newFileImportsFromOldFile = new SymbolSet();
@@ -225,7 +238,8 @@ function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Sym
     });
 }
 
-function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
+/**@internal */
+export function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
     switch (statement.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.ClassDeclaration:
@@ -247,8 +261,8 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         }
     }
 }
-
-function isInImport(decl: Declaration) {
+/** @internal */
+export function isInImport(decl: Declaration) {
     switch (decl.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
@@ -268,7 +282,8 @@ function isVariableDeclarationInImport(decl: VariableDeclaration) {
         !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
 }
 
-function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
+/**@internal */
+export function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
     return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
 }
 function sourceFileOfTopLevelDeclaration(node: TopLevelDeclaration): Node {
@@ -287,7 +302,8 @@ function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node
     }
 }
 
-function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLevelDeclaration {
+/**@internal */
+export function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLevelDeclaration {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.ClassDeclaration:
@@ -301,7 +317,9 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
             return false;
     }
 }
-interface ReadonlySymbolSet {
+
+/**@internal */
+export interface ReadonlySymbolSet {
     size(): number;
     has(symbol: Symbol): boolean;
     forEach(cb: (symbol: Symbol) => void): void;
