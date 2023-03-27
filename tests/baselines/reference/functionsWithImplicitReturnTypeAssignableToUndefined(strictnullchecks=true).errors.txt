@@ -1,7 +1,7 @@
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(15,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(21,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(22,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(28,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(34,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(35,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(41,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 
 
 ==== tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts (4 errors) ====
@@ -11,15 +11,22 @@ tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(34,
         // Implicit return, but undefined is always assignable to unknown.
     }
     
-    function f2(): any {
+    type MyUnknown = unknown;
+    function f2(): unknown {
+        if (Math.random() < 0.5) return true;
+    
+        // Implicit return, but undefined is always assignable to unknown.
+    }
+    
+    function f3(): any {
         // Implicit return, but undefined is always assignable to any.
     }
     
-    function f3(): void {
+    function f4(): void {
         // Implicit return, but undefined is always assignable to void.
     }
     
-    function f4(): {} {
+    function f5(): {} {
                    ~~
 !!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
         if (Math.random() < 0.5) return {};
@@ -27,7 +34,7 @@ tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(34,
         // Implicit return, but undefined is assignable to object when strictNullChecks is off.
     }
     
-    function f5(): Record<string, any> {
+    function f6(): Record<string, any> {
                    ~~~~~~~~~~~~~~~~~~~
 !!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
         if (Math.random() < 0.5) return { "foo": true };
@@ -36,7 +43,7 @@ tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(34,
         // when strictNullChecks is off.
     }
     
-    function f6(): null {
+    function f7(): null {
                    ~~~~
 !!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
         if (Math.random() < 0.5) return null;
@@ -44,11 +51,10 @@ tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(34,
         // Implicit return, but undefined is assignable to null when strictNullChecks is off.
     }
     
-    function f7(): string | null {
+    function f8(): string | null {
                    ~~~~~~~~~~~~~
 !!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
         if (Math.random() < 0.5) return "foo";
     
         // Implicit return, but undefined is assignable to null when strictNullChecks is off.
     }
-    
