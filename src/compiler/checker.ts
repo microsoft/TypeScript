@@ -18870,6 +18870,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
                 elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
                 createTupleType([t], [elementFlags[i]]);
+            // avoid infinite recursion, if the singleton is the type variable itself
+            // then we'd just get back here with the same arguments from within instantiateMappedType
+            if (singleton === typeVariable) {
+                return mappedType;
+            }
             // The singleton is never a generic tuple type, so it is safe to recurse here.
             return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
         });
