@@ -1700,8 +1700,13 @@ function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): 
         return false;
     }
 
-    if (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
-        return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+    if (isNumericLiteral(node)) {
+        if (node.numericLiteralFlags & TokenFlags.IsInvalid) {
+            return false;
+        }
+        if (node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
+            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+        }
     }
 
     return !isBigIntLiteral(node);

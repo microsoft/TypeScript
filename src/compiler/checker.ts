@@ -465,7 +465,6 @@ import {
     isCatchClause,
     isCatchClauseVariableDeclarationOrBindingElement,
     isCheckJsEnabledForFile,
-    isChildOfNodeWithKind,
     isClassDeclaration,
     isClassElement,
     isClassExpression,
@@ -48531,33 +48530,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
-        // Grammar checking
-        if (node.numericLiteralFlags & TokenFlags.Octal) {
-            let diagnosticMessage: DiagnosticMessage | undefined;
-            if (languageVersion >= ScriptTarget.ES5) {
-                diagnosticMessage = Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0;
-            }
-            else if (isChildOfNodeWithKind(node, SyntaxKind.LiteralType)) {
-                diagnosticMessage = Diagnostics.Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0;
-            }
-            else if (isChildOfNodeWithKind(node, SyntaxKind.EnumMember)) {
-                diagnosticMessage = Diagnostics.Octal_literals_are_not_allowed_in_enums_members_initializer_Use_the_syntax_0;
-            }
-            if (diagnosticMessage) {
-                const withMinus = isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.MinusToken;
-                const literal = (withMinus ? "-" : "") + "0o" + node.text;
-                return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
-            }
-        }
-
+    function checkGrammarNumericLiteral(node: NumericLiteral) {
         // Realism (size) checking
-        checkNumericLiteralValueSize(node);
-
-        return false;
-    }
-
-    function checkNumericLiteralValueSize(node: NumericLiteral) {
         // We should test against `getTextOfNode(node)` rather than `node.text`, because `node.text` for large numeric literals can contain "."
         // e.g. `node.text` for numeric literal `1100000000000000000000` is `1.1e21`.
         const isFractional = getTextOfNode(node).indexOf(".") !== -1;

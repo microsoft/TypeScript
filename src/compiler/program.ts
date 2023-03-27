@@ -1317,7 +1317,6 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
     Diagnostics.Invalid_use_of_0_in_strict_mode.code,
     Diagnostics.A_label_is_not_allowed_here.code,
-    Diagnostics.Octal_literals_are_not_allowed_in_strict_mode.code,
     Diagnostics.with_statements_are_not_allowed_in_strict_mode.code,
     // grammar errors
     Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement.code,
