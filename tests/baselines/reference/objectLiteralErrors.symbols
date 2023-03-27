@@ -70,10 +70,10 @@ var e14 = { 0: 0, 0x0: 0 };
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
 >0x0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
 
-var e14 = { 0: 0, 000: 0 };
+var e14 = { 0: 0, 0o0: 0 };
 >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
->000 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
+>0o0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
 
 var e15 = { "100": 0, 1e2: 0 };
 >e15 : Symbol(e15, Decl(objectLiteralErrors.ts, 16, 3))
@@ -162,10 +162,10 @@ var f14 = { 0: 0, get 0x0() { return 0; } };
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 34, 11))
 >0x0 : Symbol(0x0, Decl(objectLiteralErrors.ts, 34, 17))
 
-var f14 = { 0: 0, get 000() { return 0; } };
+var f14 = { 0: 0, get 0o0() { return 0; } };
 >f14 : Symbol(f14, Decl(objectLiteralErrors.ts, 34, 3), Decl(objectLiteralErrors.ts, 35, 3))
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 35, 11))
->000 : Symbol(000, Decl(objectLiteralErrors.ts, 35, 17))
+>0o0 : Symbol(0o0, Decl(objectLiteralErrors.ts, 35, 17))
 
 var f15 = { "100": 0, get 1e2() { return 0; } };
 >f15 : Symbol(f15, Decl(objectLiteralErrors.ts, 36, 3))

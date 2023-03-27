@@ -2,5 +2,5 @@
 01.0
 
 //// [scannerNumericLiteral3.js]
-01;
+1;
 .0;

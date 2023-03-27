@@ -1,3 +1,4 @@
+currentDirectory:: /src/project useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/tsconfig.json]
 {"compilerOptions":{"composite":true,"traceResolution":true,"outDir":"outDir"}}

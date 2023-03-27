@@ -112,7 +112,7 @@ function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: Sour
                 changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, moduleSpecifier, quotePreference));
                 break;
             case SyntaxKind.CallExpression:
-                if (isRequireCall(importNode, /*checkArgumentIsStringLiteralLike*/ false)) {
+                if (isRequireCall(importNode, /*requireStringLiteralLikeArgument*/ false)) {
                     changes.replaceNode(importingFile, importNode, factory.createPropertyAccessExpression(getSynthesizedDeepClone(importNode), "default"));
                 }
                 break;
@@ -213,9 +213,9 @@ function convertStatement(
             const { expression } = statement as ExpressionStatement;
             switch (expression.kind) {
                 case SyntaxKind.CallExpression: {
-                    if (isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    if (isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true)) {
                         // For side-effecting require() call, just make a side-effecting import.
-                        changes.replaceNode(sourceFile, statement, makeImport(/*name*/ undefined, /*namedImports*/ undefined, expression.arguments[0], quotePreference));
+                        changes.replaceNode(sourceFile, statement, makeImport(/*defaultImport*/ undefined, /*namedImports*/ undefined, expression.arguments[0], quotePreference));
                     }
                     return false;
                 }
@@ -250,11 +250,11 @@ function convertVariableStatement(
                 foundImport = true;
                 return convertedImports([]);
             }
-            else if (isRequireCall(initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
+            else if (isRequireCall(initializer, /*requireStringLiteralLikeArgument*/ true)) {
                 foundImport = true;
                 return convertSingleImport(name, initializer.arguments[0], checker, identifiers, target, quotePreference);
             }
-            else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*checkArgumentIsStringLiteralLike*/ true)) {
+            else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*requireStringLiteralLikeArgument*/ true)) {
                 foundImport = true;
                 return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers, quotePreference);
             }
@@ -316,7 +316,7 @@ function convertAssignment(
         }
         else {
             const replacement = isObjectLiteralExpression(right) ? tryChangeModuleExportsObject(right, useSitesToUnqualify)
-                : isRequireCall(right, /*checkArgumentIsStringLiteralLike*/ true) ? convertReExportAll(right.arguments[0], checker)
+                : isRequireCall(right, /*requireStringLiteralLikeArgument*/ true) ? convertReExportAll(right.arguments[0], checker)
                 : undefined;
             if (replacement) {
                 changes.replaceNodeWithNodes(sourceFile, assignment.parent, replacement[0]);
@@ -396,7 +396,7 @@ function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker)
         exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
 }
 function reExportStar(moduleSpecifier: string): ExportDeclaration {
-    return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
+    return makeExportDeclaration(/*exportSpecifiers*/ undefined, moduleSpecifier);
 }
 function reExportDefault(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
@@ -492,7 +492,7 @@ function convertSingleImport(
                     ? undefined
                     : makeImportSpecifier(e.propertyName && e.propertyName.text, e.name.text));
             if (importSpecifiers) {
-                return convertedImports([makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier, quotePreference)]);
+                return convertedImports([makeImport(/*defaultImport*/ undefined, importSpecifiers, moduleSpecifier, quotePreference)]);
             }
         }
         // falls through -- object destructuring has an interesting pattern and must be a variable declaration
@@ -647,7 +647,7 @@ function classExpressionToDeclaration(name: string | undefined, additionalModifi
 function makeSingleImport(localName: string, propertyName: string, moduleSpecifier: StringLiteralLike, quotePreference: QuotePreference): ImportDeclaration {
     return propertyName === "default"
         ? makeImport(factory.createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, quotePreference)
-        : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, quotePreference);
+        : makeImport(/*defaultImport*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, quotePreference);
 }
 
 function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {

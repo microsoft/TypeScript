@@ -42,6 +42,8 @@ import {
     defaultMaximumTruncationLength,
     DeleteExpression,
     Diagnostic,
+    DiagnosticAndArguments,
+    DiagnosticArguments,
     DiagnosticMessage,
     DiagnosticWithLocation,
     directoryProbablyExists,
@@ -1570,7 +1572,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
                 return Comparison.LessThan;
             }
 
-            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
+            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
             if (start > position) {
                 return Comparison.GreaterThan;
             }
@@ -1609,7 +1611,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
         if (end < position) {
             return false;
         }
-        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDocComment*/ true);
         if (start > position) {
             // If this child begins after position, then all subsequent children will as well.
             return false;
@@ -2181,11 +2183,6 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
 }
 
 /** @internal */
-export function isPunctuation(kind: SyntaxKind): boolean {
-    return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
-}
-
-/** @internal */
 export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: number, sourceFile: SourceFile): boolean {
     return isTemplateLiteralKind(node.kind)
         && (node.getStart(sourceFile) < position && position < node.end) || (!!node.isUnterminated && position === node.end);
@@ -2321,6 +2318,7 @@ export const typeKeywords: readonly SyntaxKind[] = [
     SyntaxKind.ReadonlyKeyword,
     SyntaxKind.StringKeyword,
     SyntaxKind.SymbolKeyword,
+    SyntaxKind.TypeOfKeyword,
     SyntaxKind.TrueKeyword,
     SyntaxKind.VoidKeyword,
     SyntaxKind.UndefinedKeyword,
@@ -3004,7 +3002,7 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
     });
 }
 
@@ -3942,8 +3940,8 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
     if (needsNameFromDeclaration(symbol)) {
         const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
         if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
-        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
+        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
+        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
         if (fileNameCase === capitalized) return fileNameCase;
         return [fileNameCase, capitalized];
     }
@@ -4058,11 +4056,11 @@ export function getNewLineKind(newLineCharacter: string): NewLineKind {
 }
 
 /** @internal */
-export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+export type DiagnosticOrDiagnosticAndArguments = DiagnosticMessage | DiagnosticAndArguments;
 /** @internal */
-export function diagnosticToString(diag: DiagnosticAndArguments): string {
+export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): string {
     return isArray(diag)
-        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as DiagnosticArguments)
         : getLocaleSpecificMessage(diag);
 }
 

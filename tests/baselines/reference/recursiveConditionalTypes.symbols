@@ -362,7 +362,7 @@ declare let z: Box2<Box2<string>>;
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 86, 28))
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 86, 28))
 
-foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+foo(z);  // string
 >foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 87, 28))
 >z : Symbol(z, Decl(recursiveConditionalTypes.ts, 91, 11))
 

@@ -54,6 +54,7 @@ import {
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPathComponents,
+    getPathsBasePath,
     getReplacementSpanForContextToken,
     getResolvePackageJsonExports,
     getSupportedExtensions,
@@ -243,7 +244,7 @@ function convertStringLiteralCompletions(
                 preferences,
                 options,
                 /*formatContext*/ undefined,
-                /*isTypeOnlyLocation */ undefined,
+                /*isTypeOnlyLocation*/ undefined,
                 /*propertyAccessToConvert*/ undefined,
                 /*jsxIdentifierExpected*/ undefined,
                 /*isJsxInitializer*/ undefined,
@@ -559,7 +560,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
     const scriptDirectory = getDirectoryPath(scriptPath);
     const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, typeChecker, preferences, mode);
 
-    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && !compilerOptions.paths && (isRootedDiskPath(literalValue) || isUrl(literalValue))
         ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
         : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, extensionOptions, typeChecker);
 }
@@ -850,13 +851,15 @@ function getCompletionEntriesForNonRelativeModules(
 
     const result = createNameAndKindSet();
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+
     if (baseUrl) {
-        const projectDir = compilerOptions.project || host.getCurrentDirectory();
-        const absolute = normalizePath(combinePaths(projectDir, baseUrl));
+        const absolute = normalizePath(combinePaths(host.getCurrentDirectory(), baseUrl));
         getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
-        if (paths) {
-            addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
-        }
+    }
+
+    if (paths) {
+        const absolute = getPathsBasePath(compilerOptions, host)!;
+        addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
     }
 
     const fragmentDirectory = getFragmentDirectory(fragment);

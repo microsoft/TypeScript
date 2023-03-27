@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import {
+import type * as ts from "./_namespaces/ts";
+import type {
     CompilerOptionsValue,
     EndOfLineState,
     FileExtensionInfo,
