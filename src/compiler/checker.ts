@@ -15985,14 +15985,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeOperatorNode(node) && node.operator === SyntaxKind.ReadonlyKeyword;
     }
 
-    function createTupleType(elementTypes: readonly Type[], elementFlags?: readonly ElementFlags[], readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[]) {
+    function createTupleType(elementTypes: readonly Type[], elementFlags?: readonly ElementFlags[], readonly = false, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[] = []) {
         const tupleTarget = getTupleTargetType(elementFlags || map(elementTypes, _ => ElementFlags.Required), readonly, namedMemberDeclarations);
         return tupleTarget === emptyGenericType ? emptyObjectType :
             elementTypes.length ? createNormalizedTypeReference(tupleTarget, elementTypes) :
             tupleTarget;
     }
 
-    function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[]): GenericType {
+    function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[]): GenericType {
         if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Rest) {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
@@ -16015,7 +16015,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     //
     // Note that the generic type created by this function has no symbol associated with it. The same
     // is true for each of the synthesized type parameters.
-    function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[] | undefined): TupleType {
+    function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[]): TupleType {
         const arity = elementFlags.length;
         const minLength = countWhere(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic)));
         let typeParameters: TypeParameter[] | undefined;
@@ -16097,7 +16097,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // In either layout, zero or more generic variadic elements may be present at any location.
         const expandedTypes: Type[] = [];
         const expandedFlags: ElementFlags[] = [];
-        let expandedDeclarations: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
+        const expandedDeclarations: (NamedTupleMember | ParameterDeclaration | undefined)[] = [];
         let lastRequiredIndex = -1;
         let firstRestIndex = -1;
         let lastOptionalOrRestIndex = -1;
@@ -16140,7 +16140,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (t, i) => expandedFlags[firstRestIndex + i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t));
             expandedTypes.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
             expandedFlags.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
-            expandedDeclarations?.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
+            expandedDeclarations.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
         }
         const tupleTarget = getTupleTargetType(expandedFlags, target.readonly, expandedDeclarations);
         return tupleTarget === emptyGenericType ? emptyObjectType :
@@ -16159,12 +16159,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, /*isProperty*/ true) : type);
             expandedFlags.push(flags);
-            if (expandedDeclarations && declaration) {
-                expandedDeclarations.push(declaration);
-            }
-            else {
-                expandedDeclarations = undefined;
-            }
+            expandedDeclarations.push(declaration);
         }
     }
 
