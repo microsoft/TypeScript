@@ -81,6 +81,7 @@ import {
     isStringLiteralLike,
     JSDocLinkDisplayPart,
     JSDocTagInfo,
+    JsxLinkedEditInfo,
     LanguageServiceMode,
     LineAndCharacter,
     map,
@@ -1802,6 +1803,12 @@ export class Session<TMessage = string> implements EventSender {
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
     }
 
+    private getJsxLinkedEdit(args: protocol.FileLocationRequestArgs): JsxLinkedEditInfo | undefined {
+        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        const position = this.getPositionInFile(args, file);
+        return languageService.getJsxLinkedEditAtPosition(file, position);
+    }
+
     private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
@@ -3390,7 +3397,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
         },
         [protocol.CommandTypes.JsxLinkedEdit]: (request: protocol.JsxLinkedEditRequest) => {
-            return this.requiredResponse(this.getJsxClosingTag(request.arguments));
+            return this.requiredResponse(this.getJsxLinkedEdit(request.arguments));
         },
         [protocol.CommandTypes.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
             return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));

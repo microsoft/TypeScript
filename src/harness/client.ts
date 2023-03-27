@@ -726,7 +726,7 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getJsxLinkedEditAtPosition(_fileName: string, _currentCaretPosition: number): unknown {
+    getJsxLinkedEditAtPosition(_fileName: string, _position: number): never {
         return notImplemented();
     }
 
