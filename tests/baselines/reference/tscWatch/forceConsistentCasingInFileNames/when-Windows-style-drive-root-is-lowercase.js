@@ -1,3 +1,4 @@
+currentDirectory:: c:/ useCaseSensitiveFileNames: false
 Input::
 //// [c:/project/a.ts]
 

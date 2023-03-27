@@ -4,7 +4,9 @@ import {
     File,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
     configuredProjectAt,
+    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "./helpers";
@@ -128,6 +130,94 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         });
         assert.ok(sigintPropAfter);
         assert.notEqual(symbolIdBefore, ts.getSymbolId(sigintPropAfter![0].symbol));
+    });
+
+    it("invalidates the cache when a file is opened with different contents", () => {
+        const utilsTs: File = {
+            path: "/utils.ts",
+            content: `export class Element {
+                // ...
+            }
+
+            export abstract class Component {
+                abstract render(): Element;
+            }`
+        };
+        const classesTs: File = {
+            path: "/classes.ts",
+            content: `import { Component } from "./utils.js";
+
+            export class MyComponent extends Component {
+                render/**/
+            }`
+        };
+        const host = createServerHost([utilsTs, classesTs, tsconfig]);
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const projectService = session.getProjectService();
+        openFilesForSession([classesTs], session);
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: {
+                preferences: {
+                    includeCompletionsForModuleExports: true,
+                    includeCompletionsWithClassMemberSnippets: true,
+                    includeCompletionsWithInsertText: true,
+                },
+            }
+        });
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                file: classesTs.path,
+                line: 4,
+                offset: 23,
+                prefix: "render",
+                includeExternalModuleExports: true,
+                includeInsertTextCompletions: true,
+            }
+        });
+
+        const project = configuredProjectAt(projectService, 0);
+        const exportMapCache = project.getCachedExportInfoMap();
+        assert.ok(exportMapCache.isUsableByFile(classesTs.path as ts.Path));
+        assert.ok(!exportMapCache.isEmpty());
+
+        openFilesForSession([{ file: utilsTs.path, content: utilsTs.content.replace("render", "render2") }], session);
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [{
+                    fileName: classesTs.path,
+                    textChanges: [{
+                        newText: "",
+                        start: { line: 4, offset: 22 },
+                        end: { line: 4, offset: 23 },
+                    }]
+                }]
+            }
+        });
+
+        host.runQueuedTimeoutCallbacks();
+        project.getPackageJsonAutoImportProvider();
+
+        // Cache is invalidated because other file has changed
+        assert.ok(!exportMapCache.isUsableByFile(classesTs.path as ts.Path));
+        assert.ok(exportMapCache.isEmpty());
+
+        // Does not crash
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                file: classesTs.path,
+                line: 4,
+                offset: 22,
+                prefix: "rende",
+                includeExternalModuleExports: true,
+                includeInsertTextCompletions: true,
+            }
+        });
+
+        baselineTsserverLogs("exportMapCache", "invalidates the cache when a file is opened with different contents", session);
     });
 });
 

@@ -1530,7 +1530,7 @@ const b: B = new B();`
             });
         }
 
-        /* eslint-disable local/boolean-trivia */
+        /* eslint-disable local/argument-trivia */
 
         // Pre-loaded = A file from project B is already open when FAR is invoked
         // dRPL = Project A has disableReferencedProjectLoad
@@ -1557,6 +1557,6 @@ const b: B = new B();`
         baselineDisableReferencedProjectLoad(false,       false,   false,   true);  // Loaded     | Via redirect | index.ts, helper.ts |
         baselineDisableReferencedProjectLoad(false,       false,   false,   false); // Loaded     | Via redirect | index.ts, helper.ts |
 
-        /* eslint-enable local/boolean-trivia */
+        /* eslint-enable local/argument-trivia */
     });
 });

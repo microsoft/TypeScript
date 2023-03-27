@@ -1,239 +1,284 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
 // /**
 //  * Doc comment
-//  * @typedef [|Product|]
+//  * <|@typedef [|{| isWriteAccess: true |}Product|]
 //  * @property {string} title
-//  */
+//  |>*/
 // /**
 //  * @type {/*FIND ALL REFS*/[|Product|]}
 //  */
 // const product = null;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.js",
-      "kind": "type",
-      "name": "type Product = {\n    title: string;\n}",
-      "textSpan": {
-        "start": 31,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Product",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "title",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 22,
-        "length": 46
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 22,
-          "length": 46
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.js ===
+  // /**
+  //  * Doc comment
+  //  * <|@typedef [|Product|]
+  //  * @property {string} title
+  //  |>*/
+  // /**
+  //  * @type {/*FIND ALL REFS*/Product}
+  //  */
+  // const product = null;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Product = {\n    title: string;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Product",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "title",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
 // /**
 //  * Doc comment
-//  * @typedef /*FIND ALL REFS*/[|Product|]
+//  * <|@typedef /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Product|]
 //  * @property {string} title
-//  */
+//  |>*/
 // /**
 //  * @type {[|Product|]}
 //  */
 // const product = null;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.js",
-      "kind": "type",
-      "name": "type Product = {\n    title: string;\n}",
-      "textSpan": {
-        "start": 31,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Product",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "title",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 22,
-        "length": 46
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 22,
-          "length": 46
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.js ===
+  // /**
+  //  * Doc comment
+  //  * <|@typedef /*FIND ALL REFS*/[|Product|]
+  //  * @property {string} title
+  //  |>*/
+  // /**
+  //  * @type {Product}
+  //  */
+  // const product = null;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Product = {\n    title: string;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Product",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "title",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef /*RENAME*/[|ProductRENAME|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {[|ProductRENAME|]}
+//  */
+// const product = null;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|ProductRENAME|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*RENAME*/[|ProductRENAME|]}
+//  */
+// const product = null;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {[|{| kind: "reference" |}Product|]}
+//  */
+// const product = null;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|{| kind: "writtenReference" |}Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*HIGHLIGHTS*/[|{| kind: "reference" |}Product|]}
+//  */
+// const product = null;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*GOTO DEF*/Product}
+//  */
+// const product = null;
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "Product",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

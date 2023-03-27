@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     BuilderProgram,
     BuildInfo,
@@ -81,6 +80,7 @@ import {
     sys,
     System,
     toPath,
+    toPath as ts_toPath,
     updateErrorForNoInputFiles,
     updateMissingFilePathsWatch,
     updateSharedExtendedConfigFileWatcher,
@@ -672,7 +672,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function toPath(fileName: string) {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function isFileMissingOnHost(hostSourceFile: HostFileInfo | undefined): hostSourceFile is FileMissingOnHost {
@@ -1088,7 +1088,6 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateExtendedConfigFilesWatches(forProjectPath: Path, options: CompilerOptions | undefined, watchOptions: WatchOptions | undefined, watchType: WatchTypeRegistry["ExtendedConfigFile"] | WatchTypeRegistry["ExtendedConfigOfReferencedProject"]) {
-        Debug.assert(configFileName);
         updateSharedExtendedConfigFileWatcher(
             forProjectPath,
             options,
@@ -1104,7 +1103,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
                     // If there are no referenced projects this extended config file watcher depend on ignore
                     if (!projects?.size) return;
                     projects.forEach(projectPath => {
-                        if (toPath(configFileName) === projectPath) {
+                        if (configFileName && toPath(configFileName) === projectPath) {
                             // If this is the config file of the project, reload completely
                             reloadLevel = ConfigFileProgramReloadLevel.Full;
                         }

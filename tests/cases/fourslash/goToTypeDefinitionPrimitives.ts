@@ -12,9 +12,9 @@
 /////*reference3*/y;
 /////*reference4*/y;
 
-verify.goToType({
-    reference1: [],
-    reference2: [],
-    reference3: [],
-    reference4: []
-});
+verify.baselineGoToType(
+    "reference1",
+    "reference2",
+    "reference3",
+    "reference4",
+);
