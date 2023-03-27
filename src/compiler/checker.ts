@@ -13605,8 +13605,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getConstraintOfDistributiveConditionalType(type: ConditionalType): Type | undefined {
-        if (type.resolvedDefaultConstraintOfDistributed !== undefined) {
-            return type.resolvedDefaultConstraintOfDistributed || undefined;
+        if (type.resolvedConstraintOfDistributive !== undefined) {
+            return type.resolvedConstraintOfDistributive || undefined;
         }
 
         // Check if we have a conditional type of the form 'T extends U ? X : Y', where T is a constrained
@@ -13626,12 +13626,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraint && constraint !== type.checkType) {
                 const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper));
                 if (!(instantiated.flags & TypeFlags.Never)) {
-                    type.resolvedDefaultConstraintOfDistributed = instantiated;
+                    type.resolvedConstraintOfDistributive = instantiated;
                     return instantiated;
                 }
             }
         }
-        type.resolvedDefaultConstraintOfDistributed = false;
+        type.resolvedConstraintOfDistributive = false;
         return undefined;
     }
 
