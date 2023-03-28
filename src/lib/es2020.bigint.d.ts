@@ -147,10 +147,10 @@ interface BigInt64Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /** Yields index, value pairs for every entry in the array. */
     entries(): IterableIterator<[number, bigint]>;
@@ -419,10 +419,10 @@ interface BigUint64Array {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 
     /** Yields index, value pairs for every entry in the array. */
     entries(): IterableIterator<[number, bigint]>;
@@ -673,6 +673,7 @@ interface DataView {
      * Gets the BigInt64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getBigInt64(byteOffset: number, littleEndian?: boolean): bigint;
 
@@ -680,6 +681,7 @@ interface DataView {
      * Gets the BigUint64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getBigUint64(byteOffset: number, littleEndian?: boolean): bigint;
 
@@ -687,8 +689,7 @@ interface DataView {
      * Stores a BigInt64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setBigInt64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 
@@ -696,8 +697,7 @@ interface DataView {
      * Stores a BigUint64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setBigUint64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 }

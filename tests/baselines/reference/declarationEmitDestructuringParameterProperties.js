@@ -44,14 +44,14 @@ declare class C1 {
     z: string;
     constructor([x, y, z]: string[]);
 }
-declare type TupleType1 = [string, number, boolean];
+type TupleType1 = [string, number, boolean];
 declare class C2 {
     x: string;
     y: number;
     z: boolean;
     constructor([x, y, z]: TupleType1);
 }
-declare type ObjType1 = {
+type ObjType1 = {
     x: number;
     y: string;
     z: boolean;

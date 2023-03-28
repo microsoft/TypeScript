@@ -18,11 +18,7 @@
 ////     return <h1>World </h1>;
 //// }
 
-//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}SFCComp|] = SFC1 || SFC2;|]
-//// [|<[|{| "contextRangeIndex": 2 |}SFCComp|] x={ "hi" } />|]
+//// /*1*/var /*2*/SFCComp = SFC1 || SFC2;
+//// /*3*/</*4*/SFCComp x={ "hi" } />
 
-verify.singleReferenceGroup(`var SFCComp: ((prop: {
-    x: number;
-}) => JSX.Element) | ((prop: {
-    x: boolean;
-}) => JSX.Element)`, "SFCComp");
+verify.baselineFindAllReferences('1', '2', '3', '4');

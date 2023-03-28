@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/typeOnly/a.ts ===
 export type A = {};
->A : A
+>A : {}
 
 export type { A as default };
 >A : any

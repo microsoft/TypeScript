@@ -2,7 +2,7 @@
 // Various repros from #30581
 
 type RecordMap = { n: number, s: string, b: boolean };
->RecordMap : RecordMap
+>RecordMap : { n: number; s: string; b: boolean; }
 >n : number
 >s : string
 >b : boolean
@@ -71,16 +71,16 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 // --------
 
 type TextFieldData = { value: string }
->TextFieldData : TextFieldData
+>TextFieldData : { value: string; }
 >value : string
 
 type SelectFieldData = { options: string[], selectedValue: string }
->SelectFieldData : SelectFieldData
+>SelectFieldData : { options: string[]; selectedValue: string; }
 >options : string[]
 >selectedValue : string
 
 type FieldMap = {
->FieldMap : FieldMap
+>FieldMap : { text: TextFieldData; select: SelectFieldData; }
 
     text: TextFieldData;
 >text : TextFieldData
@@ -99,7 +99,7 @@ type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
 >props : FieldMap[K]
 
 type RenderFuncMap = { [K in keyof FieldMap]: RenderFunc<K> };
->RenderFuncMap : RenderFuncMap
+>RenderFuncMap : { text: RenderFunc<"text">; select: RenderFunc<"select">; }
 
 function renderTextField(props: TextFieldData) {}
 >renderTextField : (props: TextFieldData) => void
@@ -146,7 +146,7 @@ function renderField<K extends keyof FieldMap>(field: FormField<K>) {
 // --------
 
 type TypeMap = {
->TypeMap : TypeMap
+>TypeMap : { foo: string; bar: number; }
 
     foo: string,
 >foo : string
@@ -160,7 +160,7 @@ type Keys = keyof TypeMap;
 >Keys : keyof TypeMap
 
 type HandlerMap = { [P in Keys]: (x: TypeMap[P]) => void };
->HandlerMap : HandlerMap
+>HandlerMap : { foo: (x: string) => void; bar: (x: number) => void; }
 >x : TypeMap[P]
 
 const handlers: HandlerMap = {
@@ -276,7 +276,7 @@ process([{ type: 'foo', data: 'abc' }]);
 // --------
 
 type LetterMap = { A: string, B: number }
->LetterMap : LetterMap
+>LetterMap : { A: string; B: number; }
 >A : string
 >B : number
 
@@ -298,19 +298,19 @@ function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): v
 }
 
 type A = { A: string };
->A : A
+>A : { A: string; }
 >A : string
 
 type B = { B: number };
->B : B
+>B : { B: number; }
 >B : number
 
 type ACaller = (a: A) => void;
->ACaller : ACaller
+>ACaller : (a: A) => void
 >a : A
 
 type BCaller = (b: B) => void;
->BCaller : BCaller
+>BCaller : (b: B) => void
 >b : B
 
 declare const xx: { letter: A, caller: ACaller } | { letter: B, caller: BCaller };
@@ -552,7 +552,7 @@ function ff1() {
 // Repro from #47368
 
 type ArgMap = { a: number, b: string };
->ArgMap : ArgMap
+>ArgMap : { a: number; b: string; }
 >a : number
 >b : string
 
@@ -561,7 +561,7 @@ type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
 >x : ArgMap[K]
 
 type Funcs = { [K in keyof ArgMap]: Func<K> };
->Funcs : Funcs
+>Funcs : { a: Func<"a">; b: Func<"b">; }
 
 function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >f1 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
@@ -601,7 +601,7 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >key : K
 >arg : ArgMap[K]
 
-    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    const func: Func<K> = funcs[key];
 >func : Func<K>
 >funcs[key] : Funcs[K]
 >funcs : Funcs
@@ -693,5 +693,208 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
     }
     return undefined;
 >undefined : undefined
+}
+
+// Repro from #48157
+
+interface Foo {
+    bar?: string
+>bar : string | undefined
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+>foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
+>prop : T
+>f : Required<Foo>
+
+    bar(f[prop]);
+>bar(f[prop]) : void
+>bar : (t: string) => void
+>f[prop] : Required<Foo>[T]
+>f : Required<Foo>
+>prop : T
+}
+
+declare function bar(t: string): void;
+>bar : (t: string) => void
+>t : string
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+>ops : T
+>attr : Attr
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+>ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>{ name: 'a'} : { readonly name: "a"; }
+>name : "a"
+>'a' : "a"
+>{name: 'b'} : { readonly name: "b"; }
+>name : "b"
+>'b' : "b"
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+>BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>'name' : "name"
+
+type BarLookup = typeof BAR_LOOKUP;
+>BarLookup : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+>Baz : { a: "a"; b: "b"; }
+
+// repro from #43982
+
+interface Original {
+  prop1: {
+>prop1 : { subProp1: string; subProp2: string; }
+
+    subProp1: string;
+>subProp1 : string
+
+    subProp2: string;
+>subProp2 : string
+
+  };
+  prop2: {
+>prop2 : { subProp3: string; subProp4: string; }
+
+    subProp3: string;
+>subProp3 : string
+
+    subProp4: string;
+>subProp4 : string
+
+  };
+}
+type KeyOfOriginal = keyof Original;
+>KeyOfOriginal : keyof Original
+
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+>NestedKeyOfOriginalFor : keyof Original[T]
+
+type SameKeys<T> = {
+>SameKeys : SameKeys<T>
+
+  [K in keyof T]: {
+    [K2 in keyof T[K]]: number;
+  };
+};
+
+type MappedFromOriginal = SameKeys<Original>;
+>MappedFromOriginal : SameKeys<Original>
+
+const getStringAndNumberFromOriginalAndMapped = <
+>getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+
+  K extends KeyOfOriginal,
+  N extends NestedKeyOfOriginalFor<K>
+>(
+  original: Original,
+>original : Original
+
+  mappedFromOriginal: MappedFromOriginal,
+>mappedFromOriginal : SameKeys<Original>
+
+  key: K,
+>key : K
+
+  nestedKey: N
+>nestedKey : N
+
+): [Original[K][N], MappedFromOriginal[K][N]] => {
+  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+>[original[key][nestedKey], mappedFromOriginal[key][nestedKey]] : [Original[K][N], SameKeys<Original>[K][N]]
+>original[key][nestedKey] : Original[K][N]
+>original[key] : Original[K]
+>original : Original
+>key : K
+>nestedKey : N
+>mappedFromOriginal[key][nestedKey] : SameKeys<Original>[K][N]
+>mappedFromOriginal[key] : SameKeys<Original>[K]
+>mappedFromOriginal : SameKeys<Original>
+>key : K
+>nestedKey : N
+
+};
+
+// repro from #31675
+interface Config {
+  string: string;
+>string : string
+
+  number: number;
+>number : number
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+>getConfigOrDefault : <T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]) => Config[T]
+
+  userConfig: Partial<Config>,
+>userConfig : Partial<Config>
+
+  key: T,
+>key : T
+
+  defaultValue: Config[T]
+>defaultValue : Config[T]
+
+): Config[T] {
+  const userValue = userConfig[key]; 
+>userValue : Partial<Config>[T]
+>userConfig[key] : Partial<Config>[T]
+>userConfig : Partial<Config>
+>key : T
+
+  const assertedCheck = userValue ? userValue! : defaultValue;
+>assertedCheck : Config[T]
+>userValue ? userValue! : defaultValue : Config[T]
+>userValue : Partial<Config>[T]
+>userValue! : NonNullable<Partial<Config>[T]>
+>userValue : NonNullable<Partial<Config>[T]>
+>defaultValue : Config[T]
+
+  return assertedCheck;
+>assertedCheck : Config[T]
+}
+
+// repro from #47523
+
+type Foo1 = {
+>Foo1 : { x: number; y: string; }
+
+  x: number;
+>x : number
+
+  y: string;
+>y : string
+
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+>getValueConcrete : <K extends keyof Foo1>(o: Partial<Foo1>, k: K) => Foo1[K] | undefined
+
+  o: Partial<Foo1>,
+>o : Partial<Foo1>
+
+  k: K
+>k : K
+
+): Foo1[K] | undefined {
+  return o[k];
+>o[k] : Partial<Foo1>[K]
+>o : Partial<Foo1>
+>k : K
 }
 

@@ -5,7 +5,6 @@ declare function dec<T>(target: T): T;
 
 var F = @dec () => {
 >F : any
-> : any
 >dec () : unknown
 >dec : <T>(target: T) => T
 }

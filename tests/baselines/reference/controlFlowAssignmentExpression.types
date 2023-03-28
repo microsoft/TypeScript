@@ -47,7 +47,7 @@ x; // number
 
 // https://github.com/microsoft/TypeScript/issues/35484
 type D = { done: true, value: 1 } | { done: false, value: 2 };
->D : D
+>D : { done: true; value: 1; } | { done: false; value: 2; }
 >done : true
 >true : true
 >value : 1

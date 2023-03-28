@@ -8,7 +8,7 @@ module M {
 >M : typeof M
 
     type W = Window | string;
->W : W
+>W : string | Window
 
     export module N {
 >N : typeof N
@@ -25,7 +25,7 @@ module M1 {
 >M1 : typeof M1
 
     export type W = Window | string;
->W : W
+>W : string | Window
 
     export module N {
 >N : typeof N

@@ -150,8 +150,8 @@ var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div
 <a b>;
 </>;
 //// [29.jsx]
-<a b/>, <>;
-</>;
+<a b=<>;
+</>/>;
 //// [30.jsx]
 <a>}</a>;
 //// [31.jsx]

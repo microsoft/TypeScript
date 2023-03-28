@@ -7,7 +7,7 @@ declare global {
 >Model : Model<T, E>
 
         initialize(attributes?: T, options?: CombinedModelConstructorOptions<E, this>): void;
->initialize : (attributes?: T | undefined, options?: CombinedModelConstructorOptions<E, this> | undefined) => void
+>initialize : (attributes?: T, options?: CombinedModelConstructorOptions<E, this>) => void
 >attributes : T | undefined
 >options : CombinedModelConstructorOptions<E, this> | undefined
 
@@ -78,5 +78,4 @@ hoge.fetch(null as any);
 >hoge : Backbone.ModelWithCache
 >fetch : (options?: any) => JQueryXHR
 >null as any : any
->null : null
 

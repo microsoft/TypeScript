@@ -7,7 +7,7 @@ tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(8,22): erro
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(10,29): error TS5086: A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(12,46): error TS5087: A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(14,49): error TS5087: A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.
-tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(14,52): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(14,52): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string[]'?
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(16,39): error TS5085: A tuple member cannot be both optional and rest.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(18,44): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(20,13): error TS2456: Type alias 'RecusiveRestUnlabeled' circularly references itself.
@@ -48,7 +48,7 @@ tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(21,13): err
                                                     ~~~~~~~~~~~~
 !!! error TS5087: A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.
                                                        ~~~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string[]'?
     
     export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
                                           ~~~~~~~~~~~~~~~~~~

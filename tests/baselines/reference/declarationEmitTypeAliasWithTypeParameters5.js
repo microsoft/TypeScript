@@ -11,15 +11,15 @@ function foo() {
 
 //// [declarationEmitTypeAliasWithTypeParameters5.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
     return {};
 }
 
 
 //// [declarationEmitTypeAliasWithTypeParameters5.d.ts]
-declare type Foo<T, Y> = {
+type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>;
 };
-export declare type SubFoo<R> = Foo<string, R>;
+export type SubFoo<R> = Foo<string, R>;
 export {};

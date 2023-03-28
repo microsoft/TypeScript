@@ -1,0 +1,32 @@
+=== /a.js ===
+/**
+ * @param {number | undefined} x
+ * @param {number | undefined} y
+ */
+export function Foo(x, y) {
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 4, 20))
+>y : Symbol(y, Decl(a.js, 4, 22))
+
+    if (!(this instanceof Foo)) {
+>this : Symbol(Foo, Decl(a.js, 0, 0))
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+
+        return new Foo(x, y);
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 4, 20))
+>y : Symbol(y, Decl(a.js, 4, 22))
+    }
+    this.x = x;
+>this.x : Symbol(Foo.x, Decl(a.js, 7, 5))
+>this : Symbol(Foo, Decl(a.js, 0, 0))
+>x : Symbol(Foo.x, Decl(a.js, 7, 5))
+>x : Symbol(x, Decl(a.js, 4, 20))
+
+    this.y = y;
+>this.y : Symbol(Foo.y, Decl(a.js, 8, 15))
+>this : Symbol(Foo, Decl(a.js, 0, 0))
+>y : Symbol(Foo.y, Decl(a.js, 8, 15))
+>y : Symbol(y, Decl(a.js, 4, 22))
+}
+

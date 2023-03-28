@@ -14,17 +14,17 @@ abstract class AbstractB { b: string; }
 >b : string
 
 type Abstracts = typeof AbstractA | typeof AbstractB;
->Abstracts : Abstracts
+>Abstracts : typeof AbstractA | typeof AbstractB
 >AbstractA : typeof AbstractA
 >AbstractB : typeof AbstractB
 
 type Concretes = typeof ConcreteA | typeof ConcreteB;
->Concretes : Concretes
+>Concretes : typeof ConcreteA | typeof ConcreteB
 >ConcreteA : typeof ConcreteA
 >ConcreteB : typeof ConcreteB
 
 type ConcretesOrAbstracts = Concretes | Abstracts;
->ConcretesOrAbstracts : ConcretesOrAbstracts
+>ConcretesOrAbstracts : Abstracts | Concretes
 
 declare const cls1: ConcretesOrAbstracts;
 >cls1 : ConcretesOrAbstracts

@@ -46,6 +46,18 @@ console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '))
 new Intl.Locale(); // should error
 new Intl.Locale(new Intl.Locale('en-US'));
 
+new Intl.DisplayNames(); // TypeError: invalid_argument
+new Intl.DisplayNames('en'); // TypeError: invalid_argument
+new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
+console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB')); // "British English"
+
+const localesArg = ["es-ES", new Intl.Locale("en-US")];
+console.log((new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale); // "es-ES"
+console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-US"]
+console.log(Intl.DisplayNames.supportedLocalesOf()); // []
+console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]
+
+
 //// [es2020IntlAPIs.js]
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
 const count = 26254.39;
@@ -78,3 +90,12 @@ const options1 = { localeMatcher: 'lookup' };
 console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
 new Intl.Locale(); // should error
 new Intl.Locale(new Intl.Locale('en-US'));
+new Intl.DisplayNames(); // TypeError: invalid_argument
+new Intl.DisplayNames('en'); // TypeError: invalid_argument
+new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
+console.log((new Intl.DisplayNames(undefined, { type: 'language' })).of('en-GB')); // "British English"
+const localesArg = ["es-ES", new Intl.Locale("en-US")];
+console.log((new Intl.DisplayNames(localesArg, { type: 'language' })).resolvedOptions().locale); // "es-ES"
+console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-US"]
+console.log(Intl.DisplayNames.supportedLocalesOf()); // []
+console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]

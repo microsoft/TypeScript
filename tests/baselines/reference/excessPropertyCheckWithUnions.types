@@ -1,6 +1,6 @@
 === tests/cases/compiler/excessPropertyCheckWithUnions.ts ===
 type ADT = {
->ADT : ADT
+>ADT : { tag: "A"; a1: string; } | { tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; } | { tag: "T"; }
 
     tag: "A",
 >tag : "A"
@@ -44,7 +44,7 @@ wrong = { tag: "D" }
 >"D" : "D"
 
 type Ambiguous = {
->Ambiguous : Ambiguous
+>Ambiguous : { tag: "A"; x: string; } | { tag: "A"; y: number; } | { tag: "B"; z: boolean; } | { tag: "C"; }
 
     tag: "A",
 >tag : "A"
@@ -126,9 +126,7 @@ amb = { tag: "A", y: 12, extra: 12 }
 >extra : number
 >12 : 12
 
-// assignability errors still work.
-// But note that the error for `z: true` is the fallback one of reporting on
-// the last constituent since assignability error reporting can't find a single best discriminant either.
+// assignability errors still work
 amb = { tag: "A" }
 >amb = { tag: "A" } : { tag: "A"; }
 >amb : Ambiguous
@@ -137,16 +135,16 @@ amb = { tag: "A" }
 >"A" : "A"
 
 amb = { tag: "A", z: true }
->amb = { tag: "A", z: true } : { tag: "A"; z: true; }
+>amb = { tag: "A", z: true } : { tag: "A"; z: boolean; }
 >amb : Ambiguous
->{ tag: "A", z: true } : { tag: "A"; z: true; }
+>{ tag: "A", z: true } : { tag: "A"; z: boolean; }
 >tag : "A"
 >"A" : "A"
->z : true
+>z : boolean
 >true : true
 
 type Overlapping =
->Overlapping : Overlapping
+>Overlapping : { a: 1; b: 1; first: string; } | { a: 2; second: string; } | { b: 3; third: string; }
 
     | { a: 1, b: 1, first: string }
 >a : 1
@@ -220,16 +218,16 @@ t0 = t2
 
 // Nested excess property checks work with discriminated unions
 type AN = { a: string } | { c: string }
->AN : AN
+>AN : { a: string; } | { c: string; }
 >a : string
 >c : string
 
 type BN = { b: string }
->BN : BN
+>BN : { b: string; }
 >b : string
 
 type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
->AB : AB
+>AB : { kind: "A"; n: AN; } | { kind: "B"; n: BN; }
 >kind : "A"
 >n : AN
 >kind : "B"
@@ -280,18 +278,18 @@ const abac: AB = {
 
 // Excess property checks must match all discriminable properties
 type Button = { tag: 'button'; type?: 'submit'; };
->Button : Button
+>Button : { tag: 'button'; type?: "submit" | undefined; }
 >tag : "button"
 >type : "submit" | undefined
 
 type Anchor = { tag: 'a'; type?: string; href: string };
->Anchor : Anchor
+>Anchor : { tag: 'a'; type?: string | undefined; href: string; }
 >tag : "a"
 >type : string | undefined
 >href : string
 
 type Union = Button | Anchor;
->Union : Union
+>Union : Button | Anchor
 
 const obj: Union = {
 >obj : Union
@@ -319,7 +317,7 @@ interface IValue {
 >value : string
 }
 
-interface StringKeys { 
+interface StringKeys {
     [propertyName: string]: IValue;
 >propertyName : string
 
@@ -331,7 +329,7 @@ interface NumberKeys {
 }
 
 type ObjectDataSpecification = StringKeys | NumberKeys;
->ObjectDataSpecification : ObjectDataSpecification
+>ObjectDataSpecification : StringKeys | NumberKeys
 
 
 const dataSpecification: ObjectDataSpecification = {  // Error
@@ -381,7 +379,7 @@ interface I3 extends Record<string, string> {
 }
 
 type Properties =
->Properties : Properties
+>Properties : I1 | I2 | I3 | { [key: string]: never; }
 
     | { [key: string]: never }
 >key : string

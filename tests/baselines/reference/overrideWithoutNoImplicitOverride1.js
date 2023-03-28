@@ -63,7 +63,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.NonAmbientDerived = exports.NonAmbientBase = exports.NonAmbientClass = void 0;
 var NonAmbientClass = /** @class */ (function () {
     function NonAmbientClass() {

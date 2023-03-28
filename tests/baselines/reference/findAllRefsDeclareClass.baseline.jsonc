@@ -1,0 +1,73 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
+// /*FIND ALL REFS*/<|declare class [|{| isWriteAccess: true, isDefinition: true |}C|] {
+//     static m(): void;
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
+  // /*FIND ALL REFS*/<|declare class [|C|] {
+  //     static m(): void;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
+// <|declare class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}C|] {
+//     static m(): void;
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
+  // <|declare class /*FIND ALL REFS*/[|C|] {
+  //     static m(): void;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

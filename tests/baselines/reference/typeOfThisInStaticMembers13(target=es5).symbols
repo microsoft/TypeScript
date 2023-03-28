@@ -11,9 +11,11 @@ class C {
 
         static [this.c] = 123;
 >[this.c] : Symbol(Inner[this.c], Decl(typeOfThisInStaticMembers13.ts, 2, 31))
+>this : Symbol(Inner, Decl(typeOfThisInStaticMembers13.ts, 2, 16))
 
         [this.c] = 123;
 >[this.c] : Symbol(Inner[this.c], Decl(typeOfThisInStaticMembers13.ts, 3, 30))
+>this : Symbol(Inner, Decl(typeOfThisInStaticMembers13.ts, 2, 16))
     }
 }
 

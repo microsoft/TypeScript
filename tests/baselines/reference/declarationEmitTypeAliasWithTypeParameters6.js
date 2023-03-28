@@ -16,8 +16,8 @@ function foo() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters6.d.ts]
-declare type Foo<T, Y> = {
+type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>;
 };
-declare type SubFoo<R, S> = Foo<S, R>;
+type SubFoo<R, S> = Foo<S, R>;
 declare function foo(): SubFoo<number, string>;

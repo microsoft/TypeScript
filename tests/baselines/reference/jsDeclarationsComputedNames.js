@@ -50,7 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
 var TopLevelSym = Symbol();
 var InnerSym = Symbol();
-var MyClass = /** @class */ (function () {
+var MyClass = exports.MyClass = /** @class */ (function () {
     /**
      * @param {typeof TopLevelSym | typeof InnerSym} _p
      */
@@ -64,7 +64,6 @@ var MyClass = /** @class */ (function () {
     MyClass[_a] = 12;
     return MyClass;
 }());
-exports.MyClass = MyClass;
 
 
 //// [index.d.ts]

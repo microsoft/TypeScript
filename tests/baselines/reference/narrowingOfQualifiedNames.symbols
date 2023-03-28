@@ -253,3 +253,76 @@ function init2(foo: DeepOptional) {
         }
     }
 }
+
+// Repro from #48289
+
+type Fish = { type: 'fish', hasFins: true }
+>Fish : Symbol(Fish, Decl(narrowingOfQualifiedNames.ts, 64, 1))
+>type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13))
+>hasFins : Symbol(hasFins, Decl(narrowingOfQualifiedNames.ts, 68, 27))
+
+type Dog = { type: 'dog', saysWoof: true }
+>Dog : Symbol(Dog, Decl(narrowingOfQualifiedNames.ts, 68, 43))
+>type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 69, 12))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+
+type Pet = Fish | Dog;
+>Pet : Symbol(Pet, Decl(narrowingOfQualifiedNames.ts, 69, 42))
+>Fish : Symbol(Fish, Decl(narrowingOfQualifiedNames.ts, 64, 1))
+>Dog : Symbol(Dog, Decl(narrowingOfQualifiedNames.ts, 68, 43))
+
+function handleDogBroken<PetType extends Pet>(pet: PetType) {
+>handleDogBroken : Symbol(handleDogBroken, Decl(narrowingOfQualifiedNames.ts, 71, 22))
+>PetType : Symbol(PetType, Decl(narrowingOfQualifiedNames.ts, 73, 25))
+>Pet : Symbol(Pet, Decl(narrowingOfQualifiedNames.ts, 69, 42))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 73, 46))
+>PetType : Symbol(PetType, Decl(narrowingOfQualifiedNames.ts, 73, 25))
+
+    if(pet.type === 'dog') {
+>pet.type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 73, 46))
+>type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
+
+        const _okay1 = pet.saysWoof;
+>_okay1 : Symbol(_okay1, Decl(narrowingOfQualifiedNames.ts, 75, 13))
+>pet.saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 73, 46))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+
+        const _okay2: typeof pet.saysWoof = pet.saysWoof;
+>_okay2 : Symbol(_okay2, Decl(narrowingOfQualifiedNames.ts, 76, 13))
+>pet.saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 73, 46))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet.saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 73, 46))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+    }
+}
+
+function handleDogWorking(pet: Pet) {
+>handleDogWorking : Symbol(handleDogWorking, Decl(narrowingOfQualifiedNames.ts, 78, 1))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 80, 26))
+>Pet : Symbol(Pet, Decl(narrowingOfQualifiedNames.ts, 69, 42))
+
+    if(pet.type === 'dog') {
+>pet.type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 80, 26))
+>type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
+
+        const _okay1 = pet.saysWoof;
+>_okay1 : Symbol(_okay1, Decl(narrowingOfQualifiedNames.ts, 82, 13))
+>pet.saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 80, 26))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+
+        const _okay2: typeof pet.saysWoof = pet.saysWoof;
+>_okay2 : Symbol(_okay2, Decl(narrowingOfQualifiedNames.ts, 83, 13))
+>pet.saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 80, 26))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet.saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+>pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 80, 26))
+>saysWoof : Symbol(saysWoof, Decl(narrowingOfQualifiedNames.ts, 69, 25))
+    }
+}

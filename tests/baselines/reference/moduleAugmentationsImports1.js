@@ -44,7 +44,7 @@ let c = a.getCls().y.toLowerCase();
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
     var A = /** @class */ (function () {
         function A() {
@@ -55,7 +55,7 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     var B = /** @class */ (function () {
         function B() {
@@ -67,13 +67,13 @@ define("b", ["require", "exports"], function (require, exports) {
 /// <reference path="c.d.ts"/>
 define("d", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     a_1.A.prototype.getB = function () { return undefined; };
     a_1.A.prototype.getCls = function () { return undefined; };
 });
 define("main", ["require", "exports", "d"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();

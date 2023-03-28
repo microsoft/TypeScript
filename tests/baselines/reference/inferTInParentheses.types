@@ -1,6 +1,6 @@
 === tests/cases/compiler/inferTInParentheses.ts ===
 type F1 = (num: [number]) => void;
->F1 : F1
+>F1 : (num: [number]) => void
 >num : [number]
 
 type IsNumber<T extends number> = T;

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/objectFreezeLiteralsDontWiden.ts ===
+const PUPPETEER_REVISIONS = Object.freeze({
+>PUPPETEER_REVISIONS : Symbol(PUPPETEER_REVISIONS, Decl(objectFreezeLiteralsDontWiden.ts, 0, 5))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  chromium: '1011831',
+>chromium : Symbol(chromium, Decl(objectFreezeLiteralsDontWiden.ts, 0, 43))
+
+  firefox: 'latest',
+>firefox : Symbol(firefox, Decl(objectFreezeLiteralsDontWiden.ts, 1, 22))
+
+});
+
+let preferredRevision = PUPPETEER_REVISIONS.chromium;
+>preferredRevision : Symbol(preferredRevision, Decl(objectFreezeLiteralsDontWiden.ts, 5, 3))
+>PUPPETEER_REVISIONS.chromium : Symbol(chromium, Decl(objectFreezeLiteralsDontWiden.ts, 0, 43))
+>PUPPETEER_REVISIONS : Symbol(PUPPETEER_REVISIONS, Decl(objectFreezeLiteralsDontWiden.ts, 0, 5))
+>chromium : Symbol(chromium, Decl(objectFreezeLiteralsDontWiden.ts, 0, 43))
+
+preferredRevision = PUPPETEER_REVISIONS.firefox;
+>preferredRevision : Symbol(preferredRevision, Decl(objectFreezeLiteralsDontWiden.ts, 5, 3))
+>PUPPETEER_REVISIONS.firefox : Symbol(firefox, Decl(objectFreezeLiteralsDontWiden.ts, 1, 22))
+>PUPPETEER_REVISIONS : Symbol(PUPPETEER_REVISIONS, Decl(objectFreezeLiteralsDontWiden.ts, 0, 5))
+>firefox : Symbol(firefox, Decl(objectFreezeLiteralsDontWiden.ts, 1, 22))
+

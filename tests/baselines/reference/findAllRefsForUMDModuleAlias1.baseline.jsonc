@@ -1,0 +1,105 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// /*FIND ALL REFS*/export as namespace myLib;
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// <|export as namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}myLib|];|>
+
+// === /tests/cases/fourslash/1.ts ===
+// /// <reference path="0.d.ts" />
+// [|myLib|].doThing();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/0.d.ts ===
+  // export function doThing(): string;
+  // export function doTheOtherThing(): void;
+  // <|export as namespace /*FIND ALL REFS*/[|myLib|];|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export namespace myLib",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "myLib",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// <|export as namespace [|{| isWriteAccess: true |}myLib|];|>
+
+// === /tests/cases/fourslash/1.ts ===
+// /// <reference path="0.d.ts" />
+// /*FIND ALL REFS*/[|myLib|].doThing();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/0.d.ts ===
+  // export function doThing(): string;
+  // export function doTheOtherThing(): void;
+  // <|export as namespace [|myLib|];|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export namespace myLib",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "myLib",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

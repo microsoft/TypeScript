@@ -5,8 +5,6 @@ type __Awaited<T> =
 >__Awaited : __Awaited<T>
 
     T extends null | undefined ? T :
->null : null
-
     T extends PromiseLike<infer U> ? __Awaited<U> :
     T;
 
@@ -17,7 +15,6 @@ type MyPromise<T> = {
 >then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
 >f : ((value: T) => U | PromiseLike<U>) | null | undefined
 >value : T
->null : null
 }
 
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
@@ -25,7 +22,6 @@ type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 
 type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 >P0 : string | number | null | undefined
->null : null
 
 type P1 = __Awaited<any>;
 >P1 : any
@@ -76,7 +72,7 @@ type B0 = Flatten<string[][][]>;
 >B0 : string[]
 
 type B1 = Flatten<string[][] | readonly (number[] | boolean[][])[]>;
->B1 : B1
+>B1 : string[] | readonly (number | boolean)[]
 
 type B2 = Flatten<InfiniteArray<string>>;
 >B2 : any[]
@@ -96,7 +92,7 @@ type TT0 = TupleOf<string, 4>;
 >TT0 : [string, string, string, string]
 
 type TT1 = TupleOf<number, 0 | 2 | 4>;
->TT1 : TT1
+>TT1 : [] | [number, number] | [number, number, number, number]
 
 type TT2 = TupleOf<number, number>;
 >TT2 : number[]
@@ -154,22 +150,22 @@ declare function unbox<T>(box: RecBox<T>): T
 >box : RecBox<T>
 
 type T1 = Box<string>;
->T1 : T1
+>T1 : Box<string>
 
 type T2 = Box<T1>;
->T2 : T2
+>T2 : Box<T1>
 
 type T3 = Box<T2>;
->T3 : T3
+>T3 : Box<T2>
 
 type T4 = Box<T3>;
->T4 : T4
+>T4 : Box<T3>
 
 type T5 = Box<T4>;
->T5 : T5
+>T5 : Box<T4>
 
 type T6 = Box<T5>;
->T6 : T6
+>T6 : Box<T5>
 
 declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
 >b1 : Box<Box<Box<Box<Box<Box<string>>>>>>
@@ -252,8 +248,8 @@ declare function foo<T>(x: Box1<Box1<T>>): T;
 declare let z: Box2<Box2<string>>;
 >z : Box2<Box2<string>>
 
-foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
->foo(z) : unknown
+foo(z);  // string
+>foo(z) : string
 >foo : <T>(x: Box1<Box1<T>>) => T
 >z : Box2<Box2<string>>
 
@@ -324,8 +320,6 @@ type ParseManyWhitespace<S extends string> =
 
     S extends ` ${infer R0}` ?
         ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
->null : null
-
         ParseSuccess<S>;
 
 type TP1 = ParseManyWhitespace<" foo">;
@@ -340,7 +334,6 @@ type ParseManyWhitespace2<S extends string> =
 
 type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
 >Helper : Helper<T>
->null : null
 
 type TP2 = ParseManyWhitespace2<" foo">;
 >TP2 : ParseSuccess<"foo">

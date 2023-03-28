@@ -1,0 +1,13 @@
+=== /a.js ===
+/**
+ * @typedef Foo
+ * @property {string} a
+ */
+
+/**
+ * @param {Foo} [options]
+ */
+function f({ a = "a" }) {}
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 8, 12))
+

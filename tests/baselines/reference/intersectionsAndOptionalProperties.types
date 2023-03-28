@@ -7,13 +7,11 @@ declare let x: { a?: number, b: string };
 declare let y: { a: null, b: string };
 >y : { a: null; b: string; }
 >a : null
->null : null
 >b : string
 
 declare let z: { a: null } & { b: string };
 >z : { a: null; } & { b: string; }
 >a : null
->null : null
 >b : string
 
 x = y;  // Error
@@ -37,9 +35,8 @@ interface To {
 }
 
 type From =  { field: null } & Omit<To, 'field'>;
->From : From
+>From : { field: null; } & Omit<To, "field">
 >field : null
->null : null
 
 function foo(v: From) {
 >foo : (v: From) => void

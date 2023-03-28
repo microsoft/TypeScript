@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: updateExpressionInModule", () => {
     // only run BigInt tests if BigInt is supported in the host environment
     const itIfBigInt = typeof BigInt === "function" ? it : it.skip;

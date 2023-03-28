@@ -230,10 +230,10 @@ foo2(...x2);
 // Repros from #47754
 
 type RestParams = [y: string] | [y: number];
->RestParams : RestParams
+>RestParams : [y: string] | [y: number]
 
 type Signature = (x: string, ...rest: RestParams) => void;
->Signature : Signature
+>Signature : (x: string, ...rest: RestParams) => void
 >x : string
 >rest : RestParams
 

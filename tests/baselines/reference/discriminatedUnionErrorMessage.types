@@ -1,22 +1,22 @@
 === tests/cases/compiler/discriminatedUnionErrorMessage.ts ===
 type Square = { kind: "sq", size: number }
->Square : Square
+>Square : { kind: "sq"; size: number; }
 >kind : "sq"
 >size : number
 
 type Rectangle = { kind: "rt", x: number, y: number }
->Rectangle : Rectangle
+>Rectangle : { kind: "rt"; x: number; y: number; }
 >kind : "rt"
 >x : number
 >y : number
 
 type Circle = { kind: "cr", radius: number }
->Circle : Circle
+>Circle : { kind: "cr"; radius: number; }
 >kind : "cr"
 >radius : number
 
 type Shape =
->Shape : Shape
+>Shape : Square | Rectangle | Circle
 
     | Square
     | Rectangle

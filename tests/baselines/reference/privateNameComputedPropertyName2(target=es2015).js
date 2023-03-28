@@ -21,6 +21,6 @@ class A {
     constructor() {
         _A_x.set(this, 100);
     }
-    [(_A_x = new WeakMap(), (getX = (a) => __classPrivateFieldGet(a, _A_x, "f"), "_"))]() { }
+    [(_A_x = new WeakMap(), getX = (a) => __classPrivateFieldGet(a, _A_x, "f"), "_")]() { }
 }
 console.log(getX(new A));

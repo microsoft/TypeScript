@@ -1,0 +1,65 @@
+=== tests/cases/compiler/circularAccessorAnnotations.ts ===
+declare const c1: {
+>c1 : Symbol(c1, Decl(circularAccessorAnnotations.ts, 0, 13))
+
+    get foo(): typeof c1.foo;
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 0, 19))
+>c1.foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 0, 19))
+>c1 : Symbol(c1, Decl(circularAccessorAnnotations.ts, 0, 13))
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 0, 19))
+}
+
+declare const c2: {
+>c2 : Symbol(c2, Decl(circularAccessorAnnotations.ts, 4, 13))
+
+    set foo(value: typeof c2.foo);
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 4, 19))
+>value : Symbol(value, Decl(circularAccessorAnnotations.ts, 5, 12))
+>c2.foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 4, 19))
+>c2 : Symbol(c2, Decl(circularAccessorAnnotations.ts, 4, 13))
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 4, 19))
+}
+
+declare const c3: {
+>c3 : Symbol(c3, Decl(circularAccessorAnnotations.ts, 8, 13))
+
+    get foo(): string;
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 8, 19), Decl(circularAccessorAnnotations.ts, 9, 22))
+
+    set foo(value: typeof c3.foo);
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 8, 19), Decl(circularAccessorAnnotations.ts, 9, 22))
+>value : Symbol(value, Decl(circularAccessorAnnotations.ts, 10, 12))
+>c3.foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 8, 19), Decl(circularAccessorAnnotations.ts, 9, 22))
+>c3 : Symbol(c3, Decl(circularAccessorAnnotations.ts, 8, 13))
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 8, 19), Decl(circularAccessorAnnotations.ts, 9, 22))
+}
+
+type T1 = {
+>T1 : Symbol(T1, Decl(circularAccessorAnnotations.ts, 11, 1))
+
+    get foo(): T1["foo"];
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 13, 11))
+>T1 : Symbol(T1, Decl(circularAccessorAnnotations.ts, 11, 1))
+}
+
+type T2 = {
+>T2 : Symbol(T2, Decl(circularAccessorAnnotations.ts, 15, 1))
+
+    set foo(value: T2["foo"]);
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 17, 11))
+>value : Symbol(value, Decl(circularAccessorAnnotations.ts, 18, 12))
+>T2 : Symbol(T2, Decl(circularAccessorAnnotations.ts, 15, 1))
+}
+
+type T3 = {
+>T3 : Symbol(T3, Decl(circularAccessorAnnotations.ts, 19, 1))
+
+    get foo(): string;
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 21, 11), Decl(circularAccessorAnnotations.ts, 22, 22))
+
+    set foo(value: T3["foo"]);
+>foo : Symbol(foo, Decl(circularAccessorAnnotations.ts, 21, 11), Decl(circularAccessorAnnotations.ts, 22, 22))
+>value : Symbol(value, Decl(circularAccessorAnnotations.ts, 23, 12))
+>T3 : Symbol(T3, Decl(circularAccessorAnnotations.ts, 19, 1))
+}
+

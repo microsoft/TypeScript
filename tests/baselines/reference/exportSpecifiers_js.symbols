@@ -1,0 +1,7 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.js ===
+const foo = 0;
+>foo : Symbol(foo, Decl(a.js, 0, 5))
+
+export { type foo };
+>foo : Symbol(foo, Decl(a.js, 1, 8))
+

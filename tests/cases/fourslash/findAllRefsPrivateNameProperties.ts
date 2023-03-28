@@ -1,10 +1,10 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 ////class C {
-////    [|[|{|"isDefinition": true, "isWriteAccess": true, "contextRangeIndex": 0 |}#foo|] = 10;|]
+////    /*1*/#foo = 10;
 ////    constructor() {
-////        this.[|{|"isWriteAccess": true|}#foo|] = 20;
-////        [|#foo|] in this;
+////        this./*2*/#foo = 20;
+////        /*3*/#foo in this;
 ////    }
 ////}
 ////class D extends C {
@@ -14,12 +14,10 @@
 ////    }
 ////}
 ////class E {
-////    [|[|{|"isDefinition": true, "contextRangeIndex": 4 |}#foo|]: number;|]
+////    /*4*/#foo: number;
 ////    constructor() {
-////        this.[|{|"isWriteAccess": true|}#foo|] = 20;
+////        this./*5*/#foo = 20;
 ////    }
 ////}
 
-const [rC0Def, rC0, rC1, rC2, rE0Def, rE0, rE1] = test.ranges();
-verify.singleReferenceGroup("(property) C.#foo: number", [rC0, rC1, rC2]);
-verify.singleReferenceGroup("(property) E.#foo: number", [rE0, rE1]);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

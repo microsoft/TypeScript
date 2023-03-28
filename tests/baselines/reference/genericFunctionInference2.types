@@ -10,7 +10,7 @@ declare function combineReducers<S>(reducers: { [K in keyof S]: Reducer<S[K]> })
 >reducers : { [K in keyof S]: Reducer<S[K]>; }
 
 type MyState = { combined: { foo: number } };
->MyState : MyState
+>MyState : { combined: {    foo: number;}; }
 >combined : { foo: number; }
 >foo : number
 
@@ -54,7 +54,7 @@ declare function withH<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
 >handlerCreators : HandleCreatorsFactory<T, U>
 
 type Props = { out: number }
->Props : Props
+>Props : { out: number; }
 >out : number
 
 type HandleCreatorsFactory<T, U> = (initialProps: T) => { [P in keyof U]: (props: T) => U[P] };
@@ -92,5 +92,4 @@ enhancer4.onChange(null);
 >enhancer4.onChange : (e: any) => void
 >enhancer4 : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
 >onChange : (e: any) => void
->null : null
 

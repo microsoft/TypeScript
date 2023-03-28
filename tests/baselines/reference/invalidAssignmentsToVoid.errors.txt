@@ -49,6 +49,7 @@ tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,5):
         x = a;
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'void'.
+!!! related TS2208 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:19:12: This type parameter might need an `extends void` constraint.
     }
     x = f;
         ~

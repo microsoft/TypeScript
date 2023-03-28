@@ -148,7 +148,6 @@ export type ComponentClass<P> = new (props: P) => Component<P>;
 export type FunctionComponent<P> = (props: P) => null;
 >FunctionComponent : FunctionComponent<P>
 >props : P
->null : null
 
 export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
 >ComponentType : ComponentType<P>
@@ -198,4 +197,23 @@ let z = foo(ab);  // [AB<string>, string]
 >foo(ab) : [{ a: string; } | { b: string; }, string]
 >foo : <T, U>(obj: T & AB<U>) => [T, U]
 >ab : AB<string>
+
+// Repro from #51399
+
+declare let a: <T>() => (T extends true ? true : false) & boolean;
+>a : <T>() => (T extends true ? true : false) & boolean
+>true : true
+>true : true
+>false : false
+
+declare let b: <T>() => (T extends true ? true : false) & boolean;
+>b : <T>() => (T extends true ? true : false) & boolean
+>true : true
+>true : true
+>false : false
+
+a = b;
+>a = b : <T>() => (T extends true ? true : false) & boolean
+>a : <T>() => (T extends true ? true : false) & boolean
+>b : <T>() => (T extends true ? true : false) & boolean
 

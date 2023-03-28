@@ -70,10 +70,10 @@ type i09t01 = i09<1>; // error
 >i09t01 : any
 
 type i09t02 = i09<1, 2>; // ok
->i09t02 : i09t02
+>i09t02 : i09<1, 2, number>
 
 type i09t03 = i09<1, 2, 3>; // ok
->i09t03 : i09t03
+>i09t03 : i09<1, 2, 3>
 
 type i09t04 = i09<1, 2, 3, 4>; // error
 >i09t04 : any

@@ -409,7 +409,7 @@ type Arrayify<T> = { [P in keyof T]: T[P][] };
 >Arrayify : Arrayify<T>
 
 type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;  // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
->TM1 : readonly [string[], (number | undefined)[]?, ...Arrayify<U>, ...boolean[][]]
+>TM1 : readonly [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
 
 type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
 >TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]
@@ -1349,13 +1349,13 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 // Repro from #39607
 
 declare function getUser(id: string, options?: { x?: string }): string;
->getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
+>getUser : (id: string, options?: {    x?: string;}) => string
 >id : string
 >options : { x?: string | undefined; } | undefined
 >x : string | undefined
 
 declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
->getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
+>getOrgUser : (id: string, orgId: number, options?: {    y?: number;    z?: boolean;}) => void
 >id : string
 >orgId : number
 >options : { y?: number | undefined; z?: boolean | undefined; } | undefined
@@ -1390,14 +1390,14 @@ callApi(getOrgUser);
 // Repro from #40235
 
 type Numbers = number[];
->Numbers : Numbers
+>Numbers : number[]
 
 type Unbounded = [...Numbers, boolean];
 >Unbounded : [...number[], boolean]
 
 const data: Unbounded = [false, false];  // Error
 >data : [...number[], boolean]
->[false, false] : [false, false]
+>[false, false] : [boolean, false]
 >false : false
 >false : false
 

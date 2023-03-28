@@ -16,7 +16,7 @@ var happyFriday = c.b.Friday;
 
 //// [internalAliasEnumInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.a = void 0;
 var a;
 (function (a) {

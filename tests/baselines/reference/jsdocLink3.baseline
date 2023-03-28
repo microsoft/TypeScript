@@ -1,3 +1,26 @@
+=== /module1.ts ===
+// import { C } from './jsdocLink3'
+// /**
+//  * {@link C}
+//  * @wat Makes a {@link C}. A default one.
+//  * {@link C()}
+//  * {@link C|postfix text}
+//  * {@link unformatted postfix text}
+//  * @see {@link C} its great
+//  */
+// function CC() {
+//          ^^
+// | ----------------------------------------------------------------------
+// | function CC(): void
+// | {@link C}
+// | @wat Makes a {@link C}. A default one.
+// | {@link C()}
+// | {@link Cpostfix text}
+// | {@link unformatted postfix text}
+// | @see {@link C} its great
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +28,7 @@
       "position": 210,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -59,10 +82,10 @@
           "text": "C",
           "kind": "linkName",
           "target": {
-            "fileName": "/jsdocLink3.ts",
+            "fileName": "/module1.ts",
             "textSpan": {
-              "start": 0,
-              "length": 18
+              "start": 9,
+              "length": 1
             }
           }
         },
@@ -87,10 +110,10 @@
               "text": "C",
               "kind": "linkName",
               "target": {
-                "fileName": "/jsdocLink3.ts",
+                "fileName": "/module1.ts",
                 "textSpan": {
-                  "start": 0,
-                  "length": 18
+                  "start": 9,
+                  "length": 1
                 }
               }
             },
@@ -110,10 +133,10 @@
               "text": "C()",
               "kind": "linkName",
               "target": {
-                "fileName": "/jsdocLink3.ts",
+                "fileName": "/module1.ts",
                 "textSpan": {
-                  "start": 0,
-                  "length": 18
+                  "start": 9,
+                  "length": 1
                 }
               }
             },
@@ -133,10 +156,10 @@
               "text": "C",
               "kind": "linkName",
               "target": {
-                "fileName": "/jsdocLink3.ts",
+                "fileName": "/module1.ts",
                 "textSpan": {
-                  "start": 0,
-                  "length": 18
+                  "start": 9,
+                  "length": 1
                 }
               }
             },
@@ -181,10 +204,10 @@
               "text": "C",
               "kind": "linkName",
               "target": {
-                "fileName": "/jsdocLink3.ts",
+                "fileName": "/module1.ts",
                 "textSpan": {
-                  "start": 0,
-                  "length": 18
+                  "start": 9,
+                  "length": 1
                 }
               }
             },

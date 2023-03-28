@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts ===
 type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
->Two : Two
+>Two : { foo: {    bar: true;}; baz: true; } | { [s: string]: string; }
 >foo : { bar: true; }
 >bar : true
 >true : true
@@ -26,7 +26,7 @@ u.baz = 'hi'
 >'hi' : "hi"
 
 type Three = { foo: number } | { [s: string]: string } | { [s: string]: boolean };
->Three : Three
+>Three : { foo: number; } | { [s: string]: string; } | { [s: string]: boolean; }
 >foo : number
 >s : string
 >s : string
@@ -42,7 +42,7 @@ v.foo = false
 >false : false
 
 type Missing = { foo: number, bar: true } | { [s: string]: string } | { foo: boolean }
->Missing : Missing
+>Missing : { foo: number; bar: true; } | { [s: string]: string; } | { foo: boolean; }
 >foo : number
 >bar : true
 >true : true
@@ -65,7 +65,7 @@ m.bar
 >bar : any
 
 type RO = { foo: number } | { readonly [s: string]: string }
->RO : RO
+>RO : { foo: number; } | { readonly [s: string]: string; }
 >foo : number
 >s : string
 
@@ -80,7 +80,7 @@ ro.foo = 'not allowed'
 >'not allowed' : "not allowed"
 
 type Num = { '0': string } | { [n: number]: number }
->Num : Num
+>Num : { '0': string; } | { [n: number]: number; }
 >'0' : string
 >n : number
 
@@ -107,7 +107,7 @@ const sym = Symbol()
 >Symbol : SymbolConstructor
 
 type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, [s: string]: string | number }
->Both : Both
+>Both : { s: number; '0': number; [sym]: boolean; } | { [n: number]: number; [s: string]: string | number; }
 >s : number
 >'0' : number
 >[sym] : boolean

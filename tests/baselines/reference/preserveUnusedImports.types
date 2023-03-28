@@ -1,6 +1,6 @@
 === tests/cases/compiler/a.ts ===
 export type A = {};
->A : A
+>A : {}
 
 === tests/cases/compiler/b.ts ===
 export class B {}

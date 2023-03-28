@@ -40,7 +40,7 @@ const templateStrUnion = `union with number ${symbolUnionNumber} and union with 
 // Fix #44462
 
 type StringOrSymbol = string | symbol;
->StringOrSymbol : StringOrSymbol
+>StringOrSymbol : string | symbol
 
 function getKey<S extends StringOrSymbol>(key: S) {
 >getKey : <S extends StringOrSymbol>(key: S) => string

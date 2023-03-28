@@ -23,7 +23,7 @@ verify.completions({
     includes: [
         {
             name: "M",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[0],
             insertText:
 `abstract M<T>(t: T): void;

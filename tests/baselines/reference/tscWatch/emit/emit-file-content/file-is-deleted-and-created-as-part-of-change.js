@@ -1,3 +1,4 @@
+currentDirectory:: /home/username/project useCaseSensitiveFileNames: true
 Input::
 //// [/home/username/project/app/file.ts]
 var a = 10;
@@ -43,21 +44,21 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /home/username/project/app/file.ts (used version)
 
-WatchedFiles::
-/home/username/project/tsconfig.json:
-  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
-/home/username/project/app/file.ts:
-  {"fileName":"/home/username/project/app/file.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/home/username/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/home/username/project/tsconfig.json: *new*
+  {}
+/home/username/project/app/file.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/home/username/project/node_modules/@types:
-  {"directoryName":"/home/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/home/username/project/app:
-  {"directoryName":"/home/username/project/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/home/username/project/app: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -95,22 +96,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/username/project/app/file.ts (computed .d.ts)
-
-WatchedFiles::
-/home/username/project/tsconfig.json:
-  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
-/home/username/project/app/file.ts:
-  {"fileName":"/home/username/project/app/file.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/home/username/project/node_modules/@types:
-  {"directoryName":"/home/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/home/username/project/app:
-  {"directoryName":"/home/username/project/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

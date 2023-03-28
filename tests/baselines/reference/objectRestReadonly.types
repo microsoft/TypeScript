@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/rest/objectRestReadonly.ts ===
 // #23734
 type ObjType = {
->ObjType : ObjType
+>ObjType : { foo: string; baz: string; quux: string; }
 
   foo: string
 >foo : string

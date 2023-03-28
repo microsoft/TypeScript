@@ -4,13 +4,9 @@
 
 // @Filename: /a.js
 /////** @enum {string} */
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}E|] = { A: "" };|]
-////[|E|]["A"];
-/////** @type {[|E|]} */
-////const e = [|E|].A;
+/////*1*/const /*2*/E = { A: "" };
+/////*3*/E["A"];
+/////** @type {/*4*/E} */
+////const e = /*5*/E.A;
 
-verify.singleReferenceGroup(
-`type E = string
-const E: {
-    A: string;
-}`, "E");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

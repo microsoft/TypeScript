@@ -5,4 +5,4 @@
 ////    [|f|]([|f|]);
 ////}
 
-verify.rangesAreDocumentHighlights();
+verify.baselineDocumentHighlights();

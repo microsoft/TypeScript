@@ -6,7 +6,7 @@ type T02 = string & never;
 >T02 : never
 
 type T03 = string | number | never;
->T03 : T03
+>T03 : string | number
 
 type T04 = string & number & never;
 >T04 : never
@@ -25,11 +25,9 @@ type T08 = undefined & never;
 
 type T09 = null | never;
 >T09 : null
->null : null
 
 type T10 = null & never;
 >T10 : never
->null : null
 
 type T11 = { a: string } | never;
 >T11 : { a: string; }

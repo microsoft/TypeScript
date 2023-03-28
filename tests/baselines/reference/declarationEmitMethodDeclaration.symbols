@@ -1,0 +1,10 @@
+=== /a.js ===
+export default {
+    methods: {
+>methods : Symbol(methods, Decl(a.js, 0, 16))
+
+        foo() { }
+>foo : Symbol(foo, Decl(a.js, 1, 14))
+    }
+}
+

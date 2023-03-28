@@ -1,0 +1,39 @@
+tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2307: Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
+    // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
+    namespace JSX {}
+    class Component {
+        render() {
+            return <div>
+                   ~~~~~
+                {/* missing */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                {null/* preserved */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                {
+    ~~~~~~~~~~~~~
+                    // ??? 1
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+                { // ??? 2
+    ~~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+                {// ??? 3
+    ~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+                {
+    ~~~~~~~~~~~~~
+                    // ??? 4
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+                /* ??? 5 */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+            </div>;
+    ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
+        }
+    }

@@ -101,3 +101,11 @@ if (ux || y || uz || isFoo) {
     // error on isFoo
 }
 
+if (x && z) {
+>x : Symbol(x, Decl(uncalledFunctionChecksInConditional.ts, 24, 13))
+>z : Symbol(z, Decl(uncalledFunctionChecksInConditional.ts, 27, 38))
+
+    // no error
+    z();
+>z : Symbol(z, Decl(uncalledFunctionChecksInConditional.ts, 27, 38))
+}

@@ -4,7 +4,9 @@ about: Create a report to help us improve TypeScript
 title: ''
 labels: ''
 assignees: ''
+
 ---
+
 # Bug Report
 
 <!--

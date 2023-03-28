@@ -33,6 +33,12 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 };
 var _b, _A_field;
 class A {
+    testObject() {
+        return { x: 10, y: 6 };
+    }
+    testArray() {
+        return [10, 11];
+    }
     constructor() {
         var _c;
         this.otherClass = A;
@@ -44,12 +50,6 @@ class A {
         ({ a: ({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value = 1, b: [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value = 1] } = { b: [] });
         [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value = 2] = [];
         _c = this.otherClass, [({ set value(_b) { __classPrivateFieldSet(_c, _b, _b, "f", _A_field); } }).value = 2] = [];
-    }
-    testObject() {
-        return { x: 10, y: 6 };
-    }
-    testArray() {
-        return [10, 11];
     }
     static test(_a) {
         [({ set value(_c) { __classPrivateFieldSet(_a, _b, _c, "f", _A_field); } }).value] = [2];

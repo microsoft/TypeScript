@@ -1,3 +1,33 @@
+=== /tests/cases/fourslash/Foo.js ===
+// /**
+//  * @param {string} p1 - A string param
+//  * @param {string?} p2 - An optional param
+//  * @param {string} [p3] - Another optional param
+//  * @param {string} [p4="test"] - An optional param with a default value
+//  */
+// function f1(p1, p2, p3, p4){}
+// f1('foo', 'bar', 'baz', 'qux');
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**p1: string**, p2: string, p3?: string, p4?: string): void
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | f1(p1: string, **p2: string**, p3?: string, p4?: string): void
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | f1(p1: string, p2: string, **p3?: string**, p4?: string): void
+// | ----------------------------------------------------------------------
+//                         ^
+// | ----------------------------------------------------------------------
+// | f1(p1: string, p2: string, p3?: string, **p4?: string**): void
+// | @param p1 - A string param
+// | @param p2 - An optional param
+// | @param p3 - Another optional param
+// | @param p4 - An optional param with a default value
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +35,7 @@
       "position": 244,
       "name": "1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -52,7 +82,7 @@
               "name": "p1",
               "documentation": [
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ],
@@ -81,7 +111,7 @@
               "name": "p2",
               "documentation": [
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ],
@@ -110,7 +140,7 @@
               "name": "p3",
               "documentation": [
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ],
@@ -143,7 +173,7 @@
               "name": "p4",
               "documentation": [
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ],
@@ -187,7 +217,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ]
@@ -204,7 +234,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ]
@@ -221,7 +251,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ]
@@ -238,7 +268,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ]
@@ -261,7 +291,7 @@
       "position": 251,
       "name": "2"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -308,7 +338,7 @@
               "name": "p1",
               "documentation": [
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ],
@@ -337,7 +367,7 @@
               "name": "p2",
               "documentation": [
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ],
@@ -366,7 +396,7 @@
               "name": "p3",
               "documentation": [
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ],
@@ -399,7 +429,7 @@
               "name": "p4",
               "documentation": [
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ],
@@ -443,7 +473,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ]
@@ -460,7 +490,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ]
@@ -477,7 +507,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ]
@@ -494,7 +524,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ]
@@ -517,7 +547,7 @@
       "position": 258,
       "name": "3"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -564,7 +594,7 @@
               "name": "p1",
               "documentation": [
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ],
@@ -593,7 +623,7 @@
               "name": "p2",
               "documentation": [
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ],
@@ -622,7 +652,7 @@
               "name": "p3",
               "documentation": [
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ],
@@ -655,7 +685,7 @@
               "name": "p4",
               "documentation": [
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ],
@@ -699,7 +729,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ]
@@ -716,7 +746,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ]
@@ -733,7 +763,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ]
@@ -750,7 +780,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ]
@@ -773,7 +803,7 @@
       "position": 265,
       "name": "4"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -820,7 +850,7 @@
               "name": "p1",
               "documentation": [
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ],
@@ -849,7 +879,7 @@
               "name": "p2",
               "documentation": [
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ],
@@ -878,7 +908,7 @@
               "name": "p3",
               "documentation": [
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ],
@@ -911,7 +941,7 @@
               "name": "p4",
               "documentation": [
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ],
@@ -955,7 +985,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string param",
+                  "text": "- A string param",
                   "kind": "text"
                 }
               ]
@@ -972,7 +1002,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param",
+                  "text": "- An optional param",
                   "kind": "text"
                 }
               ]
@@ -989,7 +1019,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Another optional param",
+                  "text": "- Another optional param",
                   "kind": "text"
                 }
               ]
@@ -1006,7 +1036,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An optional param with a default value",
+                  "text": "- An optional param with a default value",
                   "kind": "text"
                 }
               ]

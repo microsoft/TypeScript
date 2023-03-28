@@ -18,7 +18,7 @@ namespace jsx {
         export interface IntrinsicAttributes {}
         export interface IntrinsicClassAttributes<T> {}
         export type IntrinsicElements = {
->IntrinsicElements : IntrinsicElements
+>IntrinsicElements : { div: {    className: string;}; }
 
             div: { className: string }
 >div : { className: string; }
@@ -42,7 +42,6 @@ declare const Comp: (p: { className?: string }) => null
 >Comp : (p: {    className?: string;}) => null
 >p : { className?: string; }
 >className : string
->null : null
 
 ;<Comp css="color:hotpink;" />
 ><Comp css="color:hotpink;" /> : jsx.JSX.Element

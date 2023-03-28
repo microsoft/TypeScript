@@ -8,7 +8,7 @@ export enum Color {
 
 //// [commentOnExportEnumDeclaration.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Color = void 0;
 /**
  * comment

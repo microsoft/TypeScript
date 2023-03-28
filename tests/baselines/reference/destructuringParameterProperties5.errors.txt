@@ -48,7 +48,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(1
     }
     
     var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
-                      ~~~~~~
+                      ~~
 !!! error TS2322: Type '{ x1: number; x2: string; x3: true; }' is not assignable to type 'ObjType1'.
 !!! error TS2322:   Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
                                                   ~~

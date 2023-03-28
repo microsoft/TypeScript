@@ -1,0 +1,80 @@
+=== tests/cases/compiler/constructorWithParameterPropertiesAndPrivateFields.es2015.ts ===
+// https://github.com/microsoft/TypeScript/issues/48771
+
+class A {
+>A : Symbol(A, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 0, 0))
+
+  readonly #privateField: string;
+>#privateField : Symbol(A.#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 2, 9))
+
+  constructor(arg: { key: string }, public exposedField: number) {
+>arg : Symbol(arg, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 14))
+>key : Symbol(key, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 20))
+>exposedField : Symbol(A.exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 35))
+
+    ({ key: this.#privateField } = arg);
+>key : Symbol(key, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 6, 6))
+>this.#privateField : Symbol(A.#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 2, 9))
+>this : Symbol(A, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 0, 0))
+>arg : Symbol(arg, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 14))
+  }
+
+  log() {
+>log : Symbol(A.log, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 7, 3))
+
+    console.log(this.#privateField);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#privateField : Symbol(A.#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 2, 9))
+>this : Symbol(A, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 0, 0))
+
+    console.log(this.exposedField);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.exposedField : Symbol(A.exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 35))
+>this : Symbol(A, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 0, 0))
+>exposedField : Symbol(A.exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 35))
+  }
+}
+
+class B {
+>B : Symbol(B, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 13, 1))
+
+  readonly #privateField: string;
+>#privateField : Symbol(B.#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 15, 9))
+
+  constructor(arg: { key: string }, public exposedField: number) {
+>arg : Symbol(arg, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 14))
+>key : Symbol(key, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 20))
+>exposedField : Symbol(B.exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 35))
+
+    "prologue";
+    ({ key: this.#privateField } = arg);
+>key : Symbol(key, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 20, 6))
+>this.#privateField : Symbol(B.#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 15, 9))
+>this : Symbol(B, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 13, 1))
+>arg : Symbol(arg, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 14))
+  }
+
+  log() {
+>log : Symbol(B.log, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 21, 3))
+
+    console.log(this.#privateField);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#privateField : Symbol(B.#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 15, 9))
+>this : Symbol(B, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 13, 1))
+
+    console.log(this.exposedField);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.exposedField : Symbol(B.exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 35))
+>this : Symbol(B, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 13, 1))
+>exposedField : Symbol(B.exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 35))
+  }
+}
+

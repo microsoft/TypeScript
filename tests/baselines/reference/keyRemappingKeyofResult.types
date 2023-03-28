@@ -6,19 +6,19 @@ const sym = Symbol("")
 >"" : ""
 
 type Orig = { [k: string]: any, str: any, [sym]: any }
->Orig : Orig
+>Orig : { [k: string]: any; str: any; [sym]: any; }
 >k : string
 >str : any
 >[sym] : any
 >sym : unique symbol
 
 type Okay = Exclude<keyof Orig, never>
->Okay : Okay
+>Okay : string | number | unique symbol
 
 // type Okay = string | number | typeof sym
 
 type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
->Remapped : Remapped
+>Remapped : { str: any; [sym]: any; }
 
 /* type Remapped = {
     str: any;
@@ -27,7 +27,7 @@ type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: an
 // no string index signature, right?
 
 type Oops = Exclude<keyof Remapped, never>
->Oops : Oops
+>Oops : unique symbol | "str"
 
 declare let x: Oops;
 >x : Oops

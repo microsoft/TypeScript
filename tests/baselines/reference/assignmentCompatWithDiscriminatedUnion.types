@@ -6,12 +6,12 @@ namespace Example1 {
 >Example1 : typeof Example1
 
     type S = { done: boolean, value: number };
->S : S
+>S : { done: boolean; value: number; }
 >done : boolean
 >value : number
 
     type T =
->T : T
+>T : { done: true; value: number; } | { done: false; value: number; }
 
         | { done: true, value: number }     // T0
 >done : true
@@ -42,12 +42,12 @@ namespace Example2 {
 >Example2 : typeof Example2
 
     type S = { a: 0 | 2, b: 4 };
->S : S
+>S : { a: 0 | 2; b: 4; }
 >a : 0 | 2
 >b : 4
 
     type T = { a: 0,     b: 1 | 4 }     // T0
->T : T
+>T : { a: 0; b: 1 | 4; } | { a: 1; b: 2; } | { a: 2; b: 3 | 4; }
 >a : 0
 >b : 4 | 1
 
@@ -78,12 +78,12 @@ namespace Example3 {
 >Example3 : typeof Example3
 
     type S = { a: 0 | 2, b: 4 };
->S : S
+>S : { a: 0 | 2; b: 4; }
 >a : 0 | 2
 >b : 4
 
     type T = { a: 0,     b: 1 | 4 }     // T0
->T : T
+>T : { a: 0; b: 1 | 4; } | { a: 1; b: 2 | 4; } | { a: 2; b: 3; }
 >a : 0
 >b : 4 | 1
 
@@ -115,12 +115,12 @@ namespace Example4 {
 >Example4 : typeof Example4
 
     type S = { a: 0 | 2, b: 4 };
->S : S
+>S : { a: 0 | 2; b: 4; }
 >a : 0 | 2
 >b : 4
 
     type T = { a: 0,     b: 1 | 4 }             // T0
->T : T
+>T : { a: 0; b: 1 | 4; } | { a: 1; b: 2; } | { a: 2; b: 3 | 4; c: string; }
 >a : 0
 >b : 4 | 1
 
@@ -155,16 +155,16 @@ namespace Example5 {
     //       3 discriminant properties with 3 types a piece
     //       is 27 possible combinations.
     type N = 0 | 1 | 2;
->N : N
+>N : 0 | 2 | 1
 
     type S = { a: N, b: N, c: N };
->S : S
+>S : { a: N; b: N; c: N; }
 >a : N
 >b : N
 >c : N
 
     type T = { a: 0, b: N, c: N }
->T : T
+>T : { a: 0; b: N; c: N; } | { a: 1; b: N; c: N; } | { a: 2; b: N; c: N; } | { a: N; b: 0; c: N; } | { a: N; b: 1; c: N; } | { a: N; b: 2; c: N; } | { a: N; b: N; c: 0; } | { a: N; b: N; c: 1; } | { a: N; b: N; c: 2; }
 >a : 0
 >b : N
 >c : N
@@ -228,7 +228,7 @@ namespace GH14865 {
 >GH14865 : typeof GH14865
 
     type Style1 = {
->Style1 : Style1
+>Style1 : { type: "A"; data: string; } | { type: "B"; data: string; }
 
         type: "A";
 >type : "A"
@@ -246,7 +246,7 @@ namespace GH14865 {
     };
 
     type Style2 = {
->Style2 : Style2
+>Style2 : { type: "A" | "B"; data: string; }
 
         type: "A" | "B";
 >type : "A" | "B"
@@ -322,10 +322,10 @@ namespace GH12052 {
 >type : "categorical"
 
     type IAxis = ILinearAxis | ICategoricalAxis;
->IAxis : IAxis
+>IAxis : ILinearAxis | ICategoricalAxis
 
     type IAxisType = "linear" | "categorical";
->IAxisType : IAxisType
+>IAxisType : "linear" | "categorical"
 
     function getAxisType(): IAxisType {
 >getAxisType : () => IAxisType
@@ -381,10 +381,10 @@ namespace GH18421 {
     }
 
     type ThingType = 'one' | 'two';
->ThingType : ThingType
+>ThingType : "one" | "two"
 
     type Thing = ThingTypeOne | ThingTypeTwo;
->Thing : Thing
+>Thing : ThingTypeOne | ThingTypeTwo
 
     function makeNewThing(thingType: ThingType): Thing {
 >makeNewThing : (thingType: ThingType) => Thing
@@ -406,7 +406,7 @@ namespace GH15907 {
 >GH15907 : typeof GH15907
 
     type Action = { type: 'activate' } | { type: 'disactivate' };
->Action : Action
+>Action : { type: 'activate'; } | { type: 'disactivate'; }
 >type : "activate"
 >type : "disactivate"
 
@@ -445,7 +445,7 @@ namespace GH20889 {
 >type : "A2"
     }
     type AU = A1 | A2;
->AU : AU
+>AU : A1 | A2
 
     function foo(obj1: AU) {
 >foo : (obj1: AU) => void
@@ -470,10 +470,10 @@ namespace GH39357 {
 >GH39357 : typeof GH39357
 
     type A = ["a", number] | ["b", number] | ["c", string];
->A : A
+>A : ["a", number] | ["b", number] | ["c", string]
 
     type B = "a" | "b" | "c";
->B : B
+>B : "a" | "b" | "c"
 
     declare const b: B;
 >b : B

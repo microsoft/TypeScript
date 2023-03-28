@@ -212,12 +212,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) : BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
 >buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
 >Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE} : SO_FAR & { identifier: TYPE; }
->Object.assign({}, soFar, {identifier: instance as TYPE}) : SO_FAR & { identifier: TYPE; }
+>Object.assign({}, soFar, {identifier: instance as TYPE}) : SO_FAR & Record<"record", unknown> & { identifier: TYPE; }
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
 >{} : {}
->soFar : SO_FAR
+>soFar : SO_FAR & Record<"record", unknown>
 >{identifier: instance as TYPE} : { identifier: TYPE; }
 >identifier : TYPE
 >instance as TYPE : TYPE
@@ -389,13 +389,13 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >soFar : SO_FAR
 >"object" in soFar : boolean
 >"object" : "object"
->soFar : SO_FAR
+>soFar : SO_FAR & Record<"identifier", unknown>
 >"maxMsToWaitBeforePublishing" in soFar : boolean
 >"maxMsToWaitBeforePublishing" : "maxMsToWaitBeforePublishing"
->soFar : SO_FAR
+>soFar : SO_FAR & Record<"identifier", unknown> & Record<"object", unknown>
 >"PubSubRecordIsStoredInRedisAsA" in soFar : boolean
 >"PubSubRecordIsStoredInRedisAsA" : "PubSubRecordIsStoredInRedisAsA"
->soFar : SO_FAR
+>soFar : SO_FAR & Record<"identifier", unknown> & Record<"object", unknown> & Record<"maxMsToWaitBeforePublishing", unknown>
 >{} : {}
 >{      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    } : { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
 

@@ -1,0 +1,14 @@
+tests/cases/compiler/assignmentCompatability46.ts(3,4): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'never'.
+tests/cases/compiler/assignmentCompatability46.ts(4,4): error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type 'never'.
+
+
+==== tests/cases/compiler/assignmentCompatability46.ts (2 errors) ====
+    declare function fn(x: never): void;
+    
+    fn([1, 2, 3])
+       ~~~~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'never'.
+    fn({ a: 1, b: 2 })
+       ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type 'never'.
+    

@@ -1,4 +1,4 @@
 === tests/cases/compiler/anyMappedTypesError.ts ===
 type Foo = {[P in "bar"]};
->Foo : Foo
+>Foo : { bar: any; }
 

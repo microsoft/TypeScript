@@ -18,9 +18,9 @@ tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignabl
         x: number;
         constructor() {
             return 1; // error
-            ~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'D'.
-            ~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
     }
@@ -36,7 +36,7 @@ tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignabl
         x: T;
         constructor() {
             return { x: 1 }; // error
-            ~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
                      ~
 !!! error TS2322: Type 'number' is not assignable to type 'T'.

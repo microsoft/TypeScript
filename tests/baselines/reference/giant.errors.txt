@@ -1,44 +1,44 @@
 tests/cases/compiler/giant.ts(22,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(23,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(23,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(23,20): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(24,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(25,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(25,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(25,29): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(26,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(27,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(27,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(27,21): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(28,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(29,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(29,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(29,30): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(32,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(33,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(33,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(33,29): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(34,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(35,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(35,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(35,20): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(60,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(60,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(61,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(62,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(75,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(86,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(87,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(87,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(87,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(88,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(89,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(89,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(89,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(90,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(91,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(91,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(91,25): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(92,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(93,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(93,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(93,34): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(96,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(97,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(97,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(97,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(98,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(99,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(99,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(99,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(124,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(124,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(125,9): error TS1021: An index signature must have a type annotation.
@@ -46,23 +46,23 @@ tests/cases/compiler/giant.ts(126,10): error TS1096: An index signature must hav
 tests/cases/compiler/giant.ts(139,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(153,39): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(165,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(166,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(166,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(166,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(167,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(168,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(168,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(168,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(169,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(170,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(170,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(170,25): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(171,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(172,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(172,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(172,34): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(175,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(176,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(176,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(176,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(177,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(178,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(178,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(178,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(203,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(203,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(204,9): error TS1021: An index signature must have a type annotation.
@@ -96,46 +96,46 @@ tests/cases/compiler/giant.ts(261,22): error TS1183: An implementation cannot be
 tests/cases/compiler/giant.ts(261,25): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(266,30): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(280,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(281,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(281,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(281,20): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(282,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(283,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(283,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(283,29): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(284,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(285,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(285,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(285,21): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(286,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(287,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(287,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(287,30): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(290,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(291,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(291,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(291,29): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(292,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(293,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(293,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(293,20): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(318,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(318,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(319,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(320,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(333,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(344,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(345,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(345,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(345,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(346,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(347,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(347,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(347,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(348,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(349,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(349,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(349,25): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(350,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(351,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(351,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(351,34): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(354,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(355,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(355,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(355,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(356,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(357,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(357,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(357,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(382,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(382,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(383,9): error TS1021: An index signature must have a type annotation.
@@ -143,23 +143,23 @@ tests/cases/compiler/giant.ts(384,10): error TS1096: An index signature must hav
 tests/cases/compiler/giant.ts(397,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(411,39): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(423,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(424,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(424,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(424,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(425,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(426,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(426,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(426,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(427,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(428,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(428,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(428,25): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(429,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(430,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(430,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(430,34): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(433,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(434,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(434,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(434,33): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(435,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(436,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(436,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(436,24): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(461,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(461,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(462,9): error TS1021: An index signature must have a type annotation.
@@ -274,33 +274,33 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
+                       ~
+!!! error TS1005: '{' expected.
         public psF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
+                                ~
+!!! error TS1005: '{' expected.
         private rgF() { }
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
                     ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                    ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
+                        ~
+!!! error TS1005: '{' expected.
         private rsF(param:any) { }
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
                     ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
+                                 ~
+!!! error TS1005: '{' expected.
         static tV;
         static tF() { }
         static tsF(param:any) { }
@@ -308,17 +308,17 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
+                                ~
+!!! error TS1005: '{' expected.
         static tgF() { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
+                       ~
+!!! error TS1005: '{' expected.
     }
     interface I {
         //Call Signature
@@ -384,33 +384,33 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
+                           ~
+!!! error TS1005: '{' expected.
             public psF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
+                                    ~
+!!! error TS1005: '{' expected.
             private rgF() { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
+                            ~
+!!! error TS1005: '{' expected.
             private rsF(param:any) { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
+                                     ~
+!!! error TS1005: '{' expected.
             static tV;
             static tF() { }
             static tsF(param:any) { }
@@ -418,17 +418,17 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
+                                    ~
+!!! error TS1005: '{' expected.
             static tgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
+                           ~
+!!! error TS1005: '{' expected.
         }
         interface I {
             //Call Signature
@@ -511,33 +511,33 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
+                           ~
+!!! error TS1005: '{' expected.
             public psF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
+                                    ~
+!!! error TS1005: '{' expected.
             private rgF() { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
+                            ~
+!!! error TS1005: '{' expected.
             private rsF(param:any) { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
+                                     ~
+!!! error TS1005: '{' expected.
             static tV;
             static tF() { }
             static tsF(param:any) { }
@@ -545,17 +545,17 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
+                                    ~
+!!! error TS1005: '{' expected.
             static tgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
+                           ~
+!!! error TS1005: '{' expected.
         }
         export interface eI {
             //Call Signature
@@ -726,33 +726,33 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
+                       ~
+!!! error TS1005: '{' expected.
         public psF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
+                                ~
+!!! error TS1005: '{' expected.
         private rgF() { }
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
                     ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                    ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
+                        ~
+!!! error TS1005: '{' expected.
         private rsF(param:any) { }
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
                     ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
+                                 ~
+!!! error TS1005: '{' expected.
         static tV;
         static tF() { }
         static tsF(param:any) { }
@@ -760,17 +760,17 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
+                                ~
+!!! error TS1005: '{' expected.
         static tgF() { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
+                       ~
+!!! error TS1005: '{' expected.
     }
     export interface eI {
         //Call Signature
@@ -836,33 +836,33 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
+                           ~
+!!! error TS1005: '{' expected.
             public psF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
+                                    ~
+!!! error TS1005: '{' expected.
             private rgF() { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
+                            ~
+!!! error TS1005: '{' expected.
             private rsF(param:any) { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
+                                     ~
+!!! error TS1005: '{' expected.
             static tV;
             static tF() { }
             static tsF(param:any) { }
@@ -870,17 +870,17 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
+                                    ~
+!!! error TS1005: '{' expected.
             static tgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
+                           ~
+!!! error TS1005: '{' expected.
         }
         interface I {
             //Call Signature
@@ -963,33 +963,33 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
+                           ~
+!!! error TS1005: '{' expected.
             public psF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
+                                    ~
+!!! error TS1005: '{' expected.
             private rgF() { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
+                            ~
+!!! error TS1005: '{' expected.
             private rsF(param:any) { }
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
+                                     ~
+!!! error TS1005: '{' expected.
             static tV;
             static tF() { }
             static tsF(param:any) { }
@@ -997,17 +997,17 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
+                                    ~
+!!! error TS1005: '{' expected.
             static tgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
+                           ~
+!!! error TS1005: '{' expected.
         }
         export interface eI {
             //Call Signature

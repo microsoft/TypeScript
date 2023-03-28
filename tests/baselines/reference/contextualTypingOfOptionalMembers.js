@@ -80,7 +80,7 @@ app({
     actions: {
         foo: function (s) { return s; } // Should be typed number => number
     },
-    view: function (s, a) { return undefined; }
+    view: function (s, a) { return undefined; },
 });
 var y = foo({
     bar: function (x) {
@@ -91,13 +91,13 @@ app2({
     actions: {
         foo: function (s) { return s; } // Should be typed number => number
     },
-    view: function (s, a) { return undefined; }
+    view: function (s, a) { return undefined; },
 });
 app3({
     state: 100,
     actions: [
         function (s) { return s; } // Should be typed number => number
     ],
-    view: function (s, a) { return undefined; }
+    view: function (s, a) { return undefined; },
 });
 var a = <App4 state={100} foo={function (s) { return s; }}/>; // TODO: should be number => number, but JSX resolution is missing an inferential pass

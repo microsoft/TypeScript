@@ -1,4 +1,4 @@
-tests/cases/compiler/forInStrictNullChecksNoError.ts(5,5): error TS2533: Object is possibly 'null' or 'undefined'.
+tests/cases/compiler/forInStrictNullChecksNoError.ts(5,5): error TS18049: 'x' is possibly 'null' or 'undefined'.
 
 
 ==== tests/cases/compiler/forInStrictNullChecksNoError.ts (1 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/forInStrictNullChecksNoError.ts(5,5): error TS2533: Object 
         }
         x["no"]; // should still error
         ~
-!!! error TS2533: Object is possibly 'null' or 'undefined'.
+!!! error TS18049: 'x' is possibly 'null' or 'undefined'.
     }

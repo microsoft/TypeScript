@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/compiler/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -52,21 +53,21 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es5.d.ts (used version)
 /src/app.ts (used version)
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
+PolledWatches::
+/src/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/src/tsconfig.json: *new*
+  {}
+/src/app.ts: *new*
+  {}
+/compiler/lib.es5.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/src/node_modules/@types:
-  {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/src: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -107,23 +108,23 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts (used version)
 /src/app.ts (computed .d.ts)
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
-/compiler/lib.es2015.promise.d.ts:
-  {"fileName":"/compiler/lib.es2015.promise.d.ts","pollingInterval":250}
+PolledWatches::
+/src/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/src/tsconfig.json:
+  {}
+/src/app.ts:
+  {}
+/compiler/lib.es5.d.ts:
+  {}
+/compiler/lib.es2015.promise.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/src/node_modules/@types:
-  {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

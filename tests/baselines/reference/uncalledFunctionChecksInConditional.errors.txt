@@ -79,3 +79,7 @@ tests/cases/compiler/uncalledFunctionChecksInConditional.ts(48,22): error TS2774
         // error on isFoo
     }
     
+    if (x && z) {
+        // no error
+        z();
+    }

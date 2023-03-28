@@ -2,19 +2,25 @@
 
 // @Filename: a.ts
 ////interface A {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}foo|]: string;|]
+////    /*1*/foo: string;
 ////}
 
 // @Filename: b.ts
 ///////<reference path='a.ts'/>
 /////**/
 ////function foo(x: A) {
-////    x.[|foo|]
+////    x./*2*/foo
 ////}
 
-verify.singleReferenceGroup("(property) A.foo: string", "foo");
-
-goTo.marker("");
-edit.insert("\n");
-
-verify.singleReferenceGroup("(property) A.foo: string", "foo");
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['1', '2'] },
+    {
+        type: "customWork",
+        work: () => {
+            goTo.marker("");
+            edit.insert("\n");
+            return "edits";
+        }
+    },
+    { type: "findAllReferences", markerOrRange: ['1', '2'] },
+);

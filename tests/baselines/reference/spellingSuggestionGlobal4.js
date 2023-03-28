@@ -6,5 +6,5 @@ global.x // should not suggest `global` (GH#42209)
 
 //// [spellingSuggestionGlobal4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 global.x; // should not suggest `global` (GH#42209)

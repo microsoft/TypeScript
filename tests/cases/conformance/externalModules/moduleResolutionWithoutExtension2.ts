@@ -1,5 +1,5 @@
-// @moduleResolution: node12
-// @module: node12
+// @moduleResolution: node16
+// @module: node16
 
 // @filename: /src/buzz.mts
 // Extensionless relative path cjs import in an ES module

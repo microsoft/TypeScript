@@ -243,7 +243,7 @@ interface TestString {
 }
 
 type TestGeneric = (TestString | TestObject) & { [k: string]: any; };
->TestGeneric : TestGeneric
+>TestGeneric : (TestObject | TestString) & { [k: string]: any; }
 >k : string
 
 const test: TestGeneric = {

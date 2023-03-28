@@ -1,0 +1,12 @@
+=== tests/cases/compiler/index.ts ===
+import * as me from "#dep";
+>me : Symbol(me, Decl(index.ts, 0, 6))
+
+me.thing();
+>me.thing : Symbol(thing, Decl(index.ts, 2, 11))
+>me : Symbol(me, Decl(index.ts, 0, 6))
+>thing : Symbol(thing, Decl(index.ts, 2, 11))
+
+export function thing(): void {}
+>thing : Symbol(thing, Decl(index.ts, 2, 11))
+

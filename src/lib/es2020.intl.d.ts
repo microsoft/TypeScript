@@ -1,3 +1,4 @@
+/// <reference lib="es2018.intl" />
 declare namespace Intl {
 
     /**
@@ -29,6 +30,25 @@ declare namespace Intl {
         | "minutes"
         | "second"
         | "seconds";
+
+    /**
+     * Value of the `unit` property in objects returned by
+     * `Intl.RelativeTimeFormat.prototype.formatToParts()`. `formatToParts` and
+     * `format` methods accept either singular or plural unit names as input,
+     * but `formatToParts` only outputs singular (e.g. "day") not plural (e.g.
+     * "days").
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts#Using_formatToParts).
+     */
+     type RelativeTimeFormatUnitSingular =
+        | "year"
+        | "quarter"
+        | "month"
+        | "week"
+        | "day"
+        | "hour"
+        | "minute"
+        | "second";
 
     /**
      * The locale matching algorithm to use.
@@ -63,7 +83,7 @@ declare namespace Intl {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      */
-    type LocalesArgument = UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[] | Locale | Locale[] | undefined;
+    type LocalesArgument = UnicodeBCP47LocaleIdentifier | Locale | readonly (UnicodeBCP47LocaleIdentifier | Locale)[] | undefined;
 
     /**
      * An object with some or all of properties of `options` parameter
@@ -100,11 +120,16 @@ declare namespace Intl {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts#Using_formatToParts).
      */
-    interface RelativeTimeFormatPart {
-        type: string;
-        value: string;
-        unit?: RelativeTimeFormatUnit;
-    }
+    type RelativeTimeFormatPart =
+        | {
+              type: "literal";
+              value: string;
+          }
+        | {
+              type: Exclude<NumberFormatPartTypes, "literal">;
+              value: string;
+              unit: RelativeTimeFormatUnitSingular;
+          };
 
     interface RelativeTimeFormat {
         /**
@@ -291,12 +316,36 @@ declare namespace Intl {
         new (tag: BCP47LanguageTag | Locale, options?: LocaleOptions): Locale;
     };
 
-     interface DisplayNamesOptions {
+    type DisplayNamesFallback =
+        | "code"
+        | "none";
+
+    type DisplayNamesType =
+        | "language"
+        | "region"
+        | "script"
+        | "calendar"
+        | "dateTimeField"
+        | "currency";
+
+    type DisplayNamesLanguageDisplay =
+        | "dialect"
+        | "standard";
+
+    interface DisplayNamesOptions {
+        localeMatcher?: RelativeTimeFormatLocaleMatcher;
+        style?: RelativeTimeFormatStyle;
+        type: DisplayNamesType;
+        languageDisplay?: DisplayNamesLanguageDisplay;
+        fallback?: DisplayNamesFallback;
+    }
+
+    interface ResolvedDisplayNamesOptions {
         locale: UnicodeBCP47LocaleIdentifier;
-        localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
-        type: "language" | "region" | "script" | "currency";
-        fallback: "code" | "none";
+        type: DisplayNamesType;
+        fallback: DisplayNamesFallback;
+        languageDisplay?: DisplayNamesLanguageDisplay;
     }
 
     interface DisplayNames {
@@ -322,7 +371,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/resolvedOptions).
          */
-        resolvedOptions(): DisplayNamesOptions;
+        resolvedOptions(): ResolvedDisplayNamesOptions;
     }
 
     /**
@@ -343,7 +392,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/DisplayNames).
          */
-        new(locales?: BCP47LanguageTag | BCP47LanguageTag[], options?: Partial<DisplayNamesOptions>): DisplayNames;
+        new(locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames;
 
         /**
          * Returns an array containing those of the provided locales that are supported in display names without having to fall back to the runtime's default locale.
@@ -358,7 +407,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
          */
-        supportedLocalesOf(locales: BCP47LanguageTag | BCP47LanguageTag[], options?: {localeMatcher: RelativeTimeFormatLocaleMatcher}): BCP47LanguageTag[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher }): BCP47LanguageTag[];
     };
 
 }

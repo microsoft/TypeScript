@@ -1,0 +1,21 @@
+tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts(3,26): error TS2838: All declarations of 'U' must have identical constraints.
+tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts(3,53): error TS2838: All declarations of 'U' must have identical constraints.
+tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts(8,48): error TS2304: Cannot find name 'U'.
+
+
+==== tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts (3 errors) ====
+    // infer twice with different constraints (same behavior as class/interface)
+    type X1<T> =
+        T extends { a: infer U extends string, b: infer U extends number } ? U :
+                             ~
+!!! error TS2838: All declarations of 'U' must have identical constraints.
+                                                        ~
+!!! error TS2838: All declarations of 'U' must have identical constraints.
+        never;
+    
+    // infer cannot reference type params in same 'extends' clause
+    type X2<T> =
+        T extends { a: infer U, b: infer V extends U } ? [U, V] :
+                                                   ~
+!!! error TS2304: Cannot find name 'U'.
+        never;

@@ -16,7 +16,7 @@ if (!module.exports) module.exports = "";
 //// [moduleExports1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeScript = void 0;
     var TypeScript;
     (function (TypeScript) {

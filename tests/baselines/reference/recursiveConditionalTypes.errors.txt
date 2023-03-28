@@ -53,6 +53,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
 !!! error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/compiler/recursiveConditionalTypes.ts:18:14: This type parameter might need an `extends U` constraint.
         ta = tx;  // Error
         ~~
 !!! error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
@@ -145,7 +146,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
     
     declare let z: Box2<Box2<string>>;
     
-    foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+    foo(z);  // string
     
     // Intersect tuple element types
     
@@ -230,7 +231,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
     
     function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
         return value.length;  // Error
-        ~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
     }
     

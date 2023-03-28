@@ -22,5 +22,6 @@ tests/cases/compiler/typeParameterArgumentEquivalence.ts(5,5): error TS2322: Typ
 !!! error TS2322: Type '(item: number) => boolean' is not assignable to type '(item: T) => boolean'.
 !!! error TS2322:   Types of parameters 'item' and 'item' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/compiler/typeParameterArgumentEquivalence.ts:1:14: This type parameter might need an `extends number` constraint.
     }
     

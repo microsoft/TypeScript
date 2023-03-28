@@ -155,7 +155,7 @@ module import_private {
 //// [privacyLocalInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.import_public = exports.m_public = void 0;
     // private elements
     var m_private;

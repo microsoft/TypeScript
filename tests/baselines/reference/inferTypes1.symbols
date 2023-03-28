@@ -349,33 +349,33 @@ type T60 = infer U;  // Error
 >T60 : Symbol(T60, Decl(inferTypes1.ts, 79, 57))
 >U : Symbol(U, Decl(inferTypes1.ts, 81, 16))
 
-type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
+type T61<T> = (infer A) extends infer B ? infer C : infer D;  // Error
 >T61 : Symbol(T61, Decl(inferTypes1.ts, 81, 19))
 >T : Symbol(T, Decl(inferTypes1.ts, 82, 9))
->A : Symbol(A, Decl(inferTypes1.ts, 82, 19))
->B : Symbol(B, Decl(inferTypes1.ts, 82, 35))
->C : Symbol(C, Decl(inferTypes1.ts, 82, 45))
->D : Symbol(D, Decl(inferTypes1.ts, 82, 55))
+>A : Symbol(A, Decl(inferTypes1.ts, 82, 20))
+>B : Symbol(B, Decl(inferTypes1.ts, 82, 37))
+>C : Symbol(C, Decl(inferTypes1.ts, 82, 47))
+>D : Symbol(D, Decl(inferTypes1.ts, 82, 57))
 
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
->T62 : Symbol(T62, Decl(inferTypes1.ts, 82, 58))
+>T62 : Symbol(T62, Decl(inferTypes1.ts, 82, 60))
 >T : Symbol(T, Decl(inferTypes1.ts, 83, 9))
 >U : Symbol(U)
 >U : Symbol(U, Decl(inferTypes1.ts, 83, 30))
 >U : Symbol(U, Decl(inferTypes1.ts, 83, 30))
 >U : Symbol(U)
 
-type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
+type T63<T> = T extends ((infer A) extends infer B ? infer C : infer D) ? string : number;
 >T63 : Symbol(T63, Decl(inferTypes1.ts, 83, 44))
 >T : Symbol(T, Decl(inferTypes1.ts, 84, 9))
 >T : Symbol(T, Decl(inferTypes1.ts, 84, 9))
->A : Symbol(A, Decl(inferTypes1.ts, 84, 30))
->B : Symbol(B, Decl(inferTypes1.ts, 84, 46))
->C : Symbol(C, Decl(inferTypes1.ts, 84, 56))
->D : Symbol(D, Decl(inferTypes1.ts, 84, 66))
+>A : Symbol(A, Decl(inferTypes1.ts, 84, 31))
+>B : Symbol(B, Decl(inferTypes1.ts, 84, 48))
+>C : Symbol(C, Decl(inferTypes1.ts, 84, 58))
+>D : Symbol(D, Decl(inferTypes1.ts, 84, 68))
 
 type T70<T extends string> = { x: T };
->T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 88))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 90))
 >T : Symbol(T, Decl(inferTypes1.ts, 86, 9))
 >x : Symbol(x, Decl(inferTypes1.ts, 86, 30))
 >T : Symbol(T, Decl(inferTypes1.ts, 86, 9))
@@ -384,9 +384,9 @@ type T71<T> = T extends T70<infer U> ? T70<U> : never;
 >T71 : Symbol(T71, Decl(inferTypes1.ts, 86, 38))
 >T : Symbol(T, Decl(inferTypes1.ts, 87, 9))
 >T : Symbol(T, Decl(inferTypes1.ts, 87, 9))
->T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 88))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 90))
 >U : Symbol(U, Decl(inferTypes1.ts, 87, 33))
->T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 88))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 90))
 >U : Symbol(U, Decl(inferTypes1.ts, 87, 33))
 
 type T72<T extends number> = { y: T };
@@ -401,7 +401,7 @@ type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
 >T : Symbol(T, Decl(inferTypes1.ts, 90, 9))
 >T72 : Symbol(T72, Decl(inferTypes1.ts, 87, 54))
 >U : Symbol(U, Decl(inferTypes1.ts, 90, 33))
->T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 88))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 90))
 >U : Symbol(U, Decl(inferTypes1.ts, 90, 33))
 
 type T74<T extends number, U extends string> = { x: T, y: U };
@@ -420,7 +420,7 @@ type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : ne
 >T74 : Symbol(T74, Decl(inferTypes1.ts, 90, 54))
 >U : Symbol(U, Decl(inferTypes1.ts, 93, 33), Decl(inferTypes1.ts, 93, 42))
 >U : Symbol(U, Decl(inferTypes1.ts, 93, 33), Decl(inferTypes1.ts, 93, 42))
->T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 88))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 90))
 >U : Symbol(U, Decl(inferTypes1.ts, 93, 33), Decl(inferTypes1.ts, 93, 42))
 >T72 : Symbol(T72, Decl(inferTypes1.ts, 87, 54))
 >U : Symbol(U, Decl(inferTypes1.ts, 93, 33), Decl(inferTypes1.ts, 93, 42))

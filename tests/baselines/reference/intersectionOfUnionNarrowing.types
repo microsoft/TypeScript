@@ -9,7 +9,7 @@ interface X {
 >bProp : string
 }
 type AorB = { a: object; b: undefined } | { a: undefined; b: object };
->AorB : AorB
+>AorB : { a: object; b: undefined; } | { a: undefined; b: object; }
 >a : object
 >b : undefined
 >a : undefined

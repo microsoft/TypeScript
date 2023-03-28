@@ -37,7 +37,7 @@ verify.completions({
     includes: [
         {
             name: "method",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[1],
             insertText: "public override method(): number {\n}",
         },
@@ -55,7 +55,7 @@ verify.completions({
     includes: [
         {
             name: "method",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[0],
             insertText: "public abstract method(): number;",
         },
@@ -73,7 +73,7 @@ verify.completions({
     includes: [
         {
             name: "fun",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[2],
             insertText:
 `public fun(a: number): number;

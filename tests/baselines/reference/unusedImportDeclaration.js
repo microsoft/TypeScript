@@ -25,7 +25,7 @@ var TesterB = /** @class */ (function () {
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var thingy = {
     me: "A"
 };

@@ -1,9 +1,9 @@
 === tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts ===
 type MyTupleItem = {};
->MyTupleItem : MyTupleItem
+>MyTupleItem : {}
 
 type MyTuple = [MyTupleItem, ...MyTupleItem[]];
->MyTuple : MyTuple
+>MyTuple : [MyTupleItem, ...MyTupleItem[]]
 
 type GenericFunction<T extends MyTuple> = (...fromArgs: T) => void;
 >GenericFunction : GenericFunction<T>

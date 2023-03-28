@@ -1,6 +1,6 @@
 === tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts ===
 type TreeNode = {
->TreeNode : TreeNode
+>TreeNode : { name: string; parent: TreeNode; }
 
     name: string;
 >name : string
@@ -10,7 +10,7 @@ type TreeNode = {
 }
 
 type TreeNodeMiddleman = {
->TreeNodeMiddleman : TreeNodeMiddleman
+>TreeNodeMiddleman : { name: string; parent: TreeNode; }
 
     name: string;
 >name : string

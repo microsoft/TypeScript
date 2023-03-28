@@ -1,0 +1,23 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember9.ts ===
+// interface I {
+//     m(): void;
+// }
+// class A {
+//     <|[|m|]() {}|>;
+// }
+// class B extends A implements I {
+//    /*GOTO DEF*/override m() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "m",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

@@ -14,7 +14,6 @@ var arr2 = [[null], [1], ['']];
 >arr2 : (number[] | string[])[]
 >[[null], [1], ['']] : (number[] | string[])[]
 >[null] : null[]
->null : null
 >[1] : number[]
 >1 : 1
 >[''] : string[]

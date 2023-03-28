@@ -23,97 +23,74 @@ type DiscriminatorFalse = {
 >x : Symbol(x, Decl(discriminantPropertyInference.ts, 9, 9))
 }
 
-type Unrelated = {
->Unrelated : Symbol(Unrelated, Decl(discriminantPropertyInference.ts, 10, 1))
-
-    val: number;
->val : Symbol(val, Decl(discriminantPropertyInference.ts, 12, 18))
-}
+type Props = DiscriminatorTrue | DiscriminatorFalse;
+>Props : Symbol(Props, Decl(discriminantPropertyInference.ts, 10, 1))
+>DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(discriminantPropertyInference.ts, 0, 0))
+>DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(discriminantPropertyInference.ts, 5, 1))
 
 declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
->f : Symbol(f, Decl(discriminantPropertyInference.ts, 14, 1))
->options : Symbol(options, Decl(discriminantPropertyInference.ts, 16, 19))
+>f : Symbol(f, Decl(discriminantPropertyInference.ts, 12, 52))
+>options : Symbol(options, Decl(discriminantPropertyInference.ts, 14, 19))
 >DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(discriminantPropertyInference.ts, 0, 0))
 >DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(discriminantPropertyInference.ts, 5, 1))
 
 // simple inference
 f({
->f : Symbol(f, Decl(discriminantPropertyInference.ts, 14, 1))
+>f : Symbol(f, Decl(discriminantPropertyInference.ts, 12, 52))
 
     disc: true,
->disc : Symbol(disc, Decl(discriminantPropertyInference.ts, 19, 3))
+>disc : Symbol(disc, Decl(discriminantPropertyInference.ts, 17, 3))
 
     cb: s => parseInt(s)
->cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 20, 15))
->s : Symbol(s, Decl(discriminantPropertyInference.ts, 21, 7))
+>cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 18, 15))
+>s : Symbol(s, Decl(discriminantPropertyInference.ts, 19, 7))
 >parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
->s : Symbol(s, Decl(discriminantPropertyInference.ts, 21, 7))
+>s : Symbol(s, Decl(discriminantPropertyInference.ts, 19, 7))
 
 });
 
 // simple inference
 f({
->f : Symbol(f, Decl(discriminantPropertyInference.ts, 14, 1))
+>f : Symbol(f, Decl(discriminantPropertyInference.ts, 12, 52))
 
     disc: false,
->disc : Symbol(disc, Decl(discriminantPropertyInference.ts, 25, 3))
+>disc : Symbol(disc, Decl(discriminantPropertyInference.ts, 23, 3))
 
     cb: n => n.toFixed()
->cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 26, 16))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 27, 7))
+>cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 24, 16))
+>n : Symbol(n, Decl(discriminantPropertyInference.ts, 25, 7))
 >n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 27, 7))
+>n : Symbol(n, Decl(discriminantPropertyInference.ts, 25, 7))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 });
 
 // simple inference when strict-null-checks are enabled
 f({
->f : Symbol(f, Decl(discriminantPropertyInference.ts, 14, 1))
+>f : Symbol(f, Decl(discriminantPropertyInference.ts, 12, 52))
 
     disc: undefined,
->disc : Symbol(disc, Decl(discriminantPropertyInference.ts, 31, 3))
+>disc : Symbol(disc, Decl(discriminantPropertyInference.ts, 29, 3))
 >undefined : Symbol(undefined)
 
     cb: n => n.toFixed()
->cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 32, 20))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 33, 7))
+>cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 30, 20))
+>n : Symbol(n, Decl(discriminantPropertyInference.ts, 31, 7))
 >n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 33, 7))
+>n : Symbol(n, Decl(discriminantPropertyInference.ts, 31, 7))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 });
 
 // requires checking type information since discriminator is missing from object
 f({
->f : Symbol(f, Decl(discriminantPropertyInference.ts, 14, 1))
+>f : Symbol(f, Decl(discriminantPropertyInference.ts, 12, 52))
 
     cb: n => n.toFixed()
->cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 37, 3))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 38, 7))
+>cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 35, 3))
+>n : Symbol(n, Decl(discriminantPropertyInference.ts, 36, 7))
 >n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 38, 7))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
-
-});
-
-
-declare function g(options: DiscriminatorTrue | DiscriminatorFalse | Unrelated): any;
->g : Symbol(g, Decl(discriminantPropertyInference.ts, 39, 3))
->options : Symbol(options, Decl(discriminantPropertyInference.ts, 42, 19))
->DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(discriminantPropertyInference.ts, 0, 0))
->DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(discriminantPropertyInference.ts, 5, 1))
->Unrelated : Symbol(Unrelated, Decl(discriminantPropertyInference.ts, 10, 1))
-
-// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
-g({
->g : Symbol(g, Decl(discriminantPropertyInference.ts, 39, 3))
-
-    cb: n => n.toFixed()
->cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 45, 3))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 46, 7))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->n : Symbol(n, Decl(discriminantPropertyInference.ts, 46, 7))
+>n : Symbol(n, Decl(discriminantPropertyInference.ts, 36, 7))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 });
