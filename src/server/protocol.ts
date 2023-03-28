@@ -607,7 +607,6 @@ export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
     arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
 }
 export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
-    triggerReason?: RefactorTriggerReason;
     kind?: string;
 };
 /**

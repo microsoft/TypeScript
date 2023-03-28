@@ -2924,7 +2924,7 @@ export function createLanguageService(
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
     }
 
-    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string): { newFilename: string | undefined, files: string[] | undefined } {
+    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFilename: string | undefined, files: string[] | undefined } {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const program = getProgram();
@@ -2944,7 +2944,7 @@ export function createLanguageService(
         //creating new filename
         let newFilename;
         if (program) {
-            newFilename = createNewFilename(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions, triggerReason, kind), host);
+            newFilename = createNewFilename(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
         }
         return { newFilename, files };
     }

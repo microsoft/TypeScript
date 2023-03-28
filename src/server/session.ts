@@ -2710,7 +2710,7 @@ export class Session<TMessage = string> implements EventSender {
             if (project.containsFile(file)) {
                 const scriptInfo = project.getScriptInfoForNormalizedPath(file);
                 if (scriptInfo) {
-                    const { newFilename, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind);
+                    const { newFilename, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
                     if (files) {
                         for (const file of files) {
                             if (!allFiles.includes(file)) {

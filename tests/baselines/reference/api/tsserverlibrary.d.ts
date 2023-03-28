@@ -511,7 +511,6 @@ declare namespace ts {
                 arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
             }
             type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
-                triggerReason?: RefactorTriggerReason;
                 kind?: string;
             };
             /**

@@ -194,7 +194,7 @@ function getNewStatementsAndRemoveFromOldFile(
         if (sourceFile && sourceFile.statements.length > 0) {
             changes.insertNodesAfter(sourceFile, sourceFile.statements[sourceFile.statements.length - 1], body);
         }
-        if (imports.length > 0 && sourceFile) {
+        if (sourceFile && imports.length > 0) {
             insertImports(changes, sourceFile, imports, /*blankLineBetween*/ true, preferences);
         }
     }
