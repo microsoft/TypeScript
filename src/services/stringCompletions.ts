@@ -440,7 +440,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
-            return fromContextualType();
+            return fromContextualType() || fromContextualType(ContextFlags.None);
     }
 
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
