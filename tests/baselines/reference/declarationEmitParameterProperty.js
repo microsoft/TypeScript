@@ -20,6 +20,6 @@ exports.Foo = Foo;
 
 //// [declarationEmitParameterProperty.d.ts]
 export declare class Foo {
-    bar?: string | undefined;
+    bar?: string;
     constructor(bar?: string);
 }

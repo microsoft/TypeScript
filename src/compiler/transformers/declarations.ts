@@ -1634,7 +1634,7 @@ export function transformDeclarations(context: TransformationContext) {
                                 ensureModifiers(param),
                                 param.name,
                                 param.questionToken,
-                                ensureType(param, param.type, /*ignorePrivate*/ undefined, /*shouldUseResolverType*/ !!param.questionToken),
+                                ensureType(param, param.type),
                                 ensureNoInitializer(param)), param);
                         }
                         else {
