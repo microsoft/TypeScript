@@ -1,8 +1,5 @@
 tests/cases/compiler/abstractPropertyNegative.ts(10,18): error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
+tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
 tests/cases/compiler/abstractPropertyNegative.ts(15,5): error TS1253: Abstract properties can only appear within an abstract class.
 tests/cases/compiler/abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
 tests/cases/compiler/abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a read-only property.
@@ -18,7 +15,7 @@ tests/cases/compiler/abstractPropertyNegative.ts(40,9): error TS2676: Accessors 
 tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstract or non-abstract.
 
 
-==== tests/cases/compiler/abstractPropertyNegative.ts (15 errors) ====
+==== tests/cases/compiler/abstractPropertyNegative.ts (12 errors) ====
     interface A {
         prop: string;
         m(): string;
@@ -35,13 +32,11 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
     }
     class C extends B {
           ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
-          ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
-          ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
-          ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
+!!! error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
+!!! related TS2515 tests/cases/compiler/abstractPropertyNegative.ts:6:14: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
+!!! related TS2515 tests/cases/compiler/abstractPropertyNegative.ts:8:18: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
+!!! related TS2515 tests/cases/compiler/abstractPropertyNegative.ts:9:14: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
+!!! related TS2515 tests/cases/compiler/abstractPropertyNegative.ts:10:18: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
         readonly ro = "readonly please";
         abstract notAllowed: string;
         ~~~~~~~~

@@ -7760,5 +7760,9 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
+    },
+    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
+        "category": "Error",
+        "code": 18052
     }
 }
