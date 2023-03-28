@@ -27,7 +27,6 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
-    ExportAssignment,
     Expression,
     ExpressionStatement,
     extensionFromPath,
