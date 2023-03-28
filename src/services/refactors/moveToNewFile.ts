@@ -707,7 +707,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
                 if (isInImport(decl)) {
                     oldImportsNeededByNewFile.add(symbol);
                 }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
+                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol) && ![...symbolsExportedLaterInOldFile.values()].includes(symbol)) {
                     newFileImportsFromOldFile.add(symbol);
                 }
             }
