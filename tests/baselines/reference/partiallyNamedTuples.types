@@ -86,3 +86,30 @@ type AddMixedConditionalLiteral = AddMixedConditional<0>;
 type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
 >AddMixedConditionalNumberPrimitive : [first: boolean, null, third: "a"]
 
+declare function test<T extends readonly unknown[]>(
+>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
+
+  arg: [
+>arg : [...{ [K in keyof T]: { type: T[K]; }; }]
+
+    ...{
+      [K in keyof T]: {
+        type: T[K];
+>type : T[K]
+
+      };
+    }
+  ]
+): T;
+
+declare const input: [first: { type: number }, { type: string }];
+>input : [first: { type: number; }, { type: string; }]
+>type : number
+>type : string
+
+const output = test(input);
+>output : [first: number, string]
+>test(input) : [first: number, string]
+>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
+>input : [first: { type: number; }, { type: string; }]
+

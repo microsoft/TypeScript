@@ -42,3 +42,17 @@ type AddMixedConditional<T> = [
 type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
 type AddMixedConditionalLiteral = AddMixedConditional<0>;
 type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
+
+declare function test<T extends readonly unknown[]>(
+  arg: [
+    ...{
+      [K in keyof T]: {
+        type: T[K];
+      };
+    }
+  ]
+): T;
+
+declare const input: [first: { type: number }, { type: string }];
+
+const output = test(input);

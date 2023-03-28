@@ -127,3 +127,36 @@ type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
 >AddMixedConditionalNumberPrimitive : Symbol(AddMixedConditionalNumberPrimitive, Decl(partiallyNamedTuples.ts, 42, 57))
 >AddMixedConditional : Symbol(AddMixedConditional, Decl(partiallyNamedTuples.ts, 32, 2))
 
+declare function test<T extends readonly unknown[]>(
+>test : Symbol(test, Decl(partiallyNamedTuples.ts, 43, 70))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 45, 22))
+
+  arg: [
+>arg : Symbol(arg, Decl(partiallyNamedTuples.ts, 45, 52))
+
+    ...{
+      [K in keyof T]: {
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 48, 7))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 45, 22))
+
+        type: T[K];
+>type : Symbol(type, Decl(partiallyNamedTuples.ts, 48, 23))
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 45, 22))
+>K : Symbol(K, Decl(partiallyNamedTuples.ts, 48, 7))
+
+      };
+    }
+  ]
+): T;
+>T : Symbol(T, Decl(partiallyNamedTuples.ts, 45, 22))
+
+declare const input: [first: { type: number }, { type: string }];
+>input : Symbol(input, Decl(partiallyNamedTuples.ts, 55, 13))
+>type : Symbol(type, Decl(partiallyNamedTuples.ts, 55, 30))
+>type : Symbol(type, Decl(partiallyNamedTuples.ts, 55, 48))
+
+const output = test(input);
+>output : Symbol(output, Decl(partiallyNamedTuples.ts, 57, 5))
+>test : Symbol(test, Decl(partiallyNamedTuples.ts, 43, 70))
+>input : Symbol(input, Decl(partiallyNamedTuples.ts, 55, 13))
+

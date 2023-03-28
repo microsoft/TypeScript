@@ -44,6 +44,20 @@ type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
 type AddMixedConditionalLiteral = AddMixedConditional<0>;
 type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
 
+declare function test<T extends readonly unknown[]>(
+  arg: [
+    ...{
+      [K in keyof T]: {
+        type: T[K];
+      };
+    }
+  ]
+): T;
+
+declare const input: [first: { type: number }, { type: string }];
+
+const output = test(input);
+
 
 //// [partiallyNamedTuples.js]
 function fa1() {
@@ -76,3 +90,4 @@ function fb3(a) {
         args[_i - 1] = arguments[_i];
     }
 }
+var output = test(input);
