@@ -37,7 +37,6 @@ class BugExhibition2<T> {
 >localFunction : () => void
 
         return null;
->null : null
     }
 }
 
@@ -105,7 +104,7 @@ enum E {
 >E : E
 
     A = (() => {
->A : E
+>A : E.A
 >(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    })() : number
 >(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    }) : () => number
 >() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    } : () => number

@@ -6,7 +6,6 @@ export type A = "number" | "null" | A[];
 
 export type F<T> = null extends T
 >F : F<T>
->null : null
 
     ? [F<NonNullable<T>>, "null"]
     : T extends number
@@ -19,7 +18,6 @@ export type G<T> = { [k in keyof T]: F<T[k]> };
 interface K {
     b: number | null;
 >b : number | null
->null : null
 }
 
 const gK: { [key in keyof K]: A } = { b: ["number", "null"] };

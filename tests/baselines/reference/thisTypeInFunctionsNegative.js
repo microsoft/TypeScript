@@ -178,6 +178,12 @@ const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 const f3 = async (this: {n: number}, m: number) => m + this.n;
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 
+class Derived3 extends Base2 {
+    f(this: this) {
+        super.polymorphic();
+    }
+}
+
 
 //// [thisTypeInFunctionsNegative.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -332,3 +338,8 @@ c.explicitProperty = (m) => m + this.n;
 const f2 = (m) => m + this.n;
 const f3 = (m) => __awaiter(this, void 0, void 0, function* () { return m + this.n; });
 const f4 = (m) => __awaiter(this, void 0, void 0, function* () { return m + this.n; });
+class Derived3 extends Base2 {
+    f() {
+        super.polymorphic();
+    }
+}

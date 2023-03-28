@@ -9,7 +9,7 @@
     "'package.json' does not have a 'typesVersions' field.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field 'foo.js' that references '/node_modules/foo/foo.js'.",
-    "File '/node_modules/foo/foo.js' exist - use it as a name resolution result.",
+    "File '/node_modules/foo/foo.js' exists - use it as a name resolution result.",
     "File '/node_modules/foo/foo.js' has an unsupported extension, so skipping it.",
     "Loading module as file / folder, candidate module location '/node_modules/foo/foo.js', target file types: TypeScript, Declaration.",
     "File name '/node_modules/foo/foo.js' has a '.js' extension - stripping it.",

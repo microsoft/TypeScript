@@ -6,7 +6,7 @@
     "Module name '/import/foo', matched pattern '/import/*'.",
     "Trying substitution './import/*', candidate module location: './import/foo'.",
     "Loading module as file / folder, candidate module location '/root/import/foo', target file types: TypeScript, Declaration.",
-    "File '/root/import/foo.ts' exist - use it as a name resolution result.",
+    "File '/root/import/foo.ts' exists - use it as a name resolution result.",
     "======== Module name '/import/foo' was successfully resolved to '/root/import/foo.ts'. ========",
     "======== Resolving module '/client/bar' from '/root/src/a.ts'. ========",
     "Module resolution kind is not specified, using 'Node10'.",
@@ -26,6 +26,6 @@
     "Module name '/client/bar', matched pattern '/client/*'.",
     "Trying substitution './client/*', candidate module location: './client/bar'.",
     "Loading module as file / folder, candidate module location '/root/client/bar', target file types: JavaScript.",
-    "File '/root/client/bar.js' exist - use it as a name resolution result.",
+    "File '/root/client/bar.js' exists - use it as a name resolution result.",
     "======== Module name '/client/bar' was successfully resolved to '/root/client/bar.js'. ========"
 ]

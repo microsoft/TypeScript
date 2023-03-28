@@ -10,7 +10,6 @@ function isNonNullable<T>(obj: T): asserts obj is NonNullable<T> {
 >undefined : undefined
 >obj === null : boolean
 >obj : T & ({} | null)
->null : null
 
         throw new Error("Must not be a nullable value");
 >new Error("Must not be a nullable value") : Error
@@ -32,7 +31,6 @@ import * as asserts from "./asserts";
 function test(obj: string | null): void {
 >test : (obj: string | null) => void
 >obj : string | null
->null : null
 
     asserts.isNonNullable(obj);
 >asserts.isNonNullable(obj) : void

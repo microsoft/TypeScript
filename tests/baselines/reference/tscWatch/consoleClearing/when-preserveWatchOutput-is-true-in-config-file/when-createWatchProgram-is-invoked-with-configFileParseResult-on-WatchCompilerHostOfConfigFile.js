@@ -42,18 +42,16 @@ Shape signatures in builder refreshed for::
 /f.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/f.ts:
+/f.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -88,20 +86,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /f.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/f.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 exitCode:: ExitStatus.undefined
 

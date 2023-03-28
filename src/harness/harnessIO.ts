@@ -1,7 +1,3 @@
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vpath from "./_namespaces/vpath";
-import * as vfs from "./_namespaces/vfs";
 import * as compiler from "./_namespaces/compiler";
 import * as documents from "./_namespaces/documents";
 import * as fakes from "./_namespaces/fakes";
@@ -10,6 +6,10 @@ import {
     TypeWriterResult,
     TypeWriterWalker,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 export interface IO {
     newLine(): string;
@@ -269,7 +269,7 @@ export namespace Compiler {
         }
 
         if (!libFileNameSourceFileMap) {
-            libFileNameSourceFileMap = new Map(ts.getEntries({
+            libFileNameSourceFileMap = new Map(Object.entries({
                 [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
             }));
         }
@@ -551,7 +551,7 @@ export namespace Compiler {
     export function getErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
         let outputLines = "";
         const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+        for (const value of gen) {
             const [, content] = value;
             outputLines += content;
         }
@@ -567,7 +567,7 @@ export namespace Compiler {
         diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
         let outputLines = "";
         // Count up all errors that were found in files other than lib.d.ts so we don't miss any
-        let totalErrorsReportedInNonLibraryFiles = 0;
+        let totalErrorsReportedInNonLibraryNonTsconfigFiles = 0;
 
         let errorsReported = 0;
 
@@ -596,7 +596,11 @@ export namespace Compiler {
                 .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
-                    errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
+                    if (location && isDefaultLibraryFile(info.file!.fileName)) {
+                        location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
+                    }
+                    errLines.push(`!!! related TS${info.code}${location}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
                 }
             }
             errLines.forEach(e => outputLines += (newLine() + e));
@@ -605,14 +609,19 @@ export namespace Compiler {
             // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
             // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
             // then they will be added twice thus triggering 'total errors' assertion with condition
-            // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
+            // Similarly for tsconfig, which may be in the input files and contain errors.
+            // 'totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length
 
-            if (!error.file || !isDefaultLibraryFile(error.file.fileName)) {
-                totalErrorsReportedInNonLibraryFiles++;
+            if (!error.file || !isDefaultLibraryFile(error.file.fileName) && !vpath.isTsConfigFile(error.file.fileName)) {
+                totalErrorsReportedInNonLibraryNonTsconfigFiles++;
             }
         }
 
-        yield [diagnosticSummaryMarker, Utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+        let topDiagnostics = minimalDiagnosticsToString(diagnostics, options && options.pretty);
+        topDiagnostics = Utils.removeTestPathPrefixes(topDiagnostics);
+        topDiagnostics = topDiagnostics.replace(/^(lib(?:.*)\.d\.ts)\(\d+,\d+\)/igm, "$1(--,--)");
+
+        yield [diagnosticSummaryMarker, topDiagnostics + IO.newLine() + IO.newLine(), diagnostics.length];
 
         // Report global errors
         const globalErrors = diagnostics.filter(err => !err.file);
@@ -696,7 +705,7 @@ export namespace Compiler {
                 // Case-duplicated files on a case-insensitive build will have errors reported in both the dupe and the original
                 // thanks to the canse-insensitive path comparison on the error file path - We only want to count those errors once
                 // for the assert below, so we subtract them here.
-                totalErrorsReportedInNonLibraryFiles -= errorsReported;
+                totalErrorsReportedInNonLibraryNonTsconfigFiles -= errorsReported;
             }
             outputLines = "";
             errorsReported = 0;
@@ -706,13 +715,12 @@ export namespace Compiler {
             return !!diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
         });
 
-        const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-            // Count an error generated from tests262-harness folder.This should only apply for test262
-            return !!diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
+        const numTsconfigDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+            return !!diagnostic.file && (vpath.isTsConfigFile(diagnostic.file.fileName));
         });
 
         // Verify we didn't miss any errors in total
-        assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
+        assert.equal(totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length, "total number of errors");
     }
 
     export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
@@ -791,7 +799,7 @@ export namespace Compiler {
         function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {
             let result = "";
             const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
-            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+            for (const value of gen) {
                 const [, content] = value;
                 result += content;
             }
@@ -810,7 +818,7 @@ export namespace Compiler {
                 const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
                 const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                 let lastIndexWritten: number | undefined;
-                for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
+                for (const result of gen) {
                     if (isSymbolBaseline && !result.symbol) {
                         return;
                     }
@@ -950,7 +958,7 @@ export namespace Compiler {
         const gen = iterateOutputs(outputFiles);
         // Emit them
         let result = "";
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+        for (const value of gen) {
             // Some extra spacing if this isn't the first file
             if (result.length) {
                 result += "\r\n\r\n";
@@ -964,7 +972,7 @@ export namespace Compiler {
 
     export function* iterateOutputs(outputFiles: Iterable<documents.TextDocument>): IterableIterator<[string, string]> {
         // Collect, test, and sort the fileNames
-        const files = Array.from(outputFiles);
+        const files = ts.arrayFrom(outputFiles);
         files.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
         const dupeCase = new Map<string, number>();
         // Yield them
@@ -1095,7 +1103,7 @@ function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string 
             return option.type;
         }
         if (option.type === "boolean") {
-            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(ts.getEntries({
+            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(Object.entries({
                 true: 1,
                 false: 0
             })));
@@ -1438,7 +1446,7 @@ export namespace Baseline {
 
         // eslint-disable-next-line no-null/no-null
         if (gen !== null) {
-            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+            for (const value of gen) {
                 const [name, content, count] = value as [string, string, number | undefined];
                 if (count === 0) continue; // Allow error reporter to skip writing files without errors
                 const relativeFileName = relativeFileBase + "/" + name + extension;

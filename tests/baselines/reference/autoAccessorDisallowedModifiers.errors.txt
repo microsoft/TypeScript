@@ -11,10 +11,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowe
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(12,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(13,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(14,15): error TS1276: An 'accessor' property cannot be declared optional.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(18,14): error TS1029: 'override' modifier must precede 'accessor' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(22,5): error TS1070: 'accessor' modifier cannot appear on a type member.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(25,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(26,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(15,14): error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(16,14): error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(20,14): error TS1029: 'override' modifier must precede 'accessor' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(24,5): error TS1070: 'accessor' modifier cannot appear on a type member.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(27,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(28,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(29,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
@@ -22,13 +22,15 @@ tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowe
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(31,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(32,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(33,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(33,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(34,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(35,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(35,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(36,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(37,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts (28 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts (30 errors) ====
     abstract class C1 {
         accessor accessor a: any;
                  ~~~~~~~~
@@ -69,6 +71,12 @@ tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowe
         accessor l?: any;
                   ~
 !!! error TS1276: An 'accessor' property cannot be declared optional.
+        accessor readonly m: any;
+                 ~~~~~~~~
+!!! error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
+        accessor declare n: any;
+                 ~~~~~~~
+!!! error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
     }
     
     class C2 extends C1 {

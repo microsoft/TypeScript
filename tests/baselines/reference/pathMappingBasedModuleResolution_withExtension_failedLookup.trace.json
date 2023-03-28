@@ -7,6 +7,7 @@
     "Trying substitution 'foo/foo.ts', candidate module location: 'foo/foo.ts'.",
     "File '/foo/foo.ts' does not exist.",
     "Loading module as file / folder, candidate module location '/foo/foo.ts', target file types: TypeScript, Declaration.",
+    "File name '/foo/foo.ts' has a '.ts' extension - stripping it.",
     "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Directory '/node_modules' does not exist, skipping all lookups in it.",
     "'baseUrl' option is set to '/', using this value to resolve non-relative module name 'foo'.",
@@ -15,6 +16,7 @@
     "Trying substitution 'foo/foo.ts', candidate module location: 'foo/foo.ts'.",
     "File '/foo/foo.ts' does not exist.",
     "Loading module as file / folder, candidate module location '/foo/foo.ts', target file types: JavaScript.",
+    "File name '/foo/foo.ts' has a '.ts' extension - stripping it.",
     "Loading module 'foo' from 'node_modules' folder, target file types: JavaScript.",
     "Directory '/node_modules' does not exist, skipping all lookups in it.",
     "======== Module name 'foo' was not resolved. ========"

@@ -15,7 +15,6 @@ import {
     forEachEntry,
     getDefaultCompilerOptions,
     getEmitScriptTarget,
-    getEntries,
     getImpliedNodeFormatForFile,
     getNewLineCharacter,
     getSetExternalModuleIndicator,
@@ -44,6 +43,12 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
+const optionsRedundantWithVerbatimModuleSyntax = new Set([
+    "isolatedModules",
+    "preserveValueImports",
+    "importsNotUsedAsValues"
+]);
+
 /*
  * This function will compile source text from 'input' argument using specified compiler options.
  * If not options are provided - it will use a set of default compiler options.
@@ -67,6 +72,11 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     for (const option of transpileOptionValueCompilerOptions) {
+        // Do not set redundant config options if `verbatimModuleSyntax` was supplied.
+        if (options.verbatimModuleSyntax && optionsRedundantWithVerbatimModuleSyntax.has(option.name)) {
+            continue;
+        }
+
         options[option.name] = option.transpileOptionValue;
     }
 
@@ -117,7 +127,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     if (transpileOptions.renamedDependencies) {
-        sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
+        sourceFile.renamedDependencies = new Map(Object.entries(transpileOptions.renamedDependencies));
     }
 
     // Output
