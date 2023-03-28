@@ -29,7 +29,7 @@ tests/cases/conformance/classes/mixinAbstractClasses.2.ts(25,1): error TS2511: C
     class DerivedFromAbstract extends MixedBase {
           ~~~~~~~~~~~~~~~~~~~
 !!! error TS18052: Non-abstract class 'DerivedFromAbstract' does not implement all abstract members of 'AbstractBase & Mixin'
-!!! related TS2515 tests/cases/conformance/classes/mixinAbstractClasses.2.ts:21:7: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
+!!! related TS2515 tests/cases/conformance/classes/mixinAbstractClasses.2.ts:15:14: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
     }
     
     // error expected: Cannot create an instance of an abstract class.

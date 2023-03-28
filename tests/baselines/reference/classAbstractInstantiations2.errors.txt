@@ -51,7 +51,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     class C extends B { } // error -- not declared abstract
           ~
 !!! error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
-!!! related TS2515 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts:26:7: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+!!! related TS2515 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts:7:14: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
     
     abstract class D extends B { } // okay
     
