@@ -732,9 +732,9 @@ Info 73   [00:02:49.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

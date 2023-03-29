@@ -111,7 +111,9 @@ Info 32   [00:01:21.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: Wat
 Info 33   [00:01:22.000] Scheduled: /a/b/tsconfig.json
 Info 34   [00:01:23.000] Scheduled: *ensureProjectForOpenFiles*
 Info 35   [00:01:24.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {
                 "compilerOptions": {
@@ -230,7 +232,7 @@ Info 69   [00:02:23.000] 	FileName: /a/b/node_modules/module1.ts ProjectRootPath
 Info 69   [00:02:24.000] 		Projects: /dev/null/inferredProject2*
 Info 69   [00:02:25.000] 	FileName: /a/module1.ts ProjectRootPath: undefined
 Info 69   [00:02:26.000] 		Projects: /a/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

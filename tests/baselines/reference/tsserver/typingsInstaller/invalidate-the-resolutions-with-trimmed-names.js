@@ -144,7 +144,9 @@ Info 15   [00:01:32.000] Scheduled: /dev/null/inferredProject1*
 Info 16   [00:01:33.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:34.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/foo@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 17   [00:01:35.000] Running: /dev/null/inferredProject1*
 Info 18   [00:01:36.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -188,7 +190,9 @@ TI:: [00:01:51.000] Sending response:
 Info 23   [00:01:52.000] Scheduled: /dev/null/inferredProject1*
 Info 24   [00:01:53.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [00:01:54.000] No new typings were requested as a result of typings discovery
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 2
+3: /dev/null/inferredProject1*
+4: *ensureProjectForOpenFiles*
 
 Info 25   [00:01:55.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 26   [00:01:56.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -226,7 +230,9 @@ TI:: [00:02:09.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypi
 TI:: [00:02:10.000] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 TI:: [00:02:11.000] No new typings were requested as a result of typings discovery
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+3: /dev/null/inferredProject1*
+4: *ensureProjectForOpenFiles*
 
 Info 30   [00:02:12.000] Running: /dev/null/inferredProject1*
 Info 31   [00:02:13.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -272,6 +278,7 @@ Info 39   [00:02:43.000] -----------------------------------------------
 Info 39   [00:02:44.000] Open files: 
 Info 39   [00:02:45.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 39   [00:02:46.000] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0

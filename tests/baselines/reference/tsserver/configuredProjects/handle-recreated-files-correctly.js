@@ -60,7 +60,9 @@ Info 22   [00:00:42.000] DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :
 Info 23   [00:00:43.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 24   [00:00:44.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 25   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /a/b/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/a/b/commonFile2.ts] deleted
 
 PolledWatches::
@@ -106,13 +108,15 @@ Info 35   [00:01:03.000] -----------------------------------------------
 Info 35   [00:01:04.000] Open files: 
 Info 35   [00:01:05.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 35   [00:01:06.000] 		Projects: /a/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 35   [00:01:09.000] DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 36   [00:01:10.000] Scheduled: /a/b/tsconfig.json
 Info 37   [00:01:11.000] Scheduled: *ensureProjectForOpenFiles*
 Info 38   [00:01:12.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+5: /a/b/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/a/b/commonFile2.ts]
 let y = 1
 
@@ -150,7 +154,7 @@ Info 49   [00:01:31.000] -----------------------------------------------
 Info 49   [00:01:32.000] Open files: 
 Info 49   [00:01:33.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 49   [00:01:34.000] 		Projects: /a/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

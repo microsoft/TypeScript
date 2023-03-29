@@ -172,7 +172,7 @@ it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive wa
         emacsIgnoredFileFromIgnoreDirectory
     ].forEach(ignoredEntity => {
         host.ensureFileOrFolder(ignoredEntity);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
     });
 
     baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);

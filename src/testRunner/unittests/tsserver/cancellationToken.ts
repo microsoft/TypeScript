@@ -87,7 +87,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 arguments: { files: ["/a/missing"], delay: 0 }
             });
             // Queued files
-            host.checkTimeoutQueueLengthAndRun(1);
+            host.runQueuedTimeoutCallbacks();
             // Completed event since file is missing
         }
         {
@@ -133,7 +133,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             host.runQueuedTimeoutCallbacks();
             // the semanticDiag message
             host.runQueuedImmediateCallbacks();
-            host.runQueuedImmediateCallbacks(1);
+            host.runQueuedImmediateCallbacks();
             cancellationToken.resetToken();
         }
         {

@@ -123,7 +123,9 @@ Info 29   [00:01:07.000] FileWatcher:: Triggered with /user/username/rootfolder/
 Info 30   [00:01:08.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 31   [00:01:09.000] Scheduled: *ensureProjectForOpenFiles*
 Info 32   [00:01:10.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/project/file3.ts 1:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/file3.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/rootfolder/otherfolder/a/b/project/file3.ts]
 export class c { }export class d {}
 
@@ -157,7 +159,7 @@ Info 42   [00:01:30.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/pr
 Info 42   [00:01:31.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 42   [00:01:32.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 43   [00:01:36.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 44   [00:01:37.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
@@ -168,7 +170,8 @@ Info 48   [00:01:41.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 49   [00:01:44.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 50   [00:01:45.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info 51   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+5: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts]
 export class a { }
 
@@ -202,9 +205,13 @@ FsWatchesRecursive::
 Info 52   [00:01:47.000] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
 Info 53   [00:01:48.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 54   [00:01:49.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+7: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+7: *ensureProjectForOpenFiles*
 
 Info 55   [00:01:50.000] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 56   [00:01:51.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -252,7 +259,7 @@ Info 70   [00:02:15.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/pr
 Info 70   [00:02:16.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 70   [00:02:17.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:

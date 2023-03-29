@@ -694,7 +694,10 @@ Info 72   [00:02:51.000] Scheduled: *ensureProjectForOpenFiles*
 Info 73   [00:02:52.000] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
 Info 74   [00:02:53.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 75   [00:02:54.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 1:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/main/tsconfig.json
+3: /user/username/projects/myproject/dependency/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/decls/FnS.d.ts]
 export declare function fn1(): void;
 export declare function fn2(): void;
@@ -760,7 +763,7 @@ Info 89   [00:03:36.000] 	FileName: /user/username/projects/myproject/dependency
 Info 89   [00:03:37.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 89   [00:03:38.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 89   [00:03:39.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

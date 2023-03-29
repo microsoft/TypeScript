@@ -121,7 +121,10 @@ Info 55   [00:01:25.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 56   [00:01:26.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 57   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 58   [00:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+10: /a/b/tsconfig.jsonFailedLookupInvalidation
+13: /a/b/tsconfig.json
+14: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -171,7 +174,9 @@ FsWatchesRecursive::
 Info 59   [00:01:30.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 60   [00:01:31.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 61   [00:01:32.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After running timeout callbacks
+After running Timeout callback:: count: 2
+15: /a/b/tsconfig.json
+16: *ensureProjectForOpenFiles*
 
 Info 62   [00:01:38.000] DirectoryWatcher:: Triggered with /a/b/file1Consumer3.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 63   [00:01:39.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation
@@ -180,7 +185,10 @@ Info 65   [00:01:41.000] DirectoryWatcher:: Triggered with /a/b/file1Consumer3.t
 Info 66   [00:01:42.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 67   [00:01:43.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 68   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file1Consumer3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+17: /a/b/tsconfig.jsonFailedLookupInvalidation
+18: /a/b/tsconfig.json
+19: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
@@ -252,7 +260,8 @@ Info 89   [00:02:16.000] 		Projects: /a/b/tsconfig.json
 Info 89   [00:02:17.000] got projects updated in background, updating diagnostics for /a/b/file1Consumer1.ts
 Info 90   [00:02:18.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+20: checkOne
 
 PolledWatches::
 /a/b/node_modules/@types:

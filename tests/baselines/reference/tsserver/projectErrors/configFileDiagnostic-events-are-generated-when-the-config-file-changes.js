@@ -102,7 +102,9 @@ Info 22   [00:00:46.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: Wat
 Info 23   [00:00:47.000] Scheduled: /a/b/tsconfig.json
 Info 24   [00:00:48.000] Scheduled: *ensureProjectForOpenFiles*
 Info 25   [00:00:49.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {
                 "compilerOptions": {
@@ -155,13 +157,17 @@ Info 40   [00:01:15.000] 		Projects: /a/b/tsconfig.json
 Info 40   [00:01:16.000] got projects updated in background, updating diagnostics for /a/b/app.ts
 Info 41   [00:01:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/app.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+3: checkOne
 
 Info 42   [00:01:21.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info 43   [00:01:22.000] Scheduled: /a/b/tsconfig.json
 Info 44   [00:01:23.000] Scheduled: *ensureProjectForOpenFiles*
 Info 45   [00:01:24.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+3: checkOne
+4: /a/b/tsconfig.json
+5: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {
                 "compilerOptions": {}
@@ -214,4 +220,5 @@ Info 61   [00:01:51.000] 		Projects: /a/b/tsconfig.json
 Info 61   [00:01:52.000] got projects updated in background, updating diagnostics for /a/b/app.ts
 Info 62   [00:01:53.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/app.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+6: checkOne

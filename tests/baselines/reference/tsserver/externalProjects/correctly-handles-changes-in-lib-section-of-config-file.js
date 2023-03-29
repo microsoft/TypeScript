@@ -63,7 +63,9 @@ Info 16   [00:00:40.000] FileWatcher:: Triggered with /src/tsconfig.json 1:: Wat
 Info 17   [00:00:41.000] Scheduled: /src/tsconfig.json
 Info 18   [00:00:42.000] Scheduled: *ensureProjectForOpenFiles*
 Info 19   [00:00:43.000] Elapsed:: *ms FileWatcher:: Triggered with /src/tsconfig.json 1:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /src/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/src/tsconfig.json]
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
@@ -135,7 +137,7 @@ Info 32   [00:01:04.000] -----------------------------------------------
 Info 32   [00:01:05.000] Open files: 
 Info 32   [00:01:06.000] 	FileName: /src/app.ts ProjectRootPath: undefined
 Info 32   [00:01:07.000] 		Projects: /src/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /src/node_modules/@types:

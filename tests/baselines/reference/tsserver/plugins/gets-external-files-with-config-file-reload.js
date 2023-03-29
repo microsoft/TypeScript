@@ -106,7 +106,9 @@ Info 22   [00:00:52.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 23   [00:00:53.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 24   [00:00:54.000] Scheduled: *ensureProjectForOpenFiles*
 Info 25   [00:00:55.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"plugins":[{"name":"some-other-plugin"}]}}
 
@@ -158,7 +160,7 @@ Info 42   [00:01:20.000] -----------------------------------------------
 Info 42   [00:01:21.000] Open files: 
 Info 42   [00:01:22.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 42   [00:01:23.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:

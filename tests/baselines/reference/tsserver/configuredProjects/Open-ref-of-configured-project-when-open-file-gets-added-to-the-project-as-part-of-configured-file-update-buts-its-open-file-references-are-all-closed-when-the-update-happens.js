@@ -193,7 +193,9 @@ Info 47   [00:02:10.000] 		Projects: /dev/null/inferredProject1*
 Info 47   [00:02:11.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 47   [00:02:12.000] 		Projects: /dev/null/inferredProject2*
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+2: /a/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -290,7 +292,7 @@ Info 66   [00:02:56.000] 	FileName: /a/b/src/file2.ts ProjectRootPath: undefined
 Info 66   [00:02:57.000] 		Projects: /a/b/tsconfig.json
 Info 66   [00:02:58.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 66   [00:02:59.000] 		Projects: /dev/null/inferredProject2*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

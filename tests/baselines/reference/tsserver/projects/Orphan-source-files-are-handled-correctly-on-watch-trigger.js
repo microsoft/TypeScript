@@ -69,7 +69,9 @@ Info 15   [00:00:49.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 16   [00:00:50.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 17   [00:00:51.000] Scheduled: *ensureProjectForOpenFiles*
 Info 18   [00:00:52.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":["src/file1.ts"]}
 
@@ -127,16 +129,16 @@ Info 30   [00:01:12.000] -----------------------------------------------
 Info 30   [00:01:13.000] Open files: 
 Info 30   [00:01:14.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
 Info 30   [00:01:15.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Containing projects for /user/username/projects/myproject/src/file2.ts:: 
 Info 30   [00:01:19.000] FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
 Info 31   [00:01:20.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/src/file2.ts]
 export let y = 10;export let z = 10;
 
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Containing projects for /user/username/projects/myproject/src/file2.ts:: 

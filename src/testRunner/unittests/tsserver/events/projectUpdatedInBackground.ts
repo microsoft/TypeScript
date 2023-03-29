@@ -379,7 +379,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                     file3.content += "export class d {}";
                     host.writeFile(file3.path, file3.content);
-                    host.checkTimeoutQueueLengthAndRun(2);
+                    host.runQueuedTimeoutCallbacks();
 
                     host.writeFile(file2.path, file2.content);
                     host.runQueuedTimeoutCallbacks(); // For invalidation

@@ -89,6 +89,9 @@ Input::
 import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...

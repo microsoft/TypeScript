@@ -80,6 +80,9 @@ Change:: Delete f2
 Input::
 //// [/a/b/f2.ts] deleted
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...

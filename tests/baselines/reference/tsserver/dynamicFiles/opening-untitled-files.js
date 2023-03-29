@@ -45,7 +45,8 @@ Info 11   [00:00:33.000] Open files:
 Info 11   [00:00:34.000] 	FileName: untitled:^Untitled-1 ProjectRootPath: /user/username/projects/myproject
 Info 11   [00:00:35.000] 		Projects: /dev/null/inferredProject1*
 /user/username/projects/myproject/untitled:^Untitled-1 isDynamic:: true
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 //// [/user/username/projects/myproject/Untitled-1.ts]
 const x = 10;
 

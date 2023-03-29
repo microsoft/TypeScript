@@ -142,7 +142,9 @@ Info 29   [00:01:10.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 30   [00:01:11.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 31   [00:01:12.000] Scheduled: *ensureProjectForOpenFiles*
 Info 32   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/projects/project2/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/projects/project1/class3.ts]
 class class3 {}
 
@@ -186,7 +188,7 @@ Info 43   [00:01:32.000] -----------------------------------------------
 Info 43   [00:01:33.000] Open files: 
 Info 43   [00:01:34.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 43   [00:01:35.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/projects/project2/node_modules/@types:
@@ -220,19 +222,19 @@ Info 45   [00:01:41.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 46   [00:01:43.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 47   [00:01:44.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp/file.d.ts
 Info 48   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/projects/project1/temp/file.d.ts]
 declare class file {}
 
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0
 
 Info 49   [00:01:48.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 50   [00:01:49.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Info 51   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts]
 declare class class3 {}
 
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0

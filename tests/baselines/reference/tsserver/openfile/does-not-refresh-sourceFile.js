@@ -233,7 +233,9 @@ Info 37   [00:01:16.000] FileWatcher:: Triggered with /project/b.ts 1:: WatchInf
 Info 38   [00:01:17.000] Scheduled: /project/tsconfig.json
 Info 39   [00:01:18.000] Scheduled: *ensureProjectForOpenFiles*
 Info 40   [00:01:19.000] Elapsed:: *ms FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /project/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/project/b.ts]
 export const b = 10;export const x = 10;
 
@@ -265,4 +267,4 @@ Info 50   [00:01:37.000] -----------------------------------------------
 Info 50   [00:01:38.000] Open files: 
 Info 50   [00:01:39.000] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info 50   [00:01:40.000] 		Projects: /project/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0

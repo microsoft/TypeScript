@@ -508,7 +508,9 @@ Info 51   [00:02:14.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 52   [00:02:15.000] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info 53   [00:02:16.000] Scheduled: *ensureProjectForOpenFiles*
 Info 54   [00:02:17.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 1:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/main/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
 {"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}
 
@@ -546,7 +548,7 @@ Info 62   [00:02:43.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 62   [00:02:44.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 62   [00:02:45.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 62   [00:02:46.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

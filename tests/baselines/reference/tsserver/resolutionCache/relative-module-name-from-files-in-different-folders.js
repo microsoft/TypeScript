@@ -168,7 +168,9 @@ Info 78   [00:02:17.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 79   [00:02:18.000] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info 80   [00:02:19.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 81   [00:02:20.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /user/username/projects/myproject/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/product/src/file1.ts]
 import { module1 } from "./module1";import { module2 } from "../module2";import { module1 } from "./module1";import { module2 } from "../module2";
 
@@ -247,4 +249,4 @@ Info 99   [00:02:46.000] -----------------------------------------------
 Info 99   [00:02:47.000] Open files: 
 Info 99   [00:02:48.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info 99   [00:02:49.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0

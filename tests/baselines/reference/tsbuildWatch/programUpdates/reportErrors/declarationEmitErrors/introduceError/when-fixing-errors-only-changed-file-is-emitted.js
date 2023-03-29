@@ -179,6 +179,9 @@ export var myClassWithError = class {
     };
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
@@ -219,6 +222,9 @@ export var myClassWithError = class {
     };
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...

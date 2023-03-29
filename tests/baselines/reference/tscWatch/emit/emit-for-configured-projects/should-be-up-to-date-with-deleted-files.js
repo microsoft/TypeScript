@@ -135,6 +135,9 @@ export var T: number;export function Foo() { };
 
 //// [/a/b/file1Consumer2.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...

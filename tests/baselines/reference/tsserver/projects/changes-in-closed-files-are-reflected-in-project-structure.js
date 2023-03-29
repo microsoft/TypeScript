@@ -71,7 +71,9 @@ Info 22   [00:00:57.000] FileWatcher:: Triggered with /a/b/f2.ts 1:: WatchInfo: 
 Info 23   [00:00:58.000] Scheduled: /dev/null/inferredProject1*
 Info 24   [00:00:59.000] Scheduled: *ensureProjectForOpenFiles*
 Info 25   [00:01:00.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/f2.ts 1:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 //// [/a/b/f2.ts]
 export * from "../c/f3"
 
@@ -144,7 +146,7 @@ Info 41   [00:01:34.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 41   [00:01:35.000] 		Projects: /dev/null/inferredProject1*
 Info 41   [00:01:36.000] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
 Info 41   [00:01:37.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Inferred project: /dev/null/inferredProject2* isOrphan:: true isClosed: false

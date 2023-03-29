@@ -172,6 +172,9 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 Scheduling update
@@ -293,6 +296,8 @@ Change:: Emit with emitOnlyDts shouldnt emit anything
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program
@@ -390,6 +395,8 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program
@@ -403,6 +410,8 @@ Change:: Emit with emitOnlyDts shouldnt emit anything
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program
@@ -416,6 +425,8 @@ Change:: Emit full should not emit anything
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program

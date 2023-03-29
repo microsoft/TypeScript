@@ -76,7 +76,8 @@ FsWatchesRecursive::
   {}
 
 Info 16   [00:00:39.000] Scheduled: *ensureProjectForOpenFiles*
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles*
 
 Info 17   [00:00:41.500] Running: *ensureProjectForOpenFiles*
 Info 18   [00:00:42.500] Before ensureProjectForOpenFiles:
@@ -95,7 +96,7 @@ Info 20   [00:00:52.500] -----------------------------------------------
 Info 20   [00:00:53.500] Open files: 
 Info 20   [00:00:54.500] 	FileName: /index.ts ProjectRootPath: undefined
 Info 20   [00:00:55.500] 		Projects: /tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 20   [00:00:58.500] DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info 21   [00:00:59.500] Config: /tsconfig.json Detected new package.json: package.json

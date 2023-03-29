@@ -138,7 +138,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             }
         });
 
-        verifyGetErrRequest({ session, host, files: [file1] });
+        verifyGetErrRequest({ session, files: [file1] });
 
         const padIndex: File = {
             path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
@@ -166,8 +166,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: { file: file.path, fileContent: file.content },
         });
 
-        host.checkTimeoutQueueLength(0);
-        verifyGetErrRequest({ session, host, files: [file] });
+        verifyGetErrRequest({ session, files: [file] });
         baselineTsserverLogs("resolutionCache", `suggestion diagnostics`, session);
     });
 
@@ -192,8 +191,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             },
         });
 
-        host.checkTimeoutQueueLength(0);
-        verifyGetErrRequest({ session, host, files: [file], skip: [{ suggestion: true }] });
+        verifyGetErrRequest({ session, files: [file], skip: [{ suggestion: true }] });
         baselineTsserverLogs("resolutionCache", `disable suggestion diagnostics`, session);
     });
 
@@ -211,7 +209,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: { file: file.path, fileContent: file.content },
         });
 
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
@@ -220,7 +218,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             }
         });
 
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
             command: ts.server.protocol.CommandTypes.GeterrForProject,
             arguments: {
@@ -229,7 +227,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             }
         });
 
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
     });
 });
@@ -585,10 +583,10 @@ export const x = 10;`
             const host = createServerHost(files);
             const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(file1.path);
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
 
             host.ensureFileOrFolder(npmCacheFile);
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
             baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup/closed script infos", service);
         });
         it("when watching node_modules as part of wild card directories in config project", () => {
@@ -600,10 +598,10 @@ export const x = 10;`
             const host = createServerHost(files);
             const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(file1.path);
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
 
             host.ensureFileOrFolder(npmCacheFile);
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
             baselineTsserverLogs("resolutionCache", "when watching node_modules as part of wild card directories in config project", service);
         });
     });
@@ -623,7 +621,7 @@ export const x = 10;`
 
             // invoke callback to simulate saving
             host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("resolutionCache", "avoid unnecessary lookup invalidation on save", service);
         });
     });

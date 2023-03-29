@@ -82,7 +82,9 @@ Info 19   [00:00:59.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 20   [00:01:00.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 21   [00:01:01.000] Scheduled: *ensureProjectForOpenFiles*
 Info 22   [00:01:02.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/folder2/module3.ts]
 import * as M from "folder1/module1";
 
@@ -146,7 +148,7 @@ Info 33   [00:01:21.000] -----------------------------------------------
 Info 33   [00:01:22.000] Open files: 
 Info 33   [00:01:23.000] 	FileName: /user/username/projects/myproject/client/linktofolder2/module2.ts ProjectRootPath: undefined
 Info 33   [00:01:24.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:

@@ -202,7 +202,9 @@ Info 49   [00:02:00.000] Scheduled: /jsconfig.json, Cancelled earlier one
 Info 50   [00:02:01.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [00:02:02.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/jsconfig.json","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+13: /jsconfig.json
+14: *ensureProjectForOpenFiles*
 
 Info 51   [00:02:03.000] Running: /jsconfig.json
 Info 52   [00:02:04.000] Starting updateGraphWorker: Project: /jsconfig.json
@@ -249,4 +251,4 @@ Info 60   [00:02:32.000] -----------------------------------------------
 Info 60   [00:02:33.000] Open files: 
 Info 60   [00:02:34.000] 	FileName: /app.js ProjectRootPath: undefined
 Info 60   [00:02:35.000] 		Projects: /jsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

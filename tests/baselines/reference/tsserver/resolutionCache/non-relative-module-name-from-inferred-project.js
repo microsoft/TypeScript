@@ -198,7 +198,9 @@ Info 125  [00:03:10.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 126  [00:03:11.000] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
 Info 127  [00:03:12.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 128  [00:03:13.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /dev/null/inferredProject1*
+6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/product/src/file1.ts]
 import "./feature/file2"; import "../test/file4"; import "../test/src/file3"; import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
 
@@ -298,4 +300,4 @@ Info 149  [00:03:42.000] -----------------------------------------------
 Info 149  [00:03:43.000] Open files: 
 Info 149  [00:03:44.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info 149  [00:03:45.000] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0

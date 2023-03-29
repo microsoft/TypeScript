@@ -87,7 +87,8 @@ Info 31   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /proj/n
 Info 32   [00:01:08.000] DirectoryWatcher:: Triggered with /proj/node_modules/debug/index.d.ts :: WatchInfo: /proj/node_modules 1 undefined Project: /proj/tsconfig.json WatchType: Failed Lookup Locations
 Info 33   [00:01:09.000] Scheduled: /proj/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info 34   [00:01:10.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /proj/node_modules/debug/index.d.ts :: WatchInfo: /proj/node_modules 1 undefined Project: /proj/tsconfig.json WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+4: /proj/tsconfig.jsonFailedLookupInvalidation
 //// [/proj/node_modules/debug/index.d.ts]
 export {}
 
@@ -113,9 +114,13 @@ FsWatchesRecursive::
 Info 35   [00:01:11.000] Running: /proj/tsconfig.jsonFailedLookupInvalidation
 Info 36   [00:01:12.000] Scheduled: /proj/tsconfig.json
 Info 37   [00:01:13.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+5: /proj/tsconfig.json
+6: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /proj/tsconfig.json
+6: *ensureProjectForOpenFiles*
 
 Info 38   [00:01:14.000] Running: /proj/tsconfig.json
 Info 39   [00:01:15.000] Starting updateGraphWorker: Project: /proj/tsconfig.json
@@ -158,7 +163,7 @@ Info 49   [00:01:33.000] -----------------------------------------------
 Info 49   [00:01:34.000] Open files: 
 Info 49   [00:01:35.000] 	FileName: /proj/foo/boo/app.ts ProjectRootPath: undefined
 Info 49   [00:01:36.000] 		Projects: /proj/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 49   [00:01:37.000] getSemanticDiagnostics:: /proj/foo/boo/app.ts:: 0
 Info 50   [00:01:38.000] getSemanticDiagnostics:: /proj/foo/boo/moo/app.ts:: 0

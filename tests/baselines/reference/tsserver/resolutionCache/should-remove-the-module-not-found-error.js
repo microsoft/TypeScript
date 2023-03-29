@@ -94,7 +94,8 @@ After request
 Info 19   [00:00:36.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 20   [00:00:37.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 21   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -102,7 +103,9 @@ export function bar() { };
 Info 22   [00:00:39.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 23   [00:00:40.000] Scheduled: /dev/null/inferredProject1*
 Info 24   [00:00:41.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+2: /dev/null/inferredProject1*
+3: *ensureProjectForOpenFiles*
 
 Before request
 

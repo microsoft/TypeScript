@@ -82,7 +82,8 @@ Info 26   [00:00:54.000] Search path: /a/b/projects/project/src
 Info 27   [00:00:55.000] For info: /a/b/projects/project/src/index.ts :: No config files found.
 Info 28   [00:00:56.000] Scheduled: *ensureProjectForOpenFiles*
 Info 29   [00:00:57.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json] deleted
 
 FsWatches::
@@ -124,7 +125,7 @@ Info 46   [00:01:19.500] -----------------------------------------------
 Info 46   [00:01:20.500] Open files: 
 Info 46   [00:01:21.500] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info 46   [00:01:22.500] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/project/src/tsconfig.json: *new*
@@ -157,7 +158,9 @@ Info 55   [00:01:34.500] For info: /a/b/projects/project/src/index.ts :: Config 
 Info 56   [00:01:35.500] Scheduled: /a/b/projects/project/tsconfig.json, Cancelled earlier one
 Info 57   [00:01:36.500] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 58   [00:01:37.500] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+4: /a/b/projects/project/tsconfig.json
+5: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json]
 {}
 
@@ -248,7 +251,7 @@ Info 82   [00:02:15.500] -----------------------------------------------
 Info 82   [00:02:16.500] Open files: 
 Info 82   [00:02:17.500] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info 82   [00:02:18.500] 		Projects: /a/b/projects/project/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/project/src/node_modules/@types:

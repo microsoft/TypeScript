@@ -94,12 +94,13 @@ Info 19   [00:00:34.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 20   [00:00:35.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 TestServerCancellationToken:: resetRequest:: 2 is as expected
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -146,13 +147,14 @@ Info 24   [00:00:39.000] response:
 After request
 
 TestServerCancellationToken:: Setting request to cancel:: 3
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+2: checkOne
 
 TestServerCancellationToken:: Cancellation is requested
 Info 25   [00:00:40.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 TestServerCancellationToken:: resetRequest:: 3 is as expected
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -175,21 +177,23 @@ Info 27   [00:00:42.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+3: checkOne
 
 Info 28   [00:00:43.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 5 is as expected
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 TestServerCancellationToken:: Setting request to cancel:: 5
-Before running immediate callbacks
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 TestServerCancellationToken:: Cancellation is requested
 Info 29   [00:00:44.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
 TestServerCancellationToken:: resetRequest:: 5 is as expected
-After running immediate callbacks
+After running Immedidate callback:: count: 0
 
 Before request
 
@@ -212,28 +216,32 @@ Info 31   [00:00:46.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+4: checkOne
 
 Info 32   [00:00:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 6 is as expected
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks
+Before running Immedidate callback:: count: 1
+2: semanticCheck
 
 Info 33   [00:00:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 6 is as expected
-After running immediate callbacks
+After running Immedidate callback:: count: 1
+3: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: suggestionCheck
 
 Info 34   [00:00:49.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 Info 35   [00:00:50.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
 TestServerCancellationToken:: resetRequest:: 6 is as expected
-After running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Before request
 
@@ -256,12 +264,13 @@ Info 37   [00:00:52.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+5: checkOne
 
 Info 38   [00:00:53.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 7 is as expected
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

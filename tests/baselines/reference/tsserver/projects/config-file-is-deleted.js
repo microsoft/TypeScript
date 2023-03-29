@@ -89,7 +89,8 @@ Info 33   [00:01:01.000] Search path: /a/b
 Info 34   [00:01:02.000] For info: /a/b/f2.ts :: No config files found.
 Info 35   [00:01:03.000] Scheduled: *ensureProjectForOpenFiles*
 Info 36   [00:01:04.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 2:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json] deleted
 
 Info 37   [00:01:05.500] Running: *ensureProjectForOpenFiles*
@@ -141,7 +142,7 @@ Info 56   [00:01:36.500] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 56   [00:01:37.500] 		Projects: /dev/null/inferredProject1*
 Info 56   [00:01:38.500] 	FileName: /a/b/f2.ts ProjectRootPath: undefined
 Info 56   [00:01:39.500] 		Projects: /dev/null/inferredProject2*
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*

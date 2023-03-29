@@ -120,21 +120,25 @@ Info 16   [00:00:31.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: checkOne
 
 ServerCancellationToken:: Cancellation Request id:: 2
 Info 17   [00:00:32.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/app.ts","diagnostics":[]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 ServerCancellationToken:: Cancellation Request id:: 2
 Info 18   [00:00:33.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/app.ts","diagnostics":[]}}
-After running immediate callbacks
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 ServerCancellationToken:: Cancellation Request id:: 2
 Info 19   [00:00:34.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/app.ts","diagnostics":[]}}
 Info 20   [00:00:35.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-After running immediate callbacks
+After running Immedidate callback:: count: 0

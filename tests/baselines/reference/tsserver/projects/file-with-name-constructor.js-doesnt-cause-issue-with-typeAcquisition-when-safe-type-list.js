@@ -70,7 +70,8 @@ Info 11   [00:00:30.000] 	Files (3)
 	  Root file specified for compilation
 
 Info 12   [00:00:31.000] -----------------------------------------------
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 
 PolledWatches::
 /node_modules: *new*

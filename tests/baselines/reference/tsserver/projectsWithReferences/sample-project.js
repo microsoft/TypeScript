@@ -200,7 +200,9 @@ Info 29   [00:01:16.000] FileWatcher:: Triggered with /user/username/projects/sa
 Info 30   [00:01:17.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 31   [00:01:18.000] Scheduled: *ensureProjectForOpenFiles*
 Info 32   [00:01:19.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/sample1/tests/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';
 export function getSecondsInDay() {
@@ -268,13 +270,15 @@ Info 42   [00:01:37.000] -----------------------------------------------
 Info 42   [00:01:38.000] Open files: 
 Info 42   [00:01:39.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 42   [00:01:40.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 42   [00:01:43.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
 Info 43   [00:01:44.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 44   [00:01:45.000] Scheduled: *ensureProjectForOpenFiles*
 Info 45   [00:01:46.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/sample1/tests/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';
 export function getSecondsInDay() {
@@ -314,13 +318,15 @@ Info 55   [00:02:04.000] -----------------------------------------------
 Info 55   [00:02:05.000] Open files: 
 Info 55   [00:02:06.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 55   [00:02:07.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 55   [00:02:11.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
 Info 56   [00:02:12.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 57   [00:02:13.000] Scheduled: *ensureProjectForOpenFiles*
 Info 58   [00:02:14.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+5: /user/username/projects/sample1/tests/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/sample1/logic/tsconfig.json]
 {"compilerOptions":{"composite":true,"declaration":true,"declarationDir":"decls"},"references":[{"path":"../core"}]}
 
@@ -371,4 +377,4 @@ Info 69   [00:02:33.000] -----------------------------------------------
 Info 69   [00:02:34.000] Open files: 
 Info 69   [00:02:35.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 69   [00:02:36.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

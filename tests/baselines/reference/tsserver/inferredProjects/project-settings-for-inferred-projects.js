@@ -71,7 +71,10 @@ Info 28   [00:00:56.000] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@
 Info 29   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info 30   [00:00:58.000] Scheduled: /dev/null/inferredProject2*
 Info 31   [00:00:59.000] Scheduled: *ensureProjectForOpenFiles*
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+1: /dev/null/inferredProject1*
+2: /dev/null/inferredProject2*
+3: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
@@ -144,7 +147,7 @@ Info 59   [00:01:45.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 59   [00:01:46.000] 		Projects: /dev/null/inferredProject1*
 Info 59   [00:01:47.000] 	FileName: /a/mod.ts ProjectRootPath: undefined
 Info 59   [00:01:48.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

@@ -36,8 +36,9 @@ Info 2    [00:00:17.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 3    [00:00:18.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0

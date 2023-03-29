@@ -165,7 +165,9 @@ Info 24   [00:00:55.000] DirectoryWatcher:: Triggered with /a/b/file1Consumer3.t
 Info 25   [00:00:56.000] Scheduled: /a/b/tsconfig.json
 Info 26   [00:00:57.000] Scheduled: *ensureProjectForOpenFiles*
 Info 27   [00:00:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file1Consumer3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/file1Consumer3.ts]
 import {Foo} from "./moduleFile1"; let y = Foo();
 
@@ -221,7 +223,7 @@ Info 38   [00:01:17.000] -----------------------------------------------
 Info 38   [00:01:18.000] Open files: 
 Info 38   [00:01:19.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
 Info 38   [00:01:20.000] 		Projects: /a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/node_modules/@types:

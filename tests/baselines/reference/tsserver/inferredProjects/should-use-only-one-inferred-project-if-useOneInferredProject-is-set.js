@@ -132,7 +132,9 @@ Info 42   [00:01:39.000] For info: /user/username/projects/myproject/a/b/main.ts
 Info 43   [00:01:40.000] Scheduled: /user/username/projects/myproject/a/b/tsconfig.json, Cancelled earlier one
 Info 44   [00:01:41.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 45   [00:01:42.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/a/b/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/a/b/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/a/b/tsconfig.json]
 {
                     "compilerOptions": {
@@ -248,7 +250,7 @@ Info 70   [00:02:29.000] 	FileName: /user/username/projects/myproject/a/c/main.t
 Info 70   [00:02:30.000] 		Projects: /dev/null/inferredProject1*
 Info 70   [00:02:31.000] 	FileName: /user/username/projects/myproject/a/d/main.ts ProjectRootPath: undefined
 Info 70   [00:02:32.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/a/tsconfig.json:

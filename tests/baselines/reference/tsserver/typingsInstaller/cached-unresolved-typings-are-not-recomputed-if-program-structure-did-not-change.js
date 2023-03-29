@@ -125,7 +125,8 @@ Info 16   [00:01:06.000] response:
     }
 After request
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 
 Info 17   [00:01:07.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 18   [00:01:08.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms

@@ -63,7 +63,9 @@ Info 26   [00:00:53.000] For info: /a/b/projects/project/src/index.ts :: Config 
 Info 27   [00:00:54.000] Scheduled: /a/b/projects/project/tsconfig.json, Cancelled earlier one
 Info 28   [00:00:55.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 29   [00:00:56.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+3: /a/b/projects/project/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json]
 {}
 
@@ -150,7 +152,7 @@ Info 53   [00:01:34.000] -----------------------------------------------
 Info 53   [00:01:35.000] Open files: 
 Info 53   [00:01:36.000] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info 53   [00:01:37.000] 		Projects: /a/b/projects/project/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/project/src/node_modules/@types:
@@ -199,7 +201,8 @@ Info 63   [00:01:49.000] Search path: /a/b/projects/project/src
 Info 64   [00:01:50.000] For info: /a/b/projects/project/src/index.ts :: No config files found.
 Info 65   [00:01:51.000] Scheduled: *ensureProjectForOpenFiles*
 Info 66   [00:01:52.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+5: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json] deleted
 
 PolledWatches::
@@ -255,7 +258,7 @@ Info 79   [00:02:13.500] -----------------------------------------------
 Info 79   [00:02:14.500] Open files: 
 Info 79   [00:02:15.500] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info 79   [00:02:16.500] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/project/src/node_modules/@types:

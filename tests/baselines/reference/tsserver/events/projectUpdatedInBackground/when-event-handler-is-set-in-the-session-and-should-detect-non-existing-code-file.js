@@ -143,7 +143,9 @@ Info 29   [00:00:52.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 
 Info 30   [00:00:53.000] Running: /a/b/tsconfig.json
 Info 31   [00:00:54.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -180,7 +182,7 @@ Info 40   [00:01:13.000] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: unde
 Info 40   [00:01:14.000] 		Projects: /a/b/tsconfig.json
 Info 40   [00:01:15.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/referenceFile1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/modulefile2.ts:
@@ -207,7 +209,9 @@ Info 46   [00:01:23.000] DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :
 Info 47   [00:01:24.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 48   [00:01:25.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 49   [00:01:26.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /a/b/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile2.ts]
 export var Foo4 = 10;
 
@@ -269,7 +273,7 @@ Info 60   [00:01:47.000] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: unde
 Info 60   [00:01:48.000] 		Projects: /a/b/tsconfig.json
 Info 60   [00:01:49.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/referenceFile1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/node_modules/@types:

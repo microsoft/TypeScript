@@ -79,6 +79,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/myproject/a.js] file written with same contents
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
@@ -113,6 +116,9 @@ Input::
 const x = 10;
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
