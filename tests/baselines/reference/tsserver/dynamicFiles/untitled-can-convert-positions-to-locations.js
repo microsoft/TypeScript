@@ -138,6 +138,7 @@ FsWatchesRecursive::
 /proj:
   {}
 
+/proj/untitled:^untitled-1 isDynamic:: true
 Before request
 
 Info 31   [00:00:57.000] request:

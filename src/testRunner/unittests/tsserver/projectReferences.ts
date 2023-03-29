@@ -10,7 +10,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkProjectActualFiles,
     createHostWithSolutionBuild,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -250,26 +249,23 @@ function foo() {
         };
         const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
         const host = createServerHost(files);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(aTs.path);
-        service.checkNumberOfProjects({ configuredProjects: 1 });
 
         // project A referencing b.d.ts without project reference
         const projectA = service.configuredProjects.get(configA.path)!;
         assert.isDefined(projectA);
-        checkProjectActualFiles(projectA, [aTs.path, a2Ts.path, bDts.path, libFile.path, configA.path]);
 
         // reuses b.d.ts but sets the path and resolved path since projectC has project references
         // as the real resolution was to b.ts
         service.openClientFile(cTs.path);
-        service.checkNumberOfProjects({ configuredProjects: 2 });
-        const projectC = service.configuredProjects.get(configC.path)!;
-        checkProjectActualFiles(projectC, [cTs.path, bTs.path, libFile.path, configC.path]);
 
         // Now new project for project A tries to reuse b but there is no filesByName mapping for b's source location
         host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
+        service.testhost.baselineHost("a2Ts modified");
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
+        baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", service);
     });
 
     describe("when references are monorepo like with symlinks", () => {

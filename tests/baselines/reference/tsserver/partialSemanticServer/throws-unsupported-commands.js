@@ -74,12 +74,12 @@ Before request
 
 Info 8    [00:00:45.000] request:
     {
-      "type": "request",
-      "seq": 1,
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Info 9    [00:00:46.000] Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic
 Info 10   [00:00:47.000] LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic

@@ -1,41 +1,48 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost } from "../virtualFileSystemWithWatch";
-import { createProjectService } from "./helpers";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession, openFilesForSession } from "./helpers";
 
-describe("unittests:: tsserver:: format settings", () => {
+describe("unittests:: tsserver:: formatSettings", () => {
     it("can be set globally", () => {
         const f1 = {
             path: "/a/b/app.ts",
             content: "let x;"
         };
         const host = createServerHost([f1]);
-        const projectService = createProjectService(host);
-        projectService.openClientFile(f1.path);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([f1], session);
 
-        const defaultSettings = projectService.getFormatCodeOptions(f1.path as ts.server.NormalizedPath);
+        const defaultSettings = session.getProjectService().getFormatCodeOptions(f1.path as ts.server.NormalizedPath);
 
         // set global settings
         const newGlobalSettings1 = { ...defaultSettings, placeOpenBraceOnNewLineForControlBlocks: !defaultSettings.placeOpenBraceOnNewLineForControlBlocks };
-        projectService.setHostConfiguration({ formatOptions: newGlobalSettings1 });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { formatOptions: newGlobalSettings1 }
+        });
 
         // get format options for file - should be equal to new global settings
-        const s1 = projectService.getFormatCodeOptions(ts.server.toNormalizedPath(f1.path));
-        assert.deepEqual(s1, newGlobalSettings1, "file settings should be the same with global settings");
+        session.logger.log(`FormatCodeOptions should be global:: ${f1.path}:: ${JSON.stringify(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)), undefined, " ")}`);
 
         // set per file format options
         const newPerFileSettings = { ...defaultSettings, insertSpaceAfterCommaDelimiter: !defaultSettings.insertSpaceAfterCommaDelimiter };
-        projectService.setHostConfiguration({ formatOptions: newPerFileSettings, file: f1.path });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { formatOptions: newPerFileSettings, file: f1.path }
+        });
 
         // get format options for file - should be equal to new per-file settings
-        const s2 = projectService.getFormatCodeOptions(ts.server.toNormalizedPath(f1.path));
-        assert.deepEqual(s2, newPerFileSettings, "file settings should be the same with per-file settings");
+        session.logger.log(`FormatCodeOptions should be per file:: ${f1.path}:: ${JSON.stringify(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)), undefined, " ")}`);
 
         // set new global settings - they should not affect ones that were set per-file
         const newGlobalSettings2 = { ...defaultSettings, insertSpaceAfterSemicolonInForStatements: !defaultSettings.insertSpaceAfterSemicolonInForStatements };
-        projectService.setHostConfiguration({ formatOptions: newGlobalSettings2 });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { formatOptions: newGlobalSettings2 }
+        });
 
         // get format options for file - should be equal to new per-file settings
-        const s3 = projectService.getFormatCodeOptions(ts.server.toNormalizedPath(f1.path));
-        assert.deepEqual(s3, newPerFileSettings, "file settings should still be the same with per-file settings");
+        session.logger.log(`FormatCodeOptions should be per file:: ${f1.path}:: ${JSON.stringify(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)), undefined, " ")}`);
+        baselineTsserverLogs("formatSettings", "works when extends is specified with a case insensitive file system", session);
     });
 });
