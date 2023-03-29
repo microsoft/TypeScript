@@ -403,8 +403,8 @@ write("export = ts;", WriteTarget.Both);
 write("export as namespace ts;", WriteTarget.Both);
 
 const copyrightNotice = fs.readFileSync(path.join(__dirname, "CopyrightNotice.txt"), "utf-8");
-const publicContents = copyrightNotice + publicLines.join(newLine);
-const internalContents = copyrightNotice + internalLines.join(newLine);
+const publicContents = copyrightNotice + publicLines.join(newLine) + newLine;
+const internalContents = copyrightNotice + internalLines.join(newLine) + newLine;
 
 if (publicContents.includes("@internal")) {
     console.error("Output includes untrimmed @internal nodes!");
