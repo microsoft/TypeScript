@@ -3961,10 +3961,7 @@ function needsNameFromDeclaration(symbol: Symbol) {
     return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
 }
 
-/**
- * @internal
- */
-export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
+function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
     return firstDefined(symbol.declarations, d =>
         isExportAssignment(d)
             ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text

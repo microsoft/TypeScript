@@ -27,6 +27,7 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    ExportAssignment,
     Expression,
     ExpressionStatement,
     extensionFromPath,
@@ -43,7 +44,6 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getDecorators,
-    getDefaultLikeExportNameFromDeclaration,
     getDirectoryPath,
     getLocaleSpecificMessage,
     getModifiers,
@@ -691,7 +691,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
             const name = nameOfTopLevelDeclaration(decl);
             const top = getTopLevelDeclarationStatement(decl);
             // exported later in export that is not going to be moved, skip updating symbol imports in other files
-            const skipSymbolUpdating = name && isExportedLaterInOldFile(oldFile, top, useEsModuleSyntax, name, toMove, symbol);
+            const skipSymbolUpdating = name && isExportedLaterInOldFile(oldFile, top, useEsModuleSyntax, name, toMove);
             if (skipSymbolUpdating) {
                 symbolsExportedLaterInOldFile.set(name.text, symbol);
                 return;
@@ -978,11 +978,15 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
 }
 
-function isExportedLaterInOldFile(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name: Identifier, toMove: readonly Statement[], symbol: Symbol): boolean {
+function getDefaultExportName(sourceFile: SourceFile) {
+    return tryCast((sourceFile.symbol.exports?.get("default" as __String)?.declarations?.[0] as undefined | ExportAssignment)?.expression, isIdentifier);
+}
+
+function isExportedLaterInOldFile(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name: Identifier, toMove: readonly Statement[]): boolean {
     if (useEs6Exports) {
         return !isExpressionStatement(decl)
             && !hasSyntacticModifier(decl, ModifierFlags.Export)
-            && (!!sourceFile.symbol.exports?.has(name.escapedText) || !!getDefaultLikeExportNameFromDeclaration(symbol))
+            && (!!sourceFile.symbol.exports?.has(name.escapedText) || getDefaultExportName(sourceFile)?.escapedText === name.escapedText)
             && !toMove.some((node) =>
                 (isExportDeclaration(node) && tryCast(node.exportClause, isNamedExports)?.elements.some(el => el.name.text === name.text))
                 || (isExportAssignment(node) && tryCast(node.expression, isIdentifier)?.text === name.text));
