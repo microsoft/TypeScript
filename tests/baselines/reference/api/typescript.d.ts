@@ -7195,3 +7195,4 @@ declare namespace ts {
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
 }
 export = ts;
+export as namespace ts;
