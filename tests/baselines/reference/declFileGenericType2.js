@@ -100,19 +100,19 @@ var templa;
 
 
 //// [declFileGenericType2.d.ts]
-declare module templa.mvc {
+declare namespace templa.mvc {
     interface IModel {
     }
 }
-declare module templa.mvc {
+declare namespace templa.mvc {
     interface IController<ModelType extends templa.mvc.IModel> {
     }
 }
-declare module templa.mvc {
+declare namespace templa.mvc {
     class AbstractController<ModelType extends templa.mvc.IModel> implements mvc.IController<ModelType> {
     }
 }
-declare module templa.mvc.composite {
+declare namespace templa.mvc.composite {
     interface ICompositeControllerModel extends mvc.IModel {
         getControllers(): mvc.IController<mvc.IModel>[];
     }

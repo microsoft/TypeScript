@@ -434,16 +434,16 @@ declare namespace m13 {
         function f(): number;
     }
 }
-declare module m4 {
+declare namespace m4 {
     var b: any;
 }
-declare module m5 {
+declare namespace m5 {
     var c: any;
 }
-declare module m43 {
+declare namespace m43 {
     var b: any;
 }
-declare module m55 {
+declare namespace m55 {
     var c: any;
 }
 declare module "m3" {
@@ -463,7 +463,7 @@ declare namespace exportTests {
         get c1(): C1_public;
     }
 }
-declare module mAmbient {
+declare namespace mAmbient {
     class C {
         myProp: number;
     }
@@ -478,7 +478,7 @@ declare module mAmbient {
         y,
         z
     }
-    module m3 {
+    namespace m3 {
         class C {
             myProp: number;
         }

@@ -74,7 +74,7 @@ var X;
 
 
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.d.ts]
-declare module A.B.Base {
+declare namespace A.B.Base {
     class W {
         id: number;
     }

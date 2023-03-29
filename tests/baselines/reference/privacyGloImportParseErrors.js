@@ -331,17 +331,17 @@ declare module "use_glo_M1_public" {
     };
     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
-    module m2 {
-        module m5 {
+    namespace m2 {
+        namespace m5 {
         }
     }
 }
 declare module "anotherParseError" {
-    module m2 {
+    namespace m2 {
         module "abc" {
         }
     }
-    module m2 {
+    namespace m2 {
         module "abc2" {
         }
     }

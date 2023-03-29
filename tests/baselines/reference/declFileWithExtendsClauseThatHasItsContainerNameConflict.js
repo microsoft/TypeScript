@@ -64,7 +64,7 @@ var A;
 
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.d.ts]
-declare module A.B.C {
+declare namespace A.B.C {
     class B {
     }
 }

@@ -104,6 +104,6 @@ declare var v: number;
 declare namespace Foo {
     var x: number;
 }
-declare module N {
+declare namespace N {
     function F(): any;
 }

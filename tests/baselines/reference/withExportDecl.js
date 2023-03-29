@@ -122,7 +122,7 @@ export declare function exportedFunction(): {
     y: string;
     n: number;
 };
-export declare module m2 {
+export declare namespace m2 {
     var a: number;
 }
 export declare namespace m3 {
