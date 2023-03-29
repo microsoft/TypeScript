@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/file1.ts]
 import * as T from "./moduleFile"; T.bar();

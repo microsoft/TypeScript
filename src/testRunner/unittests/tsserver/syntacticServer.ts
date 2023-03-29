@@ -6,8 +6,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
@@ -155,22 +153,17 @@ function fooB() { }`
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
+        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
         const service = session.getProjectService();
         openFilesForSession([file1], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         const project = service.inferredProjects[0];
-        checkProjectActualFiles(project, ts.emptyArray);
 
         openFilesForSession([file2], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         assert.isFalse(project.dirty);
         project.updateGraph();
-        checkProjectActualFiles(project, ts.emptyArray);
 
         closeFilesForSession([file2], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         assert.isTrue(project.dirty);
-        checkProjectActualFiles(project, ts.emptyArray);
+        baselineTsserverLogs("syntacticServer", "should not include referenced files from unopened files", session);
     });
 });

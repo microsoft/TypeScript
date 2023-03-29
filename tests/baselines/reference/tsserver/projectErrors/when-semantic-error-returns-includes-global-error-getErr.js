@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:22.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
@@ -126,7 +127,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 25   [00:00:53.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/ui.ts","diagnostics":[{"start":{"line":1,"offset":11},"end":{"line":1,"offset":39},"text":"An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.","code":2697,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -134,4 +135,4 @@ Info 26   [00:00:54.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/ui.ts","diagnostics":[]}}
 Info 27   [00:00:55.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

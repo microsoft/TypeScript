@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -265,13 +266,13 @@ Before running immediate callbacks and checking length (1)
 
 Info 55   [00:01:41.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
 Info 56   [00:01:42.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before checking timeout queue length (1) and running
 
@@ -283,7 +284,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 58   [00:01:44.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[{"start":{"line":6,"offset":5},"end":{"line":6,"offset":6},"text":"Type 'number' is not assignable to type 'string'.","code":2322,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -291,4 +292,4 @@ Info 59   [00:01:45.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 60   [00:01:46.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

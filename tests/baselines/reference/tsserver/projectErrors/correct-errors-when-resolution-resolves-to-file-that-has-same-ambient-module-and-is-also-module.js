@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
@@ -153,7 +154,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 29   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -161,7 +162,7 @@ Info 30   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 31   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before request
 
@@ -227,7 +228,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 42   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -235,4 +236,4 @@ Info 43   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 44   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

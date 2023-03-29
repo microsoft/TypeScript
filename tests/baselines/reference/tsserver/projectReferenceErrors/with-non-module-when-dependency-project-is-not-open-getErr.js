@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -176,7 +177,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 34   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -184,4 +185,4 @@ Info 35   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Info 36   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

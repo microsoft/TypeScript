@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/temp/a.ts]
@@ -109,7 +110,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 20   [00:00:43.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":25},"text":"Cannot find module 'pad' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -117,7 +118,7 @@ Info 21   [00:00:44.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 Info 22   [00:00:45.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Info 23   [00:00:51.000] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 24   [00:00:52.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
@@ -231,4 +232,4 @@ Before running immediate callbacks
 
 Info 65   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-Before running immediate callbacks
+After running immediate callbacks

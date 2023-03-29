@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:01:18.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
@@ -387,7 +388,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 46   [00:02:10.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -395,7 +396,7 @@ Info 47   [00:02:11.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
 Info 48   [00:02:12.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before request
 
@@ -472,7 +473,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 59   [00:02:23.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -480,4 +481,4 @@ Info 60   [00:02:24.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
 Info 61   [00:02:25.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

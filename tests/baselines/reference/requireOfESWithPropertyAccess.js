@@ -30,7 +30,7 @@ x.x.grey;
 
 //// [ch.d.ts]
 export namespace x {
-    const grey: {};
+    let grey: {};
 }
 //// [main.d.ts]
 export {};

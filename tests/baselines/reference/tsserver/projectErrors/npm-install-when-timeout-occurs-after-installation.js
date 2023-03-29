@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/main.ts]
@@ -134,7 +135,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 29   [00:00:58.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -142,7 +143,7 @@ Info 30   [00:00:59.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 31   [00:01:00.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Info 32   [00:01:03.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 33   [00:01:04.000] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
@@ -241,7 +242,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 73   [00:01:52.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -249,7 +250,7 @@ Info 74   [00:01:53.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 75   [00:01:54.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Info 76   [00:01:57.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 77   [00:01:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -326,7 +327,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 114  [00:02:47.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -334,7 +335,7 @@ Info 115  [00:02:48.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 116  [00:02:49.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Checking timeout queue length: 2
 //// [/user/username/projects/myproject/node_modules/@angular/core/index.d.ts]
@@ -373,7 +374,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 120  [00:02:59.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -381,7 +382,7 @@ Info 121  [00:03:00.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 122  [00:03:01.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Info 123  [00:03:03.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 124  [00:03:04.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -523,7 +524,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 199  [00:04:41.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -531,4 +532,4 @@ Info 200  [00:04:42.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 201  [00:04:43.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

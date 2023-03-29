@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/myproject/bar/app.ts]
@@ -120,7 +121,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 26   [00:00:53.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -128,7 +129,7 @@ Info 27   [00:00:54.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 28   [00:00:55.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Info 29   [00:00:57.000] DirectoryWatcher:: Triggered with /a/b/projects/myproject/foo :: WatchInfo: /a/b/projects/myproject 1 undefined Config: /a/b/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 30   [00:00:58.000] Scheduled: /a/b/projects/myproject/tsconfig.json
@@ -265,7 +266,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 66   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -273,4 +274,4 @@ Info 67   [00:01:49.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 68   [00:01:50.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

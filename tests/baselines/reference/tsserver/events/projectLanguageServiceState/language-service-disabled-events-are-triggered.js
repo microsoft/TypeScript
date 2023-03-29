@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/app.js]
@@ -12,12 +13,12 @@ let x = 1;
 
 Info 1    [00:00:12.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/app.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Info 2    [00:00:13.000] Search path: /a
 Info 3    [00:00:14.000] For info: /a/app.js :: Config file name: /a/jsconfig.json

@@ -8,27 +8,25 @@ import {
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
-    createProjectService,
     createSession,
     openFilesForSession,
+    TestSessionOptions,
 } from "./helpers";
 
-describe("unittests:: tsserver:: plugins loading", () => {
+describe("unittests:: tsserver:: plugins:: loading", () => {
     const testProtocolCommand = "testProtocolCommand";
     const testProtocolCommandRequest = "testProtocolCommandRequest";
     const testProtocolCommandResponse = "testProtocolCommandResponse";
 
-    function createHostWithPlugin(files: readonly File[]) {
+    function createHostWithPlugin(files: readonly File[], opts?: Partial<TestSessionOptions>) {
         const host = createServerHost(files);
-        const pluginsLoaded: string[] = [];
-        const protocolHandlerRequests: [string, string][] = [];
         host.require = (_initialPath, moduleName) => {
-            pluginsLoaded.push(moduleName);
+            session.logger.log(`Loading plugin: ${moduleName}`);
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         info.session?.addProtocolHandler(testProtocolCommand, request => {
-                            protocolHandlerRequests.push([request.command, request.arguments]);
+                            session.logger.log(`addProtocolHandler: ${JSON.stringify(request, undefined, " ")}`);
                             return {
                                 response: testProtocolCommandResponse
                             };
@@ -39,7 +37,8 @@ describe("unittests:: tsserver:: plugins loading", () => {
                 error: undefined
             };
         };
-        return { host, pluginsLoaded, protocolHandlerRequests };
+        const session = createSession(host, { ...opts, logger: createLoggerWithInMemoryLogs(host) });
+        return { host, session };
     }
 
     it("With local plugins", () => {
@@ -57,10 +56,9 @@ describe("unittests:: tsserver:: plugins loading", () => {
                 }
             })
         };
-        const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
-        const service = createProjectService(host);
-        service.openClientFile(aTs.path);
-        assert.deepEqual(pluginsLoaded, expectedToLoad);
+        const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        openFilesForSession([aTs], session);
+        baselineTsserverLogs("plugins", "With local plugins", session);
     });
 
     it("With global plugins", () => {
@@ -71,15 +69,13 @@ describe("unittests:: tsserver:: plugins loading", () => {
             path: "/tsconfig.json",
             content: "{}"
         };
-        const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
-        const service = createProjectService(host, { globalPlugins: [...expectedToLoad, ...notToLoad] });
-        service.openClientFile(aTs.path);
-        assert.deepEqual(pluginsLoaded, expectedToLoad);
+        const { session } = createHostWithPlugin([aTs, tsconfig, libFile], { globalPlugins: [...expectedToLoad, ...notToLoad] });
+        openFilesForSession([aTs], session);
+        baselineTsserverLogs("plugins", "With global plugins", session);
     });
 
     it("With session and custom protocol message", () => {
         const pluginName = "some-plugin";
-        const expectedToLoad = [pluginName];
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
@@ -92,27 +88,16 @@ describe("unittests:: tsserver:: plugins loading", () => {
             })
         };
 
-        const { host, pluginsLoaded, protocolHandlerRequests } = createHostWithPlugin([aTs, tsconfig, libFile]);
-        const session = createSession(host);
+        const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
 
-        const service = createProjectService(host, { session });
-        service.openClientFile(aTs.path);
-        assert.deepEqual(pluginsLoaded, expectedToLoad);
+        openFilesForSession([aTs], session);
 
-        const resp = session.executeCommandSeq({
+        session.executeCommandSeq({
             command: testProtocolCommand,
             arguments: testProtocolCommandRequest
         });
 
-        assert.strictEqual(protocolHandlerRequests.length, 1);
-        const [command, args] = protocolHandlerRequests[0];
-        assert.strictEqual(command, testProtocolCommand);
-        assert.strictEqual(args, testProtocolCommandRequest);
-
-        const expectedResp: ts.server.HandlerResponse = {
-            response: testProtocolCommandResponse
-        };
-        assert.deepEqual(resp, expectedResp);
+        baselineTsserverLogs("plugins", "With session and custom protocol message", session);
     });
 
     it("gets external files with config file reload", () => {
@@ -161,7 +146,7 @@ describe("unittests:: tsserver:: plugins loading", () => {
     });
 });
 
-describe("unittests:: tsserver:: plugins overriding getSupportedCodeFixes", () => {
+describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", () => {
     it("getSupportedCodeFixes can be proxied", () => {
         const aTs: File = {
             path: "/a.ts",

@@ -1675,7 +1675,7 @@ namespace Parser {
         }
 
         // Set source file so that errors will be reported with this file name
-        const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken, sourceFlags, noop);
+        const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclarationFile*/ false, statements, endOfFileToken, sourceFlags, noop);
 
         if (setParentNodes) {
             fixupParentReferences(sourceFile);
@@ -2128,8 +2128,8 @@ namespace Parser {
         parseErrorAt(range.pos, range.end, message, ...args);
     }
 
-    function scanError(message: DiagnosticMessage, length: number): void {
-        parseErrorAtPosition(scanner.getTokenEnd(), length, message);
+    function scanError(message: DiagnosticMessage, length: number, arg0?: any): void {
+        parseErrorAtPosition(scanner.getTokenEnd(), length, message, arg0);
     }
 
     function getNodePos(): number {
@@ -2186,10 +2186,6 @@ namespace Parser {
 
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
         return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
-    }
-
-    function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-        return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
     }
 
     function reScanLessThanToken(): SyntaxKind {
@@ -3501,7 +3497,7 @@ namespace Parser {
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
-                    parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
+                    parseRightSideOfDot(allowReservedWords, /*allowPrivateIdentifiers*/ false) as Identifier
                 ),
                 pos
             );
@@ -3636,8 +3632,8 @@ namespace Parser {
     }
 
     function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
-        if (isTaggedTemplate) {
-            reScanTemplateHeadOrNoSubstitutionTemplate();
+        if (!isTaggedTemplate && scanner.getTokenFlags() & TokenFlags.IsInvalid) {
+            reScanTemplateToken(/*isTaggedTemplate*/ false);
         }
         const fragment = parseLiteralLikeNode(token());
         Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
@@ -3660,7 +3656,6 @@ namespace Parser {
         const pos = getNodePos();
         const node =
             isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, scanner.getTokenValue(), getTemplateLiteralRawText(kind), scanner.getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags) :
-            // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal. But because of how the scanner separates the tokens, we would
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
@@ -6088,7 +6083,7 @@ namespace Parser {
         }
         else {
             parseExpected(SyntaxKind.SlashToken);
-            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
                 // manually advance the scanner in order to look for jsx text inside jsx
                 if (inExpressionContext) {
                     nextToken();
@@ -6138,7 +6133,7 @@ namespace Parser {
             parseExpected(SyntaxKind.CloseBraceToken);
         }
         else {
-            if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+            if (parseExpected(SyntaxKind.CloseBraceToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
                 scanJsxText();
             }
         }
@@ -6185,7 +6180,7 @@ namespace Parser {
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanSlashToken);
         const tagName = parseJsxElementName();
-        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
             // manually advance the scanner in order to look for jsx text inside jsx
             if (inExpressionContext || !tagNamesAreEquivalent(open.tagName, tagName)) {
                 nextToken();
@@ -6351,7 +6346,7 @@ namespace Parser {
             tag,
             typeArguments,
             token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
-                (reScanTemplateHeadOrNoSubstitutionTemplate(), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
+                (reScanTemplateToken(/*isTaggedTemplate*/ true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
                 parseTemplateExpression(/*isTaggedTemplate*/ true)
         );
         if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
@@ -6451,10 +6446,14 @@ namespace Parser {
 
     function parsePrimaryExpression(): PrimaryExpression {
         switch (token()) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                if (scanner.getTokenFlags() & TokenFlags.IsInvalid) {
+                    reScanTemplateToken(/*isTaggedTemplate*/ false);
+                }
+            // falls through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return parseLiteralNode();
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
@@ -6492,7 +6491,7 @@ namespace Parser {
                 }
                 break;
             case SyntaxKind.TemplateHead:
-                return parseTemplateExpression(/* isTaggedTemplate */ false);
+                return parseTemplateExpression(/*isTaggedTemplate*/ false);
             case SyntaxKind.PrivateIdentifier:
                 return parsePrivateIdentifier();
         }
@@ -8476,7 +8475,7 @@ namespace Parser {
 
     export namespace JSDocParser {
         export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
-            initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            initializeState("file.js", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS);
             scanner.setText(content, start, length);
             currentToken = scanner.scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -8510,7 +8509,7 @@ namespace Parser {
             const pos = getNodePos();
             const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
             const p2 = getNodePos();
-            let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
+            let entityName: EntityName | JSDocMemberName = parseEntityName(/*allowReservedWords*/ false);
             while (token() === SyntaxKind.PrivateIdentifier) {
                 reScanHashToken(); // rescan #id as # id
                 nextTokenJSDoc(); // then skip the #
@@ -8526,7 +8525,7 @@ namespace Parser {
         }
 
         export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
-            initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            initializeState("", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS);
             const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
             const sourceFile = { languageVariant: LanguageVariant.Standard, text: content } as SourceFile;

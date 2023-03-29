@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|declare module [|"e"|] {
+//     class Foo { }
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// import {Foo, Bar} from [|'e/*GOTO DEF*/'|];
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"e\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

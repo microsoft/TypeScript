@@ -1119,7 +1119,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             /*reportSummary*/ undefined,
             (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => outputFiles.push({ name, text, writeByteOrderMark, data }),
             cancellationToken,
-            /*emitOnlyDts*/ false,
+            /*emitOnlyDtsFiles*/ false,
             customTransformers || state.host.getCustomTransformers?.(project)
         );
         // Don't emit .d.ts if there are decl file errors

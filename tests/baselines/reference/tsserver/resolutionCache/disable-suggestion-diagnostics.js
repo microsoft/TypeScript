@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a.js]
@@ -153,4 +154,4 @@ Info 19   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a.js","diagnostics":[]}}
 Info 20   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

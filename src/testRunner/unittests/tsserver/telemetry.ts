@@ -5,6 +5,7 @@ import {
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
+    openExternalProjectForSession,
     openFilesForSession,
     toExternalFiles,
 } from "./helpers";
@@ -78,14 +79,11 @@ describe("unittests:: tsserver:: project telemetry", () => {
         baselineTsserverLogs("telemetry", "works with external project", session);
 
         function open(): void {
-            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
-                command: ts.server.protocol.CommandTypes.OpenExternalProject,
-                arguments: {
-                    rootFiles: toExternalFiles([file1.path]),
-                    options: compilerOptions,
-                    projectFileName,
-                }
-            });
+            openExternalProjectForSession({
+                rootFiles: toExternalFiles([file1.path]),
+                options: compilerOptions,
+                projectFileName,
+            }, session);
             openFilesForSession([file1], session); // Only on file open the project will be updated
         }
     });

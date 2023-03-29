@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 
@@ -138,7 +139,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 16   [00:00:25.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -146,4 +147,4 @@ Info 17   [00:00:26.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[{"start":{"line":9,"offset":5},"end":{"line":9,"offset":6},"text":"'x' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 18   [00:00:27.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)

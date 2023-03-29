@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:57.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:58.000] Search path: /user/username/projects/myproject/src
 Info 2    [00:00:59.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -214,7 +215,7 @@ Before running immediate callbacks and checking length (1)
 
 Info 38   [00:01:46.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
@@ -222,7 +223,7 @@ Info 39   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 40   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Before running immediate callbacks and checking length (1)
+After running immediate callbacks and checking length (1)
 
 Info 41   [00:01:49.000] Search path: /dummy
 Info 42   [00:01:50.000] For info: /dummy/dummy.ts :: No config files found.

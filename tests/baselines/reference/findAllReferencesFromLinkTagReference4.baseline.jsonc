@@ -1,86 +1,71 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts ===
 // enum E {
 //     /** {@link /*FIND ALL REFS*/[|B|]} */
 //     A,
-//     [|B|]
+//     [|{| isWriteAccess: true |}B|]
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts",
-      "kind": "enum member",
-      "name": "(enum member) E.B = 1",
-      "textSpan": {
-        "start": 41,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "enum member",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "B",
-          "kind": "enumMemberName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts ===
+  // enum E {
+  //     /** {@link /*FIND ALL REFS*/B} */
+  //     A,
+  //     [|B|]
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.B = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "B",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

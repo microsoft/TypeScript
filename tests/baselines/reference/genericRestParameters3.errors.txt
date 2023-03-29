@@ -6,19 +6,19 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(18,1): error TS2345
     Source has 0 element(s) but target requires 2.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(23,1): error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
   Types of parameters 'y' and 'args' are incompatible.
-    Type '[string] | [number, boolean]' is not assignable to type 'readonly [y: string]'.
-      Type '[number, boolean]' is not assignable to type 'readonly [y: string]'.
+    Type '[string] | [number, boolean]' is not assignable to type '[y: string]'.
+      Type '[number, boolean]' is not assignable to type '[y: string]'.
         Source has 2 element(s) but target allows only 1.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(24,1): error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
   Types of parameters 'y' and 'args' are incompatible.
-    Type '[string] | [number, boolean]' is not assignable to type 'readonly [y: number, z: boolean]'.
-      Type '[string]' is not assignable to type 'readonly [y: number, z: boolean]'.
+    Type '[string] | [number, boolean]' is not assignable to type '[y: number, z: boolean]'.
+      Type '[string]' is not assignable to type '[y: number, z: boolean]'.
         Source has 1 element(s) but target requires 2.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(35,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(36,21): error TS2345: Argument of type 'number' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(37,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
   Types of parameters 'cb' and 'args' are incompatible.
-    Property '0' is missing in type 'CoolArray<any>' but required in type 'readonly [cb: (...args: any[]) => void]'.
+    Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(44,32): error TS2345: Argument of type '[10, 20]' is not assignable to parameter of type 'CoolArray<number>'.
   Property 'hello' is missing in type '[10, 20]' but required in type 'CoolArray<number>'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(49,1): error TS2345: Argument of type '[]' is not assignable to parameter of type 'CoolArray<never>'.
@@ -69,15 +69,15 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
     ~~
 !!! error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
-!!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type 'readonly [y: string]'.
-!!! error TS2322:       Type '[number, boolean]' is not assignable to type 'readonly [y: string]'.
+!!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[y: string]'.
+!!! error TS2322:       Type '[number, boolean]' is not assignable to type '[y: string]'.
 !!! error TS2322:         Source has 2 element(s) but target allows only 1.
     f1 = f3;  // Error
     ~~
 !!! error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
-!!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type 'readonly [y: number, z: boolean]'.
-!!! error TS2322:       Type '[string]' is not assignable to type 'readonly [y: number, z: boolean]'.
+!!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[y: number, z: boolean]'.
+!!! error TS2322:       Type '[string]' is not assignable to type '[y: number, z: boolean]'.
 !!! error TS2322:         Source has 1 element(s) but target requires 2.
     f1 = f4;
     
@@ -100,7 +100,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
                         ~~~
 !!! error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 !!! error TS2345:   Types of parameters 'cb' and 'args' are incompatible.
-!!! error TS2345:     Property '0' is missing in type 'CoolArray<any>' but required in type 'readonly [cb: (...args: any[]) => void]'.
+!!! error TS2345:     Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
     
     function bar<T extends any[]>(...args: T): T {
         return args;
