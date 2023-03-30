@@ -789,6 +789,9 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:40 AM[0m] File change detected. Starting incremental compilation...
@@ -914,6 +917,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -926,6 +931,10 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:03:17 AM[0m] File change detected. Starting incremental compilation...
@@ -1020,6 +1029,10 @@ Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 [[90m12:03:33 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1120,6 +1133,9 @@ Change:: build pkg6,pkg7
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:03:53 AM[0m] Project 'pkg6/tsconfig.json' is out of date because output 'pkg6/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1168,6 +1184,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -1180,6 +1198,10 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:04:04 AM[0m] File change detected. Starting incremental compilation...
@@ -1276,6 +1298,10 @@ Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
 
 Input::
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
 Output::
 [[90m12:04:21 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1379,6 +1405,10 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;
 
 
+Before running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:04:43 AM[0m] File change detected. Starting incremental compilation...
@@ -1495,6 +1525,9 @@ Change:: build pkg6,pkg7
 
 Input::
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:05:11 AM[0m] Project 'pkg6/tsconfig.json' is out of date because output 'pkg6/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1543,6 +1576,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

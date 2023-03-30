@@ -47,7 +47,8 @@ Info 16   [00:00:38.000] DirectoryWatcher:: Triggered with /users/username/proje
 Info 17   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info 18   [00:00:42.000] DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info 19   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 //// [/users/username/projects/project/a.ts] file changed its modified time
 
 PolledWatches::

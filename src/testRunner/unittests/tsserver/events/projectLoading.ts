@@ -54,7 +54,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 openFilesForSession([aTs], session);
 
                 host.writeFile(configA.path, configA.content);
-                host.checkTimeoutQueueLengthAndRun(2);
+                host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("events/projectLoading", `change is detected in the config file ${sessionType}`, session);
             });
 
@@ -74,7 +74,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 openFilesForSession([bTs], session);
 
                 host.writeFile(configA.path, configA.content);
-                host.checkTimeoutQueueLengthAndRun(2);
+                host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("events/projectLoading", `change is detected in an extended config file ${sessionType}`, session);
             });
 

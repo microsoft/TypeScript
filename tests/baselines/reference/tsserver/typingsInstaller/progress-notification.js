@@ -127,7 +127,9 @@ Info 12   [00:01:20.000] Scheduled: /dev/null/inferredProject1*
 Info 13   [00:01:21.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:22.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/commander@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 14   [00:01:23.000] Running: /dev/null/inferredProject1*
 Info 15   [00:01:24.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -173,4 +175,4 @@ Info 23   [00:01:51.000] -----------------------------------------------
 Info 23   [00:01:52.000] Open files: 
 Info 23   [00:01:53.000] 	FileName: /a/app.js ProjectRootPath: undefined
 Info 23   [00:01:54.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

@@ -112,11 +112,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         // Add a tsconfig file
         host.writeFile(configFile.path, configFile.content);
-        host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
+        host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
 
         // remove the tsconfig file
         host.deleteFile(configFile.path);
-        host.checkTimeoutQueueLengthAndRun(1); // Refresh inferred projects
+        host.runQueuedTimeoutCallbacks(); // Refresh inferred projects
 
         baselineTsserverLogs("configuredProjects", "add and then remove a config file in a folder with loose files", projectService);
     });
@@ -132,7 +132,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         // add a new ts file
         host.writeFile(commonFile2.path, commonFile2.content);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("configuredProjects", "add new files to a configured project without file list", projectService);
     });
 
@@ -165,11 +165,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         // delete commonFile2
         host.deleteFile(commonFile2.path);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         // re-add commonFile2
         host.writeFile(commonFile2.path, commonFile2.content);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("configuredProjects", "handle recreated files correctly", projectService);
     });
 
@@ -234,7 +234,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
                 },
                 "files": ["${file1.path}"]
             }`);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         // will not remove project 1
         logInferredProjectsOrphanStatus(projectService);
@@ -371,7 +371,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         projectService.openClientFile(file3.path);
 
         host.writeFile(configFile.path, configFile.content);
-        host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
+        host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
         logInferredProjectsOrphanStatus(projectService);
         baselineTsserverLogs("configuredProjects", "open file become a part of configured project if it is referenced from root file", projectService);
     });
@@ -397,7 +397,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.writeFile(file2.path, file2.content);
 
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file on disk)", projectService);
     });
@@ -423,7 +423,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.writeFile(configFile.path, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
 
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file in list of files)", projectService);
     });
 
@@ -697,7 +697,7 @@ declare var console: {
         const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([fooIndex, barIndex], session);
-        verifyGetErrRequest({ session, host, files: [barIndex, fooIndex] });
+        verifyGetErrRequest({ session, files: [barIndex, fooIndex] });
         baselineTsserverLogs("configuredProjects", "when multiple projects are open detects correct default project", session);
     });
 
@@ -780,11 +780,10 @@ declare var console: {
             }
             verifyGetErrRequest({
                 session,
-                host,
                 files: errorOnNewFileBeforeOldFile ?
                     [fooBar, foo] :
                     [foo, fooBar],
-                existingTimeouts: withExclude ? 0 : 2
+                existingTimeouts: !withExclude
             });
             baselineTsserverLogs("configuredProjects", `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`, session);
         }
@@ -929,7 +928,7 @@ foo();`
                     strict: true
                 }
             }));
-            host.checkTimeoutQueueLengthAndRun(3);
+            host.runQueuedTimeoutCallbacks();
 
             host.writeFile(bravoExtendedConfig.path, JSON.stringify({
                 extends: "./alpha.tsconfig.json",
@@ -937,15 +936,15 @@ foo();`
                     strict: false
                 }
             }));
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             host.writeFile(bConfig.path, JSON.stringify({
                 extends: "../extended/alpha.tsconfig.json",
             }));
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             host.writeFile(alphaExtendedConfig.path, "{}");
-            host.checkTimeoutQueueLengthAndRun(3);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("configuredProjects", "should watch the extended configs of multiple projects", projectService);
         });
 

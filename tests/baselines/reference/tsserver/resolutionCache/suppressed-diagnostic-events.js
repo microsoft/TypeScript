@@ -46,7 +46,8 @@ PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 
 Before request
 
@@ -70,7 +71,8 @@ Info 13   [00:00:24.000] response:
     }
 After request
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 
 Before request
 
@@ -92,4 +94,5 @@ Info 16   [00:00:27.000] response:
     }
 After request
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0

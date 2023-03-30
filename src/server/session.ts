@@ -329,8 +329,8 @@ export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger
  * Allows to schedule next step in multistep operation
  */
 interface NextStep {
-    immediate(action: () => void): void;
-    delay(ms: number, action: () => void): void;
+    immediate(actionType: string, action: () => void): void;
+    delay(actionType: string, ms: number, action: () => void): void;
 }
 
 /**
@@ -371,22 +371,22 @@ class MultistepOperation implements NextStep {
         this.setImmediateId(undefined);
     }
 
-    public immediate(action: () => void) {
+    public immediate(actionType: string, action: () => void) {
         const requestId = this.requestId!;
         Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id");
         this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
             this.immediateId = undefined;
             this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
-        }));
+        }, actionType));
     }
 
-    public delay(ms: number, action: () => void) {
+    public delay(actionType: string, ms: number, action: () => void) {
         const requestId = this.requestId!;
         Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id");
         this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
             this.timerHandle = undefined;
             this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
-        }, ms));
+        }, ms, actionType));
     }
 
     private executeAction(action: (next: NextStep) => void) {
@@ -1271,7 +1271,7 @@ export class Session<TMessage = string> implements EventSender {
         const goNext = () => {
             index++;
             if (checkList.length > index) {
-                next.delay(followMs, checkOne);
+                next.delay("checkOne", followMs, checkOne);
             }
         };
         const checkOne = () => {
@@ -1308,7 +1308,7 @@ export class Session<TMessage = string> implements EventSender {
                 goNext();
                 return;
             }
-            next.immediate(() => {
+            next.immediate("semanticCheck", () => {
                 this.semanticCheck(fileName, project);
                 if (this.changeSeq !== seq) {
                     return;
@@ -1318,7 +1318,7 @@ export class Session<TMessage = string> implements EventSender {
                     goNext();
                     return;
                 }
-                next.immediate(() => {
+                next.immediate("suggestionCheck", () => {
                     this.suggestionCheck(fileName, project);
                     goNext();
                 });
@@ -1326,7 +1326,7 @@ export class Session<TMessage = string> implements EventSender {
         };
 
         if (checkList.length > index && this.changeSeq === seq) {
-            next.delay(ms, checkOne);
+            next.delay("checkOne", ms, checkOne);
         }
     }
 

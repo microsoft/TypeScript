@@ -64,6 +64,9 @@ Input::
 //
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
 Scheduling update

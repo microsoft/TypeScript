@@ -147,7 +147,9 @@ Info 41   [00:01:51.000] For info: /a/b/src/file2.ts :: Config file name: /a/b/t
 Info 42   [00:01:52.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 43   [00:01:53.000] Scheduled: *ensureProjectForOpenFiles*
 Info 44   [00:01:54.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+2: /a/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {}
 
@@ -251,7 +253,7 @@ Info 64   [00:02:46.000] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info 64   [00:02:47.000] 		Projects: /a/b/tsconfig.json
 Info 64   [00:02:48.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 64   [00:02:49.000] 		Projects: /dev/null/inferredProject2*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

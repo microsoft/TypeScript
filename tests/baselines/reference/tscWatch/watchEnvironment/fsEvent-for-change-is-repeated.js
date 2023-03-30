@@ -73,6 +73,9 @@ Input::
 let a: string = "Hello World"
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
@@ -112,6 +115,9 @@ Change:: receive another change event without modifying the file
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
@@ -129,6 +135,9 @@ Input::
 
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
@@ -166,6 +175,9 @@ Change:: receive another change event without modifying the file
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update

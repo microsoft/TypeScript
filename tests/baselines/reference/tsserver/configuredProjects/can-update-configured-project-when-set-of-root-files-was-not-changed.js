@@ -53,7 +53,9 @@ Info 15   [00:00:37.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: Wat
 Info 16   [00:00:38.000] Scheduled: /a/b/tsconfig.json
 Info 17   [00:00:39.000] Scheduled: *ensureProjectForOpenFiles*
 Info 18   [00:00:40.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {"compilerOptions":{"outFile":"out.js"},"files":["f1.ts","f2.ts"]}
 
@@ -107,4 +109,4 @@ Info 30   [00:01:00.000] -----------------------------------------------
 Info 30   [00:01:01.000] Open files: 
 Info 30   [00:01:02.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 30   [00:01:03.000] 		Projects: /a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0

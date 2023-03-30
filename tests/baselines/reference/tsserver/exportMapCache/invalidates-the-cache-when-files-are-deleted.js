@@ -274,7 +274,9 @@ Info 52   [00:01:49.000] DirectoryWatcher:: Triggered with a.ts :: WatchInfo:  1
 Info 53   [00:01:50.000] Scheduled: /tsconfig.json, Cancelled earlier one
 Info 54   [00:01:51.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 55   [00:01:52.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a.ts :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+3: /tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/a.ts] deleted
 
 PolledWatches::
@@ -344,4 +346,4 @@ Info 68   [00:02:19.000] -----------------------------------------------
 Info 68   [00:02:20.000] Open files: 
 Info 68   [00:02:21.000] 	FileName: /b.ts ProjectRootPath: undefined
 Info 68   [00:02:22.000] 		Projects: /tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0

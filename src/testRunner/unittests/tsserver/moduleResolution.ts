@@ -49,7 +49,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             openFilesForSession([fileA], session);
             return {
                 host, session, packageFile,
-                verifyErr: () => verifyGetErrRequest({ files: [fileA], session, host }),
+                verifyErr: () => verifyGetErrRequest({ files: [fileA], session }),
             };
         }
         it("package json file is edited", () => {

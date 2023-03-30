@@ -179,7 +179,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 //// [/user/username/projects/myproject/node_modules/module1/index.d.ts]
 export function foo(): string;
 
@@ -275,7 +276,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 //// [/user/username/projects/myproject/file2.ts]
 export function bar(){}
             bar();
@@ -349,7 +351,8 @@ Info 76   [00:02:18.000] response:
     }
 After request
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 //// [/user/username/projects/myproject/file2.ts] deleted
 
 Before request

@@ -59,7 +59,9 @@ Info 17   [00:00:47.000] FileWatcher:: Close:: WatchInfo: /a/b/f2.ts 500 undefin
 Info 18   [00:00:48.000] Scheduled: /dev/null/inferredProject1*
 Info 19   [00:00:49.000] Scheduled: *ensureProjectForOpenFiles*
 Info 20   [00:00:50.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/f2.ts 2:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 //// [/a/b/f2.ts] deleted
 
 PolledWatches::
@@ -123,7 +125,7 @@ Info 42   [00:01:27.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 42   [00:01:28.000] 		Projects: /dev/null/inferredProject1*
 Info 42   [00:01:29.000] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
 Info 42   [00:01:30.000] 		Projects: /dev/null/inferredProject2*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

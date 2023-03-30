@@ -739,11 +739,11 @@ After request
 
 Info 55   [00:01:58.000] FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info 56   [00:01:59.000] Elapsed:: *ms FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 //// [/package.json]
 {}
 
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 57   [00:02:00.000] moduleSpecifierCache count: 0

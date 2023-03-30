@@ -84,6 +84,10 @@ Change:: Delete config file
 Input::
 //// [/a/b/tsconfig.json] deleted
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 1
+1: timerToUpdateProgram
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
 

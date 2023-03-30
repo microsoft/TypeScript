@@ -263,6 +263,10 @@ FsWatchesRecursive::
 /user/username/projects/sample1/core:
   {}
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 sysLog:: /user/username/projects/sample1/logic/tsconfig.json:: Changing watcher to PresentFileSystemEntryWatcher
 
@@ -426,6 +430,9 @@ Change:: Build Tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 

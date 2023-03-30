@@ -741,7 +741,9 @@ Info 55   [00:01:58.000] FileWatcher:: Triggered with /tsconfig.json 1:: WatchIn
 Info 56   [00:01:59.000] Scheduled: /tsconfig.json
 Info 57   [00:02:00.000] Scheduled: *ensureProjectForOpenFiles*
 Info 58   [00:02:01.000] Elapsed:: *ms FileWatcher:: Triggered with /tsconfig.json 1:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/tsconfig.json]
 { "compilerOptions": { "moduleResolution": "classic" }, "include": ["src"] }
 
@@ -809,6 +811,6 @@ Info 73   [00:02:38.000] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info 73   [00:02:39.000] 		Projects: /tsconfig.json
 Info 73   [00:02:40.000] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info 73   [00:02:41.000] 		Projects: /tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 73   [00:02:42.000] moduleSpecifierCache count: 0

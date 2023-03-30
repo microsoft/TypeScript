@@ -145,6 +145,9 @@ Input::
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
@@ -180,6 +183,9 @@ Input::
 export function fooBar() { }
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
@@ -275,6 +281,9 @@ Change:: reports error when there is no change to tsconfig file
 Input::
 //// [/user/username/projects/myproject/tsconfig.json] file written with same contents
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
@@ -310,6 +319,9 @@ Input::
 {"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...

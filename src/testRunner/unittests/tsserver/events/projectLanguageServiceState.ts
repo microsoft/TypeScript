@@ -40,7 +40,7 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
 
         host.writeFile(configWithExclude.path, configWithExclude.content);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
         baselineTsserverLogs("events/projectLanguageServiceState", "language service disabled events are triggered", session);
     });

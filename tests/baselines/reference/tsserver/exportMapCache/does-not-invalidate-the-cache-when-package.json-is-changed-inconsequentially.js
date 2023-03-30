@@ -255,12 +255,12 @@ After request
 
 Info 46   [00:01:36.000] FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info 47   [00:01:37.000] Elapsed:: *ms FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 //// [/package.json]
 { "name": "blah", "dependencies": { "mobx": "*" } }
 
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 48   [00:01:38.000] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info 49   [00:01:39.000] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*

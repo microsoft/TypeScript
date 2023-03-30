@@ -153,7 +153,9 @@ Info 16   [00:01:26.000] Scheduled: /a/b/tsconfig.json
 Info 17   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:28.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/a/b/tsconfig.json","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 
 Info 18   [00:01:29.000] Running: /a/b/tsconfig.json
 Info 19   [00:01:30.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -199,4 +201,4 @@ Info 27   [00:01:57.000] -----------------------------------------------
 Info 27   [00:01:58.000] Open files: 
 Info 27   [00:01:59.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 27   [00:02:00.000] 		Projects: /a/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

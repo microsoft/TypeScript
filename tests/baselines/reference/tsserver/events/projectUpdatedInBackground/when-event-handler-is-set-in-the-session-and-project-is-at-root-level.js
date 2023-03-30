@@ -111,7 +111,9 @@ Info 23   [00:00:51.000] FileWatcher:: Triggered with /a/b/project/file3.ts 1:: 
 Info 24   [00:00:52.000] Scheduled: /a/b/project/tsconfig.json
 Info 25   [00:00:53.000] Scheduled: *ensureProjectForOpenFiles*
 Info 26   [00:00:54.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/b/project/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/project/file3.ts]
 export class c { }export class d {}
 
@@ -145,15 +147,15 @@ Info 36   [00:01:14.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undef
 Info 36   [00:01:15.000] 		Projects: /a/b/project/tsconfig.json
 Info 36   [00:01:16.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/project/file1.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 //// [/a/b/node_modules/file2.d.ts]
 export class a { }
 
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 
-After running timeout callbacks
+After running Timeout callback:: count: 0

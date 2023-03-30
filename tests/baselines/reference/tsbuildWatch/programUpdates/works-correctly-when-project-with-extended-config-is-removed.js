@@ -270,6 +270,9 @@ Input::
 {"references":[{"path":"./project1.tsconfig.json"}],"files":[]}
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...

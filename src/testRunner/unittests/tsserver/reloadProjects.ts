@@ -43,14 +43,14 @@ describe("unittests:: tsserver:: reloadProjects", () => {
         const updatedText = `${file2.content}
             bar();`;
         host.writeFile(file2.path, updatedText);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects
         });
 
         // delete file
         host.deleteFile(file2.path);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects
         });
@@ -67,7 +67,7 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects
@@ -94,7 +94,7 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects
@@ -120,7 +120,7 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects
@@ -146,7 +146,7 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects

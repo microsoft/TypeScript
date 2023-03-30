@@ -114,7 +114,8 @@ TI:: [00:01:27.000] #1 with arguments'["@types/commander@tsFakeMajor.Minor"]'.
 TI:: [00:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/package.json 1:: WatchInfo: /a/b/package.json 2000 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
 Info 12   [00:01:29.000] FileWatcher:: Triggered with /a/b/package.json 1:: WatchInfo: /a/b/package.json 250 undefined WatchType: package.json file
 Info 13   [00:01:30.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/package.json 1:: WatchInfo: /a/b/package.json 250 undefined WatchType: package.json file
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 //// [/a/b/package.json]
 { "dependencies": { "commander": "0.0.2" } }
 
@@ -149,7 +150,9 @@ Info 14   [00:01:41.000] Scheduled: /dev/null/inferredProject1*
 Info 15   [00:01:42.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:43.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/commander@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 16   [00:01:44.000] Running: /dev/null/inferredProject1*
 Info 17   [00:01:45.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -195,4 +198,4 @@ Info 25   [00:02:12.000] -----------------------------------------------
 Info 25   [00:02:13.000] Open files: 
 Info 25   [00:02:14.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 25   [00:02:15.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

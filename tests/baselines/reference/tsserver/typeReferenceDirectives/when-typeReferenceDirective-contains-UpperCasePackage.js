@@ -142,7 +142,9 @@ Info 24   [00:01:10.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 25   [00:01:11.000] Scheduled: /user/username/projects/myproject/test/tsconfig.json
 Info 26   [00:01:12.000] Scheduled: *ensureProjectForOpenFiles*
 Info 27   [00:01:13.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/lib/@app/lib/index.d.ts 1:: WatchInfo: /user/username/projects/myproject/lib/@app/lib/index.d.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/test/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/lib/@app/lib/index.d.ts]
 /// <reference types="UpperCasePackage" />
 declare class TestLib {
@@ -180,4 +182,4 @@ Info 37   [00:01:31.000] -----------------------------------------------
 Info 37   [00:01:32.000] Open files: 
 Info 37   [00:01:33.000] 	FileName: /user/username/projects/myproject/test/test.ts ProjectRootPath: undefined
 Info 37   [00:01:34.000] 		Projects: /user/username/projects/myproject/test/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

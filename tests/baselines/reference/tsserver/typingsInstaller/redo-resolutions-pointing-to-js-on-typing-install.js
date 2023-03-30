@@ -166,7 +166,9 @@ Info 23   [00:01:38.000] Scheduled: /dev/null/inferredProject1*
 Info 24   [00:01:39.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:40.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/commander@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 25   [00:01:41.000] Running: /dev/null/inferredProject1*
 Info 26   [00:01:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -199,7 +201,9 @@ TI:: [00:01:57.000] Sending response:
 Info 33   [00:01:58.000] Scheduled: /dev/null/inferredProject1*
 Info 34   [00:01:59.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [00:02:00.000] No new typings were requested as a result of typings discovery
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 2
+3: /dev/null/inferredProject1*
+4: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /user/username/projects/a/b/tsconfig.json:

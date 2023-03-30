@@ -70,7 +70,10 @@ Info 33   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/no
 Info 34   [00:01:00.000] DirectoryWatcher:: Triggered with /a/b/node_modules/@types/lib1/index.d.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 35   [00:01:01.000] Project: /a/b/tsconfig.json Detected excluded file: /a/b/node_modules/@types/lib1/index.d.ts
 Info 36   [00:01:02.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/node_modules/@types/lib1/index.d.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+4: /a/b/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: /a/b/tsconfig.jsonFailedLookupInvalidation
 //// [/a/b/node_modules/@types/lib1/index.d.ts] deleted
 
 PolledWatches::
@@ -118,7 +121,7 @@ Info 46   [00:01:20.000] -----------------------------------------------
 Info 46   [00:01:21.000] Open files: 
 Info 46   [00:01:22.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 46   [00:01:23.000] 		Projects: /a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 46   [00:01:27.000] DirectoryWatcher:: Triggered with /a/b/node_modules/@types/lib2 :: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
 Info 47   [00:01:28.000] Scheduled: /a/b/tsconfig.json
@@ -142,7 +145,10 @@ Info 64   [00:01:47.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/no
 Info 65   [00:01:48.000] DirectoryWatcher:: Triggered with /a/b/node_modules/@types/lib2/index.d.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 66   [00:01:49.000] Project: /a/b/tsconfig.json Detected excluded file: /a/b/node_modules/@types/lib2/index.d.ts
 Info 67   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/node_modules/@types/lib2/index.d.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+11: /a/b/tsconfig.json
+12: *ensureProjectForOpenFiles*
+14: /a/b/tsconfig.jsonFailedLookupInvalidation
 //// [/a/b/node_modules/@types/lib2/index.d.ts]
 export let b: number
 
@@ -181,4 +187,4 @@ Info 79   [00:02:10.000] -----------------------------------------------
 Info 79   [00:02:11.000] Open files: 
 Info 79   [00:02:12.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 79   [00:02:13.000] 		Projects: /a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0

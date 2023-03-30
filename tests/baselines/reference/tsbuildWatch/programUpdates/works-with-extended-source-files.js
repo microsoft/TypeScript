@@ -308,6 +308,10 @@ Input::
 {"compilerOptions":{"strict":true}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
@@ -419,6 +423,9 @@ Change:: Build project 2
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:28 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
@@ -509,6 +516,9 @@ Input::
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
@@ -601,6 +611,9 @@ Input::
 {"extends":"./alpha.tsconfig.json"}
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
@@ -690,6 +703,10 @@ Input::
 {}
 
 
+Before running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
@@ -798,6 +815,9 @@ Change:: Build project 2
 
 Input::
 
+Before running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:38 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
 
@@ -846,6 +866,9 @@ Input::
 {"compilerOptions":{"strictNullChecks":true}}
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:57 AM[0m] File change detected. Starting incremental compilation...
@@ -884,6 +907,9 @@ Input::
 {"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
 
 
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:03:06 AM[0m] File change detected. Starting incremental compilation...
@@ -950,6 +976,9 @@ Change:: Delete extendedConfigFile2 and report error
 Input::
 //// [/a/b/extendsConfig2.tsconfig.json] deleted
 
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:03:13 AM[0m] File change detected. Starting incremental compilation...

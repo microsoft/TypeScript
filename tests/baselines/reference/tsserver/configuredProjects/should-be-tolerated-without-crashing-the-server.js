@@ -60,7 +60,7 @@ Info 27   [00:00:43.000] -----------------------------------------------
 Info 27   [00:00:44.000] Open files: 
 Info 27   [00:00:45.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 27   [00:00:46.000] 		Projects: /dev/null/inferredProject1*
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/app: *new*
@@ -78,4 +78,4 @@ FsWatches::
 /a/b/tsconfig.json: *new*
   {}
 
-After running timeout callbacks
+After running Timeout callback:: count: 0

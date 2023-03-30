@@ -526,6 +526,10 @@ Input::
 export const newFileConst = 30;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
@@ -672,6 +676,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -717,6 +724,10 @@ export const newFileConst = 30;
 export class someClass2 { }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
@@ -847,6 +858,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:05 AM[0m] Found 0 errors. Watching for file changes.
 

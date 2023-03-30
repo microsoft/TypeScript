@@ -384,6 +384,7 @@ export function toExternalFiles(fileNames: string[]) {
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     patched: boolean;
     baselineHost(title: string): void;
+    logTimeoutQueueLength(): void;
 };
 function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
@@ -391,50 +392,47 @@ function patchHostTimeouts(
 ) {
     const host = inputHost as TestSessionAndServiceHost;
     if (host.patched) return host;
-    const originalCheckTimeoutQueueLength = host.checkTimeoutQueueLength;
+    host.patched = true;
+    if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
+        host.logTimeoutQueueLength = ts.notImplemented;
+        host.baselineHost = ts.notImplemented;
+        return host;
+    }
+
     const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
     const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
     let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
-    host.checkTimeoutQueueLengthAndRun = checkTimeoutQueueLengthAndRun;
-    host.checkTimeoutQueueLength = checkTimeoutQueueLength;
     host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
     host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
+    host.logTimeoutQueueLength = logTimeoutQueueLength;
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
 
-    function checkTimeoutQueueLengthAndRun(expected: number) {
-        host.baselineHost(`Before checking timeout queue length (${expected}) and running`);
-        originalCheckTimeoutQueueLength.call(host, expected);
-        originalRunQueuedTimeoutCallbacks.call(host);
-        host.baselineHost(`After checking timeout queue length (${expected}) and running`);
-    }
-
-    function checkTimeoutQueueLength(expected: number) {
-        host.baselineHost(`Checking timeout queue length: ${expected}`);
-        originalCheckTimeoutQueueLength.call(host, expected);
+    function logTimeoutQueueLength() {
+        logger.log(host.timeoutCallbacks.log());
+        host.baselineHost(host.immediateCallbacks.log());
     }
 
     function runQueuedTimeoutCallbacks(timeoutId?: number) {
-        host.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+        host.baselineHost(`Before running ${host.timeoutCallbacks.log()}`);
+        if (timeoutId !== undefined) logger.log(`Invoking ${host.timeoutCallbacks.callbackType} callback:: timeoutId:: ${timeoutId}:: ${host.timeoutCallbacks.map[timeoutId].args[0]}`);
         originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
-        host.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+        host.baselineHost(`After running ${host.timeoutCallbacks.log()}`);
     }
 
-    function runQueuedImmediateCallbacks(checkCount?: number) {
-        host.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
-        originalRunQueuedImmediateCallbacks.call(host, checkCount);
-        host.baselineHost(`After running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+    function runQueuedImmediateCallbacks() {
+        host.baselineHost(`Before running ${host.immediateCallbacks.log()}`);
+        originalRunQueuedImmediateCallbacks.call(host);
+        host.baselineHost(`After running ${host.immediateCallbacks.log()}`);
     }
 
     function baselineHost(title: string) {
-        if (!logger.hasLevel(ts.server.LogLevel.verbose)) return;
         logger.log(title);
-        const logs = logger.logs || [];
-        host.diff(logs, hostDiff);
-        host.serializeWatches(logs);
-        if (!logger.logs) logs.forEach(log => logger.log(log));
+        ts.Debug.assertIsDefined(logger.logs);
+        host.diff(logger.logs, hostDiff);
+        host.serializeWatches(logger.logs);
         hostDiff = host.snap();
         host.writtenFiles.clear();
     }
@@ -574,7 +572,7 @@ export class TestProjectService extends ts.server.ProjectService {
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this.logger
         );
-        this.testhost.baselineHost("Creating project service");
+        if (logger.hasLevel(ts.server.LogLevel.verbose)) this.testhost.baselineHost("Creating project service");
     }
 }
 
@@ -739,8 +737,7 @@ export function logDiagnostics(sessionOrService: TestSession | TestProjectServic
 }
 export interface VerifyGetErrRequestBase {
     session: TestSession;
-    host: TestServerHost;
-    existingTimeouts?: number;
+    existingTimeouts?: boolean;
 }
 export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
     files: readonly (string | File)[];
@@ -760,18 +757,12 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
     skip?: readonly (SkipErrors | undefined)[];
 }
-function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckAllErrors) {
+function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
     ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
-        if (existingTimeouts !== undefined) {
-            host.checkTimeoutQueueLength(existingTimeouts + 1);
-            host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
-        }
-        else {
-            host.checkTimeoutQueueLengthAndRun(1);
-        }
-        if (!skip?.[i]?.semantic) host.runQueuedImmediateCallbacks(1);
-        if (!skip?.[i]?.suggestion) host.runQueuedImmediateCallbacks(1);
+        session.testhost.runQueuedTimeoutCallbacks(existingTimeouts ? session.testhost.getNextTimeoutId() - 1 : undefined);
+        if (!skip?.[i]?.semantic) session.testhost.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.suggestion) session.testhost.runQueuedImmediateCallbacks();
     }
 }
 
@@ -785,7 +776,7 @@ function verifyErrorsUsingGeterr({scenario, subScenario, allFiles, openFiles, ge
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession(openFiles(), session);
 
-        verifyGetErrRequest({ session, host, files: getErrRequest() });
+        verifyGetErrRequest({ session, files: getErrRequest() });
         baselineTsserverLogs(scenario, `${subScenario} getErr`, session);
     });
 }
@@ -801,7 +792,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
                 command: ts.server.protocol.CommandTypes.GeterrForProject,
                 arguments: { delay: 0, file: filePath(expected.project) }
             });
-            checkAllErrors({ session, host, files: expected.files });
+            checkAllErrors({ session, files: expected.files });
         }
         baselineTsserverLogs(scenario, `${subScenario} geterrForProject`, session);
     });

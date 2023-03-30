@@ -47,7 +47,9 @@ Info 16   [00:00:35.000] DirectoryWatcher:: Triggered with /a/b/f2.ts :: WatchIn
 Info 17   [00:00:36.000] Scheduled: /a/b/tsconfig.json
 Info 18   [00:00:37.000] Scheduled: *ensureProjectForOpenFiles*
 Info 19   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/f2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/f2.ts]
 let y = 1
 
@@ -99,7 +101,7 @@ Info 30   [00:00:57.000] -----------------------------------------------
 Info 30   [00:00:58.000] Open files: 
 Info 30   [00:00:59.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 30   [00:01:00.000] 		Projects: /a/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

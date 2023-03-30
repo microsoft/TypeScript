@@ -530,6 +530,10 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
@@ -652,6 +656,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -887,6 +894,10 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:02:11 AM[0m] File change detected. Starting incremental compilation...
@@ -1001,6 +1012,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:51 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -1238,6 +1252,10 @@ export class someClass { }
 export class someClass2 { }
 
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:02:58 AM[0m] File change detected. Starting incremental compilation...
@@ -1368,6 +1386,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:03:39 AM[0m] Found 0 errors. Watching for file changes.
 

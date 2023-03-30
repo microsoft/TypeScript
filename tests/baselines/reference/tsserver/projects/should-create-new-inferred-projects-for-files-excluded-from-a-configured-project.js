@@ -83,7 +83,9 @@ Info 17   [00:00:39.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: Wat
 Info 18   [00:00:40.000] Scheduled: /a/b/tsconfig.json
 Info 19   [00:00:41.000] Scheduled: *ensureProjectForOpenFiles*
 Info 20   [00:00:42.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {
                 "compilerOptions": {},
@@ -129,7 +131,7 @@ Info 32   [00:01:02.000] -----------------------------------------------
 Info 32   [00:01:03.000] Open files: 
 Info 32   [00:01:04.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 32   [00:01:05.000] 		Projects: /a/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Before request
 

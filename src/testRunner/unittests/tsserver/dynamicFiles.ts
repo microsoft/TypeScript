@@ -81,7 +81,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             content: "const x = 10;"
         };
         host.writeFile(untitled.path, untitled.content);
-        host.checkTimeoutQueueLength(0);
+        service.testhost.logTimeoutQueueLength();
         service.openClientFile(untitled.path, untitled.content, /*scriptKind*/ undefined, "/user/username/projects/myproject");
 
         service.closeClientFile(untitledFile);

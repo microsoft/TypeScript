@@ -243,8 +243,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             appendAllScriptInfos(session);
 
             // Since this is not js project so no typings are queued
-            host.checkTimeoutQueueLength(0);
-            verifyGetErrRequest({ session, host, files: [untitledFile] });
+            verifyGetErrRequest({ session, files: [untitledFile] });
             baselineTsserverLogs("projectErrors", `when opening new file that doesnt exist on disk yet ${useProjectRoot ? "with projectRoot" : "without projectRoot"}`, session);
         }
 
@@ -278,12 +277,12 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path, }
         });
-        verifyGetErrRequest({ session, host, files: [app] });
+        verifyGetErrRequest({ session, files: [app] });
 
         host.renameFolder(`${projectDir}/foo`, `${projectDir}/foo2`);
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
-        verifyGetErrRequest({ session, host, files: [app] });
+        verifyGetErrRequest({ session, files: [app] });
         baselineTsserverLogs("projectErrors", `folder rename updates project structure and reports no errors`, session);
     });
 
@@ -302,7 +301,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             }
         });
 
-        host.checkTimeoutQueueLengthAndRun(1);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("projectErrors", "getting errors before opening file", session);
     });
 
@@ -324,10 +323,10 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([{ file: app, projectRootPath: "/user/username/projects/myproject" }], session);
         openFilesForSession([{ file: backendTest, projectRootPath: "/user/username/projects/myproject" }], session);
-        verifyGetErrRequest({ session, host, files: [backendTest.path, app.path] });
+        verifyGetErrRequest({ session, files: [backendTest.path, app.path] });
         closeFilesForSession([backendTest], session);
         openFilesForSession([{ file: serverUtilities.path, projectRootPath: "/user/username/projects/myproject" }], session);
-        verifyGetErrRequest({ session, host, files: [serverUtilities.path, app.path] });
+        verifyGetErrRequest({ session, files: [serverUtilities.path, app.path] });
         baselineTsserverLogs("projectErrors", `reports errors correctly when file referenced by inferred project root, is opened right after closing the root file`, session);
     });
 
@@ -362,7 +361,7 @@ declare module '@custom/plugin' {
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aFile], session);
 
-        checkErrors();
+        verifyGetErrRequest({ session, files: [aFile] });
 
         session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
             command: ts.server.protocol.CommandTypes.Change,
@@ -375,13 +374,8 @@ declare module '@custom/plugin' {
                 insertString: "o"
             }
         });
-        checkErrors();
+        verifyGetErrRequest({ session, files: [aFile] });
         baselineTsserverLogs("projectErrors", `correct errors when resolution resolves to file that has same ambient module and is also module`, session);
-
-        function checkErrors() {
-            host.checkTimeoutQueueLength(0);
-            verifyGetErrRequest({ session, host, files: [aFile] });
-        }
     });
 
     describe("when semantic error returns includes global error", () => {
@@ -728,18 +722,18 @@ console.log(blabla);`
     }
 
     it("should not report incorrect error when json is root file found by tsconfig", () => {
-        const { host, session, test } = createSessionForTest({
+        const { session, test } = createSessionForTest({
             include: ["./src/*.ts", "./src/*.json"]
         });
-        verifyGetErrRequest({ session, host, files: [test] });
+        verifyGetErrRequest({ session, files: [test] });
         baselineTsserverLogs("projectErrors", `should not report incorrect error when json is root file found by tsconfig`, session);
     });
 
     it("should report error when json is not root file found by tsconfig", () => {
-        const { host, session, test } = createSessionForTest({
+        const { session, test } = createSessionForTest({
             include: ["./src/*.ts"]
         });
-        verifyGetErrRequest({ session, host, files: [test] });
+        verifyGetErrRequest({ session, files: [test] });
         baselineTsserverLogs("projectErrors", `should report error when json is not root file found by tsconfig`, session);
     });
 });
@@ -763,7 +757,7 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         const host = createServerHost(projectFiles);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([{ file: main, projectRootPath: "/user/username/projects/myproject" }], session);
-        verifyGetErrRequest({ session, host, files: [main] });
+        verifyGetErrRequest({ session, files: [main] });
 
         let npmInstallComplete = false;
 
@@ -775,7 +769,7 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
             { path: `/user/username/projects/myproject/node_modules/.staging/@babel/helper-plugin-utils-a06c629f` },
             { path: `/user/username/projects/myproject/node_modules/.staging/core-js-db53158d` },
         ];
-        verifyWhileNpmInstall(3);
+        verifyWhileNpmInstall();
 
         filesAndFoldersToAdd = [
             { path: `/user/username/projects/myproject/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
@@ -783,34 +777,32 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
             { path: `/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
         ];
         // Since we added/removed in .staging no timeout
-        verifyWhileNpmInstall(0);
+        verifyWhileNpmInstall();
 
         filesAndFoldersToAdd = [];
         host.ensureFileOrFolder(moduleFile, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true, /*ignoreParentWatch*/ true);
         // Since we added/removed in .staging no timeout
-        verifyWhileNpmInstall(0);
+        verifyWhileNpmInstall();
 
         // Remove staging folder to remove errors
         host.deleteFolder(`/user/username/projects/myproject/node_modules/.staging`, /*recursive*/ true);
         npmInstallComplete = true;
         projectFiles.push(moduleFile);
         // Additional watch for watching script infos from node_modules
-        verifyWhileNpmInstall(3);
+        verifyWhileNpmInstall();
 
         baselineTsserverLogs("projectErrors", `npm install when timeout occurs ${timeoutDuringPartialInstallation ? "inbetween" : "after"} installation`, session);
 
-        function verifyWhileNpmInstall(timeouts: number) {
+        function verifyWhileNpmInstall() {
             filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
             if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                host.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
-                if (timeouts) {
-                    host.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
-                }
+                host.runQueuedTimeoutCallbacks(); // Invalidation of failed lookups
+                host.runQueuedTimeoutCallbacks(); // Actual update
             }
             else {
-                host.checkTimeoutQueueLength(timeouts ? 3 : 2);
+                session.testhost.logTimeoutQueueLength();
             }
-            verifyGetErrRequest({ session, host, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation ? timeouts ? 3 : 2 : undefined });
+            verifyGetErrRequest({ session, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation });
         }
     }
 

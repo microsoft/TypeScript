@@ -72,7 +72,7 @@ describe("unittests:: tsserver:: projects::", () => {
             }`;
         host.writeFile(configFile.path, configFile.content);
 
-        host.checkTimeoutQueueLengthAndRun(2); // Update the configured project + refresh inferred projects
+        host.runQueuedTimeoutCallbacks(); // Update the configured project + refresh inferred projects
 
         openFilesForSession([commonFile2], session);
         baselineTsserverLogs("projects", "should create new inferred projects for files excluded from a configured project", session);
@@ -282,7 +282,7 @@ describe("unittests:: tsserver:: projects::", () => {
         projectService.openClientFile(file3.path);
 
         host.writeFile(file2.path, `export * from "../c/f3"`); // now inferred project should inclule file3
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         logInferredProjectsOrphanStatus(projectService);
         baselineTsserverLogs("projects", "changes in closed files are reflected in project structure", projectService);
     });
@@ -307,7 +307,7 @@ describe("unittests:: tsserver:: projects::", () => {
         projectService.openClientFile(file3.path);
 
         host.deleteFile(file2.path);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("projects", "deleted files affect project structure", projectService);
     });
 
@@ -384,7 +384,7 @@ describe("unittests:: tsserver:: projects::", () => {
             unresolvedImports: response.unresolvedImports,
         });
 
-        host.checkTimeoutQueueLength(0);
+        projectService.testhost.logTimeoutQueueLength();
         assert.isUndefined(request);
         baselineTsserverLogs("projects", "file with name constructor.js doesnt cause issue with typeAcquisition when safe type list", projectService);
     });
@@ -553,7 +553,7 @@ describe("unittests:: tsserver:: projects::", () => {
         projectService.openClientFile(file2.path);
 
         host.deleteFile(config.path);
-        host.checkTimeoutQueueLengthAndRun(1);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("projects", "config file is deleted", projectService);
     });
 
@@ -1155,7 +1155,7 @@ describe("unittests:: tsserver:: projects::", () => {
         service.openClientFile(file1.path);
 
         host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
-        host.checkTimeoutQueueLength(0);
+        service.testhost.logTimeoutQueueLength();
         baselineTsserverLogs("projects", "no project structure update on directory watch invoke on open file save", service);
     });
 
@@ -1326,43 +1326,43 @@ describe("unittests:: tsserver:: projects::", () => {
         openFile(fileB);
         openFile(fileSubA);
 
-        host.checkTimeoutQueueLengthAndRun(0);
+        host.runQueuedTimeoutCallbacks();
 
         // This should schedule 2 timeouts for ensuring project structure and ensuring projects for open file
         host.deleteFile(fileSubA.path);
         host.deleteFolder(ts.getDirectoryPath(fileSubA.path));
         host.writeFile(fileA.path, fileA.content);
-        host.checkTimeoutQueueLength(2);
+        session.testhost.logTimeoutQueueLength();
 
         closeFilesForSession([fileSubA], session);
         // This should cancel existing updates and schedule new ones
-        host.checkTimeoutQueueLength(2);
+        session.testhost.logTimeoutQueueLength();
 
         // Open the fileA (as if rename)
         // config project is updated to check if fileA is present in it
         openFile(fileA);
 
         // Run the timeout for updating configured project and ensuring projects for open file
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         // file is deleted but watches are not yet invoked
         const originalFileExists = host.fileExists;
         host.fileExists = s => s === fileA.path ? false : originalFileExists.call(host, s);
         closeFilesForSession([fileA], session);
-        host.checkTimeoutQueueLength(2); // Update configured project and projects for open file
+        session.testhost.logTimeoutQueueLength(); // Update configured project and projects for open file
 
         // This should create inferred project since fileSubA not on the disk
         openFile(fileSubA);
 
-        host.checkTimeoutQueueLengthAndRun(2); // Update configured project and projects for open file
+        host.runQueuedTimeoutCallbacks(); // Update configured project and projects for open file
         host.fileExists = originalFileExists;
 
         // Actually trigger the file move
         host.deleteFile(fileA.path);
         host.ensureFileOrFolder(fileSubA);
-        host.checkTimeoutQueueLength(2);
+        session.testhost.logTimeoutQueueLength();
 
-        verifyGetErrRequest({ session, host, files: [fileB, fileSubA], existingTimeouts: 2 });
+        verifyGetErrRequest({ session, files: [fileB, fileSubA], existingTimeouts: true });
         baselineTsserverLogs("projects", "handles delayed directory watch invoke on file creation", session);
 
         function openFile(file: File) {

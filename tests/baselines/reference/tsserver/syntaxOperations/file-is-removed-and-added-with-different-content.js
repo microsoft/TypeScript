@@ -93,7 +93,9 @@ Info 18   [00:00:47.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 19   [00:00:48.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 20   [00:00:49.000] Scheduled: *ensureProjectForOpenFiles*
 Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/unitTest1.ts]
 import assert = require('assert');
 
@@ -147,7 +149,7 @@ Info 34   [00:01:11.000] -----------------------------------------------
 Info 34   [00:01:12.000] Open files: 
 Info 34   [00:01:13.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
 Info 34   [00:01:14.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -330,10 +332,10 @@ After request
 
 Info 41   [00:01:31.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 42   [00:01:32.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/unitTest1.ts] deleted
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -361,7 +363,9 @@ Info 46   [00:01:42.000] response:
     }
 After request
 
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
 
 Info 47   [00:01:43.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 48   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -397,7 +401,7 @@ Info 58   [00:02:02.000] -----------------------------------------------
 Info 58   [00:02:03.000] Open files: 
 Info 58   [00:02:04.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
 Info 58   [00:02:05.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -421,7 +425,9 @@ Info 58   [00:02:08.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 59   [00:02:09.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 60   [00:02:10.000] Scheduled: *ensureProjectForOpenFiles*
 Info 61   [00:02:11.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /user/username/projects/myproject/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/unitTest1.ts]
 import assert = require('assert');
 
@@ -473,7 +479,7 @@ Info 74   [00:02:32.000] -----------------------------------------------
 Info 74   [00:02:33.000] Open files: 
 Info 74   [00:02:34.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
 Info 74   [00:02:35.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:

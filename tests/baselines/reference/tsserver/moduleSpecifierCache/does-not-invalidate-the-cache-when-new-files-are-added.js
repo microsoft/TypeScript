@@ -741,7 +741,9 @@ Info 55   [00:01:57.000] DirectoryWatcher:: Triggered with /src/a2.ts :: WatchIn
 Info 56   [00:01:58.000] Scheduled: /tsconfig.json
 Info 57   [00:01:59.000] Scheduled: *ensureProjectForOpenFiles*
 Info 58   [00:02:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /src/a2.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/src/a2.ts]
 export const foo = 0;
 
@@ -811,7 +813,7 @@ Info 72   [00:02:36.000] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info 72   [00:02:37.000] 		Projects: /tsconfig.json
 Info 72   [00:02:38.000] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info 72   [00:02:39.000] 		Projects: /tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

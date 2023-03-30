@@ -117,6 +117,10 @@ FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
   {"inode":9}
 
+Before running Timeout callback:: count: 2
+6: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
@@ -213,6 +217,10 @@ FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
   {"inode":12}
 
+Before running Timeout callback:: count: 2
+13: timerToUpdateProgram
+14: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update

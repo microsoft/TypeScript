@@ -74,6 +74,10 @@ Change:: Delete imported file
 Input::
 //// [/a/bar.d.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+2: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:18 AM[0m] File change detected. Starting incremental compilation...
@@ -131,6 +135,13 @@ Input::
 export const y = 1;export const x = 10;
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...

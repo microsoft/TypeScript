@@ -92,7 +92,9 @@ Info 46   [00:01:28.000] For info: /user/username/projects/myproject/a/c/f3.ts :
 Info 47   [00:01:29.000] Scheduled: /user/username/projects/myproject/a/c/tsconfig.json, Cancelled earlier one
 Info 48   [00:01:30.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 49   [00:01:31.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/a/c/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/a/c/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/a/c/tsconfig.json]
 {"compilerOptions":{},"files":["f2.ts","f3.ts"]}
 
@@ -225,7 +227,7 @@ Info 88   [00:02:34.000] 	FileName: /user/username/projects/myproject/a/b/f1.ts 
 Info 88   [00:02:35.000] 		Projects: /user/username/projects/myproject/a/c/tsconfig.json
 Info 88   [00:02:36.000] 	FileName: /user/username/projects/myproject/a/c/f3.ts ProjectRootPath: undefined
 Info 88   [00:02:37.000] 		Projects: /user/username/projects/myproject/a/c/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

@@ -100,7 +100,9 @@ Info 22   [00:00:45.000] DirectoryWatcher:: Triggered with /a/b/file2.ts :: Watc
 Info 23   [00:00:46.000] Scheduled: /a/b/tsconfig.json
 Info 24   [00:00:47.000] Scheduled: *ensureProjectForOpenFiles*
 Info 25   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /a/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b/file2.ts]
 export var y = 10;
 
@@ -144,7 +146,8 @@ Info 36   [00:01:10.000] 		Projects: /a/b/tsconfig.json
 Info 36   [00:01:11.000] got projects updated in background, updating diagnostics for /a/b/file1.ts
 Info 37   [00:01:12.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+3: checkOne
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -166,7 +169,10 @@ Info 38   [00:01:15.000] DirectoryWatcher:: Triggered with /a/b/file3.ts :: Watc
 Info 39   [00:01:16.000] Scheduled: /a/b/tsconfig.json
 Info 40   [00:01:17.000] Scheduled: *ensureProjectForOpenFiles*
 Info 41   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+3: checkOne
+4: /a/b/tsconfig.json
+5: *ensureProjectForOpenFiles*
 //// [/a/b/file3.ts]
 export var z = 10;
 
@@ -215,7 +221,8 @@ Info 53   [00:01:41.000] 		Projects: /a/b/tsconfig.json
 Info 53   [00:01:42.000] got projects updated in background, updating diagnostics for /a/b/file1.ts
 Info 54   [00:01:43.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+6: checkOne
 
 PolledWatches::
 /a/b/node_modules/@types:

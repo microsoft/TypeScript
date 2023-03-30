@@ -750,7 +750,9 @@ Info 64   [00:02:07.000] DirectoryWatcher:: Triggered with /src/b-link2.ts :: Wa
 Info 65   [00:02:08.000] Scheduled: /tsconfig.json, Cancelled earlier one
 Info 66   [00:02:09.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 67   [00:02:10.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /src/b-link2.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/src/b-link.ts] deleted symlink
 
 PolledWatches::
@@ -833,6 +835,6 @@ Info 80   [00:02:45.000] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info 80   [00:02:46.000] 		Projects: /tsconfig.json
 Info 80   [00:02:47.000] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info 80   [00:02:48.000] 		Projects: /tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 80   [00:02:49.000] moduleSpecifierCache count: 0

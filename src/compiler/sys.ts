@@ -286,7 +286,7 @@ function createDynamicPriorityPollingWatchFile(host: {
         return queue;
     }
 
-    function pollPollingIntervalQueue(queue: PollingIntervalQueue) {
+    function pollPollingIntervalQueue(_timeoutType: string, queue: PollingIntervalQueue) {
         queue.pollIndex = pollQueue(queue, queue.pollingInterval, queue.pollIndex, pollingChunkSize[queue.pollingInterval]);
         // Set the next polling index and timeout
         if (queue.length) {
@@ -298,12 +298,12 @@ function createDynamicPriorityPollingWatchFile(host: {
         }
     }
 
-    function pollLowPollingIntervalQueue(queue: PollingIntervalQueue) {
+    function pollLowPollingIntervalQueue(_timeoutType: string, queue: PollingIntervalQueue) {
         // Always poll complete list of changedFilesInLastPoll
         pollQueue(changedFilesInLastPoll, PollingInterval.Low, /*pollIndex*/ 0, changedFilesInLastPoll.length);
 
         // Finally do the actual polling of the queue
-        pollPollingIntervalQueue(queue);
+        pollPollingIntervalQueue(_timeoutType, queue);
         // Schedule poll if there are files in changedFilesInLastPoll but no files in the actual queue
         // as pollPollingIntervalQueue wont schedule for next poll
         if (!queue.pollScheduled && changedFilesInLastPoll.length) {
@@ -374,7 +374,7 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 
     function scheduleNextPoll(pollingInterval: PollingInterval) {
-        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
+        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingInterval === PollingInterval.Low ? "pollLowPollingIntervalQueue" : "pollPollingIntervalQueue", pollingIntervalQueue(pollingInterval));
     }
 }
 
@@ -465,7 +465,7 @@ function createFixedChunkSizePollingWatchFile(host: {
 
     function scheduleNextPoll() {
         if (!watchedFiles.length || pollScheduled) return;
-        pollScheduled = host.setTimeout(pollQueue, PollingInterval.High);
+        pollScheduled = host.setTimeout(pollQueue, PollingInterval.High, "pollQueue");
     }
 }
 
@@ -713,7 +713,7 @@ function createDirectoryWatcherSupportingRecursive({
             clearTimeout(timerToUpdateChildWatches);
             timerToUpdateChildWatches = undefined;
         }
-        timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000);
+        timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000, "timerToUpdateChildWatches");
     }
 
     function onTimerToUpdateChildWatches() {
