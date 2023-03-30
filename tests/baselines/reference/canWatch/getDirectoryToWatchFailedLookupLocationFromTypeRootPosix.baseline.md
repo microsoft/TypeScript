@@ -1113,31 +1113,3 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## RootDirForResolution: undefined
-
-| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
-| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
-| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
-| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
-| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
-| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
-| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
-| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
-| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
-| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
-| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
-| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
-

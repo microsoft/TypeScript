@@ -73,7 +73,7 @@ describe("unittests:: canWatch::", () => {
                         baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/subdir/somefile.d.ts"), root, maxLengths);
                     });
                 });
-                function baselineGetDirectoryToWatchFailedLookupLocation(path: ts.Path, root: ts.Path | undefined, maxLengths: readonly number[]) {
+                function baselineGetDirectoryToWatchFailedLookupLocation(path: ts.Path, root: ts.Path, maxLengths: readonly number[]) {
                     const result = ts.getDirectoryToWatchFailedLookupLocation(
                         path,
                         path,
@@ -112,17 +112,14 @@ describe("unittests:: canWatch::", () => {
         },
     );
 
-    function baselineCanWatchForRoot(paths: readonly ts.Path[], baseline: string[], baselineForRoot: (root: ts.Path | undefined) => void) {
-        paths.forEach(baselineRoot);
-        baselineRoot(/*rootDirForResolution*/ undefined);
-        baseline.push("", "");
-
-        function baselineRoot(rootDirForResolution: ts.Path | undefined) {
+    function baselineCanWatchForRoot(paths: readonly ts.Path[], baseline: string[], baselineForRoot: (root: ts.Path) => void) {
+        paths.forEach(rootDirForResolution => {
             const root = ts.getRootDirectoryOfResolutionCache(rootDirForResolution, ts.returnUndefined) as ts.Path;
             assert(root === rootDirForResolution);
             baseline.push("", `## RootDirForResolution: ${rootDirForResolution}`);
             baselineForRoot(root);
-        }
+        });
+        baseline.push("", "");
     }
 
     function baselineCanWatch(

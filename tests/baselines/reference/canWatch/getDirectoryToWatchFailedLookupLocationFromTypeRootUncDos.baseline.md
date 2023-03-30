@@ -1417,39 +1417,3 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## RootDirForResolution: undefined
-
-| Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
-| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| //vda1cs4850/c$/folderAtRoot/folder1/node_modules/@types                                                | //vda1cs4850/c$/folderAtRoot/folder1/node_modules                                                       |
-| //vda1cs4850/c$/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/c$/folderAtRoot/folder1/folder2/node_modules                                               |
-| //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
-| //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
-| //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| //vda1cs4850/c$/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/node_modules                                        |
-| //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/node_modules                                |
-| //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
-| //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
-| //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
-| //vda1cs4850/c$/user/username/node_modules/@types                                                       | //vda1cs4850/c$/user/username/node_modules                                                              |
-| //vda1cs4850/c$/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/c$/user/username/folderAtRoot/node_modules                                                 |
-| //vda1cs4850/c$/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/node_modules                                         |
-| //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
-| //vda1cs4850/c$/usr/username/node_modules/@types                                                        | //vda1cs4850/c$/usr/username/node_modules                                                               |
-| //vda1cs4850/c$/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/c$/usr/username/folderAtRoot/node_modules                                                  |
-| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/c$/usr/username/folderAtRoot/folder1/node_modules                                          |
-| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
-| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
-| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
-| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
-| //vda1cs4850/c$/home/username/node_modules/@types                                                       | //vda1cs4850/c$/home/username/node_modules                                                              |
-| //vda1cs4850/c$/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/c$/home/username/folderAtRoot/node_modules                                                 |
-| //vda1cs4850/c$/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/c$/home/username/folderAtRoot/folder1/node_modules                                         |
-| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
-

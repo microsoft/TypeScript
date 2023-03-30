@@ -34,6 +34,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -155,6 +157,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
+/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/a/c/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/a/c/jsconfig.json: *new*
@@ -261,6 +265,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
+/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/a/c/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/a/c/jsconfig.json:

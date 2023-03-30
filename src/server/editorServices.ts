@@ -2703,12 +2703,12 @@ export class ProjectService {
         }
 
         // Single inferred project does not have a project root and hence no current directory
-        return this.createInferredProject(/*currentDirectory*/ undefined, /*isSingleInferredProject*/ true);
+        return this.createInferredProject("", /*isSingleInferredProject*/ true);
     }
 
-    private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string | undefined): InferredProject {
+    private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string): InferredProject {
         Debug.assert(!this.useSingleInferredProject);
-        const expectedCurrentDirectory = this.toCanonicalFileName(this.getNormalizedAbsolutePath(currentDirectory || ""));
+        const expectedCurrentDirectory = this.toCanonicalFileName(this.getNormalizedAbsolutePath(currentDirectory));
         // Reuse the project with same current directory but no roots
         for (const inferredProject of this.inferredProjects) {
             if (!inferredProject.projectRootPath &&
@@ -2721,7 +2721,7 @@ export class ProjectService {
         return this.createInferredProject(currentDirectory);
     }
 
-    private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
+    private createInferredProject(currentDirectory: string, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
         const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;

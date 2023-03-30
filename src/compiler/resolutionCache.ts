@@ -259,17 +259,16 @@ export function canWatchDirectoryOrFile(dirPath: Path) {
 }
 
 /** @internal */
-export function canWatchAtTypes(atTypes: Path, rootPath: Path | undefined) {
+export function canWatchAtTypes(atTypes: Path, rootPath: Path) {
     // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
     const dirPath = getDirectoryPath(getDirectoryPath(atTypes));
     return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
 }
 
-function isInDirectoryPath(dir: Path | undefined, file: Path) {
-    if (dir === undefined || file.length < dir.length) {
-        return false;
-    }
-    return startsWith(file, dir) && (isDiskPathRoot(dir) || file[dir.length] === directorySeparator);
+function isInDirectoryPath(dir: Path, file: Path) {
+    return file.length >= dir.length &&
+        startsWith(file, dir) &&
+        (isDiskPathRoot(dir) || file[dir.length] === directorySeparator);
 }
 
 /** @internal */
@@ -281,8 +280,8 @@ export function canWatchAffectingLocation(filePath: Path) {
 export function getDirectoryToWatchFailedLookupLocation(
     failedLookupLocation: string,
     failedLookupLocationPath: Path,
-    rootDir: string | undefined,
-    rootPath: Path | undefined,
+    rootDir: string,
+    rootPath: Path,
     rootSplitLength: number,
     getCurrentDirectory: () => string | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
@@ -302,8 +301,8 @@ export function getDirectoryToWatchFailedLookupLocation(
         else {
             // Always watch root directory non recursively
             return {
-                dir: rootDir!,
-                dirPath: rootPath!,
+                dir: rootDir,
+                dirPath: rootPath,
                 nonRecursive: true
             };
         }
@@ -356,7 +355,7 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
 export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     typeRoot: string,
     typeRootPath: Path,
-    rootPath: Path | undefined,
+    rootPath: Path,
     filterCustomPath: (path: Path) => boolean, // Return true if this path can be used
 ): Path | undefined {
     if (isInDirectoryPath(rootPath, typeRootPath)) {
@@ -367,8 +366,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
 }
 
 /** @internal */
-export function getRootDirectoryOfResolutionCache(rootDirForResolution: string | undefined, getCurrentDirectory: () => string | undefined) {
-    if (rootDirForResolution === undefined) return undefined;
+export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, getCurrentDirectory: () => string | undefined) {
     const normalized = getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory());
     return !isDiskPathRoot(normalized) ?
         removeTrailingDirectorySeparator(normalized) :
@@ -376,17 +374,15 @@ export function getRootDirectoryOfResolutionCache(rootDirForResolution: string |
 }
 
 /** @internal */
-export function getRootPathSplitLength(rootPath: Path | undefined) {
-    return rootPath !== undefined ?
-        rootPath.split(directorySeparator).length - (hasTrailingDirectorySeparator(rootPath) ? 1 : 0) :
-        0;
+export function getRootPathSplitLength(rootPath: Path) {
+    return rootPath.split(directorySeparator).length - (hasTrailingDirectorySeparator(rootPath) ? 1 : 0);
 }
 
 type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
     (resolution: T) => R | undefined;
 
 /** @internal */
-export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
+export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
     let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
     let filesWithInvalidatedResolutions: Set<Path> | undefined;
     let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
@@ -437,7 +433,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
     const fileWatchesOfAffectingLocations = new Map<string, FileWatcherOfAffectingLocation>();
     const rootDir = getRootDirectoryOfResolutionCache(rootDirForResolution, getCurrentDirectory);
-    const rootPath = rootDir !== undefined ? resolutionHost.toPath(rootDir) : undefined;
+    const rootPath = resolutionHost.toPath(rootDir);
     const rootSplitLength = getRootPathSplitLength(rootPath);
 
     // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
@@ -894,7 +890,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
             if (setAtRoot) {
                 // This is always non recursive
-                setDirectoryWatcher(rootDir!, rootPath!, /*nonRecursive*/ true); // TODO: GH#18217
+                setDirectoryWatcher(rootDir, rootPath, /*nonRecursive*/ true); // TODO: GH#18217
             }
         }
         watchAffectingLocationsOfResolution(resolution, !failedLookupLocations?.length);
@@ -1037,7 +1033,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
             }
             if (removeAtRoot) {
-                removeDirectoryWatcher(rootPath!);
+                removeDirectoryWatcher(rootPath);
             }
         }
         else if (affectingLocations?.length) {

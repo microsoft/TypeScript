@@ -1417,39 +1417,3 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## RootDirForResolution: undefined
-
-| Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
-| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
-| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
-| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
-| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
-| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
-| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
-| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
-| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
-| c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
-| c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
-| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
-| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | c:/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
-| c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
-| c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
-| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
-| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | c:/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
-| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
-| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
-| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
-| c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
-| c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
-| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
-| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | c:/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
-
