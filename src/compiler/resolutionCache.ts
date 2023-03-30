@@ -364,6 +364,11 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     return toWatch && filterCustomPath(toWatch.dirPath) ? toWatch.dirPath : undefined;
 }
 
+/** @internal */
+export function getRootDirectoryOfResolutionCache(rootDirForResolution: string | undefined, getCurrentDirectory: () => string | undefined) {
+    return rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
+}
+
 type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
     (resolution: T) => R | undefined;
 
@@ -418,7 +423,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
     const fileWatchesOfAffectingLocations = new Map<string, FileWatcherOfAffectingLocation>();
-    const rootDir = rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
+    const rootDir = getRootDirectoryOfResolutionCache(rootDirForResolution, getCurrentDirectory);
     const rootPath = (rootDir && resolutionHost.toPath(rootDir)) as Path; // TODO: GH#18217
     const rootSplitLength = rootPath !== undefined ? rootPath.split(directorySeparator).length : 0;
 

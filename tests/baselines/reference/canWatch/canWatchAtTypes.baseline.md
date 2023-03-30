@@ -1,10 +1,10 @@
 ## Testing for root: /
 
-## Root path: /
+## RootDirForResolution: / Root: 
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
-| /node_modules/@types                                                                     | true            |
+| /node_modules/@types                                                                     | false           |
 | /folderAtRoot/node_modules/@types                                                        | false           |
 | /folderAtRoot/folder1/node_modules/@types                                                | false           |
 | /folderAtRoot/folder1/folder2/node_modules/@types                                        | false           |
@@ -28,7 +28,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /folderAtRoot
+## RootDirForResolution: /folderAtRoot Root: /folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -56,7 +56,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /folderAtRoot/folder1
+## RootDirForResolution: /folderAtRoot/folder1 Root: /folderAtRoot/folder1
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -84,7 +84,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /folderAtRoot/folder1/folder2
+## RootDirForResolution: /folderAtRoot/folder1/folder2 Root: /folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -112,7 +112,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3 Root: /folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -140,7 +140,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4 Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -168,7 +168,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -196,7 +196,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users
+## RootDirForResolution: /users Root: /users
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -224,7 +224,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username
+## RootDirForResolution: /users/username Root: /users/username
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -252,7 +252,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username/folderAtRoot
+## RootDirForResolution: /users/username/folderAtRoot Root: /users/username/folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -280,7 +280,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username/folderAtRoot/folder1
+## RootDirForResolution: /users/username/folderAtRoot/folder1 Root: /users/username/folderAtRoot/folder1
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -308,7 +308,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2 Root: /users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -336,7 +336,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3 Root: /users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -364,7 +364,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -392,7 +392,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -420,7 +420,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user
+## RootDirForResolution: /user Root: /user
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -448,7 +448,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username
+## RootDirForResolution: /user/username Root: /user/username
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -476,7 +476,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username/folderAtRoot
+## RootDirForResolution: /user/username/folderAtRoot Root: /user/username/folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -504,7 +504,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username/folderAtRoot/folder1
+## RootDirForResolution: /user/username/folderAtRoot/folder1 Root: /user/username/folderAtRoot/folder1
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -532,7 +532,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2 Root: /user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -560,7 +560,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3 Root: /user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -588,7 +588,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -616,7 +616,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -644,7 +644,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -675,11 +675,11 @@
 
 ## Testing for root: c:/
 
-## Root path: c:/
+## RootDirForResolution: c:/ Root: c:
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
-| c:/node_modules/@types                                                                     | true            |
+| c:/node_modules/@types                                                                     | false           |
 | c:/folderAtRoot/node_modules/@types                                                        | false           |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
@@ -703,7 +703,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/folderAtRoot
+## RootDirForResolution: c:/folderAtRoot Root: c:/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -731,7 +731,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/folderAtRoot/folder1
+## RootDirForResolution: c:/folderAtRoot/folder1 Root: c:/folderAtRoot/folder1
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -759,7 +759,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/folderAtRoot/folder1/folder2
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2 Root: c:/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -787,7 +787,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3 Root: c:/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -815,7 +815,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4 Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -843,7 +843,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -871,7 +871,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users
+## RootDirForResolution: c:/users Root: c:/users
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -899,7 +899,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username
+## RootDirForResolution: c:/users/username Root: c:/users/username
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -927,7 +927,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username/folderAtRoot
+## RootDirForResolution: c:/users/username/folderAtRoot Root: c:/users/username/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -955,7 +955,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username/folderAtRoot/folder1
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1 Root: c:/users/username/folderAtRoot/folder1
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -983,7 +983,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2 Root: c:/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1011,7 +1011,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3 Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1039,7 +1039,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1067,7 +1067,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1095,7 +1095,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user
+## RootDirForResolution: c:/user Root: c:/user
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1123,7 +1123,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username
+## RootDirForResolution: c:/user/username Root: c:/user/username
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1151,7 +1151,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username/folderAtRoot
+## RootDirForResolution: c:/user/username/folderAtRoot Root: c:/user/username/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1179,7 +1179,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username/folderAtRoot/folder1
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1 Root: c:/user/username/folderAtRoot/folder1
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1207,7 +1207,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2 Root: c:/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1235,7 +1235,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3 Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1263,7 +1263,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1291,7 +1291,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1319,7 +1319,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1350,11 +1350,11 @@
 
 ## Testing for root: //vda1cs4850/
 
-## Root path: //vda1cs4850/
+## RootDirForResolution: //vda1cs4850/ Root: //vda1cs4850
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
-| //vda1cs4850/node_modules/@types                                                                     | true            |
+| //vda1cs4850/node_modules/@types                                                                     | false           |
 | //vda1cs4850/folderAtRoot/node_modules/@types                                                        | false           |
 | //vda1cs4850/folderAtRoot/folder1/node_modules/@types                                                | true            |
 | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
@@ -1378,7 +1378,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/folderAtRoot
+## RootDirForResolution: //vda1cs4850/folderAtRoot Root: //vda1cs4850/folderAtRoot
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1406,7 +1406,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1 Root: //vda1cs4850/folderAtRoot/folder1
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1434,7 +1434,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2 Root: //vda1cs4850/folderAtRoot/folder1/folder2
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1462,7 +1462,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1490,7 +1490,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1518,7 +1518,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1546,7 +1546,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users
+## RootDirForResolution: //vda1cs4850/users Root: //vda1cs4850/users
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1574,7 +1574,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username
+## RootDirForResolution: //vda1cs4850/users/username Root: //vda1cs4850/users/username
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1602,7 +1602,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot Root: //vda1cs4850/users/username/folderAtRoot
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1630,7 +1630,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1 Root: //vda1cs4850/users/username/folderAtRoot/folder1
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1658,7 +1658,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1686,7 +1686,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1714,7 +1714,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1742,7 +1742,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1770,7 +1770,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user
+## RootDirForResolution: //vda1cs4850/user Root: //vda1cs4850/user
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1798,7 +1798,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username
+## RootDirForResolution: //vda1cs4850/user/username Root: //vda1cs4850/user/username
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1826,7 +1826,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot Root: //vda1cs4850/user/username/folderAtRoot
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1854,7 +1854,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1 Root: //vda1cs4850/user/username/folderAtRoot/folder1
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1882,7 +1882,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1910,7 +1910,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1938,7 +1938,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1966,7 +1966,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -1994,7 +1994,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                            | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------------------- | --------------- |
@@ -2025,7 +2025,7 @@
 
 ## Testing for root: //vda1cs4850/c$
 
-## Root path: //vda1cs4850/c$
+## RootDirForResolution: //vda1cs4850/c$ Root: //vda1cs4850/c$
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2053,7 +2053,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/folderAtRoot
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot Root: //vda1cs4850/c$/folderAtRoot
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2081,7 +2081,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1 Root: //vda1cs4850/c$/folderAtRoot/folder1
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2109,7 +2109,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2137,7 +2137,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2165,7 +2165,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2193,7 +2193,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2221,7 +2221,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users
+## RootDirForResolution: //vda1cs4850/c$/users Root: //vda1cs4850/c$/users
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2249,7 +2249,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username
+## RootDirForResolution: //vda1cs4850/c$/users/username Root: //vda1cs4850/c$/users/username
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2277,7 +2277,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot Root: //vda1cs4850/c$/users/username/folderAtRoot
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2305,7 +2305,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2333,7 +2333,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2361,7 +2361,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2389,7 +2389,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2417,7 +2417,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2445,7 +2445,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user
+## RootDirForResolution: //vda1cs4850/c$/user Root: //vda1cs4850/c$/user
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2473,7 +2473,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username
+## RootDirForResolution: //vda1cs4850/c$/user/username Root: //vda1cs4850/c$/user/username
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2501,7 +2501,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot Root: //vda1cs4850/c$/user/username/folderAtRoot
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2529,7 +2529,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2557,7 +2557,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2585,7 +2585,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2613,7 +2613,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2641,7 +2641,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |
@@ -2669,7 +2669,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                               | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------------------- | --------------- |

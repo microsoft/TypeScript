@@ -1,25 +1,24 @@
 ## Testing for root: /
 
-## Root path: /
+## RootDirForResolution: / Root: 
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| /node_modules/@types                                                                     |                                                                                          |
-| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
-| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
-| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
-| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
-| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
-| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
-| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                |                                                                                          |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        |                                                                                          |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                |                                                                                          |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 |                                                                                          |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         |                                                                                          |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 |                                                                                          |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         |                                                                                          |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types |                                                                                          |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  |                                                                                          |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          |                                                                                          |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  |                                                                                          |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          |                                                                                          |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  |                                                                                          |
 
-## Root path: /folderAtRoot
+## RootDirForResolution: /folderAtRoot Root: /folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -38,7 +37,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /folderAtRoot/folder1
+## RootDirForResolution: /folderAtRoot/folder1 Root: /folderAtRoot/folder1
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -57,7 +56,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /folderAtRoot/folder1/folder2
+## RootDirForResolution: /folderAtRoot/folder1/folder2 Root: /folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -76,7 +75,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3 Root: /folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -94,7 +93,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4 Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -112,7 +111,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -130,7 +129,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users
+## RootDirForResolution: /users Root: /users
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -149,7 +148,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username
+## RootDirForResolution: /users/username Root: /users/username
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -168,7 +167,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username/folderAtRoot
+## RootDirForResolution: /users/username/folderAtRoot Root: /users/username/folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -187,7 +186,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username/folderAtRoot/folder1
+## RootDirForResolution: /users/username/folderAtRoot/folder1 Root: /users/username/folderAtRoot/folder1
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -205,7 +204,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2 Root: /users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -223,7 +222,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3 Root: /users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -241,7 +240,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -259,7 +258,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -277,7 +276,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: /user
+## RootDirForResolution: /user Root: /user
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -296,7 +295,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user                                                                                    |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user                                                                                    |
 
-## Root path: /user/username
+## RootDirForResolution: /user/username Root: /user/username
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -315,7 +314,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username                                                                           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username                                                                           |
 
-## Root path: /user/username/folderAtRoot
+## RootDirForResolution: /user/username/folderAtRoot Root: /user/username/folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -334,7 +333,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot                                                              |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot                                                              |
 
-## Root path: /user/username/folderAtRoot/folder1
+## RootDirForResolution: /user/username/folderAtRoot/folder1 Root: /user/username/folderAtRoot/folder1
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -352,7 +351,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1                                                      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1                                                      |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2 Root: /user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -370,7 +369,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2                                              |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2                                              |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3 Root: /user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -388,7 +387,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3                                      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3                                      |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -406,7 +405,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 
-## Root path: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -424,7 +423,7 @@
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -445,30 +444,29 @@
 
 ## Testing for root: c:/
 
-## Root path: c:/
+## RootDirForResolution: c:/ Root: c:
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| c:/node_modules/@types                                                                     |                                                                                            |
-| c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
-| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
-| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
-| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
-| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
-| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
-| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
-| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
-| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
-| c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
-| c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
-| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
-| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | c:/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | c:                                                                                         |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:                                                                                         |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:                                                                                         |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:                                                                                         |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:                                                                                         |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:                                                                                         |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:                                                                                         |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:                                                                                         |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:                                                                                         |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:                                                                                         |
+| c:/user/username/node_modules/@types                                                       | c:                                                                                         |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | c:                                                                                         |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:                                                                                         |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | c:                                                                                         |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:                                                                                         |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:                                                                                         |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:                                                                                         |
 
-## Root path: c:/folderAtRoot
+## RootDirForResolution: c:/folderAtRoot Root: c:/folderAtRoot
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -491,7 +489,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/folderAtRoot/folder1
+## RootDirForResolution: c:/folderAtRoot/folder1 Root: c:/folderAtRoot/folder1
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -513,7 +511,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/folderAtRoot/folder1/folder2
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2 Root: c:/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -535,7 +533,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3 Root: c:/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -557,7 +555,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4 Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -579,7 +577,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -601,7 +599,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users
+## RootDirForResolution: c:/users Root: c:/users
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -624,7 +622,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username
+## RootDirForResolution: c:/users/username Root: c:/users/username
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -647,7 +645,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username/folderAtRoot
+## RootDirForResolution: c:/users/username/folderAtRoot Root: c:/users/username/folderAtRoot
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -670,7 +668,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username/folderAtRoot/folder1
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1 Root: c:/users/username/folderAtRoot/folder1
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -692,7 +690,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2 Root: c:/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -714,7 +712,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3 Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -736,7 +734,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -758,7 +756,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -780,7 +778,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: c:/user
+## RootDirForResolution: c:/user Root: c:/user
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -803,7 +801,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user                                                                                    |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user                                                                                    |
 
-## Root path: c:/user/username
+## RootDirForResolution: c:/user/username Root: c:/user/username
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -825,7 +823,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username                                                                           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username                                                                           |
 
-## Root path: c:/user/username/folderAtRoot
+## RootDirForResolution: c:/user/username/folderAtRoot Root: c:/user/username/folderAtRoot
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -847,7 +845,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot                                                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot                                                              |
 
-## Root path: c:/user/username/folderAtRoot/folder1
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1 Root: c:/user/username/folderAtRoot/folder1
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -869,7 +867,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1                                                      |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1                                                      |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2 Root: c:/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -891,7 +889,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2                                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2                                              |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3 Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -913,7 +911,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -935,7 +933,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 
-## Root path: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -957,7 +955,7 @@
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
@@ -982,30 +980,29 @@
 
 ## Testing for root: //vda1cs4850/
 
-## Root path: //vda1cs4850/
+## RootDirForResolution: //vda1cs4850/ Root: //vda1cs4850
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| //vda1cs4850/node_modules/@types                                                                     |                                                                                                      |
-| //vda1cs4850/folderAtRoot/folder1/node_modules/@types                                                | //vda1cs4850/folderAtRoot/folder1/node_modules                                                       |
-| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
-| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
-| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
-| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
-| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
-| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
-| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
-| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
-| //vda1cs4850/user/username/node_modules/@types                                                       | //vda1cs4850/user/username/node_modules                                                              |
-| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
-| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
-| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
-| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
-| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
-| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/folderAtRoot/folder1/node_modules/@types                                                | //vda1cs4850                                                                                         |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850                                                                                         |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850                                                                                         |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850                                                                                         |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850                                                                                         |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850                                                                                         |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850                                                                                         |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850                                                                                         |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850                                                                                         |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/node_modules/@types                                                       | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850                                                                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850                                                                                         |
 
-## Root path: //vda1cs4850/folderAtRoot
+## RootDirForResolution: //vda1cs4850/folderAtRoot Root: //vda1cs4850/folderAtRoot
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1028,7 +1025,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1 Root: //vda1cs4850/folderAtRoot/folder1
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1050,7 +1047,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2 Root: //vda1cs4850/folderAtRoot/folder1/folder2
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1072,7 +1069,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1094,7 +1091,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1116,7 +1113,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1138,7 +1135,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users
+## RootDirForResolution: //vda1cs4850/users Root: //vda1cs4850/users
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1161,7 +1158,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username
+## RootDirForResolution: //vda1cs4850/users/username Root: //vda1cs4850/users/username
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1184,7 +1181,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot Root: //vda1cs4850/users/username/folderAtRoot
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1207,7 +1204,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1 Root: //vda1cs4850/users/username/folderAtRoot/folder1
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1229,7 +1226,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1251,7 +1248,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1273,7 +1270,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1295,7 +1292,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1317,7 +1314,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/user
+## RootDirForResolution: //vda1cs4850/user Root: //vda1cs4850/user
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1340,7 +1337,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user                                                                                    |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user                                                                                    |
 
-## Root path: //vda1cs4850/user/username
+## RootDirForResolution: //vda1cs4850/user/username Root: //vda1cs4850/user/username
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1362,7 +1359,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username                                                                           |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username                                                                           |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot Root: //vda1cs4850/user/username/folderAtRoot
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1384,7 +1381,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot                                                              |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot                                                              |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1 Root: //vda1cs4850/user/username/folderAtRoot/folder1
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1406,7 +1403,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1                                                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1                                                      |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1428,7 +1425,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2                                              |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2                                              |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1450,7 +1447,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1472,7 +1469,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 
-## Root path: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1494,7 +1491,7 @@
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -1519,7 +1516,7 @@
 
 ## Testing for root: //vda1cs4850/c$
 
-## Root path: //vda1cs4850/c$
+## RootDirForResolution: //vda1cs4850/c$ Root: //vda1cs4850/c$
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1542,7 +1539,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$                                                                                         |
 
-## Root path: //vda1cs4850/c$/folderAtRoot
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot Root: //vda1cs4850/c$/folderAtRoot
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1565,7 +1562,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1 Root: //vda1cs4850/c$/folderAtRoot/folder1
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1587,7 +1584,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1609,7 +1606,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1631,7 +1628,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1653,7 +1650,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1675,7 +1672,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users
+## RootDirForResolution: //vda1cs4850/c$/users Root: //vda1cs4850/c$/users
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1698,7 +1695,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username
+## RootDirForResolution: //vda1cs4850/c$/users/username Root: //vda1cs4850/c$/users/username
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1721,7 +1718,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot Root: //vda1cs4850/c$/users/username/folderAtRoot
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1744,7 +1741,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1766,7 +1763,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1788,7 +1785,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1810,7 +1807,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1832,7 +1829,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1854,7 +1851,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
-## Root path: //vda1cs4850/c$/user
+## RootDirForResolution: //vda1cs4850/c$/user Root: //vda1cs4850/c$/user
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1877,7 +1874,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user                                                                                    |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user                                                                                    |
 
-## Root path: //vda1cs4850/c$/user/username
+## RootDirForResolution: //vda1cs4850/c$/user/username Root: //vda1cs4850/c$/user/username
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1899,7 +1896,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username                                                                           |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username                                                                           |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot Root: //vda1cs4850/c$/user/username/folderAtRoot
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1921,7 +1918,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot                                                              |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot                                                              |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1943,7 +1940,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1                                                      |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1                                                      |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1965,7 +1962,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2                                              |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2                                              |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -1987,7 +1984,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -2009,7 +2006,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 
-## Root path: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+## RootDirForResolution: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5 Root: //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -2031,7 +2028,7 @@
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
-## Root path: undefined
+## RootDirForResolution: undefined Root: undefined
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
