@@ -5813,6 +5813,7 @@ export interface Symbol {
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
     /** @internal */ isAssigned?: boolean;  // True if the symbol is a parameter with assignments
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
+    /** @internal */ declarationSet?: Set<Declaration>; // Same as `declarations`. Used for constant time 'contains/has' checks.
 }
 
 /** @internal */

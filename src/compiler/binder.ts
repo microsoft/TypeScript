@@ -3,7 +3,6 @@ import {
     AccessExpression,
     addRelatedInfo,
     append,
-    appendIfUnique,
     ArrayBindingElement,
     ArrayLiteralExpression,
     ArrowFunction,
@@ -624,7 +623,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         symbol.flags |= symbolFlags;
 
         node.symbol = symbol;
-        symbol.declarations = appendIfUnique(symbol.declarations, node);
+        if (symbol.declarations) {
+          if (!symbol.declarationSet!.has(node)) {
+            symbol.declarations.push(node);
+            symbol.declarationSet!.add(node);
+          }
+        }
+        else {
+          symbol.declarations = [node];
+          symbol.declarationSet = new Set([node]);
+        }
 
         if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
             symbol.exports = createSymbolTable();
