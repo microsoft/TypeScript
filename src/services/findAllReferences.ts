@@ -151,6 +151,7 @@ import {
     isNamespaceExportDeclaration,
     isNewExpressionTarget,
     isNoSubstitutionTemplateLiteral,
+    isNumericLiteral,
     isObjectBindingElementWithoutPropertyName,
     isObjectLiteralExpression,
     isObjectLiteralMethod,
@@ -758,6 +759,14 @@ function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeC
                 { prefixText: name + " as " } :
                 { suffixText: " as " + name };
         }
+    }
+
+    // If the node is a numerical indexing literal, then add quotes around the property access.
+    if (entry.kind !== EntryKind.Span && isNumericLiteral(entry.node) && isAccessExpression(entry.node.parent)) {
+        return {
+            prefixText: "'",
+            suffixText: "'"
+        };
     }
 
     return emptyOptions;
