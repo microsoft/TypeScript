@@ -29,8 +29,7 @@ import {
     TypeChecker,
     UserPreferences,
 } from "../_namespaces/ts";
-import { getStatementsToMove, getUsageInfo, isTopLevelDeclaration, ReadonlySymbolSet, ToMove, UsageInfo } from "../createNewFilename";
-import { addExports, addExportToChanges, addNewFileToTsconfig, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getTopLevelDeclarationStatement, makeImportOrRequire,moduleSpecifierFromImport, nameOfTopLevelDeclaration, updateImportsInOtherFiles } from "../moveToFileAndNewFile";
+import { addExports, addExportToChanges, addNewFileToTsconfig, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire,moduleSpecifierFromImport, nameOfTopLevelDeclaration, ReadonlySymbolSet, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
 import { registerRefactor } from "../refactorProvider";
 
 const refactorNameForMoveToFile = "Move to file";

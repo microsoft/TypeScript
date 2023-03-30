@@ -321,7 +321,7 @@ import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
-import { createNewFilename } from "./createNewFilename";
+import { createNewFilename } from "./moveToFileAndNewFile";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
