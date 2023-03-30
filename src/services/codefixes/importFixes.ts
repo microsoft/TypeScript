@@ -360,7 +360,6 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 importClauseOrBindingPattern,
                 defaultImport,
                 arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
-                compilerOptions,
                 preferences);
         });
 
@@ -1260,7 +1259,6 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
                 importClauseOrBindingPattern,
                 importKind === ImportKind.Default ? { name: symbolName, addAsTypeOnly } : undefined,
                 importKind === ImportKind.Named ? [{ name: symbolName, addAsTypeOnly }] : emptyArray,
-                compilerOptions,
                 preferences);
             const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
             return includeSymbolNameInDescription
@@ -1374,7 +1372,6 @@ function doAddExistingFix(
     clause: ImportClause | ObjectBindingPattern,
     defaultImport: Import | undefined,
     namedImports: readonly Import[],
-    compilerOptions: CompilerOptions,
     preferences: UserPreferences,
 ): void {
     if (clause.kind === SyntaxKind.ObjectBindingPattern) {
@@ -1389,13 +1386,11 @@ function doAddExistingFix(
 
     const promoteFromTypeOnly = clause.isTypeOnly && some([defaultImport, ...namedImports], i => i?.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
     const existingSpecifiers = clause.namedBindings && tryCast(clause.namedBindings, isNamedImports)?.elements;
-    // If we are promoting from a type-only import and `--isolatedModules` and `--preserveValueImports`
-    // are enabled, we need to make every existing import specifier type-only. It may be possible that
-    // some of them don't strictly need to be marked type-only (if they have a value meaning and are
-    // never used in an emitting position). These are allowed to be imported without being type-only,
-    // but the user has clearly already signified that they don't need them to be present at runtime
-    // by placing them in a type-only import. So, just mark each specifier as type-only.
-    const convertExistingToTypeOnly = promoteFromTypeOnly && importNameElisionDisabled(compilerOptions);
+    // We used to convert existing specifiers to type-only only if compiler options indicated that
+    // would be meaningful (see the `importNameElisionDisabled` utility function), but user
+    // feedback indicated a preference for preserving the type-onlyness of existing specifiers
+    // regardless of whether it would make a difference in emit.
+    const convertExistingSpecifiersToTypeOnly = promoteFromTypeOnly;
 
     if (defaultImport) {
         Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
@@ -1440,7 +1435,7 @@ function doAddExistingFix(
                 // Organize imports puts type-only import specifiers last, so if we're
                 // adding a non-type-only specifier and converting all the other ones to
                 // type-only, there's no need to ask for the insertion index - it's 0.
-                const insertionIndex = convertExistingToTypeOnly && !spec.isTypeOnly
+                const insertionIndex = convertExistingSpecifiersToTypeOnly && !spec.isTypeOnly
                     ? 0
                     : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparer);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
@@ -1466,7 +1461,7 @@ function doAddExistingFix(
 
     if (promoteFromTypeOnly) {
         changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
-        if (convertExistingToTypeOnly && existingSpecifiers) {
+        if (convertExistingSpecifiersToTypeOnly && existingSpecifiers) {
             for (const specifier of existingSpecifiers) {
                 changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, specifier);
             }
