@@ -1972,10 +1972,6 @@
         "category": "Error",
         "code": 2379
     },
-    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
-        "category": "Error",
-        "code": 2380
-    },
     "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
         "code": 2383

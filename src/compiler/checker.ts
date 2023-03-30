@@ -38507,12 +38507,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(getter.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
                         error(setter.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
                     }
-
-                    const getterType = getAnnotatedAccessorType(getter);
-                    const setterType = getAnnotatedAccessorType(setter);
-                    if (getterType && setterType) {
-                        checkTypeAssignableTo(getterType, setterType, getter, Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type);
-                    }
                 }
             }
             const returnType = getTypeOfAccessors(getSymbolOfDeclaration(node));
