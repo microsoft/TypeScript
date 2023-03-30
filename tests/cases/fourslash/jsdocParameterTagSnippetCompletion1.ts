@@ -115,5 +115,13 @@
 ////  * @p/*jk*/
 ////  */
 //// function kk(...a) {}
+////
+//// function reallylongfunctionnameabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl(a) {}
+//// /**
+////  *
+////  * @p/*jl*/
+////  */
+//// function ll(a = reallylongfunctionnameabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl("")) {}
+////}
 
 verify.baselineCompletions();

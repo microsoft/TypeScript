@@ -47,6 +47,7 @@ import {
     diagnosticToString,
     displayPart,
     DotDotDotToken,
+    EmitFlags,
     EmitHint,
     EmitTextWriter,
     EntityName,
@@ -312,6 +313,7 @@ import {
     ScriptElementKindModifier,
     ScriptTarget,
     SemanticMeaning,
+    setEmitFlags,
     setSnippetElement,
     shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
@@ -673,9 +675,10 @@ export function getCompletionsAtPosition(
 
     }
 
+    const compilerOptions = program.getCompilerOptions();
+    const checker = program.getTypeChecker();
     // If the request is a continuation of an earlier `isIncomplete` response,
     // we can continue it from the cached previous response.
-    const compilerOptions = program.getCompilerOptions();
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
         const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
@@ -713,12 +716,24 @@ export function getCompletionsAtPosition(
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
             return jsdocCompletionInfo([
                 ...JsDoc.getJSDocTagNameCompletions(),
-                ...getJSDocParameterCompletions(sourceFile, position, preferences, compilerOptions, /*tagNameOnly*/ true)]);
+                ...getJSDocParameterCompletions(
+                    sourceFile,
+                    position,
+                    checker,
+                    compilerOptions,
+                    preferences,
+                    /*tagNameOnly*/ true)]);
         case CompletionDataKind.JsDocTag:
             // If the current position is a jsDoc tag, only tags should be provided for completion
             return jsdocCompletionInfo([
                 ...JsDoc.getJSDocTagCompletions(),
-                ...getJSDocParameterCompletions(sourceFile, position, preferences, compilerOptions, /*tagNameOnly*/ false)]);
+                ...getJSDocParameterCompletions(
+                    sourceFile,
+                    position,
+                    checker,
+                    compilerOptions,
+                    preferences,
+                    /*tagNameOnly*/ false)]);
         case CompletionDataKind.JsDocParameterName:
             return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
         case CompletionDataKind.Keywords:
@@ -838,8 +853,9 @@ function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
 function getJSDocParameterCompletions(
     sourceFile: SourceFile,
     position: number,
-    preferences: UserPreferences,
+    checker: TypeChecker,
     options: CompilerOptions,
+    preferences: UserPreferences,
     tagNameOnly: boolean): CompletionEntry[] {
     const currentToken = getTokenAtPosition(sourceFile, position);
     if (!isJSDocTag(currentToken) && !isJSDoc(currentToken)) {
@@ -864,8 +880,29 @@ function getJSDocParameterCompletions(
         if (isIdentifier(param.name)) { // Named parameter
             const tabstopCounter = { tabstop: 1 };
             const paramName = param.name.text;
-            let snippetText = getJSDocParamAnnotation(paramName, param.initializer, param.dotDotDotToken, isJs, /*isObject*/ false, /*isSnippet*/ true, tabstopCounter);
-            let insertText = getJSDocParamAnnotation(paramName, param.initializer, param.dotDotDotToken, isJs, /*isObject*/ false, /*isSnippet*/ false);
+            let snippetText =
+                getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,
+                    tabstopCounter);
+            let insertText =
+                getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ false,
+                    checker,
+                    options,
+                    preferences);
             if (tagNameOnly) { // Remove `@`
                 insertText = insertText.slice(1);
                 snippetText = snippetText.slice(1);
@@ -881,9 +918,27 @@ function getJSDocParameterCompletions(
         else if (param.parent.parameters.indexOf(param) === paramTagCount) { // Destructuring parameter; do it positionally
             const paramPath = `param${paramTagCount}`;
             const insertTextResult =
-                generateJSDocParamTagsForDestructuring(paramPath, param.name, param.initializer, param.dotDotDotToken, isJs, /*isSnippet*/ false);
+                generateJSDocParamTagsForDestructuring(
+                    paramPath,
+                    param.name,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isSnippet*/ false,
+                    checker,
+                    options,
+                    preferences,);
             const snippetTextResult =
-                generateJSDocParamTagsForDestructuring(paramPath, param.name, param.initializer, param.dotDotDotToken, isJs, /*isSnippet*/ true);
+                generateJSDocParamTagsForDestructuring(
+                    paramPath,
+                    param.name,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,);
             let insertText = insertTextResult.join(getNewLineCharacter(options) + "* ");
             let snippetText = snippetTextResult.join(getNewLineCharacter(options) + "* ");
             if (tagNameOnly) { // Remove `@`
@@ -907,9 +962,24 @@ function generateJSDocParamTagsForDestructuring(
     initializer: Expression | undefined,
     dotDotDotToken: DotDotDotToken | undefined,
     isJs: boolean,
-    isSnippet: boolean): string[] {
+    isSnippet: boolean,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences): string[] {
     if (!isJs) {
-        return [getJSDocParamAnnotation(path, initializer, dotDotDotToken, isJs, /*isObject*/ false, isSnippet, { tabstop: 1 })];
+        return [
+            getJSDocParamAnnotation(
+                path,
+                initializer,
+                dotDotDotToken,
+                isJs,
+                /*isObject*/ false,
+                isSnippet,
+                checker,
+                options,
+                preferences,
+                { tabstop: 1 })
+        ];
     }
     return patternWorker(path, pattern, initializer, dotDotDotToken, { tabstop: 1 });
 
@@ -922,7 +992,18 @@ function generateJSDocParamTagsForDestructuring(
         if (isObjectBindingPattern(pattern) && !dotDotDotToken) {
             const oldTabstop = counter.tabstop;
             const childCounter = { tabstop: oldTabstop };
-            const rootParam = getJSDocParamAnnotation(path, initializer, dotDotDotToken, isJs, /*isObject*/ true, isSnippet, childCounter);
+            const rootParam =
+                getJSDocParamAnnotation(
+                    path,
+                    initializer,
+                    dotDotDotToken,
+                    isJs,
+                    /*isObject*/ true,
+                    isSnippet,
+                    checker,
+                    options,
+                    preferences,
+                    childCounter);
             let childTags: string[] | undefined = [];
             for (const element of pattern.elements) {
                 const elementTags = elementWorker(path, element, childCounter);
@@ -939,7 +1020,19 @@ function generateJSDocParamTagsForDestructuring(
                 return [rootParam, ...childTags];
             }
         }
-        return [getJSDocParamAnnotation(path, initializer, dotDotDotToken, isJs, /*isObject*/ false, isSnippet, counter)];
+        return [
+            getJSDocParamAnnotation(
+                path,
+                initializer,
+                dotDotDotToken,
+                isJs,
+                /*isObject*/ false,
+                isSnippet,
+                checker,
+                options,
+                preferences,
+                counter)
+            ];
     }
 
     // Assumes binding element is inside object binding pattern.
@@ -951,7 +1044,18 @@ function generateJSDocParamTagsForDestructuring(
                 return undefined;
             }
             const paramName = `${path}.${propertyName}`;
-            return [getJSDocParamAnnotation(paramName, element.initializer, element.dotDotDotToken, isJs, /*isObject*/ false, isSnippet, counter)];
+            return [
+                getJSDocParamAnnotation(
+                    paramName,
+                    element.initializer,
+                    element.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    isSnippet,
+                    checker,
+                    options,
+                    preferences,
+                    counter)];
         }
         else if (element.propertyName) { // `{ b: {...} }` or `{ b: [...] }`
             const propertyName = tryGetTextOfPropertyName(element.propertyName);
@@ -973,6 +1077,9 @@ function getJSDocParamAnnotation(
     isJs: boolean,
     isObject: boolean,
     isSnippet: boolean,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences,
     tabstopCounter?: TabStopCounter) {
     if (isSnippet) {
         Debug.assertIsDefined(tabstopCounter);
@@ -984,17 +1091,38 @@ function getJSDocParamAnnotation(
         paramName = escapeSnippetText(paramName);
     }
     if (isJs) {
-        let type: string;
+        let type = "*";
         if (isObject) {
             Debug.assert(!dotDotDotToken, `Cannot annotate a rest parameter with type 'Object'.`);
             type = "Object";
         }
         else {
-            if (isSnippet) {
-                type = `\${${tabstopCounter!.tabstop++}:*}`;
+            if (initializer) {
+                const inferredType = checker.getTypeAtLocation(initializer.parent);
+                if (!(inferredType.flags & TypeFlags.Any)) {
+                    const sourceFile = initializer.getSourceFile();
+                    const quotePreference = getQuotePreference(sourceFile, preferences);
+                    const builderFlags = (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
+                    const typeNode = checker.typeToTypeNode(inferredType, findAncestor(initializer, isFunctionLike), builderFlags);
+                    if (typeNode) {
+                        const printer = isSnippet
+                            ? createSnippetPrinter({
+                                removeComments: true,
+                                module: options.module,
+                                target: options.target,
+                            })
+                            : createPrinter({
+                                removeComments: true,
+                                module: options.module,
+                                target: options.target
+                            });
+                        setEmitFlags(typeNode, EmitFlags.SingleLine);
+                        type = printer.printNode(EmitHint.Unspecified, typeNode, sourceFile);
+                    }
+                }
             }
-            else {
-                type = "*";
+            if (isSnippet) {
+                type = `\${${tabstopCounter!.tabstop++}:${type}}`;
             }
         }
         const dotDotDot = !isObject && dotDotDotToken ? "..." : "";
