@@ -7,8 +7,6 @@ It also determines the directory to watch and whether to watch it recursively or
 
 ## RootDirForResolution: //vda1cs4850/
 
-Root: //vda1cs4850
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               | //vda1cs4850/node_modules                                                                                                    | true      |
@@ -130,8 +128,6 @@ Root: //vda1cs4850
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home                                                                                                            | true      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot
-
-Root: //vda1cs4850/folderAtRoot
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -255,8 +251,6 @@ Root: //vda1cs4850/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1
 
-Root: //vda1cs4850/folderAtRoot/folder1
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -378,8 +372,6 @@ Root: //vda1cs4850/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/folderAtRoot/folder1/folder2
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -503,8 +495,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -626,8 +616,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -751,8 +739,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -874,8 +860,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/users
-
-Root: //vda1cs4850/users
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -999,8 +983,6 @@ Root: //vda1cs4850/users
 
 ## RootDirForResolution: //vda1cs4850/users/username
 
-Root: //vda1cs4850/users/username
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -1122,8 +1104,6 @@ Root: //vda1cs4850/users/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot
-
-Root: //vda1cs4850/users/username/folderAtRoot
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1247,8 +1227,6 @@ Root: //vda1cs4850/users/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/users/username/folderAtRoot/folder1
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -1370,8 +1348,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1495,8 +1471,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -1618,8 +1592,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1743,8 +1715,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -1866,8 +1836,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/f
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/user
-
-Root: //vda1cs4850/user
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1991,8 +1959,6 @@ Root: //vda1cs4850/user
 
 ## RootDirForResolution: //vda1cs4850/user/username
 
-Root: //vda1cs4850/user/username
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -2114,8 +2080,6 @@ Root: //vda1cs4850/user/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot
-
-Root: //vda1cs4850/user/username/folderAtRoot
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2239,8 +2203,6 @@ Root: //vda1cs4850/user/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/user/username/folderAtRoot/folder1
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -2362,8 +2324,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2487,8 +2447,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -2610,8 +2568,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2735,8 +2691,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -2858,8 +2812,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/fo
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/usr
-
-Root: //vda1cs4850/usr
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2983,8 +2935,6 @@ Root: //vda1cs4850/usr
 
 ## RootDirForResolution: //vda1cs4850/usr/username
 
-Root: //vda1cs4850/usr/username
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -3106,8 +3056,6 @@ Root: //vda1cs4850/usr/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot
-
-Root: //vda1cs4850/usr/username/folderAtRoot
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3231,8 +3179,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -3354,8 +3300,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3479,8 +3423,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -3602,8 +3544,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3727,8 +3667,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -3850,8 +3788,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/fol
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: //vda1cs4850/home
-
-Root: //vda1cs4850/home
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3975,8 +3911,6 @@ Root: //vda1cs4850/home
 
 ## RootDirForResolution: //vda1cs4850/home/username
 
-Root: //vda1cs4850/home/username
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -4098,8 +4032,6 @@ Root: //vda1cs4850/home/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot                                                                                      | true      |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot
-
-Root: //vda1cs4850/home/username/folderAtRoot
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -4223,8 +4155,6 @@ Root: //vda1cs4850/home/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/home/username/folderAtRoot/folder1
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -4346,8 +4276,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2                                                                      | true      |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -4471,8 +4399,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -4594,8 +4520,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4                                                      | true      |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -4719,8 +4643,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |
 | //vda1cs4850/node_modules/@types/somefile.d.ts                                                                               |                                                                                                                              |           |
@@ -4842,8 +4764,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/fo
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | Location                                                                                                                     | getDirectoryToWatchFailedLookupLocation                                                                                      | Recursive |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------- |

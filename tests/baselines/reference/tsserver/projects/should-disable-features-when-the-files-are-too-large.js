@@ -30,6 +30,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f1.js 500 undefin
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj1
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /a/b/f1.js for info /a/b/f1.js: fileSize: 10485760
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: proj1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: proj1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -44,6 +46,8 @@ TI:: Creating typing installer
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -100,6 +104,8 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
+/node_modules/@types:
+  {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}
 /node_modules: *new*
@@ -134,6 +140,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.js 500 undefin
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj2
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /a/b/f2.js for info /a/b/f2.js: fileSize: 6291456
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: proj2 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj2 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'proj2' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -173,6 +181,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types:
   {"pollingInterval":500}
 /bower_components:
   {"pollingInterval":500}
@@ -225,6 +235,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types:
   {"pollingInterval":500}
 /bower_components:
   {"pollingInterval":500}

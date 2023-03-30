@@ -46,6 +46,10 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /users/username/projects/project/file1.ts (used version)
 
+PolledWatches::
+/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
 /users/username/projects/project/file1.ts: *new*
   {}
@@ -103,6 +107,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/modulefile.ts (computed .d.ts)
 /users/username/projects/project/file1.ts (computed .d.ts)
+
+PolledWatches::
+/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /users/username/projects/project/file1.ts:

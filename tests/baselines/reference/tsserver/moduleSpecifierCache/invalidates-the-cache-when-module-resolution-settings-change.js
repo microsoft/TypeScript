@@ -60,6 +60,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefine
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -117,6 +119,8 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /tsconfig.json: *new*
@@ -173,6 +177,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -234,6 +240,8 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -763,7 +771,11 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -812,5 +824,31 @@ Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
+/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json:
+  {}
+/src/ambient.d.ts:
+  {}
+/src/b-link.ts:
+  {}
+/package.json:
+  {}
+
+FsWatchesRecursive::
+/src:
+  {}
+/node_modules:
+  {}
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache count: 0

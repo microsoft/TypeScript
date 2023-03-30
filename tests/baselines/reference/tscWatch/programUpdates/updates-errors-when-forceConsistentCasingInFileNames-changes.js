@@ -50,6 +50,10 @@ Shape signatures in builder refreshed for::
 /b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
+PolledWatches::
+/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
 /tsconfig.json: *new*
   {}
@@ -127,6 +131,28 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+PolledWatches::
+/node_modules/@types:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
+/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
 
 exitCode:: ExitStatus.undefined
 

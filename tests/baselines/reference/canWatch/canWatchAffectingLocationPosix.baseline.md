@@ -6,8 +6,6 @@ Determines if package.json that was found during module resolution and change in
 
 ## RootDirForResolution: /
 
-Root: 
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -51,8 +49,6 @@ Root:
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /folderAtRoot
-
-Root: /folderAtRoot
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -98,8 +94,6 @@ Root: /folderAtRoot
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
-Root: /folderAtRoot/folder1
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -143,8 +137,6 @@ Root: /folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
-
-Root: /folderAtRoot/folder1/folder2
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -190,8 +182,6 @@ Root: /folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
-Root: /folderAtRoot/folder1/folder2/folder3
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -235,8 +225,6 @@ Root: /folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -282,8 +270,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -327,8 +313,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /users
-
-Root: /users
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -374,8 +358,6 @@ Root: /users
 
 ## RootDirForResolution: /users/username
 
-Root: /users/username
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -419,8 +401,6 @@ Root: /users/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /users/username/folderAtRoot
-
-Root: /users/username/folderAtRoot
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -466,8 +446,6 @@ Root: /users/username/folderAtRoot
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
-Root: /users/username/folderAtRoot/folder1
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -511,8 +489,6 @@ Root: /users/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
-
-Root: /users/username/folderAtRoot/folder1/folder2
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -558,8 +534,6 @@ Root: /users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -603,8 +577,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -650,8 +622,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -695,8 +665,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /user
-
-Root: /user
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -742,8 +710,6 @@ Root: /user
 
 ## RootDirForResolution: /user/username
 
-Root: /user/username
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -787,8 +753,6 @@ Root: /user/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /user/username/folderAtRoot
-
-Root: /user/username/folderAtRoot
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -834,8 +798,6 @@ Root: /user/username/folderAtRoot
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
-Root: /user/username/folderAtRoot/folder1
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -879,8 +841,6 @@ Root: /user/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
-
-Root: /user/username/folderAtRoot/folder1/folder2
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -926,8 +886,6 @@ Root: /user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -971,8 +929,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1018,8 +974,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1063,8 +1017,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /usr
-
-Root: /usr
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1110,8 +1062,6 @@ Root: /usr
 
 ## RootDirForResolution: /usr/username
 
-Root: /usr/username
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1155,8 +1105,6 @@ Root: /usr/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot
-
-Root: /usr/username/folderAtRoot
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1202,8 +1150,6 @@ Root: /usr/username/folderAtRoot
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1
 
-Root: /usr/username/folderAtRoot/folder1
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1247,8 +1193,6 @@ Root: /usr/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
-
-Root: /usr/username/folderAtRoot/folder1/folder2
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1294,8 +1238,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1339,8 +1281,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1386,8 +1326,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1431,8 +1369,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /home
-
-Root: /home
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1478,8 +1414,6 @@ Root: /home
 
 ## RootDirForResolution: /home/username
 
-Root: /home/username
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1523,8 +1457,6 @@ Root: /home/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /home/username/folderAtRoot
-
-Root: /home/username/folderAtRoot
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1570,8 +1502,6 @@ Root: /home/username/folderAtRoot
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1
 
-Root: /home/username/folderAtRoot/folder1
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1615,8 +1545,6 @@ Root: /home/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
-
-Root: /home/username/folderAtRoot/folder1/folder2
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1662,8 +1590,6 @@ Root: /home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1707,8 +1633,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
@@ -1754,8 +1678,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |
 | /package.json                                                                     | false                     |
@@ -1799,8 +1721,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |

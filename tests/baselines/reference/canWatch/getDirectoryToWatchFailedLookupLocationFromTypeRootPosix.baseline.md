@@ -7,37 +7,34 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 ## RootDirForResolution: /
 
-Root: 
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                |                                                                                          |
-| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        |                                                                                          |
-| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                |                                                                                          |
-| /users/username/folderAtRoot/folder1/node_modules/@types                                 |                                                                                          |
-| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         |                                                                                          |
-| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 |                                                                                          |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         |                                                                                          |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types |                                                                                          |
-| /user/username/folderAtRoot/folder1/node_modules/@types                                  |                                                                                          |
-| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          |                                                                                          |
-| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  |                                                                                          |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          |                                                                                          |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  |                                                                                          |
-| /usr/username/folderAtRoot/folder1/node_modules/@types                                   |                                                                                          |
-| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           |                                                                                          |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   |                                                                                          |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           |                                                                                          |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   |                                                                                          |
-| /home/username/folderAtRoot/folder1/node_modules/@types                                  |                                                                                          |
-| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          |                                                                                          |
-| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  |                                                                                          |
-| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          |                                                                                          |
-| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  |                                                                                          |
+| /node_modules/@types                                                                     | /                                                                                        |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /                                                                                        |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /                                                                                        |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /                                                                                        |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /                                                                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /                                                                                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /                                                                                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /                                                                                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /                                                                                        |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /                                                                                        |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /                                                                                        |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /                                                                                        |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /                                                                                        |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /                                                                                        |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /                                                                                        |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /                                                                                        |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /                                                                                        |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /                                                                                        |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /                                                                                        |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /                                                                                        |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /                                                                                        |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /                                                                                        |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /                                                                                        |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /                                                                                        |
 
 ## RootDirForResolution: /folderAtRoot
-
-Root: /folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -68,8 +65,6 @@ Root: /folderAtRoot
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
-Root: /folderAtRoot/folder1
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/node_modules/@types                                                | /folderAtRoot/folder1                                                                    |
@@ -98,8 +93,6 @@ Root: /folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
-
-Root: /folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -130,8 +123,6 @@ Root: /folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
-Root: /folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3                                                    |
@@ -159,8 +150,6 @@ Root: /folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -190,8 +179,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -219,8 +206,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /users
-
-Root: /users
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -251,8 +236,6 @@ Root: /users
 
 ## RootDirForResolution: /users/username
 
-Root: /users/username
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -281,8 +264,6 @@ Root: /users/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /users/username/folderAtRoot
-
-Root: /users/username/folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -313,8 +294,6 @@ Root: /users/username/folderAtRoot
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
-Root: /users/username/folderAtRoot/folder1
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -342,8 +321,6 @@ Root: /users/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
-
-Root: /users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -373,8 +350,6 @@ Root: /users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -402,8 +377,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -433,8 +406,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -462,8 +433,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /user
-
-Root: /user
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -494,8 +463,6 @@ Root: /user
 
 ## RootDirForResolution: /user/username
 
-Root: /user/username
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -524,8 +491,6 @@ Root: /user/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /user/username/folderAtRoot
-
-Root: /user/username/folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -556,8 +521,6 @@ Root: /user/username/folderAtRoot
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
-Root: /user/username/folderAtRoot/folder1
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -585,8 +548,6 @@ Root: /user/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
-
-Root: /user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -616,8 +577,6 @@ Root: /user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -645,8 +604,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -676,8 +633,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -705,8 +660,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /usr
-
-Root: /usr
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -737,8 +690,6 @@ Root: /usr
 
 ## RootDirForResolution: /usr/username
 
-Root: /usr/username
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -767,8 +718,6 @@ Root: /usr/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /usr/username/folderAtRoot
-
-Root: /usr/username/folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -799,8 +748,6 @@ Root: /usr/username/folderAtRoot
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1
 
-Root: /usr/username/folderAtRoot/folder1
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -828,8 +775,6 @@ Root: /usr/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
-
-Root: /usr/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -859,8 +804,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -888,8 +831,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -919,8 +860,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -948,8 +887,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
 
 ## RootDirForResolution: /home
-
-Root: /home
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -980,8 +917,6 @@ Root: /home
 
 ## RootDirForResolution: /home/username
 
-Root: /home/username
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -1010,8 +945,6 @@ Root: /home/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username                                                                           |
 
 ## RootDirForResolution: /home/username/folderAtRoot
-
-Root: /home/username/folderAtRoot
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -1042,8 +975,6 @@ Root: /home/username/folderAtRoot
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1
 
-Root: /home/username/folderAtRoot/folder1
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -1071,8 +1002,6 @@ Root: /home/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1                                                      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
-
-Root: /home/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -1102,8 +1031,6 @@ Root: /home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -1131,8 +1058,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -1162,8 +1087,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -1191,8 +1114,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |

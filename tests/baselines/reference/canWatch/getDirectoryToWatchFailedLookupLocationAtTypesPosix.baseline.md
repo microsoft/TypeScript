@@ -7,8 +7,6 @@ It also determines the directory to watch and whether to watch it recursively or
 
 ## RootDirForResolution: /
 
-Root: 
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               | /node_modules                                                                                                    | true      |
@@ -130,8 +128,6 @@ Root:
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home                                                                                                            | true      |
 
 ## RootDirForResolution: /folderAtRoot
-
-Root: /folderAtRoot
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -255,8 +251,6 @@ Root: /folderAtRoot
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
-Root: /folderAtRoot/folder1
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -378,8 +372,6 @@ Root: /folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
-
-Root: /folderAtRoot/folder1/folder2
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -503,8 +495,6 @@ Root: /folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
-Root: /folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -626,8 +616,6 @@ Root: /folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -751,8 +739,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -874,8 +860,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /users
-
-Root: /users
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -999,8 +983,6 @@ Root: /users
 
 ## RootDirForResolution: /users/username
 
-Root: /users/username
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -1122,8 +1104,6 @@ Root: /users/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot
-
-Root: /users/username/folderAtRoot
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1247,8 +1227,6 @@ Root: /users/username/folderAtRoot
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
-Root: /users/username/folderAtRoot/folder1
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -1370,8 +1348,6 @@ Root: /users/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
-
-Root: /users/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1495,8 +1471,6 @@ Root: /users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -1618,8 +1592,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1743,8 +1715,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -1866,8 +1836,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /user
-
-Root: /user
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -1991,8 +1959,6 @@ Root: /user
 
 ## RootDirForResolution: /user/username
 
-Root: /user/username
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -2114,8 +2080,6 @@ Root: /user/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot
-
-Root: /user/username/folderAtRoot
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2239,8 +2203,6 @@ Root: /user/username/folderAtRoot
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
-Root: /user/username/folderAtRoot/folder1
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -2362,8 +2324,6 @@ Root: /user/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
-
-Root: /user/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2487,8 +2447,6 @@ Root: /user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -2610,8 +2568,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2735,8 +2691,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -2858,8 +2812,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /usr
-
-Root: /usr
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -2983,8 +2935,6 @@ Root: /usr
 
 ## RootDirForResolution: /usr/username
 
-Root: /usr/username
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -3106,8 +3056,6 @@ Root: /usr/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot
-
-Root: /usr/username/folderAtRoot
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3231,8 +3179,6 @@ Root: /usr/username/folderAtRoot
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1
 
-Root: /usr/username/folderAtRoot/folder1
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -3354,8 +3300,6 @@ Root: /usr/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
-
-Root: /usr/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3479,8 +3423,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -3602,8 +3544,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3727,8 +3667,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -3850,8 +3788,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: /home
-
-Root: /home
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -3975,8 +3911,6 @@ Root: /home
 
 ## RootDirForResolution: /home/username
 
-Root: /home/username
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -4098,8 +4032,6 @@ Root: /home/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                                      | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot
-
-Root: /home/username/folderAtRoot
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -4223,8 +4155,6 @@ Root: /home/username/folderAtRoot
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1
 
-Root: /home/username/folderAtRoot/folder1
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -4346,8 +4276,6 @@ Root: /home/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2                                                                      | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
-
-Root: /home/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -4471,8 +4399,6 @@ Root: /home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -4594,8 +4520,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                                      | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
@@ -4719,8 +4643,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | /node_modules/@types/somefile.d.ts                                                                               |                                                                                                                  |           |
@@ -4842,8 +4764,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                                 | true      |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | Location                                                                                                         | getDirectoryToWatchFailedLookupLocation                                                                          | Recursive |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |

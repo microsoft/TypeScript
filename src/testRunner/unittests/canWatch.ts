@@ -79,7 +79,7 @@ describe("unittests:: canWatch::", () => {
                         path,
                         root,
                         root,
-                        root !== undefined ? root.split(ts.directorySeparator).length : 0,
+                        ts.getRootPathSplitLength(root),
                         ts.returnUndefined,
                     );
                     pushRow(baseline, [path, result ? result.dir : "", result ? `${!result.nonRecursive}` : ""], maxLengths);
@@ -119,7 +119,8 @@ describe("unittests:: canWatch::", () => {
 
         function baselineRoot(rootDirForResolution: ts.Path | undefined) {
             const root = ts.getRootDirectoryOfResolutionCache(rootDirForResolution, ts.returnUndefined) as ts.Path;
-            baseline.push("", `## RootDirForResolution: ${rootDirForResolution}`, "", `Root: ${root}`);
+            assert(root === rootDirForResolution);
+            baseline.push("", `## RootDirForResolution: ${rootDirForResolution}`);
             baselineForRoot(root);
         }
     }

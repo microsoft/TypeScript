@@ -6,8 +6,6 @@ Determines if package.json that was found during module resolution and change in
 
 ## RootDirForResolution: //vda1cs4850/
 
-Root: //vda1cs4850
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -51,8 +49,6 @@ Root: //vda1cs4850
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot
-
-Root: //vda1cs4850/folderAtRoot
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -98,8 +94,6 @@ Root: //vda1cs4850/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1
 
-Root: //vda1cs4850/folderAtRoot/folder1
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -143,8 +137,6 @@ Root: //vda1cs4850/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/folderAtRoot/folder1/folder2
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -190,8 +182,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -235,8 +225,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -282,8 +270,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -327,8 +313,6 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users
-
-Root: //vda1cs4850/users
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -374,8 +358,6 @@ Root: //vda1cs4850/users
 
 ## RootDirForResolution: //vda1cs4850/users/username
 
-Root: //vda1cs4850/users/username
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -419,8 +401,6 @@ Root: //vda1cs4850/users/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot
-
-Root: //vda1cs4850/users/username/folderAtRoot
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -466,8 +446,6 @@ Root: //vda1cs4850/users/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/users/username/folderAtRoot/folder1
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -511,8 +489,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -558,8 +534,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -603,8 +577,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -650,8 +622,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -695,8 +665,6 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/f
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user
-
-Root: //vda1cs4850/user
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -742,8 +710,6 @@ Root: //vda1cs4850/user
 
 ## RootDirForResolution: //vda1cs4850/user/username
 
-Root: //vda1cs4850/user/username
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -787,8 +753,6 @@ Root: //vda1cs4850/user/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot
-
-Root: //vda1cs4850/user/username/folderAtRoot
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -834,8 +798,6 @@ Root: //vda1cs4850/user/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/user/username/folderAtRoot/folder1
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -879,8 +841,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -926,8 +886,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -971,8 +929,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1018,8 +974,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1063,8 +1017,6 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/fo
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/usr
-
-Root: //vda1cs4850/usr
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1110,8 +1062,6 @@ Root: //vda1cs4850/usr
 
 ## RootDirForResolution: //vda1cs4850/usr/username
 
-Root: //vda1cs4850/usr/username
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1155,8 +1105,6 @@ Root: //vda1cs4850/usr/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot
-
-Root: //vda1cs4850/usr/username/folderAtRoot
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1202,8 +1150,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1247,8 +1193,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1294,8 +1238,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1339,8 +1281,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1386,8 +1326,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1431,8 +1369,6 @@ Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/fol
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/home
-
-Root: //vda1cs4850/home
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1478,8 +1414,6 @@ Root: //vda1cs4850/home
 
 ## RootDirForResolution: //vda1cs4850/home/username
 
-Root: //vda1cs4850/home/username
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1523,8 +1457,6 @@ Root: //vda1cs4850/home/username
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot
-
-Root: //vda1cs4850/home/username/folderAtRoot
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1570,8 +1502,6 @@ Root: //vda1cs4850/home/username/folderAtRoot
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1
 
-Root: //vda1cs4850/home/username/folderAtRoot/folder1
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1615,8 +1545,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
-
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1662,8 +1590,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1707,8 +1633,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
@@ -1754,8 +1678,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |
 | //vda1cs4850/package.json                                                                     | false                     |
@@ -1799,8 +1721,6 @@ Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/fo
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | File                                                                                          | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------------------- | ------------------------- |

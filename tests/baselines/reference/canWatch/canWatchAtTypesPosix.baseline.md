@@ -7,11 +7,9 @@ These are the typeRoots calculated because user didnt specify typeRoots in compi
 
 ## RootDirForResolution: /
 
-Root: 
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
-| /node_modules/@types                                                                     | false           |
+| /node_modules/@types                                                                     | true            |
 | /folderAtRoot/node_modules/@types                                                        | false           |
 | /folderAtRoot/folder1/node_modules/@types                                                | false           |
 | /folderAtRoot/folder1/folder2/node_modules/@types                                        | false           |
@@ -52,8 +50,6 @@ Root:
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /folderAtRoot
-
-Root: /folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -99,8 +95,6 @@ Root: /folderAtRoot
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
-Root: /folderAtRoot/folder1
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -144,8 +138,6 @@ Root: /folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
-
-Root: /folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -191,8 +183,6 @@ Root: /folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
-Root: /folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -236,8 +226,6 @@ Root: /folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -283,8 +271,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -328,8 +314,6 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /users
-
-Root: /users
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -375,8 +359,6 @@ Root: /users
 
 ## RootDirForResolution: /users/username
 
-Root: /users/username
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -420,8 +402,6 @@ Root: /users/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /users/username/folderAtRoot
-
-Root: /users/username/folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -467,8 +447,6 @@ Root: /users/username/folderAtRoot
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
-Root: /users/username/folderAtRoot/folder1
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -512,8 +490,6 @@ Root: /users/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
-
-Root: /users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -559,8 +535,6 @@ Root: /users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -604,8 +578,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -651,8 +623,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -696,8 +666,6 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /user
-
-Root: /user
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -743,8 +711,6 @@ Root: /user
 
 ## RootDirForResolution: /user/username
 
-Root: /user/username
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -788,8 +754,6 @@ Root: /user/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /user/username/folderAtRoot
-
-Root: /user/username/folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -835,8 +799,6 @@ Root: /user/username/folderAtRoot
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
-Root: /user/username/folderAtRoot/folder1
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -880,8 +842,6 @@ Root: /user/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
-
-Root: /user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -927,8 +887,6 @@ Root: /user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -972,8 +930,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1019,8 +975,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1064,8 +1018,6 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /usr
-
-Root: /usr
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1111,8 +1063,6 @@ Root: /usr
 
 ## RootDirForResolution: /usr/username
 
-Root: /usr/username
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1156,8 +1106,6 @@ Root: /usr/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot
-
-Root: /usr/username/folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1203,8 +1151,6 @@ Root: /usr/username/folderAtRoot
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1
 
-Root: /usr/username/folderAtRoot/folder1
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1248,8 +1194,6 @@ Root: /usr/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
-
-Root: /usr/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1295,8 +1239,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1340,8 +1282,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1387,8 +1327,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1432,8 +1370,6 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /home
-
-Root: /home
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1479,8 +1415,6 @@ Root: /home
 
 ## RootDirForResolution: /home/username
 
-Root: /home/username
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1524,8 +1458,6 @@ Root: /home/username
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /home/username/folderAtRoot
-
-Root: /home/username/folderAtRoot
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1571,8 +1503,6 @@ Root: /home/username/folderAtRoot
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1
 
-Root: /home/username/folderAtRoot/folder1
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1616,8 +1546,6 @@ Root: /home/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
-
-Root: /home/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1663,8 +1591,6 @@ Root: /home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1708,8 +1634,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
@@ -1755,8 +1679,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |
 | /node_modules/@types                                                                     | false           |
@@ -1800,8 +1722,6 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | Directory                                                                                | canWatchAtTypes |
 | ---------------------------------------------------------------------------------------- | --------------- |

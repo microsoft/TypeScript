@@ -161,6 +161,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: ^walkThroughSnippet:/Users/UserName/projects/someProject/out
 Info seq  [hh:mm:ss:mss] For info: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -221,6 +223,8 @@ PolledWatches::
 /user/username/projects/myproject/bower_components:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+/node_modules/@types: *new*
   {"pollingInterval":500}
 /^walkThroughSnippet:: *new*
   {"pollingInterval":500}

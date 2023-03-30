@@ -7,11 +7,9 @@ These are the typeRoots calculated because user didnt specify typeRoots in compi
 
 ## RootDirForResolution: c:/
 
-Root: c:
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
-| c:/node_modules/@types                                                                     | false           |
+| c:/node_modules/@types                                                                     | true            |
 | c:/folderAtRoot/node_modules/@types                                                        | false           |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
@@ -52,8 +50,6 @@ Root: c:
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot
-
-Root: c:/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -99,8 +95,6 @@ Root: c:/folderAtRoot
 
 ## RootDirForResolution: c:/folderAtRoot/folder1
 
-Root: c:/folderAtRoot/folder1
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -144,8 +138,6 @@ Root: c:/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2
-
-Root: c:/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -191,8 +183,6 @@ Root: c:/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -236,8 +226,6 @@ Root: c:/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -283,8 +271,6 @@ Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -328,8 +314,6 @@ Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users
-
-Root: c:/users
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -375,8 +359,6 @@ Root: c:/users
 
 ## RootDirForResolution: c:/users/username
 
-Root: c:/users/username
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -420,8 +402,6 @@ Root: c:/users/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot
-
-Root: c:/users/username/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -467,8 +447,6 @@ Root: c:/users/username/folderAtRoot
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1
 
-Root: c:/users/username/folderAtRoot/folder1
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -512,8 +490,6 @@ Root: c:/users/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2
-
-Root: c:/users/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -559,8 +535,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -604,8 +578,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -651,8 +623,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -696,8 +666,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user
-
-Root: c:/user
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -743,8 +711,6 @@ Root: c:/user
 
 ## RootDirForResolution: c:/user/username
 
-Root: c:/user/username
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -788,8 +754,6 @@ Root: c:/user/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot
-
-Root: c:/user/username/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -835,8 +799,6 @@ Root: c:/user/username/folderAtRoot
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1
 
-Root: c:/user/username/folderAtRoot/folder1
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -880,8 +842,6 @@ Root: c:/user/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2
-
-Root: c:/user/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -927,8 +887,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -972,8 +930,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1019,8 +975,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1064,8 +1018,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/usr
-
-Root: c:/usr
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1111,8 +1063,6 @@ Root: c:/usr
 
 ## RootDirForResolution: c:/usr/username
 
-Root: c:/usr/username
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1156,8 +1106,6 @@ Root: c:/usr/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot
-
-Root: c:/usr/username/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1203,8 +1151,6 @@ Root: c:/usr/username/folderAtRoot
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1
 
-Root: c:/usr/username/folderAtRoot/folder1
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1248,8 +1194,6 @@ Root: c:/usr/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2
-
-Root: c:/usr/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1295,8 +1239,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1340,8 +1282,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1387,8 +1327,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1432,8 +1370,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/home
-
-Root: c:/home
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1479,8 +1415,6 @@ Root: c:/home
 
 ## RootDirForResolution: c:/home/username
 
-Root: c:/home/username
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1524,8 +1458,6 @@ Root: c:/home/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/home/username/folderAtRoot
-
-Root: c:/home/username/folderAtRoot
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1571,8 +1503,6 @@ Root: c:/home/username/folderAtRoot
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1
 
-Root: c:/home/username/folderAtRoot/folder1
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1616,8 +1546,6 @@ Root: c:/home/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2
-
-Root: c:/home/username/folderAtRoot/folder1/folder2
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1663,8 +1591,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/home/username/folderAtRoot/folder1/folder2/folder3
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1708,8 +1634,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
@@ -1755,8 +1679,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |
 | c:/node_modules/@types                                                                     | false           |
@@ -1800,8 +1722,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | Directory                                                                                  | canWatchAtTypes |
 | ------------------------------------------------------------------------------------------ | --------------- |

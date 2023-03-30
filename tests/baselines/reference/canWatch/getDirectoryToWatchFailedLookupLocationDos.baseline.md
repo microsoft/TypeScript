@@ -7,11 +7,9 @@ It also determines the directory to watch and whether to watch it recursively or
 
 ## RootDirForResolution: c:/
 
-Root: c:
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
-| c:/somefile.d.ts                                                                               | c:                                                                                             | false     |
+| c:/somefile.d.ts                                                                               | c:/                                                                                            | false     |
 | c:/dir/somefile.d.ts                                                                           | c:/dir                                                                                         | true      |
 | c:/dir/subdir/somefile.d.ts                                                                    | c:/dir                                                                                         | true      |
 | c:/folderAtRoot/somefile.d.ts                                                                  | c:/folderAtRoot                                                                                | true      |
@@ -130,8 +128,6 @@ Root: c:
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | c:/home                                                                                        | true      |
 
 ## RootDirForResolution: c:/folderAtRoot
-
-Root: c:/folderAtRoot
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -255,8 +251,6 @@ Root: c:/folderAtRoot
 
 ## RootDirForResolution: c:/folderAtRoot/folder1
 
-Root: c:/folderAtRoot/folder1
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -378,8 +372,6 @@ Root: c:/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2
-
-Root: c:/folderAtRoot/folder1/folder2
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -503,8 +495,6 @@ Root: c:/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -626,8 +616,6 @@ Root: c:/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -751,8 +739,6 @@ Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -874,8 +860,6 @@ Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/users
-
-Root: c:/users
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -999,8 +983,6 @@ Root: c:/users
 
 ## RootDirForResolution: c:/users/username
 
-Root: c:/users/username
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -1122,8 +1104,6 @@ Root: c:/users/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot
-
-Root: c:/users/username/folderAtRoot
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -1247,8 +1227,6 @@ Root: c:/users/username/folderAtRoot
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1
 
-Root: c:/users/username/folderAtRoot/folder1
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -1370,8 +1348,6 @@ Root: c:/users/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2
-
-Root: c:/users/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -1495,8 +1471,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -1618,8 +1592,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -1743,8 +1715,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -1866,8 +1836,6 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/user
-
-Root: c:/user
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -1991,8 +1959,6 @@ Root: c:/user
 
 ## RootDirForResolution: c:/user/username
 
-Root: c:/user/username
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -2114,8 +2080,6 @@ Root: c:/user/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot
-
-Root: c:/user/username/folderAtRoot
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -2239,8 +2203,6 @@ Root: c:/user/username/folderAtRoot
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1
 
-Root: c:/user/username/folderAtRoot/folder1
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -2362,8 +2324,6 @@ Root: c:/user/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2
-
-Root: c:/user/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -2487,8 +2447,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -2610,8 +2568,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -2735,8 +2691,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -2858,8 +2812,6 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/usr
-
-Root: c:/usr
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -2983,8 +2935,6 @@ Root: c:/usr
 
 ## RootDirForResolution: c:/usr/username
 
-Root: c:/usr/username
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -3106,8 +3056,6 @@ Root: c:/usr/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot
-
-Root: c:/usr/username/folderAtRoot
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -3231,8 +3179,6 @@ Root: c:/usr/username/folderAtRoot
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1
 
-Root: c:/usr/username/folderAtRoot/folder1
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -3354,8 +3300,6 @@ Root: c:/usr/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2
-
-Root: c:/usr/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -3479,8 +3423,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -3602,8 +3544,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -3727,8 +3667,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -3850,8 +3788,6 @@ Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 
 ## RootDirForResolution: c:/home
-
-Root: c:/home
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -3975,8 +3911,6 @@ Root: c:/home
 
 ## RootDirForResolution: c:/home/username
 
-Root: c:/home/username
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -4098,8 +4032,6 @@ Root: c:/home/username
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | c:/home/username/folderAtRoot                                                                  | true      |
 
 ## RootDirForResolution: c:/home/username/folderAtRoot
-
-Root: c:/home/username/folderAtRoot
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -4223,8 +4155,6 @@ Root: c:/home/username/folderAtRoot
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1
 
-Root: c:/home/username/folderAtRoot/folder1
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -4346,8 +4276,6 @@ Root: c:/home/username/folderAtRoot/folder1
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | c:/home/username/folderAtRoot/folder1/folder2                                                  | true      |
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2
-
-Root: c:/home/username/folderAtRoot/folder1/folder2
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -4471,8 +4399,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3
 
-Root: c:/home/username/folderAtRoot/folder1/folder2/folder3
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -4594,8 +4520,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2/folder3
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
-
-Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
@@ -4719,8 +4643,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
 ## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
-Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
-
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
 | c:/somefile.d.ts                                                                               |                                                                                                |           |
@@ -4842,8 +4764,6 @@ Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 
 ## RootDirForResolution: undefined
-
-Root: undefined
 
 | Location                                                                                       | getDirectoryToWatchFailedLookupLocation                                                        | Recursive |
 | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
