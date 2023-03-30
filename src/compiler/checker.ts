@@ -11426,17 +11426,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.writeType || (links.writeType = instantiateType(getWriteTypeOfSymbol(links.target!), links.mapper));
     }
 
-    function reportCircularityError(symbol: Symbol) {
-        const declaration = symbol.valueDeclaration as VariableLikeDeclaration;
+    function reportCircularityError(symbol: Symbol, declaration: Node | undefined = symbol.valueDeclaration || symbol.declarations?.[0]) {
         // Check if variable has type annotation that circularly references the variable itself
-        if (getEffectiveTypeAnnotationNode(declaration)) {
-            error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation,
+        if (declaration && getEffectiveTypeAnnotationNode(declaration)) {
+            error(declaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation,
                 symbolToString(symbol));
             return errorType;
         }
         // Check if variable has initializer that circularly references the variable itself
-        if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
-            error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
+        if (noImplicitAny && declaration && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
+            error(declaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                 symbolToString(symbol));
         }
         // Circularities could also result from parameters in function expressions that end up
@@ -13141,7 +13140,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const modifiers = getMappedTypeModifiers(type.mappedType);
         const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
-        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
         for (const prop of getPropertiesOfType(type.source)) {
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
@@ -13149,23 +13147,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             inferredProp.declarations = prop.declarations;
             inferredProp.links.nameType = getSymbolLinks(prop).nameType;
             inferredProp.links.propertyType = getTypeOfSymbol(prop);
-            if (type.constraintType.type.flags & TypeFlags.IndexedAccess
-                && (type.constraintType.type as IndexedAccessType).objectType.flags & TypeFlags.TypeParameter
-                && (type.constraintType.type as IndexedAccessType).indexType.flags & TypeFlags.TypeParameter) {
-                // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
-                // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
-                // type identities produced, we simplify such indexed access occurences
-                const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
-                const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
-                inferredProp.links.mappedType = newMappedType as MappedType;
-                inferredProp.links.constraintType = getIndexType(newTypeParam) as IndexType;
-            }
-            else {
-                inferredProp.links.mappedType = type.mappedType;
-                inferredProp.links.constraintType = type.constraintType;
-            }
+            inferredProp.links.mappedType = type.mappedType;
+            inferredProp.links.constraintType = type.constraintType;
             members.set(prop.escapedName, inferredProp);
         }
+        setStructuredTypeMembers(type, members, emptyArray, emptyArray, emptyArray);
+        // `inferReverseMappedType` might trigger subtype reduction on the inference result and recusively attempt to resolve the structure of the type.
+        // By setting a (completed!) `members` array, we short-circuit any dependent structure resolutions. (Those recursive callers will witness the
+        // unfinished structure instead - similar to how class base type resolution works.)
+        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos);
     }
 
@@ -24005,6 +23995,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (inInferTypeForHomomorphicMappedType) {
             return undefined;
         }
+        if (constraint.type.flags & TypeFlags.IndexedAccess
+            && (constraint.type as IndexedAccessType).objectType.flags & TypeFlags.TypeParameter
+            && (constraint.type as IndexedAccessType).indexType.flags & TypeFlags.TypeParameter) {
+            // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
+            // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
+            // type identities produced, we simplify such indexed access occurences
+            const newTypeParam = (constraint.type as IndexedAccessType).objectType;
+            const newMappedType = replaceIndexedAccess(target, constraint.type as ReplaceableIndexedAccessType, newTypeParam);
+            target = newMappedType as MappedType;
+            constraint = getIndexType(newTypeParam) as IndexType;
+        }
         const key = source.id + "," + target.id + "," + constraint.id;
         if (reverseMappedCache.has(key)) {
             return reverseMappedCache.get(key);
@@ -24056,7 +24057,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
+            // Since `inferReverseMappedType` avoids pulling on structure in its inference result, we *shouldn't* have a recursive
+            // type resolution request, but if we somehow do, we should error.
+            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                reportCircularityError(symbol);
+                return errorType;
+            }
             links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType);
+
+            if (!popTypeResolution()) {
+                reportCircularityError(symbol);
+                return links.type = errorType;
+            }
         }
         return links.type;
     }
@@ -24066,7 +24078,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || unknownType;
+        // Skip subtype reducing the inference result (this can eagerly resolve structure, which we'd rather avoid while doing this inference)
+        return getTypeFromInference(inference, UnionReduction.Literal) || unknownType;
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
@@ -24111,8 +24124,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false);
     }
 
-    function getTypeFromInference(inference: InferenceInfo) {
-        return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
+    function getTypeFromInference(inference: InferenceInfo, reductions = UnionReduction.Subtype) {
+        return inference.candidates ? getUnionType(inference.candidates, reductions) :
             inference.contraCandidates ? getIntersectionType(inference.contraCandidates) :
             undefined;
     }
