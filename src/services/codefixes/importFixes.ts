@@ -1386,11 +1386,6 @@ function doAddExistingFix(
 
     const promoteFromTypeOnly = clause.isTypeOnly && some([defaultImport, ...namedImports], i => i?.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
     const existingSpecifiers = clause.namedBindings && tryCast(clause.namedBindings, isNamedImports)?.elements;
-    // We used to convert existing specifiers to type-only only if compiler options indicated that
-    // would be meaningful (see the `importNameElisionDisabled` utility function), but user
-    // feedback indicated a preference for preserving the type-onlyness of existing specifiers
-    // regardless of whether it would make a difference in emit.
-    const convertExistingSpecifiersToTypeOnly = promoteFromTypeOnly;
 
     if (defaultImport) {
         Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
@@ -1435,7 +1430,7 @@ function doAddExistingFix(
                 // Organize imports puts type-only import specifiers last, so if we're
                 // adding a non-type-only specifier and converting all the other ones to
                 // type-only, there's no need to ask for the insertion index - it's 0.
-                const insertionIndex = convertExistingSpecifiersToTypeOnly && !spec.isTypeOnly
+                const insertionIndex = promoteFromTypeOnly && !spec.isTypeOnly
                     ? 0
                     : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparer);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
@@ -1461,7 +1456,11 @@ function doAddExistingFix(
 
     if (promoteFromTypeOnly) {
         changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
-        if (convertExistingSpecifiersToTypeOnly && existingSpecifiers) {
+        if (existingSpecifiers) {
+            // We used to convert existing specifiers to type-only only if compiler options indicated that
+            // would be meaningful (see the `importNameElisionDisabled` utility function), but user
+            // feedback indicated a preference for preserving the type-onlyness of existing specifiers
+            // regardless of whether it would make a difference in emit.
             for (const specifier of existingSpecifiers) {
                 changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, specifier);
             }
