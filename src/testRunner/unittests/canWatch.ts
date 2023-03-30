@@ -4,9 +4,9 @@ import * as ts from "../_namespaces/ts";
 describe("unittests:: canWatch::", () => {
     it("canWatchDirectoryOrFile", () => {
         const baseline: string[] = [];
-        getRoots().forEach(root => {
-            baseline.push(`## Testing for root: ${root}`);
-            const { paths, longestPathLength } = getPathsAtRoot(root);
+        getRoots().forEach(osRoot => {
+            baseline.push(`## Testing for root: ${osRoot}`);
+            const { paths, longestPathLength } = getPathsAtRoot(osRoot);
             const testType = "canWatchDirectoryOrFile";
             const maxLengths = [longestPathLength + "/package.json".length, testType.length] as const;
             pushHeader(baseline, ["Directory", testType], maxLengths);
@@ -20,6 +20,49 @@ describe("unittests:: canWatch::", () => {
 
         function baselineCanWatchDirectoryOrFile(path: string, maxLengths: readonly number[]) {
             pushRow(baseline, [path, `${ts.canWatchDirectoryOrFile(path as ts.Path)}`], maxLengths);
+        }
+    });
+
+    it("canWatchAtTypes", () => {
+        const baseline: string[] = [];
+        getRoots().forEach(osRoot => {
+            baseline.push(`## Testing for root: ${osRoot}`);
+            const { paths, longestPathLength } = getPathsAtRoot(osRoot);
+            const testType = "canWatchAtTypes";
+            const maxLengths = [longestPathLength + "/node_modules/@types".length, testType.length] as const;
+            paths.forEach(baselineForRoot);
+            baselineForRoot(/*root*/ undefined);
+            baseline.push("", "");
+            function baselineForRoot(root: string | undefined) {
+                baseline.push("", `## Root path: ${root}`);
+                pushHeader(baseline, ["Directory", testType], maxLengths);
+                paths.forEach(path => baselineCanWatchAtTypes(ts.combinePaths(path, "node_modules/@types"), root, maxLengths));
+            }
+        });
+
+        Baseline.runBaseline(`canWatch/canWatchAtTypes.baseline.md`, baseline.join("\r\n"));
+
+        function baselineCanWatchAtTypes(path: string, root: string | undefined, maxLengths: readonly number[]) {
+            pushRow(baseline, [path, `${ts.canWatchAtTypes(path as ts.Path, root as ts.Path | undefined)}`], maxLengths);
+        }
+    });
+
+    it("canWatchAffectingLocation", () => {
+        const baseline: string[] = [];
+        getRoots().forEach(osRoot => {
+            baseline.push(`## Testing for root: ${osRoot}`);
+            const { paths, longestPathLength } = getPathsAtRoot(osRoot);
+            const testType = "canWatchAffectingLocation";
+            const maxLengths = [longestPathLength + "/package.json".length, testType.length] as const;
+            pushHeader(baseline, ["File", testType], maxLengths);
+            paths.forEach(path => baselineCanWatchAffectingLocation(`${ts.combinePaths(path, "package.json")}`, maxLengths));
+            baseline.push("", "");
+        });
+
+        Baseline.runBaseline(`canWatch/canWatchAffectingLocation.baseline.md`, baseline.join("\r\n"));
+
+        function baselineCanWatchAffectingLocation(path: string, maxLengths: readonly number[]) {
+            pushRow(baseline, [path, `${ts.canWatchAffectingLocation(path as ts.Path,)}`], maxLengths);
         }
     });
 

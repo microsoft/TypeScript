@@ -255,6 +255,18 @@ export function canWatchDirectoryOrFile(dirPath: Path) {
     return true;
 }
 
+/** @internal */
+export function canWatchAtTypes(atTypes: Path, rootPath: Path | undefined) {
+    // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
+    const dirPath = getDirectoryPath(getDirectoryPath(atTypes));
+    return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
+}
+
+/** @internal */
+export function canWatchAffectingLocation(filePath: Path) {
+    return canWatchDirectoryOrFile(filePath);
+}
+
 type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
     (resolution: T) => R | undefined;
 
@@ -869,7 +881,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
         const paths = new Set<string>();
         paths.add(locationToWatch);
-        let actualWatcher = canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
+        let actualWatcher = canWatchAffectingLocation(resolutionHost.toPath(locationToWatch)) ?
             resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
                 cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
                 const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
@@ -1222,14 +1234,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function canWatchTypeRootPath(nodeTypesDirectory: string) {
+    function canWatchTypeRootPath(typeRoot: string) {
         // If type roots is specified, watch that path
         if (resolutionHost.getCompilationSettings().typeRoots) return true;
 
         // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-        const dir = getDirectoryPath(getDirectoryPath(nodeTypesDirectory));
-        const dirPath = resolutionHost.toPath(dir);
-        return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
+        return canWatchAtTypes(resolutionHost.toPath(typeRoot), rootPath);
     }
 }
 
