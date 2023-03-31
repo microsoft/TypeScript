@@ -1203,7 +1203,7 @@ export namespace Core {
                 return undefined;
             }
             // Likewise, when we *are* looking for a special keyword, make sure we
-            // *don’t* include readonly member modifiers.
+            // *don't* include readonly member modifiers.
             return getAllReferencesForKeyword(
                 sourceFiles,
                 node.kind,
@@ -1444,7 +1444,7 @@ export namespace Core {
             });
         }
 
-        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
+        // Source file ID -> symbol ID -> Whether the symbol has been searched for in the source file.
         private readonly sourceFileToSeenSymbols: Set<number>[] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbols(sourceFile: SourceFile, symbols: readonly Symbol[]): boolean {
