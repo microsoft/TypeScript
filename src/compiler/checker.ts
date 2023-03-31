@@ -32720,10 +32720,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         effectiveArgs.push(syntheticArg);
                     });
                 }
-                else if (constraint && isTupleType(constraint) && every(constraint.target.elementFlags, flag => !(flag & ElementFlags.Variable))) {
+                else if (constraint && isTupleType(constraint)) {
                     forEach(getTypeArguments(constraint), (_, i) => {
-                        const syntheticArg = createSyntheticExpression(arg, getTypeOfPropertyOfType(spreadType, "" + i as __String)!,
-                            /*isSpread*/ false, constraint.target.labeledElementDeclarations?.[i]);
+                        const isVariable = !!(constraint.target.elementFlags[i] & ElementFlags.Variable);
+                        const syntheticArg = createSyntheticExpression(arg, !isVariable ? getTypeOfPropertyOfType(spreadType, "" + i as __String)! : spreadType,
+                            /*isSpread*/ isVariable, constraint.target.labeledElementDeclarations?.[i]);
                         effectiveArgs.push(syntheticArg);
                     });
                 }
