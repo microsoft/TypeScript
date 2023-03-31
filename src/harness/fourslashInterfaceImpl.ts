@@ -189,8 +189,8 @@ export class VerifyNegatable {
         this.state.verifyJsxClosingTag(map);
     }
 
-    public jsxLinkedEdit(map: { [markerName: string]: ts.JsxLinkedEditInfo | undefined }): void {
-        this.state.verifyJsxLinkedEdit(map);
+    public linkedEditing(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
+        this.state.verifyLinkedEditing(map);
     }
 
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {

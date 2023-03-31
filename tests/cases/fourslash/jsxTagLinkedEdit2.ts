@@ -25,7 +25,7 @@ const linkedCursors = {
     wordPattern : 'div'
 };
 
-verify.jsxLinkedEdit( {
+verify.linkedEditing( {
     "0": linkedCursors,
     "1": linkedCursors,
     "2": undefined,

@@ -607,7 +607,7 @@ export interface LanguageService {
      * Editors should call this after `>` is typed.
      */
     getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
-    getJsxLinkedEditAtPosition(fileName: string, position: number): JsxLinkedEditInfo | undefined;
+    getLinkedEditingAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
 
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
 
@@ -662,7 +662,7 @@ export interface JsxClosingTagInfo {
     readonly newText: string;
 }
 
-export interface JsxLinkedEditInfo {
+export interface LinkedEditingInfo {
     readonly ranges: TextSpan[];
     wordPattern?: string;
 }

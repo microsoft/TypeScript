@@ -13,7 +13,7 @@ const linkedCursors6 = {
     wordPattern : 'someNamespace.Thing'
 };
 
-verify.jsxLinkedEdit( {
+verify.linkedEditing( {
     "1": linkedCursors6,
     "2": linkedCursors6,
     "3": linkedCursors6,

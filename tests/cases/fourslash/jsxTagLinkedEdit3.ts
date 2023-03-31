@@ -10,7 +10,7 @@
 ////   /*7*/</div>
 ////);
 
-verify.jsxLinkedEdit( {
+verify.linkedEditing( {
     "0": undefined,
     "1": undefined,
     "2": undefined,

@@ -3444,10 +3444,10 @@ export class TestState {
         }
     }
 
-    public verifyJsxLinkedEdit(map: { [markerName: string]: ts.JsxLinkedEditInfo | undefined }): void {
+    public verifyLinkedEditing(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
         for (const markerName in map) {
             this.goToMarker(markerName);
-            const actual = this.languageService.getJsxLinkedEditAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const actual = this.languageService.getLinkedEditingAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.deepEqual(actual, map[markerName], markerName);
         }
     }

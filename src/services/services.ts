@@ -191,7 +191,6 @@ import {
     JsxElement,
     JsxEmit,
     JsxFragment,
-    JsxLinkedEditInfo,
     JsxOpeningElement,
     LanguageService,
     LanguageServiceHost,
@@ -201,6 +200,7 @@ import {
     length,
     LineAndCharacter,
     lineBreakPart,
+    LinkedEditingInfo,
     LiteralType,
     map,
     mapDefined,
@@ -2482,7 +2482,7 @@ export function createLanguageService(
         }
     }
 
-    function getJsxLinkedEditAtPosition(fileName: string, position: number): JsxLinkedEditInfo | undefined {
+    function getLinkedEditingAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
         const token = findPrecedingToken(position, sourceFile);
         if (!token) return undefined;
@@ -3058,7 +3058,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
-        getJsxLinkedEditAtPosition,
+        getLinkedEditingAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,

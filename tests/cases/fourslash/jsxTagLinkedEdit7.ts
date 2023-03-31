@@ -44,7 +44,7 @@ const linkedCursors2 = {
     wordPattern : undefined
 };
 
-verify.jsxLinkedEdit({
+verify.linkedEditing({
     "0": linkedCursors1,
     "1": undefined,
     "2": undefined,

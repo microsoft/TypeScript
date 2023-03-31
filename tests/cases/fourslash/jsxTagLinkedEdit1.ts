@@ -42,7 +42,7 @@ const linkedCursors3 = {
     wordPattern: 'div'
 };
 
-verify.jsxLinkedEdit( {
+verify.linkedEditing( {
     "0": linkedCursors1,
     "1": linkedCursors1,
     "2": linkedCursors1,

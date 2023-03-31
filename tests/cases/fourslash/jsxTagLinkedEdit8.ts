@@ -8,6 +8,6 @@
 ////    </B>
 ////);
 
-verify.jsxLinkedEdit( {
+verify.linkedEditing( {
     "8": undefined,
 }); 

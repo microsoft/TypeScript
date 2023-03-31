@@ -81,9 +81,9 @@ import {
     isStringLiteralLike,
     JSDocLinkDisplayPart,
     JSDocTagInfo,
-    JsxLinkedEditInfo,
     LanguageServiceMode,
     LineAndCharacter,
+    LinkedEditingInfo,
     map,
     mapDefined,
     mapDefinedIterator,
@@ -1803,10 +1803,10 @@ export class Session<TMessage = string> implements EventSender {
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
     }
 
-    private getJsxLinkedEdit(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRanges | undefined {
+    private getLinkedEditing(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRanges | undefined {
         const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
         const position = this.getPositionInFile(args, file);
-        const linkedEditInfo = languageService.getJsxLinkedEditAtPosition(file, position);
+        const linkedEditInfo = languageService.getLinkedEditingAtPosition(file, position);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
         if (scriptInfo === undefined || linkedEditInfo === undefined) return undefined;
         return convertLinkedEditInfoToRanges(linkedEditInfo, scriptInfo);
@@ -3399,8 +3399,8 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
         },
-        [protocol.CommandTypes.JsxLinkedEdit]: (request: protocol.JsxLinkedEditRequest) => {
-            return this.requiredResponse(this.getJsxLinkedEdit(request.arguments));
+        [protocol.CommandTypes.LinkedEditing]: (request: protocol.LinkedEditingRequest) => {
+            return this.requiredResponse(this.getLinkedEditing(request.arguments));
         },
         [protocol.CommandTypes.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
             return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
@@ -3657,7 +3657,7 @@ function positionToLineOffset(info: ScriptInfoOrConfig, position: number): proto
     return isConfigFile(info) ? locationFromLineAndCharacter(info.getLineAndCharacterOfPosition(position)) : info.positionToLineOffset(position);
 }
 
-function convertLinkedEditInfoToRanges(linkedEdit: JsxLinkedEditInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRanges {
+function convertLinkedEditInfoToRanges(linkedEdit: LinkedEditingInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRanges {
     return {
         ranges: linkedEdit.ranges.map(
             s => {
