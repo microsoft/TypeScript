@@ -68,7 +68,6 @@ import {
     isDeclarationName,
     isExportAssignment,
     isExportDeclaration,
-    isExportSpecifier,
     isExpressionStatement,
     isExternalModuleReference,
     isIdentifier,
@@ -676,14 +675,13 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
     const movedSymbols = new SymbolSet();
     const oldImportsNeededByNewFile = new SymbolSet();
     const newFileImportsFromOldFile = new SymbolSet();
+    const symbolsExportedLaterInOldFile = new SymbolSet();
 
     const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
     const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
     if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
         oldImportsNeededByNewFile.add(jsxNamespaceSymbol);
     }
-
-    const symbolsExportedLaterInOldFile = new Map<string, Symbol>();
 
     for (const statement of toMove) {
         forEachTopLevelDeclaration(statement, decl => {
@@ -693,7 +691,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
             // exported later in export that is not going to be moved, skip updating symbol imports in other files
             const skipSymbolUpdating = name && isExportedLaterInOldFile(oldFile, top, useEsModuleSyntax, name, toMove);
             if (skipSymbolUpdating) {
-                symbolsExportedLaterInOldFile.set(name.text, symbol);
+                symbolsExportedLaterInOldFile.add(symbol);
                 return;
             }
             movedSymbols.add(symbol);
@@ -706,7 +704,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
                 if (isInImport(decl)) {
                     oldImportsNeededByNewFile.add(symbol);
                 }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol) && ![...symbolsExportedLaterInOldFile.values()].includes(symbol)) {
+                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol) && !symbolsExportedLaterInOldFile.has(symbol)) {
                     newFileImportsFromOldFile.add(symbol);
                 }
             }
@@ -719,7 +717,7 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
 
-        // jsxNamespaceSymbol will only be set iff it is in oldImportsNeededByNewFile.
+        // jsxNamespaceSymbol will only be set if it is in oldImportsNeededByNewFile.
         if (jsxNamespaceSymbol && !!(statement.transformFlags & TransformFlags.ContainsJsx)) {
             unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
         }
@@ -728,12 +726,12 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
             if (movedSymbols.has(symbol)) {
                 oldFileImportsFromNewFile.add(symbol);
             }
-            else if (symbolsExportedLaterInOldFile.has(symbol.name)) {
-                oldFileImportsFromNewFile.add(symbolsExportedLaterInOldFile.get(symbol.name)!);
-            }
             unusedImportsFromOldFile.delete(symbol);
         });
     }
+    symbolsExportedLaterInOldFile.forEach((symbol) => {
+        oldFileImportsFromNewFile.add(symbol);
+    });
 
     return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile };
 
@@ -823,8 +821,7 @@ function filterBindingName(name: BindingName, keep: (name: Identifier) => boolea
 
 function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol) => void) {
     node.forEachChild(function cb(node) {
-        const isExportSymbol = isExportSpecifier(node.parent) || isExportAssignment(node.parent);
-        if (isIdentifier(node) && (!isDeclarationName(node) || isExportSymbol)) {
+        if (isIdentifier(node) && !isDeclarationName(node)) {
             const sym = checker.getSymbolAtLocation(node);
             if (sym) onReference(sym);
         }
