@@ -2,18 +2,16 @@
 
 // @Filename: /selfClosing.tsx
 ////const jsx = (
-////   <div>/*1*/
+////   <div>/*0*/
 ////      <p>/*4*/
-////         /*5*/<img/*2*/ /*3*//>
+////         No lin/*9*/ked cursors here!
+////         /*5*/</*1*/img/*2*/ /*3*//>
 ////     /*6*/ </p>/*8*/
 ////   /*7*/</div>
 ////);
 
-// const linkedCursors3 = {ranges: [{start: 18, length: 3}, 
-//                                  {start: 91,  length: 3}],
-//                         wordPattern : 'div'};
-
 verify.jsxLinkedEdit( {
+    "0": undefined,
     "1": undefined,
     "2": undefined,
     "3": undefined,
@@ -22,4 +20,5 @@ verify.jsxLinkedEdit( {
     "6": undefined,
     "7": undefined,
     "8": undefined,
+    "9": undefined,
 });

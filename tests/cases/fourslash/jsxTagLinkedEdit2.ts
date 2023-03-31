@@ -1,24 +1,36 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: /attrs.tsx
+// for readability 
 ////const jsx = (
-////   </*0*/div/*1*/ /*5*/styl/*2*/e={{ color: 'red' }}/*6*/>/*4*/
+////   <div style={{ color: 'red' }}>
 ////      <p>
 ////         <img />
 ////      </p>
-////   </di/*3*/v>
+////   </div>
 ////);
 
-const linkedCursors2 = {ranges: [{start: 18, length: 3}, 
-                                 {start: 91, length: 3}],
-                        wordPattern : 'div'};
+// @Filename: /attrs.tsx
+////const jsx = (
+////   </*0*/div/*1*/ /*2*/styl/*3*/e={{ color: 'red' }}/*4*/>/*5*/
+////      <p>
+////         <img />
+////      </p>
+////   </di/*6*/v>
+////);
+
+const startPos = test.markerByName("0").position;
+const endPos =  test.markerByName("6").position - 2;
+const linkedCursors = {
+    ranges: [{ start: startPos, length: 3 }, { start: endPos, length: 3 }],
+    wordPattern : 'div'
+};
 
 verify.jsxLinkedEdit( {
-    "0": linkedCursors2,
-    "1": linkedCursors2,
+    "0": linkedCursors,
+    "1": linkedCursors,
     "2": undefined,
-    "3": linkedCursors2,
+    "3": undefined,
     "4": undefined,
     "5": undefined,
-    "6": undefined,
+    "6": linkedCursors,
 });

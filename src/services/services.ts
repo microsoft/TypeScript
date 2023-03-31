@@ -2499,7 +2499,7 @@ export function createLanguageService(
             return { ranges, wordPattern };
         }
         else {
-            // looks mirroring in element tag names
+            // looks for mirroring in element tag names
             const tag = findAncestor(token,
                 n => {
                     if (!n.parent.parent) return "quit";

@@ -2,17 +2,20 @@
 
 // @FileName: /invalid1.tsx
 ////const jsx = (
-////    <div/*4*/>
-////        <div/*5*/>
-////    </div/*6*/>
+////    <div/*0*/>
+////        <div/*1*/>
+////    </div/*2*/>
 ////);
 
-const linkedCursors5 = {ranges: [{start: 33, length: 3}, 
-                            {start: 44, length: 3}],
-                        wordPattern : 'div'};
+const startPos = test.markerByName("1").position - 3;
+const endPos =  test.markerByName("2").position - 3;
+const linkedCursors = {
+    ranges: [{ start: startPos, length: 3 }, { start: endPos, length: 3 }],
+    wordPattern : 'div'
+};
 
 verify.jsxLinkedEdit( {
-    "4": undefined,
-    "5": linkedCursors5,
-    "6": linkedCursors5,
+    "0": undefined,
+    "1": linkedCursors,
+    "2": linkedCursors,
 });

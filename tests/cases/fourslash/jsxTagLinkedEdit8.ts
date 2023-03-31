@@ -8,10 +8,6 @@
 ////    </B>
 ////);
 
-// const linkedCursors8 = {ranges: [{start: 14, end: 14}, 
-//                             {start: 43, end: 43}],
-//                         wordPattern : };
-
 verify.jsxLinkedEdit( {
     "8": undefined,
 }); 

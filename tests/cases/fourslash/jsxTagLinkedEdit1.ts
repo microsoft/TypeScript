@@ -8,8 +8,8 @@
 
 // @Filename: /basic.tsx
 ////const jsx = (
-////    </*0*/d/*1*/iv/*2*/>/*7*/
-////    </*6*///*3*/di/*4*/v/*5*/>/*8*/
+////    </*0*/d/*1*/iv/*2*/>/*3*/
+////    </*4*///*5*/di/*6*/v/*7*/>/*8*/
 ////);
 
 // @Filename: /whitespaceInvalidClosing.tsx
@@ -18,36 +18,54 @@
 ////   < /*9*/ /div>
 ////);
 
-// @Filename: /whitespaceOpening.tsx
-////const jsx3 = (
+// @Filename: /whitespace.tsx
+////const whitespaceOpening = (
 ////   </*10*/ /*11*/div/*12*/ /*13*/> /*14*/
-////   </di/*A*/v>
+////   <//*15*/di/*16*/v>
+////);
+////const whitespaceClosing = (
+////   </*17*/di/*18*/v>
+////   <//*19*/ /*20*/div/*21*/ /*22*/> /*23*/
 ////);
 
-// @Filename: /whitespaceClosing.tsx
-////const jsx = (
-////   <di/*B*/v>
-////   <//*15*/ /*16*/div/*17*/ /*18*/> /*19*/
-////);
-
-const linkedCursors1 = {ranges: [{start: 19, length: 3}, 
-                                 {start: 30, length: 3}],
-                        wordPattern : 'div'};
+const markers = test.markers();
+const linkedCursors1 = {
+    ranges: [{ start: markers[0].position, length: 3 }, { start: markers[5].position, length: 3 }],
+    wordPattern: 'div'
+};
+const linkedCursors2 = {
+    ranges: [{ start: markers[11].position, length: 3 }, { start: markers[15].position, length: 3 }],
+    wordPattern: 'div'
+};
+const linkedCursors3 = {
+    ranges: [{ start: markers[17].position, length: 3 }, { start: markers[20].position, length: 3 }],
+    wordPattern: 'div'
+};
 
 verify.jsxLinkedEdit( {
     "0": linkedCursors1,
     "1": linkedCursors1,
     "2": linkedCursors1,
-    "3": linkedCursors1,
-    "4": linkedCursors1,
+    "3": undefined,
+    "4": undefined,
     "5": linkedCursors1,
-    "6": undefined,
-    "7": undefined,
+    "6": linkedCursors1,
+    "7": linkedCursors1,
     "8": undefined,
     "9": undefined, // I believe this should be an invalid tag
     "10": undefined,
+    "11": linkedCursors2,
+    "12": linkedCursors2,
     "13": undefined,
-    "15": undefined,
-    "18": undefined,
+    "14": undefined,
+    "15": linkedCursors2,
+    "16": linkedCursors2,
+    "17": linkedCursors3,
+    "18": linkedCursors3,
+    "19": undefined,
+    "20": linkedCursors3,
+    "21": linkedCursors3,
+    "22": undefined,
+    "23": undefined,
     });
 

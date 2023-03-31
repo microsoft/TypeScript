@@ -15,19 +15,22 @@
 ////      <p>
 ////         <img />
 ////      </p>
-////   </di/*6*/v>
+////   <//*6*/div>
 ////);
 
-const linkedCursors4 = {ranges: [{start: 18, length: 3}, 
-                            {start: 69, length: 3}],
-                        wordPattern : 'div'};
+const startPos = test.markerByName("0").position;
+const endPos =  test.markerByName("6").position;
+const linkedCursors = {
+    ranges: [{ start: startPos, length: 3 }, { start: endPos, length: 3 }],
+    wordPattern : 'div'
+};
 
 verify.jsxLinkedEdit( {
-    "0": linkedCursors4,
-    "1": linkedCursors4,
+    "0": linkedCursors,
+    "1": linkedCursors,
     "2": undefined,
     "3": undefined,
     "4": undefined,
     "5": undefined,
-    "6": linkedCursors4, 
+    "6": linkedCursors, 
 });
