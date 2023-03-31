@@ -70,14 +70,14 @@ function doChange(context: RefactorContext, oldFile: SourceFile, newFile: string
     const usage = getUsageInfo(oldFile, toMove.all, checker);
     //creating a new file
     if (!host.fileExists(newFile)) {
-        changes.createNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ false));
+        changes.addToNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ false), /*isNewFile*/ true);
         addNewFileToTsconfig(program, changes, oldFile.fileName, newFile, hostGetCanonicalFileName(host));
     }
     else {
         const sourceFile = program.getSourceFile(newFile);
         if (sourceFile) {
             const newFileImportAdder = codefix.createImportAdder(sourceFile, context.program, context.preferences, context.host);
-            changes.addStatementsToNewFile(oldFile, program.getSourceFile(newFile), getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ true, newFileImportAdder));
+            changes.addToNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ true, newFileImportAdder), /*isNewFile*/ false);
         }
     }
 }

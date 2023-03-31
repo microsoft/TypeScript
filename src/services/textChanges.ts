@@ -480,10 +480,9 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 /** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
-    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
+    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], isNewFile: boolean }[] = [];
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
-    private readonly changeExistingFile: { readonly oldFile: SourceFile, readonly newFile: SourceFile | undefined, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
 
     public static fromContext(context: TextChangesContext): ChangeTracker {
         return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -1128,25 +1127,23 @@ export class ChangeTracker {
     public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
-        let changes;
-        if (this.changeExistingFile && this.changes) {
-            for (const { oldFile } of this.changeExistingFile) {
-                changes = changesToText.getTextChangesFromChangesForMoveToExistingFile(this.changes, oldFile, this.newLineCharacter, this.formatContext, validate);
-                return changes;
+        let changes: FileTextChanges[] = [];
+        for (const { oldFile, fileName, statements, isNewFile } of this.newFiles) {
+            if (isNewFile) {
+                changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
             }
+            else {
+                changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate, oldFile);
+            }
+            return changes;
         }
         changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
-        for (const { oldFile, fileName, statements } of this.newFiles) {
-            changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
-        }
         return changes;
     }
 
-    public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
-        this.newFiles.push({ oldFile, fileName, statements });
-    }
-    public addStatementsToNewFile(oldFile: SourceFile, newFile: SourceFile | undefined, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
-        this.changeExistingFile.push({ oldFile, newFile, statements });
+    public addToNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], isNewFile: boolean): void {
+        this.newFiles.push({ oldFile, fileName, statements, isNewFile });
     }
 }
 
@@ -1224,7 +1221,7 @@ export function getNewFileText(statements: readonly Statement[], scriptKind: Scr
 }
 
 namespace changesToText {
-    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined, oldFile?: SourceFile): FileTextChanges[] {
         return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
             const sourceFile = changesInFile[0].sourceFile;
             // order changes by start position
@@ -1238,36 +1235,7 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
-                const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
-
-                // Filter out redundant changes.
-                if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
-                    return undefined;
-                }
-
-                return createTextChange(span, newText);
-            });
-
-            return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
-        });
-    }
-
-    export function getTextChangesFromChangesForMoveToExistingFile(changes: readonly Change[], oldFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
-        return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
-            // order changes by start position
-            // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
-            const normalized = stableSort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
-            // verify that change intervals do not overlap, except possibly at end points.
-            for (let i = 0; i < normalized.length - 1; i++) {
-                Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
-                    `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
-            }
-
-            const sourceFile = changesInFile[0].sourceFile;
-            const textChanges = mapDefined(normalized, c => {
-                const span = createTextSpanFromRange(c.range);
-                const newText = computeNewText(c, oldFile, newLineCharacter, formatContext, validate);
-
+                const newText = (oldFile) ? computeNewText(c, oldFile, newLineCharacter, formatContext, validate): computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
                 // Filter out redundant changes.
                 if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
                     return undefined;
