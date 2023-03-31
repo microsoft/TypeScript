@@ -4149,7 +4149,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!isIdentifier(name)) {
             return undefined;
         }
-        const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || getESModuleInterop(compilerOptions));
+        const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(getAllowSyntheticDefaultImports(compilerOptions));
         const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, /*dontResolveAlias*/ false, suppressInteropError);
         if (targetSymbol) {
             if (name.escapedText) {
@@ -9204,7 +9204,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If `target` refers to a shorthand module symbol, the name we're trying to pull out isn;t recoverable from the target symbol
                 // In such a scenario, we must fall back to looking for an alias declaration on `symbol` and pulling the target name from that
                 let verbatimTargetName = isShorthandAmbientModuleSymbol(target) && getSomeTargetNameFromDeclarations(symbol.declarations) || unescapeLeadingUnderscores(target.escapedName);
-                if (verbatimTargetName === InternalSymbolName.ExportEquals && (getESModuleInterop(compilerOptions) || compilerOptions.allowSyntheticDefaultImports)) {
+                if (verbatimTargetName === InternalSymbolName.ExportEquals && getAllowSyntheticDefaultImports(compilerOptions)) {
                     // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
                     verbatimTargetName = InternalSymbolName.Default;
                 }
@@ -34163,7 +34163,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-        if (isInJSFile(node) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler && isCommonJsRequire(node)) {
+        if (isInJSFile(node) && (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler || compilerOptions.noDtsResolution) && isCommonJsRequire(node)) {
+            // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
             return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
         }
 
