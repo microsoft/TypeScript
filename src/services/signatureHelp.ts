@@ -227,7 +227,7 @@ function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Pro
 
 function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
     const pos = startingToken.getFullStart();
-    // There’s a possibility that `startingToken.parent` contains only `startingToken` and
+    // There's a possibility that `startingToken.parent` contains only `startingToken` and
     // missing nodes, none of which are valid to be returned by `findPrecedingToken`. In that
     // case, the preceding token we want is actually higher up the tree—almost definitely the
     // next parent, but theoretically the situation with missing nodes might be happening on
