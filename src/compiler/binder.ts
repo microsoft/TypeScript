@@ -3526,7 +3526,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (!isBindingPattern(node.name)) {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (isInJSFile(node) &&
-                shouldResolveJsRequire(compilerOptions) &&
+                shouldResolveJsRequire(options) &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)

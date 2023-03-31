@@ -4150,7 +4150,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!isIdentifier(name)) {
             return undefined;
         }
-        const suppressInteropError = name.escapedText === InternalSymbolName.Default && allowSyntheticDefaultImports);
+        const suppressInteropError = name.escapedText === InternalSymbolName.Default && allowSyntheticDefaultImports;
         const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, /*dontResolveAlias*/ false, suppressInteropError);
         if (targetSymbol) {
             if (name.escapedText) {
