@@ -41,12 +41,13 @@ describe("unittests:: canWatch::", () => {
         (paths, longestPathLength, baseline) => {
             const testType = "canWatchAffectingLocation";
             const maxLengths = [longestPathLength + "/package.json".length, testType.length] as const;
-            pushHeader(baseline, ["File", testType], maxLengths);
-            paths.forEach(path => {
-                path = combinePaths(path, "package.json");
-                pushRow(baseline, [path, `${ts.canWatchAffectingLocation(path)}`], maxLengths);
+            baselineCanWatchForRoot(paths, baseline, _root => {
+                pushHeader(baseline, ["File", testType], maxLengths);
+                paths.forEach(path => {
+                    path = combinePaths(path, "package.json");
+                    pushRow(baseline, [path, `${ts.canWatchAffectingLocation(path)}`], maxLengths);
+                });
             });
-            baseline.push("", "");
         },
     );
 
