@@ -3,7 +3,7 @@
 Determines if given node_modules/@types can be watched.
 These are the typeRoots calculated because user didnt specify typeRoots in compierOptions
 
-## Testing for root: c:/
+## Testing for Dos root: c:/
 
 ## RootDirForResolution: c:/
 

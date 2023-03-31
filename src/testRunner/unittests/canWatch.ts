@@ -131,17 +131,17 @@ describe("unittests:: canWatch::", () => {
         info: () => string,
         baselineOsRoot: (pathsAtRoot: PathAndLongPathLength, baseline: string[]) => void,
     ) {
-        it(`${scenario}Unix`, () => {
-            baselineCanWatchForOsRoot(scenario, "Unix", "/", info, baselineOsRoot);
+        it(`${scenario}Posix`, () => {
+            baselineCanWatchForOsRoot(scenario, "Posix", "/", info, baselineOsRoot);
         });
-        it(`${scenario}Windows`, () => {
-            baselineCanWatchForOsRoot(scenario, "Windows", "c:/", info, baselineOsRoot);
+        it(`${scenario}Dos`, () => {
+            baselineCanWatchForOsRoot(scenario, "Dos", "c:/", info, baselineOsRoot);
         });
-        it(`${scenario}Network`, () => {
-            baselineCanWatchForOsRoot(scenario, "Network", "//vda1cs4850/", info, baselineOsRoot);
+        it(`${scenario}Unc`, () => {
+            baselineCanWatchForOsRoot(scenario, "Unc", "//vda1cs4850/", info, baselineOsRoot);
         });
-        it(`${scenario}NetworkWindows`, () => {
-            baselineCanWatchForOsRoot(scenario, "NetworkWindows", "//vda1cs4850/c$", info, baselineOsRoot);
+        it(`${scenario}UncDos`, () => {
+            baselineCanWatchForOsRoot(scenario, "UncDos", "//vda1cs4850/c$", info, baselineOsRoot);
         });
     }
 
@@ -153,7 +153,7 @@ describe("unittests:: canWatch::", () => {
         baselineOsRoot: (pathsAtRoot: PathAndLongPathLength, baseline: string[]) => void,
     ) {
         const baseline: string[] = [`# ${scenario}`, "", info(), ""];
-        baseline.push(`## Testing for root: ${osRoot}`);
+        baseline.push(`## Testing for ${suffix} root: ${osRoot}`);
         baselineOsRoot(getPathsAtRoot(osRoot), baseline);
         Baseline.runBaseline(`canWatch/${scenario}${suffix}.baseline.md`, baseline.join("\r\n"));
     }

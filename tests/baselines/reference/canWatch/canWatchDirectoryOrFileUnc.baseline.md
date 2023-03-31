@@ -2,7 +2,7 @@
 
 Determines if given directory or file can be watched
 
-## Testing for root: //vda1cs4850/
+## Testing for Unc root: //vda1cs4850/
 
 | Directory                                                                                     | canWatchDirectoryOrFile |
 | --------------------------------------------------------------------------------------------- | ----------------------- |

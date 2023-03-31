@@ -2,7 +2,7 @@
 
 Determines if package.json that was found during module resolution and change in it will affect resolution can be watched.
 
-## Testing for root: /
+## Testing for Posix root: /
 
 | File                                                                              | canWatchAffectingLocation |
 | --------------------------------------------------------------------------------- | ------------------------- |

@@ -2,7 +2,7 @@
 
 Determines if given directory or file can be watched
 
-## Testing for root: /
+## Testing for Posix root: /
 
 | Directory                                                                         | canWatchDirectoryOrFile |
 | --------------------------------------------------------------------------------- | ----------------------- |
