@@ -192,8 +192,9 @@ export class C
 }
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
+Before running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -336,7 +337,7 @@ export class C
 
 
 Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
+4: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -462,7 +463,7 @@ export class C
 
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+5: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

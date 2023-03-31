@@ -157,6 +157,7 @@ TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
