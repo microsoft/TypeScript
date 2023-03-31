@@ -329,6 +329,7 @@ import {
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
     zipToModeAwareCache,
+    shouldResolveJsRequire,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -3211,8 +3212,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             collectModuleReferences(node, /*inAmbientModule*/ false);
         }
 
-        // `require` has no special meaning in `--moduleResolution bundler`
-        const shouldProcessRequires = isJavaScriptFile && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler;
+        const shouldProcessRequires = isJavaScriptFile && shouldResolveJsRequire(options);
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || shouldProcessRequires) {
             collectDynamicImportOrRequireCalls(file);
         }

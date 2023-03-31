@@ -940,6 +940,7 @@ import {
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     shouldPreserveConstEnums,
+    shouldResolveJsRequire,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -34163,8 +34164,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-        if (isInJSFile(node) && (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler || compilerOptions.noDtsResolution) && isCommonJsRequire(node)) {
-            // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
+        if (isInJSFile(node) && shouldResolveJsRequire(compilerOptions) && isCommonJsRequire(node)) {
             return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
         }
 
