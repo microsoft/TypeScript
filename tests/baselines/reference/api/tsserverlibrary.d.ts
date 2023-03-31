@@ -881,8 +881,12 @@ declare namespace ts {
             interface JsxLinkedEditRequest extends FileLocationRequest {
                 readonly command: CommandTypes.JsxLinkedEdit;
             }
+            interface LinkedEditingRanges {
+                ranges: TextSpan[];
+                wordPattern?: string;
+            }
             interface JsxLinkedEditResponse extends Response {
-                readonly info: JsxLinkedEditInfo;
+                readonly body: LinkedEditingRanges;
             }
             /**
              * Get document highlights request; value of command field is

@@ -1803,10 +1803,13 @@ export class Session<TMessage = string> implements EventSender {
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
     }
 
-    private getJsxLinkedEdit(args: protocol.FileLocationRequestArgs): JsxLinkedEditInfo | undefined {
+    private getJsxLinkedEdit(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRanges | undefined {
         const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
         const position = this.getPositionInFile(args, file);
-        return languageService.getJsxLinkedEditAtPosition(file, position);
+        const linkedEditInfo = languageService.getJsxLinkedEditAtPosition(file, position);
+        const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+        if (scriptInfo === undefined || linkedEditInfo === undefined) return undefined;
+        return convertLinkedEditInfoToRanges(linkedEditInfo, scriptInfo);
     }
 
     private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
@@ -3652,6 +3655,20 @@ function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoO
 
 function positionToLineOffset(info: ScriptInfoOrConfig, position: number): protocol.Location {
     return isConfigFile(info) ? locationFromLineAndCharacter(info.getLineAndCharacterOfPosition(position)) : info.positionToLineOffset(position);
+}
+
+function convertLinkedEditInfoToRanges(linkedEdit: JsxLinkedEditInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRanges {
+    return {
+        ranges: linkedEdit.ranges.map(
+            s => {
+                return {
+                start: scriptInfo.positionToLineOffset(s.start),
+                end: scriptInfo.positionToLineOffset(s.start + s.length)
+                };
+            }
+        ),
+        wordPattern: linkedEdit.wordPattern,
+    };
 }
 
 function locationFromLineAndCharacter(lc: LineAndCharacter): protocol.Location {

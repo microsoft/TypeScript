@@ -73,7 +73,6 @@ import {
     FindAllReferences,
     findAncestor,
     findChildOfKind,
-    findNextToken,
     findPrecedingToken,
     first,
     firstDefined,
@@ -155,13 +154,10 @@ import {
     isJSDocCommentContainingNode,
     isJsxAttributes,
     isJsxClosingElement,
-    isJsxClosingFragment,
     isJsxElement,
     isJsxFragment,
     isJsxOpeningElement,
     isJsxOpeningFragment,
-    isJsxSelfClosingElement,
-    isJSXTagName,
     isJsxText,
     isLabelName,
     isLiteralComputedPropertyDeclarationName,
@@ -2491,9 +2487,7 @@ export function createLanguageService(
         const token = findPrecedingToken(position, sourceFile);
         if (!token) return undefined;
 
-        if ((isJsxOpeningFragment(token.parent) && token.kind === SyntaxKind.LessThanToken)
-            || (isJsxClosingFragment(token.parent) && token.kind === SyntaxKind.SlashToken)){
-
+        if (isJsxFragment(token.parent.parent)) {
             const openPos = token.parent.parent.openingFragment.getStart(sourceFile) + 1; // "<".length
             const closePos = token.parent.parent.closingFragment.getStart(sourceFile) + 2; // "</".length
 
@@ -2504,17 +2498,13 @@ export function createLanguageService(
             const wordPattern = undefined;
             return { ranges, wordPattern };
         }
-        else if (isJsxFragment(token.parent.parent)) {
-            return undefined;
-        }
         else {
+            // looks mirroring in element tag names
             const tag = findAncestor(token,
                 n => {
                     if (!n.parent.parent) return "quit";
                     else if (isJsxElement(n.parent.parent)) {
-                        if ((isJSXTagName(n) && !isJsxSelfClosingElement(n.parent))
-                            || (n.kind === SyntaxKind.LessThanToken && isJSXTagName(findNextToken(n, n.parent, sourceFile) ?? n))
-                            || n.kind === SyntaxKind.SlashToken) {
+                        if (isJsxOpeningElement(n.parent) || isJsxClosingElement(n.parent)) {
                             return true;
                         }
                         return "quit";
@@ -2527,6 +2517,7 @@ export function createLanguageService(
             const openTag = { start: element.parent.openingElement.tagName.getStart(sourceFile), end: element.parent.openingElement.tagName.end };
             const endTag = { start: element.parent.closingElement.tagName.getStart(sourceFile), end: element.parent.closingElement.tagName.end };
 
+            // only return a mirror if the cursor is within a tag name
             if (!(openTag.start <= position && position <= openTag.end || endTag.start <= position && position <= endTag.end)) return undefined;
             if (element.parent.openingElement.tagName.getText(sourceFile) !== element.parent.closingElement.tagName.getText(sourceFile)) return undefined;
 

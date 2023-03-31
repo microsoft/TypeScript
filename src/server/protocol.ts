@@ -4,7 +4,6 @@ import {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
-    JsxLinkedEditInfo,
     MapLike,
     OutliningSpanKind,
     OutputFile,
@@ -1107,8 +1106,13 @@ export interface JsxLinkedEditRequest extends FileLocationRequest {
     readonly command: CommandTypes.JsxLinkedEdit;
 }
 
+export interface LinkedEditingRanges {
+    ranges: TextSpan[];
+    wordPattern?: string;
+}
+
 export interface JsxLinkedEditResponse extends Response {
-    readonly info: JsxLinkedEditInfo;
+    readonly body: LinkedEditingRanges;
 }
 
 /**
