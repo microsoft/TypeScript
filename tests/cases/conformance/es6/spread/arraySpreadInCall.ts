@@ -23,3 +23,35 @@ interface IAction {
 declare const action: IAction
 action.run(...[100, 'foo']) // error
 
+// repro from #53541
+class T {
+  fn(name?: string, sex?: number): void {}
+}
+
+class M<X extends T> {
+  constructor(public m: X) {}
+
+  fn(...args: Parameters<X["fn"]>) {
+    this.m.fn(...args);
+  }
+}
+
+// repro from #53541#issuecomment-1487859044
+interface HasMethod {
+  method(first?: string, second?: number): void;
+  method2(...args: [name: string, sex?: number] | [other: number]): void;
+}
+
+function fn21<HasMethodLike extends HasMethod>(
+  instance: HasMethodLike,
+  ...args: Parameters<HasMethodLike["method"]>
+) {
+  instance.method(...args);
+}
+
+function fn22<HasMethodLike extends HasMethod>(
+  instance: HasMethodLike,
+  ...args: Parameters<HasMethodLike["method2"]>
+) {
+  instance.method2(...args);
+}

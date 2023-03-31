@@ -139,4 +139,85 @@ action.run(...[100, 'foo']) // error
 >100 : 100
 >'foo' : "foo"
 
+// repro from #53541
+class T {
+>T : T
+
+  fn(name?: string, sex?: number): void {}
+>fn : (name?: string, sex?: number) => void
+>name : string | undefined
+>sex : number | undefined
+}
+
+class M<X extends T> {
+>M : M<X>
+
+  constructor(public m: X) {}
+>m : X
+
+  fn(...args: Parameters<X["fn"]>) {
+>fn : (...args: Parameters<X["fn"]>) => void
+>args : Parameters<X["fn"]>
+
+    this.m.fn(...args);
+>this.m.fn(...args) : void
+>this.m.fn : (name?: string | undefined, sex?: number | undefined) => void
+>this.m : X
+>this : this
+>m : X
+>fn : (name?: string | undefined, sex?: number | undefined) => void
+>...args : string | number | undefined
+>args : Parameters<X["fn"]>
+  }
+}
+
+// repro from #53541#issuecomment-1487859044
+interface HasMethod {
+  method(first?: string, second?: number): void;
+>method : (first?: string, second?: number) => void
+>first : string | undefined
+>second : number | undefined
+
+  method2(...args: [name: string, sex?: number] | [other: number]): void;
+>method2 : (...args: [name: string, sex?: number] | [other: number]) => void
+>args : [name: string, sex?: number | undefined] | [other: number]
+}
+
+function fn21<HasMethodLike extends HasMethod>(
+>fn21 : <HasMethodLike extends HasMethod>(instance: HasMethodLike, ...args: Parameters<HasMethodLike["method"]>) => void
+
+  instance: HasMethodLike,
+>instance : HasMethodLike
+
+  ...args: Parameters<HasMethodLike["method"]>
+>args : Parameters<HasMethodLike["method"]>
+
+) {
+  instance.method(...args);
+>instance.method(...args) : void
+>instance.method : (first?: string | undefined, second?: number | undefined) => void
+>instance : HasMethodLike
+>method : (first?: string | undefined, second?: number | undefined) => void
+>...args : string | number | undefined
+>args : Parameters<HasMethodLike["method"]>
+}
+
+function fn22<HasMethodLike extends HasMethod>(
+>fn22 : <HasMethodLike extends HasMethod>(instance: HasMethodLike, ...args: Parameters<HasMethodLike["method2"]>) => void
+
+  instance: HasMethodLike,
+>instance : HasMethodLike
+
+  ...args: Parameters<HasMethodLike["method2"]>
+>args : Parameters<HasMethodLike["method2"]>
+
+) {
+  instance.method2(...args);
+>instance.method2(...args) : void
+>instance.method2 : (...args: [name: string, sex?: number | undefined] | [other: number]) => void
+>instance : HasMethodLike
+>method2 : (...args: [name: string, sex?: number | undefined] | [other: number]) => void
+>...args : string | number | undefined
+>args : Parameters<HasMethodLike["method2"]>
+}
 

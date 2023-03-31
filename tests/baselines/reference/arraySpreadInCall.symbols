@@ -70,4 +70,96 @@ action.run(...[100, 'foo']) // error
 >action : Symbol(action, Decl(arraySpreadInCall.ts, 19, 13))
 >run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 16, 19))
 
+// repro from #53541
+class T {
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 20, 27))
+
+  fn(name?: string, sex?: number): void {}
+>fn : Symbol(T.fn, Decl(arraySpreadInCall.ts, 23, 9))
+>name : Symbol(name, Decl(arraySpreadInCall.ts, 24, 5))
+>sex : Symbol(sex, Decl(arraySpreadInCall.ts, 24, 19))
+}
+
+class M<X extends T> {
+>M : Symbol(M, Decl(arraySpreadInCall.ts, 25, 1))
+>X : Symbol(X, Decl(arraySpreadInCall.ts, 27, 8))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 20, 27))
+
+  constructor(public m: X) {}
+>m : Symbol(M.m, Decl(arraySpreadInCall.ts, 28, 14))
+>X : Symbol(X, Decl(arraySpreadInCall.ts, 27, 8))
+
+  fn(...args: Parameters<X["fn"]>) {
+>fn : Symbol(M.fn, Decl(arraySpreadInCall.ts, 28, 29))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 30, 5))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(arraySpreadInCall.ts, 27, 8))
+
+    this.m.fn(...args);
+>this.m.fn : Symbol(T.fn, Decl(arraySpreadInCall.ts, 23, 9))
+>this.m : Symbol(M.m, Decl(arraySpreadInCall.ts, 28, 14))
+>this : Symbol(M, Decl(arraySpreadInCall.ts, 25, 1))
+>m : Symbol(M.m, Decl(arraySpreadInCall.ts, 28, 14))
+>fn : Symbol(T.fn, Decl(arraySpreadInCall.ts, 23, 9))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 30, 5))
+  }
+}
+
+// repro from #53541#issuecomment-1487859044
+interface HasMethod {
+>HasMethod : Symbol(HasMethod, Decl(arraySpreadInCall.ts, 33, 1))
+
+  method(first?: string, second?: number): void;
+>method : Symbol(HasMethod.method, Decl(arraySpreadInCall.ts, 36, 21))
+>first : Symbol(first, Decl(arraySpreadInCall.ts, 37, 9))
+>second : Symbol(second, Decl(arraySpreadInCall.ts, 37, 24))
+
+  method2(...args: [name: string, sex?: number] | [other: number]): void;
+>method2 : Symbol(HasMethod.method2, Decl(arraySpreadInCall.ts, 37, 48))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 38, 10))
+}
+
+function fn21<HasMethodLike extends HasMethod>(
+>fn21 : Symbol(fn21, Decl(arraySpreadInCall.ts, 39, 1))
+>HasMethodLike : Symbol(HasMethodLike, Decl(arraySpreadInCall.ts, 41, 14))
+>HasMethod : Symbol(HasMethod, Decl(arraySpreadInCall.ts, 33, 1))
+
+  instance: HasMethodLike,
+>instance : Symbol(instance, Decl(arraySpreadInCall.ts, 41, 47))
+>HasMethodLike : Symbol(HasMethodLike, Decl(arraySpreadInCall.ts, 41, 14))
+
+  ...args: Parameters<HasMethodLike["method"]>
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 42, 26))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>HasMethodLike : Symbol(HasMethodLike, Decl(arraySpreadInCall.ts, 41, 14))
+
+) {
+  instance.method(...args);
+>instance.method : Symbol(HasMethod.method, Decl(arraySpreadInCall.ts, 36, 21))
+>instance : Symbol(instance, Decl(arraySpreadInCall.ts, 41, 47))
+>method : Symbol(HasMethod.method, Decl(arraySpreadInCall.ts, 36, 21))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 42, 26))
+}
+
+function fn22<HasMethodLike extends HasMethod>(
+>fn22 : Symbol(fn22, Decl(arraySpreadInCall.ts, 46, 1))
+>HasMethodLike : Symbol(HasMethodLike, Decl(arraySpreadInCall.ts, 48, 14))
+>HasMethod : Symbol(HasMethod, Decl(arraySpreadInCall.ts, 33, 1))
+
+  instance: HasMethodLike,
+>instance : Symbol(instance, Decl(arraySpreadInCall.ts, 48, 47))
+>HasMethodLike : Symbol(HasMethodLike, Decl(arraySpreadInCall.ts, 48, 14))
+
+  ...args: Parameters<HasMethodLike["method2"]>
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 49, 26))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>HasMethodLike : Symbol(HasMethodLike, Decl(arraySpreadInCall.ts, 48, 14))
+
+) {
+  instance.method2(...args);
+>instance.method2 : Symbol(HasMethod.method2, Decl(arraySpreadInCall.ts, 37, 48))
+>instance : Symbol(instance, Decl(arraySpreadInCall.ts, 48, 47))
+>method2 : Symbol(HasMethod.method2, Decl(arraySpreadInCall.ts, 37, 48))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 49, 26))
+}
 
