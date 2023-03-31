@@ -10,16 +10,21 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | c:/node_modules/@types                                                                     | c:/                                                                                        |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/                                                                                        |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/                                                                                        |
+| c:/users/node_modules/@types                                                               | c:/                                                                                        |
+| c:/users/username/node_modules/@types                                                      | c:/                                                                                        |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/                                                                                        |
+| c:/user/node_modules/@types                                                                | c:/                                                                                        |
 | c:/user/username/node_modules/@types                                                       | c:/                                                                                        |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/                                                                                        |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/                                                                                        |
@@ -27,6 +32,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/                                                                                        |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/                                                                                        |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/                                                                                        |
+| c:/usr/node_modules/@types                                                                 | c:/                                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/                                                                                        |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/                                                                                        |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/                                                                                        |
@@ -34,6 +40,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/                                                                                        |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/                                                                                        |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/                                                                                        |
+| c:/home/node_modules/@types                                                                | c:/                                                                                        |
 | c:/home/username/node_modules/@types                                                       | c:/                                                                                        |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/                                                                                        |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/                                                                                        |
@@ -52,11 +59,13 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot                                                                            |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot                                                                            |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot                                                                            |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -64,6 +73,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -71,6 +81,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -83,16 +94,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1                                                                    |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1                                                                    |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1                                                                    |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1                                                                    |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1                                                                    |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -100,6 +114,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -107,6 +122,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -119,16 +135,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2                                                            |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2                                                            |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2                                                            |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2                                                            |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -136,6 +155,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -143,6 +163,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -155,16 +176,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3                                                    |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3                                                    |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3                                                    |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -172,6 +196,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -179,6 +204,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -191,16 +217,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4                                            |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4                                            |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -208,6 +237,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -215,6 +245,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -227,16 +258,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5                                    |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -244,6 +278,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -251,6 +286,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -263,17 +299,21 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
 | c:/users/node_modules/@types                                                               | c:/users                                                                                   |
+| c:/users/username/node_modules/@types                                                      | c:/users                                                                                   |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users                                                                                   |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -281,6 +321,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -288,6 +329,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -300,17 +342,20 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
 | c:/users/username/node_modules/@types                                                      | c:/users/username                                                                          |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username                                                                          |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -318,6 +363,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -325,6 +371,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -337,6 +384,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
@@ -348,6 +396,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot                                                             |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot                                                             |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot                                                             |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -355,6 +404,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -362,6 +412,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -374,16 +425,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1                                                     |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1                                                     |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1                                                     |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1                                                     |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1                                                     |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -391,6 +445,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -398,6 +453,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -410,16 +466,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2                                             |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2                                             |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2                                             |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2                                             |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -427,6 +486,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -434,6 +494,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -446,16 +507,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3                                     |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3                                     |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3                                     |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -463,6 +527,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -470,6 +535,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -482,16 +548,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4                             |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4                             |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -499,6 +568,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -506,6 +576,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -518,16 +589,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                     |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -535,6 +609,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -542,6 +617,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -554,11 +630,13 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
@@ -572,6 +650,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user                                                                                    |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user                                                                                    |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user                                                                                    |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -579,6 +658,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -591,16 +671,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username                                                                           |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username                                                                           |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username                                                                           |
@@ -608,6 +691,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username                                                                           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username                                                                           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username                                                                           |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -615,6 +699,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -627,16 +712,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot                                                              |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot                                                              |
@@ -644,6 +732,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot                                                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot                                                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot                                                              |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -651,6 +740,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -663,16 +753,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1                                                      |
@@ -680,6 +773,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1                                                      |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1                                                      |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1                                                      |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -687,6 +781,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -699,16 +794,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -716,6 +814,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2                                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2                                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2                                              |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -723,6 +822,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -735,16 +835,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -752,6 +855,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3                                      |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3                                      |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -759,6 +863,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -771,16 +876,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -788,6 +896,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -795,6 +904,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -807,16 +917,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -824,6 +937,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -831,6 +945,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -843,16 +958,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -868,6 +986,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr                                                                                     |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr                                                                                     |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr                                                                                     |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -880,16 +999,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -897,6 +1019,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username                                                                            |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username                                                                            |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username                                                                            |
@@ -904,6 +1027,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username                                                                            |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username                                                                            |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username                                                                            |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -916,16 +1040,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -933,6 +1060,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot                                                               |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot                                                               |
@@ -940,6 +1068,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot                                                               |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot                                                               |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot                                                               |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -952,16 +1081,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -969,6 +1101,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1                                                       |
@@ -976,6 +1109,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1                                                       |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1                                                       |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1                                                       |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -988,16 +1122,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1005,6 +1142,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1012,6 +1150,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2                                               |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2                                               |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2                                               |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1024,16 +1163,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1041,6 +1183,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1048,6 +1191,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3                                       |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3                                       |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3                                       |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1060,16 +1204,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1077,6 +1224,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1084,6 +1232,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4                               |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4                               |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1096,16 +1245,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1113,6 +1265,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1120,6 +1273,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                       |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1132,16 +1286,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1149,6 +1306,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1169,16 +1327,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1186,6 +1347,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1193,6 +1355,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username                                                                           |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username                                                                           |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username                                                                           |
@@ -1205,16 +1368,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1222,6 +1388,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1229,6 +1396,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot                                                              |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot                                                              |
@@ -1241,16 +1409,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1258,6 +1429,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1265,6 +1437,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1                                                      |
@@ -1277,16 +1450,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1294,6 +1470,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1301,6 +1478,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1313,16 +1491,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1330,6 +1511,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1337,6 +1519,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1349,16 +1532,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1366,6 +1552,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1373,6 +1560,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |
@@ -1385,16 +1573,19 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| c:/folderAtRoot/node_modules/@types                                                        | c:/folderAtRoot/node_modules                                                               |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/folderAtRoot/folder1/node_modules                                                       |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/folderAtRoot/folder1/folder2/node_modules                                               |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username/folderAtRoot/node_modules                                                |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username/folderAtRoot/folder1/node_modules                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username/folderAtRoot/folder1/folder2/node_modules                                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| c:/user/node_modules/@types                                                                | c:/user/node_modules                                                                       |
 | c:/user/username/node_modules/@types                                                       | c:/user/username/node_modules                                                              |
 | c:/user/username/folderAtRoot/node_modules/@types                                          | c:/user/username/folderAtRoot/node_modules                                                 |
 | c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | c:/user/username/folderAtRoot/folder1/node_modules                                         |
@@ -1402,6 +1593,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| c:/usr/node_modules/@types                                                                 | c:/usr/node_modules                                                                        |
 | c:/usr/username/node_modules/@types                                                        | c:/usr/username/node_modules                                                               |
 | c:/usr/username/folderAtRoot/node_modules/@types                                           | c:/usr/username/folderAtRoot/node_modules                                                  |
 | c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | c:/usr/username/folderAtRoot/folder1/node_modules                                          |
@@ -1409,6 +1601,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| c:/home/node_modules/@types                                                                | c:/home/node_modules                                                                       |
 | c:/home/username/node_modules/@types                                                       | c:/home/username/node_modules                                                              |
 | c:/home/username/folderAtRoot/node_modules/@types                                          | c:/home/username/folderAtRoot/node_modules                                                 |
 | c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | c:/home/username/folderAtRoot/folder1/node_modules                                         |

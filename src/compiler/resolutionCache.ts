@@ -260,8 +260,7 @@ export function canWatchDirectoryOrFile(dirPath: Path) {
 /** @internal */
 export function canWatchAtTypes(atTypes: Path, rootPath: Path) {
     // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-    const dirPath = getDirectoryPath(getDirectoryPath(atTypes));
-    return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
+    return isInRootPathOrCanWatchDirectoryOrFile(getDirectoryPath(atTypes), rootPath);
 }
 
 function isInDirectoryPath(dir: Path, file: Path) {
@@ -270,9 +269,14 @@ function isInDirectoryPath(dir: Path, file: Path) {
         (isDiskPathRoot(dir) || file[dir.length] === directorySeparator);
 }
 
+function isInRootPathOrCanWatchDirectoryOrFile(fileOrDirPath: Path, rootPath: Path) {
+    return isInDirectoryPath(rootPath, fileOrDirPath) ||
+        canWatchDirectoryOrFile(fileOrDirPath);
+}
+
 /** @internal */
-export function canWatchAffectingLocation(filePath: Path) {
-    return canWatchDirectoryOrFile(filePath);
+export function canWatchAffectingLocation(filePath: Path, rootPath: Path) {
+    return isInRootPathOrCanWatchDirectoryOrFile(filePath, rootPath);
 }
 
 /** @internal */
@@ -327,7 +331,7 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
 
     // If the directory is node_modules use it to watch, always watch it recursively
     if (isNodeModulesDirectory(dirPath)) {
-        return canWatchDirectoryOrFile(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
+        return canWatchDirectoryOrFile(dirPath) ? { dir, dirPath } : undefined;
     }
 
     let nonRecursive = true;
@@ -909,7 +913,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
         const paths = new Set<string>();
         paths.add(locationToWatch);
-        let actualWatcher = canWatchAffectingLocation(resolutionHost.toPath(locationToWatch)) ?
+        let actualWatcher = canWatchAffectingLocation(resolutionHost.toPath(locationToWatch), rootPath) ?
             resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
                 cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
                 const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();

@@ -8,15 +8,15 @@ Determines if package.json that was found during module resolution and change in
 
 | File                                                                                | canWatchAffectingLocation |
 | ----------------------------------------------------------------------------------- | ------------------------- |
-| c:/package.json                                                                     | false                     |
+| c:/package.json                                                                     | true                      |
 | c:/folderAtRoot/package.json                                                        | true                      |
 | c:/folderAtRoot/folder1/package.json                                                | true                      |
 | c:/folderAtRoot/folder1/folder2/package.json                                        | true                      |
 | c:/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
-| c:/users/package.json                                                               | false                     |
-| c:/users/username/package.json                                                      | false                     |
+| c:/users/package.json                                                               | true                      |
+| c:/users/username/package.json                                                      | true                      |
 | c:/users/username/folderAtRoot/package.json                                         | true                      |
 | c:/users/username/folderAtRoot/folder1/package.json                                 | true                      |
 | c:/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
@@ -323,8 +323,8 @@ Determines if package.json that was found during module resolution and change in
 | c:/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
-| c:/users/package.json                                                               | false                     |
-| c:/users/username/package.json                                                      | false                     |
+| c:/users/package.json                                                               | true                      |
+| c:/users/username/package.json                                                      | true                      |
 | c:/users/username/folderAtRoot/package.json                                         | true                      |
 | c:/users/username/folderAtRoot/folder1/package.json                                 | true                      |
 | c:/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
@@ -368,7 +368,7 @@ Determines if package.json that was found during module resolution and change in
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
 | c:/users/package.json                                                               | false                     |
-| c:/users/username/package.json                                                      | false                     |
+| c:/users/username/package.json                                                      | true                      |
 | c:/users/username/folderAtRoot/package.json                                         | true                      |
 | c:/users/username/folderAtRoot/folder1/package.json                                 | true                      |
 | c:/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
