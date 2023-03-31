@@ -241,7 +241,6 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
-    ModuleResolutionKind,
     Mutable,
     NamespaceExportDeclaration,
     Node,
