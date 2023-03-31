@@ -51,41 +51,43 @@ describe("unittests:: canWatch::", () => {
         },
     );
 
-    baselineCanWatch(
-        "getDirectoryToWatchFailedLookupLocation",
-        () => `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
-        ({ paths, longestPathLength }, baseline) => {
-            const recursive = "Recursive";
-            const maxLength = longestPathLength + "/node_modules/@types/dir/subdir/somefile.d.ts".length;
-            const maxLengths = [maxLength, maxLength, recursive.length] as const;
-            baselineCanWatchForRoot(paths, baseline, baselineForRoot);
-            function baselineForRoot(root: string | undefined) {
-                pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive], maxLengths);
-                paths.forEach(path => {
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "node_modules/dir/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "node_modules/@types/dir/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "node_modules/dir/subdir/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "node_modules/@types/dir/subdir/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "node_modules/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "node_modules/@types/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "dir/somefile.d.ts"), root, maxLengths);
-                    baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, "dir/subdir/somefile.d.ts"), root, maxLengths);
-                });
-            }
-            function baselineGetDirectoryToWatchFailedLookupLocation(path: string, root: string | undefined, maxLengths: readonly number[]) {
-                const result = ts.getDirectoryToWatchFailedLookupLocation(
-                    path,
-                    path as ts.Path,
-                    root,
-                    root as ts.Path | undefined,
-                    root !== undefined ? root.split(ts.directorySeparator).length : 0,
-                    ts.returnUndefined,
-                );
-                pushRow(baseline, [path, result ? result.dir : "", result ? `${!result.nonRecursive}` : ""], maxLengths);
-            }
-        },
-    );
+    baselineGetDirectoryToWatchOfFailedLookup("getDirectoryToWatchFailedLookupLocationNodeModules", "node_modules");
+    baselineGetDirectoryToWatchOfFailedLookup("getDirectoryToWatchFailedLookupLocationAtTypes", "node_modules/@types");
+    baselineGetDirectoryToWatchOfFailedLookup("getDirectoryToWatchFailedLookupLocation", "");
+    function baselineGetDirectoryToWatchOfFailedLookup(
+        scenario: string,
+        forPath: "node_modules" | "node_modules/@types" | "",
+    ) {
+        baselineCanWatch(
+            scenario,
+            () => `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
+            ({ paths, longestPathLength }, baseline) => {
+                const recursive = "Recursive";
+                const maxLength = longestPathLength + ts.combinePaths(forPath, "dir/subdir/somefile.d.ts").length;
+                const maxLengths = [maxLength, maxLength, recursive.length] as const;
+                baselineCanWatchForRoot(paths, baseline, baselineForRoot);
+                function baselineForRoot(root: string | undefined) {
+                    pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive], maxLengths);
+                    paths.forEach(path => {
+                        baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, forPath, "somefile.d.ts"), root, maxLengths);
+                        baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, forPath, "dir/somefile.d.ts"), root, maxLengths);
+                        baselineGetDirectoryToWatchFailedLookupLocation(ts.combinePaths(path, forPath, "dir/subdir/somefile.d.ts"), root, maxLengths);
+                    });
+                }
+                function baselineGetDirectoryToWatchFailedLookupLocation(path: string, root: string | undefined, maxLengths: readonly number[]) {
+                    const result = ts.getDirectoryToWatchFailedLookupLocation(
+                        path,
+                        path as ts.Path,
+                        root,
+                        root as ts.Path | undefined,
+                        root !== undefined ? root.split(ts.directorySeparator).length : 0,
+                        ts.returnUndefined,
+                    );
+                    pushRow(baseline, [path, result ? result.dir : "", result ? `${!result.nonRecursive}` : ""], maxLengths);
+                }
+            },
+        );
+    }
 
     baselineCanWatch(
         "getDirectoryToWatchFailedLookupLocationFromTypeRoot",
@@ -124,7 +126,11 @@ describe("unittests:: canWatch::", () => {
         }
     }
 
-    function baselineCanWatch(scenario: string, info: () => string, baselineOsRoot: (pathsAtRoot: PathAndLongPathLength, baseline: string[]) => void) {
+    function baselineCanWatch(
+        scenario: string,
+        info: () => string,
+        baselineOsRoot: (pathsAtRoot: PathAndLongPathLength, baseline: string[]) => void,
+    ) {
         it(`${scenario}Unix`, () => {
             baselineCanWatchForOsRoot(scenario, "Unix", "/", info, baselineOsRoot);
         });
