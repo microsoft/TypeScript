@@ -287,6 +287,7 @@ import {
     setParentRecursive,
     setResolvedModule,
     setResolvedTypeReferenceDirective,
+    shouldResolveJsRequire,
     skipTrivia,
     skipTypeChecking,
     some,
@@ -329,7 +330,6 @@ import {
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
     zipToModeAwareCache,
-    shouldResolveJsRequire,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
