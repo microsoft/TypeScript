@@ -119,20 +119,37 @@ describe("unittests:: canWatch::", () => {
 
         function baselineRoot(rootDirForResolution: string | undefined) {
             const root = ts.getRootDirectoryOfResolutionCache(rootDirForResolution, ts.returnUndefined);
-            baseline.push("", `## RootDirForResolution: ${rootDirForResolution} Root: ${root}`);
+            baseline.push("", `## RootDirForResolution: ${rootDirForResolution}`, "", `Root: ${root}`);
             baselineForRoot(root);
         }
     }
 
     function baselineCanWatch(scenario: string, info: () => string, baselineOsRoot: (pathsAtRoot: PathAndLongPathLength, baseline: string[]) => void) {
-        it(scenario, () => {
-            const baseline: string[] = [`# ${scenario}`, "", info(), ""];
-            getRoots().forEach(osRoot => {
-                baseline.push(`## Testing for root: ${osRoot}`);
-                baselineOsRoot(getPathsAtRoot(osRoot), baseline);
-            });
-            Baseline.runBaseline(`canWatch/${scenario}.baseline.md`, baseline.join("\r\n"));
+        it(`${scenario}Unix`, () => {
+            baselineCanWatchForOsRoot(scenario, "Unix", "/", info, baselineOsRoot);
         });
+        it(`${scenario}Windows`, () => {
+            baselineCanWatchForOsRoot(scenario, "Windows", "c:/", info, baselineOsRoot);
+        });
+        it(`${scenario}Network`, () => {
+            baselineCanWatchForOsRoot(scenario, "Network", "//vda1cs4850/", info, baselineOsRoot);
+        });
+        it(`${scenario}NetworkWindows`, () => {
+            baselineCanWatchForOsRoot(scenario, "NetworkWindows", "//vda1cs4850/c$", info, baselineOsRoot);
+        });
+    }
+
+    function baselineCanWatchForOsRoot(
+        scenario: string,
+        suffix: string,
+        osRoot: string,
+        info: () => string,
+        baselineOsRoot: (pathsAtRoot: PathAndLongPathLength, baseline: string[]) => void,
+    ) {
+        const baseline: string[] = [`# ${scenario}`, "", info(), ""];
+        baseline.push(`## Testing for root: ${osRoot}`);
+        baselineOsRoot(getPathsAtRoot(osRoot), baseline);
+        Baseline.runBaseline(`canWatch/${scenario}${suffix}.baseline.md`, baseline.join("\r\n"));
     }
 
     function pushHeader(baseline: string[], headers: string[], maxLengths: readonly number[]) {
@@ -151,9 +168,6 @@ describe("unittests:: canWatch::", () => {
         if (divider) baseline.push(divider);
     }
 
-    function getRoots() {
-        return ["/", "c:/", "//vda1cs4850/", "//vda1cs4850/c$"];
-    }
 
     interface PathAndLongPathLength {
         paths: string[];
