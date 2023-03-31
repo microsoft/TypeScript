@@ -4007,7 +4007,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const hasDefaultOnly = isOnlyImportedAsDefault(specifier);
         const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
         if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
-            if (hasExportAssignmentSymbol(moduleSymbol) && !(getAllowSyntheticDefaultImports(compilerOptions) || getESModuleInterop(compilerOptions))) {
+            if (hasExportAssignmentSymbol(moduleSymbol) && !allowSyntheticDefaultImports) {
                 const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
                 const exportEqualsSymbol = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
                 const exportAssignment = exportEqualsSymbol!.valueDeclaration;
@@ -4150,7 +4150,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!isIdentifier(name)) {
             return undefined;
         }
-        const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(getAllowSyntheticDefaultImports(compilerOptions));
+        const suppressInteropError = name.escapedText === InternalSymbolName.Default && allowSyntheticDefaultImports);
         const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, /*dontResolveAlias*/ false, suppressInteropError);
         if (targetSymbol) {
             if (name.escapedText) {
@@ -9205,7 +9205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If `target` refers to a shorthand module symbol, the name we're trying to pull out isn;t recoverable from the target symbol
                 // In such a scenario, we must fall back to looking for an alias declaration on `symbol` and pulling the target name from that
                 let verbatimTargetName = isShorthandAmbientModuleSymbol(target) && getSomeTargetNameFromDeclarations(symbol.declarations) || unescapeLeadingUnderscores(target.escapedName);
-                if (verbatimTargetName === InternalSymbolName.ExportEquals && getAllowSyntheticDefaultImports(compilerOptions)) {
+                if (verbatimTargetName === InternalSymbolName.ExportEquals && allowSyntheticDefaultImports) {
                     // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
                     verbatimTargetName = InternalSymbolName.Default;
                 }
