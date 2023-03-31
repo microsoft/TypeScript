@@ -8439,6 +8439,12 @@ export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResol
 }
 
 /** @internal */
+export function shouldResolveJsRequire(compilerOptions: CompilerOptions): boolean {
+    // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
+    return !!compilerOptions.noDtsResolution || getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler;
+}
+
+/** @internal */
 export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
