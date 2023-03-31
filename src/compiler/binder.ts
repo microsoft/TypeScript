@@ -70,6 +70,7 @@ import {
     FlowReduceLabel,
     forEach,
     forEachChild,
+    forEachIterator,
     ForInOrOfStatement,
     ForStatement,
     FunctionDeclaration,
@@ -233,7 +234,6 @@ import {
     JsxAttribute,
     JsxAttributes,
     LabeledStatement,
-    length,
     LiteralLikeElementAccessExpression,
     MappedTypeNode,
     MetaProperty,
@@ -538,6 +538,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var inAssignmentPattern = false;
 
     var symbolCount = 0;
+    var symbols: Symbol[];
 
     var Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
     var classifiableNames: Set<__String>;
@@ -565,6 +566,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inStrictMode = bindInStrictMode(file, opts);
         classifiableNames = new Set();
         symbolCount = 0;
+        symbols = [];
 
         Symbol = objectAllocator.getSymbolConstructor();
 
@@ -579,6 +581,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             file.symbolCount = symbolCount;
             file.classifiableNames = classifiableNames;
             delayedBindJSDocTypedefTag();
+            finalizeSymbolDeclarations();
         }
 
         file = undefined!;
@@ -602,6 +605,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         hasExplicitReturn = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
+        symbols = undefined!;
     }
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
@@ -616,22 +620,29 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function createSymbol(flags: SymbolFlags, name: __String): Symbol {
         symbolCount++;
-        return new Symbol(flags, name);
+        const symbol = new Symbol(flags, name);
+        symbols.push(symbol);
+        return symbol;
+    }
+
+    function finalizeSymbolDeclarations(): void {
+        for (const symbol of symbols) {
+            if (symbol.declarationSet) {
+                symbol.declarations = Array.from(symbol.declarationSet);
+                symbol.declarationSet = undefined;
+            }
+        }
     }
 
     function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolFlags: SymbolFlags) {
         symbol.flags |= symbolFlags;
 
         node.symbol = symbol;
-        if (symbol.declarations) {
-          if (!symbol.declarationSet!.has(node)) {
-            symbol.declarations.push(node);
-            symbol.declarationSet!.add(node);
-          }
+        if (symbol.declarationSet) {
+            symbol.declarationSet.add(node);
         }
         else {
-          symbol.declarations = [node];
-          symbol.declarationSet = new Set([node]);
+            symbol.declarationSet = new Set([node]);
         }
 
         if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
@@ -815,7 +826,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     }
 
                     let multipleDefaultExports = false;
-                    if (length(symbol.declarations)) {
+                    if (symbol.declarationSet && symbol.declarationSet.size) {
                         // If the current node is a default export of some sort, then check if
                         // there are any other default exports that we need to error on.
                         // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
@@ -829,7 +840,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             // Error on multiple export default in the following case:
                             // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
                             // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
-                            if (symbol.declarations && symbol.declarations.length &&
+                            if (symbol.declarationSet && symbol.declarationSet.size &&
                                 (node.kind === SyntaxKind.ExportAssignment && !(node as ExportAssignment).isExportEquals)) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                 messageNeedsName = false;
@@ -845,7 +856,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     }
 
                     const declarationName = getNameOfDeclaration(node) || node;
-                    forEach(symbol.declarations, (declaration, index) => {
+                    forEachIterator(symbol.declarations, (declaration, index) => {
                         const decl = getNameOfDeclaration(declaration) || declaration;
                         const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
@@ -3513,7 +3524,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (node.name) {
                 setParent(node.name, node);
             }
-            file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations![0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
+            file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarationSet!.values().next().value, Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
         }
         symbol.exports!.set(prototypeSymbol.escapedName, prototypeSymbol);
         prototypeSymbol.parent = symbol;

@@ -45,6 +45,21 @@ export function forEach<T, U>(array: readonly T[] | undefined, callback: (elemen
     return undefined;
 }
 
+/** @internal */
+export function forEachIterator<T, U>(iterator: Iterable<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+    if (iterator) {
+        let pos = 0;
+        for (const value of iterator) {
+            const result = callback(value, pos);
+            if (result) {
+                return result;
+            }
+            pos++;
+        }
+    }
+    return undefined;
+}
+
 /**
  * Like `forEach`, but iterates in reverse order.
  *
