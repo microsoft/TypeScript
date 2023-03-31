@@ -1,16 +1,5 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/projects/temp/a.ts",
-        "fileContent": "import f = require(\"pad\"); f;",
-        "scriptKindName": "TS",
-        "projectRootPath": "/a/b/projects/temp"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/projects/temp/a.ts]
 import f = require("pad"); f;
@@ -29,12 +18,18 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/temp/a.ts",
+        "fileContent": "import f = require(\"pad\"); f;",
+        "scriptKindName": "TS",
+        "projectRootPath": "/a/b/projects/temp"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a/b/projects/temp
 Info 3    [00:00:20.000] For info: /a/b/projects/temp/a.ts :: No config files found.
 Info 4    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -48,8 +43,8 @@ Info 11   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:30.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 14   [00:00:31.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/temp/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/temp/a.ts SVC-1-0 "import f = require(\"pad\"); f;"
 
 
 	../../../lib/lib.d.ts
@@ -65,28 +60,28 @@ Info 16   [00:00:35.000] -----------------------------------------------
 Info 16   [00:00:36.000] Open files: 
 Info 16   [00:00:37.000] 	FileName: /a/b/projects/temp/a.ts ProjectRootPath: /a/b/projects/temp
 Info 16   [00:00:38.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 16   [00:00:39.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/projects/temp/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/temp/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
+Before request
+
 Info 17   [00:00:40.000] request:
     {
       "command": "geterr",
@@ -99,161 +94,35 @@ Info 17   [00:00:40.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 18   [00:00:41.000] response:
     {
       "responseRequired": false
     }
-Before checking timeout queue length (1) and running
+After request
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 19   [00:00:42.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 20   [00:00:43.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":25},"text":"Cannot find module 'pad' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 21   [00:00:44.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 Info 22   [00:00:45.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
+After running Immedidate callback:: count: 0
 
 Info 23   [00:00:51.000] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 24   [00:00:52.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
@@ -282,7 +151,10 @@ Info 46   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/pr
 Info 47   [00:01:17.000] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 48   [00:01:18.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info 49   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+11: /dev/null/inferredProject1*
+12: *ensureProjectForOpenFiles*
+14: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/a/b/projects/temp/node_modules/@types/pad/index.d.ts]
 export = pad;declare function pad(length: number, text: string, char ?: string): string;
 
@@ -293,14 +165,20 @@ PolledWatches::
 /a/b/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
 
+PolledWatches *deleted*::
+/a/b/projects/temp/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
+/a/b/projects/temp/node_modules: *new*
   {}
-/a/b/projects/temp/node_modules/@types:
+/a/b/projects/temp/node_modules/@types: *new*
   {}
 
 Info 50   [00:01:21.000] Running: /dev/null/inferredProject1*
@@ -311,9 +189,9 @@ Info 54   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 55   [00:01:26.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 56   [00:01:27.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 57   [00:01:28.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/projects/temp/node_modules/@types/pad/index.d.ts
-	/a/b/projects/temp/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/temp/node_modules/@types/pad/index.d.ts Text-1 "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+	/a/b/projects/temp/a.ts SVC-1-0 "import f = require(\"pad\"); f;"
 
 
 	../../../lib/lib.d.ts
@@ -325,41 +203,11 @@ Info 57   [00:01:28.000] 	Files (3)
 	  Root file specified for compilation
 
 Info 58   [00:01:29.000] -----------------------------------------------
-After running timeout callbacks
+After running Timeout callback:: count: 1
+15: *ensureProjectForOpenFiles*
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
-Before running timeout callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
+Before running Timeout callback:: count: 1
+15: *ensureProjectForOpenFiles*
 
 Info 59   [00:01:30.000] Running: *ensureProjectForOpenFiles*
 Info 60   [00:01:31.000] Before ensureProjectForOpenFiles:
@@ -381,96 +229,20 @@ Info 62   [00:01:44.000] 		Projects: /dev/null/inferredProject1*
 Info 62   [00:01:45.000] got projects updated in background, updating diagnostics for /a/b/projects/temp/a.ts
 Info 63   [00:01:46.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/projects/temp/a.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+16: checkOne
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
-Before running timeout callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
+Before running Timeout callback:: count: 1
+16: checkOne
 
 Info 64   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
-Before running immediate callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 65   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-Before running immediate callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
+After running Immedidate callback:: count: 1
+4: suggestionCheck

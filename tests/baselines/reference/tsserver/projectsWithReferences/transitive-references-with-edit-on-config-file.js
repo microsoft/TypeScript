@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:39.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/a/lib/lib.d.ts]
@@ -39,12 +40,6 @@ X;
 export class X {}
 export class A {}
 
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 1    [00:00:40.000] Search path: /user/username/projects/myproject/c
 Info 2    [00:00:41.000] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
@@ -124,11 +119,11 @@ Info 26   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 27   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:01:07.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 29   [00:01:08.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -156,7 +151,9 @@ Info 33   [00:01:25.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 34   [00:01:26.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 35   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*
 Info 36   [00:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/c/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/c/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/c/tsconfig.json]
 {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
 
@@ -166,35 +163,35 @@ export class A {}
 
 
 PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
+/user/username/projects/myproject/c/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a/tsconfig.json:
+/user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/b/index.ts:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts:
+/user/username/projects/myproject/a/index.ts: *new*
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
-/user/username/projects/myproject/refs:
+/user/username/projects/myproject/refs: *new*
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/a: *new*
   {}
 
 Info 37   [00:01:29.000] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -249,11 +246,11 @@ Info 65   [00:01:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 66   [00:01:58.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 67   [00:01:59.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 68   [00:02:00.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/nrefs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/nrefs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -285,9 +282,15 @@ Info 73   [00:02:13.000] -----------------------------------------------
 Info 73   [00:02:14.000] Open files: 
 Info 73   [00:02:15.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 73   [00:02:16.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500} *new*
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
 /user/username/projects/myproject/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
@@ -309,14 +312,26 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
+  {} *new*
+/user/username/projects/myproject/nrefs/a.d.ts: *new*
   {}
-/user/username/projects/myproject/nrefs/a.d.ts:
+
+FsWatches *deleted*::
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/b:
+  {} *new*
+/user/username/projects/myproject/nrefs: *new*
   {}
-/user/username/projects/myproject/nrefs:
+/user/username/projects/myproject/a:
+  {} *new*
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/refs:
   {}
 /user/username/projects/myproject/a:
   {}
@@ -325,44 +340,12 @@ Info 73   [00:02:20.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 74   [00:02:21.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 75   [00:02:22.000] Scheduled: *ensureProjectForOpenFiles*
 Info 76   [00:02:23.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/c/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/c/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/c/tsconfig.json]
 {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
 
-
-PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/index.ts:
-  {}
-/user/username/projects/myproject/a/index.ts:
-  {}
-/user/username/projects/myproject/refs/a.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}
-/user/username/projects/myproject/nrefs:
-  {}
-/user/username/projects/myproject/a:
-  {}
 
 Info 77   [00:02:24.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 78   [00:02:25.000] Reloading configured project /user/username/projects/myproject/c/tsconfig.json
@@ -415,11 +398,11 @@ Info 104  [00:02:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 105  [00:02:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 106  [00:02:53.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 107  [00:02:54.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -451,9 +434,15 @@ Info 112  [00:03:07.000] -----------------------------------------------
 Info 112  [00:03:08.000] Open files: 
 Info 112  [00:03:09.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 112  [00:03:10.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500} *new*
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
 /user/username/projects/myproject/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
@@ -477,12 +466,24 @@ FsWatches::
 /user/username/projects/myproject/nrefs/a.d.ts:
   {}
 /user/username/projects/myproject:
+  {} *new*
+
+FsWatches *deleted*::
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/b:
+  {} *new*
+/user/username/projects/myproject/refs: *new*
   {}
-/user/username/projects/myproject/refs:
+/user/username/projects/myproject/a:
+  {} *new*
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/nrefs:
   {}
 /user/username/projects/myproject/a:
   {}

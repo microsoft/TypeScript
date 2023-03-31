@@ -12,7 +12,6 @@ class B<T> extends A<T> {
 >bar : () => T
 
         return null;
->null : null
     }
 }
 

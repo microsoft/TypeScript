@@ -16,7 +16,7 @@ tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts(7,24):
 !!! related TS2728 tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts:3:53: 'b' is declared here.
     x = { y: { a: 0, b: 0 } };
     x = { y: { a: 0, b: 0, c: 0 } };  // Error
-                           ~~~~
+                           ~
 !!! error TS2322: Type '{ a: 0; b: 0; c: number; }' is not assignable to type '{ a: 0; } & { b: 0; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: 0; } & { b: 0; }'.
     

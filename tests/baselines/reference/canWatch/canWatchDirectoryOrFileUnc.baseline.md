@@ -1,0 +1,58 @@
+# canWatchDirectoryOrFile
+
+Determines if given directory or file can be watched
+
+## Testing for Unc root: //vda1cs4850/
+
+| Directory                                                                                     | canWatchDirectoryOrFile |
+| --------------------------------------------------------------------------------------------- | ----------------------- |
+| //vda1cs4850/                                                                                 | false                   |
+| //vda1cs4850/folderAtRoot                                                                     | false                   |
+| //vda1cs4850/folderAtRoot/folder1                                                             | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2                                                     | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3                                             | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4                                     | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5                             | true                    |
+| //vda1cs4850/users                                                                            | false                   |
+| //vda1cs4850/users/username                                                                   | false                   |
+| //vda1cs4850/users/username/folderAtRoot                                                      | false                   |
+| //vda1cs4850/users/username/folderAtRoot/folder1                                              | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2                                      | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3                              | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4                      | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5              | true                    |
+| //vda1cs4850/user                                                                             | false                   |
+| //vda1cs4850/user/username                                                                    | true                    |
+| //vda1cs4850/user/username/folderAtRoot                                                       | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1                                               | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2                                       | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3                               | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4                       | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5               | true                    |
+
+| File                                                                                          | canWatchDirectoryOrFile |
+| --------------------------------------------------------------------------------------------- | ----------------------- |
+| //vda1cs4850/package.json                                                                     | false                   |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                    |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                    |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                    |
+| //vda1cs4850/users/package.json                                                               | false                   |
+| //vda1cs4850/users/username/package.json                                                      | false                   |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                    |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                    |
+| //vda1cs4850/user/package.json                                                                | true                    |
+| //vda1cs4850/user/username/package.json                                                       | true                    |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                    |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                    |
+

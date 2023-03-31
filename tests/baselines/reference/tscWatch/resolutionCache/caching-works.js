@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/d/f0.ts]
 import {x} from "f1"
@@ -56,18 +57,16 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (used version)
 /a/d/f0.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/d/f0.ts:
+/a/d/f0.ts: *new*
   {}
-/a/f1.ts:
+/a/f1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -92,6 +91,9 @@ import {x} from "f1"
                             var x: string = 1;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
@@ -129,20 +131,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/a/d/f0.ts:
-  {}
-/a/f1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/d/f0.js]
@@ -161,6 +149,9 @@ Input::
 import {x} from "f2"
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -188,7 +179,7 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
 PolledWatches::
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -196,7 +187,11 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/:
+/: *new*
+  {}
+
+FsWatches *deleted*::
+/a/f1.ts:
   {}
 
 FsWatchesRecursive::
@@ -220,6 +215,9 @@ Input::
 import {x} from "f1"
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
@@ -255,14 +253,20 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (computed .d.ts)
 /a/d/f0.ts (computed .d.ts)
 
-PolledWatches::
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/d/f0.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/f1.ts:
+/a/f1.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
   {}
 
 FsWatchesRecursive::

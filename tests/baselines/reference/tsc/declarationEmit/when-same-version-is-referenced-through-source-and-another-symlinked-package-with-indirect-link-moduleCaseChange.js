@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myProject/plugin-two/package.json]
 {"name":"plugin-two","version":"0.1.3","main":"dist/commonjs/index.js"}
@@ -164,12 +165,6 @@ Program files::
 /user/username/projects/myProject/plugin-two/dist/commonjs/index.d.ts
 /user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
 /user/username/projects/myproject/plugin-one/index.ts
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
 

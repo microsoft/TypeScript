@@ -1,3 +1,4 @@
+currentDirectory:: /a/b useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/foo.ts]
 
@@ -61,20 +62,18 @@ Shape signatures in builder refreshed for::
 /a/b/bar.d.ts (used version)
 
 PolledWatches::
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.ts:
+/a/b/foo.ts: *new*
   {}
-/a/b/bar.d.ts:
+/a/b/bar.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -103,6 +102,9 @@ declare module "fs" {
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
@@ -126,22 +128,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/bar.d.ts (used version)
 /a/b/foo.ts (computed .d.ts)
-
-PolledWatches::
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/foo.ts:
-  {}
-/a/b/bar.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

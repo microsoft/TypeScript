@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"traceResolution":true,"extendedDiagnostics":true},"files":["main.ts"]}
@@ -68,20 +69,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/main.ts:
+/user/username/projects/myproject/main.ts: *new*
   {}
-/user/username/projects/myproject/other.d.ts:
+/user/username/projects/myproject/other.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -96,6 +95,9 @@ Change:: write other with same contents
 Input::
 //// [/user/username/projects/myproject/other.d.ts] file changed its modified time
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Scheduling update
@@ -129,22 +131,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/user/username/projects/myproject/other.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -155,6 +141,9 @@ Input::
 export function foo(): void;export function bar(): void;
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Scheduling update
@@ -192,22 +181,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/other.d.ts (used version)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/user/username/projects/myproject/other.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/main.js] file written with same contents
@@ -220,6 +193,9 @@ Input::
 export function foo() {}
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Scheduling update
@@ -269,10 +245,8 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/other.ts:
+/user/username/projects/myproject/other.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

@@ -165,6 +165,7 @@ import {
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
     isInString,
+    isInterfaceDeclaration,
     isIntersectionTypeNode,
     isJSDoc,
     isJSDocAugmentsTag,
@@ -1528,11 +1529,11 @@ function getEntryForMemberCompletion(
         // if it has one, so that the cursor ends up in the body once the completion is inserted.
         // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
         const emptyStmt = factory.createEmptyStatement();
-        body = factory.createBlock([emptyStmt], /* multiline */ true);
+        body = factory.createBlock([emptyStmt], /*multiLine*/ true);
         setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
     }
     else {
-        body = factory.createBlock([], /* multiline */ true);
+        body = factory.createBlock([], /*multiLine*/ true);
     }
 
     let modifiers = ModifierFlags.None;
@@ -1761,11 +1762,11 @@ function createObjectLiteralMethod(
             let body;
             if (preferences.includeCompletionsWithSnippetText) {
                 const emptyStmt = factory.createEmptyStatement();
-                body = factory.createBlock([emptyStmt], /* multiline */ true);
+                body = factory.createBlock([emptyStmt], /*multiLine*/ true);
                 setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
             }
             else {
-                body = factory.createBlock([], /* multiline */ true);
+                body = factory.createBlock([], /*multiLine*/ true);
             }
 
             const parameters = typeNode.parameters.map(typedParam =>
@@ -1990,7 +1991,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
 
 function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
-    const quotedModuleSpecifier = quote(sourceFile, preferences, escapeSnippetText(origin.moduleSpecifier));
+    const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind =
         origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
@@ -2927,7 +2928,10 @@ function getCompletionData(
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
     const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
 
-    const literals = mapDefined(
+    // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
+    // for strings getStringLiteralCompletions handles completions
+    const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
+    const literals = !isLiteralExpected ? [] : mapDefined(
         contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
 
@@ -3002,8 +3006,7 @@ function getCompletionData(
 
         // Since this is qualified name check it's a type node location
         const isImportType = isLiteralImportTypeNode(node);
-        const isTypeLocation = insideJsDocTagTypeExpression
-            || (isImportType && !(node as ImportTypeNode).isTypeOf)
+        const isTypeLocation = (isImportType && !(node as ImportTypeNode).isTypeOf)
             || isPartOfTypeNode(node.parent)
             || isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
@@ -3026,7 +3029,7 @@ function getCompletionData(
                             : isRhsOfImportDeclaration ?
                                 // Any kind is allowed when dotting off namespace in internal import equals declaration
                                 symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
-                                isTypeLocation ? isValidTypeAccess : isValidValueAccess;
+                                isTypeLocation || insideJsDocTagTypeExpression ? isValidTypeAccess : isValidValueAccess;
                     for (const exportedSymbol of exportedSymbols) {
                         if (isValidAccess(exportedSymbol)) {
                             symbols.push(exportedSymbol);
@@ -3035,6 +3038,7 @@ function getCompletionData(
 
                     // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
                     if (!isTypeLocation &&
+                        !insideJsDocTagTypeExpression &&
                         symbol.declarations &&
                         symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                         let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
@@ -3095,7 +3099,7 @@ function getCompletionData(
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                    addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
+                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                 }
             }
         }
@@ -3113,7 +3117,7 @@ function getCompletionData(
             if (promiseType) {
                 for (const symbol of promiseType.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                        addPropertySymbol(symbol, /* insertAwait */ true, insertQuestionDot);
+                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot);
                     }
                 }
             }
@@ -3818,7 +3822,7 @@ function getCompletionData(
                 const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(propertySymbol => {
-                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*writing*/ false, typeForObject, propertySymbol);
+                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*isWrite*/ false, typeForObject, propertySymbol);
                 });
                 existingMembers = objectLikeContainer.elements;
             }
@@ -4260,9 +4264,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/`.
-            && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
@@ -4497,6 +4501,8 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+            case SyntaxKind.AsyncKeyword:
+                return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;

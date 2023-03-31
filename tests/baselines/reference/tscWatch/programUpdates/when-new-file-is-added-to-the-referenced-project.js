@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
@@ -77,29 +78,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
+/user/username/projects/myproject/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
+/user/username/projects/myproject/projects/project1/class1.d.ts: *new*
   {}
-/user/username/projects/myproject/projects/project2/class2.ts:
+/user/username/projects/myproject/projects/project2/class2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
+/user/username/projects/myproject/projects/project1: *new*
   {}
-/user/username/projects/myproject/projects/project2:
+/user/username/projects/myproject/projects/project2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -187,6 +188,9 @@ Input::
 class class3 {}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
@@ -232,7 +236,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -263,6 +267,39 @@ Input::
 declare class class3 {}
 
 
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
+  {}
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
@@ -322,7 +359,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -415,6 +452,8 @@ Input::
 declare class file {}
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
@@ -424,34 +463,6 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -460,6 +471,9 @@ Change:: Delete output of class3
 Input::
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 Scheduling update
@@ -512,7 +526,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -525,6 +539,10 @@ FsWatches::
 /user/username/projects/myproject/projects/project2/class2.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/projects/project1/class3.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -604,6 +622,39 @@ Input::
 declare class class3 {}
 
 
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
+  {}
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
@@ -663,7 +714,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
   {}
 
 FsWatchesRecursive::

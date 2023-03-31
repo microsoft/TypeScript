@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/client/folder1/module1.ts]
 export class Module1Class { }
@@ -65,23 +66,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/client/folder1/module1.ts:
+/user/username/projects/myproject/client/folder1/module1.ts: *new*
   {}
-/user/username/projects/myproject/client/linktofolder2/module2.ts:
+/user/username/projects/myproject/client/linktofolder2/module2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/client:
+/user/username/projects/myproject/client: *new*
   {}
-/user/username/projects/myproject/folder2:
+/user/username/projects/myproject/folder2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -111,6 +112,9 @@ Input::
 import * as M from "folder1/module1";
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 Scheduling update
@@ -158,7 +162,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/client/linktofolder2/module3.ts:
+/user/username/projects/myproject/client/linktofolder2/module3.ts: *new*
   {}
 
 FsWatchesRecursive::

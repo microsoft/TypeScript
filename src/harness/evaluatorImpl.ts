@@ -5,8 +5,6 @@ import * as ts from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
 
-declare let Symbol: SymbolConstructor;
-
 const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
 const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
 

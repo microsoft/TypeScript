@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/file1.ts]
 import * as T from "./moduleFile"; T.bar();
@@ -45,16 +46,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/file1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/file1.ts:
+/a/b/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -74,6 +73,13 @@ Input::
 export function bar() { }
 
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
@@ -98,17 +104,17 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (computed .d.ts)
 /a/b/file1.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/file1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
+/a:
+  {}
 
 exitCode:: ExitStatus.undefined
 

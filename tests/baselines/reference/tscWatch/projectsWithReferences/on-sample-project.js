@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -497,33 +498,33 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
+/user/username/projects/sample1/tests/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
+/user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/core/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/tests/index.ts:
+/user/username/projects/sample1/tests/index.ts: *new*
   {}
-/user/username/projects/sample1/core/index.d.ts:
+/user/username/projects/sample1/core/index.d.ts: *new*
   {}
-/user/username/projects/sample1/logic/index.d.ts:
+/user/username/projects/sample1/logic/index.d.ts: *new*
   {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
+/user/username/projects/sample1/core/anothermodule.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
+/user/username/projects/sample1/core: *new*
   {}
-/user/username/projects/sample1/logic:
+/user/username/projects/sample1/logic: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -642,37 +643,9 @@ function foo() { }
 }
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/core/index.d.ts:
-  {}
-/user/username/projects/sample1/logic/index.d.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -799,6 +772,9 @@ export declare function gfoo(): void;
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
@@ -859,36 +835,6 @@ Dependencies for::
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
-
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/core/index.d.ts:
-  {}
-/user/username/projects/sample1/logic/index.d.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1102,6 +1048,9 @@ export declare function gfoo(): void;
 
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
@@ -1190,7 +1139,11 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/sample1/logic/decls/index.d.ts:
+/user/username/projects/sample1/logic/decls/index.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/sample1/logic/index.d.ts:
   {}
 
 FsWatchesRecursive::

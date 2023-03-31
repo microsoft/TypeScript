@@ -35,7 +35,7 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
                 format: "2020"
             }
         });
-        verifyGetErrRequest({ session, host, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
+        verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
         baselineTsserverLogs("inconsistentErrorInEditor", "should not error", session);
     });
 });
@@ -67,7 +67,7 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
                 format: "2020"
             }
         });
-        verifyGetErrRequest({ session, host, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
+        verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
         baselineTsserverLogs("inconsistentErrorInEditor2", "should not error", session);
     });
 });

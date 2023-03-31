@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:27.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/user/username/rootfolder/otherfolder/a/b/app.ts]
@@ -44,12 +45,6 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:28.000] Search path: /user/username/rootfolder/otherfolder/a/b
 Info 2    [00:00:29.000] For info: /user/username/rootfolder/otherfolder/a/b/app.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Info 3    [00:00:30.000] Creating configuration project /user/username/rootfolder/otherfolder/a/b/tsconfig.json
@@ -81,8 +76,8 @@ Info 21   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:49.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:50.000] Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
 Info 24   [00:00:51.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/rootfolder/otherfolder/a/b/app.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/app.ts SVC-1-0 "import _ from 'lodash';"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -185,7 +180,11 @@ Info 109  [00:02:54.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 110  [00:02:55.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info 111  [00:02:56.000] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js
 Info 112  [00:02:57.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 3
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+7: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/package.json]
 {
   "name": "symbol-observable",
@@ -534,27 +533,27 @@ exports['default'] = result;
 
 
 PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
+/user/username/rootfolder/otherfolder/a/node_modules: *new*
   {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
+/user/username/rootfolder/otherfolder/node_modules: *new*
   {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
+/user/username/rootfolder/otherfolder/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
+/user/username/rootfolder/otherfolder/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
+/user/username/rootfolder/otherfolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
+/user/username/rootfolder/otherfolder/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
+/user/username/rootfolder/otherfolder/a/b: *new*
   {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
+/user/username/rootfolder/otherfolder/a/b/node_modules: *new*
   {}
 
 Info 113  [00:03:07.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/lib :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -587,7 +586,11 @@ Info 139  [00:03:43.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 140  [00:03:44.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info 141  [00:03:45.000] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594
 Info 142  [00:03:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 3
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+7: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/package.json]
 {
     "name": "@types/lodash",
@@ -638,61 +641,17 @@ module.exports = require('./lodash');
 
 
 
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
-
 Info 143  [00:03:48.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 144  [00:03:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 145  [00:03:50.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info 146  [00:03:51.000] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594
 Info 147  [00:03:52.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 3
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+7: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594] deleted
-
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
 
 Info 148  [00:04:13.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/bundles :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 149  [00:04:14.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/bundles :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -729,7 +688,11 @@ Info 179  [00:04:56.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 180  [00:04:57.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info 181  [00:04:58.000] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts
 Info 182  [00:04:59.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 3
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+7: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts]
 
 // Stub for lodash
@@ -745,30 +708,6 @@ declare namespace _ {
     }
 }
 
-
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
 
 Info 183  [00:05:12.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/src/scheduler :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 184  [00:05:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/src/scheduler :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -795,7 +734,11 @@ Info 204  [00:05:41.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 205  [00:05:42.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info 206  [00:05:43.000] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041
 Info 207  [00:05:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 3
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+7: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041]
 {
   "_args": [
@@ -1028,30 +971,6 @@ Checking timeout queue length: 3
 
 
 
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
-
 Info 208  [00:05:46.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 209  [00:05:47.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 210  [00:05:48.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
@@ -1119,7 +1038,11 @@ Info 271  [00:07:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 272  [00:07:14.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.bin :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info 273  [00:07:15.000] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.bin
 Info 274  [00:07:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.bin :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 3
+Timeout callback:: count: 3
+32: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+33: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+34: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041] deleted
 
 PolledWatches::
@@ -1130,6 +1053,10 @@ PolledWatches::
 /user/username/rootfolder/otherfolder/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1143,7 +1070,7 @@ FsWatchesRecursive::
   {}
 /user/username/rootfolder/otherfolder/a/b/node_modules:
   {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
+/user/username/rootfolder/otherfolder/a/b/node_modules/@types: *new*
   {}
 
 Info 275  [00:07:18.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -1466,7 +1393,10 @@ Info 591  [00:13:54.000] DirectoryWatcher:: Triggered with /user/username/rootfo
 Info 592  [00:13:55.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Info 593  [00:13:56.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 594  [00:13:57.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/rxjs/testing :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+78: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
+87: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+88: *ensureProjectForOpenFiles*
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/symbolle/package.json]
 {
   "name": "symbol-observable",
@@ -1885,84 +1815,16 @@ declare namespace _ {
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/lodash-b0733faa/index.js] deleted
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts] deleted
 
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {}
-
 Info 595  [00:13:58.000] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info 596  [00:13:59.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Info 597  [00:14:00.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 2
+89: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+90: *ensureProjectForOpenFiles*
 
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {}
-
-Before running timeout callbacks
-
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types:
-  {}
+Before running Timeout callback:: count: 2
+89: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+90: *ensureProjectForOpenFiles*
 
 Info 598  [00:14:01.000] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Info 599  [00:14:02.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
@@ -1977,9 +1839,9 @@ Info 607  [00:14:10.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 608  [00:14:11.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 609  [00:14:12.000] Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
 Info 610  [00:14:13.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/index.d.ts
-	/user/username/rootfolder/otherfolder/a/b/app.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/index.d.ts Text-1 "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}"
+	/user/username/rootfolder/otherfolder/a/b/app.ts SVC-1-0 "import _ from 'lodash';"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -2008,7 +1870,7 @@ Info 615  [00:14:26.000] -----------------------------------------------
 Info 615  [00:14:27.000] Open files: 
 Info 615  [00:14:28.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/app.ts ProjectRootPath: undefined
 Info 615  [00:14:29.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/rootfolder/otherfolder/a/node_modules/@types:
@@ -2016,14 +1878,20 @@ PolledWatches::
 /user/username/rootfolder/otherfolder/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/user/username/rootfolder/otherfolder/a/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules:
+  {"pollingInterval":500}
+
 FsWatches::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json:
+/user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json: *new*
   {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/package.json:
+/user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/package.json: *new*
   {}
 
 FsWatchesRecursive::
