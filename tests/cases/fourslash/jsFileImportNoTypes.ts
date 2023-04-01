@@ -16,6 +16,11 @@
 ////
 //// export interface TestClassInterfaceMerged {}
 //// export class TestClassInterfaceMerged {}
+////
+//// export declare const declaredVariable: number;
+//// export declare class DeclaredClass {}
+//// export declare interface DeclaredInterface {}
+//// export declare type DeclaredType = {};
 
 // @filename: /a.js
 ////import { /**/ } from './declarations.ts'

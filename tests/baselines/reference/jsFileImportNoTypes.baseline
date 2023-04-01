@@ -2,6 +2,8 @@
 // import {  } from './declarations.ts'
 //          ^
 // | ----------------------------------------------------------------------
+// | class DeclaredClass
+// | const declaredVariable: number
 // | class TestClass
 // | class TestClassInterfaceMerged
 // | interface TestClassInterfaceMerged
@@ -24,6 +26,60 @@
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
       "entries": [
+        {
+          "name": "DeclaredClass",
+          "kind": "class",
+          "kindModifiers": "export,declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "DeclaredClass",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "declaredVariable",
+          "kind": "const",
+          "kindModifiers": "export,declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "declaredVariable",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "TestClass",
           "kind": "class",
