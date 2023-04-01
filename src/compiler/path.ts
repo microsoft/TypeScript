@@ -214,6 +214,12 @@ function getEncodedRootLength(path: string): number {
         return ~path.length; // URL: "file://server", "http://server"
     }
 
+    // Data: "data:application/typescript,42"
+    const match = path.match(/*regexp*/ /^(data:(?:[a-z0-9]+(?:\/[a-z0-9]+))?(?:;base64)?,)./);
+    if (match) {
+        return ~match[1].length;
+    }
+
     // relative
     return 0;
 }
@@ -697,7 +703,7 @@ export function ensureTrailingDirectorySeparator(path: Path): Path;
 export function ensureTrailingDirectorySeparator(path: string): string;
 /** @internal */
 export function ensureTrailingDirectorySeparator(path: string) {
-    if (!hasTrailingDirectorySeparator(path)) {
+    if (!hasTrailingDirectorySeparator(path) && !path.startsWith("data:")) {
         return path + directorySeparator;
     }
 
