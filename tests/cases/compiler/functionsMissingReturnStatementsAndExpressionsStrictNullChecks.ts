@@ -19,11 +19,11 @@ const f20: () => undefined = () => {
 }
 
 const f21: () => undefined | number = () => {
-    // Regular void function because contextual type for implicit return isn't just undefined
+    // Error, regular void function because contextual type for implicit return isn't just undefined
 }
 
 const f22: () => number = () => {
-    // Regular void function because contextual type for implicit return isn't just undefined
+    // Error, regular void function because contextual type for implicit return isn't just undefined
 }
 
 async function f30(): Promise<undefined> {

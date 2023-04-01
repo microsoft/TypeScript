@@ -35,14 +35,14 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChe
           ~~~
 !!! error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
 !!! error TS2322:   Type 'void' is not assignable to type 'number | undefined'.
-        // Regular void function because contextual type for implicit return isn't just undefined
+        // Error, regular void function because contextual type for implicit return isn't just undefined
     }
     
     const f22: () => number = () => {
           ~~~
 !!! error TS2322: Type '() => void' is not assignable to type '() => number'.
 !!! error TS2322:   Type 'void' is not assignable to type 'number'.
-        // Regular void function because contextual type for implicit return isn't just undefined
+        // Error, regular void function because contextual type for implicit return isn't just undefined
     }
     
     async function f30(): Promise<undefined> {

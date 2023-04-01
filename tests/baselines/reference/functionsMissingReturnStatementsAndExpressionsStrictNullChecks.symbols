@@ -26,13 +26,13 @@ const f20: () => undefined = () => {
 const f21: () => undefined | number = () => {
 >f21 : Symbol(f21, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 16, 5))
 
-    // Regular void function because contextual type for implicit return isn't just undefined
+    // Error, regular void function because contextual type for implicit return isn't just undefined
 }
 
 const f22: () => number = () => {
 >f22 : Symbol(f22, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 20, 5))
 
-    // Regular void function because contextual type for implicit return isn't just undefined
+    // Error, regular void function because contextual type for implicit return isn't just undefined
 }
 
 async function f30(): Promise<undefined> {
