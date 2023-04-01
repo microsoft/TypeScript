@@ -1282,6 +1282,10 @@ function createCompletionEntry(
     isRightOfOpenTag: boolean | undefined,
     includeSymbol: boolean
 ): CompletionEntry | undefined {
+    if (isInJSFile(sourceFile) && !symbolHasValueDeclaration(symbol)) {
+        return undefined;
+    }
+
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
@@ -1438,6 +1442,18 @@ function createCompletionEntry(
         data,
         ...includeSymbol ? { symbol } : undefined
     };
+}
+
+function symbolHasValueDeclaration(symbol: Symbol): boolean {
+    return !!symbol?.declarations?.some(declaration => {
+        switch (declaration.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return false;
+            default:
+                return true;
+        }
+    });
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
