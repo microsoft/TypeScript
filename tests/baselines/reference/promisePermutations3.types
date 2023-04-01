@@ -1144,8 +1144,8 @@ var r11: IPromise<number>;
 >r11 : IPromise<number>
 
 var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
->r11a : IPromise<IPromise<string>>
->r11.then(testFunction11, testFunction11, testFunction11) : IPromise<IPromise<string>>
+>r11a : IPromise<IPromise<number>>
+>r11.then(testFunction11, testFunction11, testFunction11) : IPromise<IPromise<number>>
 >r11.then : <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >r11 : IPromise<number>
 >then : <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
@@ -1157,8 +1157,8 @@ var s11: Promise<number>;
 >s11 : Promise<number>
 
 var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
->s11a : Promise<string>
->s11.then(testFunction11, testFunction11, testFunction11) : Promise<string>
+>s11a : Promise<IPromise<number>>
+>s11.then(testFunction11, testFunction11, testFunction11) : Promise<IPromise<number>>
 >s11.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >s11 : Promise<number>
 >then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
@@ -1167,8 +1167,8 @@ var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
 
 var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
->s11b : Promise<string>
->s11.then(testFunction11P, testFunction11P, testFunction11P) : Promise<string>
+>s11b : Promise<number>
+>s11.then(testFunction11P, testFunction11P, testFunction11P) : Promise<number>
 >s11.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >s11 : Promise<number>
 >then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
@@ -1177,8 +1177,8 @@ var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
 >testFunction11P : { (x: number): Promise<number>; (x: string): Promise<string>; }
 
 var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
->s11c : Promise<string>
->s11.then(testFunction11P, testFunction11, testFunction11) : Promise<string>
+>s11c : Promise<IPromise<number>>
+>s11.then(testFunction11P, testFunction11, testFunction11) : Promise<IPromise<number>>
 >s11.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >s11 : Promise<number>
 >then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
@@ -1223,8 +1223,8 @@ var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
 >testFunction12 : { <T>(x: T): IPromise<T>; <T>(x: T, y: T): IPromise<T>; }
 
 var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
->s12b : IPromise<Promise<unknown>>
->s12.then(testFunction12P, testFunction12P, testFunction12P) : IPromise<Promise<unknown>>
+>s12b : IPromise<IPromise<unknown>>
+>s12.then(testFunction12P, testFunction12P, testFunction12P) : IPromise<IPromise<unknown>>
 >s12.then : <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >s12 : IPromise<(x: any) => any>
 >then : <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>

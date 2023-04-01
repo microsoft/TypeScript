@@ -1,0 +1,63 @@
+=== tests/cases/compiler/overloadedGenericInference.ts ===
+// #35501
+declare function fn(x: string): string;
+>fn : { (x: string): string; (x: string[]): string; }
+>x : string
+
+declare function fn(x: string[]): string;
+>fn : { (x: string): string; (x: string[]): string; }
+>x : string[]
+
+declare function map<A, R>(fn: (item: A) => R, list: A[]): R[];
+>map : <A, R>(fn: (item: A) => R, list: A[]) => R[]
+>fn : (item: A) => R
+>item : A
+>list : A[]
+
+const mapped = map(fn, ['1']);
+>mapped : string[]
+>map(fn, ['1']) : string[]
+>map : <A, R>(fn: (item: A) => R, list: A[]) => R[]
+>fn : { (x: string): string; (x: string[]): string; }
+>['1'] : string[]
+>'1' : "1"
+
+// #30294 (partial fix)
+declare class C {
+>C : C
+
+    static x(y: number): number;
+>x : { (y: number): number; (): number; }
+>y : number
+
+    static x(): number;
+>x : { (y: number): number; (): number; }
+}
+C.x.call(C, 1); // ok
+>C.x.call(C, 1) : number
+>C.x.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>C.x : { (y: number): number; (): number; }
+>C : typeof C
+>x : { (y: number): number; (): number; }
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>C : typeof C
+>1 : 1
+
+C.x.call(C); // ok
+>C.x.call(C) : number
+>C.x.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>C.x : { (y: number): number; (): number; }
+>C : typeof C
+>x : { (y: number): number; (): number; }
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>C : typeof C
+
+C.x.call(1); // ok (not an error because the `this` type of `x` is not constrained)
+>C.x.call(1) : number
+>C.x.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>C.x : { (y: number): number; (): number; }
+>C : typeof C
+>x : { (y: number): number; (): number; }
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>1 : 1
+
