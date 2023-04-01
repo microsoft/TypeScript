@@ -70,7 +70,7 @@ f1(ns[0], ns[1], true);
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 >1 : Symbol(1)
 
-f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
+f1(...ns, true);
 >f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 
@@ -109,7 +109,7 @@ f2(ns[0], ns[1], true);
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 >1 : Symbol(1)
 
-f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
+f2(...ns, true);
 >f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 
@@ -156,7 +156,7 @@ const x17 = f10(42, "hello", true, ...t0);  // [number, string, boolean]
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
 
-const x18 = f10(...ns, true);  // (string | number | boolean)[]
+const x18 = f10(...ns, true);  // [number, string, boolean]
 >x18 : Symbol(x18, Decl(genericRestParameters1.ts, 42, 5))
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
@@ -175,17 +175,17 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
 
-    let x2 = f10(...v);  // V
+    let x2 = f10(...v);  // [V["0"], V["1"]]
 >x2 : Symbol(x2, Decl(genericRestParameters1.ts, 46, 7))
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >v : Symbol(v, Decl(genericRestParameters1.ts, 44, 66))
 
-    let x3 = f10(1, ...u);  // [number, ...string[]]
+    let x3 = f10(1, ...u);  // [number, ...U]
 >x3 : Symbol(x3, Decl(genericRestParameters1.ts, 47, 7))
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
 
-    let x4 = f10(...u, ...v);  // (string | number)[]
+    let x4 = f10(...u, ...v);  // [...U, V["0"], V["1"]]
 >x4 : Symbol(x4, Decl(genericRestParameters1.ts, 48, 7))
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
@@ -235,7 +235,7 @@ const z17 = f11(42, "hello", true, ...t0);  // [42, "hello", true]
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
 
-const z18 = f11(...ns, true);  // (string | number | true)[]
+const z18 = f11(...ns, true);  // [number, string, true]
 >z18 : Symbol(z18, Decl(genericRestParameters1.ts, 61, 5))
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
@@ -254,17 +254,17 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
 
-    let x2 = f11(...v);  // V
+    let x2 = f11(...v);  // [V["0"], V["1"]]
 >x2 : Symbol(x2, Decl(genericRestParameters1.ts, 65, 7))
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >v : Symbol(v, Decl(genericRestParameters1.ts, 63, 66))
 
-    let x3 = f11(1, ...u);  // [1, ...string[]]
+    let x3 = f11(1, ...u);  // [1, ...U]
 >x3 : Symbol(x3, Decl(genericRestParameters1.ts, 66, 7))
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
 
-    let x4 = f11(...u, ...v);  // (string | number)[]
+    let x4 = f11(...u, ...v);  // [...U, V["0"], V["1"]]
 >x4 : Symbol(x4, Decl(genericRestParameters1.ts, 67, 7))
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
@@ -340,7 +340,7 @@ let x22 = call(f15, "hello", 42);  // string | number
 >call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
 >f15 : Symbol(f15, Decl(genericRestParameters1.ts, 76, 1))
 
-let x23 = call(f16, "hello", 42);  // unknown
+let x23 = call(f16, "hello", 42);  // string | number
 >x23 : Symbol(x23, Decl(genericRestParameters1.ts, 84, 3))
 >call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
 >f16 : Symbol(f16, Decl(genericRestParameters1.ts, 78, 60))
@@ -432,12 +432,12 @@ declare const g20: (x: number, y?: string, z?: boolean) => string[];
 >y : Symbol(y, Decl(genericRestParameters1.ts, 106, 30))
 >z : Symbol(z, Decl(genericRestParameters1.ts, 106, 42))
 
-const g21 = bind(g20, 42);  // (y: string, z: boolean) => string[]
+const g21 = bind(g20, 42);  // (y?: string, z?: boolean) => string[]
 >g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))
 >bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
 >g20 : Symbol(g20, Decl(genericRestParameters1.ts, 106, 13))
 
-const g22 = bind(g21, "hello");  // (z: boolean) => string[]
+const g22 = bind(g21, "hello");  // (z?: boolean) => string[]
 >g22 : Symbol(g22, Decl(genericRestParameters1.ts, 109, 5))
 >bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
 >g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))

@@ -98,7 +98,7 @@ f1(ns[0], ns[1], true);
 >1 : 1
 >true : true
 
-f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
+f1(...ns, true);
 >f1(...ns, true) : void
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >...ns : string | number
@@ -166,7 +166,7 @@ f2(ns[0], ns[1], true);
 >1 : 1
 >true : true
 
-f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
+f2(...ns, true);
 >f2(...ns, true) : void
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >...ns : string | number
@@ -237,7 +237,7 @@ const x17 = f10(42, "hello", true, ...t0);  // [number, string, boolean]
 >...t0 : never
 >t0 : []
 
-const x18 = f10(...ns, true);  // (string | number | boolean)[]
+const x18 = f10(...ns, true);  // [number, string, boolean]
 >x18 : [number, string, boolean]
 >f10(...ns, true) : [number, string, boolean]
 >f10 : <T extends unknown[]>(...args: T) => T
@@ -257,14 +257,14 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >...u : string
 >u : U
 
-    let x2 = f10(...v);  // V
+    let x2 = f10(...v);  // [V["0"], V["1"]]
 >x2 : [V["0"], V["1"]]
 >f10(...v) : [V["0"], V["1"]]
 >f10 : <T extends unknown[]>(...args: T) => T
 >...v : number
 >v : V
 
-    let x3 = f10(1, ...u);  // [number, ...string[]]
+    let x3 = f10(1, ...u);  // [number, ...U]
 >x3 : [number, ...U]
 >f10(1, ...u) : [number, ...U]
 >f10 : <T extends unknown[]>(...args: T) => T
@@ -272,7 +272,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >...u : string
 >u : U
 
-    let x4 = f10(...u, ...v);  // (string | number)[]
+    let x4 = f10(...u, ...v);  // [...U, V["0"], V["1"]]
 >x4 : [...U, V["0"], V["1"]]
 >f10(...u, ...v) : [...U, V["0"], V["1"]]
 >f10 : <T extends unknown[]>(...args: T) => T
@@ -346,7 +346,7 @@ const z17 = f11(42, "hello", true, ...t0);  // [42, "hello", true]
 >...t0 : never
 >t0 : []
 
-const z18 = f11(...ns, true);  // (string | number | true)[]
+const z18 = f11(...ns, true);  // [number, string, true]
 >z18 : [number, string, true]
 >f11(...ns, true) : [number, string, true]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
@@ -366,14 +366,14 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >...u : string
 >u : U
 
-    let x2 = f11(...v);  // V
+    let x2 = f11(...v);  // [V["0"], V["1"]]
 >x2 : [V["0"], V["1"]]
 >f11(...v) : [V["0"], V["1"]]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >...v : number
 >v : V
 
-    let x3 = f11(1, ...u);  // [1, ...string[]]
+    let x3 = f11(1, ...u);  // [1, ...U]
 >x3 : [1, ...U]
 >f11(1, ...u) : [1, ...U]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
@@ -381,7 +381,7 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >...u : string
 >u : U
 
-    let x4 = f11(...u, ...v);  // (string | number)[]
+    let x4 = f11(...u, ...v);  // [...U, V["0"], V["1"]]
 >x4 : [...U, V["0"], V["1"]]
 >f11(...u, ...v) : [...U, V["0"], V["1"]]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
@@ -461,7 +461,7 @@ let x22 = call(f15, "hello", 42);  // string | number
 >"hello" : "hello"
 >42 : 42
 
-let x23 = call(f16, "hello", 42);  // unknown
+let x23 = call(f16, "hello", 42);  // string | number
 >x23 : string | number
 >call(f16, "hello", 42) : string | number
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
@@ -575,14 +575,14 @@ declare const g20: (x: number, y?: string, z?: boolean) => string[];
 >y : string | undefined
 >z : boolean | undefined
 
-const g21 = bind(g20, 42);  // (y: string, z: boolean) => string[]
+const g21 = bind(g20, 42);  // (y?: string, z?: boolean) => string[]
 >g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 >bind(g20, 42) : (y?: string | undefined, z?: boolean | undefined) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
 >g20 : (x: number, y?: string | undefined, z?: boolean | undefined) => string[]
 >42 : 42
 
-const g22 = bind(g21, "hello");  // (z: boolean) => string[]
+const g22 = bind(g21, "hello");  // (z?: boolean) => string[]
 >g22 : (z?: boolean | undefined) => string[]
 >bind(g21, "hello") : (z?: boolean | undefined) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
