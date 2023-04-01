@@ -258,8 +258,8 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >u : U
 
     let x2 = f10(...v);  // V
->x2 : V
->f10(...v) : V
+>x2 : [V["0"], V["1"]]
+>f10(...v) : [V["0"], V["1"]]
 >f10 : <T extends unknown[]>(...args: T) => T
 >...v : number
 >v : V
@@ -273,8 +273,8 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >u : U
 
     let x4 = f10(...u, ...v);  // (string | number)[]
->x4 : [...U, ...V]
->f10(...u, ...v) : [...U, ...V]
+>x4 : [...U, V["0"], V["1"]]
+>f10(...u, ...v) : [...U, V["0"], V["1"]]
 >f10 : <T extends unknown[]>(...args: T) => T
 >...u : string
 >u : U
@@ -367,8 +367,8 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >u : U
 
     let x2 = f11(...v);  // V
->x2 : V
->f11(...v) : V
+>x2 : [V["0"], V["1"]]
+>f11(...v) : [V["0"], V["1"]]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >...v : number
 >v : V
@@ -382,8 +382,8 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >u : U
 
     let x4 = f11(...u, ...v);  // (string | number)[]
->x4 : [...U, ...V]
->f11(...u, ...v) : [...U, ...V]
+>x4 : [...U, V["0"], V["1"]]
+>f11(...u, ...v) : [...U, V["0"], V["1"]]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >...u : string
 >u : U

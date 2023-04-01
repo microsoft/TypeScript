@@ -32723,7 +32723,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (constraint && isTupleType(constraint)) {
                     forEach(getTypeArguments(constraint), (_, i) => {
                         const isVariable = !!(constraint.target.elementFlags[i] & ElementFlags.Variable);
-                        const syntheticArg = createSyntheticExpression(arg, !isVariable ? getTypeOfPropertyOfType(spreadType, "" + i as __String)! : spreadType,
+                        const syntheticArg = createSyntheticExpression(arg, !isVariable ? getIndexedAccessType(spreadType, getStringLiteralType("" + i))! : spreadType,
                             /*isSpread*/ isVariable, constraint.target.labeledElementDeclarations?.[i]);
                         effectiveArgs.push(syntheticArg);
                     });
