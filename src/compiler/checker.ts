@@ -13557,10 +13557,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
     }
 
-    function isConstTypeVariable(type: Type): boolean {
-        return !!(type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
-            isGenericTupleType(type) && findIndex(getTypeArguments(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0 ||
-            type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType));
+    function isConstTypeVariable(type: Type | undefined): boolean {
+        return !!(type && (
+            type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
+            type.flags & TypeFlags.Union && some((type as UnionType).types, isConstTypeVariable) ||
+            type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType) ||
+            type.flags & TypeFlags.Conditional && isConstTypeVariable(getConstraintOfConditionalType(type as ConditionalType)) ||
+            type.flags & TypeFlags.Substitution && isConstTypeVariable((type as SubstitutionType).baseType) ||
+            isGenericTupleType(type) && findIndex(getTypeArguments(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0));
     }
 
     function getConstraintOfIndexedAccess(type: IndexedAccessType) {
@@ -37385,14 +37389,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const parent = node.parent;
         return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
             isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
-            isValidConstAssertionArgument(node) && isConstTypeParameterContext(node) ||
+            isValidConstAssertionArgument(node) && isConstTypeVariable(getContextualType(node, ContextFlags.None)) ||
             (isParenthesizedExpression(parent) || isArrayLiteralExpression(parent) || isSpreadElement(parent)) && isConstContext(parent) ||
             (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
-    }
-
-    function isConstTypeParameterContext(node: Expression) {
-        const contextualType = getContextualType(node, ContextFlags.None);
-        return !!contextualType && someType(contextualType, isConstTypeVariable);
     }
 
     function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
