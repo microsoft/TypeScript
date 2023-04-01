@@ -1282,10 +1282,6 @@ function createCompletionEntry(
     isRightOfOpenTag: boolean | undefined,
     includeSymbol: boolean
 ): CompletionEntry | undefined {
-    if (isInJSFile(sourceFile) && !symbolHasValueDeclaration(symbol)) {
-        return undefined;
-    }
-
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
@@ -1442,18 +1438,6 @@ function createCompletionEntry(
         data,
         ...includeSymbol ? { symbol } : undefined
     };
-}
-
-function symbolHasValueDeclaration(symbol: Symbol): boolean {
-    return !!symbol?.declarations?.some(declaration => {
-        switch (declaration.kind) {
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return false;
-            default:
-                return true;
-        }
-    });
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
@@ -2100,6 +2084,10 @@ export function getCompletionEntriesFromSymbols(
             continue;
         }
 
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !symbolHasValueDeclaration(symbol)) {
+            continue;
+        }
+
         const { name, needsConvertPropertyAccess } = info;
         const originalSortText = symbolToSortTextMap?.[getSymbolId(symbol)] ?? SortText.LocationPriority;
         const sortText = (isDeprecated(symbol, typeChecker) ? SortText.Deprecated(originalSortText) : originalSortText);
@@ -2194,6 +2182,18 @@ export function getCompletionEntriesFromSymbols(
         // expressions are value space (which includes the value namespaces)
         return !!(allFlags & SymbolFlags.Value);
     }
+}
+
+function symbolHasValueDeclaration(symbol: Symbol): boolean {
+    return !symbol?.declarations?.length || symbol.declarations.some(declaration => {
+        switch (declaration.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return false;
+            default:
+                return true;
+        }
+    });
 }
 
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
