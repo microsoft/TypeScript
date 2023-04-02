@@ -6901,6 +6901,7 @@ declare namespace ts {
         declaration?: SignatureDeclaration | JSDocSignature;
         typeParameters?: readonly TypeParameter[];
         parameters: readonly Symbol[];
+        thisParameter?: Symbol;
     }
     interface Signature {
         getDeclaration(): SignatureDeclaration;
