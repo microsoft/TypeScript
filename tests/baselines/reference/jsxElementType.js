@@ -11,7 +11,8 @@ type React18ReactNode =
   | React.ReactPortal
   | boolean
   | null
-  | undefined;
+  | undefined
+  | Promise<React18ReactNode>;
 
 // // React.JSXElementConstructor but it now can return React nodes from function components.
 type NewReactJSXElementConstructor<P> =
@@ -47,8 +48,7 @@ Component = RenderArray;
 <RenderArray title="react" />;
 <RenderArray excessProp />;
 
-// Future ReactNode can be Promises.
-// But they should be rejected in React 18.0.
+// React Server Component
 const RenderPromise = async ({ title }: { title: string }) => "react";
 Component = RenderPromise;
 <RenderPromise />;
@@ -137,8 +137,7 @@ Component = RenderArray;
 React.createElement(RenderArray, null);
 React.createElement(RenderArray, { title: "react" });
 React.createElement(RenderArray, { excessProp: true });
-// Future ReactNode can be Promises.
-// But they should be rejected in React 18.0.
+// React Server Component
 var RenderPromise = function (_a) {
     var title = _a.title;
     return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {

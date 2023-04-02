@@ -7,7 +7,7 @@ type React18ReactFragment = ReadonlyArray<React18ReactNode>;
 >React18ReactFragment : readonly React18ReactNode[]
 
 type React18ReactNode =
->React18ReactNode : string | number | boolean | React.ReactElement<any> | React.ReactPortal | React18ReactFragment | null | undefined
+>React18ReactNode : string | number | boolean | React.ReactElement<any> | React.ReactPortal | React18ReactFragment | Promise<React18ReactNode> | null | undefined
 
   | React.ReactElement<any>
 >React : any
@@ -22,7 +22,8 @@ type React18ReactNode =
   | null
 >null : null
 
-  | undefined;
+  | undefined
+  | Promise<React18ReactNode>;
 
 // // React.JSXElementConstructor but it now can return React nodes from function components.
 type NewReactJSXElementConstructor<P> =
@@ -136,8 +137,7 @@ Component = RenderArray;
 >RenderArray : ({ title }: { title: string; }) => string[]
 >excessProp : true
 
-// Future ReactNode can be Promises.
-// But they should be rejected in React 18.0.
+// React Server Component
 const RenderPromise = async ({ title }: { title: string }) => "react";
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
 >async ({ title }: { title: string }) => "react" : ({ title }: { title: string; }) => Promise<string>
