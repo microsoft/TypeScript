@@ -63,8 +63,8 @@ declare namespace Handler {
 }
 declare function statische(): void;
 declare namespace Strings {
-    const a: string;
-    const b: string;
+    let a: string;
+    let b: string;
 }
 type HandlerOptions = {
     /**

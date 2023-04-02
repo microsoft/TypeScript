@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:23.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/a/b/projects/project/src/file1.ts]
@@ -23,12 +24,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:24.000] Search path: /a/b/projects/project/src
 Info 2    [00:00:25.000] For info: /a/b/projects/project/src/file1.ts :: Config file name: /a/b/projects/project/src/tsconfig.json
 Info 3    [00:00:26.000] Creating configuration project /a/b/projects/project/src/tsconfig.json
@@ -52,8 +47,8 @@ Info 13   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:37.000] Finishing updateGraphWorker: Project: /a/b/projects/project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:38.000] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
 Info 16   [00:00:39.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/file1.ts SVC-1-0 ""
 
 
 	../../../../lib/lib.d.ts
@@ -94,16 +89,13 @@ Info 30   [00:01:00.000] Search path: /a/b/projects/project/src
 Info 31   [00:01:01.000] For info: /a/b/projects/project/src/file1.ts :: No config files found.
 Info 32   [00:01:02.000] Scheduled: *ensureProjectForOpenFiles*
 Info 33   [00:01:03.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/src/tsconfig.json] deleted
 
-PolledWatches::
-
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 34   [00:01:04.500] Running: *ensureProjectForOpenFiles*
 Info 35   [00:01:05.500] Before ensureProjectForOpenFiles:
@@ -122,8 +114,8 @@ Info 44   [00:01:17.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 45   [00:01:18.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 46   [00:01:19.500] Project '/dev/null/inferredProject1*' (Inferred)
 Info 47   [00:01:20.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/file1.ts SVC-1-0 ""
 
 
 	../../../../lib/lib.d.ts
@@ -140,24 +132,22 @@ Info 50   [00:01:25.500] -----------------------------------------------
 Info 50   [00:01:26.500] Open files: 
 Info 50   [00:01:27.500] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
 Info 50   [00:01:28.500] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/b/projects/project/src/tsconfig.json:
+/a/b/projects/project/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/jsconfig.json:
+/a/b/projects/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/tsconfig.json:
+/a/b/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/jsconfig.json:
+/a/b/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/node_modules/@types:
+/a/b/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/project/node_modules/@types:
+/a/b/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-
-FsWatchesRecursive::

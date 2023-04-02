@@ -1,3 +1,4 @@
+currentDirectory:: /home/user/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -86,34 +87,32 @@ Shape signatures in builder refreshed for::
 /home/user/projects/myproject/src/file.ts (used version)
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
+/home/user/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/user/projects/myproject/tsconfig.json:
+/home/user/projects/myproject/tsconfig.json: *new*
   {}
-/home/user/projects/myproject/src/file.ts:
+/home/user/projects/myproject/src/file.ts: *new*
   {}
-/home/user/projects/myproject/node_modules/reala/index.d.ts:
+/home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/home/user/projects/myproject/src:
+/home/user/projects/myproject/src: *new*
   {}
-/home/user/projects/myproject/node_modules:
+/home/user/projects/myproject/node_modules: *new*
   {}
-/home/user/projects/myproject/node_modules/reala:
+/home/user/projects/myproject/node_modules/reala: *new*
   {}
-/home/user/projects/myproject/node_modules/reala/node_modules:
+/home/user/projects/myproject/node_modules/reala/node_modules: *new*
   {}
-/home/user/projects/myproject/node_modules/realb:
+/home/user/projects/myproject/node_modules/realb: *new*
   {}
-/home/user/projects/myproject/node_modules/realb/node_modules:
+/home/user/projects/myproject/node_modules/realb/node_modules: *new*
   {}
-/home/user/projects/myproject:
+/home/user/projects/myproject: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

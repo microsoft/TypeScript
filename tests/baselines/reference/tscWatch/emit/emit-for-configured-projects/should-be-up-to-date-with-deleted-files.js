@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -68,27 +69,27 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile2.ts (used version)
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {}
-/a/b/file1consumer2.ts:
+/a/b/file1consumer2.ts: *new*
   {}
-/a/b/globalfile3.ts:
+/a/b/globalfile3.ts: *new*
   {}
-/a/b/modulefile2.ts:
+/a/b/modulefile2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -134,6 +135,9 @@ export var T: number;export function Foo() { };
 
 //// [/a/b/file1Consumer2.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -176,6 +180,10 @@ FsWatches::
 /a/b/modulefile2.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/file1consumer2.ts:
   {}
 
 FsWatchesRecursive::

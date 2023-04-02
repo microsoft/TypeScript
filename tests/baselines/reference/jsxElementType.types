@@ -20,8 +20,6 @@ type React18ReactNode =
 
   | boolean
   | null
->null : null
-
   | undefined
   | Promise<React18ReactNode>;
 
@@ -190,7 +188,6 @@ function ReactNativeFlatList(
 
 ) {
   return null;
->null : null
 }
 <ReactNativeFlatList />;
 ><ReactNativeFlatList /> : JSX.Element

@@ -13,7 +13,7 @@ tests/cases/compiler/a.js(8,30): error TS2322: Type '{ a: number; b: number; c: 
     
     /** @type {Foo} */
     export default { a: 1, b: 1, c: 1 };
-                                 ~~~~
+                                 ~
 !!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Foo'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
     

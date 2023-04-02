@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     base64decode,
     computeLineAndCharacterOfPosition,
@@ -10,6 +9,7 @@ import {
     Extension,
     getDeclarationEmitOutputFilePathWorker,
     getDirectoryPath,
+    getDocumentPositionMapper as ts_getDocumentPositionMapper,
     getLineInfo,
     getLineStarts,
     getNormalizedAbsolutePath,
@@ -23,6 +23,7 @@ import {
     removeFileExtension,
     SourceFileLike,
     sys,
+    toPath as ts_toPath,
     tryGetSourceMappingURL,
     tryParseRawSourceMap,
 } from "./_namespaces/ts";
@@ -58,7 +59,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
     function toPath(fileName: string) {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string) {
@@ -72,7 +73,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         }
         else if (host.readFile) {
             const file = getSourceFileLike(generatedFileName);
-            mapper = file && ts.getDocumentPositionMapper(
+            mapper = file && ts_getDocumentPositionMapper(
                 { getSourceFileLike, getCanonicalFileName, log: s => host.log(s) },
                 generatedFileName,
                 getLineInfo(file.text, getLineStarts(file)),

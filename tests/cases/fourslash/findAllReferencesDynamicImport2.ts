@@ -8,5 +8,7 @@
 ////     foo./*2*/[|bar|]();
 //// })
 
-verify.baselineFindAllReferences('1', '2');
-verify.rangesWithSameTextAreRenameLocations("bar");
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['1', '2'] },
+    { type: "findRenameLocations", rangeText: "bar" },
+);

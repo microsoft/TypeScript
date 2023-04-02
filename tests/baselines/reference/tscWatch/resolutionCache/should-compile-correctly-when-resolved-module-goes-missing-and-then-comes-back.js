@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/foo.ts]
 import {x} from "bar"
@@ -46,18 +47,16 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/foo.ts:
+/a/foo.ts: *new*
   {}
-/a/bar.d.ts:
+/a/bar.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -75,6 +74,10 @@ Change:: Delete imported file
 Input::
 //// [/a/bar.d.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+2: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:18 AM[0m] File change detected. Starting incremental compilation...
@@ -102,7 +105,7 @@ Shape signatures in builder refreshed for::
 /a/foo.ts (computed .d.ts)
 
 PolledWatches::
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -110,7 +113,11 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/:
+/: *new*
+  {}
+
+FsWatches *deleted*::
+/a/bar.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -128,6 +135,13 @@ Input::
 export const y = 1;export const x = 10;
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
@@ -152,14 +166,20 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-PolledWatches::
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/foo.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/bar.d.ts:
+/a/bar.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
   {}
 
 FsWatchesRecursive::

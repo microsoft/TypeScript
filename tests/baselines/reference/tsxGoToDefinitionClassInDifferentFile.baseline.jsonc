@@ -1,0 +1,19 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/C.tsx ===
+// <|export default class [|C|] {}|>
+
+// === /tests/cases/fourslash/a.tsx ===
+// import C from "./C";
+// const foo = </*GOTO DEF POS*/C />;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "C",
+    "containerName": "\"/tests/cases/fourslash/C\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

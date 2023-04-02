@@ -1,6 +1,7 @@
 [
     "======== Resolving module 'dual' from '/main.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/package.json' does not exist.",
     "Loading module 'dual' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/dual/package.json'.",

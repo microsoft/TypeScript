@@ -9,9 +9,5 @@ class greeter {
 >x : any
 >y : number
 >10 : 10
-
-        y++;
->y++ : number
->y : number
     }
 }

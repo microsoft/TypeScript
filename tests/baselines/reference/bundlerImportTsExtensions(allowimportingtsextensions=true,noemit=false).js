@@ -66,17 +66,12 @@ import {} from "./a.d.ts";
 import type {} from "./a.d.ts";
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [e.txt.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

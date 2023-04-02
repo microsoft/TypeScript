@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -147,38 +148,36 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg0/index.ts:
+/user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/typings/xterm.d.ts:
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
   {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg1/index.ts:
+/user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg2/index.ts:
+/user/username/projects/myproject/pkg2/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg3/index.ts:
+/user/username/projects/myproject/pkg3/index.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
+/user/username/projects/myproject/pkg0: *new*
   {}
-/user/username/projects/myproject/pkg1:
+/user/username/projects/myproject/pkg1: *new*
   {}
-/user/username/projects/myproject/pkg2:
+/user/username/projects/myproject/pkg2: *new*
   {}
-/user/username/projects/myproject/pkg3:
+/user/username/projects/myproject/pkg3: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -219,6 +218,13 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
@@ -307,40 +313,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -355,6 +327,9 @@ Input::
 {"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"}]}
 
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
@@ -362,8 +337,6 @@ Output::
 [[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-PolledWatches::
 
 FsWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
@@ -383,12 +356,22 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
+
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
   {}
 /user/username/projects/myproject/pkg1:
   {}
 /user/username/projects/myproject/pkg2:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg3:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -401,6 +384,13 @@ Input::
 export const typing = 10;
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
@@ -469,9 +459,40 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+
+Change:: change pkg references to remove all watches
+
+Input::
+//// [/user/username/projects/myproject/tsconfig.json]
+{"files":[],"include":[],"references":[]}
+
+
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
+
+[7m1[0m {"files":[],"include":[],"references":[]}
+[7m [0m [91m         ~~[0m
+
+[[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -486,50 +507,14 @@ FsWatches::
   {}
 /user/username/projects/myproject/pkg2/index.ts:
   {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/pkg0:
   {}
 /user/username/projects/myproject/pkg1:
   {}
 /user/username/projects/myproject/pkg2:
   {}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
-
-Change:: change pkg references to remove all watches
-
-Input::
-//// [/user/username/projects/myproject/tsconfig.json]
-{"files":[],"include":[],"references":[]}
-
-
-Output::
->> Screen clear
-[[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
-
-[96mtsconfig.json[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
-
-[7m1[0m {"files":[],"include":[],"references":[]}
-[7m [0m [91m         ~~[0m
-
-[[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -541,15 +526,9 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

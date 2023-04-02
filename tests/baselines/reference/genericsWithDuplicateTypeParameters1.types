@@ -6,7 +6,6 @@ function f2<X, X>(a: X, b: X): X { return null; }
 >f2 : <X>(a: X, b: X) => X
 >a : X
 >b : X
->null : null
 
 class C<X, X> {
 >C : C<X>
@@ -18,7 +17,6 @@ class C<X, X> {
 >f2 : <X>(a: X, b: X) => X
 >a : X
 >b : X
->null : null
 }
 
 interface I<X, X> {
@@ -46,5 +44,4 @@ var m = {
 >f2 : <X>(a: X, b: X) => X
 >a : X
 >b : X
->null : null
 }

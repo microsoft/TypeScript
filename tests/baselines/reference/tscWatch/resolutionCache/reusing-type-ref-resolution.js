@@ -1,3 +1,4 @@
+currentDirectory:: /src/project useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/tsconfig.json]
 {"compilerOptions":{"composite":true,"traceResolution":true,"outDir":"outDir"}}
@@ -74,16 +75,22 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg0/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /src/project/fileWithTypeRefs.ts 250 undefined Source file
-======== Resolving type reference directive 'pkg2', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
+======== Resolving type reference directive 'pkg2', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg2/package.json' does not exist.
 File '/src/project/node_modules/pkg2.d.ts' does not exist.
 File '/src/project/node_modules/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg2/index.d.ts', result '/src/project/node_modules/pkg2/index.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts', primary: false. ========
-======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
+======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg3.d.ts' does not exist.
 Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
@@ -152,27 +159,27 @@ Shape signatures in builder refreshed for::
 /src/project/filewithtyperefs.ts (computed .d.ts during emit)
 
 PolledWatches::
-/src/project/node_modules/@types:
+/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/project/tsconfig.json:
+/src/project/tsconfig.json: *new*
   {}
-/src/project/filewithimports.ts:
+/src/project/filewithimports.ts: *new*
   {}
-/src/project/node_modules/pkg0/index.d.ts:
+/src/project/node_modules/pkg0/index.d.ts: *new*
   {}
-/src/project/filewithtyperefs.ts:
+/src/project/filewithtyperefs.ts: *new*
   {}
-/src/project/node_modules/pkg2/index.d.ts:
+/src/project/node_modules/pkg2/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/project/node_modules:
+/src/project/node_modules: *new*
   {}
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -326,6 +333,14 @@ Input::
 export interface Import1 {}
 
 
+Before running Timeout callback:: count: 2
+3: timerToInvalidateFailedLookupResolutions
+4: timerToUpdateProgram
+After running Timeout callback:: count: 1
+5: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /src/project/node_modules/pkg1 :: WatchInfo: /src/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -425,7 +440,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/src/project/node_modules/pkg1/index.d.ts:
+/src/project/node_modules/pkg1/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -562,6 +577,14 @@ Input::
 export interface Import3 {}
 
 
+Before running Timeout callback:: count: 2
+8: timerToInvalidateFailedLookupResolutions
+9: timerToUpdateProgram
+After running Timeout callback:: count: 1
+10: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /src/project/node_modules/pkg3 :: WatchInfo: /src/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -586,8 +609,11 @@ CreatingProgramWith::
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg1/index.d.ts'.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
-======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
+======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg3/package.json' does not exist.
 File '/src/project/node_modules/pkg3.d.ts' does not exist.
@@ -657,7 +683,7 @@ FsWatches::
   {}
 /src/project/node_modules/pkg1/index.d.ts:
   {}
-/src/project/node_modules/pkg3/index.d.ts:
+/src/project/node_modules/pkg3/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::

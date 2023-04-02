@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/foo.ts]
 import {x} from "bar"
@@ -46,19 +47,19 @@ Shape signatures in builder refreshed for::
 /a/foo.ts (used version)
 
 PolledWatches::
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/foo.ts:
+/a/foo.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/:
+/: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -81,6 +82,10 @@ import {y} from "bar"
 export const y = 1;
 
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+2: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
@@ -105,14 +110,20 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-PolledWatches::
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/foo.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/bar.d.ts:
+/a/bar.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
   {}
 
 FsWatchesRecursive::

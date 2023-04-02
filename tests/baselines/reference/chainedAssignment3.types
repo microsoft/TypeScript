@@ -25,7 +25,6 @@ a = b = null;
 >a : A
 >b = null : null
 >b : B
->null : null
 
 a = b = new B();
 >a = b = new B() : B
@@ -52,7 +51,6 @@ a.id = b.value = null;
 >b.value : string
 >b : B
 >value : string
->null : null
 
 // error cases
 b = a = new A();

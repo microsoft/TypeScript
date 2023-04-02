@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile.ts]
 export function bar() { };
@@ -50,21 +51,21 @@ Shape signatures in builder refreshed for::
 /a/b/file1.ts (used version)
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1.ts:
+/a/b/file1.ts: *new*
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -95,6 +96,11 @@ export function bar() { };
 //// [/a/b/moduleFile.ts] deleted
 //// [/a/b/moduleFile.js] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
+Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
@@ -127,7 +133,7 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
-/a/b/modulefile:
+/a/b/modulefile: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -137,9 +143,13 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b:
+/a/b: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile.ts:
   {}
 
 FsWatchesRecursive::
@@ -167,6 +177,14 @@ export function bar() { };
 
 //// [/a/b/moduleFile1.ts] deleted
 
+Before running Timeout callback:: count: 2
+7: timerToInvalidateFailedLookupResolutions
+8: timerToUpdateProgram
+After running Timeout callback:: count: 1
+9: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
@@ -195,6 +213,10 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/modulefile:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/b/tsconfig.json:
   {}
@@ -202,7 +224,13 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/a/b:
+  {}
+/a/b/modulefile1.ts:
   {}
 
 FsWatchesRecursive::

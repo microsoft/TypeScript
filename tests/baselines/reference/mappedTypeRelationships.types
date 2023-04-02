@@ -678,3 +678,39 @@ function f<T extends { x: {} }>(): Partial<T> {
 >undefined : undefined
 }
 
+// #32365
+interface SettingsTypes {
+  audio: {
+>audio : { volume: string; }
+
+    volume: string;
+>volume : string
+
+  };
+  video: {
+>video : { resolution: string; }
+
+    resolution: string;
+>resolution : string
+
+  };
+}
+interface Settings<Params extends { [K in keyof Params]?: string }> {
+  config: Params;
+>config : Params
+}
+type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
+>ConcreteSettingsResult1 : Settings<{ volume: string; }>
+
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
+>ConcreteSettingsResult2 : Settings<{ volume: string; } | { resolution: string; }>
+
+type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
+>GenericSettingsAccess : GenericSettingsAccess<T>
+
+type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
+>GenericSettingsResult1 : Settings<{ volume: string; }>
+
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
+>GenericSettingsResult2 : Settings<{ volume: string; } | { resolution: string; }>
+

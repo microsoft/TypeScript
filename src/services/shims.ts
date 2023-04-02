@@ -301,13 +301,6 @@ export interface LanguageServiceShim extends Shim {
     getFileReferences(fileName: string): string;
 
     /**
-     * @deprecated
-     * Returns a JSON-encoded value of the type:
-     * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-     */
-    getOccurrencesAtPosition(fileName: string, position: number): string;
-
-    /**
      * Returns a JSON-encoded value of the type:
      * { fileName: string; highlights: { start: number; length: number }[] }[]
      *
@@ -1021,13 +1014,6 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
         );
     }
 
-    public getOccurrencesAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getOccurrencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getOccurrencesAtPosition(fileName, position)
-        );
-    }
-
     public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
         return this.forwardJSONCall(
             `getDocumentHighlights('${fileName}', ${position})`,
@@ -1293,7 +1279,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             `getPreProcessedFileInfo('${fileName}')`,
             () => {
                 // for now treat files as JavaScript
-                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /*readImportFiles*/ true, /*detectJavaScriptImports*/ true);
                 return {
                     referencedFiles: this.convertFileReferences(result.referencedFiles),
                     importedFiles: this.convertFileReferences(result.importedFiles),
@@ -1356,7 +1342,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public discoverTypings(discoverTypingsJson: string): string {
-        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
+        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false);
         return this.forwardJSONCall("discoverTypings()", () => {
             const info = JSON.parse(discoverTypingsJson) as DiscoverTypingsInfo;
             if (this.safeList === undefined) {
@@ -1395,7 +1381,7 @@ export class TypeScriptServicesFactory implements ShimFactory {
                 this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
             }
             const hostAdapter = new LanguageServiceShimHostAdapter(host);
-            const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
+            const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnlyOrLanguageServiceMode*/ false);
             return new LanguageServiceShimObject(this, host, languageService);
         }
         catch (err) {

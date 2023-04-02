@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/compiler/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -53,19 +54,19 @@ Shape signatures in builder refreshed for::
 /src/app.ts (used version)
 
 PolledWatches::
-/src/node_modules/@types:
+/src/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/tsconfig.json:
+/src/tsconfig.json: *new*
   {}
-/src/app.ts:
+/src/app.ts: *new*
   {}
-/compiler/lib.es5.d.ts:
+/compiler/lib.es5.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src:
+/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -82,6 +83,9 @@ Input::
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
@@ -118,7 +122,7 @@ FsWatches::
   {}
 /compiler/lib.es5.d.ts:
   {}
-/compiler/lib.es2015.promise.d.ts:
+/compiler/lib.es2015.promise.d.ts: *new*
   {}
 
 FsWatchesRecursive::

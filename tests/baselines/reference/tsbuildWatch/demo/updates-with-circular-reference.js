@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
@@ -167,36 +168,34 @@ Output::
 
 
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/demo/animals/tsconfig.json:
+/user/username/projects/demo/animals/tsconfig.json: *new*
   {}
-/user/username/projects/demo/tsconfig-base.json:
+/user/username/projects/demo/tsconfig-base.json: *new*
   {}
-/user/username/projects/demo/animals/animal.ts:
+/user/username/projects/demo/animals/animal.ts: *new*
   {}
-/user/username/projects/demo/animals/dog.ts:
+/user/username/projects/demo/animals/dog.ts: *new*
   {}
-/user/username/projects/demo/animals/index.ts:
+/user/username/projects/demo/animals/index.ts: *new*
   {}
-/user/username/projects/demo/zoo/tsconfig.json:
+/user/username/projects/demo/zoo/tsconfig.json: *new*
   {}
-/user/username/projects/demo/zoo/zoo.ts:
+/user/username/projects/demo/zoo/zoo.ts: *new*
   {}
-/user/username/projects/demo/core/tsconfig.json:
+/user/username/projects/demo/core/tsconfig.json: *new*
   {}
-/user/username/projects/demo/core/utilities.ts:
+/user/username/projects/demo/core/utilities.ts: *new*
   {}
-/user/username/projects/demo/tsconfig.json:
+/user/username/projects/demo/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/demo/animals:
+/user/username/projects/demo/animals: *new*
   {}
-/user/username/projects/demo/zoo:
+/user/username/projects/demo/zoo: *new*
   {}
-/user/username/projects/demo/core:
+/user/username/projects/demo/core: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -215,6 +214,13 @@ Input::
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
@@ -297,38 +303,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/lib/animals/dog.d.ts (used version)
 /user/username/projects/demo/lib/animals/index.d.ts (used version)
 /user/username/projects/demo/zoo/zoo.ts (computed .d.ts during emit)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/demo/animals/tsconfig.json:
-  {}
-/user/username/projects/demo/tsconfig-base.json:
-  {}
-/user/username/projects/demo/animals/animal.ts:
-  {}
-/user/username/projects/demo/animals/dog.ts:
-  {}
-/user/username/projects/demo/animals/index.ts:
-  {}
-/user/username/projects/demo/zoo/tsconfig.json:
-  {}
-/user/username/projects/demo/zoo/zoo.ts:
-  {}
-/user/username/projects/demo/core/tsconfig.json:
-  {}
-/user/username/projects/demo/core/utilities.ts:
-  {}
-/user/username/projects/demo/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/demo/animals:
-  {}
-/user/username/projects/demo/zoo:
-  {}
-/user/username/projects/demo/core:
-  {}
 
 exitCode:: ExitStatus.undefined
 
