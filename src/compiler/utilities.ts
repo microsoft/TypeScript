@@ -4182,14 +4182,14 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
-    if (isVariableLike(hostNode) && hasInitializer(hostNode) && hostNode.initializer && hasJSDocNodes(hostNode.initializer) && hostNode.initializer.jsDoc) {
-        result = addRange(result, filterOwnedJSDocTags(hostNode, hostNode.initializer.jsDoc));
+    if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
+        result = addRange(result, filterOwnedJSDocTags(hostNode, hostNode.initializer.jsDoc!));
     }
 
     let node: Node | undefined = hostNode;
     while (node && node.parent) {
-        if (hasJSDocNodes(node) && node.jsDoc) {
-            result = addRange(result, filterOwnedJSDocTags(hostNode, node.jsDoc));
+        if (hasJSDocNodes(node)) {
+            result = addRange(result, filterOwnedJSDocTags(hostNode, node.jsDoc!));
         }
 
         if (node.kind === SyntaxKind.Parameter) {
