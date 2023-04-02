@@ -11,7 +11,7 @@ tests/cases/compiler/jsxElementType.tsx(53,2): error TS2741: Property 'title' is
 tests/cases/compiler/jsxElementType.tsx(55,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
 tests/cases/compiler/jsxElementType.tsx(71,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
-  Its instance type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element.
+  Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
 
 
@@ -113,5 +113,5 @@ tests/cases/compiler/jsxElementType.tsx(71,2): error TS2786: 'ReactNativeFlatLis
     <ReactNativeFlatList />;
      ~~~~~~~~~~~~~~~~~~~
 !!! error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
-!!! error TS2786:   Its instance type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element.
+!!! error TS2786:   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
 !!! error TS2786:     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.

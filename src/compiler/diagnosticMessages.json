@@ -7720,5 +7720,9 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
+    },
+    "Its type '{0}' is not a valid JSX element type.": {
+        "category": "Error",
+        "code": 18052
     }
 }
