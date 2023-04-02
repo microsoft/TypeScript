@@ -8507,6 +8507,7 @@ declare namespace ts {
     function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
     function getDecorators(node: HasDecorators): readonly Decorator[] | undefined;
     function getModifiers(node: HasModifiers): readonly Modifier[] | undefined;
+    function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
