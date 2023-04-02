@@ -2085,7 +2085,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -2102,7 +2102,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -2119,7 +2119,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]
@@ -7586,7 +7586,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -7603,7 +7603,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -7620,7 +7620,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]
@@ -14136,7 +14136,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -14153,7 +14153,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -14170,7 +14170,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]
@@ -19698,7 +19698,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -19715,7 +19715,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -19732,7 +19732,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]
@@ -25681,7 +25681,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -25698,7 +25698,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -25715,7 +25715,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]
@@ -31182,7 +31182,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -31199,7 +31199,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -31216,7 +31216,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]
@@ -37646,7 +37646,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
+                  "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
                   "kind": "text"
                 }
               ]
@@ -37663,7 +37663,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+                  "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
                   "kind": "text"
                 }
               ]
@@ -37680,7 +37680,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+                  "text": "this is info about b\n not aligned text about parameter will eat only one space",
                   "kind": "text"
                 }
               ]

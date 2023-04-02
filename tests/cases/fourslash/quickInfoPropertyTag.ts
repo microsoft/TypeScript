@@ -12,4 +12,4 @@
 /////** @type {I} */
 ////const obj = { /**/x: 10 };
 
-verify.quickInfoAt("", "(property) x: number", "Doc\nMore doc");
+verify.quickInfoAt("", "(property) x: number", "Doc\n                     More doc");
