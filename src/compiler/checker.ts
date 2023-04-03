@@ -45467,7 +45467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (isDeclaration(node)) {
             // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
-            const symbol = getSymbolOfDeclaration(node) || getSymbolAtLocation(node);
+            const symbol = getSymbolOfDeclaration(node);
             return symbol ? getTypeOfSymbol(symbol) : errorType;
         }
 
