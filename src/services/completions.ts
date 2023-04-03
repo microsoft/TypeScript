@@ -34,6 +34,7 @@ import {
     concatenate,
     ConstructorDeclaration,
     ContextFlags,
+    countWhere,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -872,7 +873,7 @@ function getJSDocParameterCompletions(
 
     const isJs = isSourceFileJS(sourceFile);
     const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
-    const paramTagCount = jsDoc.tags?.filter(tag => isJSDocParameterTag(tag) && tag.getEnd() <= position).length;
+    const paramTagCount = countWhere(jsDoc.tags, tag => isJSDocParameterTag(tag) && tag.getEnd() <= position);
     return mapDefined(func.parameters, param => {
         if (getJSDocParameterTags(param).length) {
             return undefined; // Parameter is already annotated.
@@ -880,19 +881,7 @@ function getJSDocParameterCompletions(
         if (isIdentifier(param.name)) { // Named parameter
             const tabstopCounter = { tabstop: 1 };
             const paramName = param.name.text;
-            let snippetText =
-                getJSDocParamAnnotation(
-                    paramName,
-                    param.initializer,
-                    param.dotDotDotToken,
-                    isJs,
-                    /*isObject*/ false,
-                    /*isSnippet*/ true,
-                    checker,
-                    options,
-                    preferences,
-                    tabstopCounter);
-            let insertText =
+            let displayText =
                 getJSDocParamAnnotation(
                     paramName,
                     param.initializer,
@@ -903,12 +892,25 @@ function getJSDocParameterCompletions(
                     checker,
                     options,
                     preferences);
+            let snippetText = isSnippet
+                ? getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,
+                    tabstopCounter)
+                : undefined;
             if (tagNameOnly) { // Remove `@`
-                insertText = insertText.slice(1);
-                snippetText = snippetText.slice(1);
+                displayText = displayText.slice(1);
+                if (snippetText) snippetText = snippetText.slice(1);
             }
             return {
-                name: insertText,
+                name: displayText,
                 kind: ScriptElementKind.parameterElement,
                 sortText: SortText.LocationPriority,
                 insertText: isSnippet ? snippetText : undefined,
@@ -917,7 +919,7 @@ function getJSDocParameterCompletions(
         }
         else if (param.parent.parameters.indexOf(param) === paramTagCount) { // Destructuring parameter; do it positionally
             const paramPath = `param${paramTagCount}`;
-            const insertTextResult =
+            const displayTextResult =
                 generateJSDocParamTagsForDestructuring(
                     paramPath,
                     param.name,
@@ -928,8 +930,8 @@ function getJSDocParameterCompletions(
                     checker,
                     options,
                     preferences,);
-            const snippetTextResult =
-                generateJSDocParamTagsForDestructuring(
+            const snippetTextResult = isSnippet
+                ? generateJSDocParamTagsForDestructuring(
                     paramPath,
                     param.name,
                     param.initializer,
@@ -938,15 +940,16 @@ function getJSDocParameterCompletions(
                     /*isSnippet*/ true,
                     checker,
                     options,
-                    preferences,);
-            let insertText = insertTextResult.join(getNewLineCharacter(options) + "* ");
-            let snippetText = snippetTextResult.join(getNewLineCharacter(options) + "* ");
+                    preferences,)
+                : undefined;
+            let displayText = displayTextResult.join(getNewLineCharacter(options) + "* ");
+            let snippetText = snippetTextResult?.join(getNewLineCharacter(options) + "* ");
             if (tagNameOnly) { // Remove `@`
-                insertText = insertText.slice(1);
-                snippetText = snippetText.slice(1);
+                displayText = displayText.slice(1);
+                if (snippetText) snippetText = snippetText.slice(1);
             }
             return {
-                name: insertText,
+                name: displayText,
                 kind: ScriptElementKind.parameterElement,
                 sortText: SortText.LocationPriority,
                 insertText: isSnippet ? snippetText : undefined,
