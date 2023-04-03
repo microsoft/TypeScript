@@ -155,13 +155,10 @@ describe("unittests:: canWatch::", () => {
         const paths: ts.Path[] = [];
         let longestPathLength = 0;
         getPathsOfDifferentFoldersAt(osRoot as ts.Path);
-        osRoot = ts.ensureTrailingDirectorySeparator(osRoot);
-        const users = combinePaths(osRoot, "users");
-        paths.push(users);
-        getPathsOfDifferentFoldersAt(combinePaths(users, "username"));
-        const user = combinePaths(osRoot, "user");
-        paths.push(user);
-        getPathsOfDifferentFoldersAt(combinePaths(user, "username"));
+        getPathsOfDifferentFoldersWithUsers("users");
+        getPathsOfDifferentFoldersWithUsers("user");
+        getPathsOfDifferentFoldersWithUsers("usr");
+        getPathsOfDifferentFoldersWithUsers("home");
         baselineOsRoot(paths, longestPathLength, baseline);
         Baseline.runBaseline(`canWatch/${scenario}${suffix}.baseline.md`, baseline.join("\r\n"));
         function getPathsOfDifferentFoldersAt(root: ts.Path) {
@@ -173,6 +170,11 @@ describe("unittests:: canWatch::", () => {
                 paths.push(root);
             }
             longestPathLength = Math.max(ts.last(paths).length, longestPathLength);
+        }
+        function getPathsOfDifferentFoldersWithUsers(usersType: string) {
+            const users = combinePaths(osRoot, usersType);
+            paths.push(users);
+            getPathsOfDifferentFoldersAt(combinePaths(users, "username"));
         }
     }
 

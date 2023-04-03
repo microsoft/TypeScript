@@ -80,6 +80,54 @@ Root:
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user                                                                                        | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user                                                                                        | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user                                                                                        | true      |
+| /usr/somefile.d.ts                                                                           | /usr                                                                                         | true      |
+| /usr/dir/somefile.d.ts                                                                       | /usr                                                                                         | true      |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr                                                                                         | true      |
+| /usr/username/somefile.d.ts                                                                  | /usr                                                                                         | true      |
+| /usr/username/dir/somefile.d.ts                                                              | /usr                                                                                         | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr                                                                                         | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr                                                                                         | true      |
+| /home/somefile.d.ts                                                                          | /home                                                                                        | true      |
+| /home/dir/somefile.d.ts                                                                      | /home                                                                                        | true      |
+| /home/dir/subdir/somefile.d.ts                                                               | /home                                                                                        | true      |
+| /home/username/somefile.d.ts                                                                 | /home                                                                                        | true      |
+| /home/username/dir/somefile.d.ts                                                             | /home                                                                                        | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home                                                                                        | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home                                                                                        | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home                                                                                        | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home                                                                                        | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home                                                                                        | true      |
 
 ## RootDirForResolution: /folderAtRoot
 
@@ -156,6 +204,54 @@ Root: /folderAtRoot
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
@@ -232,6 +328,54 @@ Root: /folderAtRoot/folder1
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
 
@@ -308,6 +452,54 @@ Root: /folderAtRoot/folder1/folder2
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
@@ -384,6 +576,54 @@ Root: /folderAtRoot/folder1/folder2/folder3
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -460,6 +700,54 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -536,6 +824,54 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users
 
@@ -612,6 +948,54 @@ Root: /users
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username
 
@@ -688,6 +1072,54 @@ Root: /users/username
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username/folderAtRoot
 
@@ -764,6 +1196,54 @@ Root: /users/username/folderAtRoot
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
@@ -840,6 +1320,54 @@ Root: /users/username/folderAtRoot/folder1
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
 
@@ -916,6 +1444,54 @@ Root: /users/username/folderAtRoot/folder1/folder2
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
@@ -992,6 +1568,54 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -1068,6 +1692,54 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1144,6 +1816,54 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user
 
@@ -1220,6 +1940,54 @@ Root: /user
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username                                                                               | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username                                                                               | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username                                                                               | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username
 
@@ -1296,6 +2064,54 @@ Root: /user/username
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username/folderAtRoot
 
@@ -1372,6 +2188,54 @@ Root: /user/username/folderAtRoot
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1                                                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1                                                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1                                                          | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
@@ -1448,6 +2312,54 @@ Root: /user/username/folderAtRoot/folder1
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2                                                  | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2                                                  | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
 
@@ -1524,6 +2436,54 @@ Root: /user/username/folderAtRoot/folder1/folder2
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
@@ -1600,6 +2560,54 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -1676,6 +2684,54 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1752,6 +2808,2038 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr
+
+Root: /usr
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           | /usr                                                                                         | true      |
+| /usr/dir/somefile.d.ts                                                                       | /usr/dir                                                                                     | true      |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir                                                                                     | true      |
+| /usr/username/somefile.d.ts                                                                  | /usr/username                                                                                | true      |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username                                                                                | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username                                                                                | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username                                                                                | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username
+
+Root: /usr/username
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  | /usr/username                                                                                | true      |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username/folderAtRoot
+
+Root: /usr/username/folderAtRoot
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot/dir                                                               | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot/dir                                                               | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username/folderAtRoot/folder1
+
+Root: /usr/username/folderAtRoot/folder1
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
+
+Root: /usr/username/folderAtRoot/folder1/folder2
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
+
+Root: /usr/username/folderAtRoot/folder1/folder2/folder3
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | false     |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | false     |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | false     |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                       | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                       | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+
+## RootDirForResolution: /home
+
+Root: /home
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          | /home                                                                                        | true      |
+| /home/dir/somefile.d.ts                                                                      | /home/dir                                                                                    | true      |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir                                                                                    | true      |
+| /home/username/somefile.d.ts                                                                 | /home/username                                                                               | true      |
+| /home/username/dir/somefile.d.ts                                                             | /home/username                                                                               | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username                                                                               | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username                                                                               | true      |
+
+## RootDirForResolution: /home/username
+
+Root: /home/username
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 | /home/username                                                                               | true      |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+
+## RootDirForResolution: /home/username/folderAtRoot
+
+Root: /home/username/folderAtRoot
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot/dir                                                              | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot/dir                                                              | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1                                                          | true      |
+
+## RootDirForResolution: /home/username/folderAtRoot/folder1
+
+Root: /home/username/folderAtRoot/folder1
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+
+## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
+
+Root: /home/username/folderAtRoot/folder1/folder2
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+
+## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
+
+Root: /home/username/folderAtRoot/folder1/folder2/folder3
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | false     |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+
+## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | false     |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+
+## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
+| /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
+| /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | false     |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 
 ## RootDirForResolution: undefined
 
@@ -1828,4 +4916,52 @@ Root: undefined
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir               | false     |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir/subdir                                                                     | false     |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot/dir                                                               | false     |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot/dir/subdir                                                        | false     |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | false     |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir/subdir                                                | false     |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | false     |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | false     |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir/subdir                                        | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir                                | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir                        | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                       | false     |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir                | false     |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir/subdir                                                                    | false     |
+| /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot/dir                                                              | false     |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot/dir/subdir                                                       | false     |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | false     |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir/subdir                                               | false     |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | false     |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | false     |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir/subdir                                       | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir                               | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir                       | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | false     |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir               | false     |
 

@@ -34,6 +34,22 @@ Root: c:
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot
 
@@ -64,6 +80,22 @@ Root: c:/folderAtRoot
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1
 
@@ -94,6 +126,22 @@ Root: c:/folderAtRoot/folder1
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2
 
@@ -124,6 +172,22 @@ Root: c:/folderAtRoot/folder1/folder2
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3
 
@@ -154,6 +218,22 @@ Root: c:/folderAtRoot/folder1/folder2/folder3
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -184,6 +264,22 @@ Root: c:/folderAtRoot/folder1/folder2/folder3/folder4
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -214,6 +310,22 @@ Root: c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users
 
@@ -244,6 +356,22 @@ Root: c:/users
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username
 
@@ -274,6 +402,22 @@ Root: c:/users/username
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot
 
@@ -304,6 +448,22 @@ Root: c:/users/username/folderAtRoot
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1
 
@@ -334,6 +494,22 @@ Root: c:/users/username/folderAtRoot/folder1
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2
 
@@ -364,6 +540,22 @@ Root: c:/users/username/folderAtRoot/folder1/folder2
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3
 
@@ -394,6 +586,22 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -424,6 +632,22 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -454,6 +678,22 @@ Root: c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user
 
@@ -484,6 +724,22 @@ Root: c:/user
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username
 
@@ -514,6 +770,22 @@ Root: c:/user/username
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot
 
@@ -544,6 +816,22 @@ Root: c:/user/username/folderAtRoot
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1
 
@@ -574,6 +862,22 @@ Root: c:/user/username/folderAtRoot/folder1
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2
 
@@ -604,6 +908,22 @@ Root: c:/user/username/folderAtRoot/folder1/folder2
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3
 
@@ -634,6 +954,22 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -664,6 +1000,22 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -694,6 +1046,758 @@ Root: c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr
+
+Root: c:/usr
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | true            |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username
+
+Root: c:/usr/username
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username/folderAtRoot
+
+Root: c:/usr/username/folderAtRoot
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username/folderAtRoot/folder1
+
+Root: c:/usr/username/folderAtRoot/folder1
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2
+
+Root: c:/usr/username/folderAtRoot/folder1/folder2
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3
+
+Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+Root: c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home
+
+Root: c:/home
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | true            |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username
+
+Root: c:/home/username
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username/folderAtRoot
+
+Root: c:/home/username/folderAtRoot
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username/folderAtRoot/folder1
+
+Root: c:/home/username/folderAtRoot/folder1
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2
+
+Root: c:/home/username/folderAtRoot/folder1/folder2
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3
+
+Root: c:/home/username/folderAtRoot/folder1/folder2/folder3
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+
+## RootDirForResolution: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+Root: c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Directory                                                                                  | canWatchAtTypes |
+| ------------------------------------------------------------------------------------------ | --------------- |
+| c:/node_modules/@types                                                                     | false           |
+| c:/folderAtRoot/node_modules/@types                                                        | false           |
+| c:/folderAtRoot/folder1/node_modules/@types                                                | true            |
+| c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | true            |
+| c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | true            |
+| c:/users/node_modules/@types                                                               | false           |
+| c:/users/username/node_modules/@types                                                      | false           |
+| c:/users/username/folderAtRoot/node_modules/@types                                         | false           |
+| c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | true            |
+| c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | true            |
+| c:/user/node_modules/@types                                                                | false           |
+| c:/user/username/node_modules/@types                                                       | true            |
+| c:/user/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/user/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
 ## RootDirForResolution: undefined
 
@@ -724,4 +1828,20 @@ Root: undefined
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| c:/usr/node_modules/@types                                                                 | false           |
+| c:/usr/username/node_modules/@types                                                        | true            |
+| c:/usr/username/folderAtRoot/node_modules/@types                                           | true            |
+| c:/usr/username/folderAtRoot/folder1/node_modules/@types                                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | true            |
+| c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | true            |
+| c:/home/node_modules/@types                                                                | false           |
+| c:/home/username/node_modules/@types                                                       | true            |
+| c:/home/username/folderAtRoot/node_modules/@types                                          | true            |
+| c:/home/username/folderAtRoot/folder1/node_modules/@types                                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
+| c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
 
