@@ -2491,20 +2491,19 @@ export function createLanguageService(
             const openPos = token.parent.parent.openingFragment.getStart(sourceFile) + 1; // "<".length
             const closePos = token.parent.parent.closingFragment.getStart(sourceFile) + 2; // "</".length
 
-            // only allows mirroring right after opening bracket: <| ></| >
+            // only allows linked editing right after opening bracket: <| ></| >
             if ((position !== openPos) && (position !== closePos)) return undefined;
 
-            const ranges = [{ start: openPos, length: 0 }, { start: closePos, length: 0 }];
-            const wordPattern = undefined;
-            return { ranges, wordPattern };
+            // wordPattern is undefined since fragments have no tag name
+            return { ranges: [{ start: openPos, length: 0 }, { start: closePos, length: 0 }] };
         }
         else {
-            // looks for mirroring in element tag names
-            const tag = findAncestor(token,
+            // determines if the cursor is in an element tag
+            const tag = findAncestor(token.parent,
                 n => {
-                    if (!n.parent.parent) return "quit";
-                    else if (isJsxElement(n.parent.parent)) {
-                        if (isJsxOpeningElement(n.parent) || isJsxClosingElement(n.parent)) {
+                    if (!n.parent) return "quit";
+                    else if (isJsxElement(n.parent)) {
+                        if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
                             return true;
                         }
                         return "quit";
@@ -2513,17 +2512,23 @@ export function createLanguageService(
                 });
             if (!tag) return undefined;
 
-            const element = tag.parent as JsxOpeningElement | JsxClosingElement;
-            const openTag = { start: element.parent.openingElement.tagName.getStart(sourceFile), end: element.parent.openingElement.tagName.end };
-            const endTag = { start: element.parent.closingElement.tagName.getStart(sourceFile), end: element.parent.closingElement.tagName.end };
+            const element = tag as JsxOpeningElement | JsxClosingElement;
+            const openTagStart = element.parent.openingElement.tagName.getStart(sourceFile);
+            const openTagEnd = element.parent.openingElement.tagName.end;
+            const closeTagStart = element.parent.closingElement.tagName.getStart(sourceFile);
+            const closeTagEnd = element.parent.closingElement.tagName.end;
 
-            // only return a mirror if the cursor is within a tag name
-            if (!(openTag.start <= position && position <= openTag.end || endTag.start <= position && position <= endTag.end)) return undefined;
-            if (element.parent.openingElement.tagName.getText(sourceFile) !== element.parent.closingElement.tagName.getText(sourceFile)) return undefined;
+            // only return linked cursors if the cursor is within a tag name
+            if (!(openTagStart <= position && position <= openTagEnd || closeTagStart <= position && position <= closeTagEnd)) return undefined;
 
-            const ranges = [{ start: openTag.start, length: openTag.end - openTag.start }, { start: endTag.start, length: endTag.end - endTag.start }];
-            const wordPattern = element.tagName.getText(sourceFile);
-            return { ranges, wordPattern };
+            // only return linked cursors if text in both tags is identical
+            const openingTagText = element.parent.openingElement.tagName.getText(sourceFile);
+            if (openingTagText !== element.parent.closingElement.tagName.getText(sourceFile)) return undefined;
+
+            return {
+                ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
+                wordPattern: openingTagText
+            };
         }
     }
 
