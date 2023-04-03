@@ -1099,7 +1099,7 @@ function getJSDocParamAnnotation(
         else {
             if (initializer) {
                 const inferredType = checker.getTypeAtLocation(initializer.parent);
-                if (!(inferredType.flags & TypeFlags.Any)) {
+                if (!(inferredType.flags & (TypeFlags.Any | TypeFlags.Void))) {
                     const sourceFile = initializer.getSourceFile();
                     const quotePreference = getQuotePreference(sourceFile, preferences);
                     const builderFlags = (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
@@ -1121,7 +1121,7 @@ function getJSDocParamAnnotation(
                     }
                 }
             }
-            if (isSnippet) {
+            if (isSnippet && type === "*") {
                 type = `\${${tabstopCounter!.tabstop++}:${type}}`;
             }
         }

@@ -87,7 +87,7 @@
 // | virtual
 // | yields
 // | param {Object} param0 
-// | * @param {*} [param0.a=1] 
+// | * @param {number} [param0.a=1] 
 // | param {*} b 
 // | ----------------------------------------------------------------------
 //   */
@@ -8263,13 +8263,13 @@
           "documentation": []
         },
         {
-          "name": "param {Object} param0 \r\n* @param {*} [param0.a=1] ",
+          "name": "param {Object} param0 \r\n* @param {number} [param0.a=1] ",
           "kind": "",
           "sortText": "11",
           "kindModifiers": "",
           "displayParts": [
             {
-              "text": "param {Object} param0 \r\n* @param {*} [param0.a=1] ",
+              "text": "param {Object} param0 \r\n* @param {number} [param0.a=1] ",
               "kind": "text"
             }
           ],

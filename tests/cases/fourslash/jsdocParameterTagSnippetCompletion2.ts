@@ -27,6 +27,11 @@
 ////  * @p/*jd*/
 ////  */
 //// function dd(...a) {}
+////
+//// /**
+////  * @p/*z*/
+////  */
+//// function zz(a = 3) {}
 
 
 verify.baselineCompletions({
