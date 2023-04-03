@@ -29,6 +29,22 @@ Determines if given directory or file can be watched
 | /user/username/folderAtRoot/folder1/folder2/folder3                               | true                    |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                       | true                    |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5               | true                    |
+| /usr                                                                              | false                   |
+| /usr/username                                                                     | false                   |
+| /usr/username/folderAtRoot                                                        | false                   |
+| /usr/username/folderAtRoot/folder1                                                | true                    |
+| /usr/username/folderAtRoot/folder1/folder2                                        | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/folder3                                | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                        | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                | true                    |
+| /home                                                                             | false                   |
+| /home/username                                                                    | false                   |
+| /home/username/folderAtRoot                                                       | false                   |
+| /home/username/folderAtRoot/folder1                                               | true                    |
+| /home/username/folderAtRoot/folder1/folder2                                       | true                    |
+| /home/username/folderAtRoot/folder1/folder2/folder3                               | true                    |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4                       | true                    |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5               | true                    |
 
 | File                                                                              | canWatchDirectoryOrFile |
 | --------------------------------------------------------------------------------- | ----------------------- |
@@ -55,4 +71,20 @@ Determines if given directory or file can be watched
 | /user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                    |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                    |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                    |
+| /usr/package.json                                                                 | false                   |
+| /usr/username/package.json                                                        | false                   |
+| /usr/username/folderAtRoot/package.json                                           | true                    |
+| /usr/username/folderAtRoot/folder1/package.json                                   | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/package.json                           | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                    |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                    |
+| /home/package.json                                                                | false                   |
+| /home/username/package.json                                                       | false                   |
+| /home/username/folderAtRoot/package.json                                          | true                    |
+| /home/username/folderAtRoot/folder1/package.json                                  | true                    |
+| /home/username/folderAtRoot/folder1/folder2/package.json                          | true                    |
+| /home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                    |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                    |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                    |
 

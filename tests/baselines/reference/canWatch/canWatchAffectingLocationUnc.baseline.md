@@ -33,6 +33,22 @@ Root: //vda1cs4850
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot
 
@@ -63,6 +79,22 @@ Root: //vda1cs4850/folderAtRoot
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1
 
@@ -93,6 +125,22 @@ Root: //vda1cs4850/folderAtRoot/folder1
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2
 
@@ -123,6 +171,22 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 
@@ -153,6 +217,22 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -183,6 +263,22 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -213,6 +309,22 @@ Root: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users
 
@@ -243,6 +355,22 @@ Root: //vda1cs4850/users
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username
 
@@ -273,6 +401,22 @@ Root: //vda1cs4850/users/username
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot
 
@@ -303,6 +447,22 @@ Root: //vda1cs4850/users/username/folderAtRoot
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1
 
@@ -333,6 +493,22 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
@@ -363,6 +539,22 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 
@@ -393,6 +585,22 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -423,6 +631,22 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -453,6 +677,22 @@ Root: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/f
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user
 
@@ -483,6 +723,22 @@ Root: //vda1cs4850/user
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username
 
@@ -513,6 +769,22 @@ Root: //vda1cs4850/user/username
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot
 
@@ -543,6 +815,22 @@ Root: //vda1cs4850/user/username/folderAtRoot
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1
 
@@ -573,6 +861,22 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
@@ -603,6 +907,22 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 
@@ -633,6 +953,22 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -663,6 +999,22 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -693,6 +1045,758 @@ Root: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/fo
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr
+
+Root: //vda1cs4850/usr
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username
+
+Root: //vda1cs4850/usr/username
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot
+
+Root: //vda1cs4850/usr/username/folderAtRoot
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1
+
+Root: //vda1cs4850/usr/username/folderAtRoot/folder1
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
+
+Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
+
+Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+Root: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home
+
+Root: //vda1cs4850/home
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username
+
+Root: //vda1cs4850/home/username
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot
+
+Root: //vda1cs4850/home/username/folderAtRoot
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1
+
+Root: //vda1cs4850/home/username/folderAtRoot/folder1
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
+
+Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
+
+Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+
+## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+Root: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| File                                                                                          | canWatchAffectingLocation |
+| --------------------------------------------------------------------------------------------- | ------------------------- |
+| //vda1cs4850/package.json                                                                     | false                     |
+| //vda1cs4850/folderAtRoot/package.json                                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/package.json                                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/package.json                                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/package.json                                | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/package.json                        | true                      |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json                | true                      |
+| //vda1cs4850/users/package.json                                                               | false                     |
+| //vda1cs4850/users/username/package.json                                                      | false                     |
+| //vda1cs4850/users/username/folderAtRoot/package.json                                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/package.json                                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/package.json                         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/package.json                 | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json         | true                      |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json | true                      |
+| //vda1cs4850/user/package.json                                                                | true                      |
+| //vda1cs4850/user/username/package.json                                                       | true                      |
+| //vda1cs4850/user/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
 ## RootDirForResolution: undefined
 
@@ -723,4 +1827,20 @@ Root: undefined
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/usr/package.json                                                                 | true                      |
+| //vda1cs4850/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/home/package.json                                                                | true                      |
+| //vda1cs4850/home/username/package.json                                                       | true                      |
+| //vda1cs4850/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 
