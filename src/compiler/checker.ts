@@ -491,6 +491,7 @@ import {
     isDynamicName,
     isEffectiveExternalModule,
     isElementAccessExpression,
+    isEmptyStringLiteral,
     isEntityName,
     isEntityNameExpression,
     isEnumConst,
@@ -29246,6 +29247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isPossiblyDiscriminantValue(node: Expression): boolean {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
+                return !isEmptyStringLiteral(node as StringLiteral);
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
