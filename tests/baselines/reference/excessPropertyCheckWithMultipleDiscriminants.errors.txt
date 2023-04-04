@@ -1,7 +1,7 @@
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
   Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(42,5): error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+  Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2322: Type '{ p1: "left"; p2: true; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
   Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
@@ -59,10 +59,10 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): err
         p1: 'left',
         p2: false,
         p3: 42,
+        p4: "hello"
         ~~
 !!! error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
-        p4: "hello"
+!!! error TS2322:   Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
     };
     
     // This has excess error because variant two is not applicable.

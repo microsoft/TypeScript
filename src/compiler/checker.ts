@@ -491,7 +491,6 @@ import {
     isDynamicName,
     isEffectiveExternalModule,
     isElementAccessExpression,
-    isEmptyStringLiteral,
     isEntityName,
     isEntityNameExpression,
     isEnumConst,
@@ -22629,11 +22628,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let i = 0;
             for (const type of target.types) {
                 const targetType = getTypeOfPropertyOfType(type, propertyName);
-                if (targetType && related(getDiscriminatingType(), targetType)) {
-                    discriminable[i] = discriminable[i] === undefined ? true : discriminable[i];
-                }
-                else {
-                    discriminable[i] = false;
+                if (discriminable[i] === undefined) {
+                    discriminable[i] = !!(targetType && related(getDiscriminatingType(), targetType));
                 }
                 i++;
             }
@@ -29247,7 +29243,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isPossiblyDiscriminantValue(node: Expression): boolean {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
-                return !isEmptyStringLiteral(node as StringLiteral);
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
