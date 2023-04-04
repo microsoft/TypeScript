@@ -89,7 +89,7 @@ declare namespace ts {
         namespace protocol {
             enum CommandTypes {
                 JsxClosingTag = "jsxClosingTag",
-                LinkedEditing = "LinkedEditing",
+                LinkedEditingRange = "linkedEditingRange",
                 Brace = "brace",
                 BraceCompletion = "braceCompletion",
                 GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -878,14 +878,14 @@ declare namespace ts {
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
             }
-            interface LinkedEditingRequest extends FileLocationRequest {
-                readonly command: CommandTypes.LinkedEditing;
+            interface LinkedEditingRangeRequest extends FileLocationRequest {
+                readonly command: CommandTypes.LinkedEditingRange;
             }
             interface LinkedEditingRanges {
                 ranges: TextSpan[];
                 wordPattern?: string;
             }
-            interface LinkedEditingResponse extends Response {
+            interface LinkedEditingRangeResponse extends Response {
                 readonly body: LinkedEditingRanges;
             }
             /**
@@ -3858,7 +3858,7 @@ declare namespace ts {
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
             private getJsxClosingTag;
-            private getLinkedEditing;
+            private getLinkedEditingRange;
             private getDocumentHighlights;
             private provideInlayHints;
             private setCompilerOptionsForInferredProjects;
@@ -9989,7 +9989,7 @@ declare namespace ts {
          * Editors should call this after `>` is typed.
          */
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
-        getLinkedEditingAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
+        getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];

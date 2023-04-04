@@ -726,7 +726,7 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getLinkedEditingAtPosition(_fileName: string, _position: number): never {
+    getLinkedEditingRangeAtPosition(_fileName: string, _position: number): never {
         return notImplemented();
     }
 

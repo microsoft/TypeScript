@@ -186,12 +186,10 @@ import {
     JSDocTagInfo,
     JsonSourceFile,
     JsxAttributes,
-    JsxClosingElement,
     JsxClosingTagInfo,
     JsxElement,
     JsxEmit,
     JsxFragment,
-    JsxOpeningElement,
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
@@ -2482,10 +2480,10 @@ export function createLanguageService(
         }
     }
 
-    function getLinkedEditingAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined {
+    function getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
         const token = findPrecedingToken(position, sourceFile);
-        if (!token) return undefined;
+        if (!token || token.parent.kind === SyntaxKind.SourceFile) return undefined;
 
         if (isJsxFragment(token.parent.parent)) {
             const openPos = token.parent.parent.openingFragment.getStart(sourceFile) + 1; // "<".length
@@ -2494,12 +2492,11 @@ export function createLanguageService(
             // only allows linked editing right after opening bracket: <| ></| >
             if ((position !== openPos) && (position !== closePos)) return undefined;
 
-            // wordPattern is undefined since fragments have no tag name
             return { ranges: [{ start: openPos, length: 0 }, { start: closePos, length: 0 }] };
         }
         else {
             // determines if the cursor is in an element tag
-            const tag = findAncestor(token.parent,
+            const element = findAncestor(token.parent,
                 n => {
                     if (!n.parent) return "quit";
                     else if (isJsxElement(n.parent)) {
@@ -2510,9 +2507,8 @@ export function createLanguageService(
                     }
                     return false;
                 });
-            if (!tag) return undefined;
+            if (!element || !(isJsxOpeningElement(element) || isJsxClosingElement(element))) return undefined;
 
-            const element = tag as JsxOpeningElement | JsxClosingElement;
             const openTagStart = element.parent.openingElement.tagName.getStart(sourceFile);
             const openTagEnd = element.parent.openingElement.tagName.end;
             const closeTagStart = element.parent.closingElement.tagName.getStart(sourceFile);
@@ -2527,7 +2523,6 @@ export function createLanguageService(
 
             return {
                 ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
-                wordPattern: openingTagText
             };
         }
     }
@@ -3063,7 +3058,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
-        getLinkedEditingAtPosition,
+        getLinkedEditingRangeAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,

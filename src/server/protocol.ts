@@ -23,7 +23,7 @@ import {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
-    LinkedEditing = "LinkedEditing",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -1102,8 +1102,8 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
-export interface LinkedEditingRequest extends FileLocationRequest {
-    readonly command: CommandTypes.LinkedEditing;
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
 }
 
 export interface LinkedEditingRanges {
@@ -1111,7 +1111,7 @@ export interface LinkedEditingRanges {
     wordPattern?: string;
 }
 
-export interface LinkedEditingResponse extends Response {
+export interface LinkedEditingRangeResponse extends Response {
     readonly body: LinkedEditingRanges;
 }
 

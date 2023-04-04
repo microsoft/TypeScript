@@ -6107,7 +6107,7 @@ declare namespace ts {
          * Editors should call this after `>` is typed.
          */
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
-        getLinkedEditingAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
+        getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];

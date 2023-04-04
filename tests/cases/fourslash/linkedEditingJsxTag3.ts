@@ -1,14 +1,14 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /selfClosing.tsx
-////const jsx = (
-////   <div>/*0*/
-////      <p>/*4*/
-////         No lin/*9*/ked cursors here!
-////         /*5*/</*1*/img/*2*/ /*3*//>
-////     /*6*/ </p>/*8*/
-////   /*7*/</div>
-////);
+/////*0*/const jsx = /*1*/(
+////   <div> /*2*/
+////      <p>/*3*/
+////         No lin/*4*/ked cursors here!
+////         /*5*/</*6*/img/*7*/ /*8*///*9*/>
+////     /*10*/ </p>/*11*/
+////   /*12*/</div>
+/////*13*/)/*14*/;/*15*/
 
 verify.linkedEditing( {
     "0": undefined,
@@ -21,4 +21,10 @@ verify.linkedEditing( {
     "7": undefined,
     "8": undefined,
     "9": undefined,
+    "10": undefined,
+    "11": undefined,
+    "12": undefined,
+    "13": undefined,
+    "14": undefined,
+    "15": undefined,
 });

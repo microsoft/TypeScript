@@ -7,39 +7,30 @@
 //);
 
 // @Filename: /basic.tsx
-////const jsx = (
-////    </*0*/d/*1*/iv/*2*/>/*3*/
+/////*a*/const j/*b*/sx = (
+////    /*c*/</*0*/d/*1*/iv/*2*/>/*3*/
 ////    </*4*///*5*/di/*6*/v/*7*/>/*8*/
 ////);
+////const jsx2 = (
+////    <d/*9*/iv>
+////        <d/*10*/iv>
+////            <p/*11*/>
+////            <//*12*/p>        
+////        </d/*13*/iv>
+////    </d/*14*/iv>
+////);/*d*/
 
-// @Filename: /whitespaceInvalidClosing.tsx
-////const jsx = (
-////   <div>
-////   < /*9*/ /div>
-////);
-
-// @Filename: /whitespace.tsx
-////const whitespaceOpening = (
-////   </*10*/ /*11*/div/*12*/ /*13*/> /*14*/
-////   <//*15*/di/*16*/v>
-////);
-////const whitespaceClosing = (
-////   </*17*/di/*18*/v>
-////   <//*19*/ /*20*/div/*21*/ /*22*/> /*23*/
-////);
-
-const markers = test.markers();
 const linkedCursors1 = {
-    ranges: [{ start: markers[0].position, length: 3 }, { start: markers[5].position, length: 3 }],
-    wordPattern: 'div'
+    ranges: [{ start: test.markerByName("0").position, length: 3 }, { start: test.markerByName("5").position, length: 3 }],
 };
 const linkedCursors2 = {
-    ranges: [{ start: markers[11].position, length: 3 }, { start: markers[15].position, length: 3 }],
-    wordPattern: 'div'
+    ranges: [{ start: test.markerByName("9").position - 1, length: 3 }, { start: test.markerByName("14").position - 1, length: 3 }],
 };
 const linkedCursors3 = {
-    ranges: [{ start: markers[17].position, length: 3 }, { start: markers[20].position, length: 3 }],
-    wordPattern: 'div'
+    ranges: [{ start: test.markerByName("10").position - 1, length: 3 }, { start: test.markerByName("13").position - 1, length: 3 }],
+};
+const linkedCursors4 = {
+    ranges: [{ start: test.markerByName("11").position - 1, length: 1 }, { start: test.markerByName("12").position, length: 1 }],
 };
 
 verify.linkedEditing( {
@@ -52,20 +43,15 @@ verify.linkedEditing( {
     "6": linkedCursors1,
     "7": linkedCursors1,
     "8": undefined,
-    "9": undefined, // I believe this should be an invalid tag
-    "10": undefined,
-    "11": linkedCursors2,
-    "12": linkedCursors2,
-    "13": undefined,
-    "14": undefined,
-    "15": linkedCursors2,
-    "16": linkedCursors2,
-    "17": linkedCursors3,
-    "18": linkedCursors3,
-    "19": undefined,
-    "20": linkedCursors3,
-    "21": linkedCursors3,
-    "22": undefined,
-    "23": undefined,
-    });
+    "9": linkedCursors2,
+    "10": linkedCursors3,
+    "11": linkedCursors4,
+    "12": linkedCursors4,
+    "13": linkedCursors3,
+    "14": linkedCursors2,
+    "a": undefined,
+    "b": undefined,
+    "c": undefined,
+    "d": undefined,
+});
 

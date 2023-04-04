@@ -190,7 +190,7 @@ export class VerifyNegatable {
     }
 
     public linkedEditing(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
-        this.state.verifyLinkedEditing(map);
+        this.state.verifyLinkedEditingRange(map);
     }
 
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {

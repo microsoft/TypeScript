@@ -1803,10 +1803,10 @@ export class Session<TMessage = string> implements EventSender {
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
     }
 
-    private getLinkedEditing(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRanges | undefined {
+    private getLinkedEditingRange(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRanges | undefined {
         const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
         const position = this.getPositionInFile(args, file);
-        const linkedEditInfo = languageService.getLinkedEditingAtPosition(file, position);
+        const linkedEditInfo = languageService.getLinkedEditingRangeAtPosition(file, position);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
         if (scriptInfo === undefined || linkedEditInfo === undefined) return undefined;
         return convertLinkedEditInfoToRanges(linkedEditInfo, scriptInfo);
@@ -3399,8 +3399,8 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
         },
-        [protocol.CommandTypes.LinkedEditing]: (request: protocol.LinkedEditingRequest) => {
-            return this.requiredResponse(this.getLinkedEditing(request.arguments));
+        [protocol.CommandTypes.LinkedEditingRange]: (request: protocol.LinkedEditingRangeRequest) => {
+            return this.requiredResponse(this.getLinkedEditingRange(request.arguments));
         },
         [protocol.CommandTypes.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
             return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
@@ -3658,17 +3658,16 @@ function positionToLineOffset(info: ScriptInfoOrConfig, position: number): proto
 }
 
 function convertLinkedEditInfoToRanges(linkedEdit: LinkedEditingInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRanges {
-    return {
-        ranges: linkedEdit.ranges.map(
-            s => {
+    const ranges = linkedEdit.ranges.map(
+            r => {
                 return {
-                start: scriptInfo.positionToLineOffset(s.start),
-                end: scriptInfo.positionToLineOffset(s.start + s.length)
+                    start: scriptInfo.positionToLineOffset(r.start),
+                    end: scriptInfo.positionToLineOffset(r.start + r.length),
                 };
             }
-        ),
-        wordPattern: linkedEdit.wordPattern,
-    };
+        );
+    if (!linkedEdit.wordPattern) return { ranges };
+    return { ranges, wordPattern: linkedEdit.wordPattern };
 }
 
 function locationFromLineAndCharacter(lc: LineAndCharacter): protocol.Location {
