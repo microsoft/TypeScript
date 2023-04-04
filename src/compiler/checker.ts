@@ -17790,11 +17790,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
                 if (freshMapper) {
                     const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
-                    for (const p of freshParams) {
-                        if (root.inferTypeParameters.indexOf(p) === -1) {
+                    forEach(freshParams, (p, i) => {
+                        if (p !== root.inferTypeParameters![i]) {
                             p.mapper = freshCombinedMapper;
                         }
-                    }
+                    });
                 }
                 if (!checkTypeDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
