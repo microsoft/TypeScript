@@ -2184,18 +2184,6 @@ export function getCompletionEntriesFromSymbols(
     }
 }
 
-function symbolHasValueDeclaration(symbol: Symbol): boolean {
-    return !symbol?.declarations?.length || symbol.declarations.some(declaration => {
-        switch (declaration.kind) {
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return false;
-            default:
-                return true;
-        }
-    });
-}
-
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
     const entries = getLabelStatementCompletions(node);
     if (entries.length) {
