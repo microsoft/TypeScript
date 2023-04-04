@@ -45703,6 +45703,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
         }
 
+        if (isBindingElement(node)) {
+            return getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ true, CheckMode.Normal) || errorType;
+        }
+
         if (isDeclaration(node)) {
             // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
             const symbol = getSymbolOfDeclaration(node);
