@@ -27,7 +27,7 @@ import {
     FunctionExpression,
     getEmitScriptTarget,
     getModeForUsageLocation,
-    getQuotePreference,
+    getQuotePreferenceFromFile,
     getResolvedModule,
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
@@ -87,10 +87,10 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, program, preferences } = context;
         const changes = textChanges.ChangeTracker.with(context, changes => {
-            const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
+            const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreferenceFromFile(sourceFile, preferences));
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
-                    fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
+                    fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreferenceFromFile(importingFile, preferences));
                 }
             }
         });
