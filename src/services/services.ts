@@ -64,9 +64,8 @@ import {
     EntityName,
     equateValues,
     ExportDeclaration,
+    Extension,
     extensionFromPath,
-    extensionIsTS,
-    fileExtensionIs,
     FileReference,
     FileTextChanges,
     filter,
@@ -87,6 +86,7 @@ import {
     getAdjustedRenameLocation,
     getAllSuperTypeNodes,
     getAssignmentDeclarationKind,
+    getBaseFileName,
     GetCompletionsAtPositionOptions,
     getContainerNode,
     getDefaultLibFileName,
@@ -121,7 +121,6 @@ import {
     hasStaticModifier,
     hasSyntacticModifier,
     hasTabstop,
-    hasTSFileExtension,
     HostCancellationToken,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -276,6 +275,7 @@ import {
     SourceFile,
     SourceFileLike,
     SourceMapSource,
+    startsWith,
     Statement,
     stringContains,
     StringLiteral,
@@ -2933,10 +2933,11 @@ export function createLanguageService(
         const files: string[] = [];
         if (allFiles) {
             for (const file of allFiles) {
-                if (extensionIsTS(extension) && hasTSFileExtension(file)) {
-                    files.push(file);
+                const fileExtension = extensionFromPath(file);
+                if (sourceFile === getValidSourceFile(file) || extension === Extension.Ts && fileExtension === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file), "lib.") && fileExtension === Extension.Dts) {
+                    continue;
                 }
-                else if (fileExtensionIs(file, extension)){
+                if (extension === fileExtension) {
                     files.push(file);
                 }
             }
