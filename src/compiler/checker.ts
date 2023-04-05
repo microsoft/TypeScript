@@ -10390,7 +10390,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If the parent is a tuple type, the rest element has a tuple type of the
                 // remaining tuple element types. Otherwise, the rest element has an array type with same
                 // element type as the parent type.
-                const baseConstraint = getBaseConstraintOrType(parentType);
+                const baseConstraint = mapType(parentType, t => t.flags & TypeFlags.InstantiableNonPrimitive ? getBaseConstraintOrType(t) : t);
                 type = everyType(baseConstraint, isTupleType) ?
                     mapType(baseConstraint, t => sliceTupleType(t as TupleTypeReference, index)) :
                     createArrayType(elementType);
@@ -13689,7 +13689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseConstraintOfType(type: Type): Type | undefined {
-        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
+        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || isGenericTupleType(type)) {
             const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
@@ -13819,6 +13819,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (t.flags & TypeFlags.Substitution) {
                 return getBaseConstraint(getSubstitutionIntersection(t as SubstitutionType));
+            }
+            if (isGenericTupleType(t)) {
+                return createTupleType(map(getTypeArguments(t), (v, i) => t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v),
+                    t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
             }
             return t;
         }
