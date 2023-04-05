@@ -4257,9 +4257,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
-            if (options.isolatedModules) {
-                createRedundantOptionDiagnostic("isolatedModules", "verbatimModuleSyntax");
-            }
             if (options.preserveValueImports) {
                 createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");
             }
