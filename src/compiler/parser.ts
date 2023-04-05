@@ -6013,7 +6013,7 @@ namespace Parser {
                     // We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
                     // or to cover only 'Foo' in < Foo >
                     const tag = openingTag.tagName;
-                    const start = skipTrivia(sourceText, tag.pos);
+                    const start = Math.min(skipTrivia(sourceText, tag.pos), tag.end);
                     parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                 }
                 return undefined;
