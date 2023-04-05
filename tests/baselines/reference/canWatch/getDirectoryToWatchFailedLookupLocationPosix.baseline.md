@@ -11,7 +11,7 @@ Root:
 
 | Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
-| /somefile.d.ts                                                                               |                                                                                              | true      |
+| /somefile.d.ts                                                                               |                                                                                              | false     |
 | /dir/somefile.d.ts                                                                           | /dir                                                                                         | true      |
 | /dir/subdir/somefile.d.ts                                                                    | /dir                                                                                         | true      |
 | /folderAtRoot/somefile.d.ts                                                                  | /folderAtRoot                                                                                | true      |
@@ -138,7 +138,7 @@ Root: /folderAtRoot
 | /somefile.d.ts                                                                               |                                                                                              |           |
 | /dir/somefile.d.ts                                                                           |                                                                                              |           |
 | /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
-| /folderAtRoot/somefile.d.ts                                                                  | /folderAtRoot                                                                                | true      |
+| /folderAtRoot/somefile.d.ts                                                                  | /folderAtRoot                                                                                | false     |
 | /folderAtRoot/dir/somefile.d.ts                                                              | /folderAtRoot/dir                                                                            | true      |
 | /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir                                                                            | true      |
 | /folderAtRoot/folder1/somefile.d.ts                                                          | /folderAtRoot/folder1                                                                        | true      |
@@ -265,7 +265,7 @@ Root: /folderAtRoot/folder1
 | /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
 | /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
 | /folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
-| /folderAtRoot/folder1/somefile.d.ts                                                          | /folderAtRoot/folder1                                                                        | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          | /folderAtRoot/folder1                                                                        | false     |
 | /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
 | /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
 | /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
@@ -392,7 +392,7 @@ Root: /folderAtRoot/folder1/folder2
 | /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
 | /folderAtRoot/folder1/dir/somefile.d.ts                                                      |                                                                                              |           |
 | /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               |                                                                                              |           |
-| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | false     |
 | /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2/dir                                                            | true      |
 | /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2/dir                                                            | true      |
 | /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2/folder3                                                        | true      |
@@ -519,7 +519,7 @@ Root: /folderAtRoot/folder1/folder2/folder3
 | /folderAtRoot/folder1/folder2/somefile.d.ts                                                  |                                                                                              |           |
 | /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              |                                                                                              |           |
 | /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       |                                                                                              |           |
-| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2/folder3                                                        | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2/folder3                                                        | false     |
 | /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2/folder3/dir                                                    | true      |
 | /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2/folder3/dir                                                    | true      |
 | /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2/folder3/folder4                                                | true      |
@@ -646,7 +646,7 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4
 | /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2/folder3                                                        | false     |
 | /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2/folder3/dir                                                    | true      |
 | /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2/folder3/dir                                                    | true      |
-| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2/folder3/folder4                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2/folder3/folder4                                                | false     |
 | /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2/folder3/folder4/dir                                            | true      |
 | /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2/folder3/folder4/dir                                            | true      |
 | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2/folder3/folder4/folder5                                        | true      |
@@ -773,7 +773,7 @@ Root: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2/folder3/folder4                                                | false     |
 | /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2/folder3/folder4/dir                                            | true      |
 | /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2/folder3/folder4/dir                                            | true      |
-| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2/folder3/folder4/folder5                                        | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2/folder3/folder4/folder5                                        | false     |
 | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                                    | true      |
 | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                                    | true      |
 | /users/somefile.d.ts                                                                         |                                                                                              |           |
@@ -900,7 +900,7 @@ Root: /users
 | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          |                                                                                              |           |
 | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      |                                                                                              |           |
 | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               |                                                                                              |           |
-| /users/somefile.d.ts                                                                         | /users                                                                                       | true      |
+| /users/somefile.d.ts                                                                         | /users                                                                                       | false     |
 | /users/dir/somefile.d.ts                                                                     | /users/dir                                                                                   | true      |
 | /users/dir/subdir/somefile.d.ts                                                              | /users/dir                                                                                   | true      |
 | /users/username/somefile.d.ts                                                                | /users/username                                                                              | true      |
@@ -1027,7 +1027,7 @@ Root: /users/username
 | /users/somefile.d.ts                                                                         |                                                                                              |           |
 | /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
 | /users/dir/subdir/somefile.d.ts                                                              |                                                                                              |           |
-| /users/username/somefile.d.ts                                                                | /users/username                                                                              | true      |
+| /users/username/somefile.d.ts                                                                | /users/username                                                                              | false     |
 | /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
 | /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
 | /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
@@ -1154,7 +1154,7 @@ Root: /users/username/folderAtRoot
 | /users/username/somefile.d.ts                                                                |                                                                                              |           |
 | /users/username/dir/somefile.d.ts                                                            |                                                                                              |           |
 | /users/username/dir/subdir/somefile.d.ts                                                     |                                                                                              |           |
-| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | false     |
 | /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot/dir                                                             | true      |
 | /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot/dir                                                             | true      |
 | /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot/folder1                                                         | true      |
@@ -1281,7 +1281,7 @@ Root: /users/username/folderAtRoot/folder1
 | /users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                              |           |
 | /users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                              |           |
 | /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                              |           |
-| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot/folder1                                                         | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot/folder1                                                         | false     |
 | /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot/folder1/dir                                                     | true      |
 | /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot/folder1/dir                                                     | true      |
 | /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot/folder1/folder2                                                 | true      |
@@ -1408,7 +1408,7 @@ Root: /users/username/folderAtRoot/folder1/folder2
 | /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot/folder1                                                         | false     |
 | /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot/folder1/dir                                                     | true      |
 | /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot/folder1/dir                                                     | true      |
-| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot/folder1/folder2                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot/folder1/folder2                                                 | false     |
 | /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot/folder1/folder2/dir                                             | true      |
 | /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot/folder1/folder2/dir                                             | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot/folder1/folder2/folder3                                         | true      |
@@ -1535,7 +1535,7 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3
 | /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot/folder1/folder2                                                 | false     |
 | /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot/folder1/folder2/dir                                             | true      |
 | /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot/folder1/folder2/dir                                             | true      |
-| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot/folder1/folder2/folder3                                         | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot/folder1/folder2/folder3                                         | false     |
 | /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot/folder1/folder2/folder3/dir                                     | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot/folder1/folder2/folder3/dir                                     | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot/folder1/folder2/folder3/folder4                                 | true      |
@@ -1662,7 +1662,7 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 | /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot/folder1/folder2/folder3                                         | false     |
 | /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot/folder1/folder2/folder3/dir                                     | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot/folder1/folder2/folder3/dir                                     | true      |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot/folder1/folder2/folder3/folder4                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot/folder1/folder2/folder3/folder4                                 | false     |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                             | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                             | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                         | true      |
@@ -1789,7 +1789,7 @@ Root: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot/folder1/folder2/folder3/folder4                                 | false     |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                             | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                             | true      |
-| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                         | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                         | false     |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                     | true      |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                     | true      |
 | /user/somefile.d.ts                                                                          |                                                                                              |           |
@@ -1916,7 +1916,7 @@ Root: /user
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           |                                                                                              |           |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                              |           |
 | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
-| /user/somefile.d.ts                                                                          | /user                                                                                        | true      |
+| /user/somefile.d.ts                                                                          | /user                                                                                        | false     |
 | /user/dir/somefile.d.ts                                                                      | /user/dir                                                                                    | true      |
 | /user/dir/subdir/somefile.d.ts                                                               | /user/dir                                                                                    | true      |
 | /user/username/somefile.d.ts                                                                 | /user/username                                                                               | true      |
@@ -2043,7 +2043,7 @@ Root: /user/username
 | /user/somefile.d.ts                                                                          |                                                                                              |           |
 | /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
 | /user/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
-| /user/username/somefile.d.ts                                                                 | /user/username                                                                               | true      |
+| /user/username/somefile.d.ts                                                                 | /user/username                                                                               | false     |
 | /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
 | /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
 | /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
@@ -2170,7 +2170,7 @@ Root: /user/username/folderAtRoot
 | /user/username/somefile.d.ts                                                                 |                                                                                              |           |
 | /user/username/dir/somefile.d.ts                                                             |                                                                                              |           |
 | /user/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
-| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | false     |
 | /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot/dir                                                              | true      |
 | /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot/dir                                                              | true      |
 | /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot/folder1                                                          | true      |
@@ -2297,7 +2297,7 @@ Root: /user/username/folderAtRoot/folder1
 | /user/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
 | /user/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
 | /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
-| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot/folder1                                                          | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot/folder1                                                          | false     |
 | /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot/folder1/dir                                                      | true      |
 | /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot/folder1/dir                                                      | true      |
 | /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot/folder1/folder2                                                  | true      |
@@ -2424,7 +2424,7 @@ Root: /user/username/folderAtRoot/folder1/folder2
 | /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot/folder1                                                          | false     |
 | /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot/folder1/dir                                                      | true      |
 | /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot/folder1/dir                                                      | true      |
-| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot/folder1/folder2                                                  | false     |
 | /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot/folder1/folder2/dir                                              | true      |
 | /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot/folder1/folder2/dir                                              | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
@@ -2551,7 +2551,7 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3
 | /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot/folder1/folder2                                                  | false     |
 | /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot/folder1/folder2/dir                                              | true      |
 | /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot/folder1/folder2/dir                                              | true      |
-| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
@@ -2678,7 +2678,7 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 | /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
@@ -2805,7 +2805,7 @@ Root: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
-| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | false     |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 | /usr/somefile.d.ts                                                                           |                                                                                              |           |
@@ -2932,7 +2932,7 @@ Root: /usr
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                              |           |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                              |           |
-| /usr/somefile.d.ts                                                                           | /usr                                                                                         | true      |
+| /usr/somefile.d.ts                                                                           | /usr                                                                                         | false     |
 | /usr/dir/somefile.d.ts                                                                       | /usr/dir                                                                                     | true      |
 | /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir                                                                                     | true      |
 | /usr/username/somefile.d.ts                                                                  | /usr/username                                                                                | true      |
@@ -3059,7 +3059,7 @@ Root: /usr/username
 | /usr/somefile.d.ts                                                                           |                                                                                              |           |
 | /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
 | /usr/dir/subdir/somefile.d.ts                                                                |                                                                                              |           |
-| /usr/username/somefile.d.ts                                                                  | /usr/username                                                                                | true      |
+| /usr/username/somefile.d.ts                                                                  | /usr/username                                                                                | false     |
 | /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
 | /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
 | /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
@@ -3186,7 +3186,7 @@ Root: /usr/username/folderAtRoot
 | /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
 | /usr/username/dir/somefile.d.ts                                                              |                                                                                              |           |
 | /usr/username/dir/subdir/somefile.d.ts                                                       |                                                                                              |           |
-| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | false     |
 | /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot/dir                                                               | true      |
 | /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot/dir                                                               | true      |
 | /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | true      |
@@ -3313,7 +3313,7 @@ Root: /usr/username/folderAtRoot/folder1
 | /usr/username/folderAtRoot/somefile.d.ts                                                     |                                                                                              |           |
 | /usr/username/folderAtRoot/dir/somefile.d.ts                                                 |                                                                                              |           |
 | /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          |                                                                                              |           |
-| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
 | /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
 | /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
 | /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
@@ -3440,7 +3440,7 @@ Root: /usr/username/folderAtRoot/folder1/folder2
 | /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot/folder1                                                           | false     |
 | /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
 | /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot/folder1/dir                                                       | true      |
-| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | false     |
 | /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
 | /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
@@ -3567,7 +3567,7 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3
 | /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot/folder1/folder2                                                   | false     |
 | /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
 | /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot/folder1/folder2/dir                                               | true      |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | false     |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
@@ -3694,7 +3694,7 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 | /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot/folder1/folder2/folder3                                           | false     |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot/folder1/folder2/folder3/dir                                       | true      |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | false     |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | true      |
@@ -3821,7 +3821,7 @@ Root: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4                                   | false     |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                               | true      |
-| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                           | false     |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                       | true      |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                       | true      |
 | /home/somefile.d.ts                                                                          |                                                                                              |           |
@@ -3948,7 +3948,7 @@ Root: /home
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             |                                                                                              |           |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                              |           |
 | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                              |           |
-| /home/somefile.d.ts                                                                          | /home                                                                                        | true      |
+| /home/somefile.d.ts                                                                          | /home                                                                                        | false     |
 | /home/dir/somefile.d.ts                                                                      | /home/dir                                                                                    | true      |
 | /home/dir/subdir/somefile.d.ts                                                               | /home/dir                                                                                    | true      |
 | /home/username/somefile.d.ts                                                                 | /home/username                                                                               | true      |
@@ -4075,7 +4075,7 @@ Root: /home/username
 | /home/somefile.d.ts                                                                          |                                                                                              |           |
 | /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
 | /home/dir/subdir/somefile.d.ts                                                               |                                                                                              |           |
-| /home/username/somefile.d.ts                                                                 | /home/username                                                                               | true      |
+| /home/username/somefile.d.ts                                                                 | /home/username                                                                               | false     |
 | /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
 | /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
 | /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
@@ -4202,7 +4202,7 @@ Root: /home/username/folderAtRoot
 | /home/username/somefile.d.ts                                                                 |                                                                                              |           |
 | /home/username/dir/somefile.d.ts                                                             |                                                                                              |           |
 | /home/username/dir/subdir/somefile.d.ts                                                      |                                                                                              |           |
-| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | false     |
 | /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot/dir                                                              | true      |
 | /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot/dir                                                              | true      |
 | /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | true      |
@@ -4329,7 +4329,7 @@ Root: /home/username/folderAtRoot/folder1
 | /home/username/folderAtRoot/somefile.d.ts                                                    |                                                                                              |           |
 | /home/username/folderAtRoot/dir/somefile.d.ts                                                |                                                                                              |           |
 | /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         |                                                                                              |           |
-| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
 | /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
 | /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
 | /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
@@ -4456,7 +4456,7 @@ Root: /home/username/folderAtRoot/folder1/folder2
 | /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot/folder1                                                          | false     |
 | /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot/folder1/dir                                                      | true      |
 | /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot/folder1/dir                                                      | true      |
-| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | false     |
 | /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
 | /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
@@ -4583,7 +4583,7 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3
 | /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot/folder1/folder2                                                  | false     |
 | /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
 | /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot/folder1/folder2/dir                                              | true      |
-| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
 | /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
@@ -4710,7 +4710,7 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 | /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | false     |
 | /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot/folder1/folder2/folder3/dir                                      | true      |
-| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | false     |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
@@ -4837,7 +4837,7 @@ Root: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | false     |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir                              | true      |
-| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | false     |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 
