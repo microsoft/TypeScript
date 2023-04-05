@@ -7398,7 +7398,7 @@ export const enum CharacterCodes {
     mathematicalSpace = 0x205F,
     ogham = 0x1680,
 
-    // Hermes bytecode magic bytes
+    // Unicode replacement character produced when a byte sequence is invalid
     replacementCharacter = 0xFFFD,
 
     _ = 0x5F,
