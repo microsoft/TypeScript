@@ -13,6 +13,11 @@
 ////const p = 0;
 ////[|const y: Date = p + b;|]
 
+// @Filename: /other.ts
+////export const b = 2;
+////export const a = 1;
+////export const alreadyUnused = "unused";
+
 verify.moveToFile({
     newFileContents: {
         "/a.ts":

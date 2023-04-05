@@ -2,7 +2,7 @@ import { cast, concatenate, contains, emptyArray, find, findIndex, firstDefined,
 import { getModuleSpecifier } from "../compiler/moduleSpecifiers";
 import { combinePaths, getDirectoryPath, getRelativePathFromFile,normalizePath, resolvePath } from "../compiler/path";
 import { AnyImportOrRequireStatement, AssignmentDeclarationKind, BinaryExpression, BindingElement, BindingName, CallExpression, ClassDeclaration, Declaration, DeclarationStatement, EnumDeclaration, Expression, ExpressionStatement, ExternalModuleReference, FunctionDeclaration, Identifier, ImportDeclaration, ImportEqualsDeclaration, InterfaceDeclaration, InternalSymbolName, ModifierFlags, ModifierLike, ModuleDeclaration, NamedImportBindings, Node, NodeFlags, Program, PropertyAccessExpression, PropertyAssignment, RequireOrImportCall, RequireVariableStatement, ScriptTarget, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind, TransformFlags, TypeAliasDeclaration, TypeChecker, TypeNode, VariableDeclaration, VariableDeclarationList, VariableStatement } from "../compiler/types";
-import { canHaveDecorators, canHaveModifiers, canHaveSymbol, codefix, copyEntries, createModuleSpecifierResolutionHost, createTextRangeFromSpan, Debug, escapeLeadingUnderscores, extensionFromPath, factory,FindAllReferences,forEachEntry,getAssignmentDeclarationKind,getDecorators,getModifiers,getPropertySymbolFromBindingElement,getRefactorContextSpan,getSymbolId,getUniqueName,hasSyntacticModifier,isArrayLiteralExpression, isBinaryExpression, isBindingElement, isDeclarationName, isExpressionStatement, isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration, isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression, isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableDeclaration, isVariableDeclarationList, isVariableStatement, LanguageServiceHost, makeImportIfNecessary, makeStringLiteral, ObjectBindingElementWithoutPropertyName, QuotePreference, rangeContainsRange, RefactorContext, skipAlias, Symbol,symbolNameNoDefault, textChanges } from "./_namespaces/ts";
+import { canHaveDecorators, canHaveModifiers, canHaveSymbol, codefix, copyEntries, createModuleSpecifierResolutionHost, createTextRangeFromSpan, Debug, escapeLeadingUnderscores, extensionFromPath, factory,FindAllReferences,forEachEntry,getAssignmentDeclarationKind,getDecorators,getModifiers,getPropertySymbolFromBindingElement,getRefactorContextSpan,getSymbolId,getSynthesizedDeepClone,getUniqueName,hasSyntacticModifier,isArrayLiteralExpression, isBinaryExpression, isBindingElement, isDeclarationName, isExpressionStatement, isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration, isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression, isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableDeclaration, isVariableDeclarationList, isVariableStatement, LanguageServiceHost, makeImportIfNecessary, makeStringLiteral, ObjectBindingElementWithoutPropertyName, QuotePreference, rangeContainsRange, RefactorContext, skipAlias, Symbol,symbolNameNoDefault, textChanges } from "./_namespaces/ts";
 
 /**@internal */
 export function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
@@ -232,10 +232,10 @@ export function addExports(sourceFile: SourceFile, toMove: readonly Statement[],
         if (isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
             forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))) {
-            const exports = addExport(statement, useEs6Exports);
+            const exports = addExport(getSynthesizedDeepClone(statement), useEs6Exports);
             if (exports) return exports;
         }
-        return statement;
+        return getSynthesizedDeepClone(statement);
     });
 }
 
@@ -408,7 +408,7 @@ export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralL
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
+                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*assertClause*/ undefined)
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:

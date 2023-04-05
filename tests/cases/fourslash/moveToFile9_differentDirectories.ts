@@ -1,6 +1,15 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: /a.ts
+//@moduleResolution: bundler
+//@module: esnext
+
+//@Filename: /src/dir2/bar.ts
+////import './blah';
+////import './blah2';
+////const a = 2;
+////a;
+
+// @Filename: /src/dir1/a.ts
 ////// header comment
 ////
 ////import './foo';
@@ -9,30 +18,33 @@
 ////[|const y: Date = p + b;|]
 ////a; y;
 
-// @Filename: /other.ts
+// @Filename: /src/dir1/other.ts
 ////export const b = 1;
 ////export const a = 2;
 ////export const alreadyUnused = "unused";
 
 verify.moveToFile({
     newFileContents: {
-        "/a.ts":
+        "/src/dir1/a.ts":
 `// header comment
 
-import { y } from './bar';
+import { y } from '../dir2/bar';
 import './foo';
 import { a, alreadyUnused } from './other';
 export const p = 0;
 a; y;`,
 
-        "/bar.ts":
-`import { b } from './other';
-import { p } from './a';
-
+        "/src/dir2/bar.ts":
+`import { p } from '../dir1/a';
+import { b } from '../dir1/other';
+import './blah';
+import './blah2';
+const a = 2;
+a;
 export const y: Date = p + b;
 `,
     },
-    newFile: "/bar.ts",
+    newFile: "/src/dir2/bar.ts",
 
     preferences: {
         quotePreference: "single",

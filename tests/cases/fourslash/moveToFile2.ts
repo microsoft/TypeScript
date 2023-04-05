@@ -1,6 +1,7 @@
 
 /// <reference path='fourslash.ts' />
 
+// @verbatimModuleSyntax: true
 
 // @Filename: /bar.ts
 //// const q = 0;
