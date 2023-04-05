@@ -24,7 +24,11 @@ import {
     isJsxFragment,
     isJsxSelfClosingElement,
     isJsxSpreadAttribute,
+    isObjectLiteralExpression,
+    isPropertyAssignment,
     isSourceFile,
+    isSpreadAssignment,
+    isStringLiteral,
 } from "../factory/nodeTests";
 import {
     createExpressionForJsxElement,
@@ -59,10 +63,11 @@ import {
     JsxText,
     Node,
     NodeFlags,
+    ObjectLiteralElementLike,
+    ObjectLiteralExpression,
     PropertyAssignment,
     ScriptTarget,
     SourceFile,
-    SpreadAssignment,
     Statement,
     StringLiteral,
     SyntaxKind,
@@ -116,7 +121,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (currentFileState.filenameDeclaration) {
             return currentFileState.filenameDeclaration.name;
         }
-        const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclaimationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
+        const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
         currentFileState.filenameDeclaration = declaration as VariableDeclaration & { name: Identifier };
         return currentFileState.filenameDeclaration.name;
     }
@@ -180,7 +185,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
+                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
                     setParentRecursive(importStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                 }
@@ -188,8 +193,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
-                            /*exclaimationToken*/ undefined,
+                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name))),
+                            /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
                         )
@@ -259,13 +264,18 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
     }
 
+    function hasProto(obj: ObjectLiteralExpression) {
+        return obj.properties.some(p => isPropertyAssignment(p) &&
+            (isIdentifier(p.name) && idText(p.name) === "__proto__" || isStringLiteral(p.name) && p.name.text === "__proto__"));
+    }
+
     /**
      * The react jsx/jsxs transform falls back to `createElement` when an explicit `key` argument comes after a spread
      */
     function hasKeyAfterPropsSpread(node: JsxOpeningLikeElement) {
         let spread = false;
         for (const elem of node.attributes.properties) {
-            if (isJsxSpreadAttribute(elem)) {
+            if (isJsxSpreadAttribute(elem) && (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))) {
                 spread = true;
             }
             else if (spread && isJsxAttribute(elem) && elem.name.escapedText === "key") {
@@ -443,7 +453,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
+    function transformJsxSpreadAttributeToProps(node: JsxSpreadAttribute) {
+        if (isObjectLiteralExpression(node.expression) && !hasProto(node.expression)) {
+            return node.expression.properties;
+        }
         return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }
 
@@ -454,8 +467,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxAttributesToProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-        const props = flatten<SpreadAssignment | PropertyAssignment>(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
-            map(attrs, attr => isSpread ? transformJsxSpreadAttributeToSpreadAssignment(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))));
+        const props = flatten(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
+            flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)))));
         if (children) {
             props.push(children);
         }
@@ -463,30 +476,52 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxAttributesToExpression(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-        // Map spans of JsxAttribute nodes into object literals and spans
-        // of JsxSpreadAttribute nodes into expressions.
-        const expressions = flatten(
-            spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                ? map(attrs as JsxSpreadAttribute[], transformJsxSpreadAttributeToExpression)
-                : factory.createObjectLiteralExpression(map(attrs as JsxAttribute[], transformJsxAttributeToObjectLiteralElement))
-            )
-        );
+        const expressions: Expression[] = [];
+        let properties: ObjectLiteralElementLike[] = [];
 
-        if (isJsxSpreadAttribute(attrs[0])) {
-            // We must always emit at least one object literal before a spread
-            // argument.factory.createObjectLiteral
-            expressions.unshift(factory.createObjectLiteralExpression());
+        for (const attr of attrs) {
+            if (isJsxSpreadAttribute(attr)) {
+                // as an optimization we try to flatten the first level of spread inline object
+                // as if its props would be passed as JSX attributes
+                if (isObjectLiteralExpression(attr.expression) && !hasProto(attr.expression)) {
+                    for (const prop of attr.expression.properties) {
+                        if (isSpreadAssignment(prop)) {
+                            finishObjectLiteralIfNeeded();
+                            expressions.push(prop.expression);
+                            continue;
+                        }
+                        properties.push(prop);
+                    }
+                    continue;
+                }
+                finishObjectLiteralIfNeeded();
+                expressions.push(attr.expression);
+                continue;
+            }
+            properties.push(transformJsxAttributeToObjectLiteralElement(attr));
         }
 
         if (children) {
-            expressions.push(factory.createObjectLiteralExpression([children]));
+            properties.push(children);
+        }
+
+        finishObjectLiteralIfNeeded();
+
+        if (expressions.length && !isObjectLiteralExpression(expressions[0])) {
+            // We must always emit at least one object literal before a spread attribute
+            // as the JSX always factory expects a fresh object, so we need to make a copy here
+            // we also avoid mutating an external reference by doing this (first expression is used as assign's target)
+            expressions.unshift(factory.createObjectLiteralExpression());
         }
 
         return singleOrUndefined(expressions) || emitHelpers().createAssignHelper(expressions);
-    }
 
-    function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
-        return Debug.checkDefined(visitNode(node.expression, visitor, isExpression));
+        function finishObjectLiteralIfNeeded() {
+            if (properties.length) {
+                expressions.push(factory.createObjectLiteralExpression(properties));
+                properties = [];
+            }
+        }
     }
 
     function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {

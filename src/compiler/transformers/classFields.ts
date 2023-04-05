@@ -115,6 +115,7 @@ import {
     NodeFactory,
     ObjectLiteralElement,
     OmittedExpression,
+    OuterExpressionKinds,
     ParameterDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
@@ -884,9 +885,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         filter(node.modifiers, (m): m is Modifier => isModifier(m) && !isStaticModifier(m) && !isAccessorModifier(m)),
                         node.asteriskToken,
                         functionName,
-                        /* typeParameters */ undefined,
+                        /*typeParameters*/ undefined,
                         visitParameterList(node.parameters, visitor, context),
-                        /* type */ undefined,
+                        /*type*/ undefined,
                         visitFunctionBody(node.body!, visitor, context)
                     )
                 )
@@ -1507,13 +1508,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return factory.updateBinaryExpression(node, left, node.operatorToken, right);
             }
 
-            if (isPrivateIdentifierPropertyAccessExpression(node.left)) {
+            const left = skipOuterExpressions(node.left, OuterExpressionKinds.PartiallyEmittedExpressions | OuterExpressionKinds.Parentheses);
+            if (isPrivateIdentifierPropertyAccessExpression(left)) {
                 // obj.#x = ...
-                const info = accessPrivateIdentifier(node.left.name);
+                const info = accessPrivateIdentifier(left.name);
                 if (info) {
                     return setTextRange(
                         setOriginalNode(
-                            createPrivateIdentifierAssignment(info, node.left.expression, node.right, node.operatorToken.kind),
+                            createPrivateIdentifierAssignment(info, left.expression, node.right, node.operatorToken.kind),
                             node
                         ),
                         node
@@ -1684,7 +1686,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     info.brandCheckIdentifier,
                     right,
                     info.kind,
-                    /* f */ undefined
+                    /*f*/ undefined
                 );
             case PrivateIdentifierKind.Field:
                 return emitHelpers().createClassPrivateFieldSetHelper(
@@ -1768,7 +1770,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function visitExpressionWithTypeArgumentsInHeritageClause(node: ExpressionWithTypeArguments) {
         const facts = lexicalEnvironment?.data?.facts || ClassFacts.None;
         if (facts & ClassFacts.NeedsClassSuperReference) {
-            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reserveInNestedScopes*/ true);
+            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().superClassReference = temp;
             return factory.updateExpressionWithTypeArguments(
                 node,
@@ -2875,7 +2877,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const identifier =
             typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
-            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reserveInNestedScopes*/ true, prefix, suffix);
+            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 
         if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
             addBlockScopedVariable(identifier);
@@ -2997,11 +2999,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitArrayAssignmentElement(node: Expression): Expression {
-        Debug.assertNode(node, isArrayBindingOrAssignmentElement);
-        if (isSpreadElement(node)) return visitAssignmentRestElement(node);
-        if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+        if (isArrayBindingOrAssignmentElement(node)) {
+            if (isSpreadElement(node)) return visitAssignmentRestElement(node);
+            if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+        }
         return visitEachChild(node, visitor, context);
-
     }
 
     function visitAssignmentProperty(node: PropertyAssignment) {

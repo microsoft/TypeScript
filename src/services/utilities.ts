@@ -1624,7 +1624,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
                 return Comparison.LessThan;
             }
 
-            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
+            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
             if (start > position) {
                 return Comparison.GreaterThan;
             }
@@ -1663,7 +1663,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
         if (end < position) {
             return false;
         }
-        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDocComment*/ true);
         if (start > position) {
             // If this child begins after position, then all subsequent children will as well.
             return false;
@@ -2370,6 +2370,7 @@ export const typeKeywords: readonly SyntaxKind[] = [
     SyntaxKind.ReadonlyKeyword,
     SyntaxKind.StringKeyword,
     SyntaxKind.SymbolKeyword,
+    SyntaxKind.TypeOfKeyword,
     SyntaxKind.TrueKeyword,
     SyntaxKind.VoidKeyword,
     SyntaxKind.UndefinedKeyword,
@@ -3053,7 +3054,7 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
     });
 }
 
@@ -3508,7 +3509,7 @@ function nodeIsASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         return false;
     }
 
-    // See comment in parser’s `parseDoStatement`
+    // See comment in parser's `parseDoStatement`
     if (node.kind === SyntaxKind.DoStatement) {
         return true;
     }
@@ -3575,7 +3576,7 @@ export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
     });
 
     // One statement missing a semicolon isn't sufficient evidence to say the user
-    // doesn’t want semicolons, because they may not even be done writing that statement.
+    // doesn't want semicolons, because they may not even be done writing that statement.
     if (withSemicolon === 0 && withoutSemicolon <= 1) {
         return true;
     }
@@ -3728,7 +3729,7 @@ export interface PackageJsonImportFilter {
     /**
      * Use for a specific module specifier that has already been resolved.
      * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
-     * the best module specifier for a given module _and_ determine if it’s importable.
+     * the best module specifier for a given module _and_ determine if it's importable.
      */
     allowsImportingSpecifier: (moduleSpecifier: string) => boolean;
 }
@@ -3830,7 +3831,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 
     function isAllowedCoreNodeModulesImport(moduleSpecifier: string) {
-        // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
+        // If we're in JavaScript, it can be difficult to tell whether the user wants to import
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
@@ -3860,7 +3861,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
         if (!specifier) {
             return undefined;
         }
-        // Paths here are not node_modules, so we don’t care about them;
+        // Paths here are not node_modules, so we don't care about them;
         // returning anything will trigger a lookup in package.json.
         if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
             return getNodeModuleRootSpecifier(specifier);
@@ -3991,8 +3992,8 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
     if (needsNameFromDeclaration(symbol)) {
         const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
         if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
-        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
+        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
+        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
         if (fileNameCase === capitalized) return fileNameCase;
         return [fileNameCase, capitalized];
     }

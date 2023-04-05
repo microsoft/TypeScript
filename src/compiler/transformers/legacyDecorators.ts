@@ -165,7 +165,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     }
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        if (!(classOrConstructorParameterIsDecorated(/*legacyDecorators*/ true, node) || childIsDecorated(/*legacyDecorators*/ true, node))) {
+        if (!(classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) || childIsDecorated(/*useLegacyDecorators*/ true, node))) {
             return visitEachChild(node, visitor, context);
         }
 
@@ -531,7 +531,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param member The class member.
      */
     function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
-        return nodeOrChildIsDecorated(/*legacyDecorators*/ true, member, parent)
+        return nodeOrChildIsDecorated(/*useLegacyDecorators*/ true, member, parent)
             && isStaticElement === isStatic(member);
     }
 

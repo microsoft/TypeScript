@@ -229,7 +229,7 @@ export function createClassifier(): Classifier {
                         const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                         if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                            token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
+                            token = scanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
 
                             // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                             if (token === SyntaxKind.TemplateTail) {
@@ -672,7 +672,7 @@ function getClassificationTypeName(type: ClassificationType): ClassificationType
         case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
         case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
         case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
-        default: return undefined!; // TODO: GH#18217 throw Debug.assertNever(type);
+        default: return undefined!; // TODO: GH#18217 Debug.assertNever(type);
     }
 }
 

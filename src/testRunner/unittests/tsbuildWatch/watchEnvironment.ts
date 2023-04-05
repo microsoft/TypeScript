@@ -41,9 +41,8 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
                     }
                 },
                 {
@@ -53,15 +52,14 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         maxPkgs--;
                         writePkgReferences(sys);
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, typing.content),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
                     }
                 },
                 {
@@ -71,12 +69,12 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         maxPkgs = 0;
                         writePkgReferences(sys);
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: sys => sys.logTimeoutQueueLength(),
                 },
             ],
             watchOrSolution: solutionBuilder

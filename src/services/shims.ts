@@ -1297,7 +1297,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             `getPreProcessedFileInfo('${fileName}')`,
             () => {
                 // for now treat files as JavaScript
-                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /*readImportFiles*/ true, /*detectJavaScriptImports*/ true);
                 return {
                     referencedFiles: this.convertFileReferences(result.referencedFiles),
                     importedFiles: this.convertFileReferences(result.importedFiles),
@@ -1360,7 +1360,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public discoverTypings(discoverTypingsJson: string): string {
-        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
+        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false);
         return this.forwardJSONCall("discoverTypings()", () => {
             const info = JSON.parse(discoverTypingsJson) as DiscoverTypingsInfo;
             if (this.safeList === undefined) {
@@ -1399,7 +1399,7 @@ export class TypeScriptServicesFactory implements ShimFactory {
                 this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
             }
             const hostAdapter = new LanguageServiceShimHostAdapter(host);
-            const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
+            const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnlyOrLanguageServiceMode*/ false);
             return new LanguageServiceShimObject(this, host, languageService);
         }
         catch (err) {

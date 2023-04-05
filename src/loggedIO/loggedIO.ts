@@ -176,7 +176,7 @@ export function newStyleLogIntoOldStyleLog(log: IoLog, host: System | IO, baseNa
     return log;
 }
 
-const canonicalizeForHarness = createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+const canonicalizeForHarness = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false); // This is done so tests work on windows _and_ linux
 function sanitizeTestFilePath(name: string) {
     const path = toPath(normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", canonicalizeForHarness);
     if (startsWith(path, "/")) {

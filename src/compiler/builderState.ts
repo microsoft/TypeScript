@@ -429,7 +429,7 @@ export namespace BuilderState {
                 ), sourceFiles!);
             },
             cancellationToken,
-            /*emitOnlyDtsFiles*/ true,
+            /*emitOnly*/ true,
             /*customTransformers*/ undefined,
             /*forceDtsEmit*/ true
         );

@@ -373,6 +373,7 @@ import {
     TemplateSpan,
     TextRange,
     ThrowStatement,
+    TokenFlags,
     TransformationResult,
     TryStatement,
     TupleTypeNode,
@@ -1303,7 +1304,7 @@ function emitUsingBuildInfoWorker(
         declarationMapText,
         buildInfoPath,
         buildInfo,
-        /*onlyOwnText*/ true
+        /*oldFileOfCurrentEmit*/ true
     );
     const outputFiles: OutputFile[] = [];
     const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host);
@@ -1519,12 +1520,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function printBundle(bundle: Bundle): string {
-        writeBundle(bundle, beginPrint(), /*sourceMapEmitter*/ undefined);
+        writeBundle(bundle, beginPrint(), /*sourceMapGenerator*/ undefined);
         return endPrint();
     }
 
     function printFile(sourceFile: SourceFile): string {
-        writeFile(sourceFile, beginPrint(), /*sourceMapEmitter*/ undefined);
+        writeFile(sourceFile, beginPrint(), /*sourceMapGenerator*/ undefined);
         return endPrint();
     }
 
@@ -3089,9 +3090,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
             const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
-            // If he number will be printed verbatim and it doesn't already contain a dot, add one
+            // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
-            return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
+            return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
+                && !stringContains(text, tokenToString(SyntaxKind.DotToken)!)
+                && !stringContains(text, String.fromCharCode(CharacterCodes.E))
+                && !stringContains(text, String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
             // check if constant enum value is integer
@@ -3162,7 +3166,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitParenthesizedExpression(node: ParenthesizedExpression) {
         const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
         const indented = writeLineSeparatorsAndIndentBefore(node.expression, node);
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         writeLineSeparatorsAfter(node.expression, node);
         decreaseIndentIf(indented);
         emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
@@ -3394,7 +3398,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitAsExpression(node: AsExpression) {
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         if (node.type) {
             writeSpace();
             writeKeyword("as");
@@ -3409,7 +3413,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitSatisfiesExpression(node: SatisfiesExpression) {
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         if (node.type) {
             writeSpace();
             writeKeyword("satisfies");
@@ -6053,9 +6057,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case SyntaxKind.SetAccessor:
                 return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration, privateName, prefix, suffix);
             case SyntaxKind.ComputedPropertyName:
-                return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ true, privateName, prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ true, privateName, prefix, suffix);
             default:
-                return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ false, privateName, prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ false, privateName, prefix, suffix);
         }
     }
 

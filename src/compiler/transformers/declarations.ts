@@ -274,10 +274,10 @@ export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile)
                 // to handle
                 // ... parameters, /** @internal */
                 // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
                 getLeadingCommentRanges(text, node.pos)
             )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
         return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
@@ -415,7 +415,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
         if (symbol.flags & SymbolFlags.TypeParameter) return false;
-        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
+        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
         recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         return issuedDiagnostic;
     }
@@ -730,7 +730,7 @@ export function transformDeclarations(context: TransformationContext) {
                 return factory.updateBindingElement(
                     elem,
                     elem.dotDotDotToken,
-                    /* propertyName */ undefined,
+                    /*propertyName*/ undefined,
                     elem.propertyName,
                     shouldPrintWithInitializer(elem) ? elem.initializer : undefined
                 );
@@ -1154,7 +1154,7 @@ export function transformDeclarations(context: TransformationContext) {
         if (isMethodDeclaration(input) || isMethodSignature(input)) {
             if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                 if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
             }
         }
 
@@ -1679,7 +1679,7 @@ export function transformDeclarations(context: TransformationContext) {
                                 elems.push(factory.createPropertyDeclaration(
                                     ensureModifiers(param),
                                     elem.name as Identifier,
-                                    /*questionToken*/ undefined,
+                                    /*questionOrExclamationToken*/ undefined,
                                     ensureType(elem, /*type*/ undefined),
                                     /*initializer*/ undefined
                                 ));
@@ -1697,7 +1697,7 @@ export function transformDeclarations(context: TransformationContext) {
                     factory.createPropertyDeclaration(
                         /*modifiers*/ undefined,
                         factory.createPrivateIdentifier("#private"),
-                        /*questionToken*/ undefined,
+                        /*questionOrExclamationToken*/ undefined,
                         /*type*/ undefined,
                         /*initializer*/ undefined
                     )

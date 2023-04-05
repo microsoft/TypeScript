@@ -12,6 +12,7 @@ import {
     isArray,
     last,
     map,
+    mapDefined,
     singleOrUndefined,
 } from "../../compiler/core";
 import * as Debug from "../../compiler/debug";
@@ -646,7 +647,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+            const container = getThisContainer(nodeToCheck, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
             if (
                 container.kind === SyntaxKind.FunctionDeclaration ||
                 (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
@@ -1014,7 +1015,7 @@ function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration
         case SyntaxKind.SetAccessor:
             return `'set ${scope.name.getText()}'`;
         default:
-            throw Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
+            Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
     }
 }
 function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
@@ -1083,12 +1084,12 @@ function extractFunctionInScope(
         callArguments.push(factory.createIdentifier(name));
     });
 
-    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclaration(type) }));
+    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclarationBeforePosition(type, context.startPosition) }));
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
     const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
         ? undefined
-        : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
+        : mapDefined(sortedTypeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
 
     // Strictly speaking, we should check whether each name actually binds to the appropriate type
     // parameter.  In cases of shadowing, they may not.
@@ -1330,7 +1331,7 @@ function extractFunctionInScope(
     const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
 
     const renameFilename = renameRange.getSourceFile().fileName;
-    const renameLocation = getRenameLocation(edits, renameFilename, functionNameText, /*isDeclaredBeforeUse*/ false);
+    const renameLocation = getRenameLocation(edits, renameFilename, functionNameText, /*preferLastLocation*/ false);
     return { renameFilename, renameLocation, edits };
 
     function getTypeDeepCloneUnionUndefined(typeNode: TypeNode | undefined): TypeNode | undefined {
@@ -1393,7 +1394,7 @@ function extractConstantInScope(
         const newVariable = factory.createPropertyDeclaration(
             modifiers,
             localNameText,
-            /*questionToken*/ undefined,
+            /*questionOrExclamationToken*/ undefined,
             variableType,
             initializer);
 
@@ -1474,7 +1475,7 @@ function extractConstantInScope(
     const edits = changeTracker.getChanges();
 
     const renameFilename = node.getSourceFile().fileName;
-    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
+    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*preferLastLocation*/ true);
     return { renameFilename, renameLocation, edits };
 
     function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
@@ -1526,10 +1527,10 @@ function extractConstantInScope(
                 if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
                     const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
                     parameters.splice(0, 0, factory.createParameterDeclaration(
-                        /* modifiers */ undefined,
-                        /* dotDotDotToken */ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
                         "this",
-                        /* questionToken */ undefined,
+                        /*questionToken*/ undefined,
                         checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
                     ));
                 }
@@ -1560,13 +1561,13 @@ function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     }
 }
 
-function getFirstDeclaration(type: Type): Declaration | undefined {
+function getFirstDeclarationBeforePosition(type: Type, position: number): Declaration | undefined {
     let firstDeclaration;
 
     const symbol = type.symbol;
     if (symbol && symbol.declarations) {
         for (const declaration of symbol.declarations) {
-            if (firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) {
+            if ((firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) && declaration.pos < position) {
                 firstDeclaration = declaration;
             }
         }
@@ -1601,7 +1602,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
     if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is
-        return { body: factory.createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
+        return { body: factory.createBlock(body.statements, /*multiLine*/ true), returnValueProperty: undefined };
     }
     let returnValueProperty: string | undefined;
     let ignoreReturns = false;

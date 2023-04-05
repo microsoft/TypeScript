@@ -149,7 +149,6 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
-    ModuleResolutionKind,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -157,7 +156,6 @@ import {
     NodeFlags,
     NonNullChain,
     NonNullExpression,
-    NumericLiteral,
     ObjectLiteralExpression,
     OptionalChain,
     ParameterDeclaration,
@@ -190,7 +188,6 @@ import {
     TextRange,
     ThisExpression,
     ThrowStatement,
-    TokenFlags,
     TryStatement,
     TypeLiteralNode,
     TypeOfExpression,
@@ -212,7 +209,6 @@ import {
     getContainingClass,
     getEffectiveContainerForJSDocTemplateTag,
     getElementOrPropertyAccessName,
-    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getErrorSpanForNode,
@@ -286,6 +282,7 @@ import {
     nodeIsPresent,
     setValueDeclaration,
     shouldPreserveConstEnums,
+    shouldResolveJsRequire,
     skipParentheses,
     sliceAfter,
     tryParsePattern,
@@ -2585,12 +2582,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function checkStrictModeNumericLiteral(node: NumericLiteral) {
-        if (languageVersion < ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
-            file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
-        }
-    }
-
     function checkStrictModePostfixUnaryExpression(node: PostfixUnaryExpression) {
         // Grammar checking
         // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
@@ -2835,8 +2826,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return checkStrictModeCatchClause(node as CatchClause);
             case SyntaxKind.DeleteExpression:
                 return checkStrictModeDeleteExpression(node as DeleteExpression);
-            case SyntaxKind.NumericLiteral:
-                return checkStrictModeNumericLiteral(node as NumericLiteral);
             case SyntaxKind.PostfixUnaryExpression:
                 return checkStrictModePostfixUnaryExpression(node as PostfixUnaryExpression);
             case SyntaxKind.PrefixUnaryExpression:
@@ -3321,7 +3310,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
         else if (hasDynamicName(node)) {
             bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
-            const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
+            const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
             addLateBoundAssignmentDeclarationToSymbol(node, sym);
         }
         else {
@@ -3492,7 +3481,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindCallExpression(node: CallExpression) {
         // We're only inspecting call expressions to detect CommonJS modules, so we can skip
         // this check if we've already seen the module indicator
-        if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
+        if (!file.commonJsModuleIndicator && isRequireCall(node, /*requireStringLiteralLikeArgument*/ false)) {
             setCommonJsModuleIndicator(node);
         }
     }
@@ -3547,7 +3536,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (!isBindingPattern(node.name)) {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (isInJSFile(node) &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler &&
+                shouldResolveJsRequire(options) &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)

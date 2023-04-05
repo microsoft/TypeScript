@@ -214,8 +214,8 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                         sys.writeFile(imported.path, imported.content);
                     },
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // Scheduled invalidation of resolutions
-                        sys.checkTimeoutQueueLengthAndRun(1); // Actual update
+                        sys.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
                         assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
                     },
                 },
@@ -392,7 +392,7 @@ declare module "fs" {
                             path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                             content: JSON.stringify({ something: 10 })
                         }),
-                        timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        timeouts: sys => sys.logTimeoutQueueLength(),
                     }
                 ]
             });
@@ -441,15 +441,15 @@ declare namespace myapp {
                     });
                 },
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(2); // Scheduled invalidation of resolutions, update that gets cancelled and rescheduled by actual invalidation of resolution
-                    sys.checkTimeoutQueueLengthAndRun(1); // Actual update
+                    sys.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions, update that gets cancelled and rescheduled by actual invalidation of resolution
+                    sys.runQueuedTimeoutCallbacks(); // Actual update
                 },
             },
             {
                 caption: "No change, just check program",
                 edit: ts.noop,
                 timeouts: (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
-                    sys.checkTimeoutQueueLength(0);
+                    sys.logTimeoutQueueLength();
                     const newProgram = (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>).getProgram();
                     assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
                     assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");

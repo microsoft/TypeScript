@@ -1147,7 +1147,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             /*reportSummary*/ undefined,
             (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => outputFiles.push({ name, text, writeByteOrderMark, data }),
             cancellationToken,
-            /*emitOnlyDts*/ false,
+            /*emitOnlyDtsFiles*/ false,
             customTransformers || state.host.getCustomTransformers?.(project)
         );
         // Don't emit .d.ts if there are decl file errors
@@ -2286,10 +2286,10 @@ function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: Soluti
     if (state.timerToBuildInvalidatedProject) {
         hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
     }
-    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state, changeDetected);
+    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, "timerToBuildInvalidatedProject", state, changeDetected);
 }
 
-function buildNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: string, state: SolutionBuilderState<T>, changeDetected: boolean) {
     performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
     performance.mark("SolutionBuilder::afterBuild");

@@ -145,7 +145,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         parsedConfig.options,
                         host,
                         builderProgram,
-                    /* configFileParsingDiagnostics*/ undefined,
+                    /*configFileParsingDiagnostics*/ undefined,
                     /*projectReferences*/ undefined,
                     );
                 updatePrograms();
@@ -174,7 +174,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     parsedConfig.options,
                     host,
                 /*oldProgram*/ undefined,
-                /* configFileParsingDiagnostics*/ undefined,
+                /*configFileParsingDiagnostics*/ undefined,
                 /*projectReferences*/ undefined,
                 );
                 updatePrograms();

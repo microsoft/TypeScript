@@ -14,4 +14,4 @@
 //// import Foo from './foo';
 //// const a = <[|/*use*/Foo|] />
 
-verify.goToDefinition("use", "def");
+verify.baselineGoToDefinition("use");

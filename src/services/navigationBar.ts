@@ -672,7 +672,7 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
 
             if (ctorFunction !== undefined) {
                 const ctorNode = setTextRange(
-                    factory.createConstructorDeclaration(/* modifiers */ undefined, [], /* body */ undefined),
+                    factory.createConstructorDeclaration(/*modifiers*/ undefined, [], /*body*/ undefined),
                     ctorFunction);
                 const ctor = emptyNavigationBarNode(ctorNode);
                 ctor.indent = a.indent + 1;
@@ -690,10 +690,10 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
             }
 
             lastANode = a.node = setTextRange(factory.createClassDeclaration(
-                /* modifiers */ undefined,
+                /*modifiers*/ undefined,
                 a.name as Identifier || factory.createIdentifier("__class__"),
-                /* typeParameters */ undefined,
-                /* heritageClauses */ undefined,
+                /*typeParameters*/ undefined,
+                /*heritageClauses*/ undefined,
                 []
             ), a.node);
         }
@@ -717,10 +717,10 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
         else {
             if (!a.additionalNodes) a.additionalNodes = [];
             a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
-                /* modifiers */ undefined,
+                /*modifiers*/ undefined,
                 a.name as Identifier || factory.createIdentifier("__class__"),
-                /* typeParameters */ undefined,
-                /* heritageClauses */ undefined,
+                /*typeParameters*/ undefined,
+                /*heritageClauses*/ undefined,
                 []
             ), b.node));
         }

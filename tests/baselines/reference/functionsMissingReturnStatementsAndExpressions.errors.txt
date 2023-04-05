@@ -1,15 +1,19 @@
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(112,16): error TS2378: A 'get' accessor must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(134,15): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): error TS1003: Identifier expected.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(120,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(124,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(130,16): error TS2378: A 'get' accessor must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(152,15): error TS18050: The value 'undefined' cannot be used here.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(153,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (6 errors) ====
+==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (8 errors) ====
     function f1(): string {
                    ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         // errors because there are no return statements
     }
     
@@ -109,7 +113,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): e
     
     function f21(): number | string {
                     ~~~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         // Not okay; union does not contain void or any
     }
     
@@ -119,8 +123,32 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(135,5): e
     
     function f23(): undefined | number {
                     ~~~~~~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         // Error; because `undefined | number` becomes `number` without strictNullChecks.
+    }
+    
+    const f30: () => undefined = () => {
+        // Ok, contextual type for implicit return is `undefined`
+    }
+    
+    const f31: () => undefined = () => {
+        // Ok, contextual type for expression-less return is `undefined`
+        return;
+    }
+    
+    const f32: () => undefined | number = () => {
+          ~~~
+!!! error TS2322: Type '() => void' is not assignable to type '() => number'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
+        // Error, contextual type for implicit return isn't just `undefined`
+    }
+    
+    const f33: () => undefined | number = () => {
+          ~~~
+!!! error TS2322: Type '() => void' is not assignable to type '() => number'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
+        // Error, contextual type for expression-less return isn't just `undefined`
+        return;
     }
     
     class C {

@@ -43,6 +43,7 @@ eacher((a, b) => {
 
 });
 
+// TODO: https://github.com/microsoft/TypeScript/issues/53255
 eacher((...args) => {
 >eacher((...args) => {    const [a, b] = args;    a;    b;}) : void
 >eacher : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
