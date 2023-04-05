@@ -137,22 +137,26 @@ Info 28   [00:00:59.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 29   [00:01:00.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 30   [00:01:01.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 31   [00:01:02.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
 Info 32   [00:01:03.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

@@ -421,6 +421,9 @@ export declare function gfoo(): void;
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
@@ -496,6 +499,9 @@ export class A {}
 
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
@@ -641,6 +647,9 @@ Input::
 {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
@@ -786,6 +795,9 @@ Input::
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../a"}]}
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
@@ -901,6 +913,9 @@ Input::
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../a"}]}
 
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
@@ -1006,6 +1021,10 @@ Change:: deleting referenced config file
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json] deleted
 
+Before running Timeout callback:: count: 2
+6: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
@@ -1126,6 +1145,10 @@ Input::
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
 
 
+Before running Timeout callback:: count: 2
+8: timerToUpdateProgram
+9: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:06 AM[0m] File change detected. Starting incremental compilation...
@@ -1241,6 +1264,10 @@ Change:: deleting transitively referenced config file
 Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json] deleted
 
+Before running Timeout callback:: count: 2
+10: timerToUpdateProgram
+11: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:12 AM[0m] File change detected. Starting incremental compilation...
@@ -1357,6 +1384,10 @@ Input::
 {"compilerOptions":{"composite":true}}
 
 
+Before running Timeout callback:: count: 2
+12: timerToUpdateProgram
+13: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...

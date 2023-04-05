@@ -270,25 +270,29 @@ Info 41   [00:02:01.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 42   [00:02:02.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 43   [00:02:03.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 44   [00:02:04.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 45   [00:02:05.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 46   [00:02:06.000] Search path: /dummy
 Info 47   [00:02:07.000] For info: /dummy/dummy.ts :: No config files found.

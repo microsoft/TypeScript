@@ -105,25 +105,29 @@ Info 16   [00:00:41.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 17   [00:00:42.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 18   [00:00:43.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 19   [00:00:44.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Info 20   [00:00:45.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Before request
 
@@ -180,7 +184,8 @@ Info 24   [00:00:49.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+2: checkOne
 
 Info 25   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 26   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -192,21 +197,24 @@ Info 28   [00:00:53.000] 	Files (2)
 Info 29   [00:00:54.000] -----------------------------------------------
 Info 30   [00:00:55.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 31   [00:00:56.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[{"start":{"line":4,"offset":9},"end":{"line":4,"offset":10},"text":"Type 'number' is not assignable to type 'string'.","code":2322,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+4: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
 
 Info 32   [00:00:57.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Info 33   [00:00:58.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Before request
 
@@ -263,7 +271,8 @@ Info 37   [00:01:02.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+3: checkOne
 
 Info 38   [00:01:03.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 39   [00:01:04.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -275,18 +284,21 @@ Info 41   [00:01:06.000] 	Files (2)
 Info 42   [00:01:07.000] -----------------------------------------------
 Info 43   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+5: semanticCheck
 
 Info 44   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+6: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+6: suggestionCheck
 
 Info 45   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Info 46   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

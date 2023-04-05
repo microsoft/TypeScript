@@ -129,22 +129,26 @@ Info 14   [00:00:23.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 15   [00:00:24.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 16   [00:00:25.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 17   [00:00:26.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[{"start":{"line":9,"offset":5},"end":{"line":9,"offset":6},"text":"'x' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 18   [00:00:27.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

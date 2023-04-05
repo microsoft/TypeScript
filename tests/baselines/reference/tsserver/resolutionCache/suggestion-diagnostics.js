@@ -93,8 +93,6 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
-Checking timeout queue length: 0
-
 Before request
 
 Info 11   [00:01:00.000] request:
@@ -115,22 +113,26 @@ Info 12   [00:01:01.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 13   [00:01:02.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a.js","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 14   [00:01:03.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a.js","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 15   [00:01:04.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a.js","diagnostics":[{"start":{"line":1,"offset":12},"end":{"line":1,"offset":13},"text":"'p' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 16   [00:01:05.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

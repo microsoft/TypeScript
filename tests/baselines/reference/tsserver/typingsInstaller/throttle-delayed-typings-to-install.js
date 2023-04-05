@@ -216,7 +216,8 @@ TI:: [00:01:41.000] Sending response:
 Info 11   [00:01:42.000] Scheduled: /a/app/test.csproj
 TI:: [00:01:43.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/a/app/test.csproj","packagesToInstall":["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor","@types/express@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: /a/app/test.csproj
 
 Info 12   [00:01:44.000] Running: /a/app/test.csproj
 Info 13   [00:01:45.000] Starting updateGraphWorker: Project: /a/app/test.csproj
@@ -258,4 +259,4 @@ TI:: [00:01:59.000] Finished typings discovery: {"cachedTypingPaths":["/a/data/n
 TI:: [00:02:00.000] Sending response:
     {"projectName":"/a/app/test.csproj","typeAcquisition":{"include":["jquery","moment","lodash","commander"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
 TI:: [00:02:01.000] No new typings were requested as a result of typings discovery
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0

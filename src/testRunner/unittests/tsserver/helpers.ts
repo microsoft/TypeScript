@@ -11,14 +11,6 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
 
-const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
-export function mapOutputToJson(s: string) {
-    return ts.convertToObject(
-        ts.parseJsonText("json.json", s.replace(outputEventRegex, "")),
-        []
-    );
-}
-
 export const customTypesMap = {
     path: "/typesMap.json" as ts.Path,
     content: `{
@@ -138,6 +130,7 @@ function sanitizeLog(s: string) {
         .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
         .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
         .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
+        .replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`)
         .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
         .replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
 }
@@ -391,6 +384,7 @@ export function toExternalFiles(fileNames: string[]) {
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     patched: boolean;
     baselineHost(title: string): void;
+    logTimeoutQueueLength(): void;
 };
 function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
@@ -398,50 +392,47 @@ function patchHostTimeouts(
 ) {
     const host = inputHost as TestSessionAndServiceHost;
     if (host.patched) return host;
-    const originalCheckTimeoutQueueLength = host.checkTimeoutQueueLength;
+    host.patched = true;
+    if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
+        host.logTimeoutQueueLength = ts.notImplemented;
+        host.baselineHost = ts.notImplemented;
+        return host;
+    }
+
     const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
     const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
     let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
-    host.checkTimeoutQueueLengthAndRun = checkTimeoutQueueLengthAndRun;
-    host.checkTimeoutQueueLength = checkTimeoutQueueLength;
     host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
     host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
+    host.logTimeoutQueueLength = logTimeoutQueueLength;
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
 
-    function checkTimeoutQueueLengthAndRun(expected: number) {
-        host.baselineHost(`Before checking timeout queue length (${expected}) and running`);
-        originalCheckTimeoutQueueLength.call(host, expected);
-        originalRunQueuedTimeoutCallbacks.call(host);
-        host.baselineHost(`After checking timeout queue length (${expected}) and running`);
-    }
-
-    function checkTimeoutQueueLength(expected: number) {
-        host.baselineHost(`Checking timeout queue length: ${expected}`);
-        originalCheckTimeoutQueueLength.call(host, expected);
+    function logTimeoutQueueLength() {
+        logger.log(host.timeoutCallbacks.log());
+        host.baselineHost(host.immediateCallbacks.log());
     }
 
     function runQueuedTimeoutCallbacks(timeoutId?: number) {
-        host.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+        host.baselineHost(`Before running ${host.timeoutCallbacks.log()}`);
+        if (timeoutId !== undefined) logger.log(`Invoking ${host.timeoutCallbacks.callbackType} callback:: timeoutId:: ${timeoutId}:: ${host.timeoutCallbacks.map[timeoutId].args[0]}`);
         originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
-        host.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+        host.baselineHost(`After running ${host.timeoutCallbacks.log()}`);
     }
 
-    function runQueuedImmediateCallbacks(checkCount?: number) {
-        host.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
-        originalRunQueuedImmediateCallbacks.call(host, checkCount);
-        host.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+    function runQueuedImmediateCallbacks() {
+        host.baselineHost(`Before running ${host.immediateCallbacks.log()}`);
+        originalRunQueuedImmediateCallbacks.call(host);
+        host.baselineHost(`After running ${host.immediateCallbacks.log()}`);
     }
 
     function baselineHost(title: string) {
-        if (!logger.hasLevel(ts.server.LogLevel.verbose)) return;
         logger.log(title);
-        const logs = logger.logs || [];
-        host.diff(logs, hostDiff);
-        host.serializeWatches(logs);
-        if (!logger.logs) logs.forEach(log => logger.log(log));
+        ts.Debug.assertIsDefined(logger.logs);
+        host.diff(logger.logs, hostDiff);
+        host.serializeWatches(logger.logs);
         hostDiff = host.snap();
         host.writtenFiles.clear();
     }
@@ -449,6 +440,7 @@ function patchHostTimeouts(
 
 export interface TestSessionOptions extends ts.server.SessionOptions {
     logger: Logger;
+    allowNonBaseliningLogger?: boolean;
 }
 
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
@@ -460,6 +452,7 @@ export class TestSession extends ts.server.Session {
     constructor(opts: TestSessionOptions) {
         super(opts);
         this.logger = opts.logger;
+        ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
         this.testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this.logger
@@ -497,10 +490,6 @@ export class TestSession extends ts.server.Session {
         request.seq = this.seq;
         request.type = "request";
         return this.executeCommand(request);
-    }
-
-    public clearMessages() {
-        this.testhost.clearOutput();
     }
 }
 
@@ -560,6 +549,7 @@ export function createSessionWithCustomEventHandler(host: TestServerHost, opts?:
 
 export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
     logger: Logger;
+    allowNonBaseliningLogger?: boolean;
 }
 
 export class TestProjectService extends ts.server.ProjectService {
@@ -577,15 +567,12 @@ export class TestProjectService extends ts.server.ProjectService {
             typesMapLocation: customTypesMap.path,
             ...opts
         });
+        ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
         this.testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this.logger
         );
-        this.testhost.baselineHost("Creating project service");
-    }
-
-    checkNumberOfProjects(count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
-        checkNumberOfProjects(this, count);
+        if (logger.hasLevel(ts.server.LogLevel.verbose)) this.testhost.baselineHost("Creating project service");
     }
 }
 
@@ -594,66 +581,6 @@ export function createProjectService(host: TestServerHost, options?: Partial<Tes
     const logger = options?.logger || createHasErrorMessageLogger();
     const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
     return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || ts.server.nullTypingsInstaller, options);
-}
-
-export function checkNumberOfConfiguredProjects(projectService: ts.server.ProjectService, expected: number) {
-    assert.equal(projectService.configuredProjects.size, expected, `expected ${expected} configured project(s)`);
-}
-
-export function checkNumberOfExternalProjects(projectService: ts.server.ProjectService, expected: number) {
-    assert.equal(projectService.externalProjects.length, expected, `expected ${expected} external project(s)`);
-}
-
-export function checkNumberOfInferredProjects(projectService: ts.server.ProjectService, expected: number) {
-    assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
-}
-
-export function checkNumberOfProjects(projectService: ts.server.ProjectService, count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
-    checkNumberOfConfiguredProjects(projectService, count.configuredProjects || 0);
-    checkNumberOfExternalProjects(projectService, count.externalProjects || 0);
-    checkNumberOfInferredProjects(projectService, count.inferredProjects || 0);
-}
-
-export function configuredProjectAt(projectService: ts.server.ProjectService, index: number) {
-    const values = projectService.configuredProjects.values();
-    while (index > 0) {
-        const iterResult = values.next();
-        if (iterResult.done) return ts.Debug.fail("Expected a result.");
-        index--;
-    }
-    const iterResult = values.next();
-    if (iterResult.done) return ts.Debug.fail("Expected a result.");
-    return iterResult.value;
-}
-
-function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
-    const actualSet = new Set(actual);
-    let notInActual: string[] | undefined;
-    let duplicates: string[] | undefined;
-    const seen = new Set<string>();
-    expected.forEach(expectedKey => {
-        if (seen.has(expectedKey)) (duplicates ??= []).push(expectedKey);
-        else {
-            seen.add(expectedKey);
-            if (!actualSet.has(expectedKey)) (notInActual ??= []).push(expectedKey);
-        }
-    });
-    let inActualNotExpected: string[] | undefined;
-    actual.forEach(key => {
-        if (!seen.has(key)) (inActualNotExpected ??= []).push(key);
-        else seen.add(key);
-    });
-    if (notInActual || duplicates || inActualNotExpected) {
-        assert.fail(`${caption}\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`);
-    }
-}
-
-export function checkProjectActualFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
-    checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
-}
-
-export function checkProjectRootFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
-    checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
 }
 
 export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
@@ -674,42 +601,6 @@ export function protocolTextSpanFromSubstring(str: string, substring: string, op
     const span = textSpanFromSubstring(str, substring, options);
     const toLocation = protocolToLocation(str);
     return { start: toLocation(span.start), end: toLocation(ts.textSpanEnd(span)) };
-}
-
-export interface DocumentSpanFromSubstring {
-    file: File;
-    text: string;
-    options?: SpanFromSubstringOptions;
-    contextText?: string;
-    contextOptions?: SpanFromSubstringOptions;
-}
-
-export interface ProtocolTextSpanWithContextFromString {
-    fileText: string;
-    text: string;
-    options?: SpanFromSubstringOptions;
-    contextText?: string;
-    contextOptions?: SpanFromSubstringOptions;
-}
-export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): ts.server.protocol.TextSpanWithContext {
-    const span = textSpanFromSubstring(fileText, text, options);
-    const toLocation = protocolToLocation(fileText);
-    const contextSpan = contextText !== undefined ? textSpanFromSubstring(fileText, contextText, contextOptions) : undefined;
-    return {
-        start: toLocation(span.start),
-        end: toLocation(ts.textSpanEnd(span)),
-        ...contextSpan && {
-            contextStart: toLocation(contextSpan.start),
-            contextEnd: toLocation(ts.textSpanEnd(contextSpan))
-        }
-    };
-}
-
-export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithContextFromString {
-    prefixSuffixText?: {
-        readonly prefixText?: string;
-        readonly suffixText?: string;
-    };
 }
 
 export function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.TextSpan {
@@ -746,7 +637,7 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     private requestToCancel = -1;
     private isCancellationRequestedCount = 0;
 
-    constructor(private cancelAfterRequest = 0) {
+    constructor(private logger: Logger, private cancelAfterRequest = 0) {
     }
 
     setRequest(requestId: number) {
@@ -754,11 +645,13 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 
     setRequestToCancel(requestId: number) {
+        this.logger.log(`TestServerCancellationToken:: Setting request to cancel:: ${requestId}`);
         this.resetToken();
         this.requestToCancel = requestId;
     }
 
     resetRequest(requestId: number) {
+        this.logger.log(`TestServerCancellationToken:: resetRequest:: ${requestId} is ${requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`}`);
         assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
         this.currentId = undefined;
     }
@@ -768,7 +661,9 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
         // If the request id is the request to cancel and isCancellationRequestedCount
         // has been met then cancel the request. Ex: cancel the request if it is a
         // nav bar request & isCancellationRequested() has already been called three times.
-        return this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
+        const result = this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
+        if (result) this.logger.log(`TestServerCancellationToken:: Cancellation is requested`);
+        return result;
     }
 
     resetToken() {
@@ -778,7 +673,12 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath?: string, content?: string })[], session: TestSession): void {
+export function openFilesForSession(files: readonly (string | File | {
+    readonly file: File | string,
+    readonly projectRootPath?: string,
+    content?: string,
+    scriptKindName?: ts.server.protocol.ScriptKindName,
+})[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
@@ -789,6 +689,7 @@ export function openFilesForSession(files: readonly (string | File | { readonly 
                         file: typeof file.file === "string" ? file.file : file.file.path,
                         projectRootPath: file.projectRootPath,
                         fileContent: file.content,
+                        scriptKindName: file.scriptKindName,
                     } :
                     { file: file.path }
         });
@@ -804,10 +705,39 @@ export function closeFilesForSession(files: readonly (File | string)[], session:
     }
 }
 
+export function openExternalProjectForSession(project: ts.server.protocol.ExternalProject, session: TestSession) {
+    session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+        command: ts.server.protocol.CommandTypes.OpenExternalProject,
+        arguments: project
+    });
+}
+
+export function openExternalProjectsForSession(projects: ts.server.protocol.ExternalProject[], session: TestSession) {
+    session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
+        command: ts.server.protocol.CommandTypes.OpenExternalProjects,
+        arguments: { projects }
+    });
+}
+
+export function setCompilerOptionsForInferredProjectsRequestForSession(
+    options: ts.server.protocol.InferredProjectCompilerOptions | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
+    session: TestSession
+) {
+    session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
+        command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
+        arguments: "options" in options ? // eslint-disable-line local/no-in-operator
+            options as ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs :
+            { options }
+    });
+}
+
+export function logDiagnostics(sessionOrService: TestSession | TestProjectService, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
+    sessionOrService.logger.info(`${diagnosticsType}:: ${diagnostics.length}`);
+    diagnostics.forEach(d => sessionOrService.logger.info(ts.formatDiagnostic(d, project)));
+}
 export interface VerifyGetErrRequestBase {
     session: TestSession;
-    host: TestServerHost;
-    existingTimeouts?: number;
+    existingTimeouts?: boolean;
 }
 export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
     files: readonly (string | File)[];
@@ -827,18 +757,12 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
     skip?: readonly (SkipErrors | undefined)[];
 }
-function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckAllErrors) {
+function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
     ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
-        if (existingTimeouts !== undefined) {
-            host.checkTimeoutQueueLength(existingTimeouts + 1);
-            host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
-        }
-        else {
-            host.checkTimeoutQueueLengthAndRun(1);
-        }
-        if (!skip?.[i]?.semantic) host.runQueuedImmediateCallbacks(1);
-        if (!skip?.[i]?.suggestion) host.runQueuedImmediateCallbacks(1);
+        session.testhost.runQueuedTimeoutCallbacks(existingTimeouts ? session.testhost.getNextTimeoutId() - 1 : undefined);
+        if (!skip?.[i]?.semantic) session.testhost.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.suggestion) session.testhost.runQueuedImmediateCallbacks();
     }
 }
 
@@ -852,7 +776,7 @@ function verifyErrorsUsingGeterr({scenario, subScenario, allFiles, openFiles, ge
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession(openFiles(), session);
 
-        verifyGetErrRequest({ session, host, files: getErrRequest() });
+        verifyGetErrRequest({ session, files: getErrRequest() });
         baselineTsserverLogs(scenario, `${subScenario} getErr`, session);
     });
 }
@@ -868,7 +792,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
                 command: ts.server.protocol.CommandTypes.GeterrForProject,
                 arguments: { delay: 0, file: filePath(expected.project) }
             });
-            checkAllErrors({ session, host, files: expected.files });
+            checkAllErrors({ session, files: expected.files });
         }
         baselineTsserverLogs(scenario, `${subScenario} geterrForProject`, session);
     });
@@ -923,8 +847,7 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
 }
 
 export function verifyDynamic(service: ts.server.ProjectService, path: string) {
-    const info = ts.Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(ts.arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
-    assert.isTrue(info.isDynamic);
+    (service.logger as Logger).log(`${path} isDynamic:: ${service.filenameToScriptInfo.get(path)!.isDynamic}`);
 }
 
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
@@ -932,4 +855,12 @@ export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLin
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
     return host;
+}
+
+export function logInferredProjectsOrphanStatus(projectService: ts.server.ProjectService) {
+    projectService.inferredProjects.forEach(inferredProject => (projectService.logger as Logger).log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
+}
+
+export function logConfiguredProjectsHasOpenRefStatus(projectService: ts.server.ProjectService) {
+    projectService.configuredProjects.forEach(configuredProject => (projectService.logger as Logger).log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
 }

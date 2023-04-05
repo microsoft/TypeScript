@@ -148,7 +148,8 @@ Info 42   [00:01:18.000] Scheduled: /user/username/projects/myproject/src/tsconf
 Info 43   [00:01:19.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 44   [00:01:20.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 45   [00:01:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0"}
 
@@ -156,9 +157,13 @@ Before running timeout callbacks
 Info 46   [00:01:22.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 47   [00:01:23.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 48   [00:01:24.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+2: /user/username/projects/myproject/src/tsconfig.json
+3: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+2: /user/username/projects/myproject/src/tsconfig.json
+3: *ensureProjectForOpenFiles*
 
 Info 49   [00:01:25.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 50   [00:01:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -207,7 +212,8 @@ Info 75   [00:02:02.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 75   [00:02:03.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 76   [00:02:04.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+4: checkOne
 
 Before request
 
@@ -229,25 +235,29 @@ Info 78   [00:02:06.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+5: checkOne
 
 Info 79   [00:02:07.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 80   [00:02:08.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/user/username/projects/myproject/package.json'.","code":1479,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 81   [00:02:09.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 82   [00:02:10.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 83   [00:02:11.000] Modify package json file to add type module
 Info 84   [00:02:15.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
@@ -255,7 +265,8 @@ Info 85   [00:02:16.000] Scheduled: /user/username/projects/myproject/src/tsconf
 Info 86   [00:02:17.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 87   [00:02:18.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 88   [00:02:19.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+6: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0","type":"module"}
 
@@ -263,9 +274,13 @@ Before running timeout callbacks
 Info 89   [00:02:20.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 90   [00:02:21.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 91   [00:02:22.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+7: /user/username/projects/myproject/src/tsconfig.json
+8: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+7: /user/username/projects/myproject/src/tsconfig.json
+8: *ensureProjectForOpenFiles*
 
 Info 92   [00:02:23.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 93   [00:02:24.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -314,7 +329,8 @@ Info 118  [00:03:00.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 118  [00:03:01.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 119  [00:03:02.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+9: checkOne
 
 Before request
 
@@ -336,25 +352,29 @@ Info 121  [00:03:04.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+10: checkOne
 
 Info 122  [00:03:05.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 123  [00:03:06.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+4: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
 
 Info 124  [00:03:07.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 125  [00:03:08.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 126  [00:03:09.000] Delete package.json
 Info 127  [00:03:11.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
@@ -363,15 +383,20 @@ Info 129  [00:03:13.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 130  [00:03:14.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 131  [00:03:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 132  [00:03:16.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+11: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json] deleted
 
 Info 133  [00:03:17.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 134  [00:03:18.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 135  [00:03:19.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+12: /user/username/projects/myproject/src/tsconfig.json
+13: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+12: /user/username/projects/myproject/src/tsconfig.json
+13: *ensureProjectForOpenFiles*
 
 Info 136  [00:03:20.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 137  [00:03:21.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -422,7 +447,8 @@ Info 164  [00:03:59.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 164  [00:04:00.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 165  [00:04:01.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+14: checkOne
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -468,31 +494,36 @@ Info 167  [00:04:03.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+15: checkOne
 
 Info 168  [00:04:04.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+5: semanticCheck
 
 Info 169  [00:04:05.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.","code":1479,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+6: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+6: suggestionCheck
 
 Info 170  [00:04:06.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 171  [00:04:07.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 172  [00:04:08.000] Modify package json file to without type module
 Info 173  [00:04:11.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 174  [00:04:12.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 175  [00:04:13.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+16: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0"}
 
@@ -500,9 +531,13 @@ Before running timeout callbacks
 Info 176  [00:04:14.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 177  [00:04:15.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 178  [00:04:16.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+17: /user/username/projects/myproject/src/tsconfig.json
+18: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+17: /user/username/projects/myproject/src/tsconfig.json
+18: *ensureProjectForOpenFiles*
 
 Info 179  [00:04:17.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 180  [00:04:18.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -552,7 +587,8 @@ Info 206  [00:04:55.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 206  [00:04:56.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 207  [00:04:57.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+19: checkOne
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -600,39 +636,48 @@ Info 209  [00:04:59.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+20: checkOne
 
 Info 210  [00:05:00.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+7: semanticCheck
 
 Info 211  [00:05:01.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/user/username/projects/myproject/package.json'.","code":1479,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+8: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+8: suggestionCheck
 
 Info 212  [00:05:02.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 213  [00:05:03.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 214  [00:05:04.000] Delete package.json
 Info 215  [00:05:06.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 216  [00:05:07.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 217  [00:05:08.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+21: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json] deleted
 
 Info 218  [00:05:09.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 219  [00:05:10.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 220  [00:05:11.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+22: /user/username/projects/myproject/src/tsconfig.json
+23: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+22: /user/username/projects/myproject/src/tsconfig.json
+23: *ensureProjectForOpenFiles*
 
 Info 221  [00:05:12.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 222  [00:05:13.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -684,7 +729,8 @@ Info 250  [00:05:52.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 250  [00:05:53.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 251  [00:05:54.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+24: checkOne
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -730,22 +776,26 @@ Info 253  [00:05:56.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+25: checkOne
 
 Info 254  [00:05:57.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+9: semanticCheck
 
 Info 255  [00:05:58.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.","code":1479,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+10: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+10: suggestionCheck
 
 Info 256  [00:05:59.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 257  [00:06:00.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

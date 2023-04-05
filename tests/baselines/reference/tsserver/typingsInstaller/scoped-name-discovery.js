@@ -257,7 +257,9 @@ Info 58   [00:02:25.000] Scheduled: /jsconfig.json, Cancelled earlier one
 Info 59   [00:02:26.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [00:02:27.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/jsconfig.json","packagesToInstall":["@types/zkat__cacache@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+13: /jsconfig.json
+14: *ensureProjectForOpenFiles*
 
 Info 60   [00:02:28.000] Running: /jsconfig.json
 Info 61   [00:02:29.000] Starting updateGraphWorker: Project: /jsconfig.json
@@ -296,4 +298,6 @@ TI:: [00:02:51.000] Sending response:
     {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 Info 69   [00:02:52.000] Scheduled: /jsconfig.json
 Info 70   [00:02:53.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 2
+15: /jsconfig.json
+16: *ensureProjectForOpenFiles*

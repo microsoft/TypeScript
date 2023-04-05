@@ -218,6 +218,13 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
@@ -320,6 +327,9 @@ Input::
 {"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"}]}
 
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
@@ -374,6 +384,13 @@ Input::
 export const typing = 10;
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
@@ -455,6 +472,9 @@ Input::
 {"files":[],"include":[],"references":[]}
 
 
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
@@ -506,6 +526,8 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

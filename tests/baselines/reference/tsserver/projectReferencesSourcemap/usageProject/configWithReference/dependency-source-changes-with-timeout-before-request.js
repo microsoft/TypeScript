@@ -471,7 +471,9 @@ Info 49   [00:02:09.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 50   [00:02:10.000] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info 51   [00:02:11.000] Scheduled: *ensureProjectForOpenFiles*
 Info 52   [00:02:12.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/dependency/FnS.ts 1:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/main/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 function fooBar() { }
 export function fn1() { }
@@ -521,7 +523,7 @@ Info 62   [00:02:40.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 62   [00:02:41.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 62   [00:02:42.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 62   [00:02:43.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

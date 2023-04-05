@@ -100,25 +100,29 @@ Info 18   [00:00:41.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 19   [00:00:42.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 20   [00:00:43.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":25},"text":"Cannot find module 'pad' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 21   [00:00:44.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 Info 22   [00:00:45.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 23   [00:00:51.000] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 24   [00:00:52.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
@@ -147,7 +151,10 @@ Info 46   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/pr
 Info 47   [00:01:17.000] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 48   [00:01:18.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info 49   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+11: /dev/null/inferredProject1*
+12: *ensureProjectForOpenFiles*
+14: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/a/b/projects/temp/node_modules/@types/pad/index.d.ts]
 export = pad;declare function pad(length: number, text: string, char ?: string): string;
 
@@ -196,9 +203,11 @@ Info 57   [00:01:28.000] 	Files (3)
 	  Root file specified for compilation
 
 Info 58   [00:01:29.000] -----------------------------------------------
-After running timeout callbacks
+After running Timeout callback:: count: 1
+15: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+15: *ensureProjectForOpenFiles*
 
 Info 59   [00:01:30.000] Running: *ensureProjectForOpenFiles*
 Info 60   [00:01:31.000] Before ensureProjectForOpenFiles:
@@ -220,16 +229,20 @@ Info 62   [00:01:44.000] 		Projects: /dev/null/inferredProject1*
 Info 62   [00:01:45.000] got projects updated in background, updating diagnostics for /a/b/projects/temp/a.ts
 Info 63   [00:01:46.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/projects/temp/a.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+16: checkOne
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+16: checkOne
 
 Info 64   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 65   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
-Before running immediate callbacks
+After running Immedidate callback:: count: 1
+4: suggestionCheck

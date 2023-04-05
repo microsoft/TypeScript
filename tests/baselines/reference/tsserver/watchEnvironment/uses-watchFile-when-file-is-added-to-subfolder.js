@@ -145,7 +145,10 @@ Info 28   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 Info 29   [00:00:58.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 30   [00:00:59.000] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
 Info 31   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+1: /a/username/project/tsconfig.json
+2: *ensureProjectForOpenFiles*
+3: /a/username/project/tsconfig.jsonFailedLookupInvalidation
 //// [/a/username/project/src/file2.ts]
 
 
@@ -174,7 +177,8 @@ Info 38   [00:01:07.000] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info 39   [00:01:08.000] -----------------------------------------------
-After running timeout callbacks
+After running Timeout callback:: count: 1
+4: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/username/project:

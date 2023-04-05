@@ -5,6 +5,8 @@ import {
     SymLink,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "./helpers";
@@ -66,6 +68,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
             project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path),
             { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path }
         );
+        baselineTsserverLogs("symlinkCache", "contains symlinks discovered by project references resolution after program creation", session);
     });
 
     it("works for paths close to the root", () => {
@@ -93,7 +96,7 @@ function setup() {
         depSrcSubFolderIndexTs,
         link,
     ]);
-    const session = createSession(host);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     const projectService = session.getProjectService();
     return {
         host,

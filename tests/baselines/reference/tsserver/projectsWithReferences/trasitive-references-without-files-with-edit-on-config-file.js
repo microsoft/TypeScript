@@ -157,7 +157,9 @@ Info 39   [00:01:31.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 40   [00:01:32.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 41   [00:01:33.000] Scheduled: *ensureProjectForOpenFiles*
 Info 42   [00:01:34.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/c/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/c/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/c/tsconfig.json]
 {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../b"}]}
 
@@ -288,7 +290,7 @@ Info 79   [00:02:19.000] -----------------------------------------------
 Info 79   [00:02:20.000] Open files: 
 Info 79   [00:02:21.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 79   [00:02:22.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/c/node_modules/@types:
@@ -344,7 +346,9 @@ Info 79   [00:02:26.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 80   [00:02:27.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 81   [00:02:28.000] Scheduled: *ensureProjectForOpenFiles*
 Info 82   [00:02:29.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/c/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/c/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/c/tsconfig.json]
 {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
 
@@ -436,7 +440,7 @@ Info 118  [00:03:13.000] -----------------------------------------------
 Info 118  [00:03:14.000] Open files: 
 Info 118  [00:03:15.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 118  [00:03:16.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/c/node_modules/@types:

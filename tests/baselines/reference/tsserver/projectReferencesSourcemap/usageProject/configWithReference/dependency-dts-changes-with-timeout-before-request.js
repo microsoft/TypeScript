@@ -467,7 +467,7 @@ Info 48   [00:02:05.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/decls/FnS.d.ts]
 export declare function fn1(): void;
 export declare function fn2(): void;
@@ -478,7 +478,7 @@ export declare function fn6(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

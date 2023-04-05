@@ -111,6 +111,7 @@ import {
     LabeledStatement,
     last,
     map,
+    mapDefined,
     MethodDeclaration,
     Modifier,
     ModifierFlags,
@@ -1070,12 +1071,12 @@ function extractFunctionInScope(
         callArguments.push(factory.createIdentifier(name));
     });
 
-    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclaration(type) }));
+    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclarationBeforePosition(type, context.startPosition) }));
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
     const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
         ? undefined
-        : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
+        : mapDefined(sortedTypeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
 
     // Strictly speaking, we should check whether each name actually binds to the appropriate type
     // parameter.  In cases of shadowing, they may not.
@@ -1547,13 +1548,13 @@ function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     }
 }
 
-function getFirstDeclaration(type: Type): Declaration | undefined {
+function getFirstDeclarationBeforePosition(type: Type, position: number): Declaration | undefined {
     let firstDeclaration;
 
     const symbol = type.symbol;
     if (symbol && symbol.declarations) {
         for (const declaration of symbol.declarations) {
-            if (firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) {
+            if ((firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) && declaration.pos < position) {
                 firstDeclaration = declaration;
             }
         }

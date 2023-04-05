@@ -84,7 +84,8 @@ Info 11   [00:00:57.000] -----------------------------------------------
 Info 11   [00:00:58.000] Open files: 
 Info 11   [00:00:59.000] 	FileName: /a/b/jquery.js ProjectRootPath: undefined
 Info 11   [00:01:00.000] 		Projects: /dev/null/inferredProject1*
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

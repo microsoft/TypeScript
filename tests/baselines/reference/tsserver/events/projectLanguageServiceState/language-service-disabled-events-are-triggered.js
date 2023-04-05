@@ -13,12 +13,12 @@ let x = 1;
 
 Info 1    [00:00:12.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/app.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Info 2    [00:00:13.000] Search path: /a
 Info 3    [00:00:14.000] For info: /a/app.js :: Config file name: /a/jsconfig.json
@@ -93,7 +93,9 @@ Info 23   [00:00:43.000] FileWatcher:: Triggered with /a/jsconfig.json 1:: Watch
 Info 24   [00:00:44.000] Scheduled: /a/jsconfig.json
 Info 25   [00:00:45.000] Scheduled: *ensureProjectForOpenFiles*
 Info 26   [00:00:46.000] Elapsed:: *ms FileWatcher:: Triggered with /a/jsconfig.json 1:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/jsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/jsconfig.json]
 {"exclude":["largefile.js"]}
 
@@ -225,7 +227,9 @@ Info 61   [00:01:56.000] Finishing updateGraphWorker: Project: /a/jsconfig.json 
 Info 62   [00:01:57.000] Same program as before
 Info 63   [00:01:58.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/a/jsconfig.json","configFile":"/a/jsconfig.json","diagnostics":[{"text":"File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'","code":6053,"category":"error"},{"text":"Cannot find global type 'Array'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Boolean'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Function'.","code":2318,"category":"error"},{"text":"Cannot find global type 'IArguments'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Number'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Object'.","code":2318,"category":"error"},{"text":"Cannot find global type 'RegExp'.","code":2318,"category":"error"},{"text":"Cannot find global type 'String'.","code":2318,"category":"error"}]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 2
+7: /a/jsconfig.json
+8: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/lib/lib.d.ts:

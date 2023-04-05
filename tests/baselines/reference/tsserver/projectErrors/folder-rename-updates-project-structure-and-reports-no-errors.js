@@ -111,25 +111,29 @@ Info 24   [00:00:51.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 25   [00:00:52.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 26   [00:00:53.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 27   [00:00:54.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 28   [00:00:55.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 29   [00:00:57.000] DirectoryWatcher:: Triggered with /a/b/projects/myproject/foo :: WatchInfo: /a/b/projects/myproject 1 undefined Config: /a/b/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 30   [00:00:58.000] Scheduled: /a/b/projects/myproject/tsconfig.json
@@ -152,7 +156,9 @@ Info 46   [00:01:16.000] DirectoryWatcher:: Triggered with /a/b/projects/myproje
 Info 47   [00:01:17.000] Scheduled: /a/b/projects/myproject/tsconfig.json, Cancelled earlier one
 Info 48   [00:01:18.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 49   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/myproject/foo2/foo.ts :: WatchInfo: /a/b/projects/myproject 1 undefined Config: /a/b/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+10: /a/b/projects/myproject/tsconfig.json
+11: *ensureProjectForOpenFiles*
 //// [/a/b/projects/myproject/foo2/foo.ts]
 declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 
@@ -212,7 +218,8 @@ Info 60   [00:01:41.000] 		Projects: /a/b/projects/myproject/tsconfig.json
 Info 60   [00:01:42.000] got projects updated in background, updating diagnostics for /a/b/projects/myproject/bar/app.ts
 Info 61   [00:01:43.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/projects/myproject/bar/app.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+12: checkOne
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -230,11 +237,12 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+12: checkOne
 
 Info 62   [00:01:44.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -256,22 +264,26 @@ Info 64   [00:01:46.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+13: checkOne
 
 Info 65   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: semanticCheck
 
 Info 66   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+5: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+5: suggestionCheck
 
 Info 67   [00:01:49.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 68   [00:01:50.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

@@ -227,10 +227,12 @@ Info 49   [00:01:35.000] response:
     }
 After request
 
-Checking timeout queue length: 3
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
+3: checkOne
 
-Before running timeout callback3
-
+Invoking Timeout callback:: timeoutId:: 3:: checkOne
 Info 50   [00:01:36.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 51   [00:01:37.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 52   [00:01:38.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -258,7 +260,9 @@ Info 58   [00:01:44.000] 	Files (4)
 Info 59   [00:01:45.000] -----------------------------------------------
 Info 60   [00:01:46.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
-After running timeout callback3
+After running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -292,36 +296,46 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 61   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 62   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
-Checking timeout queue length: 3
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
+4: checkOne
 
-Before running timeout callback4
-
+Invoking Timeout callback:: timeoutId:: 4:: checkOne
 Info 63   [00:01:49.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
-After running timeout callback4
+After running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 64   [00:01:50.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+4: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
 
 Info 65   [00:01:51.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 Info 66   [00:01:52.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

@@ -66,6 +66,21 @@ Input::
 
 //// [/a/username/project/src/file1.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: pollPollingIntervalQueue
+2: timerToUpdateProgram
+After running Timeout callback:: count: 3
+3: timerToUpdateProgram
+4: pollLowPollingIntervalQueue
+5: pollPollingIntervalQueue
+Before running Timeout callback:: count: 3
+3: timerToUpdateProgram
+4: pollLowPollingIntervalQueue
+5: pollPollingIntervalQueue
+After running Timeout callback:: count: 3
+6: timerToUpdateProgram
+7: pollLowPollingIntervalQueue
+8: pollPollingIntervalQueue
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...

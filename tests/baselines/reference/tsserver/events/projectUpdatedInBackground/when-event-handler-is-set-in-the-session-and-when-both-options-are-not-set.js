@@ -101,7 +101,9 @@ Info 22   [00:00:43.000] DirectoryWatcher:: Triggered with /a/b.ts :: WatchInfo:
 Info 23   [00:00:44.000] Scheduled: /a/tsconfig.json
 Info 24   [00:00:45.000] Scheduled: *ensureProjectForOpenFiles*
 Info 25   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b.ts :: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /a/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/a/b.ts]
 export let y = 1
 
@@ -144,7 +146,7 @@ Info 36   [00:01:07.000] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info 36   [00:01:08.000] 		Projects: /a/tsconfig.json
 Info 36   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/a.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/node_modules/@types:
@@ -166,7 +168,9 @@ Info 37   [00:01:13.000] FileWatcher:: Triggered with /a/b.ts 1:: WatchInfo: /a/
 Info 38   [00:01:14.000] Scheduled: /a/tsconfig.json
 Info 39   [00:01:15.000] Scheduled: *ensureProjectForOpenFiles*
 Info 40   [00:01:16.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b.ts 1:: WatchInfo: /a/b.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+3: /a/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/a/b.ts]
 export let x = 11
 
@@ -200,4 +204,4 @@ Info 50   [00:01:36.000] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info 50   [00:01:37.000] 		Projects: /a/tsconfig.json
 Info 50   [00:01:38.000] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/a.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0

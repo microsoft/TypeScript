@@ -103,6 +103,10 @@ FsWatchesRecursive::
 /a/b/node_modules/@types: *new*
   {}
 
+Before running Timeout callback:: count: 2
+14: timerToUpdateProgram
+16: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 sysLog:: /a/b/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
 sysLog:: /a/b/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher

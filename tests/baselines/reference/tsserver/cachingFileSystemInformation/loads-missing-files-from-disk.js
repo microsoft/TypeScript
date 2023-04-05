@@ -42,7 +42,8 @@ Info 20   [00:00:33.000] readDirectory:: []
 Info 21   [00:00:36.000] DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 22   [00:00:37.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 23   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/c/bar.d.ts]
 export var y = 1
 
@@ -60,7 +61,9 @@ FsWatches::
 Info 24   [00:00:39.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 25   [00:00:40.000] Scheduled: /dev/null/inferredProject1*
 Info 26   [00:00:41.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+2: /dev/null/inferredProject1*
+3: *ensureProjectForOpenFiles*
 
 Info 27   [00:00:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 28   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /c/bar.d.ts 500 undefined WatchType: Closed Script info

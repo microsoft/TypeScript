@@ -120,8 +120,6 @@ Info 15   [00:01:06.000] response:
     }
 After request
 
-Checking timeout queue length: 0
-
 Before request
 
 Info 16   [00:01:07.000] request:
@@ -142,16 +140,18 @@ Info 17   [00:01:08.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 18   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a.js","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 19   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a.js","diagnostics":[]}}
 Info 20   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

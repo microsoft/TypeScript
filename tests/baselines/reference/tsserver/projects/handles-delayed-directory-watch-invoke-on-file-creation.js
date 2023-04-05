@@ -155,9 +155,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0
 
 Info 28   [00:01:08.000] DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info 29   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
@@ -169,7 +169,10 @@ Info 34   [00:01:17.000] DirectoryWatcher:: Triggered with /users/username/proje
 Info 35   [00:01:18.000] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info 36   [00:01:19.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 37   [00:01:20.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 2
+Timeout callback:: count: 2
+3: /users/username/projects/project/tsconfig.json
+4: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/users/username/projects/project/a.ts]
 export const a = 10;
 
@@ -201,7 +204,10 @@ Info 41   [00:01:30.000] response:
     }
 After request
 
-Checking timeout queue length: 2
+Timeout callback:: count: 2
+5: /users/username/projects/project/tsconfig.json
+6: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 
 Before request
 
@@ -249,7 +255,9 @@ Info 50   [00:01:47.000] response:
     }
 After request
 
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+5: /users/username/projects/project/tsconfig.json
+6: *ensureProjectForOpenFiles*
 
 Info 51   [00:01:48.000] Running: /users/username/projects/project/tsconfig.json
 Info 52   [00:01:49.000] Running: *ensureProjectForOpenFiles*
@@ -276,7 +284,7 @@ Info 55   [00:02:07.000] 		Projects: /users/username/projects/project/tsconfig.j
 Info 55   [00:02:08.000] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/a.ts
 Info 56   [00:02:09.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/project/b.ts","/users/username/projects/project/a.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -304,7 +312,10 @@ Info 60   [00:02:19.000] response:
     }
 After request
 
-Checking timeout queue length: 2
+Timeout callback:: count: 2
+7: /users/username/projects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 
 Before request
 
@@ -401,7 +412,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+7: /users/username/projects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
 
 Info 84   [00:02:54.000] Running: /users/username/projects/project/tsconfig.json
 Info 85   [00:02:55.000] Running: *ensureProjectForOpenFiles*
@@ -436,7 +449,7 @@ Info 88   [00:03:19.000] 		Projects: /dev/null/inferredProject1*
 Info 88   [00:03:20.000] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/sub/a.ts
 Info 89   [00:03:21.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/project/b.ts","/users/username/projects/project/sub/a.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 90   [00:03:23.000] DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info 91   [00:03:24.000] Scheduled: /users/username/projects/project/tsconfig.json
@@ -450,7 +463,10 @@ Info 98   [00:03:35.000] DirectoryWatcher:: Triggered with /users/username/proje
 Info 99   [00:03:36.000] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info 100  [00:03:37.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 101  [00:03:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Checking timeout queue length: 2
+Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
+Immedidate callback:: count: 0
 //// [/users/username/projects/project/sub/a.ts]
 export const a = 10;
 
@@ -477,10 +493,12 @@ Info 103  [00:03:40.000] response:
     }
 After request
 
-Checking timeout queue length: 3
+Before running Timeout callback:: count: 3
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
+15: checkOne
 
-Before running timeout callback15
-
+Invoking Timeout callback:: timeoutId:: 15:: checkOne
 Info 104  [00:03:41.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 105  [00:03:42.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 106  [00:03:43.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -504,7 +522,9 @@ Info 111  [00:03:48.000] 	Files (3)
 Info 112  [00:03:49.000] -----------------------------------------------
 Info 113  [00:03:50.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
-After running timeout callback15
+After running Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
@@ -532,36 +552,46 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 114  [00:03:51.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 115  [00:03:52.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
-Checking timeout queue length: 3
+Before running Timeout callback:: count: 3
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
+16: checkOne
 
-Before running timeout callback16
-
+Invoking Timeout callback:: timeoutId:: 16:: checkOne
 Info 116  [00:03:53.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
-After running timeout callback16
+After running Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 117  [00:03:54.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+4: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
 
 Info 118  [00:03:55.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
 Info 119  [00:03:56.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

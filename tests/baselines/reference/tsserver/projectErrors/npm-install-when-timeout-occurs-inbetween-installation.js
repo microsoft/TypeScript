@@ -125,25 +125,29 @@ Info 27   [00:00:56.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+1: checkOne
 
 Info 28   [00:00:57.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 29   [00:00:58.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 30   [00:00:59.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 31   [00:01:00.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 32   [00:01:03.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 33   [00:01:04.000] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
@@ -177,7 +181,10 @@ Info 60   [00:01:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 61   [00:01:40.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/core-js-db53158d :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 62   [00:01:41.000] Project: /user/username/projects/myproject/tsconfig.json Detected ignored path: /user/username/projects/myproject/node_modules/.staging/core-js-db53158d
 Info 63   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/core-js-db53158d :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+7: /user/username/projects/myproject/tsconfig.json
+8: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -204,9 +211,13 @@ FsWatchesRecursive::
 Info 64   [00:01:43.000] Running: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 Info 65   [00:01:44.000] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info 66   [00:01:45.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 2
+9: /user/username/projects/myproject/tsconfig.json
+10: *ensureProjectForOpenFiles*
 
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+9: /user/username/projects/myproject/tsconfig.json
+10: *ensureProjectForOpenFiles*
 
 Info 67   [00:01:46.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 68   [00:01:47.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -237,7 +248,8 @@ Info 76   [00:02:06.000] 		Projects: /user/username/projects/myproject/tsconfig.
 Info 76   [00:02:07.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
 Info 77   [00:02:08.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/main.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 1
+11: checkOne
 
 Before request
 
@@ -259,25 +271,29 @@ Info 79   [00:02:10.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+12: checkOne
 
 Info 80   [00:02:11.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 81   [00:02:12.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+4: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
 
 Info 82   [00:02:13.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 83   [00:02:14.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 84   [00:02:17.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 85   [00:02:18.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -314,7 +330,7 @@ Info 115  [00:03:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 116  [00:03:01.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 117  [00:03:02.000] Project: /user/username/projects/myproject/tsconfig.json Detected ignored path: /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts
 Info 118  [00:03:03.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts]
 export const x = 10;
 
@@ -322,7 +338,11 @@ export const x = 10;
 export const y = 10;
 
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -344,32 +364,40 @@ Info 120  [00:03:05.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+13: checkOne
 
 Info 121  [00:03:06.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+5: semanticCheck
 
 Info 122  [00:03:07.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+6: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+6: suggestionCheck
 
 Info 123  [00:03:08.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 124  [00:03:09.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/node_modules/@angular/core/index.d.ts]
 export const y = 10;
 
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -391,25 +419,29 @@ Info 126  [00:03:17.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+14: checkOne
 
 Info 127  [00:03:18.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+7: semanticCheck
 
 Info 128  [00:03:19.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":36},"text":"Cannot find module '@angular/core' or its corresponding type declarations.","code":2307,"category":"error"}]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+8: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+8: suggestionCheck
 
 Info 129  [00:03:20.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 130  [00:03:21.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
 Info 131  [00:03:23.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 132  [00:03:24.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -468,16 +500,23 @@ Info 184  [00:04:26.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 185  [00:04:27.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 186  [00:04:28.000] Scheduled: *ensureProjectForOpenFiles*
 Info 187  [00:04:29.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+15: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+16: /user/username/projects/myproject/tsconfig.json
+17: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts] deleted
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts] deleted
 
 Info 188  [00:04:30.000] Running: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 Info 189  [00:04:31.000] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info 190  [00:04:32.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 2
+18: /user/username/projects/myproject/tsconfig.json
+19: *ensureProjectForOpenFiles*
 
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+18: /user/username/projects/myproject/tsconfig.json
+19: *ensureProjectForOpenFiles*
 
 Info 191  [00:04:33.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 192  [00:04:34.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -519,7 +558,8 @@ Info 202  [00:04:55.000] 		Projects: /user/username/projects/myproject/tsconfig.
 Info 202  [00:04:56.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
 Info 203  [00:04:57.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/main.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 1
+20: checkOne
 
 Before request
 
@@ -541,22 +581,26 @@ Info 205  [00:04:59.000] response:
     }
 After request
 
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+21: checkOne
 
 Info 206  [00:05:00.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+9: semanticCheck
 
 Info 207  [00:05:01.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+10: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+10: suggestionCheck
 
 Info 208  [00:05:02.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 209  [00:05:03.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

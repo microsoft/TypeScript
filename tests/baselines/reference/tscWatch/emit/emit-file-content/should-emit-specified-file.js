@@ -109,6 +109,9 @@ Input::
 export function Foo() { return 10; }export function foo2() { return 2; }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
@@ -158,6 +161,9 @@ Input::
 export function Foo() { return 10; }export function foo2() { return 2; }export function fooN() { return 2; }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...

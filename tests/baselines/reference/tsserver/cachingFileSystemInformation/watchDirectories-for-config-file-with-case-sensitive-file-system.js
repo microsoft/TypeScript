@@ -99,7 +99,9 @@ Info 19   [00:01:00.000] DirectoryWatcher:: Triggered with /Users/someuser/work/
 Info 20   [00:01:01.000] Scheduled: /Users/someuser/work/applications/frontend/tsconfig.json
 Info 21   [00:01:02.000] Scheduled: *ensureProjectForOpenFiles*
 Info 22   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /Users/someuser/work/applications/frontend/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts]
 export class Cookie { }
 
@@ -161,7 +163,7 @@ Info 33   [00:01:22.000] -----------------------------------------------
 Info 33   [00:01:23.000] Open files: 
 Info 33   [00:01:24.000] 	FileName: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts ProjectRootPath: undefined
 Info 33   [00:01:25.000] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /Users/someuser/work/applications/frontend/types:

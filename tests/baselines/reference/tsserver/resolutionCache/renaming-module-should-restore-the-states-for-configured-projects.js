@@ -114,7 +114,9 @@ Info 30   [00:00:52.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :
 Info 31   [00:00:53.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 32   [00:00:54.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 33   [00:00:55.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /a/b/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export function bar() { };
 
@@ -175,7 +177,7 @@ Info 48   [00:01:18.000] -----------------------------------------------
 Info 48   [00:01:19.000] Open files: 
 Info 48   [00:01:20.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 48   [00:01:21.000] 		Projects: /a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -248,7 +250,10 @@ Info 65   [00:01:42.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts ::
 Info 66   [00:01:43.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 67   [00:01:44.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 68   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+12: /a/b/tsconfig.jsonFailedLookupInvalidation
+13: /a/b/tsconfig.json
+14: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -279,7 +284,9 @@ FsWatchesRecursive::
 Info 69   [00:01:46.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 70   [00:01:47.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 71   [00:01:48.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After running timeout callbacks
+After running Timeout callback:: count: 2
+15: /a/b/tsconfig.json
+16: *ensureProjectForOpenFiles*
 
 Before request
 

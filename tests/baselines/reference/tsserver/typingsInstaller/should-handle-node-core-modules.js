@@ -146,7 +146,9 @@ Info 13   [00:01:18.000] Scheduled: /dev/null/inferredProject1*
 Info 14   [00:01:19.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:20.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/node@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 15   [00:01:21.000] Running: /dev/null/inferredProject1*
 Info 16   [00:01:22.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -183,9 +185,13 @@ TI:: [00:01:37.000] Sending response:
 Info 23   [00:01:38.000] Scheduled: /dev/null/inferredProject1*
 Info 24   [00:01:39.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [00:01:40.000] No new typings were requested as a result of typings discovery
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 2
+3: /dev/null/inferredProject1*
+4: *ensureProjectForOpenFiles*
 
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /dev/null/inferredProject1*
+4: *ensureProjectForOpenFiles*
 
 Info 25   [00:01:41.000] Running: /dev/null/inferredProject1*
 Info 26   [00:01:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -237,9 +243,10 @@ Info 36   [00:02:12.000] -----------------------------------------------
 Info 36   [00:02:13.000] Open files: 
 Info 36   [00:02:14.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 36   [00:02:15.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 
 Info 36   [00:02:16.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 37   [00:02:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -264,4 +271,5 @@ TI:: [00:02:31.000] 's tream':: 's tream' is in missingTypingsSet - skipping...
 TI:: [00:02:32.000] All typings are known to be missing or invalid - no need to install more typings
 TI:: [00:02:33.000] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["bar","s tream"],"kind":"action::set"}
-Checking timeout queue length: 0
+Timeout callback:: count: 0
+Immedidate callback:: count: 0

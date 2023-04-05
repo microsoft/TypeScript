@@ -267,7 +267,9 @@ TI:: [00:02:12.000] Sending response:
 Info 20   [00:02:13.000] Scheduled: /a/app/test2.csproj
 TI:: [00:02:14.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":2,"projectName":"/a/app/test2.csproj","packagesToInstall":["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /a/app/test1.csproj
+2: /a/app/test2.csproj
 
 Info 21   [00:02:15.000] Running: /a/app/test1.csproj
 Info 22   [00:02:16.000] Starting updateGraphWorker: Project: /a/app/test1.csproj
@@ -334,4 +336,4 @@ TI:: [00:02:45.000] Finished typings discovery: {"cachedTypingPaths":["/a/data/n
 TI:: [00:02:46.000] Sending response:
     {"projectName":"/a/app/test2.csproj","typeAcquisition":{"include":["grunt","gulp"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
 TI:: [00:02:47.000] No new typings were requested as a result of typings discovery
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

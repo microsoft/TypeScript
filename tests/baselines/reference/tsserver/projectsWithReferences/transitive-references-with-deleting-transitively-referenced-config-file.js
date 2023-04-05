@@ -152,7 +152,10 @@ Info 34   [00:01:20.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 35   [00:01:21.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info 36   [00:01:22.000] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info 37   [00:01:23.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/c/tsconfig.json
+2: *ensureProjectForOpenFiles*
+3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/a/tsconfig.json] deleted
 
 PolledWatches::
@@ -224,7 +227,7 @@ Info 48   [00:01:42.000] -----------------------------------------------
 Info 48   [00:01:43.000] Open files: 
 Info 48   [00:01:44.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 48   [00:01:45.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 0
 
 Info 48   [00:01:48.000] FileWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info 49   [00:01:49.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
@@ -233,7 +236,10 @@ Info 51   [00:01:51.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 52   [00:01:52.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info 53   [00:01:53.000] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info 54   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+4: /user/username/projects/myproject/c/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {"compilerOptions":{"composite":true},"files":["index.ts"]}
 
@@ -276,4 +282,4 @@ Info 65   [00:02:13.000] -----------------------------------------------
 Info 65   [00:02:14.000] Open files: 
 Info 65   [00:02:15.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 65   [00:02:16.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 0

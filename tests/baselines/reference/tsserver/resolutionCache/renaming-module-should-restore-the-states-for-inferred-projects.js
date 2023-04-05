@@ -83,7 +83,9 @@ Info 17   [00:00:35.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500
 Info 18   [00:00:36.000] Scheduled: /dev/null/inferredProject1*
 Info 19   [00:00:37.000] Scheduled: *ensureProjectForOpenFiles*
 Info 20   [00:00:38.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export function bar() { };
 
@@ -132,7 +134,7 @@ Info 34   [00:01:02.000] -----------------------------------------------
 Info 34   [00:01:03.000] Open files: 
 Info 34   [00:01:04.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 34   [00:01:05.000] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -184,7 +186,8 @@ Info 38   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/mo
 Info 39   [00:01:14.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 40   [00:01:15.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info 41   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+4: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -193,7 +196,9 @@ export function bar() { };
 Info 42   [00:01:17.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 43   [00:01:18.000] Scheduled: /dev/null/inferredProject1*
 Info 44   [00:01:19.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+5: /dev/null/inferredProject1*
+6: *ensureProjectForOpenFiles*
 
 Before request
 
@@ -217,7 +222,9 @@ Info 46   [00:01:21.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+5: /dev/null/inferredProject1*
+6: *ensureProjectForOpenFiles*
 
 Info 47   [00:01:22.000] Running: /dev/null/inferredProject1*
 Info 48   [00:01:23.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -256,7 +263,7 @@ Info 61   [00:01:44.000] -----------------------------------------------
 Info 61   [00:01:45.000] Open files: 
 Info 61   [00:01:46.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 61   [00:01:47.000] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:

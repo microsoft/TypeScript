@@ -73,7 +73,9 @@ Info 16   [00:00:31.000] FileWatcher:: Triggered with /tsconfig.json 1:: WatchIn
 Info 17   [00:00:32.000] Scheduled: /tsconfig.json
 Info 18   [00:00:33.000] Scheduled: *ensureProjectForOpenFiles*
 Info 19   [00:00:34.000] Elapsed:: *ms FileWatcher:: Triggered with /tsconfig.json 1:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/tsconfig.json]
 { "compilerOptions": { "allowUnusedLabels": false } }
 
@@ -113,7 +115,7 @@ Info 31   [00:00:54.000] -----------------------------------------------
 Info 31   [00:00:55.000] Open files: 
 Info 31   [00:00:56.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 31   [00:00:57.000] 		Projects: /tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

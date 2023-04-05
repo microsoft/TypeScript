@@ -186,44 +186,58 @@ Info 37   [00:01:20.000] response:
     }
 After request
 
-Checking timeout queue length: 3
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
+3: checkOne
 
-Before running timeout callback3
-
+Invoking Timeout callback:: timeoutId:: 3:: checkOne
 Info 38   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
-After running timeout callback3
+After running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+1: semanticCheck
 
 Info 39   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+2: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+2: suggestionCheck
 
 Info 40   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0
 
-Checking timeout queue length: 3
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
+4: checkOne
 
-Before running timeout callback4
-
+Invoking Timeout callback:: timeoutId:: 4:: checkOne
 Info 41   [00:01:24.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
-After running timeout callback4
+After running Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
 Info 42   [00:01:25.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 1
+4: suggestionCheck
 
-Before running immediate callbacks and checking length (1)
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
 
 Info 43   [00:01:26.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 Info 44   [00:01:27.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Before running immediate callbacks and checking length (1)
+After running Immedidate callback:: count: 0

@@ -138,7 +138,9 @@ Info 13   [00:01:25.000] Scheduled: /dev/null/inferredProject1*
 Info 14   [00:01:26.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:27.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/commander@tsFakeMajor.Minor","@types/node@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 15   [00:01:28.000] Running: /dev/null/inferredProject1*
 Info 16   [00:01:29.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -176,4 +178,6 @@ TI:: [00:01:42.000] Sending response:
 Info 21   [00:01:43.000] Scheduled: /dev/null/inferredProject1*
 Info 22   [00:01:44.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [00:01:45.000] No new typings were requested as a result of typings discovery
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 2
+3: /dev/null/inferredProject1*
+4: *ensureProjectForOpenFiles*

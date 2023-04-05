@@ -103,7 +103,10 @@ Info 34   [00:01:23.000] Scheduled: /user/username/projects/myproject/a/tsconfig
 Info 35   [00:01:24.000] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info 36   [00:01:25.000] Scheduled: *ensureProjectForOpenFiles*
 Info 37   [00:01:26.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/extended/alpha.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/alpha.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Extended config file
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+1: /user/username/projects/myproject/a/tsconfig.json
+2: /user/username/projects/myproject/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/extended/alpha.tsconfig.json]
 {"compilerOptions":{"strict":true}}
 
@@ -193,13 +196,15 @@ Info 57   [00:02:04.000] 	FileName: /user/username/projects/myproject/a/a.ts Pro
 Info 57   [00:02:05.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info 57   [00:02:06.000] 	FileName: /user/username/projects/myproject/b/b.ts ProjectRootPath: undefined
 Info 57   [00:02:07.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 0
 
 Info 57   [00:02:11.000] FileWatcher:: Triggered with /user/username/projects/myproject/extended/bravo.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/bravo.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Extended config file
 Info 58   [00:02:12.000] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info 59   [00:02:13.000] Scheduled: *ensureProjectForOpenFiles*
 Info 60   [00:02:14.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/extended/bravo.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/bravo.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Extended config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+4: /user/username/projects/myproject/b/tsconfig.json
+5: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/extended/bravo.tsconfig.json]
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
 
@@ -251,13 +256,15 @@ Info 72   [00:02:44.000] 	FileName: /user/username/projects/myproject/a/a.ts Pro
 Info 72   [00:02:45.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info 72   [00:02:46.000] 	FileName: /user/username/projects/myproject/b/b.ts ProjectRootPath: undefined
 Info 72   [00:02:47.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 72   [00:02:51.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Config file
 Info 73   [00:02:52.000] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info 74   [00:02:53.000] Scheduled: *ensureProjectForOpenFiles*
 Info 75   [00:02:54.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+6: /user/username/projects/myproject/b/tsconfig.json
+7: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/b/tsconfig.json]
 {"extends":"../extended/alpha.tsconfig.json"}
 
@@ -312,7 +319,7 @@ Info 90   [00:03:27.000] 	FileName: /user/username/projects/myproject/a/a.ts Pro
 Info 90   [00:03:28.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info 90   [00:03:29.000] 	FileName: /user/username/projects/myproject/b/b.ts ProjectRootPath: undefined
 Info 90   [00:03:30.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -345,7 +352,10 @@ Info 91   [00:03:35.000] Scheduled: /user/username/projects/myproject/a/tsconfig
 Info 92   [00:03:36.000] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info 93   [00:03:37.000] Scheduled: *ensureProjectForOpenFiles*
 Info 94   [00:03:38.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/extended/alpha.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/alpha.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Extended config file
-Before checking timeout queue length (3) and running
+Before running Timeout callback:: count: 3
+8: /user/username/projects/myproject/a/tsconfig.json
+9: /user/username/projects/myproject/b/tsconfig.json
+10: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/extended/alpha.tsconfig.json]
 {}
 
@@ -413,4 +423,4 @@ Info 114  [00:04:16.000] 	FileName: /user/username/projects/myproject/a/a.ts Pro
 Info 114  [00:04:17.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info 114  [00:04:18.000] 	FileName: /user/username/projects/myproject/b/b.ts ProjectRootPath: undefined
 Info 114  [00:04:19.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
-After checking timeout queue length (3) and running
+After running Timeout callback:: count: 0

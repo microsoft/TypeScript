@@ -121,7 +121,9 @@ Info 17   [00:00:38.000] FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 50
 Info 18   [00:00:39.000] Scheduled: /dev/null/inferredProject1*
 Info 19   [00:00:40.000] Scheduled: *ensureProjectForOpenFiles*
 Info 20   [00:00:41.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 //// [/a/b/commonFile2.ts]
 let y = 1
 
@@ -174,7 +176,7 @@ Info 31   [00:01:00.000] -----------------------------------------------
 Info 31   [00:01:01.000] Open files: 
 Info 31   [00:01:02.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 31   [00:01:03.000] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/node_modules/@types:

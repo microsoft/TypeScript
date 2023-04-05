@@ -97,7 +97,9 @@ Info 35   [00:01:15.000] Search path: /user/username/projects/myproject
 Info 36   [00:01:16.000] For info: /user/username/projects/myproject/commonFile2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 37   [00:01:17.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 38   [00:01:18.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json]
 {
                     "files": ["commonFile1.ts"]
@@ -187,7 +189,7 @@ Info 57   [00:02:01.000] 	FileName: /user/username/projects/myproject/commonFile
 Info 57   [00:02:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 57   [00:02:03.000] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info 57   [00:02:04.000] 		Projects: /dev/null/inferredProject2*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0
 
 Info 57   [00:02:06.000] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 58   [00:02:07.000] `remove Project::
@@ -211,7 +213,8 @@ Info 66   [00:02:15.000] Search path: /user/username/projects/myproject
 Info 67   [00:02:16.000] For info: /user/username/projects/myproject/commonFile2.ts :: No config files found.
 Info 68   [00:02:17.000] Scheduled: *ensureProjectForOpenFiles*
 Info 69   [00:02:18.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before checking timeout queue length (1) and running
+Before running Timeout callback:: count: 1
+5: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json] deleted
 
 Info 70   [00:02:19.500] Running: *ensureProjectForOpenFiles*
@@ -257,4 +260,4 @@ Info 78   [00:02:45.500] 	FileName: /user/username/projects/myproject/commonFile
 Info 78   [00:02:46.500] 		Projects: /dev/null/inferredProject1*
 Info 78   [00:02:47.500] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info 78   [00:02:48.500] 		Projects: /dev/null/inferredProject2*
-After checking timeout queue length (1) and running
+After running Timeout callback:: count: 0

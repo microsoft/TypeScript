@@ -121,7 +121,10 @@ Info 55   [00:01:25.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 56   [00:01:26.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 57   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 58   [00:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Before running timeout callbacks
+Before running Timeout callback:: count: 3
+10: /a/b/tsconfig.jsonFailedLookupInvalidation
+13: /a/b/tsconfig.json
+14: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -171,7 +174,9 @@ FsWatchesRecursive::
 Info 59   [00:01:30.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 60   [00:01:31.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 61   [00:01:32.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-After running timeout callbacks
+After running Timeout callback:: count: 2
+15: /a/b/tsconfig.json
+16: *ensureProjectForOpenFiles*
 
 Before request
 
@@ -195,7 +200,9 @@ Info 63   [00:01:34.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+15: /a/b/tsconfig.json
+16: *ensureProjectForOpenFiles*
 
 Info 64   [00:01:35.000] Running: /a/b/tsconfig.json
 Info 65   [00:01:36.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
@@ -250,7 +257,7 @@ Info 78   [00:02:00.000] 		Projects: /a/b/tsconfig.json
 Info 78   [00:02:01.000] got projects updated in background, updating diagnostics for /a/b/file1Consumer1.ts
 Info 79   [00:02:02.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/modulefile1:
@@ -282,7 +289,9 @@ Info 80   [00:02:06.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: Wa
 Info 81   [00:02:07.000] Scheduled: /a/b/tsconfig.json
 Info 82   [00:02:08.000] Scheduled: *ensureProjectForOpenFiles*
 Info 83   [00:02:09.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+17: /a/b/tsconfig.json
+18: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
@@ -320,7 +329,7 @@ Info 93   [00:02:30.000] 		Projects: /a/b/tsconfig.json
 Info 93   [00:02:31.000] got projects updated in background, updating diagnostics for /a/b/file1Consumer1.ts
 Info 94   [00:02:32.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -344,15 +353,17 @@ Info 96   [00:02:34.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Info 97   [00:02:38.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 98   [00:02:39.000] Scheduled: /a/b/tsconfig.json
 Info 99   [00:02:40.000] Scheduled: *ensureProjectForOpenFiles*
 Info 100  [00:02:41.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+19: /a/b/tsconfig.json
+20: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export var T: number;export var T2: string;export function Foo() { };
 
@@ -394,7 +405,7 @@ Info 114  [00:03:06.000] 		Projects: /a/b/tsconfig.json
 Info 114  [00:03:07.000] got projects updated in background, updating diagnostics for /a/b/file1Consumer1.ts
 Info 115  [00:03:08.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -452,7 +463,9 @@ Info 118  [00:03:14.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: Wa
 Info 119  [00:03:15.000] Scheduled: /a/b/tsconfig.json
 Info 120  [00:03:16.000] Scheduled: *ensureProjectForOpenFiles*
 Info 121  [00:03:17.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+21: /a/b/tsconfig.json
+22: *ensureProjectForOpenFiles*
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
@@ -490,4 +503,4 @@ Info 131  [00:03:38.000] 		Projects: /a/b/tsconfig.json
 Info 131  [00:03:39.000] got projects updated in background, updating diagnostics for /a/b/file1Consumer1.ts
 Info 132  [00:03:40.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 0

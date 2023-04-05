@@ -1,6 +1,7 @@
 import "./unittests/asserts";
 import "./unittests/base64";
 import "./unittests/builder";
+import "./unittests/canWatch";
 import "./unittests/comments";
 import "./unittests/compilerCore";
 import "./unittests/convertToBase64";

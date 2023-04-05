@@ -103,7 +103,9 @@ Info 37   [00:01:03.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :
 Info 38   [00:01:04.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 39   [00:01:05.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 40   [00:01:06.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+7: /a/b/tsconfig.json
+8: *ensureProjectForOpenFiles*
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -173,7 +175,8 @@ Info 52   [00:01:29.000] 		Projects: /a/b/tsconfig.json
 Info 52   [00:01:30.000] got projects updated in background, updating diagnostics for /a/b/referenceFile1.ts
 Info 53   [00:01:31.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/referenceFile1.ts"]}}
-After running timeout callbacks
+After running Timeout callback:: count: 1
+9: checkOne
 
 PolledWatches::
 /a/b/node_modules/@types:

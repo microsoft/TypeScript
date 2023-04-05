@@ -9,6 +9,7 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
+    openFilesForSession,
 } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
@@ -35,16 +36,11 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
             filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-        session.executeCommand({
-            seq: 0,
-            type: "request",
-            command: "open",
-            arguments: { file: f1.path }
-        } as ts.server.protocol.OpenRequest);
+        openFilesForSession([f1], session);
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
 
         host.writeFile(configWithExclude.path, configWithExclude.content);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
         baselineTsserverLogs("events/projectLanguageServiceState", "language service disabled events are triggered", session);
     });

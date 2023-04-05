@@ -155,7 +155,9 @@ Info 37   [00:01:24.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 38   [00:01:25.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 39   [00:01:26.000] Scheduled: *ensureProjectForOpenFiles*
 Info 40   [00:01:27.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/index.ts 1:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/myproject/c/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/b/index.ts]
 import {A} from '@ref/a';
 export const b = new A();export function gFoo() { }
@@ -224,4 +226,4 @@ Info 50   [00:01:45.000] -----------------------------------------------
 Info 50   [00:01:46.000] Open files: 
 Info 50   [00:01:47.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 50   [00:01:48.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

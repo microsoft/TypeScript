@@ -96,6 +96,11 @@ export function bar() { };
 //// [/a/b/moduleFile.ts] deleted
 //// [/a/b/moduleFile.js] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
+Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
@@ -172,6 +177,14 @@ export function bar() { };
 
 //// [/a/b/moduleFile1.ts] deleted
 
+Before running Timeout callback:: count: 2
+7: timerToInvalidateFailedLookupResolutions
+8: timerToUpdateProgram
+After running Timeout callback:: count: 1
+9: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...

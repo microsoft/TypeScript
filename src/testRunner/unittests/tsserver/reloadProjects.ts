@@ -6,10 +6,13 @@ import {
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
-    checkNumberOfProjects,
-    checkProjectActualFiles,
-    createProjectService,
-    TestProjectService,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openExternalProjectForSession,
+    openFilesForSession,
+    setCompilerOptionsForInferredProjectsRequestForSession,
+    TestSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: reloadProjects", () => {
@@ -35,117 +38,121 @@ describe("unittests:: tsserver:: reloadProjects", () => {
         content: `export function foo(): string;`
     };
 
-    function verifyFileUpdates(host: TestServerHost, service: TestProjectService, project: ts.server.Project) {
+    function verifyFileUpdates(host: TestServerHost, session: TestSession) {
         // update file
         const updatedText = `${file2.content}
             bar();`;
         host.writeFile(file2.path, updatedText);
-        host.checkTimeoutQueueLength(0);
-        service.reloadProjects();
-        assert.equal(project.getCurrentProgram()?.getSourceFile(file2.path)?.text, updatedText);
+        session.testhost.logTimeoutQueueLength();
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.ReloadProjects
+        });
 
         // delete file
         host.deleteFile(file2.path);
-        host.checkTimeoutQueueLength(0);
-        service.reloadProjects();
-        assert.isUndefined(project.getCurrentProgram()?.getSourceFile(file2.path)?.text);
-        assert.isUndefined(service.getScriptInfo(file2.path));
+        session.testhost.logTimeoutQueueLength();
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.ReloadProjects
+        });
     }
 
     it("configured project", () => {
         const host = createServerHost([configFile, libFile, file1, file2]);
-        const service = createProjectService(host);
-        service.setHostConfiguration({ watchOptions: { excludeFiles: [file2.path] } });
-        service.openClientFile(file1.path);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = service.configuredProjects.get(configFile.path)!;
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, configFile.path]);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+        });
+        openFilesForSession([file1], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
-        service.reloadProjects();
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        assert.strictEqual(service.configuredProjects.get(configFile.path), project);
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, configFile.path, moduleFile.path]);
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.ReloadProjects
+        });
 
-        verifyFileUpdates(host, service, project);
+        verifyFileUpdates(host, session);
+        baselineTsserverLogs("reloadProjects", "configured project", session);
     });
 
     it("inferred project", () => {
         const host = createServerHost([libFile, file1, file2]);
-        const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, });
-        service.setHostConfiguration({ watchOptions: { excludeFiles: [file2.path] } });
+        const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+        });
         const timeoutId = host.getNextTimeoutId();
-        service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["node_modules"] }, "/user/username/projects/myproject");
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            options: { excludeDirectories: ["node_modules"] },
+            projectRootPath: "/user/username/projects/myproject",
+        }, session);
         host.clearTimeout(timeoutId);
-        service.openClientFile(file1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/user/username/projects/myproject");
-        checkNumberOfProjects(service, { inferredProjects: 1 });
-        const project = service.inferredProjects[0];
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]);
+        openFilesForSession([{ file: file1.path, projectRootPath: "/user/username/projects/myproject" }], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
-        service.reloadProjects();
-        checkNumberOfProjects(service, { inferredProjects: 1 });
-        assert.strictEqual(service.inferredProjects[0], project);
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, moduleFile.path]);
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.ReloadProjects
+        });
 
-        verifyFileUpdates(host, service, project);
+        verifyFileUpdates(host, session);
+        baselineTsserverLogs("reloadProjects", "inferred project", session);
     });
 
     it("external project", () => {
         const host = createServerHost([libFile, file1, file2]);
-        const service = createProjectService(host);
-        service.setHostConfiguration({ watchOptions: { excludeFiles: [file2.path] } });
-        service.openExternalProject({
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+        });
+        openExternalProjectForSession({
             projectFileName: `/user/username/projects/myproject/project.sln`,
             options: { excludeDirectories: ["node_modules"] },
             rootFiles: [{ fileName: file1.path }, { fileName: file2.path }]
-        });
-        service.openClientFile(file1.path);
-        checkNumberOfProjects(service, { externalProjects: 1 });
-        const project = service.externalProjects[0];
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]);
+        }, session);
+        openFilesForSession([file1], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
-        service.reloadProjects();
-        checkNumberOfProjects(service, { externalProjects: 1 });
-        assert.strictEqual(service.externalProjects[0], project);
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, moduleFile.path]);
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.ReloadProjects
+        });
 
-        verifyFileUpdates(host, service, project);
+        verifyFileUpdates(host, session);
+        baselineTsserverLogs("reloadProjects", "external project", session);
     });
 
     it("external project with config file", () => {
         const host = createServerHost([libFile, file1, file2, configFile]);
-        const service = createProjectService(host);
-        service.setHostConfiguration({ watchOptions: { excludeFiles: [file2.path] } });
-        service.openExternalProject({
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+        });
+        openExternalProjectForSession({
             projectFileName: `/user/username/projects/myproject/project.sln`,
             options: { excludeDirectories: ["node_modules"] },
             rootFiles: [{ fileName: file1.path }, { fileName: file2.path }, { fileName: configFile.path }]
-        });
-        service.openClientFile(file1.path);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = service.configuredProjects.get(configFile.path)!;
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, configFile.path]);
+        }, session);
+        openFilesForSession([file1], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
 
-        service.reloadProjects();
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        assert.strictEqual(service.configuredProjects.get(configFile.path), project);
-        checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, configFile.path, moduleFile.path]);
+        session.executeCommandSeq({
+            command: ts.server.protocol.CommandTypes.ReloadProjects
+        });
 
-        verifyFileUpdates(host, service, project);
+        verifyFileUpdates(host, session);
+        baselineTsserverLogs("reloadProjects", "external project with config file", session);
     });
 });

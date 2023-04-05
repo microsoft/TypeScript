@@ -139,6 +139,7 @@ Info 38   [00:01:41.000] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info 38   [00:01:42.000] 		Projects: /a/b/tsconfig.json
 Info 38   [00:01:43.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 38   [00:01:44.000] 		Projects: /dev/null/inferredProject2*
+Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Info 38   [00:01:48.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info 39   [00:01:49.000] Scheduled: /a/b/tsconfig.json
 Info 40   [00:01:50.000] Search path: /a/b/src
@@ -146,7 +147,9 @@ Info 41   [00:01:51.000] For info: /a/b/src/file2.ts :: Config file name: /a/b/t
 Info 42   [00:01:52.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 43   [00:01:53.000] Scheduled: *ensureProjectForOpenFiles*
 Info 44   [00:01:54.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+2: /a/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {}
 
@@ -250,7 +253,7 @@ Info 64   [00:02:46.000] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info 64   [00:02:47.000] 		Projects: /a/b/tsconfig.json
 Info 64   [00:02:48.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 64   [00:02:49.000] 		Projects: /dev/null/inferredProject2*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -270,6 +273,9 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
+Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
+Inferred project: /dev/null/inferredProject2* isOrphan:: false isClosed: false
 Info 64   [00:02:50.000] FileWatcher:: Added:: WatchInfo: /a/b/src/file1.ts 500 undefined WatchType: Closed Script info
 Info 65   [00:02:51.000] Project '/a/b/tsconfig.json' (Configured)
 Info 65   [00:02:52.000] 	Files (3)
@@ -324,6 +330,9 @@ Info 67   [00:03:31.000] -----------------------------------------------
 Info 67   [00:03:32.000] Open files: 
 Info 67   [00:03:33.000] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info 67   [00:03:34.000] 		Projects: /a/b/tsconfig.json
+Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
+Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
+Inferred project: /dev/null/inferredProject2* isOrphan:: true isClosed: false
 Info 67   [00:03:35.000] FileWatcher:: Close:: WatchInfo: /a/file4.ts 500 undefined WatchType: Closed Script info
 Info 68   [00:03:36.000] Search path: /a
 Info 69   [00:03:37.000] For info: /a/file4.ts :: No config files found.
@@ -352,6 +361,7 @@ Info 79   [00:03:54.000] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info 79   [00:03:55.000] 		Projects: /a/b/tsconfig.json
 Info 79   [00:03:56.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 79   [00:03:57.000] 		Projects: /dev/null/inferredProject2*
+Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Info 79   [00:03:58.000] FileWatcher:: Added:: WatchInfo: /a/b/file3.ts 500 undefined WatchType: Closed Script info
 Info 80   [00:03:59.000] Project '/a/b/tsconfig.json' (Configured)
 Info 80   [00:04:00.000] 	Files (3)
@@ -364,6 +374,7 @@ Info 80   [00:04:04.000] -----------------------------------------------
 Info 80   [00:04:05.000] Open files: 
 Info 80   [00:04:06.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 80   [00:04:07.000] 		Projects: /dev/null/inferredProject2*
+Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 File5 written
 //// [/file5.ts]
 let zz = 1;

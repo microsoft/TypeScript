@@ -13,12 +13,12 @@ let x =   1;
 
 Info 1    [00:00:12.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/app.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Info 2    [00:00:13.000] Search path: /a
 Info 3    [00:00:14.000] For info: /a/app.js :: Config file name: /a/jsconfig.json
@@ -97,7 +97,7 @@ Info 23   [00:00:40.000] request:
       "arguments": {
         "file": "/a/app.js"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info 24   [00:00:41.000] response:

@@ -15,8 +15,10 @@ import {
     createProjectService,
     createSession,
     Logger,
+    openExternalProjectForSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
     toExternalFiles,
 } from "./helpers";
@@ -170,7 +172,7 @@ it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive wa
         emacsIgnoredFileFromIgnoreDirectory
     ].forEach(ignoredEntity => {
         host.ensureFileOrFolder(ignoredEntity);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
     });
 
     baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);
@@ -380,14 +382,11 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             setupConfigureHost(session, configureHost);
-            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
-                command: ts.server.protocol.CommandTypes.OpenExternalProject,
-                arguments: {
-                    projectFileName: `/user/username/projects/myproject/project.csproj`,
-                    rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
-                    options: { excludeDirectories: ["node_modules"] }
-                }
-            });
+            openExternalProjectForSession({
+                projectFileName: `/user/username/projects/myproject/project.csproj`,
+                rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
+                options: { excludeDirectories: ["node_modules"] }
+            }, session);
             openFilesForSession([main], session);
             return session;
         }
@@ -424,13 +423,10 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
             const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
             setupConfigureHost(session, configureHost);
-            session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
-                command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
-                arguments: {
-                    options: { excludeDirectories: ["node_modules"] },
-                    projectRootPath: "/user/username/projects/myproject"
-                }
-            });
+            setCompilerOptionsForInferredProjectsRequestForSession({
+                options: { excludeDirectories: ["node_modules"] },
+                projectRootPath: "/user/username/projects/myproject"
+            }, session);
             openFilesForSession([{ file: main, projectRootPath: "/user/username/projects/myproject" }], session);
             return session;
         }

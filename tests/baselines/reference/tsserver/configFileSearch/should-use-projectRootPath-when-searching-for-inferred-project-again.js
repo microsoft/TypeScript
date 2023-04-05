@@ -89,7 +89,8 @@ Info 30   [00:01:00.000] Search path: /a/b/projects/project/src
 Info 31   [00:01:01.000] For info: /a/b/projects/project/src/file1.ts :: No config files found.
 Info 32   [00:01:02.000] Scheduled: *ensureProjectForOpenFiles*
 Info 33   [00:01:03.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/src/tsconfig.json] deleted
 
 FsWatches::
@@ -131,7 +132,7 @@ Info 50   [00:01:25.500] -----------------------------------------------
 Info 50   [00:01:26.500] Open files: 
 Info 50   [00:01:27.500] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
 Info 50   [00:01:28.500] 		Projects: /dev/null/inferredProject1*
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/project/src/tsconfig.json: *new*

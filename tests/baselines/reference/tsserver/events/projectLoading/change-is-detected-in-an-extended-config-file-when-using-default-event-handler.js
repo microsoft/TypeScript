@@ -109,7 +109,9 @@ Info 23   [00:00:59.000] FileWatcher:: Triggered with /user/username/projects/a/
 Info 24   [00:01:00.000] Scheduled: /user/username/projects/b/tsconfig.json
 Info 25   [00:01:01.000] Scheduled: *ensureProjectForOpenFiles*
 Info 26   [00:01:02.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/a/tsconfig.json 1:: WatchInfo: /user/username/projects/a/tsconfig.json 2000 undefined Config: /user/username/projects/b/tsconfig.json WatchType: Extended config file
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /user/username/projects/b/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/a/tsconfig.json] file written with same contents
 
 Info 27   [00:01:03.000] Running: /user/username/projects/b/tsconfig.json
@@ -151,4 +153,5 @@ Info 39   [00:01:26.000] 		Projects: /user/username/projects/b/tsconfig.json
 Info 39   [00:01:27.000] got projects updated in background, updating diagnostics for /user/username/projects/b/b.ts
 Info 40   [00:01:28.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/b/b.ts"]}}
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 1
+3: checkOne

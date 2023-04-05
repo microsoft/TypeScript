@@ -350,3 +350,39 @@ const test2 = inners2([1,2,3,4,5]);
 >4 : 4
 >5 : 5
 
+// Repro from #53307
+
+type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+>NotEmpty : NotEmpty<T>
+
+const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
+>thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
+><const O extends Record<string, any>>(o: NotEmpty<O>) => o : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
+>o : NotEmpty<O>
+>o : NotEmpty<O>
+
+const t = thing({ foo: '' });  // readonly { foo: "" }
+>t : { readonly foo: ""; }
+>thing({ foo: '' }) : { readonly foo: ""; }
+>thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
+
+type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+>NotEmptyMapped : NotEmptyMapped<T>
+
+const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
+>thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
+><const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
+>o : NotEmptyMapped<O>
+>o : NotEmptyMapped<O>
+
+const tMapped = thingMapped({ foo: '' });  // { foo: "" }
+>tMapped : { foo: ""; }
+>thingMapped({ foo: '' }) : { foo: ""; }
+>thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
+

@@ -70,7 +70,8 @@ Info 17   [00:00:39.000] 		Projects: /a/b/tsconfig.json
 Info 17   [00:00:42.000] DirectoryWatcher:: Triggered with /a/b/file2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 18   [00:00:43.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 19   [00:00:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: /a/b/tsconfig.jsonFailedLookupInvalidation
 //// [/a/b/file2.ts]
 export classc { method2() { return 10; } }
 
@@ -92,9 +93,13 @@ FsWatches::
 Info 20   [00:00:45.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 21   [00:00:46.000] Scheduled: /a/b/tsconfig.json
 Info 22   [00:00:47.000] Scheduled: *ensureProjectForOpenFiles*
-After running timeout callbacks
+After running Timeout callback:: count: 2
+2: /a/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 2
+2: /a/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 
 Info 23   [00:00:48.000] Running: /a/b/tsconfig.json
 Info 24   [00:00:49.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -134,7 +139,7 @@ Info 35   [00:01:08.000] -----------------------------------------------
 Info 35   [00:01:09.000] Open files: 
 Info 35   [00:01:10.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 35   [00:01:11.000] 		Projects: /a/b/tsconfig.json
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/node_modules/@types:

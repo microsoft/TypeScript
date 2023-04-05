@@ -88,6 +88,9 @@ Input::
 {"extends":"./second.tsconfig.json","compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
@@ -149,6 +152,9 @@ Input::
 {"compilerOptions":{"strict":false}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -190,6 +196,9 @@ Input::
 {"extends":"./first.tsconfig.json","compilerOptions":{"strictNullChecks":true}}
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
@@ -223,6 +232,9 @@ Input::
 {"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
