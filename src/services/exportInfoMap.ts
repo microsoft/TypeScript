@@ -451,7 +451,7 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
 }
 
 /** @internal */
-export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+export function getExportInfoMap(importingFilePath: Path, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
     const start = timestamp();
     // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
     // which will invalidate the export map cache if things change, so pull it before
@@ -463,7 +463,7 @@ export function getExportInfoMap(importingFile: SourceFile, host: LanguageServic
         getGlobalTypingsCacheLocation: () => host.getGlobalTypingsCacheLocation?.(),
     });
 
-    if (cache.isUsableByFile(importingFile.path)) {
+    if (cache.isUsableByFile(importingFilePath)) {
         host.log?.("getExportInfoMap: cache hit");
         return cache;
     }
@@ -481,7 +481,7 @@ export function getExportInfoMap(importingFile: SourceFile, host: LanguageServic
             // can cause it to happen: see 'completionsImport_mergedReExport.ts'
             if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
                 cache.add(
-                    importingFile.path,
+                    importingFilePath,
                     defaultInfo.symbol,
                     defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
                     moduleSymbol,
@@ -493,7 +493,7 @@ export function getExportInfoMap(importingFile: SourceFile, host: LanguageServic
             checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
                 if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
                     cache.add(
-                        importingFile.path,
+                        importingFilePath,
                         exported,
                         key,
                         moduleSymbol,

@@ -21,7 +21,7 @@ import {
     FunctionExpression,
     getEmitScriptTarget,
     getNameOfDeclaration,
-    getQuotePreference,
+    getQuotePreferenceFromFile,
     getTokenAtPosition,
     idText,
     isAccessExpression,
@@ -211,7 +211,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
 
             // f.x = expr
             if (isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
-                const quotePreference = getQuotePreference(sourceFile, preferences);
+                const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
                 const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
                 if (name) {
                     createFunctionLikeExpressionMember(members, assignmentExpr, name);

@@ -157,6 +157,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
+    FutureSourceFile,
     GetAccessorDeclaration,
     getBaseFileName,
     GetCanonicalFileName,
@@ -9160,7 +9161,7 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 }
 
 /** @internal */
-export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
+export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile | FutureSourceFile): ModuleSpecifierEnding {
     if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
@@ -9185,27 +9186,30 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
     // accurately, and more importantly, literally nobody wants `Index` and its existence is a mystery.
     if (!shouldAllowImportingTsExtension(compilerOptions)) {
         // If .ts imports are not valid, we only need to see one .js import to go with that.
-        return usesExtensionsOnImports(sourceFile) ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
+        return sourceFile.kind && usesExtensionsOnImports(sourceFile) ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
     }
 
     return inferPreference();
 
     function inferPreference() {
-        let usesJsExtensions = false;
-        const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
-            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
-            emptyArray;
-        for (const specifier of specifiers) {
-            if (pathIsRelative(specifier)) {
-                if (hasTSFileExtension(specifier)) {
-                    return ModuleSpecifierEnding.TsExtension;
-                }
-                if (hasJSFileExtension(specifier)) {
-                    usesJsExtensions = true;
+        if (sourceFile.kind) {
+            let usesJsExtensions = false;
+            const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
+                isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
+                emptyArray;
+            for (const specifier of specifiers) {
+                if (pathIsRelative(specifier)) {
+                    if (hasTSFileExtension(specifier)) {
+                        return ModuleSpecifierEnding.TsExtension;
+                    }
+                    if (hasJSFileExtension(specifier)) {
+                        usesJsExtensions = true;
+                    }
                 }
             }
+            return usesJsExtensions ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
         }
-        return usesJsExtensions ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
+        return ModuleSpecifierEnding.Minimal;
     }
 }
 

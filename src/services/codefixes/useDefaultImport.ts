@@ -2,7 +2,7 @@ import {
     AnyImportSyntax,
     Diagnostics,
     Expression,
-    getQuotePreference,
+    getQuotePreferenceFromFile,
     getTokenAtPosition,
     Identifier,
     isExternalModuleReference,
@@ -57,5 +57,5 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
-    changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)));
+    changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreferenceFromFile(sourceFile, preferences)));
 }

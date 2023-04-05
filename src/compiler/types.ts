@@ -4220,6 +4220,15 @@ export interface SourceFileLike {
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
 }
 
+/** @internal */
+export interface FutureSourceFile {
+    readonly kind?: undefined;
+    readonly fileName: string;
+    readonly path: Path;
+    readonly impliedNodeFormat?: ResolutionMode;
+    readonly commonJsModuleIndicator?: boolean;
+    readonly externalModuleIndicator?: boolean;
+}
 
 /** @internal */
 export interface RedirectInfo {
