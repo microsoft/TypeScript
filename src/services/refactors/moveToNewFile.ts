@@ -66,7 +66,7 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
     const newFilename = createNewFilename(oldFile, program, context, host);
 
     // If previous file was global, this is easy.
-    changes.addToNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences), /*isNewFile*/ true);
+    changes.addToNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences));
 
     addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
 }

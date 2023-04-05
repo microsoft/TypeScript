@@ -480,7 +480,7 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 /** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
-    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], isNewFile: boolean }[] = [];
+    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
@@ -1127,23 +1127,15 @@ export class ChangeTracker {
     public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
-        let changes: FileTextChanges[] = [];
-        for (const { oldFile, fileName, statements, isNewFile } of this.newFiles) {
-            if (isNewFile) {
-                changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
-                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
-            }
-            else {
-                changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate, oldFile);
-            }
-            return changes;
+        const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+        for (const { oldFile, fileName, statements } of this.newFiles) {
+            changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
         }
-        changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
         return changes;
     }
 
-    public addToNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], isNewFile: boolean): void {
-        this.newFiles.push({ oldFile, fileName, statements, isNewFile });
+    public addToNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
+        this.newFiles.push({ oldFile, fileName, statements });
     }
 }
 
@@ -1221,7 +1213,7 @@ export function getNewFileText(statements: readonly Statement[], scriptKind: Scr
 }
 
 namespace changesToText {
-    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined, oldFile?: SourceFile): FileTextChanges[] {
+    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
         return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
             const sourceFile = changesInFile[0].sourceFile;
             // order changes by start position
@@ -1235,7 +1227,7 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
-                const newText = (oldFile) ? computeNewText(c, oldFile, newLineCharacter, formatContext, validate): computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
+                const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
                 // Filter out redundant changes.
                 if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
                     return undefined;
