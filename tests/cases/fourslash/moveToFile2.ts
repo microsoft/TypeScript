@@ -1,8 +1,6 @@
 
 /// <reference path='fourslash.ts' />
 
-// @verbatimModuleSyntax: true
-
 // @Filename: /bar.ts
 //// const q = 0;
 
@@ -20,7 +18,7 @@ verify.moveToFile({
     newFileContents: {
         "/a.ts":"",
         "/bar.ts":
-`import { type A } from "./other";
+`import { A } from "./other";
 
 const q = 0;
 function f(a: A) { }
