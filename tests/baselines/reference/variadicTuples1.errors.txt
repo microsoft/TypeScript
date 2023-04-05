@@ -506,3 +506,8 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
     type U2 = [...[string, ...Numbers], boolean];
     type U3 = [...[string, number], boolean];
     
+    // Repro from #53563
+    
+    type ToStringLength1<T extends any[]> = `${T['length']}`;
+    type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+    

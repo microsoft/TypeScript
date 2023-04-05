@@ -1410,3 +1410,11 @@ type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
 >U3 : [string, number, boolean]
 
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+>ToStringLength1 : `${T["length"]}`
+
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+>ToStringLength2 : `${[...T]["length"]}`
+

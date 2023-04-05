@@ -1361,3 +1361,15 @@ type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
 >U3 : Symbol(U3, Decl(variadicTuples1.ts, 399, 45))
 
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+>ToStringLength1 : Symbol(ToStringLength1, Decl(variadicTuples1.ts, 400, 41))
+>T : Symbol(T, Decl(variadicTuples1.ts, 404, 21))
+>T : Symbol(T, Decl(variadicTuples1.ts, 404, 21))
+
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+>ToStringLength2 : Symbol(ToStringLength2, Decl(variadicTuples1.ts, 404, 57))
+>T : Symbol(T, Decl(variadicTuples1.ts, 405, 21))
+>T : Symbol(T, Decl(variadicTuples1.ts, 405, 21))
+
