@@ -1044,7 +1044,10 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
         return fileName;
     }
 
-    if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
+    if (allowedEndings[0] === ModuleSpecifierEnding.TsExtension && fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Cts])) {
+        return fileName;
+    }
+    else if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
         return noExtension + getJSExtensionForFile(fileName, options);
     }
     else if (!fileExtensionIsOneOf(fileName, [Extension.Dts]) && fileExtensionIsOneOf(fileName, [Extension.Ts]) && stringContains(fileName, ".d.")) {
