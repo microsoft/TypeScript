@@ -2084,7 +2084,7 @@ export function getCompletionEntriesFromSymbols(
             continue;
         }
 
-        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !(symbol.flags & SymbolFlags.Value)) {
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !symbolHasNoTypeOnlyDeclaration(symbol)) {
             continue;
         }
 
@@ -2182,6 +2182,18 @@ export function getCompletionEntriesFromSymbols(
         // expressions are value space (which includes the value namespaces)
         return !!(allFlags & SymbolFlags.Value);
     }
+}
+
+function symbolHasNoTypeOnlyDeclaration(symbol: Symbol): boolean {
+    return !symbol?.declarations?.length || symbol.declarations.some(declaration => {
+        switch (declaration.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return false;
+            default:
+                return true;
+        }
+    });
 }
 
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {

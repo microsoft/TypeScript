@@ -9,6 +9,7 @@
 // | interface TestClassInterfaceMerged
 // | enum TestEnum
 // | function testFunction(): void
+// | namespace TestNamespace
 // | const testValue: {}
 // | ----------------------------------------------------------------------
 
@@ -195,6 +196,27 @@
             {
               "text": "void",
               "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "TestNamespace",
+          "kind": "module",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TestNamespace",
+              "kind": "moduleName"
             }
           ],
           "documentation": []
