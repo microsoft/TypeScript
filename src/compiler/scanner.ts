@@ -1655,7 +1655,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 // this is likely a binary file that cannot be parsed
                 if (ch === CharacterCodes.replacementCharacter) {
                     // Jump to the end of the file and fail.
-                    error(Diagnostics.Invalid_character);
+                    error(Diagnostics.File_appears_to_be_binary);
                     pos = end;
                     return token = SyntaxKind.NonTextFileMarkerTrivia;
                 }
