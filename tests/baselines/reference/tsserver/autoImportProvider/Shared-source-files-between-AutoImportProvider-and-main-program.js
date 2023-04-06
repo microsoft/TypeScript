@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/node_modules/memfs/package.json]
 { "name": "memfs", "version": "1.0.0", "types": "lib/index.d.ts" }
@@ -24,7 +24,7 @@ export declare class Stats {}
 export {};
 
 
-Info 1    [00:00:28.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -33,11 +33,11 @@ Info 1    [00:00:28.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:29.000] Search path: /
-Info 3    [00:00:30.000] For info: /index.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:31.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:33.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts"
  ],
@@ -48,16 +48,16 @@ Info 6    [00:00:33.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:36.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 10   [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 11   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 12   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
-Info 13   [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 14   [00:00:41.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:42.000] Project '/tsconfig.json' (Configured)
-Info 16   [00:00:43.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/index.ts SVC-1-0 "export {};"
 	/node_modules/@types/node/index.d.ts Text-1 "export declare class Stats {}"
 
@@ -67,14 +67,14 @@ Info 16   [00:00:43.000] 	Files (2)
 	node_modules/@types/node/index.d.ts
 	  Entry point of type library 'node' specified in compilerOptions with packageId '@types/node/index.d.ts@1.0.0'
 
-Info 17   [00:00:44.000] -----------------------------------------------
-Info 18   [00:00:45.000] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info 19   [00:00:46.000] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
-Info 20   [00:00:47.000] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info 21   [00:00:48.000] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info 22   [00:00:49.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:50.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 24   [00:00:51.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/node_modules/@types/node/index.d.ts Text-1 "export declare class Stats {}"
 	/node_modules/memfs/lib/index.d.ts Text-1 "/// <reference types=\"node\" />\nexport declare class Volume {}"
 
@@ -84,19 +84,19 @@ Info 24   [00:00:51.000] 	Files (2)
 	node_modules/memfs/lib/index.d.ts
 	  Root file specified for compilation
 
-Info 25   [00:00:52.000] -----------------------------------------------
-Info 26   [00:00:53.000] Project '/tsconfig.json' (Configured)
-Info 26   [00:00:54.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 26   [00:00:55.000] -----------------------------------------------
-Info 26   [00:00:56.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 26   [00:00:57.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 26   [00:00:58.000] -----------------------------------------------
-Info 26   [00:00:59.000] Open files: 
-Info 26   [00:01:00.000] 	FileName: /index.ts ProjectRootPath: undefined
-Info 26   [00:01:01.000] 		Projects: /tsconfig.json
-Info 26   [00:01:02.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -122,7 +122,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 27   [00:01:03.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -134,18 +134,18 @@ Info 27   [00:01:03.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 28   [00:01:04.000] getCompletionData: Get current token: *
-Info 29   [00:01:05.000] getCompletionData: Is inside comment: *
-Info 30   [00:01:06.000] getCompletionData: Get previous token: *
-Info 31   [00:01:07.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 32   [00:01:08.000] forEachExternalModuleToImportFrom autoImportProvider: *
-Info 33   [00:01:09.000] getExportInfoMap: done in * ms
-Info 34   [00:01:10.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info 35   [00:01:11.000] collectAutoImports: response is incomplete
-Info 36   [00:01:12.000] collectAutoImports: *
-Info 37   [00:01:13.000] getCompletionData: Semantic work: *
-Info 38   [00:01:14.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 39   [00:01:15.000] response:
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 1,
