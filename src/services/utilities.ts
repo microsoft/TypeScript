@@ -3130,7 +3130,12 @@ export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, in
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
 /** @internal */
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-    return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
 }
 
 /** @internal */
