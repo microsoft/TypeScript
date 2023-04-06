@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -491,6 +492,10 @@ Input::
 export const newFileConst = 30;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
@@ -632,6 +637,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -677,6 +685,10 @@ export const newFileConst = 30;
 export class someClass2 { }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
@@ -802,6 +814,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:50 AM[0m] Found 0 errors. Watching for file changes.
 

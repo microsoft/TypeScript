@@ -1,0 +1,15 @@
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /tests/cases/fourslash/renameModuleExportsProperties1.ts ===
+// <|class /*RENAME*/[|ARENAME|] {}|>
+// module.exports = { /*START PREFIX*/A: [|ARENAME|] }
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /tests/cases/fourslash/renameModuleExportsProperties1.ts ===
+// <|class [|ARENAME|] {}|>
+// module.exports = { /*START PREFIX*/A: /*RENAME*/[|ARENAME|] }

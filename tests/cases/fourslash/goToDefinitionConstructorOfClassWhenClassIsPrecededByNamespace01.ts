@@ -11,4 +11,4 @@
 ////
 ////var x = new [|/*usage*/Foo|]();
 
-verify.goToDefinition("usage", "definition");
+verify.baselineGoToDefinition("usage");

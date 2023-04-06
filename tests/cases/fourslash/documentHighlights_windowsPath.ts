@@ -4,4 +4,4 @@
 ////var /*1*/[|x|] = 1;
 
 const range = test.ranges()[0];
-verify.documentHighlightsOf(range, [range], { filesToSearch: [range.fileName] });
+verify.baselineDocumentHighlights(range, { filesToSearch: [range.fileName] });

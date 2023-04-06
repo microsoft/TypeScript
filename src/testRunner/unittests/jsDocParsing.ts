@@ -433,7 +433,7 @@ oh.no
     describe("getStart", () => {
         it("runs when node with JSDoc but no parent pointers", () => {
             const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ false);
-            root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+            root.statements[0].getStart(root, /*includeJsDocComment*/ true);
         });
     });
     describe("parseIsolatedJSDocComment", () => {

@@ -13,4 +13,4 @@
 ////import f = require("./a");
 ////[|/*useTs*/f|]();
 
-verify.goToDefinition(["use", "useTs"], "f");
+verify.baselineGoToDefinition("use", "useTs");

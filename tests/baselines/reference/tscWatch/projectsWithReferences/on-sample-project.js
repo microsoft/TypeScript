@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -642,6 +643,8 @@ function foo() { }
 }
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -769,6 +772,9 @@ export declare function gfoo(): void;
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
@@ -1042,6 +1048,9 @@ export declare function gfoo(): void;
 
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...

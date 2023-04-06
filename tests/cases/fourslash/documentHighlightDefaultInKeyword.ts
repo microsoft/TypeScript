@@ -3,6 +3,4 @@
 ////[|case|]
 ////[|default|]
 
-const [defaultKeywordRange, caseKeywordRange] = test.ranges();
-verify.noDocumentHighlights(defaultKeywordRange);
-verify.noDocumentHighlights(caseKeywordRange);
+verify.baselineDocumentHighlights();

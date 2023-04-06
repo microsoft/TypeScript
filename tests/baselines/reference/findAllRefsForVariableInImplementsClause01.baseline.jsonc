@@ -1,1 +1,4 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForVariableInImplementsClause01.ts ===
+// var Base = class { };
+// class C extends Base implements /*FIND ALL REFS*/Base { }

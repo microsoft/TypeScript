@@ -9,4 +9,4 @@
 //// }
 //// bar<Test>(({[|pr/*goto*/op2|]})=>{});
 
-verify.goToDefinition("goto", "destination");
+verify.baselineGoToDefinition("goto");

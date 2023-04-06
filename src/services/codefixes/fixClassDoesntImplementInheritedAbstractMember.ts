@@ -26,8 +26,7 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [
-    Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
-    Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
+    Diagnostics.Non_abstract_class_0_does_not_implement_all_abstract_members_of_1.code,
 ];
 const fixId = "fixClassDoesntImplementInheritedAbstractMember";
 registerCodeFix({

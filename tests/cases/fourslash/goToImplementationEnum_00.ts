@@ -9,4 +9,4 @@
 ////
 //// Foo.Fo/*reference*/o1;
 
-verify.allRangesAppearInImplementationList("reference");
+verify.baselineGoToImplementation("reference");

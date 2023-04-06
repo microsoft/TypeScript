@@ -1,0 +1,22 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/jsDocSee3.ts ===
+// function foo (a: string) {
+//     /**
+//      * @see {/*GOTO DEF POS*/a}
+//      */
+//     function bar (<|[|a|]: string|>) {
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

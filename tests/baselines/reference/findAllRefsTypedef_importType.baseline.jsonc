@@ -1,165 +1,121 @@
-undefined
+// === findAllReferences ===
+// === /a.js ===
+// module.exports = 0;
+// /** /*FIND ALL REFS*/@typedef {number} Foo */
+// const dummy = 0;
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// module.exports = 0;
+// /** <|@typedef {number} /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|]|> */
+// const dummy = 0;
 
 // === /b.js ===
 // /** @type {import('./a').[|Foo|]} */
 // const x = 0;
 
+  // === Definitions ===
+  // === /a.js ===
+  // module.exports = 0;
+  // /** <|@typedef {number} /*FIND ALL REFS*/[|Foo|]|> */
+  // const dummy = 0;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Foo = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.js ===
 // module.exports = 0;
-// /** @typedef {number} /*FIND ALL REFS*/[|Foo|] */
+// /** <|@typedef {number} [|{| isWriteAccess: true |}Foo|]|> */
 // const dummy = 0;
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type",
-      "name": "type Foo = number",
-      "textSpan": {
-        "start": 42,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 24,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 3
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 24,
-          "length": 21
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 3
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
 
 // === /b.js ===
 // /** @type {import('./a')./*FIND ALL REFS*/[|Foo|]} */
 // const x = 0;
 
-// === /a.js ===
-// module.exports = 0;
-// /** @typedef {number} [|Foo|] */
-// const dummy = 0;
+  // === Definitions ===
+  // === /a.js ===
+  // module.exports = 0;
+  // /** <|@typedef {number} [|Foo|]|> */
+  // const dummy = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type",
-      "name": "type Foo = number",
-      "textSpan": {
-        "start": 42,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 24,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 3
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 24,
-          "length": 21
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 3
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Foo = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

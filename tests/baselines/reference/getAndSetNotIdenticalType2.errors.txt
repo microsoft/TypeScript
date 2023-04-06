@@ -1,5 +1,3 @@
-tests/cases/compiler/getAndSetNotIdenticalType2.ts(5,9): error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-  Type 'T' is not assignable to type 'string'.
 tests/cases/compiler/getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
   Type 'string' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
@@ -7,16 +5,12 @@ tests/cases/compiler/getAndSetNotIdenticalType2.ts(15,1): error TS2322: Type 'A<
   Type 'unknown' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (3 errors) ====
+==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (2 errors) ====
     class A<T> { foo: T; }
     
     class C<T> {
         data: A<T>;
         get x(): A<T> {
-            ~
-!!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-!!! error TS2380:   Type 'T' is not assignable to type 'string'.
-!!! related TS2208 tests/cases/compiler/getAndSetNotIdenticalType2.ts:3:9: This type parameter might need an `extends string` constraint.
             return this.data;
         }
         set x(v: A<string>) {

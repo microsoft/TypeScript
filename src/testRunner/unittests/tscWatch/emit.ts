@@ -155,7 +155,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
     const changeModuleFile1Shape: TscWatchCompileChange = {
         caption: "Change the content of moduleFile1 to `export var T: number;export function Foo() { };`",
         edit: modifyModuleFile1Shape,
-        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     };
 
     verifyTscWatchEmit({
@@ -165,7 +165,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption: "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
                 edit: sys => sys.writeFile(moduleFile1Path, `export var T: number;export function Foo() { console.log('hi'); };`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -176,18 +176,18 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption: "Change file1Consumer1 content to `export let y = Foo();`",
                 edit: sys => sys.writeFile(file1Consumer1Path, `export let y = Foo();`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             changeModuleFile1Shape,
             {
                 caption: "Add the import statements back to file1Consumer1",
                 edit: sys => sys.writeFile(file1Consumer1Path, `import {Foo} from "./moduleFile1";let y = Foo();`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`",
                 edit: sys => sys.writeFile(moduleFile1Path, `export let y = Foo();`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Multiple file edits in one go",
@@ -197,7 +197,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     sys.writeFile(file1Consumer1Path, `import {Foo} from "./moduleFile1";let y = Foo();`);
                     modifyModuleFile1Shape(sys);
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -211,7 +211,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     modifyModuleFile1Shape(sys);
                     sys.deleteFile(file1Consumer2Path);
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -225,7 +225,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     sys.writeFile("/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
                     modifyModuleFile1Shape(sys);
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -238,7 +238,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption: "change file1 internal, and verify only file1 is affected",
                 edit: sys => sys.appendFile(moduleFile1Path, "var T1: number;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -249,7 +249,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption: "change shape of global file",
                 edit: sys => sys.appendFile(globalFilePath, "var T2: string;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -280,7 +280,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption: "change file1Consumer1",
                 edit: sys => sys.appendFile(file1Consumer1Path, "export var T: number;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             changeModuleFile1Shape,
             {
@@ -289,7 +289,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     sys.appendFile(file1Consumer1Path, "export var T2: number;");
                     sys.writeFile(moduleFile1Path, `export var T2: number;export function Foo() { };`);
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -313,7 +313,7 @@ export var t2 = 10;`
             {
                 caption: "change file1",
                 edit: sys => sys.appendFile("/a/b/file1.ts", "export var t3 = 10;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -330,7 +330,7 @@ export var x = Foo();`
             {
                 caption: "delete moduleFile1",
                 edit: sys => sys.deleteFile(moduleFile1Path),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -347,12 +347,12 @@ export var x = Foo();`
             {
                 caption: "edit refereceFile1",
                 edit: sys => sys.appendFile("/a/b/referenceFile1.ts", "export var yy = Foo();"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "create moduleFile2",
                 edit: sys => sys.writeFile(moduleFile2Path, "export var Foo4 = 10;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -378,7 +378,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
                 {
                     caption: "Append a line",
                     edit: sys => sys.appendFile("/a/app.ts", newLine + "var z = 3;"),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
             ],
         });
@@ -416,12 +416,12 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             {
                 caption: "Append content to f1",
                 edit: sys => sys.appendFile("/a/b/f1.ts", "export function foo2() { return 2; }"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Again Append content to f1",
                 edit: sys => sys.appendFile("/a/b/f1.ts", "export function fooN() { return 2; }"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ],
     });
@@ -450,7 +450,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             {
                 caption: "Append content to file3",
                 edit: sys => sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ],
     });
@@ -480,7 +480,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             {
                 caption: "file is deleted and then created to modify content",
                 edit: sys => sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });

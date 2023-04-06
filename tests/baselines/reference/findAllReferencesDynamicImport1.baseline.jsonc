@@ -1,221 +1,163 @@
-undefined
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/foo.ts ===
 // export function foo() { return "foo"; }
-// import("/*FIND ALL REFS*/[|./foo|]")
-// var x = import("[|./foo|]")
+// /*FIND ALL REFS*/import("./foo")
+// var x = import("./foo")
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/foo.ts",
-      "kind": "module",
-      "name": "module \"/tests/cases/fourslash/foo\"",
-      "textSpan": {
-        "start": 0,
-        "length": 79
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/tests/cases/fourslash/foo\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 48,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "contextSpan": {
-          "start": 40,
-          "length": 15
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 72,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "contextSpan": {
-          "start": 56,
-          "length": 23
-        },
-        "isWriteAccess": false
-      }
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.ts ===
+// export function foo() { return "foo"; }
+// <|import("/*FIND ALL REFS*/[|./foo|]")|>
+// <|var x = import("[|./foo|]")|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.ts ===
+  // [|export function foo() { return "foo"; }
+  // import("/*FIND ALL REFS*/./foo")
+  // var x = import("./foo")|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/tests/cases/fourslash/foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/tests/cases/fourslash/foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/foo.ts ===
 // export function foo() { return "foo"; }
 // import("./foo")
-// /*FIND ALL REFS*/var [|x|] = import("./foo")
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}x|] = import("./foo")|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/foo.ts",
-      "kind": "var",
-      "name": "var x: Promise<typeof import(\"/tests/cases/fourslash/foo\")>",
-      "textSpan": {
-        "start": 60,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Promise",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"/tests/cases/fourslash/foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 56,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "contextSpan": {
-          "start": 56,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.ts ===
+  // export function foo() { return "foo"; }
+  // import("./foo")
+  // /*FIND ALL REFS*/<|var [|x|] = import("./foo")|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: Promise<typeof import(\"/tests/cases/fourslash/foo\")>",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Promise",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"/tests/cases/fourslash/foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/foo.ts ===
 // export function foo() { return "foo"; }
-// import("[|./foo|]")
-// var x = import("/*FIND ALL REFS*/[|./foo|]")
+// <|import("[|./foo|]")|>
+// <|var x = import("/*FIND ALL REFS*/[|./foo|]")|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/foo.ts",
-      "kind": "module",
-      "name": "module \"/tests/cases/fourslash/foo\"",
-      "textSpan": {
-        "start": 0,
-        "length": 79
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/tests/cases/fourslash/foo\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 48,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "contextSpan": {
-          "start": 40,
-          "length": 15
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 72,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "contextSpan": {
-          "start": 56,
-          "length": 23
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.ts ===
+  // [|export function foo() { return "foo"; }
+  // import("./foo")
+  // var x = import("/*FIND ALL REFS*/./foo")|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/tests/cases/fourslash/foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/tests/cases/fourslash/foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

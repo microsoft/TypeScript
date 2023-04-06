@@ -1,0 +1,65 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper3.ts ===
+// let x = {
+//     a() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].b();
+//     },
+//     b() {
+//         return [|{| kind: "reference" |}super|].a();
+//     },
+//     c: function () {
+//         return super.a();
+//     }
+//     d: () => super.b();
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper3.ts ===
+// let x = {
+//     a() {
+//         return [|{| kind: "reference" |}super|].b();
+//     },
+//     b() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].a();
+//     },
+//     c: function () {
+//         return super.a();
+//     }
+//     d: () => super.b();
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper3.ts ===
+// let x = {
+//     a() {
+//         return super.b();
+//     },
+//     b() {
+//         return super.a();
+//     },
+//     c: function () {
+//         return /*HIGHLIGHTS*/super.a();
+//     }
+//     d: () => super.b();
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper3.ts ===
+// let x = {
+//     a() {
+//         return super.b();
+//     },
+//     b() {
+//         return super.a();
+//     },
+//     c: function () {
+//         return super.a();
+//     }
+//     d: () => /*HIGHLIGHTS*/super.b();
+// }

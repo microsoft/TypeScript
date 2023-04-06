@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:11.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/a/b/app.js]
@@ -129,7 +130,9 @@ Info 9    [00:01:26.000] Scheduled: /dev/null/inferredProject1*
 Info 10   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*
 TI:: [00:01:28.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
-Before checking timeout queue length (2) and running
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
 
 Info 11   [00:01:29.000] Running: /dev/null/inferredProject1*
 Info 12   [00:01:30.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -175,4 +178,4 @@ Info 20   [00:01:57.000] -----------------------------------------------
 Info 20   [00:01:58.000] Open files: 
 Info 20   [00:01:59.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 20   [00:02:00.000] 		Projects: /dev/null/inferredProject1*
-After checking timeout queue length (2) and running
+After running Timeout callback:: count: 0

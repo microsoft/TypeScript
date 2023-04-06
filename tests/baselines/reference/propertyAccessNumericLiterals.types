@@ -35,3 +35,45 @@
 >000 : 0
 >toString : (radix?: number) => string
 
+08.8e5.toString();
+>08.8e5.toString() : string
+>08.8e5.toString : (radix?: number) => string
+>08.8e5 : 880000
+>toString : (radix?: number) => string
+
+0_8.8e5.toString();
+>0_8.8e5.toString() : string
+>0_8.8e5.toString : (radix?: number) => string
+>0_8.8e5 : 880000
+>toString : (radix?: number) => string
+
+8.8e5.toString();
+>8.8e5.toString() : string
+>8.8e5.toString : (radix?: number) => string
+>8.8e5 : 880000
+>toString : (radix?: number) => string
+
+088e4.toString();
+>088e4.toString() : string
+>088e4.toString : (radix?: number) => string
+>088e4 : 880000
+>toString : (radix?: number) => string
+
+88_e4.toString();
+>88_e4.toString() : string
+>88_e4.toString : (radix?: number) => string
+>88_e4 : 880000
+>toString : (radix?: number) => string
+
+88e4.toString();
+>88e4.toString() : string
+>88e4.toString : (radix?: number) => string
+>88e4 : 880000
+>toString : (radix?: number) => string
+
+8_8e4.toString();
+>8_8e4.toString() : string
+>8_8e4.toString : (radix?: number) => string
+>8_8e4 : 880000
+>toString : (radix?: number) => string
+

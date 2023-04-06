@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/f1.ts]
@@ -145,6 +146,7 @@ Info 26   [00:00:51.000] response:
     }
 After request
 
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 27   [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/f1.ts]
@@ -288,6 +290,7 @@ Info 53   [00:00:51.000] response:
     }
 After request
 
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 54   [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/f1.ts]
@@ -430,6 +433,7 @@ Info 80   [00:00:51.000] response:
     }
 After request
 
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 81   [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/f1.ts]
@@ -571,6 +575,7 @@ Info 105  [00:00:49.000] response:
     }
 After request
 
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 106  [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/f1.ts]

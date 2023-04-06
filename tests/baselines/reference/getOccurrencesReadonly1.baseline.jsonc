@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReadonly1.ts ===
+// interface I {
+//   /*HIGHLIGHTS*/[|{| kind: "none" |}readonly|] prop: string;
+// }

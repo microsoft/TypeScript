@@ -1,0 +1,117 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = /*HIGHLIGHTS*/super) {
+//     super;
+// }
+// 
+// module M {
+//     super;
+//     function f(x = super) {
+//     super;
+//     }
+// 
+//     class A {
+//     }
+// 
+//     class B extends A {
+//         constructor() {
+//             super();
+//         }
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = super) {
+//     /*HIGHLIGHTS*/super;
+// }
+// 
+// module M {
+//     super;
+//     function f(x = super) {
+//     super;
+//     }
+// 
+//     class A {
+//     }
+// 
+//     class B extends A {
+//         constructor() {
+//             super();
+//         }
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = super) {
+//     super;
+// }
+// 
+// module M {
+//     /*HIGHLIGHTS*/super;
+//     function f(x = super) {
+//     super;
+//     }
+// 
+//     class A {
+//     }
+// 
+//     class B extends A {
+//         constructor() {
+//             super();
+//         }
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = super) {
+//     super;
+// }
+// 
+// module M {
+//     super;
+//     function f(x = /*HIGHLIGHTS*/super) {
+//     super;
+//     }
+// 
+//     class A {
+//     }
+// 
+//     class B extends A {
+//         constructor() {
+//             super();
+//         }
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = super) {
+//     super;
+// }
+// 
+// module M {
+//     super;
+//     function f(x = super) {
+//     /*HIGHLIGHTS*/super;
+//     }
+// 
+//     class A {
+//     }
+// 
+//     class B extends A {
+//         constructor() {
+//             super();
+//         }
+//     }
+// }

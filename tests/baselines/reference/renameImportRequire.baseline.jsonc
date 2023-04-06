@@ -1,0 +1,51 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// <|import /*RENAME*/[|eRENAME|] = require("mod4");|>
+// [|eRENAME|];
+// a = { /*START PREFIX*/e: [|eRENAME|] };
+// <|export { [|eRENAME|] as e/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|import [|eRENAME|] = require("mod4");|>
+// /*RENAME*/[|eRENAME|];
+// a = { /*START PREFIX*/e: [|eRENAME|] };
+// <|export { [|eRENAME|] as e/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|import [|eRENAME|] = require("mod4");|>
+// [|eRENAME|];
+// a = { /*START PREFIX*/e: /*RENAME*/[|eRENAME|] };
+// <|export { [|eRENAME|] as e/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// import e = require("mod4");
+// e;
+// a = { e };
+// <|export { /*START PREFIX*/e as /*RENAME*/[|eRENAME|] };|>
+
+// === /b.ts ===
+// <|import { [|eRENAME|] } from "./a";|>
+// <|export { [|eRENAME|] as e/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import { /*START PREFIX*/e as /*RENAME*/[|eRENAME|] } from "./a";|>
+// <|export { [|eRENAME|] as e/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { e } from "./a";
+// <|export { /*START PREFIX*/e as /*RENAME*/[|eRENAME|] };|>

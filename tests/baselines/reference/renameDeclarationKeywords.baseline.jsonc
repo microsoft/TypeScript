@@ -1,0 +1,297 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// /*RENAME*/<|class [|C1RENAME|] extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }|>
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// <|class [|BaseRENAME|] {}|>
+// interface Implemented1 {}
+// class C1 /*RENAME*/extends [|BaseRENAME|] implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends [|BaseRENAME|] { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// <|interface [|Implemented1RENAME|] {}|>
+// class C1 extends Base /*RENAME*/implements [|Implemented1RENAME|] {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     /*RENAME*/<|get [|eRENAME|]() { return 1; }|>
+//     <|set [|eRENAME|](v) {}|>
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     <|get [|eRENAME|]() { return 1; }|>
+//     /*RENAME*/<|set [|eRENAME|](v) {}|>
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// /*RENAME*/<|interface [|I1RENAME|] extends Base { }|>
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// <|class [|BaseRENAME|] {}|>
+// interface Implemented1 {}
+// class C1 extends [|BaseRENAME|] implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 /*RENAME*/extends [|BaseRENAME|] { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// /*RENAME*/<|type [|TRENAME|] = { }|>
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// /*RENAME*/<|enum [|ERENAME|] { }|>
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// /*RENAME*/<|namespace [|NRENAME|] { }|>
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// /*RENAME*/<|module [|MRENAME|] { }|>
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// /*RENAME*/<|function [|fnRENAME|]() {}|>
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// /*RENAME*/<|var [|xRENAME|];|>
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// /*RENAME*/<|let [|yRENAME|];|>
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// /*RENAME*/<|const [|zRENAME|] = 1;|>

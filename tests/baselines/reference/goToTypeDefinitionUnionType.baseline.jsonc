@@ -1,0 +1,53 @@
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinitionUnionType.ts ===
+// <|class [|{| defId: 0 |}C|] {
+//     p;
+// }|>
+// 
+// <|interface [|{| defId: 1 |}I|] {
+//     x;
+// }|>
+// 
+// module M {
+//     <|export interface [|{| defId: 2 |}I|] {
+//         y;
+//     }|>
+// }
+// 
+// var x: C | I | M.I;
+// 
+// /*GOTO TYPE*/x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "class",
+    "name": "C",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "interface",
+    "name": "I",
+    "containerName": "M",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

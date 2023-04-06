@@ -1,0 +1,25 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesOfAnonymousFunction2.ts ===
+// //global foo definition
+// function foo() {}
+// 
+// (<|function [|{| kind: "writtenReference" |}f/*HIGHLIGHTS*/oo|](): number {
+//     return [|{| kind: "reference" |}foo|](); // local foo reference
+// }|>)
+// //global foo references
+// foo();
+// var f = foo;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesOfAnonymousFunction2.ts ===
+// //global foo definition
+// <|function [|{| kind: "writtenReference" |}foo|]() {}|>
+// 
+// (function foo(): number {
+//     return foo(); // local foo reference
+// })
+// //global foo references
+// [|{| kind: "reference" |}fo/*HIGHLIGHTS*/o|]();
+// var f = [|{| kind: "reference" |}foo|];

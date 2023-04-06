@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// @findInStrings: true
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/referencesForGlobals_1.ts ===
+// <|var /*RENAME*/[|globalNameRENAME|] = 0;|>
+
+// === /tests/cases/fourslash/server/referencesForGlobals_2.ts ===
+// var y = [|globalNameRENAME|];
+
+
+
+// === findRenameLocations ===
+// @findInStrings: true
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/referencesForGlobals_1.ts ===
+// <|var [|globalNameRENAME|] = 0;|>
+
+// === /tests/cases/fourslash/server/referencesForGlobals_2.ts ===
+// var y = /*RENAME*/[|globalNameRENAME|];

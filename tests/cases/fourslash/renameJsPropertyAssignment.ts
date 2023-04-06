@@ -7,4 +7,4 @@
 ////[|bar.[|{| "contextRangeIndex": 0 |}foo|] = "foo";|]
 ////console.log(bar.[|foo|]);
 
-verify.rangesWithSameTextAreRenameLocations("foo");
+verify.baselineRenameAtRangesWithText("foo");

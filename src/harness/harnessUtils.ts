@@ -64,7 +64,7 @@ export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: a
     } as any);
 }
 
-export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false); // This is done so tests work on windows _and_ linux
 
 export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined) {
     const queue: [ts.Node | undefined, ts.Node | undefined][] = [[node, parent]];

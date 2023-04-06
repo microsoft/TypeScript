@@ -15,8 +15,4 @@
 //// let x1 = Foo.B/*reference2*/az;
 //// let y1 = Bar.B/*reference3*/az;
 
-for (let i = 0; i < 4; i ++) {
-    goTo.marker("reference" + i);
-    goTo.implementation();
-    verify.caretAtMarker("implementation" + i);
-}
+verify.baselineGoToImplementation("reference0", "reference1", "reference2", "reference3");

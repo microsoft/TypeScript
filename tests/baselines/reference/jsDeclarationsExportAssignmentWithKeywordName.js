@@ -21,8 +21,8 @@ module.exports = {
 
 //// [index.d.ts]
 export var x: number;
-declare const _extends: string;
+declare let _extends: string;
 export declare namespace more {
-    const others: string[];
+    let others: string[];
 }
 export { _extends as extends };

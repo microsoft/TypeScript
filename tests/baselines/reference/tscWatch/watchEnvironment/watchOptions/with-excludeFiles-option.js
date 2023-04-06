@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -98,6 +99,8 @@ Input::
 export function fooBar(): string;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

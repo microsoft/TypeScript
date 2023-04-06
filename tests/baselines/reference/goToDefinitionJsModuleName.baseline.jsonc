@@ -1,0 +1,15 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.js ===
+// [||]module.exports = {};
+
+// === /tests/cases/fourslash/bar.js ===
+// var x = require(/*GOTO DEF*/[|"./foo"|]);
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./foo",
+    "unverified": false
+   }
+  ]

@@ -30,11 +30,11 @@ module.exports.Strings = Strings;
 
 //// [index.d.ts]
 export namespace Strings {
-    const a: string;
-    const b: string;
+    let a: string;
+    let b: string;
 }
-export declare const thing: string;
-export declare const also: string;
+export declare let thing: string;
+export declare let also: string;
 export declare namespace desc {
-    const item: string;
+    let item: string;
 }

@@ -1,0 +1,40 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionPartialImplementation_1.ts ===
+// module A {
+//     <|export interface [|{| defId: 0 |}IA|] {
+//         y: string;
+//     }|>
+// }
+
+// === /tests/cases/fourslash/goToDefinitionPartialImplementation_2.ts ===
+// module A {
+//     <|export interface [|{| defId: 1 |}IA|] {
+//         x: number;
+//     }|>
+// 
+//     var x: /*GOTO DEF*/IA;
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "interface",
+    "name": "IA",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "name": "IA",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -111,7 +111,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
             {
                 caption: "Create commonFile2",
                 edit: sys => sys.writeFile(commonFile2.path, commonFile2.content),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -146,17 +146,17 @@ describe("unittests:: tsc-watch:: program updates", () => {
             {
                 caption: "change file to ensure signatures are updated",
                 edit: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "delete file2",
                 edit: sys => sys.deleteFile(commonFile2.path),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "recreate file2",
                 edit: sys => sys.writeFile(commonFile2.path, commonFile2.content),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -177,7 +177,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
             {
                 caption: "create file2",
                 edit: sys => sys.writeFile(commonFile2.path, commonFile2.content),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -200,7 +200,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
             {
                 caption: "change file to ensure signatures are updated",
                 edit: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change config",
@@ -208,7 +208,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}"]
                     }`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -234,7 +234,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}", "${commonFile2.path}"]
                     }`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -262,14 +262,14 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: false }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Enable  allowUnsusedLabels",
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: true }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -303,7 +303,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     compilerOptions: { allowArbitraryExtensions: false },
                     files: ["/a.ts"],
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Enable  allowArbitraryExtensions",
@@ -311,7 +311,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     compilerOptions: { allowArbitraryExtensions: true },
                     files: ["/a.ts"],
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -347,7 +347,7 @@ export class A {
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
 
             },
             {
@@ -355,7 +355,7 @@ export class A {
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -417,7 +417,7 @@ export class A {
                         },
                         "files": ["/a/b/file1.ts"]
                     }`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -465,7 +465,7 @@ export class A {
                 caption: "Modify f2 to include f3",
                 // now inferred project should inclule file3
                 edit: sys => sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -493,7 +493,7 @@ export class A {
             {
                 caption: "Delete f2",
                 edit: sys => sys.deleteFile("/a/b/f2.ts"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -521,7 +521,7 @@ export class A {
             {
                 caption: "Delete f2",
                 edit: sys => sys.deleteFile("/a/b/f2.ts"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -564,7 +564,7 @@ export class A {
         },
         edits: [{
             caption: "change `module` to 'none'",
-            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             edit: sys => {
                 sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
             }
@@ -622,7 +622,7 @@ export class A {
             oldSnap: oldSnap2,
         });
 
-        sys.checkTimeoutQueueLength(0);
+        sys.logTimeoutQueueLength();
         baseline.push(`First program is not updated:: ${getPrograms() === ts.emptyArray}`);
         baseline.push(`Second program is not updated:: ${getPrograms2() === ts.emptyArray}`);
         Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
@@ -643,7 +643,7 @@ export class A {
             {
                 caption: "Write f2",
                 edit: sys => sys.writeFile("/a/b/f2.ts", "let y = 1"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -671,7 +671,7 @@ export class A {
             {
                 caption: "Modify config to make f2 as root too",
                 edit: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -699,12 +699,12 @@ export class A {
             {
                 caption: "Add new file",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/new-file.ts`, "export const z = 1;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Import new file",
                 edit: sys => sys.prependFile(`/user/username/projects/myproject/f1.ts`, `import { z } from "./new-file";`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -728,7 +728,7 @@ export class A {
             {
                 caption: "Write file2",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/Project/file2.ts`, "export const y = 10;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             }
         ]
     });
@@ -756,7 +756,7 @@ export class A {
             {
                 caption: "Modify config to set outFile option",
                 edit: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -784,7 +784,7 @@ export class A {
             {
                 caption: "Delete f2",
                 edit: sys => sys.deleteFile("/a/b/f2.ts"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -808,7 +808,7 @@ export class A {
             {
                 caption: "Delete config file",
                 edit: sys => sys.deleteFile(configFilePath),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -882,7 +882,7 @@ declare const eval: any`
                         }
                     })
                 ),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -1235,7 +1235,7 @@ declare const eval: any`
                     {
                         caption: "Add new file",
                         edit: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
-                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // To update program and failed lookups
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(), // To update program and failed lookups
                     },
                     noopChange,
                 ]
@@ -1844,7 +1844,7 @@ import { x } from "../b";`),
                     compilerOptions: {},
                     files: [commonFile1.path, commonFile2.path]
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change first extended config",
@@ -1853,7 +1853,7 @@ import { x } from "../b";`),
                         strict: false,
                     }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change second extended config",
@@ -1863,7 +1863,7 @@ import { x } from "../b";`),
                         strictNullChecks: true,
                     }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change config to stop extending another config",
@@ -1871,7 +1871,7 @@ import { x } from "../b";`),
                     compilerOptions: {},
                     files: [commonFile1.path, commonFile2.path]
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
@@ -1909,7 +1909,7 @@ import { x } from "../b";`),
             {
                 caption: "Add module3 to folder2",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
@@ -1960,27 +1960,27 @@ import { x } from "../b";`),
             {
                 caption: "Add class3 to project1",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Add output of class3",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Add excluded file to project1",
                 edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                timeouts: sys => sys.logTimeoutQueueLength(),
             },
             {
                 caption: "Delete output of class3",
                 edit: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Add output of class3",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
@@ -2004,7 +2004,7 @@ import { x } from "../b";`),
             {
                 caption: "Create foo in project root",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/foo`, ``),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
@@ -2042,7 +2042,7 @@ import { x } from "../b";`),
                         allowImportingTsExtensions: true
                     }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });

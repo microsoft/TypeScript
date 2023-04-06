@@ -5,4 +5,4 @@
 ////    /*shadowVariableReference*/shdVar = 1;
 ////}
 
-verify.goToDefinitionForMarkers("shadowVariable");
+verify.baselineGetDefinitionAtPosition("shadowVariableReference");

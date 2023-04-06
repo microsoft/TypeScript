@@ -5,8 +5,11 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(9,4): error TS
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(10,17): error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
   Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(11,6): error TS2322: Type '(s: any) => any' is not assignable to type '() => string'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(12,6): error TS2322: Type '(s: string) => string' is not assignable to type '() => string'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,17): error TS2322: Type '(s: any) => any' is not assignable to type '() => string'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
 ==== tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts (6 errors) ====
@@ -33,9 +36,12 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,17): error 
     f2({ toString: (s) => s }) 
          ~~~~~~~~
 !!! error TS2322: Type '(s: any) => any' is not assignable to type '() => string'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
     f2({ toString: (s: string) => s }) 
          ~~~~~~~~
 !!! error TS2322: Type '(s: string) => string' is not assignable to type '() => string'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
     f2({ value: '', toString: (s) => s.uhhh }) 
                     ~~~~~~~~
 !!! error TS2322: Type '(s: any) => any' is not assignable to type '() => string'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.

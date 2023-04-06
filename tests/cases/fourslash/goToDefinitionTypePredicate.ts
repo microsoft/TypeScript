@@ -5,7 +5,7 @@
 ////     return typeof parameter === "string";
 //// }
 
-verify.goToDefinition({
-    parameterName: "parameterDeclaration",
-    typeReference: "classDeclaration"
-});
+verify.baselineGoToDefinition(
+    "parameterName",
+    "typeReference",
+);

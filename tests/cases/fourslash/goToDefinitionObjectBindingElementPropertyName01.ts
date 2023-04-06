@@ -8,4 +8,4 @@
 ////var foo: I;
 ////var { [|/*use*/property1|]: prop1 } = foo;
 
-verify.goToDefinition("use", "def");
+verify.baselineGoToDefinition("use");

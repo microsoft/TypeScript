@@ -113,15 +113,15 @@ export function consume(t: Target, s: Second, f: Fs): void;
 export function ff(s: string): any;
 export type Target = string;
 export namespace Target {
-    const START: string;
-    const MIDDLE: string;
-    const END: string;
-    const OK_I_GUESS: number;
+    let START: string;
+    let MIDDLE: string;
+    let END: string;
+    let OK_I_GUESS: number;
 }
 export type Second = number;
 export namespace Second {
-    const OK: number;
-    const FINE: number;
+    let OK: number;
+    let FINE: number;
 }
 export type Fs = (arg0: number) => number;
 export namespace Fs {

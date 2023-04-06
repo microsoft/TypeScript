@@ -1,0 +1,15 @@
+tests/cases/compiler/classVarianceResolveCircularity.ts(5,5): error TS7022: 'Value' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== tests/cases/compiler/classVarianceResolveCircularity.ts (1 errors) ====
+    // Issue #52813
+    
+    class Bar<T> {
+        num!: number;    // Swap to remove error
+        Value = callme(this).num;
+        ~~~~~
+!!! error TS7022: 'Value' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        Field: number = callme(this).num;
+    }
+    declare function callme(x: Bar<any>): Bar<any>;
+    declare function callme(x: object): string;

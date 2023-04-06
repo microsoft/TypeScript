@@ -29,6 +29,6 @@ declare namespace Foo {
     export { Strings };
 }
 declare namespace Strings {
-    const a: string;
-    const b: string;
+    let a: string;
+    let b: string;
 }

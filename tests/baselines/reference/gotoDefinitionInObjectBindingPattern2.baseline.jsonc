@@ -1,0 +1,42 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionInObjectBindingPattern2.ts ===
+// var p0 = ({a/*GOTO DEF*/a}) => {console.log(aa)};
+// function f2({ a1, b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionInObjectBindingPattern2.ts ===
+// var p0 = ({aa}) => {console.log(aa)};
+// function f2({ a/*GOTO DEF*/1, b1 }: { <|[|a1|]: number,|> b1: number } = { a1: 0, b1: 0 }) {}
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "a1",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionInObjectBindingPattern2.ts ===
+// var p0 = ({aa}) => {console.log(aa)};
+// function f2({ a1, b/*GOTO DEF*/1 }: { a1: number, <|[|b1|]: number|> } = { a1: 0, b1: 0 }) {}
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "b1",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

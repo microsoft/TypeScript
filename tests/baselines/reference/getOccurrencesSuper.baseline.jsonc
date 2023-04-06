@@ -1,0 +1,375 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// class SuperType {
+//     superMethod() {
+//     }
+// 
+//     static superStaticMethod() {
+//         return 10;
+//     }
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = super.superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return super.superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+//     super = 10;
+//     static super = 20;
+// }

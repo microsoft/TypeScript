@@ -7,9 +7,7 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
     closeFilesForSession,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
@@ -49,15 +47,16 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
 
         const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([file1], session);
-        const projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        const diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+            arguments: {
+                projectFileName: tsconfig.path
+            }
+        });
+        baselineTsserverLogs("forceConsistentCasingInFileNames", "works when extends is specified with a case insensitive file system", session);
     });
 
     it("works when renaming file with different casing", () => {
@@ -79,7 +78,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([{ file: loggerFile, projectRootPath: "/user/username/projects/myproject" }], session);
-        verifyGetErrRequest({ session, host, files: [loggerFile] });
+        verifyGetErrRequest({ session, files: [loggerFile] });
 
         const newLoggerPath = loggerFile.path.toLowerCase();
         host.renameFile(loggerFile.path, newLoggerPath);
@@ -105,7 +104,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         });
 
         // Check errors in both files
-        verifyGetErrRequest({ session, host, files: [newLoggerPath, anotherFile] });
+        verifyGetErrRequest({ session, files: [newLoggerPath, anotherFile] });
         baselineTsserverLogs("forceConsistentCasingInFileNames", "works when renaming file with different casing", session);
     });
 
@@ -128,7 +127,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);
-        verifyGetErrRequest({ session, host, files: [anotherFile] });
+        verifyGetErrRequest({ session, files: [anotherFile] });
 
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
@@ -147,7 +146,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         });
 
         // Check errors in both files
-        verifyGetErrRequest({ host, session, files: [anotherFile] });
+        verifyGetErrRequest({ session, files: [anotherFile] });
         baselineTsserverLogs("forceConsistentCasingInFileNames", "when changing module name with different casing", session);
     });
 });

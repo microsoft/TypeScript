@@ -184,8 +184,8 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
         //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
         const wordSpans = getWordSpans(candidate, stringToWordSpans);
         for (const span of wordSpans) {
-            if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
-                return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
+            if (partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ true)) {
+                return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ false));
             }
         }
         // c) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
@@ -195,7 +195,7 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
         // filter the list based on a substring that starts on a capital letter and also with a lowercase one.
         // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
         if (chunk.text.length < candidate.length && isUpperCaseLetter(candidate.charCodeAt(index))) {
-            return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ false);
+            return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ false);
         }
     }
     else {
@@ -203,13 +203,13 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
         //    candidate in a case *sensitive* manner. If so, return that there was a substring
         //    match.
         if (candidate.indexOf(chunk.text) > 0) {
-            return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ true);
+            return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true);
         }
         // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
         if (chunk.characterSpans.length > 0) {
             const candidateParts = getWordSpans(candidate, stringToWordSpans);
-            const isCaseSensitive = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false) ? true
-                : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true) ? false : undefined;
+            const isCaseSensitive = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase*/ false) ? true
+                : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase*/ true) ? false : undefined;
             if (isCaseSensitive !== undefined) {
                 return createPatternMatch(PatternMatchKind.camelCase, isCaseSensitive);
             }
@@ -479,12 +479,12 @@ function createTextChunk(text: string): TextChunk {
 
 /** @internal */
 export function breakIntoCharacterSpans(identifier: string): TextSpan[] {
-    return breakIntoSpans(identifier, /*word:*/ false);
+    return breakIntoSpans(identifier, /*word*/ false);
 }
 
 /** @internal */
 export function breakIntoWordSpans(identifier: string): TextSpan[] {
-    return breakIntoSpans(identifier, /*word:*/ true);
+    return breakIntoSpans(identifier, /*word*/ true);
 }
 
 function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {

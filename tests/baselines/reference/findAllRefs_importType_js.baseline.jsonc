@@ -1,77 +1,39 @@
-// === /a.js ===
-// /*FIND ALL REFS*/[|module|].exports = class C {};
-// module.exports.D = class D {};
-
+// === findAllReferences ===
 // === /b.js ===
-// /** @type {import("[|./a|]")} */
+// /** <|@type {import("[|./a|]")} |>*/
 // const x = 0;
-// /** @type {import("[|./a|]").D} */
+// /** <|@type {import("[|./a|]").D} |>*/
 // const y = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "module",
-      "name": "module \"/a\"",
-      "textSpan": {
-        "start": 0,
-        "length": 59
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/a\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 3
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 4,
-          "length": 22
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 3
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 46,
-          "length": 24
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 6
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 28
-        },
-        "isWriteAccess": false
-      }
+// === /a.js ===
+// /*FIND ALL REFS*/<|[|module|].exports = class C {};|>
+// module.exports.D = class D {};
+
+  // === Definitions ===
+  // === /a.js ===
+  // /*FIND ALL REFS*/[|module.exports = class C {};
+  // module.exports.D = class D {};|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/a\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/a\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

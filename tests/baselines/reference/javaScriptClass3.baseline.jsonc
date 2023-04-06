@@ -1,0 +1,53 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/Foo.js ===
+// class Foo {
+//    constructor() {
+//        <|this.[|alpha|] = 10;|>
+//        this.beta = 'gamma';
+//    }
+//    method() { return this.alpha; }
+// }
+// var x = new Foo();
+// x.alpha/*GOTO DEF*/;
+// x.beta;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "alpha",
+    "containerName": "Foo",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/Foo.js ===
+// class Foo {
+//    constructor() {
+//        this.alpha = 10;
+//        <|this.[|beta|] = 'gamma';|>
+//    }
+//    method() { return this.alpha; }
+// }
+// var x = new Foo();
+// x.alpha;
+// x.beta/*GOTO DEF*/;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "beta",
+    "containerName": "Foo",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

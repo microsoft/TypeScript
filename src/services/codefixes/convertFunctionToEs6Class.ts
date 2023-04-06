@@ -123,7 +123,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                         isObjectLiteralExpression(firstDeclaration.parent.right)
                     ) {
                         const prototypes = firstDeclaration.parent.right;
-                        createClassElement(prototypes.symbol, /** modifiers */ undefined, memberElements);
+                        createClassElement(prototypes.symbol, /*modifiers*/ undefined, memberElements);
                     }
                 }
                 else {
@@ -204,7 +204,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             changes.delete(sourceFile, nodeToDelete);
 
             if (!assignmentExpr) {
-                members.push(factory.createPropertyDeclaration(modifiers, symbol.name, /*questionToken*/ undefined,
+                members.push(factory.createPropertyDeclaration(modifiers, symbol.name, /*questionOrExclamationToken*/ undefined,
                     /*type*/ undefined, /*initializer*/ undefined));
                 return;
             }
@@ -241,7 +241,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                 // Don't try to declare members in JavaScript files
                 if (isSourceFileJS(sourceFile)) return;
                 if (!isPropertyAccessExpression(memberDeclaration)) return;
-                const prop = factory.createPropertyDeclaration(modifiers, memberDeclaration.name, /*questionToken*/ undefined, /*type*/ undefined, assignmentExpr);
+                const prop = factory.createPropertyDeclaration(modifiers, memberDeclaration.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, assignmentExpr);
                 copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                 members.push(prop);
                 return;

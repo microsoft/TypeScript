@@ -11,4 +11,4 @@
 ////}
 ////A.B.[|/*2*/f|]("");
 
-verify.goToDefinition("2", "1");
+verify.baselineGoToDefinition("2");

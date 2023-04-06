@@ -1,127 +1,97 @@
+// === findAllReferences ===
 // === /a.js ===
 // /**
-//  * @template /*FIND ALL REFS*/[|T|]
+//  * @template /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]
 //  * @return {[|T|]}
 //  */
 // function f() {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type parameter",
-      "name": "(type parameter) T",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @template /*FIND ALL REFS*/[|T|]
+  //  * @return {T}
+  //  */
+  // function f() {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.js ===
 // /**
-//  * @template [|T|]
+//  * @template [|{| isWriteAccess: true |}T|]
 //  * @return {/*FIND ALL REFS*/[|T|]}
 //  */
 // function f() {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type parameter",
-      "name": "(type parameter) T",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @template [|T|]
+  //  * @return {/*FIND ALL REFS*/T}
+  //  */
+  // function f() {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     }
     ]
-  }
-]
+   }
+  ]

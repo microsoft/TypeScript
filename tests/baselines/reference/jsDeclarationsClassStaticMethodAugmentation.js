@@ -25,6 +25,6 @@ export class Clazz {
 export namespace Clazz {
     function method(): void;
     namespace method {
-        const prop: number;
+        let prop: number;
     }
 }

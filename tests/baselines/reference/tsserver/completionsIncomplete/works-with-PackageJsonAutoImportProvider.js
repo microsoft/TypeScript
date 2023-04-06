@@ -1,0 +1,8620 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info 0    [00:05:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/tsconfig.json]
+{ "compilerOptions": { "module": "commonjs" } }
+
+//// [/package.json]
+{ "dependencies": { "dep-a": "*" } }
+
+//// [/index.ts]
+
+
+//// [/lib/a_0.ts]
+export const aa_0__0 = 0;
+
+//// [/lib/a_1.ts]
+export const aa_1__0 = 0;
+
+//// [/lib/a_2.ts]
+export const aa_2__0 = 0;
+
+//// [/lib/a_3.ts]
+export const aa_3__0 = 0;
+
+//// [/lib/a_4.ts]
+export const aa_4__0 = 0;
+
+//// [/lib/a_5.ts]
+export const aa_5__0 = 0;
+
+//// [/lib/a_6.ts]
+export const aa_6__0 = 0;
+
+//// [/lib/a_7.ts]
+export const aa_7__0 = 0;
+
+//// [/lib/a_8.ts]
+export const aa_8__0 = 0;
+
+//// [/lib/a_9.ts]
+export const aa_9__0 = 0;
+
+//// [/lib/a_10.ts]
+export const aa_10__0 = 0;
+
+//// [/lib/a_11.ts]
+export const aa_11__0 = 0;
+
+//// [/lib/a_12.ts]
+export const aa_12__0 = 0;
+
+//// [/lib/a_13.ts]
+export const aa_13__0 = 0;
+
+//// [/lib/a_14.ts]
+export const aa_14__0 = 0;
+
+//// [/lib/a_15.ts]
+export const aa_15__0 = 0;
+
+//// [/lib/a_16.ts]
+export const aa_16__0 = 0;
+
+//// [/lib/a_17.ts]
+export const aa_17__0 = 0;
+
+//// [/lib/a_18.ts]
+export const aa_18__0 = 0;
+
+//// [/lib/a_19.ts]
+export const aa_19__0 = 0;
+
+//// [/lib/a_20.ts]
+export const aa_20__0 = 0;
+
+//// [/lib/a_21.ts]
+export const aa_21__0 = 0;
+
+//// [/lib/a_22.ts]
+export const aa_22__0 = 0;
+
+//// [/lib/a_23.ts]
+export const aa_23__0 = 0;
+
+//// [/lib/a_24.ts]
+export const aa_24__0 = 0;
+
+//// [/lib/a_25.ts]
+export const aa_25__0 = 0;
+
+//// [/lib/a_26.ts]
+export const aa_26__0 = 0;
+
+//// [/lib/a_27.ts]
+export const aa_27__0 = 0;
+
+//// [/lib/a_28.ts]
+export const aa_28__0 = 0;
+
+//// [/lib/a_29.ts]
+export const aa_29__0 = 0;
+
+//// [/lib/a_30.ts]
+export const aa_30__0 = 0;
+
+//// [/lib/a_31.ts]
+export const aa_31__0 = 0;
+
+//// [/lib/a_32.ts]
+export const aa_32__0 = 0;
+
+//// [/lib/a_33.ts]
+export const aa_33__0 = 0;
+
+//// [/lib/a_34.ts]
+export const aa_34__0 = 0;
+
+//// [/lib/a_35.ts]
+export const aa_35__0 = 0;
+
+//// [/lib/a_36.ts]
+export const aa_36__0 = 0;
+
+//// [/lib/a_37.ts]
+export const aa_37__0 = 0;
+
+//// [/lib/a_38.ts]
+export const aa_38__0 = 0;
+
+//// [/lib/a_39.ts]
+export const aa_39__0 = 0;
+
+//// [/lib/a_40.ts]
+export const aa_40__0 = 0;
+
+//// [/lib/a_41.ts]
+export const aa_41__0 = 0;
+
+//// [/lib/a_42.ts]
+export const aa_42__0 = 0;
+
+//// [/lib/a_43.ts]
+export const aa_43__0 = 0;
+
+//// [/lib/a_44.ts]
+export const aa_44__0 = 0;
+
+//// [/lib/a_45.ts]
+export const aa_45__0 = 0;
+
+//// [/lib/a_46.ts]
+export const aa_46__0 = 0;
+
+//// [/lib/a_47.ts]
+export const aa_47__0 = 0;
+
+//// [/lib/a_48.ts]
+export const aa_48__0 = 0;
+
+//// [/lib/a_49.ts]
+export const aa_49__0 = 0;
+
+//// [/lib/a_50.ts]
+export const aa_50__0 = 0;
+
+//// [/lib/a_51.ts]
+export const aa_51__0 = 0;
+
+//// [/lib/a_52.ts]
+export const aa_52__0 = 0;
+
+//// [/lib/a_53.ts]
+export const aa_53__0 = 0;
+
+//// [/lib/a_54.ts]
+export const aa_54__0 = 0;
+
+//// [/lib/a_55.ts]
+export const aa_55__0 = 0;
+
+//// [/lib/a_56.ts]
+export const aa_56__0 = 0;
+
+//// [/lib/a_57.ts]
+export const aa_57__0 = 0;
+
+//// [/lib/a_58.ts]
+export const aa_58__0 = 0;
+
+//// [/lib/a_59.ts]
+export const aa_59__0 = 0;
+
+//// [/lib/a_60.ts]
+export const aa_60__0 = 0;
+
+//// [/lib/a_61.ts]
+export const aa_61__0 = 0;
+
+//// [/lib/a_62.ts]
+export const aa_62__0 = 0;
+
+//// [/lib/a_63.ts]
+export const aa_63__0 = 0;
+
+//// [/lib/a_64.ts]
+export const aa_64__0 = 0;
+
+//// [/lib/a_65.ts]
+export const aa_65__0 = 0;
+
+//// [/lib/a_66.ts]
+export const aa_66__0 = 0;
+
+//// [/lib/a_67.ts]
+export const aa_67__0 = 0;
+
+//// [/lib/a_68.ts]
+export const aa_68__0 = 0;
+
+//// [/lib/a_69.ts]
+export const aa_69__0 = 0;
+
+//// [/lib/a_70.ts]
+export const aa_70__0 = 0;
+
+//// [/lib/a_71.ts]
+export const aa_71__0 = 0;
+
+//// [/lib/a_72.ts]
+export const aa_72__0 = 0;
+
+//// [/lib/a_73.ts]
+export const aa_73__0 = 0;
+
+//// [/lib/a_74.ts]
+export const aa_74__0 = 0;
+
+//// [/lib/a_75.ts]
+export const aa_75__0 = 0;
+
+//// [/lib/a_76.ts]
+export const aa_76__0 = 0;
+
+//// [/lib/a_77.ts]
+export const aa_77__0 = 0;
+
+//// [/lib/a_78.ts]
+export const aa_78__0 = 0;
+
+//// [/lib/a_79.ts]
+export const aa_79__0 = 0;
+
+//// [/lib/a_80.ts]
+export const aa_80__0 = 0;
+
+//// [/lib/a_81.ts]
+export const aa_81__0 = 0;
+
+//// [/lib/a_82.ts]
+export const aa_82__0 = 0;
+
+//// [/lib/a_83.ts]
+export const aa_83__0 = 0;
+
+//// [/lib/a_84.ts]
+export const aa_84__0 = 0;
+
+//// [/lib/a_85.ts]
+export const aa_85__0 = 0;
+
+//// [/lib/a_86.ts]
+export const aa_86__0 = 0;
+
+//// [/lib/a_87.ts]
+export const aa_87__0 = 0;
+
+//// [/lib/a_88.ts]
+export const aa_88__0 = 0;
+
+//// [/lib/a_89.ts]
+export const aa_89__0 = 0;
+
+//// [/lib/a_90.ts]
+export const aa_90__0 = 0;
+
+//// [/lib/a_91.ts]
+export const aa_91__0 = 0;
+
+//// [/lib/a_92.ts]
+export const aa_92__0 = 0;
+
+//// [/lib/a_93.ts]
+export const aa_93__0 = 0;
+
+//// [/lib/a_94.ts]
+export const aa_94__0 = 0;
+
+//// [/lib/a_95.ts]
+export const aa_95__0 = 0;
+
+//// [/lib/a_96.ts]
+export const aa_96__0 = 0;
+
+//// [/lib/a_97.ts]
+export const aa_97__0 = 0;
+
+//// [/lib/a_98.ts]
+export const aa_98__0 = 0;
+
+//// [/lib/a_99.ts]
+export const aa_99__0 = 0;
+
+//// [/node_modules/dep-a/package.json]
+{ "types": "index.d.ts" }
+
+//// [/node_modules/dep-a/index.d.ts]
+export * from "./file_0";
+export * from "./file_1";
+export * from "./file_2";
+export * from "./file_3";
+export * from "./file_4";
+export * from "./file_5";
+export * from "./file_6";
+export * from "./file_7";
+export * from "./file_8";
+export * from "./file_9";
+export * from "./file_10";
+export * from "./file_11";
+export * from "./file_12";
+export * from "./file_13";
+export * from "./file_14";
+export * from "./file_15";
+export * from "./file_16";
+export * from "./file_17";
+export * from "./file_18";
+export * from "./file_19";
+export * from "./file_20";
+export * from "./file_21";
+export * from "./file_22";
+export * from "./file_23";
+export * from "./file_24";
+export * from "./file_25";
+export * from "./file_26";
+export * from "./file_27";
+export * from "./file_28";
+export * from "./file_29";
+export * from "./file_30";
+export * from "./file_31";
+export * from "./file_32";
+export * from "./file_33";
+export * from "./file_34";
+export * from "./file_35";
+export * from "./file_36";
+export * from "./file_37";
+export * from "./file_38";
+export * from "./file_39";
+export * from "./file_40";
+export * from "./file_41";
+export * from "./file_42";
+export * from "./file_43";
+export * from "./file_44";
+export * from "./file_45";
+export * from "./file_46";
+export * from "./file_47";
+export * from "./file_48";
+export * from "./file_49";
+export default function main(): void;
+
+//// [/node_modules/dep-a/file_0.ts]
+export const depA_0__0 = 0;
+
+//// [/node_modules/dep-a/file_1.ts]
+export const depA_1__0 = 0;
+
+//// [/node_modules/dep-a/file_2.ts]
+export const depA_2__0 = 0;
+
+//// [/node_modules/dep-a/file_3.ts]
+export const depA_3__0 = 0;
+
+//// [/node_modules/dep-a/file_4.ts]
+export const depA_4__0 = 0;
+
+//// [/node_modules/dep-a/file_5.ts]
+export const depA_5__0 = 0;
+
+//// [/node_modules/dep-a/file_6.ts]
+export const depA_6__0 = 0;
+
+//// [/node_modules/dep-a/file_7.ts]
+export const depA_7__0 = 0;
+
+//// [/node_modules/dep-a/file_8.ts]
+export const depA_8__0 = 0;
+
+//// [/node_modules/dep-a/file_9.ts]
+export const depA_9__0 = 0;
+
+//// [/node_modules/dep-a/file_10.ts]
+export const depA_10__0 = 0;
+
+//// [/node_modules/dep-a/file_11.ts]
+export const depA_11__0 = 0;
+
+//// [/node_modules/dep-a/file_12.ts]
+export const depA_12__0 = 0;
+
+//// [/node_modules/dep-a/file_13.ts]
+export const depA_13__0 = 0;
+
+//// [/node_modules/dep-a/file_14.ts]
+export const depA_14__0 = 0;
+
+//// [/node_modules/dep-a/file_15.ts]
+export const depA_15__0 = 0;
+
+//// [/node_modules/dep-a/file_16.ts]
+export const depA_16__0 = 0;
+
+//// [/node_modules/dep-a/file_17.ts]
+export const depA_17__0 = 0;
+
+//// [/node_modules/dep-a/file_18.ts]
+export const depA_18__0 = 0;
+
+//// [/node_modules/dep-a/file_19.ts]
+export const depA_19__0 = 0;
+
+//// [/node_modules/dep-a/file_20.ts]
+export const depA_20__0 = 0;
+
+//// [/node_modules/dep-a/file_21.ts]
+export const depA_21__0 = 0;
+
+//// [/node_modules/dep-a/file_22.ts]
+export const depA_22__0 = 0;
+
+//// [/node_modules/dep-a/file_23.ts]
+export const depA_23__0 = 0;
+
+//// [/node_modules/dep-a/file_24.ts]
+export const depA_24__0 = 0;
+
+//// [/node_modules/dep-a/file_25.ts]
+export const depA_25__0 = 0;
+
+//// [/node_modules/dep-a/file_26.ts]
+export const depA_26__0 = 0;
+
+//// [/node_modules/dep-a/file_27.ts]
+export const depA_27__0 = 0;
+
+//// [/node_modules/dep-a/file_28.ts]
+export const depA_28__0 = 0;
+
+//// [/node_modules/dep-a/file_29.ts]
+export const depA_29__0 = 0;
+
+//// [/node_modules/dep-a/file_30.ts]
+export const depA_30__0 = 0;
+
+//// [/node_modules/dep-a/file_31.ts]
+export const depA_31__0 = 0;
+
+//// [/node_modules/dep-a/file_32.ts]
+export const depA_32__0 = 0;
+
+//// [/node_modules/dep-a/file_33.ts]
+export const depA_33__0 = 0;
+
+//// [/node_modules/dep-a/file_34.ts]
+export const depA_34__0 = 0;
+
+//// [/node_modules/dep-a/file_35.ts]
+export const depA_35__0 = 0;
+
+//// [/node_modules/dep-a/file_36.ts]
+export const depA_36__0 = 0;
+
+//// [/node_modules/dep-a/file_37.ts]
+export const depA_37__0 = 0;
+
+//// [/node_modules/dep-a/file_38.ts]
+export const depA_38__0 = 0;
+
+//// [/node_modules/dep-a/file_39.ts]
+export const depA_39__0 = 0;
+
+//// [/node_modules/dep-a/file_40.ts]
+export const depA_40__0 = 0;
+
+//// [/node_modules/dep-a/file_41.ts]
+export const depA_41__0 = 0;
+
+//// [/node_modules/dep-a/file_42.ts]
+export const depA_42__0 = 0;
+
+//// [/node_modules/dep-a/file_43.ts]
+export const depA_43__0 = 0;
+
+//// [/node_modules/dep-a/file_44.ts]
+export const depA_44__0 = 0;
+
+//// [/node_modules/dep-a/file_45.ts]
+export const depA_45__0 = 0;
+
+//// [/node_modules/dep-a/file_46.ts]
+export const depA_46__0 = 0;
+
+//// [/node_modules/dep-a/file_47.ts]
+export const depA_47__0 = 0;
+
+//// [/node_modules/dep-a/file_48.ts]
+export const depA_48__0 = 0;
+
+//// [/node_modules/dep-a/file_49.ts]
+export const depA_49__0 = 0;
+
+
+Info 1    [00:05:20.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "allowIncompleteCompletions": true,
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true,
+          "includeCompletionsForImportStatements": true,
+          "includePackageJsonAutoImports": "auto"
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info 2    [00:05:21.000] response:
+    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+Info 3    [00:05:22.000] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info 4    [00:05:23.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/index.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info 5    [00:05:24.000] Search path: /
+Info 6    [00:05:25.000] For info: /index.ts :: Config file name: /tsconfig.json
+Info 7    [00:05:26.000] Creating configuration project /tsconfig.json
+Info 8    [00:05:27.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info 9    [00:05:28.000] Config: /tsconfig.json : {
+ "rootNames": [
+  "/index.ts",
+  "/lib/a_0.ts",
+  "/lib/a_1.ts",
+  "/lib/a_10.ts",
+  "/lib/a_11.ts",
+  "/lib/a_12.ts",
+  "/lib/a_13.ts",
+  "/lib/a_14.ts",
+  "/lib/a_15.ts",
+  "/lib/a_16.ts",
+  "/lib/a_17.ts",
+  "/lib/a_18.ts",
+  "/lib/a_19.ts",
+  "/lib/a_2.ts",
+  "/lib/a_20.ts",
+  "/lib/a_21.ts",
+  "/lib/a_22.ts",
+  "/lib/a_23.ts",
+  "/lib/a_24.ts",
+  "/lib/a_25.ts",
+  "/lib/a_26.ts",
+  "/lib/a_27.ts",
+  "/lib/a_28.ts",
+  "/lib/a_29.ts",
+  "/lib/a_3.ts",
+  "/lib/a_30.ts",
+  "/lib/a_31.ts",
+  "/lib/a_32.ts",
+  "/lib/a_33.ts",
+  "/lib/a_34.ts",
+  "/lib/a_35.ts",
+  "/lib/a_36.ts",
+  "/lib/a_37.ts",
+  "/lib/a_38.ts",
+  "/lib/a_39.ts",
+  "/lib/a_4.ts",
+  "/lib/a_40.ts",
+  "/lib/a_41.ts",
+  "/lib/a_42.ts",
+  "/lib/a_43.ts",
+  "/lib/a_44.ts",
+  "/lib/a_45.ts",
+  "/lib/a_46.ts",
+  "/lib/a_47.ts",
+  "/lib/a_48.ts",
+  "/lib/a_49.ts",
+  "/lib/a_5.ts",
+  "/lib/a_50.ts",
+  "/lib/a_51.ts",
+  "/lib/a_52.ts",
+  "/lib/a_53.ts",
+  "/lib/a_54.ts",
+  "/lib/a_55.ts",
+  "/lib/a_56.ts",
+  "/lib/a_57.ts",
+  "/lib/a_58.ts",
+  "/lib/a_59.ts",
+  "/lib/a_6.ts",
+  "/lib/a_60.ts",
+  "/lib/a_61.ts",
+  "/lib/a_62.ts",
+  "/lib/a_63.ts",
+  "/lib/a_64.ts",
+  "/lib/a_65.ts",
+  "/lib/a_66.ts",
+  "/lib/a_67.ts",
+  "/lib/a_68.ts",
+  "/lib/a_69.ts",
+  "/lib/a_7.ts",
+  "/lib/a_70.ts",
+  "/lib/a_71.ts",
+  "/lib/a_72.ts",
+  "/lib/a_73.ts",
+  "/lib/a_74.ts",
+  "/lib/a_75.ts",
+  "/lib/a_76.ts",
+  "/lib/a_77.ts",
+  "/lib/a_78.ts",
+  "/lib/a_79.ts",
+  "/lib/a_8.ts",
+  "/lib/a_80.ts",
+  "/lib/a_81.ts",
+  "/lib/a_82.ts",
+  "/lib/a_83.ts",
+  "/lib/a_84.ts",
+  "/lib/a_85.ts",
+  "/lib/a_86.ts",
+  "/lib/a_87.ts",
+  "/lib/a_88.ts",
+  "/lib/a_89.ts",
+  "/lib/a_9.ts",
+  "/lib/a_90.ts",
+  "/lib/a_91.ts",
+  "/lib/a_92.ts",
+  "/lib/a_93.ts",
+  "/lib/a_94.ts",
+  "/lib/a_95.ts",
+  "/lib/a_96.ts",
+  "/lib/a_97.ts",
+  "/lib/a_98.ts",
+  "/lib/a_99.ts"
+ ],
+ "options": {
+  "module": 1,
+  "configFilePath": "/tsconfig.json"
+ }
+}
+Info 10   [00:05:29.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info 11   [00:05:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info 12   [00:05:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
+Info 13   [00:05:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
+Info 14   [00:05:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
+Info 15   [00:05:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
+Info 16   [00:05:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
+Info 17   [00:05:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
+Info 18   [00:05:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
+Info 19   [00:05:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
+Info 20   [00:05:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
+Info 21   [00:05:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
+Info 22   [00:05:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
+Info 23   [00:05:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
+Info 24   [00:05:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
+Info 25   [00:05:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
+Info 26   [00:05:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
+Info 27   [00:05:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
+Info 28   [00:05:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
+Info 29   [00:05:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
+Info 30   [00:05:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
+Info 31   [00:05:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
+Info 32   [00:05:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
+Info 33   [00:05:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
+Info 34   [00:05:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
+Info 35   [00:05:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
+Info 36   [00:05:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
+Info 37   [00:05:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
+Info 38   [00:05:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
+Info 39   [00:05:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
+Info 40   [00:05:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
+Info 41   [00:06:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
+Info 42   [00:06:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
+Info 43   [00:06:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
+Info 44   [00:06:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
+Info 45   [00:06:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
+Info 46   [00:06:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
+Info 47   [00:06:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
+Info 48   [00:06:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
+Info 49   [00:06:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
+Info 50   [00:06:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
+Info 51   [00:06:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
+Info 52   [00:06:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
+Info 53   [00:06:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
+Info 54   [00:06:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
+Info 55   [00:06:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
+Info 56   [00:06:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
+Info 57   [00:06:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
+Info 58   [00:06:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_50.ts 500 undefined WatchType: Closed Script info
+Info 59   [00:06:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_51.ts 500 undefined WatchType: Closed Script info
+Info 60   [00:06:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_52.ts 500 undefined WatchType: Closed Script info
+Info 61   [00:06:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_53.ts 500 undefined WatchType: Closed Script info
+Info 62   [00:06:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_54.ts 500 undefined WatchType: Closed Script info
+Info 63   [00:06:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_55.ts 500 undefined WatchType: Closed Script info
+Info 64   [00:06:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_56.ts 500 undefined WatchType: Closed Script info
+Info 65   [00:06:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_57.ts 500 undefined WatchType: Closed Script info
+Info 66   [00:06:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_58.ts 500 undefined WatchType: Closed Script info
+Info 67   [00:06:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_59.ts 500 undefined WatchType: Closed Script info
+Info 68   [00:06:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
+Info 69   [00:06:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_60.ts 500 undefined WatchType: Closed Script info
+Info 70   [00:06:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_61.ts 500 undefined WatchType: Closed Script info
+Info 71   [00:06:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_62.ts 500 undefined WatchType: Closed Script info
+Info 72   [00:06:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_63.ts 500 undefined WatchType: Closed Script info
+Info 73   [00:06:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_64.ts 500 undefined WatchType: Closed Script info
+Info 74   [00:06:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_65.ts 500 undefined WatchType: Closed Script info
+Info 75   [00:06:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_66.ts 500 undefined WatchType: Closed Script info
+Info 76   [00:06:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_67.ts 500 undefined WatchType: Closed Script info
+Info 77   [00:06:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_68.ts 500 undefined WatchType: Closed Script info
+Info 78   [00:06:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_69.ts 500 undefined WatchType: Closed Script info
+Info 79   [00:06:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
+Info 80   [00:06:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_70.ts 500 undefined WatchType: Closed Script info
+Info 81   [00:06:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_71.ts 500 undefined WatchType: Closed Script info
+Info 82   [00:06:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_72.ts 500 undefined WatchType: Closed Script info
+Info 83   [00:06:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_73.ts 500 undefined WatchType: Closed Script info
+Info 84   [00:06:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_74.ts 500 undefined WatchType: Closed Script info
+Info 85   [00:06:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_75.ts 500 undefined WatchType: Closed Script info
+Info 86   [00:06:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_76.ts 500 undefined WatchType: Closed Script info
+Info 87   [00:06:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_77.ts 500 undefined WatchType: Closed Script info
+Info 88   [00:06:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_78.ts 500 undefined WatchType: Closed Script info
+Info 89   [00:06:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_79.ts 500 undefined WatchType: Closed Script info
+Info 90   [00:06:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
+Info 91   [00:06:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_80.ts 500 undefined WatchType: Closed Script info
+Info 92   [00:06:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_81.ts 500 undefined WatchType: Closed Script info
+Info 93   [00:06:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_82.ts 500 undefined WatchType: Closed Script info
+Info 94   [00:06:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_83.ts 500 undefined WatchType: Closed Script info
+Info 95   [00:06:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_84.ts 500 undefined WatchType: Closed Script info
+Info 96   [00:06:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_85.ts 500 undefined WatchType: Closed Script info
+Info 97   [00:06:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_86.ts 500 undefined WatchType: Closed Script info
+Info 98   [00:06:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_87.ts 500 undefined WatchType: Closed Script info
+Info 99   [00:06:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_88.ts 500 undefined WatchType: Closed Script info
+Info 100  [00:06:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_89.ts 500 undefined WatchType: Closed Script info
+Info 101  [00:07:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
+Info 102  [00:07:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_90.ts 500 undefined WatchType: Closed Script info
+Info 103  [00:07:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_91.ts 500 undefined WatchType: Closed Script info
+Info 104  [00:07:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_92.ts 500 undefined WatchType: Closed Script info
+Info 105  [00:07:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_93.ts 500 undefined WatchType: Closed Script info
+Info 106  [00:07:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_94.ts 500 undefined WatchType: Closed Script info
+Info 107  [00:07:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_95.ts 500 undefined WatchType: Closed Script info
+Info 108  [00:07:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_96.ts 500 undefined WatchType: Closed Script info
+Info 109  [00:07:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_97.ts 500 undefined WatchType: Closed Script info
+Info 110  [00:07:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undefined WatchType: Closed Script info
+Info 111  [00:07:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
+Info 112  [00:07:11.000] Starting updateGraphWorker: Project: /tsconfig.json
+Info 113  [00:07:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info 114  [00:07:13.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 115  [00:07:14.000] Project '/tsconfig.json' (Configured)
+Info 116  [00:07:15.000] 	Files (101)
+	/index.ts SVC-1-0 ""
+	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
+	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
+	/lib/a_10.ts Text-1 "export const aa_10__0 = 0;"
+	/lib/a_11.ts Text-1 "export const aa_11__0 = 0;"
+	/lib/a_12.ts Text-1 "export const aa_12__0 = 0;"
+	/lib/a_13.ts Text-1 "export const aa_13__0 = 0;"
+	/lib/a_14.ts Text-1 "export const aa_14__0 = 0;"
+	/lib/a_15.ts Text-1 "export const aa_15__0 = 0;"
+	/lib/a_16.ts Text-1 "export const aa_16__0 = 0;"
+	/lib/a_17.ts Text-1 "export const aa_17__0 = 0;"
+	/lib/a_18.ts Text-1 "export const aa_18__0 = 0;"
+	/lib/a_19.ts Text-1 "export const aa_19__0 = 0;"
+	/lib/a_2.ts Text-1 "export const aa_2__0 = 0;"
+	/lib/a_20.ts Text-1 "export const aa_20__0 = 0;"
+	/lib/a_21.ts Text-1 "export const aa_21__0 = 0;"
+	/lib/a_22.ts Text-1 "export const aa_22__0 = 0;"
+	/lib/a_23.ts Text-1 "export const aa_23__0 = 0;"
+	/lib/a_24.ts Text-1 "export const aa_24__0 = 0;"
+	/lib/a_25.ts Text-1 "export const aa_25__0 = 0;"
+	/lib/a_26.ts Text-1 "export const aa_26__0 = 0;"
+	/lib/a_27.ts Text-1 "export const aa_27__0 = 0;"
+	/lib/a_28.ts Text-1 "export const aa_28__0 = 0;"
+	/lib/a_29.ts Text-1 "export const aa_29__0 = 0;"
+	/lib/a_3.ts Text-1 "export const aa_3__0 = 0;"
+	/lib/a_30.ts Text-1 "export const aa_30__0 = 0;"
+	/lib/a_31.ts Text-1 "export const aa_31__0 = 0;"
+	/lib/a_32.ts Text-1 "export const aa_32__0 = 0;"
+	/lib/a_33.ts Text-1 "export const aa_33__0 = 0;"
+	/lib/a_34.ts Text-1 "export const aa_34__0 = 0;"
+	/lib/a_35.ts Text-1 "export const aa_35__0 = 0;"
+	/lib/a_36.ts Text-1 "export const aa_36__0 = 0;"
+	/lib/a_37.ts Text-1 "export const aa_37__0 = 0;"
+	/lib/a_38.ts Text-1 "export const aa_38__0 = 0;"
+	/lib/a_39.ts Text-1 "export const aa_39__0 = 0;"
+	/lib/a_4.ts Text-1 "export const aa_4__0 = 0;"
+	/lib/a_40.ts Text-1 "export const aa_40__0 = 0;"
+	/lib/a_41.ts Text-1 "export const aa_41__0 = 0;"
+	/lib/a_42.ts Text-1 "export const aa_42__0 = 0;"
+	/lib/a_43.ts Text-1 "export const aa_43__0 = 0;"
+	/lib/a_44.ts Text-1 "export const aa_44__0 = 0;"
+	/lib/a_45.ts Text-1 "export const aa_45__0 = 0;"
+	/lib/a_46.ts Text-1 "export const aa_46__0 = 0;"
+	/lib/a_47.ts Text-1 "export const aa_47__0 = 0;"
+	/lib/a_48.ts Text-1 "export const aa_48__0 = 0;"
+	/lib/a_49.ts Text-1 "export const aa_49__0 = 0;"
+	/lib/a_5.ts Text-1 "export const aa_5__0 = 0;"
+	/lib/a_50.ts Text-1 "export const aa_50__0 = 0;"
+	/lib/a_51.ts Text-1 "export const aa_51__0 = 0;"
+	/lib/a_52.ts Text-1 "export const aa_52__0 = 0;"
+	/lib/a_53.ts Text-1 "export const aa_53__0 = 0;"
+	/lib/a_54.ts Text-1 "export const aa_54__0 = 0;"
+	/lib/a_55.ts Text-1 "export const aa_55__0 = 0;"
+	/lib/a_56.ts Text-1 "export const aa_56__0 = 0;"
+	/lib/a_57.ts Text-1 "export const aa_57__0 = 0;"
+	/lib/a_58.ts Text-1 "export const aa_58__0 = 0;"
+	/lib/a_59.ts Text-1 "export const aa_59__0 = 0;"
+	/lib/a_6.ts Text-1 "export const aa_6__0 = 0;"
+	/lib/a_60.ts Text-1 "export const aa_60__0 = 0;"
+	/lib/a_61.ts Text-1 "export const aa_61__0 = 0;"
+	/lib/a_62.ts Text-1 "export const aa_62__0 = 0;"
+	/lib/a_63.ts Text-1 "export const aa_63__0 = 0;"
+	/lib/a_64.ts Text-1 "export const aa_64__0 = 0;"
+	/lib/a_65.ts Text-1 "export const aa_65__0 = 0;"
+	/lib/a_66.ts Text-1 "export const aa_66__0 = 0;"
+	/lib/a_67.ts Text-1 "export const aa_67__0 = 0;"
+	/lib/a_68.ts Text-1 "export const aa_68__0 = 0;"
+	/lib/a_69.ts Text-1 "export const aa_69__0 = 0;"
+	/lib/a_7.ts Text-1 "export const aa_7__0 = 0;"
+	/lib/a_70.ts Text-1 "export const aa_70__0 = 0;"
+	/lib/a_71.ts Text-1 "export const aa_71__0 = 0;"
+	/lib/a_72.ts Text-1 "export const aa_72__0 = 0;"
+	/lib/a_73.ts Text-1 "export const aa_73__0 = 0;"
+	/lib/a_74.ts Text-1 "export const aa_74__0 = 0;"
+	/lib/a_75.ts Text-1 "export const aa_75__0 = 0;"
+	/lib/a_76.ts Text-1 "export const aa_76__0 = 0;"
+	/lib/a_77.ts Text-1 "export const aa_77__0 = 0;"
+	/lib/a_78.ts Text-1 "export const aa_78__0 = 0;"
+	/lib/a_79.ts Text-1 "export const aa_79__0 = 0;"
+	/lib/a_8.ts Text-1 "export const aa_8__0 = 0;"
+	/lib/a_80.ts Text-1 "export const aa_80__0 = 0;"
+	/lib/a_81.ts Text-1 "export const aa_81__0 = 0;"
+	/lib/a_82.ts Text-1 "export const aa_82__0 = 0;"
+	/lib/a_83.ts Text-1 "export const aa_83__0 = 0;"
+	/lib/a_84.ts Text-1 "export const aa_84__0 = 0;"
+	/lib/a_85.ts Text-1 "export const aa_85__0 = 0;"
+	/lib/a_86.ts Text-1 "export const aa_86__0 = 0;"
+	/lib/a_87.ts Text-1 "export const aa_87__0 = 0;"
+	/lib/a_88.ts Text-1 "export const aa_88__0 = 0;"
+	/lib/a_89.ts Text-1 "export const aa_89__0 = 0;"
+	/lib/a_9.ts Text-1 "export const aa_9__0 = 0;"
+	/lib/a_90.ts Text-1 "export const aa_90__0 = 0;"
+	/lib/a_91.ts Text-1 "export const aa_91__0 = 0;"
+	/lib/a_92.ts Text-1 "export const aa_92__0 = 0;"
+	/lib/a_93.ts Text-1 "export const aa_93__0 = 0;"
+	/lib/a_94.ts Text-1 "export const aa_94__0 = 0;"
+	/lib/a_95.ts Text-1 "export const aa_95__0 = 0;"
+	/lib/a_96.ts Text-1 "export const aa_96__0 = 0;"
+	/lib/a_97.ts Text-1 "export const aa_97__0 = 0;"
+	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;"
+	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;"
+
+
+	index.ts
+	  Matched by default include pattern '**/*'
+	lib/a_0.ts
+	  Matched by default include pattern '**/*'
+	lib/a_1.ts
+	  Matched by default include pattern '**/*'
+	lib/a_10.ts
+	  Matched by default include pattern '**/*'
+	lib/a_11.ts
+	  Matched by default include pattern '**/*'
+	lib/a_12.ts
+	  Matched by default include pattern '**/*'
+	lib/a_13.ts
+	  Matched by default include pattern '**/*'
+	lib/a_14.ts
+	  Matched by default include pattern '**/*'
+	lib/a_15.ts
+	  Matched by default include pattern '**/*'
+	lib/a_16.ts
+	  Matched by default include pattern '**/*'
+	lib/a_17.ts
+	  Matched by default include pattern '**/*'
+	lib/a_18.ts
+	  Matched by default include pattern '**/*'
+	lib/a_19.ts
+	  Matched by default include pattern '**/*'
+	lib/a_2.ts
+	  Matched by default include pattern '**/*'
+	lib/a_20.ts
+	  Matched by default include pattern '**/*'
+	lib/a_21.ts
+	  Matched by default include pattern '**/*'
+	lib/a_22.ts
+	  Matched by default include pattern '**/*'
+	lib/a_23.ts
+	  Matched by default include pattern '**/*'
+	lib/a_24.ts
+	  Matched by default include pattern '**/*'
+	lib/a_25.ts
+	  Matched by default include pattern '**/*'
+	lib/a_26.ts
+	  Matched by default include pattern '**/*'
+	lib/a_27.ts
+	  Matched by default include pattern '**/*'
+	lib/a_28.ts
+	  Matched by default include pattern '**/*'
+	lib/a_29.ts
+	  Matched by default include pattern '**/*'
+	lib/a_3.ts
+	  Matched by default include pattern '**/*'
+	lib/a_30.ts
+	  Matched by default include pattern '**/*'
+	lib/a_31.ts
+	  Matched by default include pattern '**/*'
+	lib/a_32.ts
+	  Matched by default include pattern '**/*'
+	lib/a_33.ts
+	  Matched by default include pattern '**/*'
+	lib/a_34.ts
+	  Matched by default include pattern '**/*'
+	lib/a_35.ts
+	  Matched by default include pattern '**/*'
+	lib/a_36.ts
+	  Matched by default include pattern '**/*'
+	lib/a_37.ts
+	  Matched by default include pattern '**/*'
+	lib/a_38.ts
+	  Matched by default include pattern '**/*'
+	lib/a_39.ts
+	  Matched by default include pattern '**/*'
+	lib/a_4.ts
+	  Matched by default include pattern '**/*'
+	lib/a_40.ts
+	  Matched by default include pattern '**/*'
+	lib/a_41.ts
+	  Matched by default include pattern '**/*'
+	lib/a_42.ts
+	  Matched by default include pattern '**/*'
+	lib/a_43.ts
+	  Matched by default include pattern '**/*'
+	lib/a_44.ts
+	  Matched by default include pattern '**/*'
+	lib/a_45.ts
+	  Matched by default include pattern '**/*'
+	lib/a_46.ts
+	  Matched by default include pattern '**/*'
+	lib/a_47.ts
+	  Matched by default include pattern '**/*'
+	lib/a_48.ts
+	  Matched by default include pattern '**/*'
+	lib/a_49.ts
+	  Matched by default include pattern '**/*'
+	lib/a_5.ts
+	  Matched by default include pattern '**/*'
+	lib/a_50.ts
+	  Matched by default include pattern '**/*'
+	lib/a_51.ts
+	  Matched by default include pattern '**/*'
+	lib/a_52.ts
+	  Matched by default include pattern '**/*'
+	lib/a_53.ts
+	  Matched by default include pattern '**/*'
+	lib/a_54.ts
+	  Matched by default include pattern '**/*'
+	lib/a_55.ts
+	  Matched by default include pattern '**/*'
+	lib/a_56.ts
+	  Matched by default include pattern '**/*'
+	lib/a_57.ts
+	  Matched by default include pattern '**/*'
+	lib/a_58.ts
+	  Matched by default include pattern '**/*'
+	lib/a_59.ts
+	  Matched by default include pattern '**/*'
+	lib/a_6.ts
+	  Matched by default include pattern '**/*'
+	lib/a_60.ts
+	  Matched by default include pattern '**/*'
+	lib/a_61.ts
+	  Matched by default include pattern '**/*'
+	lib/a_62.ts
+	  Matched by default include pattern '**/*'
+	lib/a_63.ts
+	  Matched by default include pattern '**/*'
+	lib/a_64.ts
+	  Matched by default include pattern '**/*'
+	lib/a_65.ts
+	  Matched by default include pattern '**/*'
+	lib/a_66.ts
+	  Matched by default include pattern '**/*'
+	lib/a_67.ts
+	  Matched by default include pattern '**/*'
+	lib/a_68.ts
+	  Matched by default include pattern '**/*'
+	lib/a_69.ts
+	  Matched by default include pattern '**/*'
+	lib/a_7.ts
+	  Matched by default include pattern '**/*'
+	lib/a_70.ts
+	  Matched by default include pattern '**/*'
+	lib/a_71.ts
+	  Matched by default include pattern '**/*'
+	lib/a_72.ts
+	  Matched by default include pattern '**/*'
+	lib/a_73.ts
+	  Matched by default include pattern '**/*'
+	lib/a_74.ts
+	  Matched by default include pattern '**/*'
+	lib/a_75.ts
+	  Matched by default include pattern '**/*'
+	lib/a_76.ts
+	  Matched by default include pattern '**/*'
+	lib/a_77.ts
+	  Matched by default include pattern '**/*'
+	lib/a_78.ts
+	  Matched by default include pattern '**/*'
+	lib/a_79.ts
+	  Matched by default include pattern '**/*'
+	lib/a_8.ts
+	  Matched by default include pattern '**/*'
+	lib/a_80.ts
+	  Matched by default include pattern '**/*'
+	lib/a_81.ts
+	  Matched by default include pattern '**/*'
+	lib/a_82.ts
+	  Matched by default include pattern '**/*'
+	lib/a_83.ts
+	  Matched by default include pattern '**/*'
+	lib/a_84.ts
+	  Matched by default include pattern '**/*'
+	lib/a_85.ts
+	  Matched by default include pattern '**/*'
+	lib/a_86.ts
+	  Matched by default include pattern '**/*'
+	lib/a_87.ts
+	  Matched by default include pattern '**/*'
+	lib/a_88.ts
+	  Matched by default include pattern '**/*'
+	lib/a_89.ts
+	  Matched by default include pattern '**/*'
+	lib/a_9.ts
+	  Matched by default include pattern '**/*'
+	lib/a_90.ts
+	  Matched by default include pattern '**/*'
+	lib/a_91.ts
+	  Matched by default include pattern '**/*'
+	lib/a_92.ts
+	  Matched by default include pattern '**/*'
+	lib/a_93.ts
+	  Matched by default include pattern '**/*'
+	lib/a_94.ts
+	  Matched by default include pattern '**/*'
+	lib/a_95.ts
+	  Matched by default include pattern '**/*'
+	lib/a_96.ts
+	  Matched by default include pattern '**/*'
+	lib/a_97.ts
+	  Matched by default include pattern '**/*'
+	lib/a_98.ts
+	  Matched by default include pattern '**/*'
+	lib/a_99.ts
+	  Matched by default include pattern '**/*'
+
+Info 117  [00:07:16.000] -----------------------------------------------
+Info 118  [00:07:17.000] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info 119  [00:07:18.000] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info 120  [00:07:19.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 121  [00:07:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 122  [00:07:21.000] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info 123  [00:07:22.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 124  [00:07:23.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 125  [00:07:24.000] 	Files (51)
+	/node_modules/dep-a/file_0.ts Text-1 "export const depA_0__0 = 0;"
+	/node_modules/dep-a/file_1.ts Text-1 "export const depA_1__0 = 0;"
+	/node_modules/dep-a/file_2.ts Text-1 "export const depA_2__0 = 0;"
+	/node_modules/dep-a/file_3.ts Text-1 "export const depA_3__0 = 0;"
+	/node_modules/dep-a/file_4.ts Text-1 "export const depA_4__0 = 0;"
+	/node_modules/dep-a/file_5.ts Text-1 "export const depA_5__0 = 0;"
+	/node_modules/dep-a/file_6.ts Text-1 "export const depA_6__0 = 0;"
+	/node_modules/dep-a/file_7.ts Text-1 "export const depA_7__0 = 0;"
+	/node_modules/dep-a/file_8.ts Text-1 "export const depA_8__0 = 0;"
+	/node_modules/dep-a/file_9.ts Text-1 "export const depA_9__0 = 0;"
+	/node_modules/dep-a/file_10.ts Text-1 "export const depA_10__0 = 0;"
+	/node_modules/dep-a/file_11.ts Text-1 "export const depA_11__0 = 0;"
+	/node_modules/dep-a/file_12.ts Text-1 "export const depA_12__0 = 0;"
+	/node_modules/dep-a/file_13.ts Text-1 "export const depA_13__0 = 0;"
+	/node_modules/dep-a/file_14.ts Text-1 "export const depA_14__0 = 0;"
+	/node_modules/dep-a/file_15.ts Text-1 "export const depA_15__0 = 0;"
+	/node_modules/dep-a/file_16.ts Text-1 "export const depA_16__0 = 0;"
+	/node_modules/dep-a/file_17.ts Text-1 "export const depA_17__0 = 0;"
+	/node_modules/dep-a/file_18.ts Text-1 "export const depA_18__0 = 0;"
+	/node_modules/dep-a/file_19.ts Text-1 "export const depA_19__0 = 0;"
+	/node_modules/dep-a/file_20.ts Text-1 "export const depA_20__0 = 0;"
+	/node_modules/dep-a/file_21.ts Text-1 "export const depA_21__0 = 0;"
+	/node_modules/dep-a/file_22.ts Text-1 "export const depA_22__0 = 0;"
+	/node_modules/dep-a/file_23.ts Text-1 "export const depA_23__0 = 0;"
+	/node_modules/dep-a/file_24.ts Text-1 "export const depA_24__0 = 0;"
+	/node_modules/dep-a/file_25.ts Text-1 "export const depA_25__0 = 0;"
+	/node_modules/dep-a/file_26.ts Text-1 "export const depA_26__0 = 0;"
+	/node_modules/dep-a/file_27.ts Text-1 "export const depA_27__0 = 0;"
+	/node_modules/dep-a/file_28.ts Text-1 "export const depA_28__0 = 0;"
+	/node_modules/dep-a/file_29.ts Text-1 "export const depA_29__0 = 0;"
+	/node_modules/dep-a/file_30.ts Text-1 "export const depA_30__0 = 0;"
+	/node_modules/dep-a/file_31.ts Text-1 "export const depA_31__0 = 0;"
+	/node_modules/dep-a/file_32.ts Text-1 "export const depA_32__0 = 0;"
+	/node_modules/dep-a/file_33.ts Text-1 "export const depA_33__0 = 0;"
+	/node_modules/dep-a/file_34.ts Text-1 "export const depA_34__0 = 0;"
+	/node_modules/dep-a/file_35.ts Text-1 "export const depA_35__0 = 0;"
+	/node_modules/dep-a/file_36.ts Text-1 "export const depA_36__0 = 0;"
+	/node_modules/dep-a/file_37.ts Text-1 "export const depA_37__0 = 0;"
+	/node_modules/dep-a/file_38.ts Text-1 "export const depA_38__0 = 0;"
+	/node_modules/dep-a/file_39.ts Text-1 "export const depA_39__0 = 0;"
+	/node_modules/dep-a/file_40.ts Text-1 "export const depA_40__0 = 0;"
+	/node_modules/dep-a/file_41.ts Text-1 "export const depA_41__0 = 0;"
+	/node_modules/dep-a/file_42.ts Text-1 "export const depA_42__0 = 0;"
+	/node_modules/dep-a/file_43.ts Text-1 "export const depA_43__0 = 0;"
+	/node_modules/dep-a/file_44.ts Text-1 "export const depA_44__0 = 0;"
+	/node_modules/dep-a/file_45.ts Text-1 "export const depA_45__0 = 0;"
+	/node_modules/dep-a/file_46.ts Text-1 "export const depA_46__0 = 0;"
+	/node_modules/dep-a/file_47.ts Text-1 "export const depA_47__0 = 0;"
+	/node_modules/dep-a/file_48.ts Text-1 "export const depA_48__0 = 0;"
+	/node_modules/dep-a/file_49.ts Text-1 "export const depA_49__0 = 0;"
+	/node_modules/dep-a/index.d.ts Text-1 "export * from \"./file_0\";\nexport * from \"./file_1\";\nexport * from \"./file_2\";\nexport * from \"./file_3\";\nexport * from \"./file_4\";\nexport * from \"./file_5\";\nexport * from \"./file_6\";\nexport * from \"./file_7\";\nexport * from \"./file_8\";\nexport * from \"./file_9\";\nexport * from \"./file_10\";\nexport * from \"./file_11\";\nexport * from \"./file_12\";\nexport * from \"./file_13\";\nexport * from \"./file_14\";\nexport * from \"./file_15\";\nexport * from \"./file_16\";\nexport * from \"./file_17\";\nexport * from \"./file_18\";\nexport * from \"./file_19\";\nexport * from \"./file_20\";\nexport * from \"./file_21\";\nexport * from \"./file_22\";\nexport * from \"./file_23\";\nexport * from \"./file_24\";\nexport * from \"./file_25\";\nexport * from \"./file_26\";\nexport * from \"./file_27\";\nexport * from \"./file_28\";\nexport * from \"./file_29\";\nexport * from \"./file_30\";\nexport * from \"./file_31\";\nexport * from \"./file_32\";\nexport * from \"./file_33\";\nexport * from \"./file_34\";\nexport * from \"./file_35\";\nexport * from \"./file_36\";\nexport * from \"./file_37\";\nexport * from \"./file_38\";\nexport * from \"./file_39\";\nexport * from \"./file_40\";\nexport * from \"./file_41\";\nexport * from \"./file_42\";\nexport * from \"./file_43\";\nexport * from \"./file_44\";\nexport * from \"./file_45\";\nexport * from \"./file_46\";\nexport * from \"./file_47\";\nexport * from \"./file_48\";\nexport * from \"./file_49\";\nexport default function main(): void;"
+
+
+	node_modules/dep-a/file_0.ts
+	  Imported via "./file_0" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_1.ts
+	  Imported via "./file_1" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_2.ts
+	  Imported via "./file_2" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_3.ts
+	  Imported via "./file_3" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_4.ts
+	  Imported via "./file_4" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_5.ts
+	  Imported via "./file_5" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_6.ts
+	  Imported via "./file_6" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_7.ts
+	  Imported via "./file_7" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_8.ts
+	  Imported via "./file_8" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_9.ts
+	  Imported via "./file_9" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_10.ts
+	  Imported via "./file_10" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_11.ts
+	  Imported via "./file_11" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_12.ts
+	  Imported via "./file_12" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_13.ts
+	  Imported via "./file_13" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_14.ts
+	  Imported via "./file_14" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_15.ts
+	  Imported via "./file_15" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_16.ts
+	  Imported via "./file_16" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_17.ts
+	  Imported via "./file_17" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_18.ts
+	  Imported via "./file_18" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_19.ts
+	  Imported via "./file_19" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_20.ts
+	  Imported via "./file_20" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_21.ts
+	  Imported via "./file_21" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_22.ts
+	  Imported via "./file_22" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_23.ts
+	  Imported via "./file_23" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_24.ts
+	  Imported via "./file_24" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_25.ts
+	  Imported via "./file_25" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_26.ts
+	  Imported via "./file_26" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_27.ts
+	  Imported via "./file_27" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_28.ts
+	  Imported via "./file_28" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_29.ts
+	  Imported via "./file_29" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_30.ts
+	  Imported via "./file_30" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_31.ts
+	  Imported via "./file_31" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_32.ts
+	  Imported via "./file_32" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_33.ts
+	  Imported via "./file_33" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_34.ts
+	  Imported via "./file_34" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_35.ts
+	  Imported via "./file_35" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_36.ts
+	  Imported via "./file_36" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_37.ts
+	  Imported via "./file_37" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_38.ts
+	  Imported via "./file_38" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_39.ts
+	  Imported via "./file_39" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_40.ts
+	  Imported via "./file_40" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_41.ts
+	  Imported via "./file_41" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_42.ts
+	  Imported via "./file_42" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_43.ts
+	  Imported via "./file_43" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_44.ts
+	  Imported via "./file_44" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_45.ts
+	  Imported via "./file_45" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_46.ts
+	  Imported via "./file_46" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_47.ts
+	  Imported via "./file_47" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_48.ts
+	  Imported via "./file_48" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/file_49.ts
+	  Imported via "./file_49" from file 'node_modules/dep-a/index.d.ts'
+	node_modules/dep-a/index.d.ts
+	  Root file specified for compilation
+
+Info 126  [00:07:25.000] -----------------------------------------------
+Info 127  [00:07:26.000] Project '/tsconfig.json' (Configured)
+Info 127  [00:07:27.000] 	Files (101)
+
+Info 127  [00:07:28.000] -----------------------------------------------
+Info 127  [00:07:29.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 127  [00:07:30.000] 	Files (51)
+
+Info 127  [00:07:31.000] -----------------------------------------------
+Info 127  [00:07:32.000] Open files: 
+Info 127  [00:07:33.000] 	FileName: /index.ts ProjectRootPath: undefined
+Info 127  [00:07:34.000] 		Projects: /tsconfig.json
+Info 127  [00:07:35.000] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+/lib/a_0.ts: *new*
+  {}
+/lib/a_1.ts: *new*
+  {}
+/lib/a_10.ts: *new*
+  {}
+/lib/a_11.ts: *new*
+  {}
+/lib/a_12.ts: *new*
+  {}
+/lib/a_13.ts: *new*
+  {}
+/lib/a_14.ts: *new*
+  {}
+/lib/a_15.ts: *new*
+  {}
+/lib/a_16.ts: *new*
+  {}
+/lib/a_17.ts: *new*
+  {}
+/lib/a_18.ts: *new*
+  {}
+/lib/a_19.ts: *new*
+  {}
+/lib/a_2.ts: *new*
+  {}
+/lib/a_20.ts: *new*
+  {}
+/lib/a_21.ts: *new*
+  {}
+/lib/a_22.ts: *new*
+  {}
+/lib/a_23.ts: *new*
+  {}
+/lib/a_24.ts: *new*
+  {}
+/lib/a_25.ts: *new*
+  {}
+/lib/a_26.ts: *new*
+  {}
+/lib/a_27.ts: *new*
+  {}
+/lib/a_28.ts: *new*
+  {}
+/lib/a_29.ts: *new*
+  {}
+/lib/a_3.ts: *new*
+  {}
+/lib/a_30.ts: *new*
+  {}
+/lib/a_31.ts: *new*
+  {}
+/lib/a_32.ts: *new*
+  {}
+/lib/a_33.ts: *new*
+  {}
+/lib/a_34.ts: *new*
+  {}
+/lib/a_35.ts: *new*
+  {}
+/lib/a_36.ts: *new*
+  {}
+/lib/a_37.ts: *new*
+  {}
+/lib/a_38.ts: *new*
+  {}
+/lib/a_39.ts: *new*
+  {}
+/lib/a_4.ts: *new*
+  {}
+/lib/a_40.ts: *new*
+  {}
+/lib/a_41.ts: *new*
+  {}
+/lib/a_42.ts: *new*
+  {}
+/lib/a_43.ts: *new*
+  {}
+/lib/a_44.ts: *new*
+  {}
+/lib/a_45.ts: *new*
+  {}
+/lib/a_46.ts: *new*
+  {}
+/lib/a_47.ts: *new*
+  {}
+/lib/a_48.ts: *new*
+  {}
+/lib/a_49.ts: *new*
+  {}
+/lib/a_5.ts: *new*
+  {}
+/lib/a_50.ts: *new*
+  {}
+/lib/a_51.ts: *new*
+  {}
+/lib/a_52.ts: *new*
+  {}
+/lib/a_53.ts: *new*
+  {}
+/lib/a_54.ts: *new*
+  {}
+/lib/a_55.ts: *new*
+  {}
+/lib/a_56.ts: *new*
+  {}
+/lib/a_57.ts: *new*
+  {}
+/lib/a_58.ts: *new*
+  {}
+/lib/a_59.ts: *new*
+  {}
+/lib/a_6.ts: *new*
+  {}
+/lib/a_60.ts: *new*
+  {}
+/lib/a_61.ts: *new*
+  {}
+/lib/a_62.ts: *new*
+  {}
+/lib/a_63.ts: *new*
+  {}
+/lib/a_64.ts: *new*
+  {}
+/lib/a_65.ts: *new*
+  {}
+/lib/a_66.ts: *new*
+  {}
+/lib/a_67.ts: *new*
+  {}
+/lib/a_68.ts: *new*
+  {}
+/lib/a_69.ts: *new*
+  {}
+/lib/a_7.ts: *new*
+  {}
+/lib/a_70.ts: *new*
+  {}
+/lib/a_71.ts: *new*
+  {}
+/lib/a_72.ts: *new*
+  {}
+/lib/a_73.ts: *new*
+  {}
+/lib/a_74.ts: *new*
+  {}
+/lib/a_75.ts: *new*
+  {}
+/lib/a_76.ts: *new*
+  {}
+/lib/a_77.ts: *new*
+  {}
+/lib/a_78.ts: *new*
+  {}
+/lib/a_79.ts: *new*
+  {}
+/lib/a_8.ts: *new*
+  {}
+/lib/a_80.ts: *new*
+  {}
+/lib/a_81.ts: *new*
+  {}
+/lib/a_82.ts: *new*
+  {}
+/lib/a_83.ts: *new*
+  {}
+/lib/a_84.ts: *new*
+  {}
+/lib/a_85.ts: *new*
+  {}
+/lib/a_86.ts: *new*
+  {}
+/lib/a_87.ts: *new*
+  {}
+/lib/a_88.ts: *new*
+  {}
+/lib/a_89.ts: *new*
+  {}
+/lib/a_9.ts: *new*
+  {}
+/lib/a_90.ts: *new*
+  {}
+/lib/a_91.ts: *new*
+  {}
+/lib/a_92.ts: *new*
+  {}
+/lib/a_93.ts: *new*
+  {}
+/lib/a_94.ts: *new*
+  {}
+/lib/a_95.ts: *new*
+  {}
+/lib/a_96.ts: *new*
+  {}
+/lib/a_97.ts: *new*
+  {}
+/lib/a_98.ts: *new*
+  {}
+/lib/a_99.ts: *new*
+  {}
+/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+/node_modules: *new*
+  {}
+
+Before request
+
+Info 128  [00:07:36.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/index.ts",
+            "textChanges": [
+              {
+                "newText": "a",
+                "start": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 1
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Info 129  [00:07:37.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info 130  [00:07:38.000] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/index.ts",
+        "line": 1,
+        "offset": 1
+      },
+      "seq": 4,
+      "type": "request"
+    }
+Info 131  [00:07:39.000] Starting updateGraphWorker: Project: /tsconfig.json
+Info 132  [00:07:40.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 133  [00:07:41.000] Project '/tsconfig.json' (Configured)
+Info 134  [00:07:42.000] 	Files (101)
+	/index.ts SVC-1-1 "a"
+	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
+	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
+	/lib/a_10.ts Text-1 "export const aa_10__0 = 0;"
+	/lib/a_11.ts Text-1 "export const aa_11__0 = 0;"
+	/lib/a_12.ts Text-1 "export const aa_12__0 = 0;"
+	/lib/a_13.ts Text-1 "export const aa_13__0 = 0;"
+	/lib/a_14.ts Text-1 "export const aa_14__0 = 0;"
+	/lib/a_15.ts Text-1 "export const aa_15__0 = 0;"
+	/lib/a_16.ts Text-1 "export const aa_16__0 = 0;"
+	/lib/a_17.ts Text-1 "export const aa_17__0 = 0;"
+	/lib/a_18.ts Text-1 "export const aa_18__0 = 0;"
+	/lib/a_19.ts Text-1 "export const aa_19__0 = 0;"
+	/lib/a_2.ts Text-1 "export const aa_2__0 = 0;"
+	/lib/a_20.ts Text-1 "export const aa_20__0 = 0;"
+	/lib/a_21.ts Text-1 "export const aa_21__0 = 0;"
+	/lib/a_22.ts Text-1 "export const aa_22__0 = 0;"
+	/lib/a_23.ts Text-1 "export const aa_23__0 = 0;"
+	/lib/a_24.ts Text-1 "export const aa_24__0 = 0;"
+	/lib/a_25.ts Text-1 "export const aa_25__0 = 0;"
+	/lib/a_26.ts Text-1 "export const aa_26__0 = 0;"
+	/lib/a_27.ts Text-1 "export const aa_27__0 = 0;"
+	/lib/a_28.ts Text-1 "export const aa_28__0 = 0;"
+	/lib/a_29.ts Text-1 "export const aa_29__0 = 0;"
+	/lib/a_3.ts Text-1 "export const aa_3__0 = 0;"
+	/lib/a_30.ts Text-1 "export const aa_30__0 = 0;"
+	/lib/a_31.ts Text-1 "export const aa_31__0 = 0;"
+	/lib/a_32.ts Text-1 "export const aa_32__0 = 0;"
+	/lib/a_33.ts Text-1 "export const aa_33__0 = 0;"
+	/lib/a_34.ts Text-1 "export const aa_34__0 = 0;"
+	/lib/a_35.ts Text-1 "export const aa_35__0 = 0;"
+	/lib/a_36.ts Text-1 "export const aa_36__0 = 0;"
+	/lib/a_37.ts Text-1 "export const aa_37__0 = 0;"
+	/lib/a_38.ts Text-1 "export const aa_38__0 = 0;"
+	/lib/a_39.ts Text-1 "export const aa_39__0 = 0;"
+	/lib/a_4.ts Text-1 "export const aa_4__0 = 0;"
+	/lib/a_40.ts Text-1 "export const aa_40__0 = 0;"
+	/lib/a_41.ts Text-1 "export const aa_41__0 = 0;"
+	/lib/a_42.ts Text-1 "export const aa_42__0 = 0;"
+	/lib/a_43.ts Text-1 "export const aa_43__0 = 0;"
+	/lib/a_44.ts Text-1 "export const aa_44__0 = 0;"
+	/lib/a_45.ts Text-1 "export const aa_45__0 = 0;"
+	/lib/a_46.ts Text-1 "export const aa_46__0 = 0;"
+	/lib/a_47.ts Text-1 "export const aa_47__0 = 0;"
+	/lib/a_48.ts Text-1 "export const aa_48__0 = 0;"
+	/lib/a_49.ts Text-1 "export const aa_49__0 = 0;"
+	/lib/a_5.ts Text-1 "export const aa_5__0 = 0;"
+	/lib/a_50.ts Text-1 "export const aa_50__0 = 0;"
+	/lib/a_51.ts Text-1 "export const aa_51__0 = 0;"
+	/lib/a_52.ts Text-1 "export const aa_52__0 = 0;"
+	/lib/a_53.ts Text-1 "export const aa_53__0 = 0;"
+	/lib/a_54.ts Text-1 "export const aa_54__0 = 0;"
+	/lib/a_55.ts Text-1 "export const aa_55__0 = 0;"
+	/lib/a_56.ts Text-1 "export const aa_56__0 = 0;"
+	/lib/a_57.ts Text-1 "export const aa_57__0 = 0;"
+	/lib/a_58.ts Text-1 "export const aa_58__0 = 0;"
+	/lib/a_59.ts Text-1 "export const aa_59__0 = 0;"
+	/lib/a_6.ts Text-1 "export const aa_6__0 = 0;"
+	/lib/a_60.ts Text-1 "export const aa_60__0 = 0;"
+	/lib/a_61.ts Text-1 "export const aa_61__0 = 0;"
+	/lib/a_62.ts Text-1 "export const aa_62__0 = 0;"
+	/lib/a_63.ts Text-1 "export const aa_63__0 = 0;"
+	/lib/a_64.ts Text-1 "export const aa_64__0 = 0;"
+	/lib/a_65.ts Text-1 "export const aa_65__0 = 0;"
+	/lib/a_66.ts Text-1 "export const aa_66__0 = 0;"
+	/lib/a_67.ts Text-1 "export const aa_67__0 = 0;"
+	/lib/a_68.ts Text-1 "export const aa_68__0 = 0;"
+	/lib/a_69.ts Text-1 "export const aa_69__0 = 0;"
+	/lib/a_7.ts Text-1 "export const aa_7__0 = 0;"
+	/lib/a_70.ts Text-1 "export const aa_70__0 = 0;"
+	/lib/a_71.ts Text-1 "export const aa_71__0 = 0;"
+	/lib/a_72.ts Text-1 "export const aa_72__0 = 0;"
+	/lib/a_73.ts Text-1 "export const aa_73__0 = 0;"
+	/lib/a_74.ts Text-1 "export const aa_74__0 = 0;"
+	/lib/a_75.ts Text-1 "export const aa_75__0 = 0;"
+	/lib/a_76.ts Text-1 "export const aa_76__0 = 0;"
+	/lib/a_77.ts Text-1 "export const aa_77__0 = 0;"
+	/lib/a_78.ts Text-1 "export const aa_78__0 = 0;"
+	/lib/a_79.ts Text-1 "export const aa_79__0 = 0;"
+	/lib/a_8.ts Text-1 "export const aa_8__0 = 0;"
+	/lib/a_80.ts Text-1 "export const aa_80__0 = 0;"
+	/lib/a_81.ts Text-1 "export const aa_81__0 = 0;"
+	/lib/a_82.ts Text-1 "export const aa_82__0 = 0;"
+	/lib/a_83.ts Text-1 "export const aa_83__0 = 0;"
+	/lib/a_84.ts Text-1 "export const aa_84__0 = 0;"
+	/lib/a_85.ts Text-1 "export const aa_85__0 = 0;"
+	/lib/a_86.ts Text-1 "export const aa_86__0 = 0;"
+	/lib/a_87.ts Text-1 "export const aa_87__0 = 0;"
+	/lib/a_88.ts Text-1 "export const aa_88__0 = 0;"
+	/lib/a_89.ts Text-1 "export const aa_89__0 = 0;"
+	/lib/a_9.ts Text-1 "export const aa_9__0 = 0;"
+	/lib/a_90.ts Text-1 "export const aa_90__0 = 0;"
+	/lib/a_91.ts Text-1 "export const aa_91__0 = 0;"
+	/lib/a_92.ts Text-1 "export const aa_92__0 = 0;"
+	/lib/a_93.ts Text-1 "export const aa_93__0 = 0;"
+	/lib/a_94.ts Text-1 "export const aa_94__0 = 0;"
+	/lib/a_95.ts Text-1 "export const aa_95__0 = 0;"
+	/lib/a_96.ts Text-1 "export const aa_96__0 = 0;"
+	/lib/a_97.ts Text-1 "export const aa_97__0 = 0;"
+	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;"
+	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;"
+
+Info 135  [00:07:43.000] -----------------------------------------------
+Info 136  [00:07:44.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 137  [00:07:45.000] 	Files (51)
+
+Info 138  [00:07:46.000] -----------------------------------------------
+Info 139  [00:07:47.000] getCompletionData: Get current token: *
+Info 140  [00:07:48.000] getCompletionData: Is inside comment: *
+Info 141  [00:07:49.000] getCompletionData: Get previous token: *
+Info 142  [00:07:50.000] getExportInfoMap: cache miss or empty; calculating new results
+Info 143  [00:07:51.000] forEachExternalModuleToImportFrom autoImportProvider: *
+Info 144  [00:07:52.000] getExportInfoMap: done in * ms
+Info 145  [00:07:53.000] collectAutoImports: resolved 100 module specifiers, plus 0 ambient and 101 from cache (198.0% hit rate)
+Info 146  [00:07:54.000] collectAutoImports: response is incomplete
+Info 147  [00:07:55.000] collectAutoImports: *
+Info 148  [00:07:56.000] getCompletionData: Semantic work: *
+Info 149  [00:07:57.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 150  [00:07:58.000] response:
+    {
+      "response": {
+        "flags": 9,
+        "isGlobalCompletion": true,
+        "isIncomplete": true,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": false,
+        "optionalReplacementSpan": {
+          "start": {
+            "line": 1,
+            "offset": 1
+          },
+          "end": {
+            "line": 1,
+            "offset": 2
+          }
+        },
+        "entries": [
+          {
+            "name": "abstract",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "any",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "as",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "asserts",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "async",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "await",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "bigint",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "boolean",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "break",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "case",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "catch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "class",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "const",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "continue",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "debugger",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "declare",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "default",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "delete",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "do",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "else",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "enum",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "export",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "extends",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "false",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "finally",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "for",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "function",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "globalThis",
+            "kind": "module",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "if",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "implements",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "import",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "in",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "infer",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "instanceof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "interface",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "keyof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "let",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "module",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "namespace",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "never",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "new",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "null",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "number",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "object",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "package",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "readonly",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "return",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "string",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "super",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "switch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "symbol",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "this",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "throw",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "true",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "try",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "type",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "typeof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "undefined",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unique",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "var",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "void",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "while",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "with",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "yield",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "aa_0__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_0",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_0",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_0__0",
+              "exportMapKey": "aa_0__0|*|",
+              "moduleSpecifier": "./lib/a_0",
+              "fileName": "/lib/a_0.ts"
+            }
+          },
+          {
+            "name": "aa_1__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_1",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_1",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_1__0",
+              "exportMapKey": "aa_1__0|*|",
+              "moduleSpecifier": "./lib/a_1",
+              "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "aa_10__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_10",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_10",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_10__0",
+              "exportMapKey": "aa_10__0|*|",
+              "moduleSpecifier": "./lib/a_10",
+              "fileName": "/lib/a_10.ts"
+            }
+          },
+          {
+            "name": "aa_11__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_11",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_11",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_11__0",
+              "exportMapKey": "aa_11__0|*|",
+              "moduleSpecifier": "./lib/a_11",
+              "fileName": "/lib/a_11.ts"
+            }
+          },
+          {
+            "name": "aa_12__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_12",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_12",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_12__0",
+              "exportMapKey": "aa_12__0|*|",
+              "moduleSpecifier": "./lib/a_12",
+              "fileName": "/lib/a_12.ts"
+            }
+          },
+          {
+            "name": "aa_13__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_13",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_13",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_13__0",
+              "exportMapKey": "aa_13__0|*|",
+              "moduleSpecifier": "./lib/a_13",
+              "fileName": "/lib/a_13.ts"
+            }
+          },
+          {
+            "name": "aa_14__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_14",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_14",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_14__0",
+              "exportMapKey": "aa_14__0|*|",
+              "moduleSpecifier": "./lib/a_14",
+              "fileName": "/lib/a_14.ts"
+            }
+          },
+          {
+            "name": "aa_15__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_15",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_15",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_15__0",
+              "exportMapKey": "aa_15__0|*|",
+              "moduleSpecifier": "./lib/a_15",
+              "fileName": "/lib/a_15.ts"
+            }
+          },
+          {
+            "name": "aa_16__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_16",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_16",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_16__0",
+              "exportMapKey": "aa_16__0|*|",
+              "moduleSpecifier": "./lib/a_16",
+              "fileName": "/lib/a_16.ts"
+            }
+          },
+          {
+            "name": "aa_17__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_17",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_17",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_17__0",
+              "exportMapKey": "aa_17__0|*|",
+              "moduleSpecifier": "./lib/a_17",
+              "fileName": "/lib/a_17.ts"
+            }
+          },
+          {
+            "name": "aa_18__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_18",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_18",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_18__0",
+              "exportMapKey": "aa_18__0|*|",
+              "moduleSpecifier": "./lib/a_18",
+              "fileName": "/lib/a_18.ts"
+            }
+          },
+          {
+            "name": "aa_19__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_19",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_19",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_19__0",
+              "exportMapKey": "aa_19__0|*|",
+              "moduleSpecifier": "./lib/a_19",
+              "fileName": "/lib/a_19.ts"
+            }
+          },
+          {
+            "name": "aa_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_2__0",
+              "exportMapKey": "aa_2__0|*|",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "aa_20__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_20",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_20",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_20__0",
+              "exportMapKey": "aa_20__0|*|",
+              "moduleSpecifier": "./lib/a_20",
+              "fileName": "/lib/a_20.ts"
+            }
+          },
+          {
+            "name": "aa_21__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_21",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_21",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_21__0",
+              "exportMapKey": "aa_21__0|*|",
+              "moduleSpecifier": "./lib/a_21",
+              "fileName": "/lib/a_21.ts"
+            }
+          },
+          {
+            "name": "aa_22__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_22",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_22",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_22__0",
+              "exportMapKey": "aa_22__0|*|",
+              "moduleSpecifier": "./lib/a_22",
+              "fileName": "/lib/a_22.ts"
+            }
+          },
+          {
+            "name": "aa_23__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_23",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_23",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_23__0",
+              "exportMapKey": "aa_23__0|*|",
+              "moduleSpecifier": "./lib/a_23",
+              "fileName": "/lib/a_23.ts"
+            }
+          },
+          {
+            "name": "aa_24__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_24",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_24",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_24__0",
+              "exportMapKey": "aa_24__0|*|",
+              "moduleSpecifier": "./lib/a_24",
+              "fileName": "/lib/a_24.ts"
+            }
+          },
+          {
+            "name": "aa_25__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_25",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_25",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_25__0",
+              "exportMapKey": "aa_25__0|*|",
+              "moduleSpecifier": "./lib/a_25",
+              "fileName": "/lib/a_25.ts"
+            }
+          },
+          {
+            "name": "aa_26__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_26",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_26",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_26__0",
+              "exportMapKey": "aa_26__0|*|",
+              "moduleSpecifier": "./lib/a_26",
+              "fileName": "/lib/a_26.ts"
+            }
+          },
+          {
+            "name": "aa_27__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_27",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_27",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_27__0",
+              "exportMapKey": "aa_27__0|*|",
+              "moduleSpecifier": "./lib/a_27",
+              "fileName": "/lib/a_27.ts"
+            }
+          },
+          {
+            "name": "aa_28__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_28",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_28",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_28__0",
+              "exportMapKey": "aa_28__0|*|",
+              "moduleSpecifier": "./lib/a_28",
+              "fileName": "/lib/a_28.ts"
+            }
+          },
+          {
+            "name": "aa_29__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_29",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_29",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_29__0",
+              "exportMapKey": "aa_29__0|*|",
+              "moduleSpecifier": "./lib/a_29",
+              "fileName": "/lib/a_29.ts"
+            }
+          },
+          {
+            "name": "aa_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_3__0",
+              "exportMapKey": "aa_3__0|*|",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "aa_30__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_30",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_30",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_30__0",
+              "exportMapKey": "aa_30__0|*|",
+              "moduleSpecifier": "./lib/a_30",
+              "fileName": "/lib/a_30.ts"
+            }
+          },
+          {
+            "name": "aa_31__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_31",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_31",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_31__0",
+              "exportMapKey": "aa_31__0|*|",
+              "moduleSpecifier": "./lib/a_31",
+              "fileName": "/lib/a_31.ts"
+            }
+          },
+          {
+            "name": "aa_32__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_32",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_32",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_32__0",
+              "exportMapKey": "aa_32__0|*|",
+              "moduleSpecifier": "./lib/a_32",
+              "fileName": "/lib/a_32.ts"
+            }
+          },
+          {
+            "name": "aa_33__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_33",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_33",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_33__0",
+              "exportMapKey": "aa_33__0|*|",
+              "moduleSpecifier": "./lib/a_33",
+              "fileName": "/lib/a_33.ts"
+            }
+          },
+          {
+            "name": "aa_34__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_34",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_34",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_34__0",
+              "exportMapKey": "aa_34__0|*|",
+              "moduleSpecifier": "./lib/a_34",
+              "fileName": "/lib/a_34.ts"
+            }
+          },
+          {
+            "name": "aa_35__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_35",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_35",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_35__0",
+              "exportMapKey": "aa_35__0|*|",
+              "moduleSpecifier": "./lib/a_35",
+              "fileName": "/lib/a_35.ts"
+            }
+          },
+          {
+            "name": "aa_36__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_36",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_36",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_36__0",
+              "exportMapKey": "aa_36__0|*|",
+              "moduleSpecifier": "./lib/a_36",
+              "fileName": "/lib/a_36.ts"
+            }
+          },
+          {
+            "name": "aa_37__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_37",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_37",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_37__0",
+              "exportMapKey": "aa_37__0|*|",
+              "moduleSpecifier": "./lib/a_37",
+              "fileName": "/lib/a_37.ts"
+            }
+          },
+          {
+            "name": "aa_38__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_38",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_38",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_38__0",
+              "exportMapKey": "aa_38__0|*|",
+              "moduleSpecifier": "./lib/a_38",
+              "fileName": "/lib/a_38.ts"
+            }
+          },
+          {
+            "name": "aa_39__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_39",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_39",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_39__0",
+              "exportMapKey": "aa_39__0|*|",
+              "moduleSpecifier": "./lib/a_39",
+              "fileName": "/lib/a_39.ts"
+            }
+          },
+          {
+            "name": "aa_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_4__0",
+              "exportMapKey": "aa_4__0|*|",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "aa_40__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_40",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_40",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_40__0",
+              "exportMapKey": "aa_40__0|*|",
+              "moduleSpecifier": "./lib/a_40",
+              "fileName": "/lib/a_40.ts"
+            }
+          },
+          {
+            "name": "aa_41__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_41",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_41",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_41__0",
+              "exportMapKey": "aa_41__0|*|",
+              "moduleSpecifier": "./lib/a_41",
+              "fileName": "/lib/a_41.ts"
+            }
+          },
+          {
+            "name": "aa_42__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_42",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_42",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_42__0",
+              "exportMapKey": "aa_42__0|*|",
+              "moduleSpecifier": "./lib/a_42",
+              "fileName": "/lib/a_42.ts"
+            }
+          },
+          {
+            "name": "aa_43__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_43",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_43",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_43__0",
+              "exportMapKey": "aa_43__0|*|",
+              "moduleSpecifier": "./lib/a_43",
+              "fileName": "/lib/a_43.ts"
+            }
+          },
+          {
+            "name": "aa_44__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_44",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_44",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_44__0",
+              "exportMapKey": "aa_44__0|*|",
+              "moduleSpecifier": "./lib/a_44",
+              "fileName": "/lib/a_44.ts"
+            }
+          },
+          {
+            "name": "aa_45__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_45",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_45",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_45__0",
+              "exportMapKey": "aa_45__0|*|",
+              "moduleSpecifier": "./lib/a_45",
+              "fileName": "/lib/a_45.ts"
+            }
+          },
+          {
+            "name": "aa_46__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_46",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_46",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_46__0",
+              "exportMapKey": "aa_46__0|*|",
+              "moduleSpecifier": "./lib/a_46",
+              "fileName": "/lib/a_46.ts"
+            }
+          },
+          {
+            "name": "aa_47__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_47",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_47",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_47__0",
+              "exportMapKey": "aa_47__0|*|",
+              "moduleSpecifier": "./lib/a_47",
+              "fileName": "/lib/a_47.ts"
+            }
+          },
+          {
+            "name": "aa_48__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_48",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_48",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_48__0",
+              "exportMapKey": "aa_48__0|*|",
+              "moduleSpecifier": "./lib/a_48",
+              "fileName": "/lib/a_48.ts"
+            }
+          },
+          {
+            "name": "aa_49__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_49",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_49",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_49__0",
+              "exportMapKey": "aa_49__0|*|",
+              "moduleSpecifier": "./lib/a_49",
+              "fileName": "/lib/a_49.ts"
+            }
+          },
+          {
+            "name": "aa_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_5__0",
+              "exportMapKey": "aa_5__0|*|",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "aa_50__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_50",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_50",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_50__0",
+              "exportMapKey": "aa_50__0|*|",
+              "moduleSpecifier": "./lib/a_50",
+              "fileName": "/lib/a_50.ts"
+            }
+          },
+          {
+            "name": "aa_51__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_51",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_51",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_51__0",
+              "exportMapKey": "aa_51__0|*|",
+              "moduleSpecifier": "./lib/a_51",
+              "fileName": "/lib/a_51.ts"
+            }
+          },
+          {
+            "name": "aa_52__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_52",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_52",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_52__0",
+              "exportMapKey": "aa_52__0|*|",
+              "moduleSpecifier": "./lib/a_52",
+              "fileName": "/lib/a_52.ts"
+            }
+          },
+          {
+            "name": "aa_53__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_53",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_53",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_53__0",
+              "exportMapKey": "aa_53__0|*|",
+              "moduleSpecifier": "./lib/a_53",
+              "fileName": "/lib/a_53.ts"
+            }
+          },
+          {
+            "name": "aa_54__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_54",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_54",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_54__0",
+              "exportMapKey": "aa_54__0|*|",
+              "moduleSpecifier": "./lib/a_54",
+              "fileName": "/lib/a_54.ts"
+            }
+          },
+          {
+            "name": "aa_55__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_55",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_55",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_55__0",
+              "exportMapKey": "aa_55__0|*|",
+              "moduleSpecifier": "./lib/a_55",
+              "fileName": "/lib/a_55.ts"
+            }
+          },
+          {
+            "name": "aa_56__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_56",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_56",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_56__0",
+              "exportMapKey": "aa_56__0|*|",
+              "moduleSpecifier": "./lib/a_56",
+              "fileName": "/lib/a_56.ts"
+            }
+          },
+          {
+            "name": "aa_57__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_57",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_57",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_57__0",
+              "exportMapKey": "aa_57__0|*|",
+              "moduleSpecifier": "./lib/a_57",
+              "fileName": "/lib/a_57.ts"
+            }
+          },
+          {
+            "name": "aa_58__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_58",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_58",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_58__0",
+              "exportMapKey": "aa_58__0|*|",
+              "moduleSpecifier": "./lib/a_58",
+              "fileName": "/lib/a_58.ts"
+            }
+          },
+          {
+            "name": "aa_59__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_59",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_59",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_59__0",
+              "exportMapKey": "aa_59__0|*|",
+              "moduleSpecifier": "./lib/a_59",
+              "fileName": "/lib/a_59.ts"
+            }
+          },
+          {
+            "name": "aa_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_6__0",
+              "exportMapKey": "aa_6__0|*|",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "aa_60__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_60",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_60",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_60__0",
+              "exportMapKey": "aa_60__0|*|",
+              "moduleSpecifier": "./lib/a_60",
+              "fileName": "/lib/a_60.ts"
+            }
+          },
+          {
+            "name": "aa_61__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_61",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_61",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_61__0",
+              "exportMapKey": "aa_61__0|*|",
+              "moduleSpecifier": "./lib/a_61",
+              "fileName": "/lib/a_61.ts"
+            }
+          },
+          {
+            "name": "aa_62__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_62",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_62",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_62__0",
+              "exportMapKey": "aa_62__0|*|",
+              "moduleSpecifier": "./lib/a_62",
+              "fileName": "/lib/a_62.ts"
+            }
+          },
+          {
+            "name": "aa_63__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_63",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_63",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_63__0",
+              "exportMapKey": "aa_63__0|*|",
+              "moduleSpecifier": "./lib/a_63",
+              "fileName": "/lib/a_63.ts"
+            }
+          },
+          {
+            "name": "aa_64__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_64",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_64",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_64__0",
+              "exportMapKey": "aa_64__0|*|",
+              "moduleSpecifier": "./lib/a_64",
+              "fileName": "/lib/a_64.ts"
+            }
+          },
+          {
+            "name": "aa_65__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_65",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_65",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_65__0",
+              "exportMapKey": "aa_65__0|*|",
+              "moduleSpecifier": "./lib/a_65",
+              "fileName": "/lib/a_65.ts"
+            }
+          },
+          {
+            "name": "aa_66__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_66",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_66",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_66__0",
+              "exportMapKey": "aa_66__0|*|",
+              "moduleSpecifier": "./lib/a_66",
+              "fileName": "/lib/a_66.ts"
+            }
+          },
+          {
+            "name": "aa_67__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_67",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_67",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_67__0",
+              "exportMapKey": "aa_67__0|*|",
+              "moduleSpecifier": "./lib/a_67",
+              "fileName": "/lib/a_67.ts"
+            }
+          },
+          {
+            "name": "aa_68__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_68",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_68",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_68__0",
+              "exportMapKey": "aa_68__0|*|",
+              "moduleSpecifier": "./lib/a_68",
+              "fileName": "/lib/a_68.ts"
+            }
+          },
+          {
+            "name": "aa_69__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_69",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_69",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_69__0",
+              "exportMapKey": "aa_69__0|*|",
+              "moduleSpecifier": "./lib/a_69",
+              "fileName": "/lib/a_69.ts"
+            }
+          },
+          {
+            "name": "aa_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_7__0",
+              "exportMapKey": "aa_7__0|*|",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "aa_70__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_70",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_70",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_70__0",
+              "exportMapKey": "aa_70__0|*|",
+              "moduleSpecifier": "./lib/a_70",
+              "fileName": "/lib/a_70.ts"
+            }
+          },
+          {
+            "name": "aa_71__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_71",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_71",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_71__0",
+              "exportMapKey": "aa_71__0|*|",
+              "moduleSpecifier": "./lib/a_71",
+              "fileName": "/lib/a_71.ts"
+            }
+          },
+          {
+            "name": "aa_72__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_72",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_72",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_72__0",
+              "exportMapKey": "aa_72__0|*|",
+              "moduleSpecifier": "./lib/a_72",
+              "fileName": "/lib/a_72.ts"
+            }
+          },
+          {
+            "name": "aa_73__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_73",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_73",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_73__0",
+              "exportMapKey": "aa_73__0|*|",
+              "moduleSpecifier": "./lib/a_73",
+              "fileName": "/lib/a_73.ts"
+            }
+          },
+          {
+            "name": "aa_74__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_74",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_74",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_74__0",
+              "exportMapKey": "aa_74__0|*|",
+              "moduleSpecifier": "./lib/a_74",
+              "fileName": "/lib/a_74.ts"
+            }
+          },
+          {
+            "name": "aa_75__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_75",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_75",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_75__0",
+              "exportMapKey": "aa_75__0|*|",
+              "moduleSpecifier": "./lib/a_75",
+              "fileName": "/lib/a_75.ts"
+            }
+          },
+          {
+            "name": "aa_76__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_76",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_76",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_76__0",
+              "exportMapKey": "aa_76__0|*|",
+              "moduleSpecifier": "./lib/a_76",
+              "fileName": "/lib/a_76.ts"
+            }
+          },
+          {
+            "name": "aa_77__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_77",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_77",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_77__0",
+              "exportMapKey": "aa_77__0|*|",
+              "moduleSpecifier": "./lib/a_77",
+              "fileName": "/lib/a_77.ts"
+            }
+          },
+          {
+            "name": "aa_78__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_78",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_78",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_78__0",
+              "exportMapKey": "aa_78__0|*|",
+              "moduleSpecifier": "./lib/a_78",
+              "fileName": "/lib/a_78.ts"
+            }
+          },
+          {
+            "name": "aa_79__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_79",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_79",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_79__0",
+              "exportMapKey": "aa_79__0|*|",
+              "moduleSpecifier": "./lib/a_79",
+              "fileName": "/lib/a_79.ts"
+            }
+          },
+          {
+            "name": "aa_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_8__0",
+              "exportMapKey": "aa_8__0|*|",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "aa_80__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_80",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_80",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_80__0",
+              "exportMapKey": "aa_80__0|*|",
+              "moduleSpecifier": "./lib/a_80",
+              "fileName": "/lib/a_80.ts"
+            }
+          },
+          {
+            "name": "aa_81__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_81",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_81",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_81__0",
+              "exportMapKey": "aa_81__0|*|",
+              "moduleSpecifier": "./lib/a_81",
+              "fileName": "/lib/a_81.ts"
+            }
+          },
+          {
+            "name": "aa_82__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_82",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_82",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_82__0",
+              "exportMapKey": "aa_82__0|*|",
+              "moduleSpecifier": "./lib/a_82",
+              "fileName": "/lib/a_82.ts"
+            }
+          },
+          {
+            "name": "aa_83__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_83",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_83",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_83__0",
+              "exportMapKey": "aa_83__0|*|",
+              "moduleSpecifier": "./lib/a_83",
+              "fileName": "/lib/a_83.ts"
+            }
+          },
+          {
+            "name": "aa_84__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_84",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_84",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_84__0",
+              "exportMapKey": "aa_84__0|*|",
+              "moduleSpecifier": "./lib/a_84",
+              "fileName": "/lib/a_84.ts"
+            }
+          },
+          {
+            "name": "aa_85__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_85",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_85",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_85__0",
+              "exportMapKey": "aa_85__0|*|",
+              "moduleSpecifier": "./lib/a_85",
+              "fileName": "/lib/a_85.ts"
+            }
+          },
+          {
+            "name": "aa_86__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_86",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_86",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_86__0",
+              "exportMapKey": "aa_86__0|*|",
+              "moduleSpecifier": "./lib/a_86",
+              "fileName": "/lib/a_86.ts"
+            }
+          },
+          {
+            "name": "aa_87__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_87",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_87",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_87__0",
+              "exportMapKey": "aa_87__0|*|",
+              "moduleSpecifier": "./lib/a_87",
+              "fileName": "/lib/a_87.ts"
+            }
+          },
+          {
+            "name": "aa_88__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_88",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_88",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_88__0",
+              "exportMapKey": "aa_88__0|*|",
+              "moduleSpecifier": "./lib/a_88",
+              "fileName": "/lib/a_88.ts"
+            }
+          },
+          {
+            "name": "aa_89__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_89",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_89",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_89__0",
+              "exportMapKey": "aa_89__0|*|",
+              "moduleSpecifier": "./lib/a_89",
+              "fileName": "/lib/a_89.ts"
+            }
+          },
+          {
+            "name": "aa_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_9__0",
+              "exportMapKey": "aa_9__0|*|",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
+            }
+          },
+          {
+            "name": "aa_90__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_90",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_90",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_90__0",
+              "exportMapKey": "aa_90__0|*|",
+              "moduleSpecifier": "./lib/a_90",
+              "fileName": "/lib/a_90.ts"
+            }
+          },
+          {
+            "name": "aa_91__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_91",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_91",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_91__0",
+              "exportMapKey": "aa_91__0|*|",
+              "moduleSpecifier": "./lib/a_91",
+              "fileName": "/lib/a_91.ts"
+            }
+          },
+          {
+            "name": "aa_92__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_92",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_92",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_92__0",
+              "exportMapKey": "aa_92__0|*|",
+              "moduleSpecifier": "./lib/a_92",
+              "fileName": "/lib/a_92.ts"
+            }
+          },
+          {
+            "name": "aa_93__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_93",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_93",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_93__0",
+              "exportMapKey": "aa_93__0|*|",
+              "moduleSpecifier": "./lib/a_93",
+              "fileName": "/lib/a_93.ts"
+            }
+          },
+          {
+            "name": "aa_94__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_94",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_94",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_94__0",
+              "exportMapKey": "aa_94__0|*|",
+              "moduleSpecifier": "./lib/a_94",
+              "fileName": "/lib/a_94.ts"
+            }
+          },
+          {
+            "name": "aa_95__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_95",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_95",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_95__0",
+              "exportMapKey": "aa_95__0|*|",
+              "moduleSpecifier": "./lib/a_95",
+              "fileName": "/lib/a_95.ts"
+            }
+          },
+          {
+            "name": "aa_96__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_96",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_96",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_96__0",
+              "exportMapKey": "aa_96__0|*|",
+              "moduleSpecifier": "./lib/a_96",
+              "fileName": "/lib/a_96.ts"
+            }
+          },
+          {
+            "name": "aa_97__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_97",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_97",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_97__0",
+              "exportMapKey": "aa_97__0|*|",
+              "moduleSpecifier": "./lib/a_97",
+              "fileName": "/lib/a_97.ts"
+            }
+          },
+          {
+            "name": "aa_98__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_98",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_98",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_98__0",
+              "exportMapKey": "aa_98__0|*|",
+              "moduleSpecifier": "./lib/a_98",
+              "fileName": "/lib/a_98.ts"
+            }
+          },
+          {
+            "name": "aa_99__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_99",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_99",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_99__0",
+              "exportMapKey": "aa_99__0|*|",
+              "moduleSpecifier": "./lib/a_99",
+              "fileName": "/lib/a_99.ts"
+            }
+          },
+          {
+            "name": "depA_0__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_0",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_0__0",
+              "exportMapKey": "depA_0__0|*|",
+              "fileName": "/node_modules/dep-a/file_0.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_1__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_1",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_1__0",
+              "exportMapKey": "depA_1__0|*|",
+              "fileName": "/node_modules/dep-a/file_1.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_10__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_10",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_10__0",
+              "exportMapKey": "depA_10__0|*|",
+              "fileName": "/node_modules/dep-a/file_10.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_11__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_11",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_11__0",
+              "exportMapKey": "depA_11__0|*|",
+              "fileName": "/node_modules/dep-a/file_11.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_12__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_12",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_12__0",
+              "exportMapKey": "depA_12__0|*|",
+              "fileName": "/node_modules/dep-a/file_12.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_13__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_13",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_13__0",
+              "exportMapKey": "depA_13__0|*|",
+              "fileName": "/node_modules/dep-a/file_13.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_14__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_14",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_14__0",
+              "exportMapKey": "depA_14__0|*|",
+              "fileName": "/node_modules/dep-a/file_14.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_15__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_15",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_15__0",
+              "exportMapKey": "depA_15__0|*|",
+              "fileName": "/node_modules/dep-a/file_15.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_16__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_16",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_16__0",
+              "exportMapKey": "depA_16__0|*|",
+              "fileName": "/node_modules/dep-a/file_16.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_17__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_17",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_17__0",
+              "exportMapKey": "depA_17__0|*|",
+              "fileName": "/node_modules/dep-a/file_17.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_18__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_18",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_18__0",
+              "exportMapKey": "depA_18__0|*|",
+              "fileName": "/node_modules/dep-a/file_18.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_19__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_19",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_19__0",
+              "exportMapKey": "depA_19__0|*|",
+              "fileName": "/node_modules/dep-a/file_19.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_2",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_2__0",
+              "exportMapKey": "depA_2__0|*|",
+              "fileName": "/node_modules/dep-a/file_2.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_20__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_20",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_20__0",
+              "exportMapKey": "depA_20__0|*|",
+              "fileName": "/node_modules/dep-a/file_20.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_21__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_21",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_21__0",
+              "exportMapKey": "depA_21__0|*|",
+              "fileName": "/node_modules/dep-a/file_21.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_22__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_22",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_22__0",
+              "exportMapKey": "depA_22__0|*|",
+              "fileName": "/node_modules/dep-a/file_22.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_23__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_23",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_23__0",
+              "exportMapKey": "depA_23__0|*|",
+              "fileName": "/node_modules/dep-a/file_23.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_24__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_24",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_24__0",
+              "exportMapKey": "depA_24__0|*|",
+              "fileName": "/node_modules/dep-a/file_24.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_25__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_25",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_25__0",
+              "exportMapKey": "depA_25__0|*|",
+              "fileName": "/node_modules/dep-a/file_25.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_26__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_26",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_26__0",
+              "exportMapKey": "depA_26__0|*|",
+              "fileName": "/node_modules/dep-a/file_26.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_27__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_27",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_27__0",
+              "exportMapKey": "depA_27__0|*|",
+              "fileName": "/node_modules/dep-a/file_27.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_28__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_28",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_28__0",
+              "exportMapKey": "depA_28__0|*|",
+              "fileName": "/node_modules/dep-a/file_28.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_29__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_29",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_29__0",
+              "exportMapKey": "depA_29__0|*|",
+              "fileName": "/node_modules/dep-a/file_29.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_3",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_3__0",
+              "exportMapKey": "depA_3__0|*|",
+              "fileName": "/node_modules/dep-a/file_3.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_30__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_30",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_30__0",
+              "exportMapKey": "depA_30__0|*|",
+              "fileName": "/node_modules/dep-a/file_30.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_31__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_31",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_31__0",
+              "exportMapKey": "depA_31__0|*|",
+              "fileName": "/node_modules/dep-a/file_31.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_32__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_32",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_32__0",
+              "exportMapKey": "depA_32__0|*|",
+              "fileName": "/node_modules/dep-a/file_32.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_33__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_33",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_33__0",
+              "exportMapKey": "depA_33__0|*|",
+              "fileName": "/node_modules/dep-a/file_33.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_34__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_34",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_34__0",
+              "exportMapKey": "depA_34__0|*|",
+              "fileName": "/node_modules/dep-a/file_34.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_35__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_35",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_35__0",
+              "exportMapKey": "depA_35__0|*|",
+              "fileName": "/node_modules/dep-a/file_35.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_36__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_36",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_36__0",
+              "exportMapKey": "depA_36__0|*|",
+              "fileName": "/node_modules/dep-a/file_36.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_37__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_37",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_37__0",
+              "exportMapKey": "depA_37__0|*|",
+              "fileName": "/node_modules/dep-a/file_37.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_38__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_38",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_38__0",
+              "exportMapKey": "depA_38__0|*|",
+              "fileName": "/node_modules/dep-a/file_38.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_39__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_39",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_39__0",
+              "exportMapKey": "depA_39__0|*|",
+              "fileName": "/node_modules/dep-a/file_39.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_4",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_4__0",
+              "exportMapKey": "depA_4__0|*|",
+              "fileName": "/node_modules/dep-a/file_4.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_40__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_40",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_40__0",
+              "exportMapKey": "depA_40__0|*|",
+              "fileName": "/node_modules/dep-a/file_40.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_41__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_41",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_41__0",
+              "exportMapKey": "depA_41__0|*|",
+              "fileName": "/node_modules/dep-a/file_41.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_42__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_42",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_42__0",
+              "exportMapKey": "depA_42__0|*|",
+              "fileName": "/node_modules/dep-a/file_42.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_43__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_43",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_43__0",
+              "exportMapKey": "depA_43__0|*|",
+              "fileName": "/node_modules/dep-a/file_43.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_44__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_44",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_44__0",
+              "exportMapKey": "depA_44__0|*|",
+              "fileName": "/node_modules/dep-a/file_44.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_45__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_45",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_45__0",
+              "exportMapKey": "depA_45__0|*|",
+              "fileName": "/node_modules/dep-a/file_45.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_46__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_46",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_46__0",
+              "exportMapKey": "depA_46__0|*|",
+              "fileName": "/node_modules/dep-a/file_46.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_47__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_47",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_47__0",
+              "exportMapKey": "depA_47__0|*|",
+              "fileName": "/node_modules/dep-a/file_47.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_48__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_48",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_48__0",
+              "exportMapKey": "depA_48__0|*|",
+              "fileName": "/node_modules/dep-a/file_48.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_49__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_49",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_49__0",
+              "exportMapKey": "depA_49__0|*|",
+              "fileName": "/node_modules/dep-a/file_49.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_5",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_5__0",
+              "exportMapKey": "depA_5__0|*|",
+              "fileName": "/node_modules/dep-a/file_5.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_6",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_6__0",
+              "exportMapKey": "depA_6__0|*|",
+              "fileName": "/node_modules/dep-a/file_6.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_7",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_7__0",
+              "exportMapKey": "depA_7__0|*|",
+              "fileName": "/node_modules/dep-a/file_7.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_8",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_8__0",
+              "exportMapKey": "depA_8__0|*|",
+              "fileName": "/node_modules/dep-a/file_8.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_9",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_9__0",
+              "exportMapKey": "depA_9__0|*|",
+              "fileName": "/node_modules/dep-a/file_9.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "main",
+            "kind": "function",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/index",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "default",
+              "exportMapKey": "main|*|",
+              "fileName": "/node_modules/dep-a/index.d.ts",
+              "isPackageJsonImport": true
+            }
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info 151  [00:07:59.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/index.ts",
+            "textChanges": [
+              {
+                "newText": "_",
+                "start": {
+                  "line": 1,
+                  "offset": 2
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
+Info 152  [00:08:00.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info 153  [00:08:01.000] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/index.ts",
+        "line": 1,
+        "offset": 2,
+        "triggerKind": 3
+      },
+      "seq": 6,
+      "type": "request"
+    }
+Info 154  [00:08:02.000] Starting updateGraphWorker: Project: /tsconfig.json
+Info 155  [00:08:03.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 156  [00:08:04.000] Project '/tsconfig.json' (Configured)
+Info 157  [00:08:05.000] 	Files (101)
+	/index.ts SVC-1-2 "a_"
+	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
+	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
+	/lib/a_10.ts Text-1 "export const aa_10__0 = 0;"
+	/lib/a_11.ts Text-1 "export const aa_11__0 = 0;"
+	/lib/a_12.ts Text-1 "export const aa_12__0 = 0;"
+	/lib/a_13.ts Text-1 "export const aa_13__0 = 0;"
+	/lib/a_14.ts Text-1 "export const aa_14__0 = 0;"
+	/lib/a_15.ts Text-1 "export const aa_15__0 = 0;"
+	/lib/a_16.ts Text-1 "export const aa_16__0 = 0;"
+	/lib/a_17.ts Text-1 "export const aa_17__0 = 0;"
+	/lib/a_18.ts Text-1 "export const aa_18__0 = 0;"
+	/lib/a_19.ts Text-1 "export const aa_19__0 = 0;"
+	/lib/a_2.ts Text-1 "export const aa_2__0 = 0;"
+	/lib/a_20.ts Text-1 "export const aa_20__0 = 0;"
+	/lib/a_21.ts Text-1 "export const aa_21__0 = 0;"
+	/lib/a_22.ts Text-1 "export const aa_22__0 = 0;"
+	/lib/a_23.ts Text-1 "export const aa_23__0 = 0;"
+	/lib/a_24.ts Text-1 "export const aa_24__0 = 0;"
+	/lib/a_25.ts Text-1 "export const aa_25__0 = 0;"
+	/lib/a_26.ts Text-1 "export const aa_26__0 = 0;"
+	/lib/a_27.ts Text-1 "export const aa_27__0 = 0;"
+	/lib/a_28.ts Text-1 "export const aa_28__0 = 0;"
+	/lib/a_29.ts Text-1 "export const aa_29__0 = 0;"
+	/lib/a_3.ts Text-1 "export const aa_3__0 = 0;"
+	/lib/a_30.ts Text-1 "export const aa_30__0 = 0;"
+	/lib/a_31.ts Text-1 "export const aa_31__0 = 0;"
+	/lib/a_32.ts Text-1 "export const aa_32__0 = 0;"
+	/lib/a_33.ts Text-1 "export const aa_33__0 = 0;"
+	/lib/a_34.ts Text-1 "export const aa_34__0 = 0;"
+	/lib/a_35.ts Text-1 "export const aa_35__0 = 0;"
+	/lib/a_36.ts Text-1 "export const aa_36__0 = 0;"
+	/lib/a_37.ts Text-1 "export const aa_37__0 = 0;"
+	/lib/a_38.ts Text-1 "export const aa_38__0 = 0;"
+	/lib/a_39.ts Text-1 "export const aa_39__0 = 0;"
+	/lib/a_4.ts Text-1 "export const aa_4__0 = 0;"
+	/lib/a_40.ts Text-1 "export const aa_40__0 = 0;"
+	/lib/a_41.ts Text-1 "export const aa_41__0 = 0;"
+	/lib/a_42.ts Text-1 "export const aa_42__0 = 0;"
+	/lib/a_43.ts Text-1 "export const aa_43__0 = 0;"
+	/lib/a_44.ts Text-1 "export const aa_44__0 = 0;"
+	/lib/a_45.ts Text-1 "export const aa_45__0 = 0;"
+	/lib/a_46.ts Text-1 "export const aa_46__0 = 0;"
+	/lib/a_47.ts Text-1 "export const aa_47__0 = 0;"
+	/lib/a_48.ts Text-1 "export const aa_48__0 = 0;"
+	/lib/a_49.ts Text-1 "export const aa_49__0 = 0;"
+	/lib/a_5.ts Text-1 "export const aa_5__0 = 0;"
+	/lib/a_50.ts Text-1 "export const aa_50__0 = 0;"
+	/lib/a_51.ts Text-1 "export const aa_51__0 = 0;"
+	/lib/a_52.ts Text-1 "export const aa_52__0 = 0;"
+	/lib/a_53.ts Text-1 "export const aa_53__0 = 0;"
+	/lib/a_54.ts Text-1 "export const aa_54__0 = 0;"
+	/lib/a_55.ts Text-1 "export const aa_55__0 = 0;"
+	/lib/a_56.ts Text-1 "export const aa_56__0 = 0;"
+	/lib/a_57.ts Text-1 "export const aa_57__0 = 0;"
+	/lib/a_58.ts Text-1 "export const aa_58__0 = 0;"
+	/lib/a_59.ts Text-1 "export const aa_59__0 = 0;"
+	/lib/a_6.ts Text-1 "export const aa_6__0 = 0;"
+	/lib/a_60.ts Text-1 "export const aa_60__0 = 0;"
+	/lib/a_61.ts Text-1 "export const aa_61__0 = 0;"
+	/lib/a_62.ts Text-1 "export const aa_62__0 = 0;"
+	/lib/a_63.ts Text-1 "export const aa_63__0 = 0;"
+	/lib/a_64.ts Text-1 "export const aa_64__0 = 0;"
+	/lib/a_65.ts Text-1 "export const aa_65__0 = 0;"
+	/lib/a_66.ts Text-1 "export const aa_66__0 = 0;"
+	/lib/a_67.ts Text-1 "export const aa_67__0 = 0;"
+	/lib/a_68.ts Text-1 "export const aa_68__0 = 0;"
+	/lib/a_69.ts Text-1 "export const aa_69__0 = 0;"
+	/lib/a_7.ts Text-1 "export const aa_7__0 = 0;"
+	/lib/a_70.ts Text-1 "export const aa_70__0 = 0;"
+	/lib/a_71.ts Text-1 "export const aa_71__0 = 0;"
+	/lib/a_72.ts Text-1 "export const aa_72__0 = 0;"
+	/lib/a_73.ts Text-1 "export const aa_73__0 = 0;"
+	/lib/a_74.ts Text-1 "export const aa_74__0 = 0;"
+	/lib/a_75.ts Text-1 "export const aa_75__0 = 0;"
+	/lib/a_76.ts Text-1 "export const aa_76__0 = 0;"
+	/lib/a_77.ts Text-1 "export const aa_77__0 = 0;"
+	/lib/a_78.ts Text-1 "export const aa_78__0 = 0;"
+	/lib/a_79.ts Text-1 "export const aa_79__0 = 0;"
+	/lib/a_8.ts Text-1 "export const aa_8__0 = 0;"
+	/lib/a_80.ts Text-1 "export const aa_80__0 = 0;"
+	/lib/a_81.ts Text-1 "export const aa_81__0 = 0;"
+	/lib/a_82.ts Text-1 "export const aa_82__0 = 0;"
+	/lib/a_83.ts Text-1 "export const aa_83__0 = 0;"
+	/lib/a_84.ts Text-1 "export const aa_84__0 = 0;"
+	/lib/a_85.ts Text-1 "export const aa_85__0 = 0;"
+	/lib/a_86.ts Text-1 "export const aa_86__0 = 0;"
+	/lib/a_87.ts Text-1 "export const aa_87__0 = 0;"
+	/lib/a_88.ts Text-1 "export const aa_88__0 = 0;"
+	/lib/a_89.ts Text-1 "export const aa_89__0 = 0;"
+	/lib/a_9.ts Text-1 "export const aa_9__0 = 0;"
+	/lib/a_90.ts Text-1 "export const aa_90__0 = 0;"
+	/lib/a_91.ts Text-1 "export const aa_91__0 = 0;"
+	/lib/a_92.ts Text-1 "export const aa_92__0 = 0;"
+	/lib/a_93.ts Text-1 "export const aa_93__0 = 0;"
+	/lib/a_94.ts Text-1 "export const aa_94__0 = 0;"
+	/lib/a_95.ts Text-1 "export const aa_95__0 = 0;"
+	/lib/a_96.ts Text-1 "export const aa_96__0 = 0;"
+	/lib/a_97.ts Text-1 "export const aa_97__0 = 0;"
+	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;"
+	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;"
+
+Info 158  [00:08:06.000] -----------------------------------------------
+Info 159  [00:08:07.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 160  [00:08:08.000] 	Files (51)
+
+Info 161  [00:08:09.000] -----------------------------------------------
+Info 162  [00:08:10.000] getExportInfoMap: cache hit
+Info 163  [00:08:11.000] continuePreviousIncompleteResponse: resolved 51 module specifiers, plus 0 ambient and 49 from cache
+Info 164  [00:08:12.000] continuePreviousIncompleteResponse: response is complete
+Info 165  [00:08:13.000] continuePreviousIncompleteResponse: *
+Info 166  [00:08:14.000] response:
+    {
+      "response": {
+        "flags": 13,
+        "isGlobalCompletion": true,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": false,
+        "optionalReplacementSpan": {
+          "start": {
+            "line": 1,
+            "offset": 1
+          },
+          "end": {
+            "line": 1,
+            "offset": 3
+          }
+        },
+        "entries": [
+          {
+            "name": "abstract",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "any",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "as",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "asserts",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "async",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "await",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "bigint",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "boolean",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "break",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "case",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "catch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "class",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "const",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "continue",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "debugger",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "declare",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "default",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "delete",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "do",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "else",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "enum",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "export",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "extends",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "false",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "finally",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "for",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "function",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "globalThis",
+            "kind": "module",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "if",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "implements",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "import",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "in",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "infer",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "instanceof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "interface",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "keyof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "let",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "module",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "namespace",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "never",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "new",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "null",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "number",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "object",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "package",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "readonly",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "return",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "string",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "super",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "switch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "symbol",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "this",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "throw",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "true",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "try",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "type",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "typeof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "undefined",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unique",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "var",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "void",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "while",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "with",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "yield",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "aa_0__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_0",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_0",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_0__0",
+              "exportMapKey": "aa_0__0|*|",
+              "moduleSpecifier": "./lib/a_0",
+              "fileName": "/lib/a_0.ts"
+            }
+          },
+          {
+            "name": "aa_1__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_1",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_1",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_1__0",
+              "exportMapKey": "aa_1__0|*|",
+              "moduleSpecifier": "./lib/a_1",
+              "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "aa_10__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_10",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_10",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_10__0",
+              "exportMapKey": "aa_10__0|*|",
+              "moduleSpecifier": "./lib/a_10",
+              "fileName": "/lib/a_10.ts"
+            }
+          },
+          {
+            "name": "aa_11__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_11",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_11",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_11__0",
+              "exportMapKey": "aa_11__0|*|",
+              "moduleSpecifier": "./lib/a_11",
+              "fileName": "/lib/a_11.ts"
+            }
+          },
+          {
+            "name": "aa_12__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_12",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_12",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_12__0",
+              "exportMapKey": "aa_12__0|*|",
+              "moduleSpecifier": "./lib/a_12",
+              "fileName": "/lib/a_12.ts"
+            }
+          },
+          {
+            "name": "aa_13__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_13",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_13",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_13__0",
+              "exportMapKey": "aa_13__0|*|",
+              "moduleSpecifier": "./lib/a_13",
+              "fileName": "/lib/a_13.ts"
+            }
+          },
+          {
+            "name": "aa_14__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_14",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_14",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_14__0",
+              "exportMapKey": "aa_14__0|*|",
+              "moduleSpecifier": "./lib/a_14",
+              "fileName": "/lib/a_14.ts"
+            }
+          },
+          {
+            "name": "aa_15__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_15",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_15",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_15__0",
+              "exportMapKey": "aa_15__0|*|",
+              "moduleSpecifier": "./lib/a_15",
+              "fileName": "/lib/a_15.ts"
+            }
+          },
+          {
+            "name": "aa_16__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_16",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_16",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_16__0",
+              "exportMapKey": "aa_16__0|*|",
+              "moduleSpecifier": "./lib/a_16",
+              "fileName": "/lib/a_16.ts"
+            }
+          },
+          {
+            "name": "aa_17__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_17",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_17",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_17__0",
+              "exportMapKey": "aa_17__0|*|",
+              "moduleSpecifier": "./lib/a_17",
+              "fileName": "/lib/a_17.ts"
+            }
+          },
+          {
+            "name": "aa_18__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_18",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_18",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_18__0",
+              "exportMapKey": "aa_18__0|*|",
+              "moduleSpecifier": "./lib/a_18",
+              "fileName": "/lib/a_18.ts"
+            }
+          },
+          {
+            "name": "aa_19__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_19",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_19",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_19__0",
+              "exportMapKey": "aa_19__0|*|",
+              "moduleSpecifier": "./lib/a_19",
+              "fileName": "/lib/a_19.ts"
+            }
+          },
+          {
+            "name": "aa_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_2__0",
+              "exportMapKey": "aa_2__0|*|",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "aa_20__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_20",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_20",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_20__0",
+              "exportMapKey": "aa_20__0|*|",
+              "moduleSpecifier": "./lib/a_20",
+              "fileName": "/lib/a_20.ts"
+            }
+          },
+          {
+            "name": "aa_21__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_21",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_21",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_21__0",
+              "exportMapKey": "aa_21__0|*|",
+              "moduleSpecifier": "./lib/a_21",
+              "fileName": "/lib/a_21.ts"
+            }
+          },
+          {
+            "name": "aa_22__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_22",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_22",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_22__0",
+              "exportMapKey": "aa_22__0|*|",
+              "moduleSpecifier": "./lib/a_22",
+              "fileName": "/lib/a_22.ts"
+            }
+          },
+          {
+            "name": "aa_23__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_23",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_23",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_23__0",
+              "exportMapKey": "aa_23__0|*|",
+              "moduleSpecifier": "./lib/a_23",
+              "fileName": "/lib/a_23.ts"
+            }
+          },
+          {
+            "name": "aa_24__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_24",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_24",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_24__0",
+              "exportMapKey": "aa_24__0|*|",
+              "moduleSpecifier": "./lib/a_24",
+              "fileName": "/lib/a_24.ts"
+            }
+          },
+          {
+            "name": "aa_25__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_25",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_25",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_25__0",
+              "exportMapKey": "aa_25__0|*|",
+              "moduleSpecifier": "./lib/a_25",
+              "fileName": "/lib/a_25.ts"
+            }
+          },
+          {
+            "name": "aa_26__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_26",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_26",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_26__0",
+              "exportMapKey": "aa_26__0|*|",
+              "moduleSpecifier": "./lib/a_26",
+              "fileName": "/lib/a_26.ts"
+            }
+          },
+          {
+            "name": "aa_27__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_27",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_27",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_27__0",
+              "exportMapKey": "aa_27__0|*|",
+              "moduleSpecifier": "./lib/a_27",
+              "fileName": "/lib/a_27.ts"
+            }
+          },
+          {
+            "name": "aa_28__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_28",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_28",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_28__0",
+              "exportMapKey": "aa_28__0|*|",
+              "moduleSpecifier": "./lib/a_28",
+              "fileName": "/lib/a_28.ts"
+            }
+          },
+          {
+            "name": "aa_29__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_29",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_29",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_29__0",
+              "exportMapKey": "aa_29__0|*|",
+              "moduleSpecifier": "./lib/a_29",
+              "fileName": "/lib/a_29.ts"
+            }
+          },
+          {
+            "name": "aa_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_3__0",
+              "exportMapKey": "aa_3__0|*|",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "aa_30__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_30",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_30",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_30__0",
+              "exportMapKey": "aa_30__0|*|",
+              "moduleSpecifier": "./lib/a_30",
+              "fileName": "/lib/a_30.ts"
+            }
+          },
+          {
+            "name": "aa_31__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_31",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_31",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_31__0",
+              "exportMapKey": "aa_31__0|*|",
+              "moduleSpecifier": "./lib/a_31",
+              "fileName": "/lib/a_31.ts"
+            }
+          },
+          {
+            "name": "aa_32__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_32",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_32",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_32__0",
+              "exportMapKey": "aa_32__0|*|",
+              "moduleSpecifier": "./lib/a_32",
+              "fileName": "/lib/a_32.ts"
+            }
+          },
+          {
+            "name": "aa_33__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_33",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_33",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_33__0",
+              "exportMapKey": "aa_33__0|*|",
+              "moduleSpecifier": "./lib/a_33",
+              "fileName": "/lib/a_33.ts"
+            }
+          },
+          {
+            "name": "aa_34__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_34",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_34",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_34__0",
+              "exportMapKey": "aa_34__0|*|",
+              "moduleSpecifier": "./lib/a_34",
+              "fileName": "/lib/a_34.ts"
+            }
+          },
+          {
+            "name": "aa_35__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_35",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_35",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_35__0",
+              "exportMapKey": "aa_35__0|*|",
+              "moduleSpecifier": "./lib/a_35",
+              "fileName": "/lib/a_35.ts"
+            }
+          },
+          {
+            "name": "aa_36__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_36",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_36",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_36__0",
+              "exportMapKey": "aa_36__0|*|",
+              "moduleSpecifier": "./lib/a_36",
+              "fileName": "/lib/a_36.ts"
+            }
+          },
+          {
+            "name": "aa_37__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_37",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_37",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_37__0",
+              "exportMapKey": "aa_37__0|*|",
+              "moduleSpecifier": "./lib/a_37",
+              "fileName": "/lib/a_37.ts"
+            }
+          },
+          {
+            "name": "aa_38__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_38",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_38",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_38__0",
+              "exportMapKey": "aa_38__0|*|",
+              "moduleSpecifier": "./lib/a_38",
+              "fileName": "/lib/a_38.ts"
+            }
+          },
+          {
+            "name": "aa_39__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_39",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_39",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_39__0",
+              "exportMapKey": "aa_39__0|*|",
+              "moduleSpecifier": "./lib/a_39",
+              "fileName": "/lib/a_39.ts"
+            }
+          },
+          {
+            "name": "aa_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_4__0",
+              "exportMapKey": "aa_4__0|*|",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "aa_40__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_40",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_40",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_40__0",
+              "exportMapKey": "aa_40__0|*|",
+              "moduleSpecifier": "./lib/a_40",
+              "fileName": "/lib/a_40.ts"
+            }
+          },
+          {
+            "name": "aa_41__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_41",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_41",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_41__0",
+              "exportMapKey": "aa_41__0|*|",
+              "moduleSpecifier": "./lib/a_41",
+              "fileName": "/lib/a_41.ts"
+            }
+          },
+          {
+            "name": "aa_42__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_42",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_42",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_42__0",
+              "exportMapKey": "aa_42__0|*|",
+              "moduleSpecifier": "./lib/a_42",
+              "fileName": "/lib/a_42.ts"
+            }
+          },
+          {
+            "name": "aa_43__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_43",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_43",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_43__0",
+              "exportMapKey": "aa_43__0|*|",
+              "moduleSpecifier": "./lib/a_43",
+              "fileName": "/lib/a_43.ts"
+            }
+          },
+          {
+            "name": "aa_44__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_44",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_44",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_44__0",
+              "exportMapKey": "aa_44__0|*|",
+              "moduleSpecifier": "./lib/a_44",
+              "fileName": "/lib/a_44.ts"
+            }
+          },
+          {
+            "name": "aa_45__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_45",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_45",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_45__0",
+              "exportMapKey": "aa_45__0|*|",
+              "moduleSpecifier": "./lib/a_45",
+              "fileName": "/lib/a_45.ts"
+            }
+          },
+          {
+            "name": "aa_46__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_46",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_46",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_46__0",
+              "exportMapKey": "aa_46__0|*|",
+              "moduleSpecifier": "./lib/a_46",
+              "fileName": "/lib/a_46.ts"
+            }
+          },
+          {
+            "name": "aa_47__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_47",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_47",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_47__0",
+              "exportMapKey": "aa_47__0|*|",
+              "moduleSpecifier": "./lib/a_47",
+              "fileName": "/lib/a_47.ts"
+            }
+          },
+          {
+            "name": "aa_48__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_48",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_48",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_48__0",
+              "exportMapKey": "aa_48__0|*|",
+              "moduleSpecifier": "./lib/a_48",
+              "fileName": "/lib/a_48.ts"
+            }
+          },
+          {
+            "name": "aa_49__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_49",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_49",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_49__0",
+              "exportMapKey": "aa_49__0|*|",
+              "moduleSpecifier": "./lib/a_49",
+              "fileName": "/lib/a_49.ts"
+            }
+          },
+          {
+            "name": "aa_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_5__0",
+              "exportMapKey": "aa_5__0|*|",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "aa_50__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_50",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_50",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_50__0",
+              "exportMapKey": "aa_50__0|*|",
+              "moduleSpecifier": "./lib/a_50",
+              "fileName": "/lib/a_50.ts"
+            }
+          },
+          {
+            "name": "aa_51__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_51",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_51",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_51__0",
+              "exportMapKey": "aa_51__0|*|",
+              "moduleSpecifier": "./lib/a_51",
+              "fileName": "/lib/a_51.ts"
+            }
+          },
+          {
+            "name": "aa_52__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_52",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_52",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_52__0",
+              "exportMapKey": "aa_52__0|*|",
+              "moduleSpecifier": "./lib/a_52",
+              "fileName": "/lib/a_52.ts"
+            }
+          },
+          {
+            "name": "aa_53__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_53",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_53",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_53__0",
+              "exportMapKey": "aa_53__0|*|",
+              "moduleSpecifier": "./lib/a_53",
+              "fileName": "/lib/a_53.ts"
+            }
+          },
+          {
+            "name": "aa_54__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_54",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_54",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_54__0",
+              "exportMapKey": "aa_54__0|*|",
+              "moduleSpecifier": "./lib/a_54",
+              "fileName": "/lib/a_54.ts"
+            }
+          },
+          {
+            "name": "aa_55__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_55",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_55",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_55__0",
+              "exportMapKey": "aa_55__0|*|",
+              "moduleSpecifier": "./lib/a_55",
+              "fileName": "/lib/a_55.ts"
+            }
+          },
+          {
+            "name": "aa_56__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_56",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_56",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_56__0",
+              "exportMapKey": "aa_56__0|*|",
+              "moduleSpecifier": "./lib/a_56",
+              "fileName": "/lib/a_56.ts"
+            }
+          },
+          {
+            "name": "aa_57__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_57",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_57",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_57__0",
+              "exportMapKey": "aa_57__0|*|",
+              "moduleSpecifier": "./lib/a_57",
+              "fileName": "/lib/a_57.ts"
+            }
+          },
+          {
+            "name": "aa_58__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_58",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_58",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_58__0",
+              "exportMapKey": "aa_58__0|*|",
+              "moduleSpecifier": "./lib/a_58",
+              "fileName": "/lib/a_58.ts"
+            }
+          },
+          {
+            "name": "aa_59__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_59",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_59",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_59__0",
+              "exportMapKey": "aa_59__0|*|",
+              "moduleSpecifier": "./lib/a_59",
+              "fileName": "/lib/a_59.ts"
+            }
+          },
+          {
+            "name": "aa_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_6__0",
+              "exportMapKey": "aa_6__0|*|",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "aa_60__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_60",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_60",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_60__0",
+              "exportMapKey": "aa_60__0|*|",
+              "moduleSpecifier": "./lib/a_60",
+              "fileName": "/lib/a_60.ts"
+            }
+          },
+          {
+            "name": "aa_61__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_61",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_61",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_61__0",
+              "exportMapKey": "aa_61__0|*|",
+              "moduleSpecifier": "./lib/a_61",
+              "fileName": "/lib/a_61.ts"
+            }
+          },
+          {
+            "name": "aa_62__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_62",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_62",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_62__0",
+              "exportMapKey": "aa_62__0|*|",
+              "moduleSpecifier": "./lib/a_62",
+              "fileName": "/lib/a_62.ts"
+            }
+          },
+          {
+            "name": "aa_63__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_63",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_63",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_63__0",
+              "exportMapKey": "aa_63__0|*|",
+              "moduleSpecifier": "./lib/a_63",
+              "fileName": "/lib/a_63.ts"
+            }
+          },
+          {
+            "name": "aa_64__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_64",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_64",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_64__0",
+              "exportMapKey": "aa_64__0|*|",
+              "moduleSpecifier": "./lib/a_64",
+              "fileName": "/lib/a_64.ts"
+            }
+          },
+          {
+            "name": "aa_65__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_65",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_65",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_65__0",
+              "exportMapKey": "aa_65__0|*|",
+              "moduleSpecifier": "./lib/a_65",
+              "fileName": "/lib/a_65.ts"
+            }
+          },
+          {
+            "name": "aa_66__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_66",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_66",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_66__0",
+              "exportMapKey": "aa_66__0|*|",
+              "moduleSpecifier": "./lib/a_66",
+              "fileName": "/lib/a_66.ts"
+            }
+          },
+          {
+            "name": "aa_67__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_67",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_67",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_67__0",
+              "exportMapKey": "aa_67__0|*|",
+              "moduleSpecifier": "./lib/a_67",
+              "fileName": "/lib/a_67.ts"
+            }
+          },
+          {
+            "name": "aa_68__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_68",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_68",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_68__0",
+              "exportMapKey": "aa_68__0|*|",
+              "moduleSpecifier": "./lib/a_68",
+              "fileName": "/lib/a_68.ts"
+            }
+          },
+          {
+            "name": "aa_69__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_69",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_69",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_69__0",
+              "exportMapKey": "aa_69__0|*|",
+              "moduleSpecifier": "./lib/a_69",
+              "fileName": "/lib/a_69.ts"
+            }
+          },
+          {
+            "name": "aa_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_7__0",
+              "exportMapKey": "aa_7__0|*|",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "aa_70__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_70",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_70",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_70__0",
+              "exportMapKey": "aa_70__0|*|",
+              "moduleSpecifier": "./lib/a_70",
+              "fileName": "/lib/a_70.ts"
+            }
+          },
+          {
+            "name": "aa_71__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_71",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_71",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_71__0",
+              "exportMapKey": "aa_71__0|*|",
+              "moduleSpecifier": "./lib/a_71",
+              "fileName": "/lib/a_71.ts"
+            }
+          },
+          {
+            "name": "aa_72__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_72",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_72",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_72__0",
+              "exportMapKey": "aa_72__0|*|",
+              "moduleSpecifier": "./lib/a_72",
+              "fileName": "/lib/a_72.ts"
+            }
+          },
+          {
+            "name": "aa_73__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_73",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_73",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_73__0",
+              "exportMapKey": "aa_73__0|*|",
+              "moduleSpecifier": "./lib/a_73",
+              "fileName": "/lib/a_73.ts"
+            }
+          },
+          {
+            "name": "aa_74__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_74",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_74",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_74__0",
+              "exportMapKey": "aa_74__0|*|",
+              "moduleSpecifier": "./lib/a_74",
+              "fileName": "/lib/a_74.ts"
+            }
+          },
+          {
+            "name": "aa_75__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_75",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_75",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_75__0",
+              "exportMapKey": "aa_75__0|*|",
+              "moduleSpecifier": "./lib/a_75",
+              "fileName": "/lib/a_75.ts"
+            }
+          },
+          {
+            "name": "aa_76__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_76",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_76",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_76__0",
+              "exportMapKey": "aa_76__0|*|",
+              "moduleSpecifier": "./lib/a_76",
+              "fileName": "/lib/a_76.ts"
+            }
+          },
+          {
+            "name": "aa_77__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_77",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_77",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_77__0",
+              "exportMapKey": "aa_77__0|*|",
+              "moduleSpecifier": "./lib/a_77",
+              "fileName": "/lib/a_77.ts"
+            }
+          },
+          {
+            "name": "aa_78__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_78",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_78",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_78__0",
+              "exportMapKey": "aa_78__0|*|",
+              "moduleSpecifier": "./lib/a_78",
+              "fileName": "/lib/a_78.ts"
+            }
+          },
+          {
+            "name": "aa_79__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_79",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_79",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_79__0",
+              "exportMapKey": "aa_79__0|*|",
+              "moduleSpecifier": "./lib/a_79",
+              "fileName": "/lib/a_79.ts"
+            }
+          },
+          {
+            "name": "aa_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_8__0",
+              "exportMapKey": "aa_8__0|*|",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "aa_80__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_80",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_80",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_80__0",
+              "exportMapKey": "aa_80__0|*|",
+              "moduleSpecifier": "./lib/a_80",
+              "fileName": "/lib/a_80.ts"
+            }
+          },
+          {
+            "name": "aa_81__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_81",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_81",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_81__0",
+              "exportMapKey": "aa_81__0|*|",
+              "moduleSpecifier": "./lib/a_81",
+              "fileName": "/lib/a_81.ts"
+            }
+          },
+          {
+            "name": "aa_82__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_82",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_82",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_82__0",
+              "exportMapKey": "aa_82__0|*|",
+              "moduleSpecifier": "./lib/a_82",
+              "fileName": "/lib/a_82.ts"
+            }
+          },
+          {
+            "name": "aa_83__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_83",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_83",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_83__0",
+              "exportMapKey": "aa_83__0|*|",
+              "moduleSpecifier": "./lib/a_83",
+              "fileName": "/lib/a_83.ts"
+            }
+          },
+          {
+            "name": "aa_84__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_84",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_84",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_84__0",
+              "exportMapKey": "aa_84__0|*|",
+              "moduleSpecifier": "./lib/a_84",
+              "fileName": "/lib/a_84.ts"
+            }
+          },
+          {
+            "name": "aa_85__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_85",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_85",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_85__0",
+              "exportMapKey": "aa_85__0|*|",
+              "moduleSpecifier": "./lib/a_85",
+              "fileName": "/lib/a_85.ts"
+            }
+          },
+          {
+            "name": "aa_86__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_86",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_86",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_86__0",
+              "exportMapKey": "aa_86__0|*|",
+              "moduleSpecifier": "./lib/a_86",
+              "fileName": "/lib/a_86.ts"
+            }
+          },
+          {
+            "name": "aa_87__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_87",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_87",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_87__0",
+              "exportMapKey": "aa_87__0|*|",
+              "moduleSpecifier": "./lib/a_87",
+              "fileName": "/lib/a_87.ts"
+            }
+          },
+          {
+            "name": "aa_88__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_88",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_88",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_88__0",
+              "exportMapKey": "aa_88__0|*|",
+              "moduleSpecifier": "./lib/a_88",
+              "fileName": "/lib/a_88.ts"
+            }
+          },
+          {
+            "name": "aa_89__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_89",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_89",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_89__0",
+              "exportMapKey": "aa_89__0|*|",
+              "moduleSpecifier": "./lib/a_89",
+              "fileName": "/lib/a_89.ts"
+            }
+          },
+          {
+            "name": "aa_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_9__0",
+              "exportMapKey": "aa_9__0|*|",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
+            }
+          },
+          {
+            "name": "aa_90__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_90",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_90",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_90__0",
+              "exportMapKey": "aa_90__0|*|",
+              "moduleSpecifier": "./lib/a_90",
+              "fileName": "/lib/a_90.ts"
+            }
+          },
+          {
+            "name": "aa_91__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_91",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_91",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_91__0",
+              "exportMapKey": "aa_91__0|*|",
+              "moduleSpecifier": "./lib/a_91",
+              "fileName": "/lib/a_91.ts"
+            }
+          },
+          {
+            "name": "aa_92__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_92",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_92",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_92__0",
+              "exportMapKey": "aa_92__0|*|",
+              "moduleSpecifier": "./lib/a_92",
+              "fileName": "/lib/a_92.ts"
+            }
+          },
+          {
+            "name": "aa_93__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_93",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_93",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_93__0",
+              "exportMapKey": "aa_93__0|*|",
+              "moduleSpecifier": "./lib/a_93",
+              "fileName": "/lib/a_93.ts"
+            }
+          },
+          {
+            "name": "aa_94__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_94",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_94",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_94__0",
+              "exportMapKey": "aa_94__0|*|",
+              "moduleSpecifier": "./lib/a_94",
+              "fileName": "/lib/a_94.ts"
+            }
+          },
+          {
+            "name": "aa_95__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_95",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_95",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_95__0",
+              "exportMapKey": "aa_95__0|*|",
+              "moduleSpecifier": "./lib/a_95",
+              "fileName": "/lib/a_95.ts"
+            }
+          },
+          {
+            "name": "aa_96__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_96",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_96",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_96__0",
+              "exportMapKey": "aa_96__0|*|",
+              "moduleSpecifier": "./lib/a_96",
+              "fileName": "/lib/a_96.ts"
+            }
+          },
+          {
+            "name": "aa_97__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_97",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_97",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_97__0",
+              "exportMapKey": "aa_97__0|*|",
+              "moduleSpecifier": "./lib/a_97",
+              "fileName": "/lib/a_97.ts"
+            }
+          },
+          {
+            "name": "aa_98__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_98",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_98",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_98__0",
+              "exportMapKey": "aa_98__0|*|",
+              "moduleSpecifier": "./lib/a_98",
+              "fileName": "/lib/a_98.ts"
+            }
+          },
+          {
+            "name": "aa_99__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_99",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_99",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_99__0",
+              "exportMapKey": "aa_99__0|*|",
+              "moduleSpecifier": "./lib/a_99",
+              "fileName": "/lib/a_99.ts"
+            }
+          },
+          {
+            "name": "depA_0__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_0__0",
+              "exportMapKey": "depA_0__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_0.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_1__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_1__0",
+              "exportMapKey": "depA_1__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_1.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_10__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_10__0",
+              "exportMapKey": "depA_10__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_10.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_11__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_11__0",
+              "exportMapKey": "depA_11__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_11.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_12__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_12__0",
+              "exportMapKey": "depA_12__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_12.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_13__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_13__0",
+              "exportMapKey": "depA_13__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_13.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_14__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_14__0",
+              "exportMapKey": "depA_14__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_14.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_15__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_15__0",
+              "exportMapKey": "depA_15__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_15.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_16__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_16__0",
+              "exportMapKey": "depA_16__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_16.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_17__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_17__0",
+              "exportMapKey": "depA_17__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_17.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_18__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_18__0",
+              "exportMapKey": "depA_18__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_18.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_19__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_19__0",
+              "exportMapKey": "depA_19__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_19.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_2__0",
+              "exportMapKey": "depA_2__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_2.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_20__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_20__0",
+              "exportMapKey": "depA_20__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_20.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_21__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_21__0",
+              "exportMapKey": "depA_21__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_21.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_22__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_22__0",
+              "exportMapKey": "depA_22__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_22.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_23__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_23__0",
+              "exportMapKey": "depA_23__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_23.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_24__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_24__0",
+              "exportMapKey": "depA_24__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_24.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_25__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_25__0",
+              "exportMapKey": "depA_25__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_25.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_26__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_26__0",
+              "exportMapKey": "depA_26__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_26.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_27__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_27__0",
+              "exportMapKey": "depA_27__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_27.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_28__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_28__0",
+              "exportMapKey": "depA_28__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_28.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_29__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_29__0",
+              "exportMapKey": "depA_29__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_29.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_3__0",
+              "exportMapKey": "depA_3__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_3.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_30__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_30__0",
+              "exportMapKey": "depA_30__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_30.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_31__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_31__0",
+              "exportMapKey": "depA_31__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_31.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_32__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_32__0",
+              "exportMapKey": "depA_32__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_32.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_33__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_33__0",
+              "exportMapKey": "depA_33__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_33.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_34__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_34__0",
+              "exportMapKey": "depA_34__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_34.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_35__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_35__0",
+              "exportMapKey": "depA_35__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_35.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_36__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_36__0",
+              "exportMapKey": "depA_36__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_36.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_37__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_37__0",
+              "exportMapKey": "depA_37__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_37.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_38__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_38__0",
+              "exportMapKey": "depA_38__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_38.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_39__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_39__0",
+              "exportMapKey": "depA_39__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_39.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_4__0",
+              "exportMapKey": "depA_4__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_4.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_40__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_40__0",
+              "exportMapKey": "depA_40__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_40.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_41__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_41__0",
+              "exportMapKey": "depA_41__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_41.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_42__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_42__0",
+              "exportMapKey": "depA_42__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_42.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_43__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_43__0",
+              "exportMapKey": "depA_43__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_43.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_44__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_44__0",
+              "exportMapKey": "depA_44__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_44.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_45__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_45__0",
+              "exportMapKey": "depA_45__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_45.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_46__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_46__0",
+              "exportMapKey": "depA_46__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_46.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_47__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_47__0",
+              "exportMapKey": "depA_47__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_47.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_48__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_48__0",
+              "exportMapKey": "depA_48__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_48.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_49__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_49__0",
+              "exportMapKey": "depA_49__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_49.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_5__0",
+              "exportMapKey": "depA_5__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_5.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_6__0",
+              "exportMapKey": "depA_6__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_6.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_7__0",
+              "exportMapKey": "depA_7__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_7.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_8__0",
+              "exportMapKey": "depA_8__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_8.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_9__0",
+              "exportMapKey": "depA_9__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_9.ts",
+              "isPackageJsonImport": true
+            }
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info 167  [00:08:15.000] request:
+    {
+      "command": "completionEntryDetails",
+      "arguments": {
+        "file": "/index.ts",
+        "line": 1,
+        "offset": 2,
+        "entryNames": [
+          {
+            "name": "depA_0__0",
+            "source": "dep-a",
+            "data": {
+              "exportName": "depA_0__0",
+              "exportMapKey": "depA_0__0|*|",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_0.ts",
+              "isPackageJsonImport": true
+            }
+          }
+        ]
+      },
+      "seq": 7,
+      "type": "request"
+    }
+Info 168  [00:08:16.000] getExportInfoMap: cache hit
+Info 169  [00:08:17.000] response:
+    {
+      "response": [
+        {
+          "name": "depA_0__0",
+          "kindModifiers": "export",
+          "kind": "const",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "depA_0__0",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "0",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": [],
+          "tags": [],
+          "codeActions": [
+            {
+              "description": "Add import from \"dep-a\"",
+              "changes": [
+                {
+                  "fileName": "/index.ts",
+                  "textChanges": [
+                    {
+                      "start": {
+                        "line": 1,
+                        "offset": 1
+                      },
+                      "end": {
+                        "line": 1,
+                        "offset": 1
+                      },
+                      "newText": "import { depA_0__0 } from \"dep-a\";\n\n"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": [
+            {
+              "text": "dep-a",
+              "kind": "text"
+            }
+          ],
+          "sourceDisplay": [
+            {
+              "text": "dep-a",
+              "kind": "text"
+            }
+          ]
+        }
+      ],
+      "responseRequired": true
+    }
+After request

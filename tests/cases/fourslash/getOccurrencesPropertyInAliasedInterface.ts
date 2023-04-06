@@ -16,4 +16,4 @@
 ////
 ////(new C()).[|abc|];
 
-verify.rangesAreOccurrences();
+verify.baselineDocumentHighlights();

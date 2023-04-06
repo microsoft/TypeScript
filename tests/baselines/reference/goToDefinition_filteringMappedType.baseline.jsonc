@@ -1,0 +1,18 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_filteringMappedType.ts ===
+// const obj = { <|[|a|]: 1|>, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { a: 0 };
+// filtered./*GOTO DEF*/a;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "a",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

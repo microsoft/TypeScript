@@ -9,4 +9,4 @@
 ////
 //// bar();
 
-verify.rangesWithSameTextAreRenameLocations("__foo");
+verify.baselineRenameAtRangesWithText("__foo");

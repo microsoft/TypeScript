@@ -1,0 +1,32 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationSuper_01.ts ===
+// <|class [|Foo|] {
+//     hello() {}
+// }|>
+// 
+// class Bar extends Foo {
+//     hello() {
+//         sup/*GOTO IMPL*/er.hello();
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

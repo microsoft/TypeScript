@@ -167,10 +167,10 @@ interface CallbackData {
     time: number;
 }
 class Callbacks {
-    private map: { cb: TimeOutCallback; args: any[]; ms: number | undefined; time: number; }[] = [];
+    readonly map: CallbackData[] = [];
     private nextId = 1;
 
-    constructor(private host: TestServerHost) {
+    constructor(private host: TestServerHost, readonly callbackType: string) {
     }
 
     getNextId() {
@@ -190,15 +190,17 @@ class Callbacks {
         }
     }
 
-    count() {
-        let n = 0;
-        for (const _ in this.map) {
-            n++;
+    log() {
+        const details: string[] = [];
+        for (const timeoutId in this.map) {
+            const { args } = this.map[Number(timeoutId)];
+            details.push(`${timeoutId}: ${args[0]}`);
         }
-        return n;
+        return `${this.callbackType} callback:: count: ${details.length}` + (details.length ? "\r\n" + details.join("\r\n") : "");
     }
 
-    private invokeCallback({ cb, args, ms, time }: CallbackData) {
+    private invokeCallback(timeoutId: number) {
+        const { cb, args, ms, time } = this.map[timeoutId];
         if (ms !== undefined) {
             const newTime = ms + time;
             if (this.host.getTime() < newTime) {
@@ -206,21 +208,17 @@ class Callbacks {
             }
         }
         cb(...args);
+        delete this.map[timeoutId];
     }
 
     invoke(invokeKey?: number) {
-        if (invokeKey) {
-            this.invokeCallback(this.map[invokeKey]);
-            delete this.map[invokeKey];
-            return;
-        }
+        if (invokeKey) return this.invokeCallback(invokeKey);
 
         // Note: invoking a callback may result in new callbacks been queued,
         // so do not clear the entire callback list regardless. Only remove the
         // ones we have invoked.
         for (const key in this.map) {
-            this.invokeCallback(this.map[key]);
-            delete this.map[key];
+            this.invokeCallback(Number(key));
         }
     }
 }
@@ -280,8 +278,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
     private toPath: (f: string) => Path;
-    private timeoutCallbacks = new Callbacks(this);
-    private immediateCallbacks = new Callbacks(this);
+    readonly timeoutCallbacks = new Callbacks(this, "Timeout");
+    readonly immediateCallbacks = new Callbacks(this, "Immedidate");
     readonly screenClears: number[] = [];
 
     readonly watchedFiles = createMultiMap<Path, TestFileWatcher>();
@@ -869,16 +867,6 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.screenClears.push(this.output.length);
     }
 
-    checkTimeoutQueueLengthAndRun(expected: number) {
-        this.checkTimeoutQueueLength(expected);
-        this.runQueuedTimeoutCallbacks();
-    }
-
-    checkTimeoutQueueLength(expected: number) {
-        const callbacksCount = this.timeoutCallbacks.count();
-        assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
-    }
-
     runQueuedTimeoutCallbacks(timeoutId?: number) {
         try {
             this.timeoutCallbacks.invoke(timeoutId);
@@ -891,10 +879,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    runQueuedImmediateCallbacks(checkCount?: number) {
-        if (checkCount !== undefined) {
-            assert.equal(this.immediateCallbacks.count(), checkCount);
-        }
+    runQueuedImmediateCallbacks() {
         this.immediateCallbacks.invoke();
     }
 

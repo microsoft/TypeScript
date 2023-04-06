@@ -1,0 +1,42 @@
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/jsDocTypedef_form1.js ===
+// 
+// /** @typedef {(string | number)} */
+// <|var /*RENAME*/[|NumberLikeRENAME|];|>
+// 
+// [|NumberLikeRENAME|] = 10;
+// 
+// /** @type {[|NumberLikeRENAME|]} */
+// var numberLike;
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/jsDocTypedef_form1.js ===
+// 
+// /** @typedef {(string | number)} */
+// <|var [|NumberLikeRENAME|];|>
+// 
+// /*RENAME*/[|NumberLikeRENAME|] = 10;
+// 
+// /** @type {[|NumberLikeRENAME|]} */
+// var numberLike;
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/jsDocTypedef_form1.js ===
+// 
+// /** @typedef {(string | number)} */
+// <|var [|NumberLikeRENAME|];|>
+// 
+// [|NumberLikeRENAME|] = 10;
+// 
+// /** @type {/*RENAME*/[|NumberLikeRENAME|]} */
+// var numberLike;

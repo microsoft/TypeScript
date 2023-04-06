@@ -1,0 +1,69 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_00.ts ===
+// <|namespace [|Foo|] {
+//     export function hello() {}
+// }|>
+// 
+// module Bar {
+//     export function sure() {}
+// }
+// 
+// let x = Fo/*GOTO IMPL*/o;
+// let y = Bar;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_00.ts ===
+// namespace Foo {
+//     export function hello() {}
+// }
+// 
+// <|module [|Bar|] {
+//     export function sure() {}
+// }|>
+// 
+// let x = Foo;
+// let y = Ba/*GOTO IMPL*/r;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   }
+  ]

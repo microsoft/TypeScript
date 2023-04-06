@@ -23,12 +23,14 @@ const [
     functionDef, asyncKeyword, functionName,
     class2Def, exportKeyword, defaultKeyword, class2Name,
 ] = test.ranges();
-verify.renameLocations([declareKeyword, abstractKeyword], [{ range: class1Name }]);
-verify.renameLocations([staticKeyword], [{ range: aName }]);
-verify.renameLocations([readonlyKeyword], [{ range: bName }]);
-verify.renameLocations([publicKeyword], [{ range: cName }]);
-verify.renameLocations([protectedKeyword], [{ range: dName }]);
-verify.renameLocations([privateKeyword], [{ range: eName }]);
-verify.renameLocations([constKeyword], [{ range: enumName }]);
-verify.renameLocations([asyncKeyword], [{ range: functionName }]);
-verify.renameLocations([exportKeyword, defaultKeyword], [{ range: class2Name }]);
+verify.baselineRename([
+    declareKeyword, abstractKeyword,
+    staticKeyword,
+    readonlyKeyword,
+    publicKeyword,
+    protectedKeyword,
+    privateKeyword,
+    constKeyword,
+    asyncKeyword,
+    exportKeyword, defaultKeyword,
+]);

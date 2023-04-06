@@ -103,3 +103,95 @@ export function T6(a: any, b: any, c: any, d: any) {
 >div : any
 }
 
+export function T7(a: any, b: any, c: any, d: any) {
+>T7 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div>;
+><div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div> : error
+>div : any
+>className : string
+>"T7" : "T7"
+>{ __proto__: null, dir: 'rtl' } : { __proto__: null; dir: string; }
+>__proto__ : null
+>dir : string
+>'rtl' : "rtl"
+>div : any
+}
+
+export function T8(a: any, b: any, c: any, d: any) {
+>T8 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T8"} { ...{ "__proto__": null } }>T8</div>;
+><div className={"T8"} { ...{ "__proto__": null } }>T8</div> : error
+>div : any
+>className : string
+>"T8" : "T8"
+>{ "__proto__": null } : { __proto__: null; }
+>"__proto__" : null
+>div : any
+}
+
+declare const __proto__: string;
+>__proto__ : string
+
+export function T9(a: any, b: any, c: any, d: any) {
+>T9 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T9"} { ...{ [__proto__]: null } }>T9</div>;
+><div className={"T9"} { ...{ [__proto__]: null } }>T9</div> : error
+>div : any
+>className : string
+>"T9" : "T9"
+>{ [__proto__]: null } : { [x: string]: null; }
+>[__proto__] : null
+>__proto__ : string
+>div : any
+}
+
+export function T10(a: any, b: any, c: any, d: any) {
+>T10 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
+><div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div> : error
+>div : any
+>className : string
+>"T10" : "T10"
+>{ ["__proto__"]: null } : { __proto__: null; }
+>["__proto__"] : null
+>"__proto__" : "__proto__"
+>div : any
+}
+
+export function T11(a: any, b: any, c: any, d: any) {
+>T11 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+><div className={"T11"} { ...{ __proto__ } }>T11</div> : error
+>div : any
+>className : string
+>"T11" : "T11"
+>{ __proto__ } : { __proto__: string; }
+>__proto__ : string
+>div : any
+}
+

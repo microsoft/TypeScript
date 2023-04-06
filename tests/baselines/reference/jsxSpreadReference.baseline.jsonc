@@ -1,0 +1,70 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// class MyClass {
+//   props: {
+//     name?: string;
+//     size?: number;
+//   }
+// }
+// 
+// <|var /*RENAME*/[|nnRENAME|]: {name?: string; size?: number};|>
+// var x = <MyClass {...[|nnRENAME|]}></MyClass>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// class MyClass {
+//   props: {
+//     name?: string;
+//     size?: number;
+//   }
+// }
+// 
+// <|var [|nnRENAME|]: {name?: string; size?: number};|>
+// var x = <MyClass {.../*RENAME*/[|nnRENAME|]}></MyClass>;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// class MyClass {
+//   props: {
+//     name?: string;
+//     size?: number;
+//   }
+// }
+// 
+// <|var [|nn|]: {name?: string; size?: number};|>
+// var x = <MyClass {...n/*GOTO DEF*/n}></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "nn",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

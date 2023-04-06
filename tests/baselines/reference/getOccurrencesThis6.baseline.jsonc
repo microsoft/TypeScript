@@ -1,0 +1,1437 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: [|{| kind: "reference" |}this|],
+// 
+//     f() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// 
+//     g() {
+//         this;
+//     },
+// 
+//     get h() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         this;
+//     },
+// 
+//     l: () => {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+//     [|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: this,
+// 
+//     f() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// 
+//     g() {
+//         this;
+//     },
+// 
+//     get h() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         this;
+//     },
+// 
+//     l: () => {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = th/*HIGHLIGHTS*/is;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: this,
+// 
+//     f() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// 
+//     g() {
+//         this;
+//     },
+// 
+//     get h() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         this;
+//     },
+// 
+//     l: () => {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: this,
+// 
+//     f() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// 
+//     g() {
+//         this;
+//     },
+// 
+//     get h() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         this;
+//     },
+// 
+//     l: () => {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// [|{| kind: "reference" |}this|];
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: /*HIGHLIGHTS*/[|{| kind: "reference" |}this|],
+// 
+//     f() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// 
+//     g() {
+//         this;
+//     },
+// 
+//     get h() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         this;
+//     },
+// 
+//     l: () => {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: this,
+// 
+//     f() {
+//         [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// 
+//     g() {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     get h() {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     l: () => {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: this,
+// 
+//     f() {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// 
+//     g() {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     get h() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     l: () => {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// [|{| kind: "reference" |}this|];
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+//     this;
+//     () => this;
+//     () => {
+//         if (this) {
+//             this;
+//         }
+//         else {
+//             this.this;
+//         }
+//     }
+//     function inside() {
+//         this;
+//         (function (_) {
+//             this;
+//         })(this);
+//     }
+// }
+// 
+// module m {
+//     var x = this;
+//     function f() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// class A {
+//     public b = this.method1;
+// 
+//     public method1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private method2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     public static staticB = this.staticMethod1;
+// 
+//     public static staticMethod1() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// 
+//     private static staticMethod2() {
+//         this;
+//         this;
+//         () => this;
+//         () => {
+//             if (this) {
+//                 this;
+//             }
+//             else {
+//                 this.this;
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//     }
+// }
+// 
+// var x = {
+//     a: [|{| kind: "reference" |}this|],
+// 
+//     f() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//     },
+// 
+//     g() {
+//         this;
+//     },
+// 
+//     get h() {
+//         this;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             this;
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         this;
+//     },
+// 
+//     l: () => {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// };
+// 

@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(2,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(3,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(4,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(5,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(2,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(3,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(4,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(16,22): error TS2739: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(18,22): error TS2741: Property 'name' is missing in type 'C' but required in type 'D'.
 
@@ -10,16 +10,16 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(1
     // all the following should be error
     function fn1(): number {  }
                     ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     function fn2(): string { }
                     ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     function fn3(): boolean { }
                     ~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     function fn4(): Date {  }
                     ~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     function fn7(): any {  } // should be valid: any includes void
     
     interface I { id: number }

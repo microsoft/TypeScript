@@ -1,1 +1,7 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForLabel2.ts ===
+// var label = "label";
+// while (true) {
+//     if (false) break /*FIND ALL REFS*/label;
+//     if (true) continue label;
+// }

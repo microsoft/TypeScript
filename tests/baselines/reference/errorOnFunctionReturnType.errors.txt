@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/foo.js(7,10): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/jsdoc/foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 tests/cases/conformance/jsdoc/foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/foo.js(16,60): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/jsdoc/foo.js(21,20): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/jsdoc/foo.js(16,60): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/conformance/jsdoc/foo.js(21,20): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 tests/cases/conformance/jsdoc/foo.js(31,10): error TS2534: A function returning 'never' cannot have a reachable end point.
 tests/cases/conformance/jsdoc/foo.js(37,5): error TS2322: Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/jsdoc/foo.js(40,56): error TS2534: A function returning 'never' cannot have a reachable end point.
@@ -17,7 +17,7 @@ tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 
     /** @type {FunctionReturningPromise} */
     function testPromise1() {
              ~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         console.log("Nope");
     }
     
@@ -30,14 +30,14 @@ tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 
     
     var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
                                                                ~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         console.log("test")
     }
     
     /** @type {FunctionReturningPromise} */
     var testPromise4 = function() {
                        ~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         console.log("test")
     }
     

@@ -181,7 +181,7 @@ var a = 4; // comment 7
         });
     }
     function createTestVariableDeclaration(name: string) {
-        return ts.factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createObjectLiteralExpression([ts.factory.createPropertyAssignment("p1", ts.factory.createNumericLiteral(1))], /*multiline*/ true));
+        return ts.factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createObjectLiteralExpression([ts.factory.createPropertyAssignment("p1", ts.factory.createNumericLiteral(1))], /*multiLine*/ true));
     }
     function createTestClass() {
         return ts.factory.createClassDeclaration(
@@ -202,7 +202,7 @@ var a = 4; // comment 7
                 ts.factory.createPropertyDeclaration(
                     /*modifiers*/ undefined,
                     "property1",
-                    /*questionToken*/ undefined,
+                    /*questionOrExclamationToken*/ undefined,
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
                     /*initializer*/ undefined
                 )
@@ -554,8 +554,7 @@ import {
     x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter12", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
+            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")));
         });
     }
     {
@@ -564,8 +563,7 @@ import {
     x // this is x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter13", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
+            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")));
         });
     }
     {
@@ -595,8 +593,7 @@ import {
     x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter16", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
+            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")));
         });
     }
     {
@@ -606,8 +603,7 @@ import {
     x // this is x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter17", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
+            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")));
         });
     }
     {
@@ -616,15 +612,13 @@ import {
     x0, x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter18", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
+            changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")));
         });
     }
     {
         const runTest = (name: string, text: string) => runSingleFileTest(name, /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             for (const specifier of ["x3", "x4", "x5"]) {
-                // eslint-disable-next-line local/boolean-trivia
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x2", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier(specifier)));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x2", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier(specifier)));
             }
         });
 
@@ -643,8 +637,7 @@ class A {
             const newNodes = [];
             for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
                 newNodes.push(
-                    // eslint-disable-next-line local/boolean-trivia
-                    ts.factory.createPropertyDeclaration(undefined, i + "", undefined, undefined, undefined));
+                    ts.factory.createPropertyDeclaration(/*modifiers*/ undefined, i + "", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
             }
             const insertAfter = findChild("x", sourceFile);
             for (const newNode of newNodes) {
@@ -659,8 +652,7 @@ class A {
 }
 `;
         runSingleFileTest("insertNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), ts.factory.createPropertyDeclaration(undefined, "a", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), undefined));
+            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), ts.factory.createPropertyDeclaration(/*modifiers*/ undefined, "a", /*questionOrExclamationToken*/ undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), /*initializer*/ undefined));
         });
     }
     {
@@ -670,8 +662,7 @@ class A {
 }
 `;
         runSingleFileTest("insertNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
-            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), ts.factory.createPropertyDeclaration(undefined, "a", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), undefined));
+            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), ts.factory.createPropertyDeclaration(/*modifiers*/ undefined, "a", /*questionOrExclamationToken*/ undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), /*initializer*/ undefined));
         });
     }
     {
@@ -706,7 +697,7 @@ class A {
             const newNode = ts.factory.createPropertyDeclaration(
                 /*modifiers*/ undefined,
                 ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
+                /*questionOrExclamationToken*/ undefined,
                 ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
@@ -723,7 +714,7 @@ class A {
             const newNode = ts.factory.createPropertyDeclaration(
                 /*modifiers*/ undefined,
                 ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
+                /*questionOrExclamationToken*/ undefined,
                 ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
@@ -739,7 +730,7 @@ interface A {
             const newNode = ts.factory.createPropertyDeclaration(
                 /*modifiers*/ undefined,
                 ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
+                /*questionOrExclamationToken*/ undefined,
                 ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
@@ -755,7 +746,7 @@ interface A {
             const newNode = ts.factory.createPropertyDeclaration(
                 /*modifiers*/ undefined,
                 ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
+                /*questionOrExclamationToken*/ undefined,
                 ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);

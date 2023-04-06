@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -89,6 +90,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -101,6 +104,11 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -110,6 +118,11 @@ Change:: Actual program update to include new file
 
 Input::
 
+Before running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
+After running Timeout callback:: count: 1
+5: timerToUpdateChildWatches
 Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
@@ -177,6 +190,9 @@ Change:: After program emit with new file, should schedule and run timeout to up
 
 Input::
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -186,6 +202,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

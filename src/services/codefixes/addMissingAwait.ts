@@ -129,7 +129,7 @@ function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expr
             }
         });
         // No fix-all because it will already be included once with the use site fix,
-        // and for simplicity the fix-all doesn‘t let the user choose between use-site and declaration-site fixes.
+        // and for simplicity the fix-all doesn't let the user choose between use-site and declaration-site fixes.
         return createCodeFixActionWithoutFixAll(
             "addMissingAwaitToInitializer",
             initializerChanges,
@@ -257,7 +257,7 @@ function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: r
         (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
 
     return diagnostic && contains(errorCodes, diagnostic.code) ||
-        // A Promise is usually not correct in a binary expression (it’s not valid
+        // A Promise is usually not correct in a binary expression (it's not valid
         // in an arithmetic expression and an equality comparison seems unusual),
         // but if the other side of the binary expression has an error, the side
         // is typed `any` which will squash the error that would identify this

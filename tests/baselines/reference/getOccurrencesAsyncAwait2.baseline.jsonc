@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait2.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait2.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  /*HIGHLIGHTS*/[|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait2.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  /*HIGHLIGHTS*/[|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait2.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] /*HIGHLIGHTS*/[|{| kind: "none" |}await|] 200;
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait2.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+//  return /*HIGHLIGHTS*/[|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }

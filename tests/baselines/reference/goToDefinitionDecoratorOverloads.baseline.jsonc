@@ -1,0 +1,55 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionDecoratorOverloads.ts ===
+// async function f() {}
+// 
+// <|function [|dec|](target: any, propertyKey: string): void;|>
+// function dec(target: any, propertyKey: symbol): void;
+// function dec(target: any, propertyKey: string | symbol) {}
+// 
+// declare const s: symbol;
+// class C {
+//     @/*GOTO DEF*/dec f() {}
+//     @dec [s]() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "dec",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionDecoratorOverloads.ts ===
+// async function f() {}
+// 
+// function dec(target: any, propertyKey: string): void;
+// <|function [|dec|](target: any, propertyKey: symbol): void;|>
+// function dec(target: any, propertyKey: string | symbol) {}
+// 
+// declare const s: symbol;
+// class C {
+//     @dec f() {}
+//     @/*GOTO DEF*/dec [s]() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "dec",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

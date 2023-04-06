@@ -1,800 +1,503 @@
+// === findAllReferences ===
 // === /a.ts ===
-// type /*FIND ALL REFS*/[|T|] = number;
+// <|type /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|] = number;|>
 // namespace T {
 //     export type U = string;
 // }
-// export = [|T|];
+// <|export = [|T|];|>
 
 // === /b.ts ===
-// const x: import("[|./a|]") = 0;
+// <|const x: import("[|./a|]") = 0;|>
 // const y: import("./a").U = "";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number\nnamespace T",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type /*FIND ALL REFS*/[|T|] = number;|>
+  // namespace T {
+  //     export type U = string;
+  // }
+  // export = T;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number\nnamespace T",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
 // type T = number;
-// namespace /*FIND ALL REFS*/[|T|] {
+// <|namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|] {
 //     export type U = string;
-// }
-// export = [|T|];
+// }|>
+// <|export = [|T|];|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "namespace T",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type [|T|] = number;|>
+  // namespace /*FIND ALL REFS*/T {
+  //     export type U = string;
+  // }
+  // export = T;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "namespace T",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// type [|T|] = number;
-// namespace [|T|] {
+// <|type [|{| isWriteAccess: true |}T|] = number;|>
+// <|namespace [|{| isWriteAccess: true |}T|] {
 //     export type U = string;
-// }
-// export = /*FIND ALL REFS*/[|T|];
+// }|>
+// <|export = /*FIND ALL REFS*/[|T|];|>
 
 // === /b.ts ===
-// const x: import("[|./a|]") = 0;
+// <|const x: import("[|./a|]") = 0;|>
 // const y: import("./a").U = "";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number\nnamespace T",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type [|T|] = number;|>
+  // namespace T {
+  //     export type U = string;
+  // }
+  // export = /*FIND ALL REFS*/T;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number\nnamespace T",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// <|const x: import("/*FIND ALL REFS*/[|{| defId: 1 |}./a|]") = 0;|>
+// <|const y: import("[|{| defId: 0 |}./a|]").U = "";|>
 
 // === /a.ts ===
-// type [|T|] = number;
-// namespace [|T|] {
+// <|type [|{| defId: 1, isWriteAccess: true |}T|] = number;|>
+// <|namespace [|{| defId: 1, isWriteAccess: true |}T|] {
 //     export type U = string;
-// }
-// [|export|] = [|T|];
+// }|>
+// <|[|{| defId: 0 |}<|export|] = [|{| contextId: 5, defId: 1 |}T|];|>|>
 
+  // === Definitions ===
+  // === /a.ts ===
+  // [|{| defId: 0 |}<|type [|{| defId: 1 |}T|] = number;|>
+  // namespace T {
+  //     export type U = string;
+  // }
+  // export = T;|]
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/a\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/a\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number\nnamespace T",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.ts ===
-// const x: import("/*FIND ALL REFS*/[|./a|]") = 0;
-// const y: import("[|./a|]").U = "";
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "module",
-      "name": "module \"/a\"",
-      "textSpan": {
-        "start": 0,
-        "length": 72
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/a\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 30
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 6
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number\nnamespace T",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+// <|const x: import("[|{| defId: 1 |}./a|]") = 0;|>
+// <|const y: import("/*FIND ALL REFS*/[|{| defId: 0 |}./a|]").U = "";|>
 
 // === /a.ts ===
-// type [|T|] = number;
-// namespace [|T|] {
+// <|type [|{| defId: 1, isWriteAccess: true |}T|] = number;|>
+// <|namespace [|{| defId: 1, isWriteAccess: true |}T|] {
 //     export type U = string;
-// }
-// [|export|] = [|T|];
+// }|>
+// <|[|{| defId: 0 |}<|export|] = [|{| contextId: 5, defId: 1 |}T|];|>|>
 
-// === /b.ts ===
-// const x: import("[|./a|]") = 0;
-// const y: import("/*FIND ALL REFS*/[|./a|]").U = "";
+  // === Definitions ===
+  // === /a.ts ===
+  // [|{| defId: 0 |}<|type [|{| defId: 1 |}T|] = number;|>
+  // namespace T {
+  //     export type U = string;
+  // }
+  // export = T;|]
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "module",
-      "name": "module \"/a\"",
-      "textSpan": {
-        "start": 0,
-        "length": 72
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/a\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 30
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 6
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/a\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/a\"",
+      "kind": "stringLiteral"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number\nnamespace T",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number\nnamespace T",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// type [|T|] = number;
-// namespace [|T|] {
+// <|type [|{| isWriteAccess: true |}T|] = number;|>
+// <|namespace [|{| isWriteAccess: true |}T|] {
 //     export type U = string;
-// }
-// /*FIND ALL REFS*/export = [|T|];
+// }|>
+// /*FIND ALL REFS*/<|export = [|T|];|>
 
 // === /b.ts ===
-// const x: import("[|./a|]") = 0;
+// <|const x: import("[|./a|]") = 0;|>
 // const y: import("./a").U = "";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number\nnamespace T",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 61,
-          "length": 11
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type [|T|] = number;|>
+  // namespace T {
+  //     export type U = string;
+  // }
+  // /*FIND ALL REFS*/export = T;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number\nnamespace T",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|type /*RENAME*/[|TRENAME|] = number;|>
+// namespace T {
+//     export type U = string;
+// }
+// <|export = [|TRENAME|];|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// type T = number;
+// <|namespace /*RENAME*/[|TRENAME|] {
+//     export type U = string;
+// }|>
+// <|export = [|TRENAME|];|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|type [|TRENAME|] = number;|>
+// <|namespace [|TRENAME|] {
+//     export type U = string;
+// }|>
+// <|export = /*RENAME*/[|TRENAME|];|>

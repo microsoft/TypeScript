@@ -1,3 +1,4 @@
+currentDirectory:: /a/c useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 1

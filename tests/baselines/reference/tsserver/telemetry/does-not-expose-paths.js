@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a.ts]

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/alpha/src/a.ts]
 export const m: number = 3;

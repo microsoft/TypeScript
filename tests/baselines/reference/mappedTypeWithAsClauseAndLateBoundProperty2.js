@@ -56,7 +56,7 @@ export declare const thing: {
     };
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
     fill: (value: number, start?: number, end?: number) => number[];
-    copyWithin: (target: number, start: number, end?: number) => number[];
+    copyWithin: (target: number, start?: number, end?: number) => number[];
     entries: () => IterableIterator<[number, number]>;
     keys: () => IterableIterator<number>;
     values: () => IterableIterator<number>;
@@ -162,7 +162,7 @@ tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): e
         };
         findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
         fill: (value: number, start?: number, end?: number) => number[];
-        copyWithin: (target: number, start: number, end?: number) => number[];
+        copyWithin: (target: number, start?: number, end?: number) => number[];
         entries: () => IterableIterator<[number, number]>;
         keys: () => IterableIterator<number>;
         values: () => IterableIterator<number>;

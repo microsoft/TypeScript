@@ -1,0 +1,51 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow6.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 100;
+// 
+// try {
+//     throw 0;
+//     var x = () => { throw 0; };
+// }
+// catch (y) {
+//     var x = () => { throw 0; };
+//     [|{| kind: "none" |}throw|] 200;
+// }
+// finally {
+//     [|{| kind: "none" |}throw|] 300;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow6.ts ===
+// [|{| kind: "none" |}throw|] 100;
+// 
+// try {
+//     throw 0;
+//     var x = () => { throw 0; };
+// }
+// catch (y) {
+//     var x = () => { throw 0; };
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 200;
+// }
+// finally {
+//     [|{| kind: "none" |}throw|] 300;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow6.ts ===
+// [|{| kind: "none" |}throw|] 100;
+// 
+// try {
+//     throw 0;
+//     var x = () => { throw 0; };
+// }
+// catch (y) {
+//     var x = () => { throw 0; };
+//     [|{| kind: "none" |}throw|] 200;
+// }
+// finally {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 300;
+// }

@@ -11,6 +11,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(26,15): error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
   Type 'new (x: string) => string' provides no match for the signature '(x: string): string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(28,16): error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(29,16): error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
   Type 'typeof C2' provides no match for the signature '(x: string): string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(30,16): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
@@ -74,6 +75,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
     var r11 = foo2(<U, V>(x: U, y: V) => x);
                    ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     var r13 = foo2(C2);
                    ~~
 !!! error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.

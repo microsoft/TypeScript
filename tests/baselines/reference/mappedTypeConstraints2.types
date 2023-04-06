@@ -128,3 +128,27 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >true : true
 }
 
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+>ObjectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+
+    [k in K as `_${k}`]: true;
+>true : true
+
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+>genericTest : <K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) => void
+>objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+>key : K
+
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
+>shouldBeTrue : true
+>true : true
+>objectWithUnderscoredKeys[`_${key}`] : ObjectWithUnderscoredKeys<K>[`_${K}`]
+>objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+>`_${key}` : `_${K}`
+>key : K
+}
+

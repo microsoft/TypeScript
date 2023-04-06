@@ -1,0 +1,20 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionYield2.ts ===
+// function* outerGen() {
+//     <|function* [|gen|]() {
+//         /*GOTO DEF*/yield 0;
+//     }|>
+//     return gen
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "gen",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

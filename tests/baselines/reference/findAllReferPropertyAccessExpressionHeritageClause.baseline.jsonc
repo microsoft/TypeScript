@@ -1,302 +1,213 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts ===
 // class B {}
 // function foo() {
-//     return {/*FIND ALL REFS*/[|B|]: B};
+//     return {/*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}B|]: B|>};
 // }
 // class C extends (foo()).[|B|] {}
 // class C1 extends foo().[|B|] {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-      "kind": "property",
-      "name": "(property) B: typeof B",
-      "textSpan": {
-        "start": 40,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 40,
-        "length": 4
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "contextSpan": {
-          "start": 40,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts ===
+  // class B {}
+  // function foo() {
+  //     return {/*FIND ALL REFS*/<|[|B|]: B|>};
+  // }
+  // class C extends (foo()).B {}
+  // class C1 extends foo().B {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B: typeof B",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts ===
 // class B {}
 // function foo() {
-//     return {[|B|]: B};
+//     return {<|[|{| isWriteAccess: true |}B|]: B|>};
 // }
 // class C extends (foo())./*FIND ALL REFS*/[|B|] {}
 // class C1 extends foo().[|B|] {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-      "kind": "property",
-      "name": "(property) B: typeof B",
-      "textSpan": {
-        "start": 40,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 40,
-        "length": 4
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "contextSpan": {
-          "start": 40,
-          "length": 4
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts ===
+  // class B {}
+  // function foo() {
+  //     return {<|[|B|]: B|>};
+  // }
+  // class C extends (foo())./*FIND ALL REFS*/B {}
+  // class C1 extends foo().B {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B: typeof B",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts ===
 // class B {}
 // function foo() {
-//     return {[|B|]: B};
+//     return {<|[|{| isWriteAccess: true |}B|]: B|>};
 // }
 // class C extends (foo()).[|B|] {}
 // class C1 extends foo()./*FIND ALL REFS*/[|B|] {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-      "kind": "property",
-      "name": "(property) B: typeof B",
-      "textSpan": {
-        "start": 40,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 40,
-        "length": 4
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "contextSpan": {
-          "start": 40,
-          "length": 4
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts ===
+  // class B {}
+  // function foo() {
+  //     return {<|[|B|]: B|>};
+  // }
+  // class C extends (foo()).B {}
+  // class C1 extends foo()./*FIND ALL REFS*/B {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B: typeof B",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

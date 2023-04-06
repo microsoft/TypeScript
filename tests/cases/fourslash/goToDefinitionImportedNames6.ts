@@ -14,4 +14,4 @@
 ////    x;
 ////}
 
-verify.goToDefinition("moduleAliasDefinition", "moduleDefinition");
+verify.baselineGoToDefinition("moduleAliasDefinition");

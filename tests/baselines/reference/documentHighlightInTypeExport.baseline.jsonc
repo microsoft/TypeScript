@@ -1,0 +1,98 @@
+// === documentHighlights ===
+// === /1.ts ===
+// <|type /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}A|] = 1;|>
+// <|<|export { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /1.ts ===
+// <|type [|{| kind: "writtenReference" |}A|] = 1;|>
+// <|<|export { /*HIGHLIGHTS*/[|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /1.ts ===
+// type A = 1;
+// <|export { A as /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}B|] };|>
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// <|type /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}A|] = 1;|>
+// let A: [|{| kind: "reference" |}A|] = 1;
+// <|<|export { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type A = 1;
+// <|let /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}A|]: A = 1;|>
+// <|<|export { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// <|type [|{| kind: "writtenReference" |}A|] = 1;|>
+// let A: /*HIGHLIGHTS*/[|{| kind: "reference" |}A|] = 1;
+// <|<|export { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// <|type [|{| kind: "writtenReference" |}A|] = 1;|>
+// <|let [|{| kind: "writtenReference" |}A|]: [|{| kind: "reference" |}A|] = 1;|>
+// <|<|export { /*HIGHLIGHTS*/[|{| contextId: 2, kind: "reference" |}A|] as [|{| contextId: 3, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type A = 1;
+// let A: A = 1;
+// <|export { A as /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}B|] };|>
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// <|type /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}A|] = 1;|>
+// let A: [|{| kind: "reference" |}A|] = 1;
+// <|<|export type { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type A = 1;
+// <|let /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}A|]: A = 1;|>
+// <|<|export type { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// <|type [|{| kind: "writtenReference" |}A|] = 1;|>
+// let A: /*HIGHLIGHTS*/[|{| kind: "reference" |}A|] = 1;
+// <|<|export type { [|{| contextId: 1, kind: "reference" |}A|] as [|{| contextId: 2, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// <|type [|{| kind: "writtenReference" |}A|] = 1;|>
+// <|let [|{| kind: "writtenReference" |}A|]: [|{| kind: "reference" |}A|] = 1;|>
+// <|<|export type { /*HIGHLIGHTS*/[|{| contextId: 2, kind: "reference" |}A|] as [|{| contextId: 3, kind: "writtenReference" |}B|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type A = 1;
+// let A: A = 1;
+// <|export type { A as /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}B|] };|>

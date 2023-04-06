@@ -1,4 +1,5 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts(28,20): error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts (1 errors) ====
@@ -32,6 +33,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
         var r10 = foo6(<T>(x: T, y: T) => ''); // error
                        ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
         function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
             return cb;

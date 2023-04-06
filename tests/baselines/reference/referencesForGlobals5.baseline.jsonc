@@ -1,345 +1,276 @@
-// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
-// var m = [|globalAlias|];
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
 // module globalModule {
 //     export var x;
 // }
 // 
-// /*FIND ALL REFS*/import [|globalAlias|] = globalModule;
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "alias",
-      "name": "(alias) namespace globalAlias\nimport globalAlias = globalModule",
-      "textSpan": {
-        "start": 50,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalAlias",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalAlias",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalModule",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 43,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 43,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}globalAlias|] = globalModule;|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
 // var m = [|globalAlias|];
 
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // module globalModule {
+  //     export var x;
+  // }
+  // 
+  // /*FIND ALL REFS*/<|import [|globalAlias|] = globalModule;|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace globalAlias\nimport globalAlias = globalModule",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalAlias",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalAlias",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalModule",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
 // module globalModule {
 //     export var x;
 // }
 // 
-// import /*FIND ALL REFS*/[|globalAlias|] = globalModule;
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}globalAlias|] = globalModule;|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "alias",
-      "name": "(alias) namespace globalAlias\nimport globalAlias = globalModule",
-      "textSpan": {
-        "start": 50,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalAlias",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalAlias",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalModule",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 43,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 43,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var m = [|globalAlias|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // module globalModule {
+  //     export var x;
+  // }
+  // 
+  // <|import /*FIND ALL REFS*/[|globalAlias|] = globalModule;|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace globalAlias\nimport globalAlias = globalModule",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalAlias",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalAlias",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalModule",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// module globalModule {
+//     export var x;
+// }
+// 
+// <|import [|{| isWriteAccess: true |}globalAlias|] = globalModule;|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
 // var m = /*FIND ALL REFS*/[|globalAlias|];
 
-// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// module globalModule {
-//     export var x;
-// }
-// 
-// import [|globalAlias|] = globalModule;
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // module globalModule {
+  //     export var x;
+  // }
+  // 
+  // <|import [|globalAlias|] = globalModule;|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "alias",
-      "name": "(alias) namespace globalAlias\nimport globalAlias = globalModule",
-      "textSpan": {
-        "start": 50,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalAlias",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalAlias",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalModule",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 43,
-        "length": 34
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 43,
-          "length": 34
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace globalAlias\nimport globalAlias = globalModule",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalAlias",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalAlias",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalModule",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]

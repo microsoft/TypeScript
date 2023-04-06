@@ -1,0 +1,33 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralOk.ts ===
+// interface Foo {
+//     f: '/*RENAME*/[|fooRENAME|]' | 'bar'
+// }
+// const d: 'foo' = 'foo'
+// declare const f: Foo
+// f.f = '[|fooRENAME|]'
+// f.f = `[|fooRENAME|]`
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralOk.ts ===
+// interface Foo {
+//     f: '[|fooRENAME|]' | 'bar'
+// }
+// const d: 'foo' = 'foo'
+// declare const f: Foo
+// f.f = '/*RENAME*/[|fooRENAME|]'
+// f.f = `[|fooRENAME|]`
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralOk.ts ===
+// interface Foo {
+//     f: '[|fooRENAME|]' | 'bar'
+// }
+// const d: 'foo' = 'foo'
+// declare const f: Foo
+// f.f = '[|fooRENAME|]'
+// f.f = `/*RENAME*/[|fooRENAME|]`

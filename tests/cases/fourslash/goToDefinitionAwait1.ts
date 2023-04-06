@@ -8,5 +8,7 @@
 ////     [|/*start2*/await|] Promise.resolve(0);
 //// }
 
-verify.goToDefinition("start1", "end1");
-verify.goToDefinition("start2", []);
+verify.baselineGoToDefinition(
+    "start1",
+    "start2"
+);

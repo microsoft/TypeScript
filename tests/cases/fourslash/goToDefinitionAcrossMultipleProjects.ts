@@ -19,4 +19,4 @@
 /////// <reference path="d.ts" />
 ////[|/*use*/x|]++;
 
-verify.goToDefinition("use", ["def1", "def2", "def3", "def4"]);
+verify.baselineGoToDefinition("use");

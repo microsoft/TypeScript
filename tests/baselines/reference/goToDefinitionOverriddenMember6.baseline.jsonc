@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember6.ts ===
+// class Foo {
+//     m() {}
+// }
+// class Bar extends Foo {
+//     /*GOTO DEF*/override m1() {}
+// }

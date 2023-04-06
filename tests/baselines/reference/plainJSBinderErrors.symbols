@@ -56,7 +56,7 @@ class C {
     withOctal() {
 >withOctal : Symbol(C.withOctal, Decl(plainJSBinderErrors.js, 23, 5))
 
-        const redundant = 010
+        const redundant = 0o10
 >redundant : Symbol(redundant, Decl(plainJSBinderErrors.js, 25, 13))
 
         with (redundant) {

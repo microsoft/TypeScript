@@ -27,7 +27,7 @@ chalk;
 
 //// [mod1.d.ts]
 export namespace chalk {
-    const grey: {};
+    let grey: {};
 }
 //// [main.d.ts]
 export {};

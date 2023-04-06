@@ -27,6 +27,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1):
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+  Target signature provides too few arguments. Expected 3 or more, but got 2.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
@@ -211,6 +212,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 3 or more, but got 2.
         return true;
     };
     

@@ -54,12 +54,12 @@ var n;
 var n = 1;
 var n = 1.0;
 var n = 1e4;
-var n = 001; // Error in ES5
+var n = 1; // Error in ES5
 var n = 0x1;
 var n = -1;
 var n = -1.0;
 var n = -1e-4;
-var n = -003; // Error in ES5
+var n = -3; // Error in ES5
 var n = -0x1;
 var s;
 var s = '';

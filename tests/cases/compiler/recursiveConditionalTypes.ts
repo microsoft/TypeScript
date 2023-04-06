@@ -95,7 +95,7 @@ declare function foo<T>(x: Box1<Box1<T>>): T;
 
 declare let z: Box2<Box2<string>>;
 
-foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+foo(z);  // string
 
 // Intersect tuple element types
 

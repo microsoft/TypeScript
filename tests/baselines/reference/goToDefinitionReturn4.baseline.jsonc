@@ -1,0 +1,3 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionReturn4.ts ===
+// /*GOTO DEF*/return;

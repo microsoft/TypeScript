@@ -6,4 +6,4 @@
 ////    [|/*1*/override|] m() {}
 ////}
 
-verify.goToDefinition("1", []);
+verify.baselineGoToDefinition("1");

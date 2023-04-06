@@ -67,7 +67,7 @@ export namespace myTypes {
         prop2: string;
     };
     type typeC = myTypes.typeB | Function;
-    const myTypes: {
+    let myTypes: {
         [x: string]: any;
     };
 }

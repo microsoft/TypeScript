@@ -34,23 +34,4 @@
 //// /** {@link /*use7*/[|Foo|] }dd*/
 //// const f = ""
 
-goTo.marker("use1");
-verify.goToDefinitionIs("def1");
-
-goTo.marker("use2");
-verify.goToDefinitionIs("def2");
-
-goTo.marker("use3");
-verify.goToDefinitionIs("def1");
-
-goTo.marker("use4");
-verify.goToDefinitionIs("def2");
-
-goTo.marker("use5");
-verify.goToDefinitionIs("def3");
-
-goTo.marker("use6");
-verify.goToDefinitionIs("def1");
-
-goTo.marker("use7");
-verify.goToDefinitionIs("def1");
+verify.baselineGetDefinitionAtPosition("use1", "use2", "use3", "use4", "use5", "use6", "use7");

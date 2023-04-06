@@ -1,0 +1,197 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_07.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     hello (): void;
+// }
+// 
+// interface Bar {
+//     hello (): void;
+// }
+// 
+// let x1: Foo            = [|{| defId: 0 |}{ hello ()          { /**typeReference*/ } }|];
+// let x2: () => Foo      = [|{| defId: 1 |}(() => { hello ()   { /**functionType*/} })|];
+// let x3: Foo | Bar      = [|{| defId: 2 |}{ hello ()          { /**unionType*/} }|];
+// let x4: Foo & (Foo & Bar)      = [|{| defId: 3 |}{ hello ()          { /**intersectionType*/} }|];
+// let x5: [Foo]          = [|{| defId: 4 |}[{ hello ()         { /**tupleType*/} }]|];
+// let x6: (Foo)          = [|{| defId: 5 |}{ hello ()          { /**parenthesizedType*/} }|];
+// let x7: (new() => Foo) = [|{| defId: 6 |}class { hello ()    { /**constructorType*/} }|];
+// let x8: Foo[]          = [|{| defId: 7 |}[{ hello ()         { /**arrayType*/} }]|];
+// let x9: { y: Foo }     = [|{| defId: 8 |}{ y: { hello ()     { /**typeLiteral*/} } }|];
+// let x10 = [|{| defId: 9 |}class implements Foo { hello() {} }|]
+// let x11 = <|class [|{| defId: 10 |}C|] implements Foo { hello() {} }|>
+// 
+// // Should not do anything for type predicates
+// function isFoo(a: any): a is Foo {
+//     return true;
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "kind": "",
+    "displayParts": []
+   },
+   {
+    "defId": 2,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "kind": "",
+    "displayParts": []
+   },
+   {
+    "defId": 5,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 6,
+    "kind": "local class",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "anonymous local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 7,
+    "kind": "",
+    "displayParts": []
+   },
+   {
+    "defId": 8,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 9,
+    "kind": "local class",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "anonymous local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 10,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ],
+    "kind": "local class"
+   }
+  ]

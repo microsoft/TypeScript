@@ -4,4 +4,4 @@
 
 //// [octalLiteralInStrictModeES3.js]
 "use strict";
-03;
+3;

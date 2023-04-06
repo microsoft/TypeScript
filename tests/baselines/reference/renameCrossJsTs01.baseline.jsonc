@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// <|exports./*RENAME*/[|areaRENAME|] = function (r) { return r * r; }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|import { [|areaRENAME|] } from './a';|>
+// var t = [|areaRENAME|](10);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import { /*START PREFIX*/area as /*RENAME*/[|areaRENAME|] } from './a';|>
+// var t = [|areaRENAME|](10);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import { /*START PREFIX*/area as [|areaRENAME|] } from './a';|>
+// var t = /*RENAME*/[|areaRENAME|](10);

@@ -112,6 +112,24 @@ function f23(): undefined | number {
     // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 
+const f30: () => undefined = () => {
+    // Ok, contextual type for implicit return is `undefined`
+}
+
+const f31: () => undefined = () => {
+    // Ok, contextual type for expression-less return is `undefined`
+    return;
+}
+
+const f32: () => undefined | number = () => {
+    // Error, contextual type for implicit return isn't just `undefined`
+}
+
+const f33: () => undefined | number = () => {
+    // Error, contextual type for expression-less return isn't just `undefined`
+    return;
+}
+
 class C {
     public get m1() {
         // Errors; get accessors must return a value.

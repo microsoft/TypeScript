@@ -34,7 +34,7 @@ export class ThrottledOperations {
             this.host.clearTimeout(pendingTimeout);
         }
         // schedule new operation, pass arguments
-        this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
+        this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, operationId, this, cb));
         if (this.logger) {
             this.logger.info(`Scheduled: ${operationId}${pendingTimeout ? ", Cancelled earlier one" : ""}`);
         }
@@ -47,7 +47,7 @@ export class ThrottledOperations {
         return this.pendingTimeouts.delete(operationId);
     }
 
-    private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
+    private static run(operationId: string, self: ThrottledOperations, cb: () => void) {
         perfLogger?.logStartScheduledOperation(operationId);
         self.pendingTimeouts.delete(operationId);
         if (self.logger) {

@@ -1,4 +1,5 @@
 Info 0    [00:00:15.000] For files of style c:/myprojects/project/x.js
+currentDirectory:: c:/ useCaseSensitiveFileNames: false
 Info 1    [00:00:16.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
 Before request
 //// [c:/a/lib/lib.d.ts]
@@ -129,6 +130,7 @@ c:/a/lib/lib.d.ts:
   {}
 
 Info 16   [00:00:17.000] For files of style //vda1cs4850/myprojects/project/x.js
+currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
 Info 17   [00:00:18.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
@@ -259,6 +261,7 @@ FsWatches::
   {}
 
 Info 32   [00:00:19.000] For files of style //vda1cs4850/c$/myprojects/project/x.js
+currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
 Info 33   [00:00:20.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
@@ -389,6 +392,7 @@ FsWatches::
   {}
 
 Info 48   [00:00:19.000] For files of style c:/users/username/myprojects/project/x.js
+currentDirectory:: c:/ useCaseSensitiveFileNames: false
 Info 49   [00:00:20.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
 Before request
 //// [c:/a/lib/lib.d.ts]
@@ -519,6 +523,7 @@ c:/a/lib/lib.d.ts:
   {}
 
 Info 64   [00:00:23.000] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
+currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
 Info 65   [00:00:24.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]

@@ -83,14 +83,14 @@ const a4b = [r4, c4];  // {}[]
 >r4 : { [x: string]: unknown; }
 >c4 : {}
 
-// Check that narrowing preserves original type in false branch for non-identical mutual subtypes
+// Check that {} is a strict supertype of Record<string, unknown>
 
 declare function isObject1(value: unknown): value is Record<string, unknown>;
 >isObject1 : (value: unknown) => value is Record<string, unknown>
 >value : unknown
 
-function gg(x: {}) {
->gg : (x: {}) => void
+function gg1(x: {}) {
+>gg1 : (x: {}) => void
 >x : {}
 
     if (isObject1(x)) {
@@ -122,15 +122,65 @@ function gg2(x: Record<string, unknown>) {
 >isObject2 : (value: unknown) => value is {}
 >x : Record<string, unknown>
 
-        x;  // {}
+        x;  // Record<string, unknown>
 >x : Record<string, unknown>
     }
     else {
-        x;  // Record<string, unknown>
+        x;  // never
 >x : never
     }
     x;  // Record<string, unknown>
 >x : Record<string, unknown>
+}
+
+// Check that {} is a strict supertype of Record<string, any>
+
+declare function isObject3(value: unknown): value is Record<string, any>;
+>isObject3 : (value: unknown) => value is Record<string, any>
+>value : unknown
+
+function gg3(x: {}) {
+>gg3 : (x: {}) => void
+>x : {}
+
+    if (isObject3(x)) {
+>isObject3(x) : boolean
+>isObject3 : (value: unknown) => value is Record<string, any>
+>x : {}
+
+        x;  // Record<string, any>
+>x : Record<string, any>
+    }
+    else {
+        x;  // {}
+>x : {}
+    }
+    x;  // {}
+>x : {}
+}
+
+declare function isObject4(value: unknown): value is {};
+>isObject4 : (value: unknown) => value is {}
+>value : unknown
+
+function gg4(x: Record<string, any>) {
+>gg4 : (x: Record<string, any>) => void
+>x : Record<string, any>
+
+    if (isObject4(x)) {
+>isObject4(x) : boolean
+>isObject4 : (value: unknown) => value is {}
+>x : Record<string, any>
+
+        x;  // Record<string, any>
+>x : Record<string, any>
+    }
+    else {
+        x;  // never
+>x : never
+    }
+    x;  // Record<string, any>
+>x : Record<string, any>
 }
 
 // Repro from #50916
@@ -201,5 +251,129 @@ function example(x: Union) {
 
     x;  // Union
 >x : Union
+}
+
+function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
+>checksArrayOrObject1 : (obj: Record<string, any> | Record<string, any>[]) => void
+>obj : Record<string, any> | Record<string, any>[]
+
+    // "accidentally" guards the first branch on the length
+    if (Array.isArray(obj) && obj.length) {
+>Array.isArray(obj) && obj.length : number | false
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : Record<string, any> | Record<string, any>[]
+>obj.length : number
+>obj : any[] | Record<string, any>[]
+>length : number
+
+        for (let key in obj) {
+>key : string
+>obj : any[] | Record<string, any>[]
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+>key : string
+>obj : any[] | Record<string, any>
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : any[] | Record<string, any>
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : any[] | Record<string, any>
+>key : string
+            }
+        }
+    }
+}
+
+function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
+>checksArrayOrObject2 : (obj: Record<string, any> | Record<string, any>[]) => void
+>obj : Record<string, any> | Record<string, any>[]
+
+    if (Array.isArray(obj)) {
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : Record<string, any> | Record<string, any>[]
+
+        // obj should only be an array type here
+        for (let key in obj) {
+>key : string
+>obj : any[] | Record<string, any>[]
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : any[] | Record<string, any>[]
+>key : string
+            }
+        }
+    }
+    else {
+        // 'obj' should probably not include an array type here.
+        for (let key in obj) {
+>key : string
+>obj : Record<string, any>
+
+            if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>obj[key] : any
+>obj : Record<string, any>
+>key : string
+>undefined : undefined
+
+                console.log(obj[key])
+>console.log(obj[key]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>obj[key] : any
+>obj : Record<string, any>
+>key : string
+            }
+        }
+    }
 }
 

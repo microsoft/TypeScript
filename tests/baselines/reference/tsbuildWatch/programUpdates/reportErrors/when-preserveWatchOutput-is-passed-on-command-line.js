@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -531,6 +532,9 @@ export const m = mod;
 let y: string = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
@@ -673,6 +677,9 @@ export function multiply(a: number, b: number) { return a * b; }
 let x: string = 10;
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 

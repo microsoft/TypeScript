@@ -1,0 +1,45 @@
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport01.ts ===
+// <|export default class /*RENAME*/[|DefaultExportedClassRENAME|] {
+// }|>
+// /*
+//  *  Commenting [|DefaultExportedClassRENAME|]
+//  */
+// 
+// var x: [|DefaultExportedClassRENAME|];
+// 
+// var y = new [|DefaultExportedClassRENAME|];
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport01.ts ===
+// <|export default class [|DefaultExportedClassRENAME|] {
+// }|>
+// /*
+//  *  Commenting [|DefaultExportedClassRENAME|]
+//  */
+// 
+// var x: /*RENAME*/[|DefaultExportedClassRENAME|];
+// 
+// var y = new [|DefaultExportedClassRENAME|];
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport01.ts ===
+// <|export default class [|DefaultExportedClassRENAME|] {
+// }|>
+// /*
+//  *  Commenting [|DefaultExportedClassRENAME|]
+//  */
+// 
+// var x: [|DefaultExportedClassRENAME|];
+// 
+// var y = new /*RENAME*/[|DefaultExportedClassRENAME|];

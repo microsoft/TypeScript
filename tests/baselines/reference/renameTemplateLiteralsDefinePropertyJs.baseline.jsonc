@@ -1,0 +1,99 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// let obj = {};
+// 
+// Object.defineProperty(obj, `/*RENAME*/[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     <|[`[|propRENAME|]`]: 1|>
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     <|[`/*RENAME*/[|propRENAME|]`]: 1|>
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     <|[`[|propRENAME|]`]: 1|>
+// };
+// 
+// obj./*RENAME*/[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     <|[`[|propRENAME|]`]: 1|>
+// };
+// 
+// obj.[|propRENAME|];
+// obj['/*RENAME*/[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     <|[`[|propRENAME|]`]: 1|>
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["/*RENAME*/[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     <|[`[|propRENAME|]`]: 1|>
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`/*RENAME*/[|propRENAME|]`];

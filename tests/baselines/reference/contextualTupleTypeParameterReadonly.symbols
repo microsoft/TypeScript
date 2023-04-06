@@ -36,20 +36,21 @@ eacher((a, b) => {
 
 });
 
+// TODO: https://github.com/microsoft/TypeScript/issues/53255
 eacher((...args) => {
 >eacher : Symbol(eacher, Decl(contextualTupleTypeParameterReadonly.ts, 7, 5))
->args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 14, 8))
+>args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 15, 8))
 
     const [a, b] = args;
->a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 15, 11))
->b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 15, 13))
->args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 14, 8))
+>a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 16, 11))
+>b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 16, 13))
+>args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 15, 8))
 
     a;
->a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 15, 11))
+>a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 16, 11))
 
     b;
->b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 15, 13))
+>b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 16, 13))
 
 });
 

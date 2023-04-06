@@ -1,0 +1,10 @@
+=== tests/cases/compiler/a.js ===
+!< {:>
+>!< {:> : boolean
+>< {:> : any
+> : any
+> : any
+
+
+> : any
+

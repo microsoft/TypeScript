@@ -1,0 +1,23 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// const foo = {
+//     set: function (x) {
+//         this._x = x;
+//     },
+//     copy: function (/*RENAME*/[|xRENAME|]) {
+//         this._x = [|xRENAME|].prop;
+//     }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// const foo = {
+//     set: function (x) {
+//         this._x = x;
+//     },
+//     copy: function ([|xRENAME|]) {
+//         this._x = /*RENAME*/[|xRENAME|].prop;
+//     }
+// };

@@ -1,189 +1,117 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
-// /*FIND ALL REFS*/namespace [|Numbers|] {
+// /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}Numbers|] {
 //     export var n = 12;
-// }
+// }|>
 // let x = [|Numbers|].n + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-      "kind": "module",
-      "name": "namespace Numbers",
-      "textSpan": {
-        "start": 10,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Numbers",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 44
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 44
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 53,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
+  // /*FIND ALL REFS*/<|namespace [|Numbers|] {
+  //     export var n = 12;
+  // }|>
+  // let x = Numbers.n + 1;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace Numbers",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Numbers",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
-// namespace /*FIND ALL REFS*/[|Numbers|] {
+// <|namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Numbers|] {
 //     export var n = 12;
-// }
+// }|>
 // let x = [|Numbers|].n + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-      "kind": "module",
-      "name": "namespace Numbers",
-      "textSpan": {
-        "start": 10,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Numbers",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 44
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 44
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 53,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
+  // <|namespace /*FIND ALL REFS*/[|Numbers|] {
+  //     export var n = 12;
+  // }|>
+  // let x = Numbers.n + 1;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace Numbers",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Numbers",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
-// namespace [|Numbers|] {
+// <|namespace [|{| isWriteAccess: true |}Numbers|] {
 //     export var n = 12;
-// }
+// }|>
 // let x = /*FIND ALL REFS*/[|Numbers|].n + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-      "kind": "module",
-      "name": "namespace Numbers",
-      "textSpan": {
-        "start": 10,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Numbers",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 44
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 44
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 53,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
+  // <|namespace [|Numbers|] {
+  //     export var n = 12;
+  // }|>
+  // let x = /*FIND ALL REFS*/Numbers.n + 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace Numbers",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Numbers",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]

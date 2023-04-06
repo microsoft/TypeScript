@@ -1,72 +1,53 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/Foo.js ===
-// /** @type {function (/*FIND ALL REFS*/[|new|]: string, string): string} */
+// /** @type {function (/*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}new|]: string|>, string): string} */
 // var f;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/Foo.js",
-      "kind": "parameter",
-      "name": "(parameter) new: string",
-      "textSpan": {
-        "start": 21,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "new",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 21,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/Foo.js",
-        "contextSpan": {
-          "start": 21,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/Foo.js ===
+  // /** @type {function (/*FIND ALL REFS*/<|[|new|]: string|>, string): string} */
+  // var f;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) new: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "new",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

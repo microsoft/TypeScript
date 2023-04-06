@@ -1,3 +1,4 @@
+currentDirectory:: c:/ useCaseSensitiveFileNames: false
 Info 0    [00:00:21.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
 Before request
 //// [c:/myfolder/allproject/project/tsconfig.json]

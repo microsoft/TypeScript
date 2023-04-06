@@ -17,5 +17,7 @@
 //// [|var [|/*dst*/{| "contextRangeIndex": 0 |}nn|]: {name?: string; size?: number};|]
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
-verify.goToDefinition("src", "dst");
-verify.rangesWithSameTextAreRenameLocations("nn");
+verify.baselineCommands(
+    { type: "findRenameLocations", rangeText: "nn" },
+    { type: "goToDefinition", markerOrRange: "src" },
+);

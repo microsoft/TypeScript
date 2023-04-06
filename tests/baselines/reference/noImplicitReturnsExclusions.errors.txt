@@ -1,0 +1,78 @@
+tests/cases/compiler/noImplicitReturnsExclusions.ts(16,26): error TS7030: Not all code paths return a value.
+tests/cases/compiler/noImplicitReturnsExclusions.ts(24,26): error TS7030: Not all code paths return a value.
+tests/cases/compiler/noImplicitReturnsExclusions.ts(40,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/noImplicitReturnsExclusions.ts(44,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/noImplicitReturnsExclusions.ts(48,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/noImplicitReturnsExclusions.ts(53,10): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/compiler/noImplicitReturnsExclusions.ts (6 errors) ====
+    // Functions with a return type of any, undefined, or a type that includes void are excluded
+    // from --noImplicitReturns checks.
+    
+    function f1(b: boolean): undefined {
+        if (b) return undefined;
+    }
+    
+    function f2(b: boolean): void {
+        if (b) return undefined;
+    }
+    
+    function f3(b: boolean): any {
+        if (b) return undefined;
+    }
+    
+    function f4(b: boolean): string | undefined {  // Error
+                             ~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (b) return undefined;
+    }
+    
+    function f5(b: boolean): string | void {
+        if (b) return undefined;
+    }
+    
+    function f6(b: boolean): unknown {  // Error
+                             ~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (b) return undefined;
+    }
+    
+    function f10(b: boolean) {
+        if (b) return;
+    }
+    
+    function f11(b: boolean) {
+        if (b) return undefined;
+    }
+    
+    function f12(b: boolean) {
+        if (b) return undefined as any;
+    }
+    
+    function f13(b: boolean) {  // Error
+             ~~~
+!!! error TS7030: Not all code paths return a value.
+        if (b) return undefined as unknown;
+    }
+    
+    function f14(b: boolean) {  // Error
+             ~~~
+!!! error TS7030: Not all code paths return a value.
+        if (b) return 42;
+    }
+    
+    function f15(b: boolean) {  // Error
+             ~~~
+!!! error TS7030: Not all code paths return a value.
+        if (b) return 42;
+        if (b) return undefined;
+    }
+    
+    function f16(b: boolean) {  // Error
+             ~~~
+!!! error TS7030: Not all code paths return a value.
+        if (b) return 42;
+        if (b) return;
+    }
+    

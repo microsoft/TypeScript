@@ -31,27 +31,4 @@
 ////}
 
 
-for (var i = 1; i <= test.markers().length; i++) {
-    goTo.marker("" + i);
-    
-    switch (i) {
-        case 1:
-            verify.occurrencesAtPositionCount(0);
-            break;
-        case 2:
-        case 3:
-            verify.occurrencesAtPositionCount(1);
-            break;
-        case 4:
-        case 5:
-        case 9:
-        case 10:
-            verify.occurrencesAtPositionCount(2);
-            break;
-        case 6:
-        case 7:
-        case 8:
-            verify.occurrencesAtPositionCount(3);
-            break;
-    }
-}
+verify.baselineDocumentHighlights(test.markers());

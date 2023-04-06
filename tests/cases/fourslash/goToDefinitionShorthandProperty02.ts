@@ -4,4 +4,4 @@
 ////    [|f/*1*/oo|]
 ////}
 
-verify.goToDefinition("1", []);
+verify.baselineGoToDefinition("1");

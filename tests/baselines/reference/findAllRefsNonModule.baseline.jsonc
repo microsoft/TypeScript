@@ -1,3 +1,4 @@
+// === findAllReferences ===
 // === /import.ts ===
 // import [|"./script/*FIND ALL REFS*/"|];
 
@@ -8,54 +9,29 @@
 // === /tripleSlash.ts ===
 // /// <reference path="[|script.ts|]" />
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/import.ts",
-      "kind": "var",
-      "name": "./script",
-      "textSpan": {
-        "start": 8,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "\"./script\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 10
-        },
-        "fileName": "/import.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 10
-        },
-        "fileName": "/require.js",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 9
-        },
-        "fileName": "/tripleSlash.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /import.ts ===
+  // import "[|./script|]/*FIND ALL REFS*/";
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "./script",
+    "displayParts": [
+     {
+      "text": "\"./script\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /import.ts ===
 // import [|"./script"|];
 
@@ -66,112 +42,54 @@
 // === /tripleSlash.ts ===
 // /// <reference path="[|script.ts|]" />
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/require.js",
-      "kind": "var",
-      "name": "./script",
-      "textSpan": {
-        "start": 9,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "\"./script\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 10
-        },
-        "fileName": "/import.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 10
-        },
-        "fileName": "/require.js",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 9
-        },
-        "fileName": "/tripleSlash.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /require.js ===
+  // require("[|./script|]/*FIND ALL REFS*/");
+  // console.log("./script");
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "./script",
+    "displayParts": [
+     {
+      "text": "\"./script\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /require.js ===
-// require("[|./script|]");
-// console.log("[|./script|]/*FIND ALL REFS*/");
+// <|require("[|{| isInString: true |}./script|]");|>
+// console.log("[|{| isInString: true |}./script|]/*FIND ALL REFS*/");
 
 // === /stringLiteral.ts ===
-// console.log("[|./script|]");
+// console.log("[|{| isInString: true |}./script|]");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/require.js",
-      "kind": "var",
-      "name": "./script",
-      "textSpan": {
-        "start": 34,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "\"./script\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 8
-        },
-        "fileName": "/require.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 20
-        },
-        "isWriteAccess": false,
-        "isInString": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 8
-        },
-        "fileName": "/require.js",
-        "isWriteAccess": false,
-        "isInString": true
-      },
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 8
-        },
-        "fileName": "/stringLiteral.ts",
-        "isWriteAccess": false,
-        "isInString": true
-      }
+  // === Definitions ===
+  // === /require.js ===
+  // require("./script");
+  // console.log("[|./script|]/*FIND ALL REFS*/");
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "./script",
+    "displayParts": [
+     {
+      "text": "\"./script\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

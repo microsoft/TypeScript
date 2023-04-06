@@ -606,4 +606,18 @@ export * as alias from './file';`, {
             testVerbatimModuleSyntax: "only"
         }
     );
+
+    transpilesCorrectly("Can transpile .ts extensions without error",
+        `import { foo } from "./foo.ts";`, {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+            testVerbatimModuleSyntax: true
+        }
+    );
+
+    transpilesCorrectly("Ignores `allowImportingTsExtensions` without `noEmit` error",
+        `import { foo } from "./foo.ts";`, {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext } },
+            testVerbatimModuleSyntax: true
+        }
+    );
 });

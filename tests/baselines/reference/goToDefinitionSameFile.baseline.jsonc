@@ -1,0 +1,147 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionSameFile.ts ===
+// <|var [|localVariable|];|>
+// function localFunction() { }
+// class localClass { }
+// interface localInterface{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// /*GOTO DEF POS*/localVariable = 1;
+// localFunction();
+// var foo = new localClass();
+// class fooCls implements localInterface { }
+// var fooVar = localModule.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "localVariable",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionSameFile.ts ===
+// var localVariable;
+// <|function [|localFunction|]() { }|>
+// class localClass { }
+// interface localInterface{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// /*GOTO DEF POS*/localFunction();
+// var foo = new localClass();
+// class fooCls implements localInterface { }
+// var fooVar = localModule.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "localFunction",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionSameFile.ts ===
+// var localVariable;
+// function localFunction() { }
+// <|class [|localClass|] { }|>
+// interface localInterface{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// localFunction();
+// var foo = new /*GOTO DEF POS*/localClass();
+// class fooCls implements localInterface { }
+// var fooVar = localModule.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "localClass",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionSameFile.ts ===
+// var localVariable;
+// function localFunction() { }
+// class localClass { }
+// <|interface [|localInterface|]{ }|>
+// module localModule{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// localFunction();
+// var foo = new localClass();
+// class fooCls implements /*GOTO DEF POS*/localInterface { }
+// var fooVar = localModule.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "localInterface",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionSameFile.ts ===
+// var localVariable;
+// function localFunction() { }
+// class localClass { }
+// interface localInterface{ }
+// <|module [|localModule|]{ export var foo = 1;}|>
+// 
+// 
+// localVariable = 1;
+// localFunction();
+// var foo = new localClass();
+// class fooCls implements localInterface { }
+// var fooVar = /*GOTO DEF POS*/localModule.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "localModule",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

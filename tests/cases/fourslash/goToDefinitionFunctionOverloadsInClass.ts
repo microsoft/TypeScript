@@ -11,7 +11,7 @@
 ////    constructor() { }
 ////}
 
-verify.goToDefinition({
-    staticFunctionOverload: "staticFunctionOverloadDefinition",
-    functionOverload: "functionOverloadDefinition"
-});
+verify.baselineGoToDefinition(
+    "staticFunctionOverload",
+    "functionOverload",
+);

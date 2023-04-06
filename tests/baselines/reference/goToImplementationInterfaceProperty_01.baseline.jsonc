@@ -1,0 +1,60 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceProperty_01.ts ===
+// interface Foo { hello: number }
+// 
+// class Bar implements Foo {
+//     <|[|hello|] = 5 * 9;|>
+// }
+// 
+// function whatever(foo: Foo) {
+//     foo.he/*GOTO IMPL*/llo;
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "property"
+   }
+  ]

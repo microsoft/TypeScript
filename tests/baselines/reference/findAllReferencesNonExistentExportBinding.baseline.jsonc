@@ -1,100 +1,59 @@
+// === findAllReferences ===
 // === /bar.ts ===
-// import { [|Foo|]/*FIND ALL REFS*/ } from "./foo";
+// <|import { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}Foo|]/*FIND ALL REFS*/ } from "./foo";|>
 
 // === /foo.ts ===
-// export { [|Foo|] }
+// <|export { [|{| defId: 1, isWriteAccess: true |}Foo|] }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/bar.ts",
-      "kind": "alias",
-      "name": "import Foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/bar.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 28
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /bar.ts ===
+  // <|import { [|{| defId: 0 |}Foo|]/*FIND ALL REFS*/ } from "./foo";|>
+
+  // === /foo.ts ===
+  // <|export { [|{| defId: 1 |}Foo|] }|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo.ts",
-      "kind": "alias",
-      "name": "export Foo",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/foo.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 14
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export Foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]

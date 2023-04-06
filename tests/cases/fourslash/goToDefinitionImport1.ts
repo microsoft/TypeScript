@@ -6,4 +6,4 @@
 // @Filename: /a.ts
 ////import { foo } from      [|"./b/*1*/"|];
 
-verify.goToDefinition("1", "2");
+verify.baselineGoToDefinition("1");

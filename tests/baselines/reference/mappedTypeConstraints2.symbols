@@ -171,3 +171,31 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     return true;
 }
 
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+>ObjectWithUnderscoredKeys : Symbol(ObjectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 46, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 50, 31))
+
+    [k in K as `_${k}`]: true;
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 51, 5))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 50, 31))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 51, 5))
+
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+>genericTest : Symbol(genericTest, Decl(mappedTypeConstraints2.ts, 52, 2))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 54, 21))
+>objectWithUnderscoredKeys : Symbol(objectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 54, 39))
+>ObjectWithUnderscoredKeys : Symbol(ObjectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 46, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 54, 21))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 54, 95))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 54, 21))
+
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
+>shouldBeTrue : Symbol(shouldBeTrue, Decl(mappedTypeConstraints2.ts, 55, 7))
+>objectWithUnderscoredKeys : Symbol(objectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 54, 39))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 54, 95))
+}
+

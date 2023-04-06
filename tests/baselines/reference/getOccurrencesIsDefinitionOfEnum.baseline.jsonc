@@ -1,192 +1,123 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
-// /*FIND ALL REFS*/enum [|E|] {
+// /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] {
 //     First,
 //     Second
-// }
+// }|>
 // let first = [|E|].First;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+  // /*FIND ALL REFS*/<|enum [|E|] {
+  //     First,
+  //     Second
+  // }|>
+  // let first = E.First;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
-// enum /*FIND ALL REFS*/[|E|] {
+// <|enum /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}E|] {
 //     First,
 //     Second
-// }
+// }|>
 // let first = [|E|].First;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+  // <|enum /*FIND ALL REFS*/[|E|] {
+  //     First,
+  //     Second
+  // }|>
+  // let first = E.First;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
-// enum [|E|] {
+// <|enum [|{| isWriteAccess: true |}E|] {
 //     First,
 //     Second
-// }
+// }|>
 // let first = /*FIND ALL REFS*/[|E|].First;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+  // <|enum [|E|] {
+  //     First,
+  //     Second
+  // }|>
+  // let first = /*FIND ALL REFS*/E.First;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,0 +1,45 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionPropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {<|[|B|]: B|>};
+// }
+// class C extends (foo())./*GOTO DEF*/B {}
+// class C1 extends foo().B {}
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "B",
+    "containerName": "__object",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionPropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {<|[|B|]: B|>};
+// }
+// class C extends (foo()).B {}
+// class C1 extends foo()./*GOTO DEF*/B {}
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "B",
+    "containerName": "__object",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -27,6 +27,4 @@
 ////import { Foo/*1*/ } from "a";
 
 goTo.file("/index.ts");
-
-goTo.marker("1");
-verify.goToDefinitionIs("2"); // getDefinitionAndBoundSpan
+verify.baselineGetDefinitionAtPosition("1"); // getDefinitionAndBoundSpan

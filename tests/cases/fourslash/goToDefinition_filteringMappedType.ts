@@ -4,4 +4,4 @@
 ////const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { a: 0 };
 ////filtered.[|/*ref*/a|];
 
-verify.goToDefinition("ref", "def");
+verify.baselineGoToDefinition("ref");

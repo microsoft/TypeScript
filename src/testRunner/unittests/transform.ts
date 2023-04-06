@@ -347,7 +347,7 @@ describe("unittests:: TransformAPI", () => {
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { @Bar baz() {} }`;
                 const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, ts.factory.createBlock([]))
+                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /*asteriskToken*/ undefined, "baz", /*questionToken*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, ts.factory.createBlock([]))
                 ]);
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
@@ -396,10 +396,10 @@ describe("unittests:: TransformAPI", () => {
     });
 
     function baselineDeclarationTransform(text: string, opts: ts.TranspileOptions) {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
         const host = new fakes.CompilerHost(fs, opts.compilerOptions);
         const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
-        program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
+        program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true, opts.transformers);
         return fs.readFileSync("/.src/index.d.ts").toString();
     }
 
@@ -545,7 +545,7 @@ module MyModule {
 
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
         const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
@@ -613,7 +613,7 @@ module MyModule {
         };
         function rootTransform<T extends ts.Node>(node: T): ts.Node {
             if (ts.isClassLike(node)) {
-                const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, ts.factory.createStringLiteral("x"))];
+                const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.factory.createStringLiteral("x"))];
                 ts.setSyntheticLeadingComments(newMembers[0], [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
                 return ts.isClassDeclaration(node) ?
                     ts.factory.updateClassDeclaration(

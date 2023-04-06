@@ -5,6 +5,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(43,25): error TS2344: T
 tests/cases/conformance/types/conditional/inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'abstract new (...args: any) => any'.
   Type 'Function' provides no match for the signature 'new (...args: any): any'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(55,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 tests/cases/conformance/types/conditional/inferTypes1.ts(56,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
   Type 'Function' provides no match for the signature '(x: any): any'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(82,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
@@ -88,6 +89,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type T24 = ArgumentType<(x: string, y: string) => number>;  // Error
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
+!!! error TS2344:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     type T25 = ArgumentType<Function>;  // Error
                             ~~~~~~~~
 !!! error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.

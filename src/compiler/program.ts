@@ -92,7 +92,6 @@ import {
     filter,
     find,
     findIndex,
-    firstDefined,
     firstDefinedIterator,
     flatMap,
     flatten,
@@ -103,7 +102,9 @@ import {
     forEachEmittedFile,
     forEachEntry,
     forEachKey,
+    forEachPropertyAssignment,
     forEachResolvedProjectReference as ts_forEachResolvedProjectReference,
+    forEachTsConfigPropArray,
     FunctionLikeDeclaration,
     getAllowJSCompilerOption,
     getAutomaticTypeDirectiveNames,
@@ -137,7 +138,6 @@ import {
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
     getPropertyArrayElementValue,
-    getPropertyAssignment,
     getResolvedModule,
     getResolveJsonModule,
     getRootLength,
@@ -151,7 +151,6 @@ import {
     getTransformers,
     getTsBuildInfoEmitOutputFilePath,
     getTsConfigObjectLiteralExpression,
-    getTsConfigPropArray,
     getTsConfigPropArrayElementValue,
     HasChangedAutomaticTypeDirectiveNames,
     hasChangesInResolutions,
@@ -262,6 +261,7 @@ import {
     ProjectReference,
     ProjectReferenceFile,
     projectReferenceIsEqualTo,
+    PropertyAssignment,
     PropertyDeclaration,
     ReferencedFile,
     removeFileExtension,
@@ -286,6 +286,7 @@ import {
     setParentRecursive,
     setResolvedModule,
     setResolvedTypeReferenceDirective,
+    shouldResolveJsRequire,
     skipTrivia,
     skipTypeChecking,
     some,
@@ -1318,7 +1319,6 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
     Diagnostics.Invalid_use_of_0_in_strict_mode.code,
     Diagnostics.A_label_is_not_allowed_here.code,
-    Diagnostics.Octal_literals_are_not_allowed_in_strict_mode.code,
     Diagnostics.with_statements_are_not_allowed_in_strict_mode.code,
     // grammar errors
     Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement.code,
@@ -2135,7 +2135,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (structureIsReused === StructureIsReused.Not) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
-            return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*resuedNames*/ undefined);
+            return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*reusedNames*/ undefined);
         }
 
         const oldSourceFile = !isString(containingFile) ? oldProgram && oldProgram.getSourceFile(containingFile.fileName) : undefined;
@@ -2542,7 +2542,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             getEmitHost(writeFileCallback),
             /*targetSourceFile*/ undefined,
             /*transformers*/ noTransformers,
-            /*emitOnlyDtsFiles*/ false,
+            /*emitOnly*/ false,
             /*onlyBuildInfo*/ true
         );
 
@@ -3213,8 +3213,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             collectModuleReferences(node, /*inAmbientModule*/ false);
         }
 
-        // `require` has no special meaning in `--moduleResolution bundler`
-        const shouldProcessRequires = isJavaScriptFile && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler;
+        const shouldProcessRequires = isJavaScriptFile && shouldResolveJsRequire(options);
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || shouldProcessRequires) {
             collectDynamicImportOrRequireCalls(file);
         }
@@ -3277,7 +3276,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const r = /import|require/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                 const node = getNodeAtPosition(file, r.lastIndex);
-                if (shouldProcessRequires && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                if (shouldProcessRequires && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.arguments[0]);
                 }
@@ -3963,7 +3962,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (host.getParsedCommandLine) {
             commandLine = host.getParsedCommandLine(refPath);
             if (!commandLine) {
-                addFileToFilesByName(/*sourceFile*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
+                addFileToFilesByName(/*file*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
                 projectReferenceRedirects.set(sourceFilePath, false);
                 return undefined;
             }
@@ -4259,9 +4258,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
-            if (options.isolatedModules) {
-                createRedundantOptionDiagnostic("isolatedModules", "verbatimModuleSyntax");
-            }
             if (options.preserveValueImports) {
                 createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");
             }
@@ -4536,7 +4532,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 );
                 if (!referenceInfo) return undefined;
                 const { sourceFile, index } = referenceInfo;
-                const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile as TsConfigSourceFile, "references"),
+                const referencesSyntax = forEachTsConfigPropArray(sourceFile as TsConfigSourceFile, "references",
                     property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
                 return referencesSyntax && referencesSyntax.elements.length > index ?
                     createDiagnosticForNodeInSourceFile(
@@ -4611,19 +4607,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         let needCompilerDiagnostic = true;
-        const pathsSyntax = getOptionPathsSyntax();
-        for (const pathProp of pathsSyntax) {
+        forEachOptionPathsSyntax(pathProp => {
             if (isObjectLiteralExpression(pathProp.initializer)) {
-                for (const keyProps of getPropertyAssignment(pathProp.initializer, key)) {
+                forEachPropertyAssignment(pathProp.initializer, key, keyProps => {
                     const initializer = keyProps.initializer;
                     if (isArrayLiteralExpression(initializer) && initializer.elements.length > valueIndex) {
                         programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, initializer.elements[valueIndex], message, ...args));
                         needCompilerDiagnostic = false;
                     }
-                }
+                });
             }
-        }
-
+        });
         if (needCompilerDiagnostic) {
             programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
@@ -4631,32 +4625,29 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createDiagnosticForOptionPaths(onKey: boolean, key: string, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         let needCompilerDiagnostic = true;
-        const pathsSyntax = getOptionPathsSyntax();
-        for (const pathProp of pathsSyntax) {
+        forEachOptionPathsSyntax(pathProp => {
             if (isObjectLiteralExpression(pathProp.initializer) &&
                 createOptionDiagnosticInObjectLiteralSyntax(
                     pathProp.initializer, onKey, key, /*key2*/ undefined,
                     message, ...args)) {
                 needCompilerDiagnostic = false;
             }
-        }
+        });
         if (needCompilerDiagnostic) {
             programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
-    function getOptionsSyntaxByName(name: string) {
-        const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
-        return compilerOptionsObjectLiteralSyntax && getPropertyAssignment(compilerOptionsObjectLiteralSyntax, name);
+    function forEachOptionsSyntaxByName<T>(name: string, callback: (prop: PropertyAssignment) => T | undefined): T | undefined {
+        return forEachPropertyAssignment(getCompilerOptionsObjectLiteralSyntax(), name, callback);
     }
 
-    function getOptionPathsSyntax() {
-        return getOptionsSyntaxByName("paths") || emptyArray;
+    function forEachOptionPathsSyntax<T>(callback: (prop: PropertyAssignment) => T | undefined) {
+        return forEachOptionsSyntaxByName("paths", callback);
     }
 
     function getOptionsSyntaxByValue(name: string, value: string) {
-        const syntaxByName = getOptionsSyntaxByName(name);
-        return syntaxByName && firstDefined(syntaxByName, property => isStringLiteral(property.initializer) && property.initializer.text === value ? property.initializer : undefined);
+        return forEachOptionsSyntaxByName(name, property => isStringLiteral(property.initializer) && property.initializer.text === value ? property.initializer : undefined);
     }
 
     function getOptionsSyntaxByArrayElementValue(name: string, value: string) {
@@ -4674,7 +4665,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
-        const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile || options.configFile, "references"),
+        const referencesSyntax = forEachTsConfigPropArray(sourceFile || options.configFile, "references",
             property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
         if (referencesSyntax && referencesSyntax.elements.length > index) {
             programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, ...args));
@@ -4704,16 +4695,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function getCompilerOptionsObjectLiteralSyntax() {
         if (_compilerOptionsObjectLiteralSyntax === undefined) {
-            _compilerOptionsObjectLiteralSyntax = false;
-            const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile);
-            if (jsonObjectLiteral) {
-                for (const prop of getPropertyAssignment(jsonObjectLiteral, "compilerOptions")) {
-                    if (isObjectLiteralExpression(prop.initializer)) {
-                        _compilerOptionsObjectLiteralSyntax = prop.initializer;
-                        break;
-                    }
-                }
-            }
+            _compilerOptionsObjectLiteralSyntax = forEachPropertyAssignment(
+                getTsConfigObjectLiteralExpression(options.configFile),
+                "compilerOptions",
+                prop => isObjectLiteralExpression(prop.initializer) ? prop.initializer : undefined
+            ) || false;
         }
         return _compilerOptionsObjectLiteralSyntax || undefined;
     }
@@ -4722,8 +4708,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean;
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): boolean;
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): boolean {
-        const props = getPropertyAssignment(objectLiteral, key1, key2);
-        for (const prop of props) {
+        let needsCompilerDiagnostic = false;
+        forEachPropertyAssignment(objectLiteral, key1, prop => {
             // eslint-disable-next-line local/no-in-operator
             if ("messageText" in message) {
                 programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
@@ -4731,8 +4717,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             else {
                 programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, ...args));
             }
-        }
-        return !!props.length;
+            needsCompilerDiagnostic = true;
+        }, key2);
+        return needsCompilerDiagnostic;
     }
 
     /**

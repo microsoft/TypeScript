@@ -1,0 +1,157 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     try {
+//     }
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|] (e) {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {
+//     }
+//     [|{| kind: "none" |}catch|] (x) {
+//     }
+// 
+//     try {
+//     }
+//     finally {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     [|{| kind: "none" |}try|] {
+//     }
+//     [|{| kind: "none" |}catch|]/*HIGHLIGHTS*/ (x) {
+//     }
+// 
+//     try {
+//     }
+//     finally {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {
+//     }
+//     [|{| kind: "none" |}finally|] {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}try|] {
+//     }
+//     [|{| kind: "none" |}finally|]/*HIGHLIGHTS*/ {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     try {
+//     }
+//     finally {/*HIGHLIGHTS*/
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// [|{| kind: "none" |}try|] {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     try {
+//     }
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|]/*HIGHLIGHTS*/ (e) {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// [|{| kind: "none" |}try|] {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     try {
+//     }
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|] (e) {
+// }
+// [|{| kind: "none" |}finally|]/*HIGHLIGHTS*/ {
+// }

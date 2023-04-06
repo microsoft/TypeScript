@@ -1,0 +1,19 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionShadowVariableInsideModule.ts ===
+// module shdModule {
+//     <|var [|shdVar|];|>
+//     /*GOTO DEF POS*/shdVar = 1;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "shdVar",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

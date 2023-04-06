@@ -1,0 +1,41 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.js ===
+// x.[|{| contextId: 0 |}test|] = <|() => { }|>
+// x./*GOTO DEF*/test();
+// x.test3 = function () { }
+// x.test3();
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "test",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.js ===
+// x.test = () => { }
+// x.test();
+// x.[|{| contextId: 0 |}test3|] = <|function () { }|>
+// x./*GOTO DEF*/test3();
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "test3",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

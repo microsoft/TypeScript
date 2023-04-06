@@ -4,7 +4,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(17,5): error TS2511: Cannot create an instance of an abstract class.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(21,1): error TS2511: Cannot create an instance of an abstract class.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(23,15): error TS2449: Class 'C' used before its declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(26,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(26,7): error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2512: Overload signatures must all be abstract or non-abstract.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(50,5): error TS1244: Abstract methods can only appear within an abstract class.
@@ -50,7 +50,8 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     class C extends B { } // error -- not declared abstract
           ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+!!! error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
+!!! related TS2515 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts:7:14: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
     
     abstract class D extends B { } // okay
     

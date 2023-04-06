@@ -15,4 +15,4 @@
 //// import { a } from "foo";
 //// [|a/*start*/|]
 
-verify.goToSourceDefinition("start", "end");
+verify.baselineGoToSourceDefinition("start");

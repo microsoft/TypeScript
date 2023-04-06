@@ -1,0 +1,23 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties5.ts ===
+// interface C extends D {
+//     propC: number;
+// }
+// interface D extends C {
+//     /*RENAME*/<|[|propDRENAME|]: string;|>
+// }
+// var d: D;
+// d.[|propDRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties5.ts ===
+// interface C extends D {
+//     propC: number;
+// }
+// interface D extends C {
+//     <|[|propDRENAME|]: string;|>
+// }
+// var d: D;
+// d./*RENAME*/[|propDRENAME|];

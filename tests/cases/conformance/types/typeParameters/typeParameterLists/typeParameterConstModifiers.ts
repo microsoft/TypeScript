@@ -84,3 +84,17 @@ const test = inners(1,2,3,4,5);
 declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
 
 const test2 = inners2([1,2,3,4,5]);
+
+// Repro from #53307
+
+type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+
+const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
+
+const t = thing({ foo: '' });  // readonly { foo: "" }
+
+type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+
+const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
+
+const tMapped = thingMapped({ foo: '' });  // { foo: "" }

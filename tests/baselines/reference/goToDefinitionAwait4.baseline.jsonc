@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionAwait4.ts ===
+// async function outerAsyncFun() {
+//     let [|{| contextId: 0 |}af|] = <|async () => {
+//       /*GOTO DEF*/await Promise.resolve(0);
+//     }|>
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "af",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

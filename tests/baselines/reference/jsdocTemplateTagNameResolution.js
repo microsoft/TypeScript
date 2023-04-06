@@ -23,7 +23,7 @@ var y = "a";
 
 //// [file.d.ts]
 declare namespace x {
-    const a: number;
+    let a: number;
 }
 /** @type {Foo<typeof x, "a">} */
 declare const y: Foo<typeof x, "a">;

@@ -1,0 +1,11 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|interface [|FooRENAME|] {
+//     foo: E.Foo;
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// enum E {
+//     /** {@link /*RENAME*/[|FooRENAME|]} */
+//     Foo
+// }

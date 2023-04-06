@@ -43,6 +43,6 @@ export const Something: 2;
 export namespace A {
     namespace B {
         export { thing };
-        export const thing: import("fs").Something;
+        export let thing: import("fs").Something;
     }
 }

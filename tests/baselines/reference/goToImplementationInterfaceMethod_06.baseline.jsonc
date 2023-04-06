@@ -1,0 +1,194 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_06.ts ===
+// interface SuperFoo {
+//     hello (): void;
+// }
+// 
+// interface Foo extends SuperFoo {
+//     someOtherFunction(): void;
+// }
+// 
+// class Bar implements Foo {
+//      <|[|{| defId: 2 |}hello|]() {}|>
+//      someOtherFunction() {}
+// }
+// 
+// function createFoo(): Foo {
+//     return {
+//         <|[|{| defId: 0 |}hello|]() {}|>,
+//         someOtherFunction() {}
+//     };
+// }
+// 
+// var y: Foo = {
+//     <|[|{| defId: 1 |}hello|]() {}|>,
+//     someOtherFunction() {}
+// };
+// 
+// class FooLike implements SuperFoo {
+//      hello() {}
+//      someOtherFunction() {}
+// }
+// 
+// class NotRelatedToFoo {
+//      hello() {}                // This case is equivalent to the last case, but is not returned because it does not share a common ancestor with Foo
+//      someOtherFunction() {}
+// }
+// 
+// class NotFoo implements SuperFoo {
+//      hello() {}                // We only want implementations of Foo, even though the function is declared in SuperFoo
+// }
+// 
+// function (x: Foo) {
+//     x.he/*GOTO IMPL*/llo()
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   },
+   {
+    "defId": 2,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]

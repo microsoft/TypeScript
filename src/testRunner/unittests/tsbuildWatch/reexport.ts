@@ -28,18 +28,16 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
                 caption: "Introduce error",
                 edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", ""),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // build src/pure
+                    sys.runQueuedTimeoutCallbacks(); // build src/main and src
                 },
             },
             {
                 caption: "Fix error",
                 edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // build src/pure
+                    sys.runQueuedTimeoutCallbacks(); // build src/main and src
                 },
             }
         ]

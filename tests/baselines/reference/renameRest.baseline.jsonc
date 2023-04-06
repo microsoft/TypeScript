@@ -1,0 +1,23 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameRest.ts ===
+// interface Gen {
+//     x: number;
+//     /*RENAME*/<|[|parentRENAME|]: Gen;|>
+//     millenial: string;
+// }
+// let t: Gen;
+// var { x, ...rest } = t;
+// rest.[|parentRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameRest.ts ===
+// interface Gen {
+//     x: number;
+//     <|[|parentRENAME|]: Gen;|>
+//     millenial: string;
+// }
+// let t: Gen;
+// var { x, ...rest } = t;
+// rest./*RENAME*/[|parentRENAME|];

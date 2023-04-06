@@ -340,7 +340,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         const check = skipPartiallyEmittedExpressions(expression);
         let needsParens = isCommaSequence(check);
         if (!needsParens) {
-            switch (getLeftmostExpression(check, /*stopAtCallExpression*/ false).kind) {
+            switch (getLeftmostExpression(check, /*stopAtCallExpressions*/ false).kind) {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
                     needsParens = true;

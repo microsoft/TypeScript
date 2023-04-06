@@ -1,0 +1,21 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/gotoDefinitionThrowsTag.ts ===
+// <|class [|E|] extends Error {}|>
+// 
+// /**
+//  * @throws {/*GOTO DEF POS*/E}
+//  */
+// function f() {}
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "E",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

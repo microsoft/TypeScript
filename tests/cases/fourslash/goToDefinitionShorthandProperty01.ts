@@ -7,9 +7,9 @@
 //// obj.[|/*valueReference1*/name|];
 //// obj.[|/*valueReference2*/id|];
 
-verify.goToDefinition({
-    valueDefinition1: "valueDeclaration1",
-    valueDefinition2: ["valueDeclaration2", "valueDeclaration3"],
-    valueReference1: "valueDefinition1",
-    valueReference2: "valueDefinition2"
-});
+verify.baselineGoToDefinition(
+    "valueDefinition1",
+    "valueDefinition2",
+    "valueReference1",
+    "valueReference2",
+);

@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionYield4.ts ===
+// function* gen() {
+//     class C { [/*GOTO DEF*/yield 10]() {} }
+// }

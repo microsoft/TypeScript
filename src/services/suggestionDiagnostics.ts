@@ -111,7 +111,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 node.declarationList.flags & NodeFlags.Const &&
                 node.declarationList.declarations.length === 1) {
                 const init = node.declarationList.declarations[0].initializer;
-                if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                if (init && isRequireCall(init, /*requireStringLiteralLikeArgument*/ true)) {
                     diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
                 }
             }
@@ -139,10 +139,10 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
                 return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
+                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true));
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
+                if (!isBinaryExpression(expression)) return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);
                 const kind = getAssignmentDeclarationKind(expression);
                 return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
             }

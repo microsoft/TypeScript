@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"module"}
@@ -291,6 +292,9 @@ Input::
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"commonjs"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
@@ -373,6 +377,9 @@ Input::
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"module"}
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
@@ -447,6 +454,9 @@ Input::
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"commonjs"}
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
@@ -533,6 +543,13 @@ export type { TheNum } from './const.cjs';
 
 //// [/user/username/projects/myproject/packages/pkg2/index.ts] deleted
 
+Before running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...

@@ -16,6 +16,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
+        Target signature provides too few arguments. Expected 2 or more, but got 1.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to type 'BList4'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
@@ -105,6 +106,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
 !!! error TS2322:   Types of property 'forEach' are incompatible.
 !!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
+!!! error TS2322:         Target signature provides too few arguments. Expected 2 or more, but got 1.
     }
     
     interface AList4 {

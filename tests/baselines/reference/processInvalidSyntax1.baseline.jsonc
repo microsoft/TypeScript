@@ -1,0 +1,17 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/decl.js ===
+// <|var [|objRENAME|] = {};|>
+
+// === /tests/cases/fourslash/unicode1.js ===
+// [|objRENAME|].𝒜 ;
+
+// === /tests/cases/fourslash/unicode2.js ===
+// [|objRENAME|].¬ ;
+
+// === /tests/cases/fourslash/unicode3.js ===
+// [|objRENAME|]¬
+
+// === /tests/cases/fourslash/forof.js ===
+// for ([|objRENAME|]/*RENAME*/.prop of arr) {
+// 
+// }

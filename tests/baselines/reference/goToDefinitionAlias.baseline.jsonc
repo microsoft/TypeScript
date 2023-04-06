@@ -1,0 +1,117 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import [|alias1|] = require("fileb");|>
+// module Module {
+//     export import alias2 = alias1;
+// }
+// 
+// // Type position
+// var t1: /*GOTO DEF*/alias1.IFoo;
+// var t2: Module.alias2.IFoo;
+// 
+// // Value posistion
+// var v1 = new alias1.Foo();
+// var v2 = new Module.alias2.Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "alias1",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import [|alias1|] = require("fileb");|>
+// module Module {
+//     export import alias2 = alias1;
+// }
+// 
+// // Type position
+// var t1: alias1.IFoo;
+// var t2: Module.alias2.IFoo;
+// 
+// // Value posistion
+// var v1 = new /*GOTO DEF*/alias1.Foo();
+// var v2 = new Module.alias2.Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "alias1",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/b.ts ===
+// import alias1 = require("fileb");
+// module Module {
+//     <|export import [|alias2|] = alias1;|>
+// }
+// 
+// // Type position
+// var t1: alias1.IFoo;
+// var t2: Module./*GOTO DEF*/alias2.IFoo;
+// 
+// // Value posistion
+// var v1 = new alias1.Foo();
+// var v2 = new Module.alias2.Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "alias2",
+    "containerName": "Module",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/b.ts ===
+// import alias1 = require("fileb");
+// module Module {
+//     <|export import [|alias2|] = alias1;|>
+// }
+// 
+// // Type position
+// var t1: alias1.IFoo;
+// var t2: Module.alias2.IFoo;
+// 
+// // Value posistion
+// var v1 = new alias1.Foo();
+// var v2 = new Module./*GOTO DEF*/alias2.Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "alias2",
+    "containerName": "Module",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]

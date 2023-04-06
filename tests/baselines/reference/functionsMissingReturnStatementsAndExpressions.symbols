@@ -164,37 +164,63 @@ function f23(): undefined | number {
     // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 
+const f30: () => undefined = () => {
+>f30 : Symbol(f30, Decl(functionsMissingReturnStatementsAndExpressions.ts, 110, 5))
+
+    // Ok, contextual type for implicit return is `undefined`
+}
+
+const f31: () => undefined = () => {
+>f31 : Symbol(f31, Decl(functionsMissingReturnStatementsAndExpressions.ts, 114, 5))
+
+    // Ok, contextual type for expression-less return is `undefined`
+    return;
+}
+
+const f32: () => undefined | number = () => {
+>f32 : Symbol(f32, Decl(functionsMissingReturnStatementsAndExpressions.ts, 119, 5))
+
+    // Error, contextual type for implicit return isn't just `undefined`
+}
+
+const f33: () => undefined | number = () => {
+>f33 : Symbol(f33, Decl(functionsMissingReturnStatementsAndExpressions.ts, 123, 5))
+
+    // Error, contextual type for expression-less return isn't just `undefined`
+    return;
+}
+
 class C {
->C : Symbol(C, Decl(functionsMissingReturnStatementsAndExpressions.ts, 108, 1))
+>C : Symbol(C, Decl(functionsMissingReturnStatementsAndExpressions.ts, 126, 1))
 
     public get m1() {
->m1 : Symbol(C.m1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 110, 9))
+>m1 : Symbol(C.m1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 128, 9))
 
         // Errors; get accessors must return a value.
     }
 
     public get m2() {
->m2 : Symbol(C.m2, Decl(functionsMissingReturnStatementsAndExpressions.ts, 113, 5))
+>m2 : Symbol(C.m2, Decl(functionsMissingReturnStatementsAndExpressions.ts, 131, 5))
 
         // Permissible; returns undefined.
         return;
     }
 
     public get m3() {
->m3 : Symbol(C.m3, Decl(functionsMissingReturnStatementsAndExpressions.ts, 118, 5))
+>m3 : Symbol(C.m3, Decl(functionsMissingReturnStatementsAndExpressions.ts, 136, 5))
 
         return "Okay, because this is a return expression.";
     }
 
     public get m4() {
->m4 : Symbol(C.m4, Decl(functionsMissingReturnStatementsAndExpressions.ts, 122, 5))
+>m4 : Symbol(C.m4, Decl(functionsMissingReturnStatementsAndExpressions.ts, 140, 5))
 
         // Fine since this consists of a single throw statement.
         throw null;
     }
 
     public get m5() {
->m5 : Symbol(C.m5, Decl(functionsMissingReturnStatementsAndExpressions.ts, 127, 5))
+>m5 : Symbol(C.m5, Decl(functionsMissingReturnStatementsAndExpressions.ts, 145, 5))
 
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are a get accessor.
