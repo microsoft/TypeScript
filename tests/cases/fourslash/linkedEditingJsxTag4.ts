@@ -18,6 +18,13 @@
 ////   <//*6*/div>
 ////);
 
+// @Filename: /typeTagError.tsx
+////const jsx = (
+////   </*10*/div/*11*/</*12*/T/*13*/>/*14*/
+////      </*15*/p />
+////   <//*16*/div>
+////);
+
 const startPos = test.markerByName("0").position;
 const endPos =  test.markerByName("6").position;
 const linkedCursors = {
@@ -32,4 +39,11 @@ verify.linkedEditing( {
     "4": undefined,
     "5": undefined,
     "6": linkedCursors, 
+    "10": undefined,
+    "11": undefined,
+    "12": undefined,
+    "13": undefined,
+    "14": undefined,
+    "15": undefined,
+    "16": undefined,
 });

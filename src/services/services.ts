@@ -34,6 +34,7 @@ import {
     Completions,
     computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
+    containsParseError,
     createDocumentRegistry,
     createGetCanonicalFileName,
     createMultiMap,
@@ -2486,8 +2487,12 @@ export function createLanguageService(
         if (!token || token.parent.kind === SyntaxKind.SourceFile) return undefined;
 
         if (isJsxFragment(token.parent.parent)) {
-            const openPos = token.parent.parent.openingFragment.getStart(sourceFile) + 1; // "<".length
-            const closePos = token.parent.parent.closingFragment.getStart(sourceFile) + 2; // "</".length
+            const openFragment = token.parent.parent.openingFragment;
+            const closeFragment = token.parent.parent.closingFragment;
+            if (containsParseError(openFragment) || containsParseError(closeFragment)) return undefined;
+
+            const openPos = openFragment.getStart(sourceFile) + 1; // "<".length
+            const closePos = closeFragment.getStart(sourceFile) + 2; // "</".length
 
             // only allows linked editing right after opening bracket: <| ></| >
             if ((position !== openPos) && (position !== closePos)) return undefined;
