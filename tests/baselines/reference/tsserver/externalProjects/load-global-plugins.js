@@ -1,11 +1,11 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/file1.ts]
 let x = [1, 2];
 
 
-Info 1    [00:00:08.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProjects",
       "arguments": {
@@ -24,26 +24,26 @@ Info 1    [00:00:08.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:09.000] Loading global plugin myplugin
-Info 3    [00:00:10.000] Enabling plugin myplugin from candidate paths: /a/lib/tsc.js/../../..
-Info 4    [00:00:11.000] Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
-Info 5    [00:00:12.000] Plugin validation succeeded
-Info 6    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
-Info 7    [00:00:14.000] Starting updateGraphWorker: Project: /a/proj1.csproj
-Info 8    [00:00:15.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/proj1.csproj WatchType: Missing file
-Info 9    [00:00:16.000] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/proj1.csproj WatchType: Type roots
-Info 10   [00:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/proj1.csproj WatchType: Type roots
-Info 11   [00:00:18.000] Finishing updateGraphWorker: Project: /a/proj1.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 12   [00:00:19.000] Project '/a/proj1.csproj' (External)
-Info 13   [00:00:20.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] Loading global plugin myplugin
+Info seq  [hh:mm:ss:mss] Enabling plugin myplugin from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Info seq  [hh:mm:ss:mss] Plugin validation succeeded
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/proj1.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/proj1.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/proj1.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/proj1.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj1.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/proj1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/file1.ts Text-1 "let x = [1, 2];"
 
 
 	file1.ts
 	  Root file specified for compilation
 
-Info 14   [00:00:21.000] -----------------------------------------------
-Info 15   [00:00:22.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -62,7 +62,7 @@ FsWatches::
 
 Before request
 
-Info 16   [00:00:23.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -72,7 +72,7 @@ Info 16   [00:00:23.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 17   [00:00:24.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {

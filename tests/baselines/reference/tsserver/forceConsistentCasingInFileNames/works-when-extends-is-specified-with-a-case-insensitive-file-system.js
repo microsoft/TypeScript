@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/Users/username/dev/project/index.ts]
 import {x} from "file2";
@@ -30,7 +30,7 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"baseUrl":".","paths":{"file2":["./file2.js"]},"typeRoots":["./types"],"forceConsistentCasingInFileNames":true}}
 
 
-Info 1    [00:00:32.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -39,11 +39,11 @@ Info 1    [00:00:32.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:33.000] Search path: /Users/username/dev/project
-Info 3    [00:00:34.000] For info: /Users/username/dev/project/index.ts :: Config file name: /Users/username/dev/project/tsconfig.json
-Info 4    [00:00:35.000] Creating configuration project /Users/username/dev/project/tsconfig.json
-Info 5    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/tsconfig.json 2000 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Config file
-Info 6    [00:00:37.000] Config: /Users/username/dev/project/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /Users/username/dev/project
+Info seq  [hh:mm:ss:mss] For info: /Users/username/dev/project/index.ts :: Config file name: /Users/username/dev/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /Users/username/dev/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/tsconfig.json 2000 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /Users/username/dev/project/tsconfig.json : {
  "rootNames": [
   "/Users/username/dev/project/index.ts",
   "/Users/username/dev/project/types/file2/index.d.ts"
@@ -63,19 +63,19 @@ Info 6    [00:00:37.000] Config: /Users/username/dev/project/tsconfig.json : {
   "configFilePath": "/Users/username/dev/project/tsconfig.json"
  }
 }
-Info 7    [00:00:38.000] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/tsconfig.all.json 2000 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Extended config file
-Info 8    [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/dev/project 1 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/dev/project 1 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/types/file2/index.d.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:42.000] Starting updateGraphWorker: Project: /Users/username/dev/project/tsconfig.json
-Info 12   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 14   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 15   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Type roots
-Info 16   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Type roots
-Info 17   [00:00:48.000] Finishing updateGraphWorker: Project: /Users/username/dev/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:00:49.000] Project '/Users/username/dev/project/tsconfig.json' (Configured)
-Info 19   [00:00:50.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/tsconfig.all.json 2000 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/dev/project 1 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/dev/project 1 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/types/file2/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/username/dev/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project/types 1 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/username/dev/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/Users/username/dev/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/Users/username/dev/project/index.ts SVC-1-0 "import {x} from \"file2\";"
 	/Users/username/dev/project/types/file2/index.d.ts Text-1 "export declare const x: string;"
@@ -89,15 +89,15 @@ Info 19   [00:00:50.000] 	Files (3)
 	  Matched by default include pattern '**/*'
 	  Entry point for implicit type library 'file2'
 
-Info 20   [00:00:51.000] -----------------------------------------------
-Info 21   [00:00:52.000] Project '/Users/username/dev/project/tsconfig.json' (Configured)
-Info 21   [00:00:53.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/Users/username/dev/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
-Info 21   [00:00:54.000] -----------------------------------------------
-Info 21   [00:00:55.000] Open files: 
-Info 21   [00:00:56.000] 	FileName: /Users/username/dev/project/index.ts ProjectRootPath: undefined
-Info 21   [00:00:57.000] 		Projects: /Users/username/dev/project/tsconfig.json
-Info 21   [00:00:58.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /Users/username/dev/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /Users/username/dev/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -121,7 +121,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 22   [00:00:59.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compilerOptionsDiagnostics-full",
       "arguments": {
@@ -130,7 +130,7 @@ Info 22   [00:00:59.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 23   [00:01:00.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
