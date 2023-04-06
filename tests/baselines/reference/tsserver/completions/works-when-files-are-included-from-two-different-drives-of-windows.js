@@ -269,18 +269,6 @@ Info 37   [00:02:13.000] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
-            "name": "React",
-            "kind": "alias",
-            "kindModifiers": "",
-            "sortText": "11"
-          },
-          {
-            "name": "Router",
-            "kind": "alias",
-            "kindModifiers": "",
-            "sortText": "11"
-          },
-          {
             "name": "as",
             "kind": "keyword",
             "kindModifiers": "",
@@ -552,6 +540,18 @@ Info 37   [00:02:13.000] response:
           },
           {
             "name": "BrowserRouter",
+            "kind": "warning",
+            "kindModifiers": "",
+            "sortText": "18"
+          },
+          {
+            "name": "React",
+            "kind": "warning",
+            "kindModifiers": "",
+            "sortText": "18"
+          },
+          {
+            "name": "Router",
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18"

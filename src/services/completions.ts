@@ -2084,7 +2084,7 @@ export function getCompletionEntriesFromSymbols(
             continue;
         }
 
-        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && symbol.flags & SymbolFlags.Value) {
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !(symbol.flags & SymbolFlags.Value)) {
             continue;
         }
 
