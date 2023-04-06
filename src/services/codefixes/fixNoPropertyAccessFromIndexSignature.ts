@@ -2,7 +2,7 @@ import {
     cast,
     Diagnostics,
     factory,
-    getQuotePreferenceFromFile,
+    getQuotePreference,
     getTokenAtPosition,
     isPropertyAccessChain,
     isPropertyAccessExpression,
@@ -37,7 +37,7 @@ registerCodeFix({
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: PropertyAccessExpression, preferences: UserPreferences): void {
-    const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
+    const quotePreference = getQuotePreference(sourceFile, preferences);
     const argumentsExpression = factory.createStringLiteral(node.name.text, quotePreference === QuotePreference.Single);
     changes.replaceNode(
         sourceFile,

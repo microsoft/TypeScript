@@ -23,7 +23,6 @@ import {
     DeclarationStatement,
     EmitHint,
     EmitTextWriter,
-    emptyArray,
     endsWith,
     Expression,
     factory,
@@ -41,7 +40,6 @@ import {
     formatting,
     FunctionDeclaration,
     FunctionExpression,
-    FutureSourceFile,
     getAncestor,
     getFirstNonSpaceCharacterPosition,
     getFormatCodeSettingsForWriting,
@@ -339,12 +337,6 @@ interface ChangeText extends BaseChange {
     readonly text: string;
 }
 
-interface NewFileInsertion {
-    readonly fileName: string;
-    readonly oldFile?: SourceFile;
-    readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[];
-}
-
 function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd): TextRange {
     return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
 }
@@ -488,7 +480,7 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 /** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
-    private newFileChanges?: NewFileInsertion[];
+    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
@@ -608,40 +600,26 @@ export class ChangeTracker {
         this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
     }
 
-    public insertNodeAtTopOfFile(sourceFile: SourceFile | FutureSourceFile, newNode: Statement, blankLineBetween: boolean): void {
+    public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
         this.insertAtTopOfFile(sourceFile, newNode, blankLineBetween);
     }
 
-    public insertNodesAtTopOfFile(sourceFile: SourceFile | FutureSourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
+    public insertNodesAtTopOfFile(sourceFile: SourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
         this.insertAtTopOfFile(sourceFile, newNodes, blankLineBetween);
     }
 
-    private insertAtTopOfFile(sourceFile: SourceFile | FutureSourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
-        const pos = sourceFile.kind ? getInsertionPositionAtSourceFileTop(sourceFile) : 0;
+    private insertAtTopOfFile(sourceFile: SourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
+        const pos = getInsertionPositionAtSourceFileTop(sourceFile);
         const options = {
             prefix: pos === 0 ? undefined : this.newLineCharacter,
-            suffix: (sourceFile.kind && isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
+            suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
         };
         if (isArray(insert)) {
-            if (sourceFile.kind) {
-                this.insertNodesAt(sourceFile, pos, insert, options);
-            }
-            else {
-                this.insertStatementsInNewFile(sourceFile.fileName, insert);
-            }
+            this.insertNodesAt(sourceFile, pos, insert, options);
         }
         else {
-            if (sourceFile.kind) {
-                this.insertNodeAt(sourceFile, pos, insert, options);
-            }
-            else {
-                this.insertStatementsInNewFile(sourceFile.fileName, [insert]);
-            }
+            this.insertNodeAt(sourceFile, pos, insert, options);
         }
-    }
-
-    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
-        (this.newFileChanges ??= []).push({ fileName, statements, oldFile });
     }
 
     public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
@@ -1150,14 +1128,14 @@ export class ChangeTracker {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
         const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
-        for (const { oldFile, fileName, statements } of this.newFileChanges ?? emptyArray) {
+        for (const { oldFile, fileName, statements } of this.newFiles) {
             changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
         }
         return changes;
     }
 
     public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
-        this.insertStatementsInNewFile(fileName, statements, oldFile);
+        this.newFiles.push({ oldFile, fileName, statements });
     }
 }
 
