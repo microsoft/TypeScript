@@ -257,8 +257,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/dir/somefile.d.ts                                                                           |                                                                                                |           |
 | c:/dir/subdir/somefile.d.ts                                                                    |                                                                                                |           |
 | c:/folderAtRoot/somefile.d.ts                                                                  |                                                                                                |           |
-| c:/folderAtRoot/dir/somefile.d.ts                                                              |                                                                                                |           |
-| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                                |           |
+| c:/folderAtRoot/dir/somefile.d.ts                                                              | c:/folderAtRoot/dir                                                                            | true      |
+| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       | c:/folderAtRoot/dir                                                                            | true      |
 | c:/folderAtRoot/folder1/somefile.d.ts                                                          | c:/folderAtRoot/folder1                                                                        | false     |
 | c:/folderAtRoot/folder1/dir/somefile.d.ts                                                      | c:/folderAtRoot/folder1/dir                                                                    | true      |
 | c:/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | c:/folderAtRoot/folder1/dir                                                                    | true      |
@@ -379,8 +379,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/dir/somefile.d.ts                                                                           |                                                                                                |           |
 | c:/dir/subdir/somefile.d.ts                                                                    |                                                                                                |           |
 | c:/folderAtRoot/somefile.d.ts                                                                  |                                                                                                |           |
-| c:/folderAtRoot/dir/somefile.d.ts                                                              |                                                                                                |           |
-| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                                |           |
+| c:/folderAtRoot/dir/somefile.d.ts                                                              | c:/folderAtRoot/dir                                                                            | true      |
+| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       | c:/folderAtRoot/dir                                                                            | true      |
 | c:/folderAtRoot/folder1/somefile.d.ts                                                          | c:/folderAtRoot/folder1                                                                        | false     |
 | c:/folderAtRoot/folder1/dir/somefile.d.ts                                                      | c:/folderAtRoot/folder1/dir                                                                    | true      |
 | c:/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | c:/folderAtRoot/folder1/dir                                                                    | true      |
@@ -501,8 +501,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/dir/somefile.d.ts                                                                           |                                                                                                |           |
 | c:/dir/subdir/somefile.d.ts                                                                    |                                                                                                |           |
 | c:/folderAtRoot/somefile.d.ts                                                                  |                                                                                                |           |
-| c:/folderAtRoot/dir/somefile.d.ts                                                              |                                                                                                |           |
-| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                                |           |
+| c:/folderAtRoot/dir/somefile.d.ts                                                              | c:/folderAtRoot/dir                                                                            | true      |
+| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       | c:/folderAtRoot/dir                                                                            | true      |
 | c:/folderAtRoot/folder1/somefile.d.ts                                                          | c:/folderAtRoot/folder1                                                                        | false     |
 | c:/folderAtRoot/folder1/dir/somefile.d.ts                                                      | c:/folderAtRoot/folder1/dir                                                                    | true      |
 | c:/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | c:/folderAtRoot/folder1/dir                                                                    | true      |
@@ -623,8 +623,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/dir/somefile.d.ts                                                                           |                                                                                                |           |
 | c:/dir/subdir/somefile.d.ts                                                                    |                                                                                                |           |
 | c:/folderAtRoot/somefile.d.ts                                                                  |                                                                                                |           |
-| c:/folderAtRoot/dir/somefile.d.ts                                                              |                                                                                                |           |
-| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                                |           |
+| c:/folderAtRoot/dir/somefile.d.ts                                                              | c:/folderAtRoot/dir                                                                            | true      |
+| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       | c:/folderAtRoot/dir                                                                            | true      |
 | c:/folderAtRoot/folder1/somefile.d.ts                                                          | c:/folderAtRoot/folder1                                                                        | false     |
 | c:/folderAtRoot/folder1/dir/somefile.d.ts                                                      | c:/folderAtRoot/folder1/dir                                                                    | true      |
 | c:/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | c:/folderAtRoot/folder1/dir                                                                    | true      |
@@ -745,8 +745,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/dir/somefile.d.ts                                                                           |                                                                                                |           |
 | c:/dir/subdir/somefile.d.ts                                                                    |                                                                                                |           |
 | c:/folderAtRoot/somefile.d.ts                                                                  |                                                                                                |           |
-| c:/folderAtRoot/dir/somefile.d.ts                                                              |                                                                                                |           |
-| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       |                                                                                                |           |
+| c:/folderAtRoot/dir/somefile.d.ts                                                              | c:/folderAtRoot/dir                                                                            | true      |
+| c:/folderAtRoot/dir/subdir/somefile.d.ts                                                       | c:/folderAtRoot/dir                                                                            | true      |
 | c:/folderAtRoot/folder1/somefile.d.ts                                                          | c:/folderAtRoot/folder1                                                                        | false     |
 | c:/folderAtRoot/folder1/dir/somefile.d.ts                                                      | c:/folderAtRoot/folder1/dir                                                                    | true      |
 | c:/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | c:/folderAtRoot/folder1/dir                                                                    | true      |
@@ -1257,8 +1257,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/dir/somefile.d.ts                                                            |                                                                                                |           |
 | c:/users/username/dir/subdir/somefile.d.ts                                                     |                                                                                                |           |
 | c:/users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                                |           |
+| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               | c:/users/username/folderAtRoot/dir                                                             | true      |
+| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | c:/users/username/folderAtRoot/dir                                                             | true      |
 | c:/users/username/folderAtRoot/folder1/somefile.d.ts                                           | c:/users/username/folderAtRoot/folder1                                                         | false     |
 | c:/users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
 | c:/users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
@@ -1379,8 +1379,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/dir/somefile.d.ts                                                            |                                                                                                |           |
 | c:/users/username/dir/subdir/somefile.d.ts                                                     |                                                                                                |           |
 | c:/users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                                |           |
+| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               | c:/users/username/folderAtRoot/dir                                                             | true      |
+| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | c:/users/username/folderAtRoot/dir                                                             | true      |
 | c:/users/username/folderAtRoot/folder1/somefile.d.ts                                           | c:/users/username/folderAtRoot/folder1                                                         | false     |
 | c:/users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
 | c:/users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
@@ -1501,8 +1501,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/dir/somefile.d.ts                                                            |                                                                                                |           |
 | c:/users/username/dir/subdir/somefile.d.ts                                                     |                                                                                                |           |
 | c:/users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                                |           |
+| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               | c:/users/username/folderAtRoot/dir                                                             | true      |
+| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | c:/users/username/folderAtRoot/dir                                                             | true      |
 | c:/users/username/folderAtRoot/folder1/somefile.d.ts                                           | c:/users/username/folderAtRoot/folder1                                                         | false     |
 | c:/users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
 | c:/users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
@@ -1623,8 +1623,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/dir/somefile.d.ts                                                            |                                                                                                |           |
 | c:/users/username/dir/subdir/somefile.d.ts                                                     |                                                                                                |           |
 | c:/users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                                |           |
+| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               | c:/users/username/folderAtRoot/dir                                                             | true      |
+| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | c:/users/username/folderAtRoot/dir                                                             | true      |
 | c:/users/username/folderAtRoot/folder1/somefile.d.ts                                           | c:/users/username/folderAtRoot/folder1                                                         | false     |
 | c:/users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
 | c:/users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
@@ -1745,8 +1745,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/dir/somefile.d.ts                                                            |                                                                                                |           |
 | c:/users/username/dir/subdir/somefile.d.ts                                                     |                                                                                                |           |
 | c:/users/username/folderAtRoot/somefile.d.ts                                                   |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               |                                                                                                |           |
-| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        |                                                                                                |           |
+| c:/users/username/folderAtRoot/dir/somefile.d.ts                                               | c:/users/username/folderAtRoot/dir                                                             | true      |
+| c:/users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | c:/users/username/folderAtRoot/dir                                                             | true      |
 | c:/users/username/folderAtRoot/folder1/somefile.d.ts                                           | c:/users/username/folderAtRoot/folder1                                                         | false     |
 | c:/users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
 | c:/users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | c:/users/username/folderAtRoot/folder1/dir                                                     | true      |
@@ -2007,8 +2007,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -2129,8 +2129,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -2251,8 +2251,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -2373,8 +2373,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -2495,8 +2495,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -2617,8 +2617,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -2739,8 +2739,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       |                                                                                                |           |
 | c:/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/user/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/user/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/user/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/user/dir/somefile.d.ts                                                                      | c:/user/dir                                                                                    | true      |
+| c:/user/dir/subdir/somefile.d.ts                                                               | c:/user/dir                                                                                    | true      |
 | c:/user/username/somefile.d.ts                                                                 | c:/user/username                                                                               | false     |
 | c:/user/username/dir/somefile.d.ts                                                             | c:/user/username/dir                                                                           | true      |
 | c:/user/username/dir/subdir/somefile.d.ts                                                      | c:/user/username/dir                                                                           | true      |
@@ -3007,8 +3007,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -3129,8 +3129,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -3251,8 +3251,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -3373,8 +3373,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -3495,8 +3495,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -3617,8 +3617,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -3739,8 +3739,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        |                                                                                                |           |
 | c:/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts |                                                                                                |           |
 | c:/usr/somefile.d.ts                                                                           |                                                                                                |           |
-| c:/usr/dir/somefile.d.ts                                                                       |                                                                                                |           |
-| c:/usr/dir/subdir/somefile.d.ts                                                                |                                                                                                |           |
+| c:/usr/dir/somefile.d.ts                                                                       | c:/usr/dir                                                                                     | true      |
+| c:/usr/dir/subdir/somefile.d.ts                                                                | c:/usr/dir                                                                                     | true      |
 | c:/usr/username/somefile.d.ts                                                                  | c:/usr/username                                                                                | false     |
 | c:/usr/username/dir/somefile.d.ts                                                              | c:/usr/username/dir                                                                            | true      |
 | c:/usr/username/dir/subdir/somefile.d.ts                                                       | c:/usr/username/dir                                                                            | true      |
@@ -4007,8 +4007,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |
@@ -4129,8 +4129,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |
@@ -4251,8 +4251,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |
@@ -4373,8 +4373,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |
@@ -4495,8 +4495,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |
@@ -4617,8 +4617,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |
@@ -4739,8 +4739,8 @@ It also determines the directory to watch and whether to watch it recursively or
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         |                                                                                                |           |
 | c:/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  |                                                                                                |           |
 | c:/home/somefile.d.ts                                                                          |                                                                                                |           |
-| c:/home/dir/somefile.d.ts                                                                      |                                                                                                |           |
-| c:/home/dir/subdir/somefile.d.ts                                                               |                                                                                                |           |
+| c:/home/dir/somefile.d.ts                                                                      | c:/home/dir                                                                                    | true      |
+| c:/home/dir/subdir/somefile.d.ts                                                               | c:/home/dir                                                                                    | true      |
 | c:/home/username/somefile.d.ts                                                                 | c:/home/username                                                                               | false     |
 | c:/home/username/dir/somefile.d.ts                                                             | c:/home/username/dir                                                                           | true      |
 | c:/home/username/dir/subdir/somefile.d.ts                                                      | c:/home/username/dir                                                                           | true      |

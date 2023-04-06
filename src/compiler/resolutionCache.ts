@@ -319,19 +319,16 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
     }
     // Use some ancestor of the root directory
     let nonRecursive = true;
-    let subDirectoryPath: PathPathComponents | undefined, subDirectory: string[] | undefined;
     for (let i = 0; i < dirPathComponents.length; i++) {
         if (dirPathComponents[i] !== rootPathComponents[i]) {
             nonRecursive = false;
-            subDirectory = dirComponents.slice(0, i + 1);
-            subDirectoryPath = dirPathComponents.slice(0, i + 1) as PathPathComponents;
-            dirPathComponents.length = i;
-            dirComponents.length = i;
+            dirComponents.length = i + 1;
+            dirPathComponents.length = i + 1;
             break;
         }
     }
     return canWatchDirectoryOrFile(dirPathComponents) ?
-        getDirectoryOfFailedLookupWatch(subDirectory || dirComponents, subDirectoryPath || dirPathComponents, nonRecursive) :
+        getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, nonRecursive) :
         undefined;
 }
 
