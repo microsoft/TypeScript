@@ -123,8 +123,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pa
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/babel-loader/node_modules/@types 1 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/babel-loader/node_modules/@types 1 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -159,8 +157,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.es2018.full.d.ts: *new*
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -201,8 +197,6 @@ Info seq  [hh:mm:ss:mss] For info: /packages/core/src/index.ts :: Config file na
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/core/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/core/node_modules/@types 1 undefined Project: /packages/core/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/core/node_modules/@types 1 undefined Project: /packages/core/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/core/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -241,10 +235,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -407,10 +397,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/node_modules/@types:
   {"pollingInterval":500}
 /packages/core/dist/loading-indicator.d.ts: *new*
   {"pollingInterval":2000}

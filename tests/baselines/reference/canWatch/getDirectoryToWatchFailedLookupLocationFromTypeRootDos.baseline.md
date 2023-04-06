@@ -9,15 +9,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                  | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| c:/node_modules/@types                                                                     | c:/                                                                                        |
 | c:/folderAtRoot/node_modules/@types                                                        | c:/                                                                                        |
 | c:/folderAtRoot/folder1/node_modules/@types                                                | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/node_modules/@types                                        | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/                                                                                        |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/                                                                                        |
-| c:/users/node_modules/@types                                                               | c:/                                                                                        |
-| c:/users/username/node_modules/@types                                                      | c:/                                                                                        |
 | c:/users/username/folderAtRoot/node_modules/@types                                         | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/                                                                                        |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/                                                                                        |
@@ -305,8 +302,6 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| c:/users/node_modules/@types                                                               | c:/users                                                                                   |
-| c:/users/username/node_modules/@types                                                      | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users                                                                                   |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users                                                                                   |
@@ -348,7 +343,6 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | c:/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | c:/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | c:/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | c:/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| c:/users/username/node_modules/@types                                                      | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/node_modules/@types                                         | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/node_modules/@types                                 | c:/users/username                                                                          |
 | c:/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | c:/users/username                                                                          |

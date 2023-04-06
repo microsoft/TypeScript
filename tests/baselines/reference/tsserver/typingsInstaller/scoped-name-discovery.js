@@ -44,8 +44,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Conf
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@types 1 undefined Project: /jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -60,8 +58,6 @@ TI:: Creating typing installer
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -148,8 +144,6 @@ TI:: typing installer creation complete
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /jsconfig.json:
@@ -220,8 +214,6 @@ TI:: Before installWorker
 
 PolledWatches::
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/node_modules/@types:
   {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}

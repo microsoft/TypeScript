@@ -9,15 +9,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 
 | Directory                                                                                               | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                     |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| //vda1cs4850/c$/node_modules/@types                                                                     | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/folderAtRoot/node_modules/@types                                                        | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/folderAtRoot/folder1/node_modules/@types                                                | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/c$                                                                                         |
-| //vda1cs4850/c$/users/node_modules/@types                                                               | //vda1cs4850/c$                                                                                         |
-| //vda1cs4850/c$/users/username/node_modules/@types                                                      | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/c$                                                                                         |
 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/c$                                                                                         |
@@ -305,8 +302,6 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| //vda1cs4850/c$/users/node_modules/@types                                                               | //vda1cs4850/c$/users                                                                                   |
-| //vda1cs4850/c$/users/username/node_modules/@types                                                      | //vda1cs4850/c$/users                                                                                   |
 | //vda1cs4850/c$/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/c$/users                                                                                   |
 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/c$/users                                                                                   |
 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/c$/users                                                                                   |
@@ -348,7 +343,6 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
 | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/c$/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
-| //vda1cs4850/c$/users/username/node_modules/@types                                                      | //vda1cs4850/c$/users/username                                                                          |
 | //vda1cs4850/c$/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/c$/users/username                                                                          |
 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/c$/users/username                                                                          |
 | //vda1cs4850/c$/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/c$/users/username                                                                          |

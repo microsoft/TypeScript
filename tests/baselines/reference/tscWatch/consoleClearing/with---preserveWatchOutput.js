@@ -40,10 +40,6 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /f.ts (used version)
 
-PolledWatches::
-/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /f.ts: *new*
   {}

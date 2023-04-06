@@ -55,12 +55,6 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-PolledWatches::
-/project/src/package.json: *new*
-  {"pollingInterval":2000}
-/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /project/tsconfig.json: *new*
   {}
@@ -69,8 +63,6 @@ FsWatches::
 /project/src/index.ts: *new*
   {}
 /a/lib/lib.es2020.full.d.ts: *new*
-  {}
-/project/package.json: *new*
   {}
 
 FsWatchesRecursive::

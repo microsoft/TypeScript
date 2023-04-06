@@ -52,10 +52,6 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/d/f3.ts (used version)
 
-PolledWatches::
-/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/c/f2.ts: *new*
   {}
@@ -110,10 +106,6 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/d/f3.ts (used version)
 /a/b/f1.ts (used version)
-
-PolledWatches::
-/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/c/f2.ts:

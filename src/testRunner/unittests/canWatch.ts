@@ -25,13 +25,12 @@ describe("unittests:: canWatch::", () => {
         (paths, longestPathLength, baseline) => {
             const testType = "canWatchAtTypes";
             const maxLengths = [longestPathLength + "/node_modules/@types".length, testType.length] as const;
-            baselineCanWatchForRoot(paths, baseline, rootPathCompoments => {
-                pushHeader(baseline, ["Directory", testType], maxLengths);
-                paths.forEach(path => {
-                    path = combinePaths(path, "node_modules/@types");
-                    pushRow(baseline, [path, `${ts.canWatchAtTypes(path, rootPathCompoments)}`], maxLengths);
-                });
+            pushHeader(baseline, ["Directory", testType], maxLengths);
+            paths.forEach(path => {
+                path = combinePaths(path, "node_modules/@types");
+                pushRow(baseline, [path, `${ts.canWatchAtTypes(path)}`], maxLengths);
             });
+            baseline.push("", "");
         },
     );
 
@@ -41,13 +40,12 @@ describe("unittests:: canWatch::", () => {
         (paths, longestPathLength, baseline) => {
             const testType = "canWatchAffectingLocation";
             const maxLengths = [longestPathLength + "/package.json".length, testType.length] as const;
-            baselineCanWatchForRoot(paths, baseline, rootPathCompoments => {
-                pushHeader(baseline, ["File", testType], maxLengths);
-                paths.forEach(path => {
-                    path = combinePaths(path, "package.json");
-                    pushRow(baseline, [path, `${ts.canWatchAffectingLocation(path, rootPathCompoments)}`], maxLengths);
-                });
+            pushHeader(baseline, ["File", testType], maxLengths);
+            paths.forEach(path => {
+                path = combinePaths(path, "package.json");
+                pushRow(baseline, [path, `${ts.canWatchAffectingLocation(path)}`], maxLengths);
             });
+            baseline.push("", "");
         },
     );
 
@@ -99,7 +97,7 @@ describe("unittests:: canWatch::", () => {
                 paths.forEach(path => {
                     path = combinePaths(path, "node_modules/@types");
                     // This is invoked only on paths that are watched
-                    if (!ts.canWatchAtTypes(path, rootPathCompoments)) return;
+                    if (!ts.canWatchAtTypes(path)) return;
                     const result = ts.getDirectoryToWatchFailedLookupLocationFromTypeRoot(
                         path,
                         path,

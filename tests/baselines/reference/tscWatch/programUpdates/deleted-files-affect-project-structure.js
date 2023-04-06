@@ -53,10 +53,6 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/b/f1.ts: *new*
   {}
@@ -150,10 +146,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
-
-PolledWatches::
-/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/b/f1.ts:

@@ -206,6 +206,30 @@ export function removeIgnoredPath(path: Path): Path | undefined {
         path;
 }
 
+function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>) {
+    // Ignore "/", "c:/"
+    if (pathComponents.length <= 1) return 1;
+    let userCheckIndex = 1;
+    let isDosStyle = pathComponents[0].search(/[a-zA-Z]:/) === 0;
+    if (pathComponents[0] !== directorySeparator &&
+        !isDosStyle && // Non dos style paths
+        pathComponents[1].search(/[a-zA-Z]\$$/) === 0) { // Dos style nextPart
+        // ignore "//vda1cs4850/c$/folderAtRoot"
+        if (pathComponents.length === 2) return 2;
+        userCheckIndex = 2;
+        isDosStyle = true;
+    }
+
+    if (isDosStyle &&
+        !pathComponents[userCheckIndex].match(/^users$/i)) {
+        // Paths like c:/notUsers
+        return userCheckIndex;
+    }
+
+    // Paths like: c:/users/username or /home/username
+    return userCheckIndex + 2;
+}
+
 /**
  * Filter out paths like
  * "/", "/user", "/user/username", "/user/username/folderAtRoot",
@@ -218,29 +242,14 @@ export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathCompone
     // Ignore "/", "c:/"
     // ignore "/user", "c:/users" or "c:/folderAtRoot"
     if (pathComponents.length <= 2) return false;
-    let userCheckIndex = 1;
-    const isNonDirectorySeparatorRoot = pathComponents[0] !== "/";
-    if (isNonDirectorySeparatorRoot &&
-        pathComponents[0].search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
-        pathComponents[1].search(/[a-zA-Z]\$$/) === 0) { // Dos style nextPart
-        // ignore "//vda1cs4850/c$/folderAtRoot"
-        if (pathComponents.length === 3) return false;
-        userCheckIndex = 2;
-    }
-
-    if (isNonDirectorySeparatorRoot &&
-        !pathComponents[userCheckIndex].match(/^users$/i)) {
-        // Paths like c:/folderAtRoot/subFolder are allowed
-        return true;
-    }
-
-    return pathComponents.length > userCheckIndex + 3;
+    const perceivedOsRootLength = perceivedOsRootLengthForWatching(pathComponents);
+    return pathComponents.length > perceivedOsRootLength + 1;
 }
 
 /** @internal */
-export function canWatchAtTypes(atTypes: Path, rootPathComponents: Readonly<PathPathComponents>) {
+export function canWatchAtTypes(atTypes: Path) {
     // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-    return isInRootPathOrCanWatchDirectoryOrFile(getDirectoryPath(atTypes), rootPathComponents);
+    return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(getDirectoryPath(atTypes));
 }
 
 function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDirComponents: Readonly<PathPathComponents>) {
@@ -251,15 +260,14 @@ function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDi
     return true;
 }
 
-function isInRootPathOrCanWatchDirectoryOrFile(fileOrDirPath: Path, rootPathComponents: Readonly<PathPathComponents>) {
+function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) {
     const fileOrDirPathComponents = getPathComponents(fileOrDirPath);
-    return isInDirectoryPath(rootPathComponents, fileOrDirPathComponents) ||
-        canWatchDirectoryOrFile(fileOrDirPathComponents);
+    return fileOrDirPathComponents.length > perceivedOsRootLengthForWatching(fileOrDirPathComponents) + 1;
 }
 
 /** @internal */
-export function canWatchAffectingLocation(filePath: Path, rootPathComponents: Readonly<PathPathComponents>) {
-    return isInRootPathOrCanWatchDirectoryOrFile(filePath, rootPathComponents);
+export function canWatchAffectingLocation(filePath: Path) {
+    return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(filePath);
 }
 
 /** @internal */
@@ -351,6 +359,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
 ): Path | undefined {
     const typeRootPathComponents = getPathComponents(typeRootPath);
     if (isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
+        // Because this is called when we are watching typeRoot, we dont need additional check whether typeRoot is not say c:/users/node_modules/@types when root is c:/
         return rootPath;
     }
     typeRoot = isRootedDiskPath(typeRoot) ? normalizePath(typeRoot) : getNormalizedAbsolutePath(typeRoot, getCurrentDirectory());
@@ -903,7 +912,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
         const paths = new Set<string>();
         paths.add(locationToWatch);
-        let actualWatcher = canWatchAffectingLocation(resolutionHost.toPath(locationToWatch), rootPathComponents) ?
+        let actualWatcher = canWatchAffectingLocation(resolutionHost.toPath(locationToWatch)) ?
             resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
                 cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
                 const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
@@ -1258,7 +1267,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (resolutionHost.getCompilationSettings().typeRoots) return true;
 
         // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-        return canWatchAtTypes(resolutionHost.toPath(typeRoot), rootPathComponents);
+        return canWatchAtTypes(resolutionHost.toPath(typeRoot));
     }
 }
 
