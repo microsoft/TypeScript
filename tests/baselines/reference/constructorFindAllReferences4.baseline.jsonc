@@ -1,63 +1,41 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/constructorFindAllReferences4.ts ===
 // export class C {
-//     /*FIND ALL REFS*/protected [|constructor|]() { }
+//     /*FIND ALL REFS*/<|protected [|constructor|]() { }|>
 //     public foo() { }
 // }
 // 
 // new [|C|]().foo();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/constructorFindAllReferences4.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 71
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/constructorFindAllReferences4.ts",
-        "contextSpan": {
-          "start": 21,
-          "length": 27
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 77,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/constructorFindAllReferences4.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/constructorFindAllReferences4.ts ===
+  // <|export class [|C|] {
+  //     /*FIND ALL REFS*/protected constructor() { }
+  //     public foo() { }
+  // }|>
+  // 
+  // new C().foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

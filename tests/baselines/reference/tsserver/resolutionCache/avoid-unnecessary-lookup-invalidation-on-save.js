@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:35.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/user/username/projects/myproject/src/node_modules/module1/index.ts]
@@ -111,7 +112,7 @@ Info 52   [00:01:36.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 53   [00:01:37.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/file1.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 54   [00:01:38.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/file1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 55   [00:01:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/file1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Before checking timeout queue length (0) and running
+Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/src/file1.ts] file changed its modified time
 
 PolledWatches::
@@ -134,4 +135,4 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-After checking timeout queue length (0) and running
+After running Timeout callback:: count: 0

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
 {
@@ -95,6 +96,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -138,6 +142,9 @@ const a = {
 };
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
@@ -201,6 +208,9 @@ import { A } from "../shared/types/db";
 const a: string = 10;
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
@@ -241,6 +251,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
@@ -282,6 +295,9 @@ import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
@@ -327,6 +343,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...

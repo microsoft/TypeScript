@@ -90,6 +90,7 @@ import {
     DefaultClause,
     DestructuringAssignment,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticMessageChain,
@@ -440,6 +441,8 @@ import {
     PropertyNameLiteral,
     PropertySignature,
     PseudoBigInt,
+    PunctuationOrKeywordSyntaxKind,
+    PunctuationSyntaxKind,
     QualifiedName,
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
@@ -1697,8 +1700,13 @@ function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): 
         return false;
     }
 
-    if (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
-        return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+    if (isNumericLiteral(node)) {
+        if (node.numericLiteralFlags & TokenFlags.IsInvalid) {
+            return false;
+        }
+        if (node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
+            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+        }
     }
 
     return !isBigIntLiteral(node);
@@ -2058,21 +2066,21 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
 }
 
 /** @internal */
-export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const sourceFile = getSourceFileOfNode(node);
-    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
+    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const start = skipTrivia(sourceFile.text, nodes.pos);
-    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
+    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
-    return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
+    return createFileDiagnostic(sourceFile, span.start, span.length, message, ...args);
 }
 
 /** @internal */
@@ -2148,7 +2156,7 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 
 /** @internal */
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
     scanner.scan();
     const start = scanner.getTokenStart();
     return createTextSpanFromBounds(start, scanner.getTokenEnd());
@@ -2156,7 +2164,7 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
 
 /** @internal */
 export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
-    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
     scanner.scan();
     return scanner.getToken();
 }
@@ -2450,10 +2458,8 @@ export function isPartOfTypeNode(node: Node): boolean {
                     return node === (parent as TypeAssertion).type;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return contains((parent as CallExpression).typeArguments, node);
                 case SyntaxKind.TaggedTemplateExpression:
-                    // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
-                    return false;
+                    return contains((parent as CallExpression | TaggedTemplateExpression).typeArguments, node);
             }
         }
     }
@@ -2680,22 +2686,23 @@ export function isThisTypePredicate(predicate: TypePredicate): predicate is This
 }
 
 /** @internal */
-export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): readonly PropertyAssignment[] {
-    return objectLiteral.properties.filter((property): property is PropertyAssignment => {
-        if (property.kind === SyntaxKind.PropertyAssignment) {
-            const propName = tryGetTextOfPropertyName(property.name);
-            return key === propName || (!!key2 && key2 === propName);
-        }
-        return false;
+export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpression | undefined, key: string, callback: (property: PropertyAssignment) => T | undefined, key2?: string) {
+    return forEach(objectLiteral?.properties, property => {
+        if (!isPropertyAssignment(property)) return undefined;
+        const propName = tryGetTextOfPropertyName(property.name);
+        return key === propName || (key2 && key2 === propName) ?
+            callback(property) :
+            undefined;
     });
 }
 
 /** @internal */
 export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
-    return firstDefined(getPropertyAssignment(objectLiteral, propKey), property =>
+    return forEachPropertyAssignment(objectLiteral, propKey, property =>
         isArrayLiteralExpression(property.initializer) ?
             find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-            undefined);
+            undefined
+    );
 }
 
 /** @internal */
@@ -2708,16 +2715,15 @@ export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigS
 
 /** @internal */
 export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
-    return firstDefined(getTsConfigPropArray(tsConfigSourceFile, propKey), property =>
+    return forEachTsConfigPropArray(tsConfigSourceFile, propKey, property =>
         isArrayLiteralExpression(property.initializer) ?
             find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
             undefined);
 }
 
 /** @internal */
-export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): readonly PropertyAssignment[] {
-    const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-    return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
+export function forEachTsConfigPropArray<T>(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, callback: (property: PropertyAssignment) => T | undefined) {
+    return forEachPropertyAssignment(getTsConfigObjectLiteralExpression(tsConfigSourceFile), propKey, callback);
 }
 
 /** @internal */
@@ -3656,7 +3662,7 @@ export function isSameEntityName(name: Expression, initializer: Expression): boo
 
 /** @internal */
 export function getRightMostAssignedExpression(node: Expression): Expression {
-    while (isAssignmentExpression(node, /*excludeCompoundAssignments*/ true)) {
+    while (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
         node = node.right;
     }
     return node;
@@ -3935,7 +3941,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
         case SyntaxKind.CallExpression:
-            return isImportCall(node.parent) || isRequireCall(node.parent, /*checkArg*/ false) ? node.parent as RequireOrImportCall : undefined;
+            return isImportCall(node.parent) || isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) ? node.parent as RequireOrImportCall : undefined;
         case SyntaxKind.LiteralType:
             Debug.assert(isStringLiteral(node));
             return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
@@ -4769,6 +4775,16 @@ export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | un
 /** @internal */
 export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
     return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+}
+
+/** @internal */
+export function isPunctuation(token: SyntaxKind): token is PunctuationSyntaxKind {
+    return SyntaxKind.FirstPunctuation <= token && token <= SyntaxKind.LastPunctuation;
+}
+
+/** @internal */
+export function isKeywordOrPunctuation(token: SyntaxKind): token is PunctuationOrKeywordSyntaxKind {
+    return isKeyword(token) || isPunctuation(token);
 }
 
 /** @internal */
@@ -6740,7 +6756,7 @@ export function getEffectiveModifierFlags(node: Node): ModifierFlags {
 
 /** @internal */
 export function getEffectiveModifierFlagsAlwaysIncludeJSDoc(node: Node): ModifierFlags {
-    return getModifierFlagsWorker(node, /*includeJSDOc*/ true, /*alwaysIncludeJSDOc*/ true);
+    return getModifierFlagsWorker(node, /*includeJSDoc*/ true, /*alwaysIncludeJSDoc*/ true);
 }
 
 /**
@@ -7995,7 +8011,7 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithDetachedLocation;
+export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation;
 /** @internal */
 export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
     assertDiagnosticLocation(/*file*/ undefined, start, length);
@@ -8066,7 +8082,7 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 }
 
 /** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
+export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation;
 /** @internal */
 export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
     assertDiagnosticLocation(file, start, length);
@@ -8091,7 +8107,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 }
 
 /** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: (string | number | undefined)[]): string;
+export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: DiagnosticArguments): string;
 /** @internal */
 export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
     let text = getLocaleSpecificMessage(message);
@@ -8104,7 +8120,7 @@ export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
 }
 
 /** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
+export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic;
 /** @internal */
 export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
     let text = getLocaleSpecificMessage(message);
@@ -8141,7 +8157,7 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
+export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain;
 /** @internal */
 export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
@@ -8420,6 +8436,12 @@ export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
+}
+
+/** @internal */
+export function shouldResolveJsRequire(compilerOptions: CompilerOptions): boolean {
+    // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
+    return !!compilerOptions.noDtsResolution || getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler;
 }
 
 /** @internal */

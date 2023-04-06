@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/username/project/src/index.ts]
@@ -129,7 +130,8 @@ Info 24   [00:00:51.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 1
+1: pollPollingIntervalQueue
 //// [/a/username/project/src/file2.ts]
 
 
@@ -141,7 +143,12 @@ Info 28   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 Info 29   [00:00:58.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 30   [00:00:59.000] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
 Info 31   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
-After running timeout callbacks
+After running Timeout callback:: count: 5
+2: /a/username/project/tsconfig.json
+3: *ensureProjectForOpenFiles*
+4: /a/username/project/tsconfig.jsonFailedLookupInvalidation
+5: pollLowPollingIntervalQueue
+6: pollPollingIntervalQueue
 
 Before request
 

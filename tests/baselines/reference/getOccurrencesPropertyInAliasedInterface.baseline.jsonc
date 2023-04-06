@@ -1,0 +1,85 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     [|{| kind: "reference" |}abc|]
+// }
+// 
+// class C implements Bar {
+//     [|{| kind: "reference" |}abc|]
+// }
+// 
+// (new C()).[|{| kind: "reference" |}abc|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         [|{| kind: "reference" |}abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     /*HIGHLIGHTS*/[|{| kind: "reference" |}abc|]
+// }
+// 
+// class C implements Bar {
+//     [|{| kind: "reference" |}abc|]
+// }
+// 
+// (new C()).[|{| kind: "reference" |}abc|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         [|{| kind: "reference" |}abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     [|{| kind: "reference" |}abc|]
+// }
+// 
+// class C implements Bar {
+//     /*HIGHLIGHTS*/[|{| kind: "reference" |}abc|]
+// }
+// 
+// (new C()).[|{| kind: "reference" |}abc|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         [|{| kind: "reference" |}abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     [|{| kind: "reference" |}abc|]
+// }
+// 
+// class C implements Bar {
+//     [|{| kind: "reference" |}abc|]
+// }
+// 
+// (new C())./*HIGHLIGHTS*/[|{| kind: "reference" |}abc|];

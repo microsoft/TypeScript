@@ -1,303 +1,237 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts ===
 // class Foo {
-//     /*FIND ALL REFS*/public [|_bar|]() { return 0; }
+//     /*FIND ALL REFS*/<|public [|{| isWriteAccess: true, isDefinition: true |}_bar|]() { return 0; }|>
 // }
 // 
 // var x: Foo;
 // x.[|_bar|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-      "kind": "method",
-      "name": "(method) Foo._bar(): number",
-      "textSpan": {
-        "start": 23,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "_bar",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 16,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-        "contextSpan": {
-          "start": 16,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts ===
+  // class Foo {
+  //     /*FIND ALL REFS*/<|public [|_bar|]() { return 0; }|>
+  // }
+  // 
+  // var x: Foo;
+  // x._bar;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo._bar(): number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "_bar",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts ===
 // class Foo {
-//     public /*FIND ALL REFS*/[|_bar|]() { return 0; }
+//     <|public /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}_bar|]() { return 0; }|>
 // }
 // 
 // var x: Foo;
 // x.[|_bar|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-      "kind": "method",
-      "name": "(method) Foo._bar(): number",
-      "textSpan": {
-        "start": 23,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "_bar",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 16,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-        "contextSpan": {
-          "start": 16,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts ===
+  // class Foo {
+  //     <|public /*FIND ALL REFS*/[|_bar|]() { return 0; }|>
+  // }
+  // 
+  // var x: Foo;
+  // x._bar;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo._bar(): number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "_bar",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts ===
 // class Foo {
-//     public [|_bar|]() { return 0; }
+//     <|public [|{| isWriteAccess: true |}_bar|]() { return 0; }|>
 // }
 // 
 // var x: Foo;
 // x./*FIND ALL REFS*/[|_bar|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-      "kind": "method",
-      "name": "(method) Foo._bar(): number",
-      "textSpan": {
-        "start": 23,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "_bar",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 16,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-        "contextSpan": {
-          "start": 16,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames1.ts ===
+  // class Foo {
+  //     <|public [|_bar|]() { return 0; }|>
+  // }
+  // 
+  // var x: Foo;
+  // x./*FIND ALL REFS*/_bar;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo._bar(): number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "_bar",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,0 +1,69 @@
+// === goToSourceDefinition ===
+// === /node_modules/lodash/lodash.js ===
+// ;(function() {
+//     /**
+//      * Adds two numbers.
+//      *
+//      * @static
+//      * @memberOf _
+//      * @since 3.4.0
+//      * @category Math
+//      * @param {number} augend The first number in an addition.
+//      * @param {number} addend The second number in an addition.
+//      * @returns {number} Returns the total.
+//      * @example
+//      *
+//      * _.add(6, 4);
+//      * // => 10
+//      */
+//     var [|{| defId: 0 |}add|] = createMathOperation(function(augend, addend) {
+//      return augend + addend;
+//     }, 0);
+// 
+//     function lodash(value) {}
+//     lodash.[|{| defId: 1 |}add|] = add;
+// 
+//     /** Detect free variable `global` from Node.js. */
+//     var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+//     /** Detect free variable `self`. */
+//     var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+//     /** Used as a reference to the global object. */
+//     var root = freeGlobal || freeSelf || Function('return this')();
+//     /** Detect free variable `exports`. */
+//     var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;////     
+//     /** Detect free variable `module`. */
+//     var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+//     if (freeModule) {
+//       // Export for Node.js.
+//       (freeModule.exports = _)._ = _;
+//       // Export for CommonJS support.
+//       freeExports._ = _;
+//     }
+//     else {
+//       // Export to the global object.
+//       root._ = _;
+//     }
+// }.call(this));
+
+// === /index.ts ===
+// import { /*GOTO SOURCE DEF*/add } from 'lodash';
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]

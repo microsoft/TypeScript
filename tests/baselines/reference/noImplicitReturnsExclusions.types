@@ -1,0 +1,129 @@
+=== tests/cases/compiler/noImplicitReturnsExclusions.ts ===
+// Functions with a return type of any, undefined, or a type that includes void are excluded
+// from --noImplicitReturns checks.
+
+function f1(b: boolean): undefined {
+>f1 : (b: boolean) => undefined
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f2(b: boolean): void {
+>f2 : (b: boolean) => void
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f3(b: boolean): any {
+>f3 : (b: boolean) => any
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f4(b: boolean): string | undefined {  // Error
+>f4 : (b: boolean) => string | undefined
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f5(b: boolean): string | void {
+>f5 : (b: boolean) => string | void
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f6(b: boolean): unknown {  // Error
+>f6 : (b: boolean) => unknown
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f10(b: boolean) {
+>f10 : (b: boolean) => void
+>b : boolean
+
+    if (b) return;
+>b : boolean
+}
+
+function f11(b: boolean) {
+>f11 : (b: boolean) => undefined
+>b : boolean
+
+    if (b) return undefined;
+>b : boolean
+>undefined : undefined
+}
+
+function f12(b: boolean) {
+>f12 : (b: boolean) => any
+>b : boolean
+
+    if (b) return undefined as any;
+>b : boolean
+>undefined as any : any
+>undefined : undefined
+}
+
+function f13(b: boolean) {  // Error
+>f13 : (b: boolean) => unknown
+>b : boolean
+
+    if (b) return undefined as unknown;
+>b : boolean
+>undefined as unknown : unknown
+>undefined : undefined
+}
+
+function f14(b: boolean) {  // Error
+>f14 : (b: boolean) => 42 | undefined
+>b : boolean
+
+    if (b) return 42;
+>b : boolean
+>42 : 42
+}
+
+function f15(b: boolean) {  // Error
+>f15 : (b: boolean) => 42 | undefined
+>b : boolean
+
+    if (b) return 42;
+>b : boolean
+>42 : 42
+
+    if (b) return undefined;
+>b : false
+>undefined : undefined
+}
+
+function f16(b: boolean) {  // Error
+>f16 : (b: boolean) => 42 | undefined
+>b : boolean
+
+    if (b) return 42;
+>b : boolean
+>42 : 42
+
+    if (b) return;
+>b : false
+}
+

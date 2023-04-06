@@ -478,7 +478,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                         exportedNamesStorageRef,
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
-                        factory.createObjectLiteralExpression(exportedNames, /*multiline*/ true)
+                        factory.createObjectLiteralExpression(exportedNames, /*multiLine*/ true)
                     )
                 ])
             )
@@ -561,7 +561,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                         [exports]
                     )
                 )
-            ], /*multiline*/ true)
+            ], /*multiLine*/ true)
         );
     }
 
@@ -643,7 +643,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                         factory.createCallExpression(
                                             exportFunction,
                                             /*typeArguments*/ undefined,
-                                            [factory.createObjectLiteralExpression(properties, /*multiline*/ true)]
+                                            [factory.createObjectLiteralExpression(properties, /*multiLine*/ true)]
                                         )
                                     )
                                 );

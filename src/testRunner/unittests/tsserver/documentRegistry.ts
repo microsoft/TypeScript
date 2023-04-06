@@ -5,12 +5,13 @@ import {
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    checkProjectActualFiles,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createProjectService,
     TestProjectService,
 } from "./helpers";
 
-describe("unittests:: tsserver:: document registry in project service", () => {
+describe("unittests:: tsserver:: documentRegistry:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;
     const file: File = {
         path: `/user/username/projects/myproject/index.ts`,
@@ -33,7 +34,6 @@ describe("unittests:: tsserver:: document registry in project service", () => {
         // Update the project
         const project = getProject(service);
         project.getLanguageService();
-        checkProjectActualFiles(project, [file.path, libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
         const moduleInfo = service.getScriptInfo(moduleFile.path)!;
         assert.isDefined(moduleInfo);
         assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
@@ -43,7 +43,7 @@ describe("unittests:: tsserver:: document registry in project service", () => {
 
     function createServiceAndHost() {
         const host = createServerHost([file, moduleFile, libFile, configFile]);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(file.path);
         checkProject(service, /*moduleIsOrphan*/ false);
         return { host, service };
@@ -77,6 +77,7 @@ describe("unittests:: tsserver:: document registry in project service", () => {
         changeFileToImportModule(service);
         assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
         assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
+        baselineTsserverLogs("documentRegistry", "Caches the source file if script info is orphan", service);
     });
 
     it("Caches the source file if script info is orphan, and orphan script info changes", () => {
@@ -99,5 +100,6 @@ describe("unittests:: tsserver:: document registry in project service", () => {
         assert.notEqual(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
         assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile!.sourceFile);
         assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
+        baselineTsserverLogs("documentRegistry", "Caches the source file if script info is orphan, and orphan script info changes", service);
     });
 });

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
@@ -448,6 +449,9 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...

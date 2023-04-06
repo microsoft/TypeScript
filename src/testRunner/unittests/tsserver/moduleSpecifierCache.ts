@@ -6,7 +6,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
@@ -143,7 +142,7 @@ function setup() {
     const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     openFilesForSession([aTs, bTs, cTs], session);
     const projectService = session.getProjectService();
-    const project = configuredProjectAt(projectService, 0);
+    const project = projectService.configuredProjects.get(tsconfig.path)!;
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
         arguments: {

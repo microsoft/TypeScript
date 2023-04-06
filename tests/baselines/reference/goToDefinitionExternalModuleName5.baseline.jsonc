@@ -1,0 +1,18 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|declare module [|{| textSpan: true |}"external/*GOTO DEF*/"|] {
+//     class Foo { }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"external\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
