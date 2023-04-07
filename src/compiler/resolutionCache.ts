@@ -262,8 +262,7 @@ function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDi
 }
 
 function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) {
-    const fileOrDirPathComponents = getPathComponents(fileOrDirPath);
-    return fileOrDirPathComponents.length > perceivedOsRootLengthForWatching(fileOrDirPathComponents, fileOrDirPathComponents.length) + 1;
+    return canWatchDirectoryOrFile(getPathComponents(fileOrDirPath));
 }
 
 /** @internal */
@@ -309,17 +308,31 @@ export function getDirectoryToWatchFailedLookupLocation(
     );
 }
 
+function getDirectoryToWatchFailedLookupLocationNodeModules(
+    dirPathComponents: Readonly<PathPathComponents>,
+) {
+    // If directory path contains node module, get the most parent node_modules directory for watching
+    const indexOfNodeModules = dirPathComponents.indexOf("node_modules" as Path);
+    if (indexOfNodeModules !== -1) {
+        // If the directory is node_modules use it to watch, always watch it recursively
+        return canWatchDirectoryOrFile(dirPathComponents, indexOfNodeModules + 1) ?
+            indexOfNodeModules + 1 :
+            false;
+    }
+    return undefined;
+}
+
 function getDirectoryToWatchFromFailedLookupLocationDirectory(
     dirComponents: readonly string[],
     dirPathComponents: Readonly<PathPathComponents>,
     rootPathComponents: Readonly<PathPathComponents>,
 ): DirectoryOfFailedLookupWatch | undefined {
     // If directory path contains node module, get the most parent node_modules directory for watching
-    const indexOfNodeModules = dirPathComponents.indexOf("node_modules" as Path);
-    if (indexOfNodeModules !== -1) {
+    const nodeModulesWatchLength = getDirectoryToWatchFailedLookupLocationNodeModules(dirPathComponents);
+    if (nodeModulesWatchLength !== undefined) {
         // If the directory is node_modules use it to watch, always watch it recursively
-        return canWatchDirectoryOrFile(dirPathComponents, indexOfNodeModules + 1) ?
-            getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, indexOfNodeModules + 1) :
+        return nodeModulesWatchLength ?
+            getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, nodeModulesWatchLength) :
             undefined;
     }
     // Use some ancestor of the root directory
