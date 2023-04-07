@@ -1,0 +1,53 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst03.ts ===
+// module m {
+//     export const x;
+//     export /*HIGHLIGHTS*/[|{| kind: "none" |}const|] enum E {
+//     }
+// }
+// 
+// export const x;
+// export const enum E {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst03.ts ===
+// module m {
+//     export const x;
+//     export const enum E {
+//     }
+// }
+// 
+// export const x;
+// export /*HIGHLIGHTS*/[|{| kind: "none" |}const|] enum E {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst03.ts ===
+// module m {
+//     export /*HIGHLIGHTS*/const x;
+//     export const enum E {
+//     }
+// }
+// 
+// export const x;
+// export const enum E {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst03.ts ===
+// module m {
+//     export const x;
+//     export const enum E {
+//     }
+// }
+// 
+// export /*HIGHLIGHTS*/const x;
+// export const enum E {
+// }

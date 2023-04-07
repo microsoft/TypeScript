@@ -61,4 +61,4 @@
 ////[|declare|] module dm { }
 ////export class EC { }
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

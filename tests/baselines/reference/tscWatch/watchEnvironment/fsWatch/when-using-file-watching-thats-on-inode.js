@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
@@ -116,6 +117,10 @@ FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
   {"inode":9}
 
+Before running Timeout callback:: count: 2
+4: timerToUpdateProgram
+5: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
@@ -202,6 +207,10 @@ FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
   {"inode":12}
 
+Before running Timeout callback:: count: 2
+9: timerToUpdateProgram
+10: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update

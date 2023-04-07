@@ -6,7 +6,7 @@ describe("unittests:: JSDocParsing", () => {
     describe("TypeExpressions", () => {
         function parsesCorrectly(name: string, content: string) {
             it(name, () => {
-                const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content, /*start*/ undefined, /*end*/ undefined);
+                const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content, /*start*/ undefined, /*length*/ undefined);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                 Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
@@ -16,7 +16,7 @@ describe("unittests:: JSDocParsing", () => {
 
         function parsesIncorrectly(name: string, content: string) {
             it(name, () => {
-                const type = ts.parseJSDocTypeExpressionForTests(content, /*start*/ undefined, /*end*/ undefined);
+                const type = ts.parseJSDocTypeExpressionForTests(content, /*start*/ undefined, /*length*/ undefined);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             });
         }
@@ -433,7 +433,7 @@ oh.no
     describe("getStart", () => {
         it("runs when node with JSDoc but no parent pointers", () => {
             const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ false);
-            root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+            root.statements[0].getStart(root, /*includeJsDocComment*/ true);
         });
     });
     describe("parseIsolatedJSDocComment", () => {

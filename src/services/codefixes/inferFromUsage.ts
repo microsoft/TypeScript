@@ -440,7 +440,7 @@ function tryReplaceImportTypeNodeWithAutoImport(
 ): boolean {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
-        forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
+        forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
         return true;
     }
     return false;
@@ -488,7 +488,7 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
     }
     else {
         const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
-            factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, /*comment*/ undefined));
+            factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined));
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }
 }

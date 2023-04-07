@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -193,6 +194,13 @@ export function createSomeObject(): SomeObject
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
@@ -331,6 +339,13 @@ export function createSomeObject(): SomeObject
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...

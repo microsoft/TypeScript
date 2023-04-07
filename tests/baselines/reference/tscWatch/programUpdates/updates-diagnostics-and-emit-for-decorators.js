@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -143,6 +144,9 @@ Input::
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
@@ -197,6 +201,9 @@ Input::
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...

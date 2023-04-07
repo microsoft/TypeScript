@@ -51,13 +51,13 @@ describe("Test Suite 1", () => {
             arguments: { file: unitTest1.path }
         });
         host.deleteFile(unitTest1.path);
-        host.checkTimeoutQueueLengthAndRun(0);
+        host.runQueuedTimeoutCallbacks();
 
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
             arguments: { file: unitTest1.path }
         });
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         const unitTest1WithChangedContent: File = {
             path: unitTest1.path,

@@ -4,4 +4,4 @@
 ////     class C { [/*start*/yield 10]() {} }
 //// }
 
-verify.goToDefinition("start", []);
+verify.baselineGoToDefinition("start");

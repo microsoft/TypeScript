@@ -8360,7 +8360,7 @@ declare namespace ts {
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
-    type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
+    type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
     interface Scanner {
         /** @deprecated use {@link getTokenFullStart} */
         getStartPos(): number;
@@ -8384,6 +8384,7 @@ declare namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+        /** @deprecated use {@link reScanTemplateToken}(false) */
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;

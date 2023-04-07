@@ -1,0 +1,45 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationEnum_00.ts ===
+// enum Foo {
+//     <|[|Foo1|] = function initializer() { return 5 } ()|>,
+//     Foo2 = 6
+// }
+// 
+// Foo.Fo/*GOTO IMPL*/o1;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo1",
+      "kind": "enumMemberName"
+     }
+    ],
+    "kind": "enum member"
+   }
+  ]

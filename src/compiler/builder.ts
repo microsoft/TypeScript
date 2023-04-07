@@ -1622,7 +1622,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
             }
             else {
                 // When whole program is affected, get all semantic diagnostics (eg when --out or --outFile is specified)
-                result = state.program.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken);
+                result = state.program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken);
                 state.changedFilesSet.clear();
                 state.programEmitPending = getBuilderFileEmit(state.compilerOptions);
             }

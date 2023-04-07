@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
@@ -731,9 +732,9 @@ Info 73   [00:02:49.000] response:
     }
 After request
 
-Before running timeout callbacks
+Before running Timeout callback:: count: 0
 
-After running timeout callbacks
+After running Timeout callback:: count: 0
 
 Before request
 

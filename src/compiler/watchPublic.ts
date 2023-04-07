@@ -803,7 +803,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
         const pending = clearInvalidateResolutionsOfFailedLookupLocations();
         writeLog(`Scheduling invalidateFailedLookup${pending ? ", Cancelled earlier one" : ""}`);
-        timerToInvalidateFailedLookupResolutions = host.setTimeout(invalidateResolutionsOfFailedLookup, 250);
+        timerToInvalidateFailedLookupResolutions = host.setTimeout(invalidateResolutionsOfFailedLookup, 250, "timerToInvalidateFailedLookupResolutions");
     }
 
     function invalidateResolutionsOfFailedLookup() {
@@ -825,7 +825,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             host.clearTimeout(timerToUpdateProgram);
         }
         writeLog("Scheduling update");
-        timerToUpdateProgram = host.setTimeout(updateProgramWithWatchStatus, 250);
+        timerToUpdateProgram = host.setTimeout(updateProgramWithWatchStatus, 250, "timerToUpdateProgram");
     }
 
     function scheduleProgramReload() {
@@ -1088,7 +1088,6 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateExtendedConfigFilesWatches(forProjectPath: Path, options: CompilerOptions | undefined, watchOptions: WatchOptions | undefined, watchType: WatchTypeRegistry["ExtendedConfigFile"] | WatchTypeRegistry["ExtendedConfigOfReferencedProject"]) {
-        Debug.assert(configFileName);
         updateSharedExtendedConfigFileWatcher(
             forProjectPath,
             options,
@@ -1104,7 +1103,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
                     // If there are no referenced projects this extended config file watcher depend on ignore
                     if (!projects?.size) return;
                     projects.forEach(projectPath => {
-                        if (toPath(configFileName) === projectPath) {
+                        if (configFileName && toPath(configFileName) === projectPath) {
                             // If this is the config file of the project, reload completely
                             reloadLevel = ConfigFileProgramReloadLevel.Full;
                         }

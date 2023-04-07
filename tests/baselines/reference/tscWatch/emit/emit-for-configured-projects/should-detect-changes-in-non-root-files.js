@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -98,6 +99,9 @@ Input::
 export var T: number;export function Foo() { };
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -142,6 +146,9 @@ Input::
 export var T: number;export function Foo() { };var T1: number;
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...

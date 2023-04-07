@@ -9,11 +9,10 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
+    logDiagnostics,
     Logger,
     openFilesForSession,
     TestProjectService,
@@ -78,9 +77,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     }
 
     function logSemanticDiagnostics(projectService: TestProjectService, project: ts.server.Project, file: File) {
-        const diags = project.getLanguageService().getSemanticDiagnostics(file.path);
-        projectService.logger.info(`getSemanticDiagnostics:: ${file.path}:: ${diags.length}`);
-        diags.forEach(d => projectService.logger.info(ts.formatDiagnostic(d, project)));
+        logDiagnostics(
+            projectService,
+            `getSemanticDiagnostics:: ${file.path}`,
+            project,
+            project.getLanguageService().getSemanticDiagnostics(file.path),
+        );
     }
 
     it("works using legacy resolution logic", () => {
@@ -335,25 +337,24 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
             const files = [file1, file2, tsconfig, libFile];
             const host = createServerHost(files);
-            const service = createProjectService(host);
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(file1.path);
 
             const project = service.configuredProjects.get(tsconfig.path)!;
-            checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+            logSemanticDiagnostics(service, project, file1);
+            logSemanticDiagnostics(service, project, file2);
 
             const debugTypesFile: File = {
                 path: `${projectLocation}/node_modules/debug/index.d.ts`,
                 content: "export {}"
             };
-            files.push(debugTypesFile);
             host.writeFile(debugTypesFile.path, debugTypesFile.content);
             host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
             host.runQueuedTimeoutCallbacks(); // Actual update
-            checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
+
+            logSemanticDiagnostics(service, project, file1);
+            logSemanticDiagnostics(service, project, file2);
+            baselineTsserverLogs("cachingFileSystemInformation", `includes the parent folder FLLs in ${resolution} module resolution mode`, service);
         }
 
         it("Includes the parent folder FLLs in node module resolution mode", () => {
@@ -429,7 +430,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib" },
                 { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js", content: "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _ponyfill = require('./ponyfill');\n\nvar _ponyfill2 = _interopRequireDefault(_ponyfill);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }\n\nvar root; /* global window */\n\n\nif (typeof self !== 'undefined') {\n  root = self;\n} else if (typeof window !== 'undefined') {\n  root = window;\n} else if (typeof global !== 'undefined') {\n  root = global;\n} else if (typeof module !== 'undefined') {\n  root = module;\n} else {\n  root = Function('return this')();\n}\n\nvar result = (0, _ponyfill2['default'])(root);\nexports['default'] = result;" },
             ].map(getRootedFileOrFolder);
-            verifyAfterPartialOrCompleteNpmInstall(2);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             filesAndFoldersToAdd.push(...[
                 { path: "/a/b/node_modules/.staging/typescript-8493ea5d/lib" },
@@ -439,12 +440,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594", content: "" }
             ].map(getRootedFileOrFolder));
             // Since we added/removed in .staging no timeout
-            verifyAfterPartialOrCompleteNpmInstall(0);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             // Remove file "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594"
             host.deleteFile(ts.last(filesAndFoldersToAdd).path);
             filesAndFoldersToAdd.length--;
-            verifyAfterPartialOrCompleteNpmInstall(0);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             filesAndFoldersToAdd.push(...[
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61/bundles" },
@@ -452,7 +453,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61/src/add/observable/dom" },
                 { path: "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts", content: "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}" }
             ].map(getRootedFileOrFolder));
-            verifyAfterPartialOrCompleteNpmInstall(0);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             filesAndFoldersToAdd.push(...[
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61/src/scheduler" },
@@ -461,7 +462,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61/testing" },
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041", content: "{\n  \"_args\": [\n    [\n      {\n        \"raw\": \"rxjs@^5.4.2\",\n        \"scope\": null,\n        \"escapedName\": \"rxjs\",\n        \"name\": \"rxjs\",\n        \"rawSpec\": \"^5.4.2\",\n        \"spec\": \">=5.4.2 <6.0.0\",\n        \"type\": \"range\"\n      },\n      \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\"\n    ]\n  ],\n  \"_from\": \"rxjs@>=5.4.2 <6.0.0\",\n  \"_id\": \"rxjs@5.4.3\",\n  \"_inCache\": true,\n  \"_location\": \"/rxjs\",\n  \"_nodeVersion\": \"7.7.2\",\n  \"_npmOperationalInternal\": {\n    \"host\": \"s3://npm-registry-packages\",\n    \"tmp\": \"tmp/rxjs-5.4.3.tgz_1502407898166_0.6800217325799167\"\n  },\n  \"_npmUser\": {\n    \"name\": \"blesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"_npmVersion\": \"5.3.0\",\n  \"_phantomChildren\": {},\n  \"_requested\": {\n    \"raw\": \"rxjs@^5.4.2\",\n    \"scope\": null,\n    \"escapedName\": \"rxjs\",\n    \"name\": \"rxjs\",\n    \"rawSpec\": \"^5.4.2\",\n    \"spec\": \">=5.4.2 <6.0.0\",\n    \"type\": \"range\"\n  },\n  \"_requiredBy\": [\n    \"/\"\n  ],\n  \"_resolved\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\",\n  \"_shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n  \"_shrinkwrap\": null,\n  \"_spec\": \"rxjs@^5.4.2\",\n  \"_where\": \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\",\n  \"author\": {\n    \"name\": \"Ben Lesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/ReactiveX/RxJS/issues\"\n  },\n  \"config\": {\n    \"commitizen\": {\n      \"path\": \"cz-conventional-changelog\"\n    }\n  },\n  \"contributors\": [\n    {\n      \"name\": \"Ben Lesh\",\n      \"email\": \"ben@benlesh.com\"\n    },\n    {\n      \"name\": \"Paul Taylor\",\n      \"email\": \"paul.e.taylor@me.com\"\n    },\n    {\n      \"name\": \"Jeff Cross\",\n      \"email\": \"crossj@google.com\"\n    },\n    {\n      \"name\": \"Matthew Podwysocki\",\n      \"email\": \"matthewp@microsoft.com\"\n    },\n    {\n      \"name\": \"OJ Kwon\",\n      \"email\": \"kwon.ohjoong@gmail.com\"\n    },\n    {\n      \"name\": \"Andre Staltz\",\n      \"email\": \"andre@staltz.com\"\n    }\n  ],\n  \"dependencies\": {\n    \"symbol-observable\": \"^1.0.1\"\n  },\n  \"description\": \"Reactive Extensions for modern JavaScript\",\n  \"devDependencies\": {\n    \"babel-polyfill\": \"^6.23.0\",\n    \"benchmark\": \"^2.1.0\",\n    \"benchpress\": \"2.0.0-beta.1\",\n    \"chai\": \"^3.5.0\",\n    \"color\": \"^0.11.1\",\n    \"colors\": \"1.1.2\",\n    \"commitizen\": \"^2.8.6\",\n    \"coveralls\": \"^2.11.13\",\n    \"cz-conventional-changelog\": \"^1.2.0\",\n    \"danger\": \"^1.1.0\",\n    \"doctoc\": \"^1.0.0\",\n    \"escape-string-regexp\": \"^1.0.5 \",\n    \"esdoc\": \"^0.4.7\",\n    \"eslint\": \"^3.8.0\",\n    \"fs-extra\": \"^2.1.2\",\n    \"get-folder-size\": \"^1.0.0\",\n    \"glob\": \"^7.0.3\",\n    \"gm\": \"^1.22.0\",\n    \"google-closure-compiler-js\": \"^20170218.0.0\",\n    \"gzip-size\": \"^3.0.0\",\n    \"http-server\": \"^0.9.0\",\n    \"husky\": \"^0.13.3\",\n    \"lint-staged\": \"3.2.5\",\n    \"lodash\": \"^4.15.0\",\n    \"madge\": \"^1.4.3\",\n    \"markdown-doctest\": \"^0.9.1\",\n    \"minimist\": \"^1.2.0\",\n    \"mkdirp\": \"^0.5.1\",\n    \"mocha\": \"^3.0.2\",\n    \"mocha-in-sauce\": \"0.0.1\",\n    \"npm-run-all\": \"^4.0.2\",\n    \"npm-scripts-info\": \"^0.3.4\",\n    \"nyc\": \"^10.2.0\",\n    \"opn-cli\": \"^3.1.0\",\n    \"platform\": \"^1.3.1\",\n    \"promise\": \"^7.1.1\",\n    \"protractor\": \"^3.1.1\",\n    \"rollup\": \"0.36.3\",\n    \"rollup-plugin-inject\": \"^2.0.0\",\n    \"rollup-plugin-node-resolve\": \"^2.0.0\",\n    \"rx\": \"latest\",\n    \"rxjs\": \"latest\",\n    \"shx\": \"^0.2.2\",\n    \"sinon\": \"^2.1.0\",\n    \"sinon-chai\": \"^2.9.0\",\n    \"source-map-support\": \"^0.4.0\",\n    \"tslib\": \"^1.5.0\",\n    \"eslint\": \"^5.16.0\",\n    \"typescript\": \"~2.0.6\",\n    \"typings\": \"^2.0.0\",\n    \"validate-commit-msg\": \"^2.14.0\",\n    \"watch\": \"^1.0.1\",\n    \"webpack\": \"^1.13.1\",\n    \"xmlhttprequest\": \"1.8.0\"\n  },\n  \"directories\": {},\n  \"dist\": {\n    \"integrity\": \"sha512-fSNi+y+P9ss+EZuV0GcIIqPUK07DEaMRUtLJvdcvMyFjc9dizuDjere+A4V7JrLGnm9iCc+nagV/4QdMTkqC4A==\",\n    \"shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n    \"tarball\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\"\n  },\n  \"engines\": {\n    \"npm\": \">=2.0.0\"\n  },\n  \"homepage\": \"https://github.com/ReactiveX/RxJS\",\n  \"keywords\": [\n    \"Rx\",\n    \"RxJS\",\n    \"ReactiveX\",\n    \"ReactiveExtensions\",\n    \"Streams\",\n    \"Observables\",\n    \"Observable\",\n    \"Stream\",\n    \"ES6\",\n    \"ES2015\"\n  ],\n  \"license\": \"Apache-2.0\",\n  \"lint-staged\": {\n    \"*.@(js)\": [\n      \"eslint --fix\",\n      \"git add\"\n    ],\n    \"*.@(ts)\": [\n      \"eslint -c .eslintrc --ext .ts . --fix\",\n      \"git add\"\n    ]\n  },\n  \"main\": \"Rx.js\",\n  \"maintainers\": [\n    {\n      \"name\": \"blesh\",\n      \"email\": \"ben@benlesh.com\"\n    }\n  ],\n  \"name\": \"rxjs\",\n  \"optionalDependencies\": {},\n  \"readme\": \"ERROR: No README data found!\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+ssh://git@github.com/ReactiveX/RxJS.git\"\n  },\n  \"scripts-info\": {\n    \"info\": \"List available script\",\n    \"build_all\": \"Build all packages (ES6, CJS, UMD) and generate packages\",\n    \"build_cjs\": \"Build CJS package with clean up existing build, copy source into dist\",\n    \"build_es6\": \"Build ES6 package with clean up existing build, copy source into dist\",\n    \"build_closure_core\": \"Minify Global core build using closure compiler\",\n    \"build_global\": \"Build Global package, then minify build\",\n    \"build_perf\": \"Build CJS & Global build, run macro performance test\",\n    \"build_test\": \"Build CJS package & test spec, execute mocha test runner\",\n    \"build_cover\": \"Run lint to current code, build CJS & test spec, execute test coverage\",\n    \"build_docs\": \"Build ES6 & global package, create documentation using it\",\n    \"build_spec\": \"Build test specs\",\n    \"check_circular_dependencies\": \"Check codebase has circular dependencies\",\n    \"clean_spec\": \"Clean up existing test spec build output\",\n    \"clean_dist_cjs\": \"Clean up existing CJS package output\",\n    \"clean_dist_es6\": \"Clean up existing ES6 package output\",\n    \"clean_dist_global\": \"Clean up existing Global package output\",\n    \"commit\": \"Run git commit wizard\",\n    \"compile_dist_cjs\": \"Compile codebase into CJS module\",\n    \"compile_module_es6\": \"Compile codebase into ES6\",\n    \"cover\": \"Execute test coverage\",\n    \"lint_perf\": \"Run lint against performance test suite\",\n    \"lint_spec\": \"Run lint against test spec\",\n    \"lint_src\": \"Run lint against source\",\n    \"lint\": \"Run lint against everything\",\n    \"perf\": \"Run macro performance benchmark\",\n    \"perf_micro\": \"Run micro performance benchmark\",\n    \"test_mocha\": \"Execute mocha test runner against existing test spec build\",\n    \"test_browser\": \"Execute mocha test runner on browser against existing test spec build\",\n    \"test\": \"Clean up existing test spec build, build test spec and execute mocha test runner\",\n    \"tests2png\": \"Generate marble diagram image from test spec\",\n    \"watch\": \"Watch codebase, trigger compile when source code changes\"\n  },\n  \"typings\": \"Rx.d.ts\",\n  \"version\": \"5.4.3\"\n}\n" }
             ].map(getRootedFileOrFolder));
-            verifyAfterPartialOrCompleteNpmInstall(0);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             // remove /a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041
             host.deleteFile(ts.last(filesAndFoldersToAdd).path);
@@ -477,7 +478,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.bin" }
             ].map(getRootedFileOrFolder));
             // From the type root update
-            verifyAfterPartialOrCompleteNpmInstall(2);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             ts.forEach(filesAndFoldersToAdd, f => {
                 f.path = f.path
@@ -488,7 +489,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             host.deleteFolder(root + "/a/b/node_modules/.staging", /*recursive*/ true);
             // npm installation complete, timeout after reload fs
             npmInstallComplete = true;
-            verifyAfterPartialOrCompleteNpmInstall(2);
+            verifyAfterPartialOrCompleteNpmInstall();
 
             baselineTsserverLogs(
                 "cachingFileSystemInformation",
@@ -496,20 +497,14 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 projectService
             );
 
-            function verifyAfterPartialOrCompleteNpmInstall(timeoutQueueLengthWhenRunningTimeouts: number) {
+            function verifyAfterPartialOrCompleteNpmInstall() {
                 filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                 if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                    if (timeoutQueueLengthWhenRunningTimeouts) {
-                        // Expected project update
-                        host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
-                        host.runQueuedTimeoutCallbacks(); // Actual update
-                    }
-                    else {
-                        host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
-                    }
+                    host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                    host.runQueuedTimeoutCallbacks(); // Actual update
                 }
                 else {
-                    host.checkTimeoutQueueLength(3);
+                    projectService.testhost.logTimeoutQueueLength();
                 }
             }
         }
@@ -535,18 +530,16 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
         const files = [app, tsconfig, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(app.path);
 
         const project = service.configuredProjects.get(tsconfig.path)!;
-        checkProjectActualFiles(project, files.map(f => f.path));
-        assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+        logSemanticDiagnostics(service, project, app);
 
         const debugTypesFile: File = {
             path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
             content: "export {}"
         };
-        files.push(debugTypesFile);
         // Do not invoke recursive directory watcher for anything other than node_module/@types
         const invoker = host.invokeFsWatchesRecursiveCallbacks;
         host.invokeFsWatchesRecursiveCallbacks = (fullPath, eventName, entryFullPath) => {
@@ -556,8 +549,8 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         host.writeFile(debugTypesFile.path, debugTypesFile.content);
         host.runQueuedTimeoutCallbacks();
-        checkProjectActualFiles(project, files.map(f => f.path));
-        assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
+        logSemanticDiagnostics(service, project, app);
+        baselineTsserverLogs("cachingFileSystemInformation", "when node_modules dont receive event for the @types file addition", service);
     });
 
     it("when creating new file in symlinked folder", () => {
@@ -584,14 +577,10 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             })
         };
         const host = createServerHost([module1, module2, symlink, config, libFile]);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(`${symlink.path}/module2.ts`);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = ts.Debug.checkDefined(service.configuredProjects.get(config.path));
-        checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path]);
         host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);
         host.runQueuedTimeoutCallbacks();
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path, `${symlink.path}/module3.ts`]);
+        baselineTsserverLogs("cachingFileSystemInformation", "when creating new file in symlinked folder", service);
     });
 });

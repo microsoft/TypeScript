@@ -1,3 +1,4 @@
+
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
@@ -11,12 +12,10 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
+    openExternalProjectForSession,
     openFilesForSession,
     TestTypingsInstaller,
     toExternalFiles,
@@ -68,27 +67,21 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watchin
             })
         };
         const host = createServerHost([f1, t1, tsconfig]);
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         projectService.openClientFile(f1.path);
-        projectService.checkNumberOfProjects({ configuredProjects: 1 });
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t1.path, tsconfig.path]);
 
         // delete t1
         host.deleteFile(t1.path);
         // run throttled operation
         host.runQueuedTimeoutCallbacks();
 
-        projectService.checkNumberOfProjects({ configuredProjects: 1 });
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
-
         // create t2
         host.writeFile(t2.path, t2.content);
         // run throttled operation
         host.runQueuedTimeoutCallbacks();
 
-        projectService.checkNumberOfProjects({ configuredProjects: 1 });
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t2.path, tsconfig.path]);
+        baselineTsserverLogs("resolutionCache", "works correctly when typings are added or removed", projectService);
     });
 });
 
@@ -145,7 +138,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             }
         });
 
-        verifyGetErrRequest({ session, host, files: [file1] });
+        verifyGetErrRequest({ session, files: [file1] });
 
         const padIndex: File = {
             path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
@@ -173,8 +166,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: { file: file.path, fileContent: file.content },
         });
 
-        host.checkTimeoutQueueLength(0);
-        verifyGetErrRequest({ session, host, files: [file] });
+        verifyGetErrRequest({ session, files: [file] });
         baselineTsserverLogs("resolutionCache", `suggestion diagnostics`, session);
     });
 
@@ -199,8 +191,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             },
         });
 
-        host.checkTimeoutQueueLength(0);
-        verifyGetErrRequest({ session, host, files: [file], skip: [{ suggestion: true }] });
+        verifyGetErrRequest({ session, files: [file], skip: [{ suggestion: true }] });
         baselineTsserverLogs("resolutionCache", `disable suggestion diagnostics`, session);
     });
 
@@ -218,7 +209,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: { file: file.path, fileContent: file.content },
         });
 
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
@@ -227,7 +218,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             }
         });
 
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
             command: ts.server.protocol.CommandTypes.GeterrForProject,
             arguments: {
@@ -236,7 +227,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             }
         });
 
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
     });
 });
@@ -335,15 +326,14 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         };
         const projectName = "project1";
         const host = createServerHost([f1]);
-        const projectService = createProjectService(host);
-        projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openExternalProjectForSession({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName }, session);
 
         // should have one external project since config file is missing
-        projectService.checkNumberOfProjects({ externalProjects: 1 });
 
         host.writeFile(config.path, config.content);
-        projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
-        projectService.checkNumberOfProjects({ configuredProjects: 1 });
+        openExternalProjectForSession({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName }, session);
+        baselineTsserverLogs("resolutionCache", "should property handle missing config files", session);
     });
 
     describe("types from config file", () => {
@@ -591,15 +581,13 @@ export const x = 10;`
         it("when watching node_modules in inferred project for failed lookup/closed script infos", () => {
             const files = [libFile, file1, file2];
             const host = createServerHost(files);
-            const service = createProjectService(host);
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(file1.path);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, files.map(f => f.path));
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
 
             host.ensureFileOrFolder(npmCacheFile);
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
+            baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup/closed script infos", service);
         });
         it("when watching node_modules as part of wild card directories in config project", () => {
             const config: File = {
@@ -608,15 +596,13 @@ export const x = 10;`
             };
             const files = [libFile, file1, file2, config];
             const host = createServerHost(files);
-            const service = createProjectService(host);
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(file1.path);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            const project = ts.Debug.checkDefined(service.configuredProjects.get(config.path));
-            checkProjectActualFiles(project, files.map(f => f.path));
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
 
             host.ensureFileOrFolder(npmCacheFile);
-            host.checkTimeoutQueueLength(0);
+            service.testhost.logTimeoutQueueLength();
+            baselineTsserverLogs("resolutionCache", "when watching node_modules as part of wild card directories in config project", service);
         });
     });
 
@@ -635,7 +621,7 @@ export const x = 10;`
 
             // invoke callback to simulate saving
             host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("resolutionCache", "avoid unnecessary lookup invalidation on save", service);
         });
     });

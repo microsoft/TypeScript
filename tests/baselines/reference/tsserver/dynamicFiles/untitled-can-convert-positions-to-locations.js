@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/proj/a.ts]
@@ -137,6 +138,7 @@ FsWatchesRecursive::
 /proj:
   {}
 
+/proj/untitled:^untitled-1 isDynamic:: true
 Before request
 
 Info 31   [00:00:57.000] request:

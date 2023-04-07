@@ -1658,7 +1658,7 @@ function parseJsonTextWorker(fileName: string, sourceText: string, languageVersi
     }
 
     // Set source file so that errors will be reported with this file name
-    const sourceFile = createSourceFileWorker(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken, sourceFlags, noop);
+    const sourceFile = createSourceFileWorker(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclarationFile*/ false, statements, endOfFileToken, sourceFlags, noop);
 
     if (setParentNodes) {
         fixupParentReferences(sourceFile);
@@ -2102,8 +2102,8 @@ function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, ...args
     parseErrorAt(range.pos, range.end, message, ...args);
 }
 
-function scanError(message: DiagnosticMessage, length: number): void {
-    parseErrorAtPosition(scanner.getTokenEnd(), length, message);
+function scanError(message: DiagnosticMessage, length: number, arg0?: any): void {
+    parseErrorAtPosition(scanner.getTokenEnd(), length, message, arg0);
 }
 
 function getNodePos(): number {
@@ -2160,10 +2160,6 @@ function reScanSlashToken(): SyntaxKind {
 
 function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
     return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
-}
-
-function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-    return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
 }
 
 function reScanLessThanToken(): SyntaxKind {
@@ -3475,7 +3471,7 @@ function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: Diagno
         entity = finishNode(
             factory.createQualifiedName(
                 entity,
-                parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
+                parseRightSideOfDot(allowReservedWords, /*allowPrivateIdentifiers*/ false) as Identifier
             ),
             pos
         );
@@ -3610,8 +3606,8 @@ function parseLiteralNode(): LiteralExpression {
 }
 
 function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
-    if (isTaggedTemplate) {
-        reScanTemplateHeadOrNoSubstitutionTemplate();
+    if (!isTaggedTemplate && scanner.getTokenFlags() & TokenFlags.IsInvalid) {
+        reScanTemplateToken(/*isTaggedTemplate*/ false);
     }
     const fragment = parseLiteralLikeNode(token());
     Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
@@ -3634,7 +3630,6 @@ function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
     const pos = getNodePos();
     const node =
         isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, scanner.getTokenValue(), getTemplateLiteralRawText(kind), scanner.getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags) :
-        // Octal literals are not allowed in strict mode or ES5
         // Note that theoretically the following condition would hold true literals like 009,
         // which is not octal. But because of how the scanner separates the tokens, we would
         // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
@@ -5673,7 +5668,7 @@ function parseSimpleUnaryExpression(): UnaryExpression {
             // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
             // in JSX and we see an expression like "+ <foo> bar".
             if (languageVariant === LanguageVariant.JSX) {
-                return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
+                return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, /*topInvalidNodePosition*/ undefined, /*openingTag*/ undefined, /*mustBeUnary*/ true);
             }
             // This is modified UnaryExpression grammar in TypeScript
             //  UnaryExpression (modified):
@@ -5900,7 +5895,7 @@ function parseSuperExpression(): MemberExpression {
     return finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
 }
 
-function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
+function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment, mustBeUnary = false): JsxElement | JsxSelfClosingElement | JsxFragment {
     const pos = getNodePos();
     const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
     let result: JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -5957,7 +5952,9 @@ function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: bool
     // does less damage and we can report a better error.
     // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
     // of one sort or another.
-    if (inExpressionContext && token() === SyntaxKind.LessThanToken) {
+    // If we are in a unary context, we can't do this recovery; the binary expression we return here is not
+    // a valid UnaryExpression and will cause problems later.
+    if (!mustBeUnary && inExpressionContext && token() === SyntaxKind.LessThanToken) {
         const topBadPos = typeof topInvalidNodePosition === "undefined" ? result.pos : topInvalidNodePosition;
         const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, topBadPos));
         if (invalidElement) {
@@ -5990,7 +5987,7 @@ function parseJsxChild(openingTag: JsxOpeningElement | JsxOpeningFragment, token
                 // We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
                 // or to cover only 'Foo' in < Foo >
                 const tag = openingTag.tagName;
-                const start = skipTrivia(sourceText, tag.pos);
+                const start = Math.min(skipTrivia(sourceText, tag.pos), tag.end);
                 parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
             }
             return undefined;
@@ -6062,7 +6059,7 @@ function parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContex
     }
     else {
         parseExpected(SyntaxKind.SlashToken);
-        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
             // manually advance the scanner in order to look for jsx text inside jsx
             if (inExpressionContext) {
                 nextToken();
@@ -6112,7 +6109,7 @@ function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undef
         parseExpected(SyntaxKind.CloseBraceToken);
     }
     else {
-        if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+        if (parseExpected(SyntaxKind.CloseBraceToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
             scanJsxText();
         }
     }
@@ -6159,7 +6156,7 @@ function parseJsxClosingElement(open: JsxOpeningElement, inExpressionContext: bo
     const pos = getNodePos();
     parseExpected(SyntaxKind.LessThanSlashToken);
     const tagName = parseJsxElementName();
-    if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+    if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnosticMessage*/ undefined, /*shouldAdvance*/ false)) {
         // manually advance the scanner in order to look for jsx text inside jsx
         if (inExpressionContext || !tagNamesAreEquivalent(open.tagName, tagName)) {
             nextToken();
@@ -6325,7 +6322,7 @@ function parseTaggedTemplateRest(pos: number, tag: LeftHandSideExpression, quest
         tag,
         typeArguments,
         token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
-            (reScanTemplateHeadOrNoSubstitutionTemplate(), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
+            (reScanTemplateToken(/*isTaggedTemplate*/ true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
             parseTemplateExpression(/*isTaggedTemplate*/ true)
     );
     if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
@@ -6425,10 +6422,14 @@ function canFollowTypeArgumentsInExpression(): boolean {
 
 function parsePrimaryExpression(): PrimaryExpression {
     switch (token()) {
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            if (scanner.getTokenFlags() & TokenFlags.IsInvalid) {
+                reScanTemplateToken(/*isTaggedTemplate*/ false);
+            }
+        // falls through
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.BigIntLiteral:
         case SyntaxKind.StringLiteral:
-        case SyntaxKind.NoSubstitutionTemplateLiteral:
             return parseLiteralNode();
         case SyntaxKind.ThisKeyword:
         case SyntaxKind.SuperKeyword:
@@ -6466,7 +6467,7 @@ function parsePrimaryExpression(): PrimaryExpression {
             }
             break;
         case SyntaxKind.TemplateHead:
-            return parseTemplateExpression(/* isTaggedTemplate */ false);
+            return parseTemplateExpression(/*isTaggedTemplate*/ false);
         case SyntaxKind.PrivateIdentifier:
             return parsePrivateIdentifier();
     }
@@ -8449,7 +8450,7 @@ const enum Tristate {
 
 /** @internal */
 export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
-    initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+    initializeState("file.js", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS);
     scanner.setText(content, start, length);
     currentToken = scanner.scan();
     const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -8482,7 +8483,7 @@ function parseJSDocNameReference(): JSDocNameReference {
     const pos = getNodePos();
     const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
     const p2 = getNodePos();
-    let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
+    let entityName: EntityName | JSDocMemberName = parseEntityName(/*allowReservedWords*/ false);
     while (token() === SyntaxKind.PrivateIdentifier) {
         reScanHashToken(); // rescan #id as # id
         nextTokenJSDoc(); // then skip the #
@@ -8498,7 +8499,7 @@ function parseJSDocNameReference(): JSDocNameReference {
 }
 
 function parseIsolatedJSDocCommentWorker(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
-    initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+    initializeState("", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS);
     const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
     const sourceFile = { languageVariant: LanguageVariant.Standard, text: content } as SourceFile;

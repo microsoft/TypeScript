@@ -540,7 +540,7 @@ export class ScriptInfo {
             }
             const existingRoot = p.getRootFilesMap().get(this.path);
             // detach is unnecessary since we'll clean the list of containing projects anyways
-            p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
+            p.removeFile(this, /*fileExists*/ false, /*detachFromProject*/ false);
             p.onFileAddedOrRemoved(this.isSymlink());
             // If the info was for the external or configured project's root,
             // add missing file as the root
