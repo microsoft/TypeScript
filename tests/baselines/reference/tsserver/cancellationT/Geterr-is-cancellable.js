@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/app.ts]
 let x = 1
@@ -8,7 +8,7 @@ let x = 1
 {"compilerOptions":{}}
 
 
-Info 1    [00:00:10.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -17,11 +17,11 @@ Info 1    [00:00:10.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:11.000] Search path: /a
-Info 3    [00:00:12.000] For info: /a/app.ts :: Config file name: /a/tsconfig.json
-Info 4    [00:00:13.000] Creating configuration project /a/tsconfig.json
-Info 5    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
-Info 6    [00:00:15.000] Config: /a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /a
+Info seq  [hh:mm:ss:mss] For info: /a/app.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
  "rootNames": [
   "/a/app.ts"
  ],
@@ -29,31 +29,31 @@ Info 6    [00:00:15.000] Config: /a/tsconfig.json : {
   "configFilePath": "/a/tsconfig.json"
  }
 }
-Info 7    [00:00:16.000] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:18.000] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info 10   [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info 11   [00:00:20.000] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Info 12   [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Info 13   [00:00:22.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 14   [00:00:23.000] Project '/a/tsconfig.json' (Configured)
-Info 15   [00:00:24.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.ts SVC-1-0 "let x = 1"
 
 
 	app.ts
 	  Matched by default include pattern '**/*'
 
-Info 16   [00:00:25.000] -----------------------------------------------
-Info 17   [00:00:26.000] Project '/a/tsconfig.json' (Configured)
-Info 17   [00:00:27.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 17   [00:00:28.000] -----------------------------------------------
-Info 17   [00:00:29.000] Open files: 
-Info 17   [00:00:30.000] 	FileName: /a/app.ts ProjectRootPath: undefined
-Info 17   [00:00:31.000] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 TestServerCancellationToken:: resetRequest:: 1 is as expected
-Info 17   [00:00:32.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -75,7 +75,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 18   [00:00:33.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -88,7 +88,7 @@ Info 18   [00:00:33.000] request:
       "type": "request"
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
-Info 19   [00:00:34.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -97,14 +97,14 @@ After request
 Before running Timeout callback:: count: 1
 1: checkOne
 
-Info 20   [00:00:35.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Timeout callback:: count: 0
 
 Before request
 
-Info 21   [00:00:36.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -117,7 +117,7 @@ Info 21   [00:00:36.000] request:
       "type": "request"
     }
 TestServerCancellationToken:: resetRequest:: 3 is as expected
-Info 22   [00:00:37.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -125,7 +125,7 @@ After request
 
 Before request
 
-Info 23   [00:00:38.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "projectInfo",
       "arguments": {
@@ -136,7 +136,7 @@ Info 23   [00:00:38.000] request:
       "type": "request"
     }
 TestServerCancellationToken:: resetRequest:: 4 is as expected
-Info 24   [00:00:39.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/a/tsconfig.json",
@@ -151,14 +151,14 @@ Before running Timeout callback:: count: 1
 2: checkOne
 
 TestServerCancellationToken:: Cancellation is requested
-Info 25   [00:00:40.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 TestServerCancellationToken:: resetRequest:: 3 is as expected
 After running Timeout callback:: count: 0
 
 Before request
 
-Info 26   [00:00:41.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -171,7 +171,7 @@ Info 26   [00:00:41.000] request:
       "type": "request"
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
-Info 27   [00:00:42.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -180,7 +180,7 @@ After request
 Before running Timeout callback:: count: 1
 3: checkOne
 
-Info 28   [00:00:43.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Timeout callback:: count: 0
@@ -190,14 +190,14 @@ Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 TestServerCancellationToken:: Cancellation is requested
-Info 29   [00:00:44.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Immedidate callback:: count: 0
 
 Before request
 
-Info 30   [00:00:45.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -210,7 +210,7 @@ Info 30   [00:00:45.000] request:
       "type": "request"
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
-Info 31   [00:00:46.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -219,7 +219,7 @@ After request
 Before running Timeout callback:: count: 1
 4: checkOne
 
-Info 32   [00:00:47.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Timeout callback:: count: 0
@@ -227,7 +227,7 @@ After running Timeout callback:: count: 0
 Before running Immedidate callback:: count: 1
 2: semanticCheck
 
-Info 33   [00:00:48.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 1
@@ -236,16 +236,16 @@ After running Immedidate callback:: count: 1
 Before running Immedidate callback:: count: 1
 3: suggestionCheck
 
-Info 34   [00:00:49.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
-Info 35   [00:00:50.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 0
 
 Before request
 
-Info 36   [00:00:51.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -258,7 +258,7 @@ Info 36   [00:00:51.000] request:
       "type": "request"
     }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
-Info 37   [00:00:52.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -267,14 +267,14 @@ After request
 Before running Timeout callback:: count: 1
 5: checkOne
 
-Info 38   [00:00:53.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
 TestServerCancellationToken:: resetRequest:: 7 is as expected
 After running Timeout callback:: count: 0
 
 Before request
 
-Info 39   [00:00:54.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -286,10 +286,10 @@ Info 39   [00:00:54.000] request:
       "seq": 8,
       "type": "request"
     }
-Info 40   [00:00:55.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
 TestServerCancellationToken:: resetRequest:: 8 is as expected
-Info 41   [00:00:56.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }

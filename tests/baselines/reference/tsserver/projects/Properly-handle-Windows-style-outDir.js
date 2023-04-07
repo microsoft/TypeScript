@@ -1,5 +1,5 @@
 currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info 0    [00:00:09.000] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [C:/a/f1.ts]
 let x = 1;
@@ -8,11 +8,11 @@ let x = 1;
 {"compilerOptions":{"outDir":"C:\\a\\b"},"include":["*.ts"]}
 
 
-Info 1    [00:00:10.000] Search path: C:/a
-Info 2    [00:00:11.000] For info: C:/a/f1.ts :: Config file name: C:/a/tsconfig.json
-Info 3    [00:00:12.000] Creating configuration project C:/a/tsconfig.json
-Info 4    [00:00:13.000] FileWatcher:: Added:: WatchInfo: C:/a/tsconfig.json 2000 undefined Project: C:/a/tsconfig.json WatchType: Config file
-Info 5    [00:00:14.000] Config: C:/a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: C:/a
+Info seq  [hh:mm:ss:mss] For info: C:/a/f1.ts :: Config file name: C:/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project C:/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/tsconfig.json 2000 undefined Project: C:/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: C:/a/tsconfig.json : {
  "rootNames": [
   "C:/a/f1.ts"
  ],
@@ -21,26 +21,26 @@ Info 5    [00:00:14.000] Config: C:/a/tsconfig.json : {
   "configFilePath": "C:/a/tsconfig.json"
  }
 }
-Info 6    [00:00:15.000] DirectoryWatcher:: Added:: WatchInfo: c:/a 0 undefined Config: C:/a/tsconfig.json WatchType: Wild card directory
-Info 7    [00:00:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/a 0 undefined Config: C:/a/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:17.000] Starting updateGraphWorker: Project: C:/a/tsconfig.json
-Info 9    [00:00:18.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined Project: C:/a/tsconfig.json WatchType: Missing file
-Info 10   [00:00:19.000] DirectoryWatcher:: Added:: WatchInfo: C:/a/node_modules/@types 1 undefined Project: C:/a/tsconfig.json WatchType: Type roots
-Info 11   [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: C:/a/node_modules/@types 1 undefined Project: C:/a/tsconfig.json WatchType: Type roots
-Info 12   [00:00:21.000] Finishing updateGraphWorker: Project: C:/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 13   [00:00:22.000] Project 'C:/a/tsconfig.json' (Configured)
-Info 14   [00:00:23.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/a 0 undefined Config: C:/a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/a 0 undefined Config: C:/a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: C:/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined Project: C:/a/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: C:/a/node_modules/@types 1 undefined Project: C:/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: C:/a/node_modules/@types 1 undefined Project: C:/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: C:/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project 'C:/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	C:/a/f1.ts SVC-1-0 "let x = 1;"
 
 
 	f1.ts
 	  Matched by include pattern '*.ts' in 'tsconfig.json'
 
-Info 15   [00:00:24.000] -----------------------------------------------
-Info 16   [00:00:25.000] Project 'C:/a/tsconfig.json' (Configured)
-Info 16   [00:00:26.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project 'C:/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 16   [00:00:27.000] -----------------------------------------------
-Info 16   [00:00:28.000] Open files: 
-Info 16   [00:00:29.000] 	FileName: C:/a/f1.ts ProjectRootPath: undefined
-Info 16   [00:00:30.000] 		Projects: C:/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: C:/a/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: C:/a/tsconfig.json

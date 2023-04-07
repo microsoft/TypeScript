@@ -1,11 +1,11 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.ts]
 let x;
 
 
-Info 1    [00:00:10.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -14,30 +14,30 @@ Info 1    [00:00:10.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:11.000] Search path: /a/b
-Info 3    [00:00:12.000] For info: /a/b/app.ts :: No config files found.
-Info 4    [00:00:13.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 6    [00:00:15.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 7    [00:00:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 8    [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 9    [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 10   [00:00:19.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] Search path: /a/b
+Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts SVC-1-0 "let x;"
 
 
 	app.ts
 	  Root file specified for compilation
 
-Info 11   [00:00:20.000] -----------------------------------------------
-Info 12   [00:00:21.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 12   [00:00:22.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 12   [00:00:23.000] -----------------------------------------------
-Info 12   [00:00:24.000] Open files: 
-Info 12   [00:00:25.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info 12   [00:00:26.000] 		Projects: /dev/null/inferredProject1*
-Info 12   [00:00:27.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -51,7 +51,7 @@ PolledWatches::
 
 Before request
 
-Info 13   [00:00:28.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -82,10 +82,10 @@ Info 13   [00:00:28.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 14   [00:00:29.000] Format host information updated
-Info 15   [00:00:30.000] response:
+Info seq  [hh:mm:ss:mss] Format host information updated
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true,"performanceData":{"updateGraphDurationMs":*}}
-Info 16   [00:00:31.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -116,7 +116,7 @@ FormatCodeOptions should be global:: /a/b/app.ts:: {
 }
 Before request
 
-Info 17   [00:00:32.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -148,10 +148,10 @@ Info 17   [00:00:32.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 18   [00:00:33.000] Host configuration update for file /a/b/app.ts
-Info 19   [00:00:34.000] response:
+Info seq  [hh:mm:ss:mss] Host configuration update for file /a/b/app.ts
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":3,"success":true,"performanceData":{"updateGraphDurationMs":*}}
-Info 20   [00:00:35.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -182,7 +182,7 @@ FormatCodeOptions should be per file:: /a/b/app.ts:: {
 }
 Before request
 
-Info 21   [00:00:36.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -213,10 +213,10 @@ Info 21   [00:00:36.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 22   [00:00:37.000] Format host information updated
-Info 23   [00:00:38.000] response:
+Info seq  [hh:mm:ss:mss] Format host information updated
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*}}
-Info 24   [00:00:39.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }

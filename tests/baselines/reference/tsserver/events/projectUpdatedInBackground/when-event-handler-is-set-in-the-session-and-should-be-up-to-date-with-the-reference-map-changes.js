@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;
@@ -8,7 +8,7 @@ import {Foo} from "./moduleFile1"; export var y = 10;
 {}
 
 
-Info 1    [00:00:12.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -17,13 +17,13 @@ Info 1    [00:00:12.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:13.000] Search path: /a/b
-Info 3    [00:00:14.000] For info: /a/b/file1Consumer1.ts :: Config file name: /a/b/tsconfig.json
-Info 4    [00:00:15.000] Creating configuration project /a/b/tsconfig.json
-Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info 6    [00:00:17.000] event:
+Info seq  [hh:mm:ss:mss] Search path: /a/b
+Info seq  [hh:mm:ss:mss] For info: /a/b/file1Consumer1.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectLoadingStart","body":{"project":"/a/b/tsconfig.json","reason":"Creating possible configured project for /a/b/file1Consumer1.ts to open"}}
-Info 7    [00:00:18.000] Config: /a/b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
  "rootNames": [
   "/a/b/file1Consumer1.ts"
  ],
@@ -31,40 +31,40 @@ Info 7    [00:00:18.000] Config: /a/b/tsconfig.json : {
   "configFilePath": "/a/b/tsconfig.json"
  }
 }
-Info 8    [00:00:19.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:21.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 11   [00:00:22.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 12   [00:00:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 13   [00:00:24.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 14   [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 15   [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 16   [00:00:27.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 17   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 18   [00:00:29.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 19   [00:00:30.000] Project '/a/b/tsconfig.json' (Configured)
-Info 20   [00:00:31.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/file1Consumer1.ts SVC-1-0 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
 
 
 	file1Consumer1.ts
 	  Matched by default include pattern '**/*'
 
-Info 21   [00:00:32.000] -----------------------------------------------
-Info 22   [00:00:33.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectLoadingFinish","body":{"project":"/a/b/tsconfig.json"}}
-Info 23   [00:00:34.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectInfo","body":{"projectId":"e10a1dc99ee63f16cb9b69bcee75540cdf41a1137371d3afbd4e7de507be5207","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":53,"tsx":0,"tsxSize":0,"dts":0,"dtsSize":0,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}
-Info 24   [00:00:35.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::configFileDiag","body":{"configFileName":"/a/b/tsconfig.json","diagnostics":[{"text":"File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'","code":6053,"category":"error"},{"text":"Cannot find global type 'Array'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Boolean'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Function'.","code":2318,"category":"error"},{"text":"Cannot find global type 'IArguments'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Number'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Object'.","code":2318,"category":"error"},{"text":"Cannot find global type 'RegExp'.","code":2318,"category":"error"},{"text":"Cannot find global type 'String'.","code":2318,"category":"error"}],"triggerFile":"/a/b/file1Consumer1.ts"}}
-Info 25   [00:00:36.000] Project '/a/b/tsconfig.json' (Configured)
-Info 25   [00:00:37.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 25   [00:00:38.000] -----------------------------------------------
-Info 25   [00:00:39.000] Open files: 
-Info 25   [00:00:40.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 25   [00:00:41.000] 		Projects: /a/b/tsconfig.json
-Info 25   [00:00:42.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -88,39 +88,39 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 26   [00:00:46.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 27   [00:00:47.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation
-Info 28   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 29   [00:00:49.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 30   [00:00:50.000] Scheduled: /a/b/tsconfig.json
-Info 31   [00:00:51.000] Scheduled: *ensureProjectForOpenFiles*
-Info 32   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 33   [00:00:55.000] DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 34   [00:00:56.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info 35   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 36   [00:00:58.000] DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 37   [00:00:59.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
-Info 38   [00:01:00.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 39   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 40   [00:01:04.000] DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 41   [00:01:05.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info 42   [00:01:06.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 43   [00:01:07.000] DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 44   [00:01:08.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
-Info 45   [00:01:09.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 46   [00:01:10.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 47   [00:01:13.000] DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 48   [00:01:14.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info 49   [00:01:15.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 50   [00:01:16.000] DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 51   [00:01:17.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
-Info 52   [00:01:18.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 53   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 54   [00:01:24.000] FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 55   [00:01:25.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 56   [00:01:26.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
-Info 57   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 58   [00:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file1Consumer2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/globalFile3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
 Before running Timeout callback:: count: 3
 10: /a/b/tsconfig.jsonFailedLookupInvalidation
 13: /a/b/tsconfig.json
@@ -171,16 +171,16 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 59   [00:01:30.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
-Info 60   [00:01:31.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
-Info 61   [00:01:32.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
 15: /a/b/tsconfig.json
 16: *ensureProjectForOpenFiles*
 
 Before request
 
-Info 62   [00:01:33.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "change",
       "arguments": {
@@ -194,7 +194,7 @@ Info 62   [00:01:33.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 63   [00:01:34.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -204,16 +204,16 @@ Before running Timeout callback:: count: 2
 15: /a/b/tsconfig.json
 16: *ensureProjectForOpenFiles*
 
-Info 64   [00:01:35.000] Running: /a/b/tsconfig.json
-Info 65   [00:01:36.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
-Info 66   [00:01:37.000] FileWatcher:: Added:: WatchInfo: /a/b/globalFile3.ts 500 undefined WatchType: Closed Script info
-Info 67   [00:01:38.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Info 68   [00:01:39.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile2.ts 500 undefined WatchType: Closed Script info
-Info 69   [00:01:40.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 70   [00:01:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 71   [00:01:42.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 72   [00:01:43.000] Project '/a/b/tsconfig.json' (Configured)
-Info 73   [00:01:44.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/globalFile3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/file1Consumer1.ts SVC-1-1 "export let y = Foo();;"
 	/a/b/moduleFile1.ts Text-1 "export function Foo() { };"
@@ -236,25 +236,25 @@ Info 73   [00:01:44.000] 	Files (6)
 	moduleFile2.ts
 	  Matched by default include pattern '**/*'
 
-Info 74   [00:01:45.000] -----------------------------------------------
-Info 75   [00:01:46.000] Running: *ensureProjectForOpenFiles*
-Info 76   [00:01:47.000] Before ensureProjectForOpenFiles:
-Info 77   [00:01:48.000] Project '/a/b/tsconfig.json' (Configured)
-Info 77   [00:01:49.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 77   [00:01:50.000] -----------------------------------------------
-Info 77   [00:01:51.000] Open files: 
-Info 77   [00:01:52.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 77   [00:01:53.000] 		Projects: /a/b/tsconfig.json
-Info 77   [00:01:54.000] After ensureProjectForOpenFiles:
-Info 78   [00:01:55.000] Project '/a/b/tsconfig.json' (Configured)
-Info 78   [00:01:56.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 78   [00:01:57.000] -----------------------------------------------
-Info 78   [00:01:58.000] Open files: 
-Info 78   [00:01:59.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 78   [00:02:00.000] 		Projects: /a/b/tsconfig.json
-Info 78   [00:02:01.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
 After running Timeout callback:: count: 0
 
@@ -284,10 +284,10 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 79   [00:02:05.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Info 80   [00:02:06.000] Scheduled: /a/b/tsconfig.json
-Info 81   [00:02:07.000] Scheduled: *ensureProjectForOpenFiles*
-Info 82   [00:02:08.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 2
 17: /a/b/tsconfig.json
 18: *ensureProjectForOpenFiles*
@@ -295,11 +295,11 @@ Before running Timeout callback:: count: 2
 export var T: number;export function Foo() { };
 
 
-Info 83   [00:02:09.000] Running: /a/b/tsconfig.json
-Info 84   [00:02:10.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 85   [00:02:11.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 86   [00:02:12.000] Project '/a/b/tsconfig.json' (Configured)
-Info 87   [00:02:13.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/file1Consumer1.ts SVC-1-1 "export let y = Foo();;"
 	/a/b/moduleFile1.ts Text-2 "export var T: number;export function Foo() { };"
@@ -307,31 +307,31 @@ Info 87   [00:02:13.000] 	Files (6)
 	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
 
-Info 88   [00:02:14.000] -----------------------------------------------
-Info 89   [00:02:15.000] Running: *ensureProjectForOpenFiles*
-Info 90   [00:02:16.000] Before ensureProjectForOpenFiles:
-Info 91   [00:02:17.000] Project '/a/b/tsconfig.json' (Configured)
-Info 91   [00:02:18.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 91   [00:02:19.000] -----------------------------------------------
-Info 91   [00:02:20.000] Open files: 
-Info 91   [00:02:21.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 91   [00:02:22.000] 		Projects: /a/b/tsconfig.json
-Info 91   [00:02:23.000] After ensureProjectForOpenFiles:
-Info 92   [00:02:24.000] Project '/a/b/tsconfig.json' (Configured)
-Info 92   [00:02:25.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 92   [00:02:26.000] -----------------------------------------------
-Info 92   [00:02:27.000] Open files: 
-Info 92   [00:02:28.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 92   [00:02:29.000] 		Projects: /a/b/tsconfig.json
-Info 92   [00:02:30.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
 After running Timeout callback:: count: 0
 
 Before request
 
-Info 93   [00:02:31.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "change",
       "arguments": {
@@ -345,7 +345,7 @@ Info 93   [00:02:31.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 94   [00:02:32.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -355,10 +355,10 @@ Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
-Info 95   [00:02:36.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Info 96   [00:02:37.000] Scheduled: /a/b/tsconfig.json
-Info 97   [00:02:38.000] Scheduled: *ensureProjectForOpenFiles*
-Info 98   [00:02:39.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 2
 19: /a/b/tsconfig.json
 20: *ensureProjectForOpenFiles*
@@ -366,15 +366,15 @@ Before running Timeout callback:: count: 2
 export var T: number;export var T2: string;export function Foo() { };
 
 
-Info 99   [00:02:40.000] Running: /a/b/tsconfig.json
-Info 100  [00:02:41.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 101  [00:02:42.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 102  [00:02:43.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 103  [00:02:44.000] DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 104  [00:02:45.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info 105  [00:02:46.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 106  [00:02:47.000] Project '/a/b/tsconfig.json' (Configured)
-Info 107  [00:02:48.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile1 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/moduleFile1.ts Text-3 "export var T: number;export var T2: string;export function Foo() { };"
 	/a/b/file1Consumer1.ts SVC-1-2 "import {Foo} from \"./moduleFile1\";let y = Foo();;;"
@@ -382,25 +382,25 @@ Info 107  [00:02:48.000] 	Files (6)
 	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
 
-Info 108  [00:02:49.000] -----------------------------------------------
-Info 109  [00:02:50.000] Running: *ensureProjectForOpenFiles*
-Info 110  [00:02:51.000] Before ensureProjectForOpenFiles:
-Info 111  [00:02:52.000] Project '/a/b/tsconfig.json' (Configured)
-Info 111  [00:02:53.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 111  [00:02:54.000] -----------------------------------------------
-Info 111  [00:02:55.000] Open files: 
-Info 111  [00:02:56.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 111  [00:02:57.000] 		Projects: /a/b/tsconfig.json
-Info 111  [00:02:58.000] After ensureProjectForOpenFiles:
-Info 112  [00:02:59.000] Project '/a/b/tsconfig.json' (Configured)
-Info 112  [00:03:00.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 112  [00:03:01.000] -----------------------------------------------
-Info 112  [00:03:02.000] Open files: 
-Info 112  [00:03:03.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 112  [00:03:04.000] 		Projects: /a/b/tsconfig.json
-Info 112  [00:03:05.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
 After running Timeout callback:: count: 0
 
@@ -436,7 +436,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 113  [00:03:06.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "change",
       "arguments": {
@@ -450,16 +450,16 @@ Info 113  [00:03:06.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 114  [00:03:07.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
 After request
 
-Info 115  [00:03:11.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Info 116  [00:03:12.000] Scheduled: /a/b/tsconfig.json
-Info 117  [00:03:13.000] Scheduled: *ensureProjectForOpenFiles*
-Info 118  [00:03:14.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 1:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 2
 21: /a/b/tsconfig.json
 22: *ensureProjectForOpenFiles*
@@ -467,11 +467,11 @@ Before running Timeout callback:: count: 2
 export var T: number;export function Foo() { };
 
 
-Info 119  [00:03:15.000] Running: /a/b/tsconfig.json
-Info 120  [00:03:16.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 121  [00:03:17.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 122  [00:03:18.000] Project '/a/b/tsconfig.json' (Configured)
-Info 123  [00:03:19.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/file1Consumer1.ts SVC-1-3 "export let y = Foo();;;;"
 	/a/b/moduleFile1.ts Text-4 "export var T: number;export function Foo() { };"
@@ -479,24 +479,24 @@ Info 123  [00:03:19.000] 	Files (6)
 	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
 
-Info 124  [00:03:20.000] -----------------------------------------------
-Info 125  [00:03:21.000] Running: *ensureProjectForOpenFiles*
-Info 126  [00:03:22.000] Before ensureProjectForOpenFiles:
-Info 127  [00:03:23.000] Project '/a/b/tsconfig.json' (Configured)
-Info 127  [00:03:24.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 127  [00:03:25.000] -----------------------------------------------
-Info 127  [00:03:26.000] Open files: 
-Info 127  [00:03:27.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 127  [00:03:28.000] 		Projects: /a/b/tsconfig.json
-Info 127  [00:03:29.000] After ensureProjectForOpenFiles:
-Info 128  [00:03:30.000] Project '/a/b/tsconfig.json' (Configured)
-Info 128  [00:03:31.000] 	Files (6)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Info 128  [00:03:32.000] -----------------------------------------------
-Info 128  [00:03:33.000] Open files: 
-Info 128  [00:03:34.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 128  [00:03:35.000] 		Projects: /a/b/tsconfig.json
-Info 128  [00:03:36.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/file1Consumer1.ts"]}}
 After running Timeout callback:: count: 0
