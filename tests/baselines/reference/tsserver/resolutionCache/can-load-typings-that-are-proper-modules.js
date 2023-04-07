@@ -27,8 +27,6 @@ Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/lib.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -46,8 +44,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/a/b/node_modules: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 

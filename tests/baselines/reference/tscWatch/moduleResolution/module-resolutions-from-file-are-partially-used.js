@@ -181,6 +181,8 @@ FsWatches::
   {}
 /a/lib/lib.d.ts: *new*
   {}
+/user/username/projects: *new*
+  {}
 /user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/node_modules/pkg/package.json: *new*

@@ -23,8 +23,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /
 Info seq  [hh:mm:ss:mss] For info: /a.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: / 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: / 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -58,16 +56,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/: *new*
-  {}
 /b.d.ts: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: / 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: / 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
@@ -87,12 +79,8 @@ Before request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/b: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/:
-  {}
 /b.d.ts:
   {}
 /b.js: *new*
@@ -127,12 +115,8 @@ TI:: Creating typing installer
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/b:
-  {"pollingInterval":500}
 
 FsWatches::
-/:
-  {}
 /b.d.ts:
   {}
 
@@ -146,11 +130,6 @@ TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a :: WatchInfo: / 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
@@ -204,15 +183,11 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/b:
-  {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}
 /node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/:
-  {}
 /b.d.ts:
   {}

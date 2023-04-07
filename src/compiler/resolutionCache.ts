@@ -283,11 +283,15 @@ export function getDirectoryToWatchFailedLookupLocation(
     // Ensure failed look up is normalized path
     failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
     const failedLookupComponents = getPathComponents(failedLookupLocation);
+    const perceivedOsRootLength = perceivedOsRootLengthForWatching(failedLookupPathComponents, failedLookupPathComponents.length);
+    if (failedLookupPathComponents.length <= perceivedOsRootLength + 1) return undefined;
+    // If directory path contains node module, get the most parent node_modules directory for watching
+    const nodeModulesIndex = failedLookupPathComponents.indexOf("node_modules" as Path);
+    if (nodeModulesIndex !== -1 && nodeModulesIndex + 1 <= perceivedOsRootLength + 1) return undefined; // node_modules not at position where it can be watched
     if (isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
-        Debug.assert(failedLookupComponents.length === failedLookupPathComponents.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
         if (failedLookupPathComponents.length > rootPathComponents.length + 1) {
             // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
-            return getDirectoryOfFailedLookupWatch(failedLookupComponents, failedLookupPathComponents, rootPathComponents.length + 1);
+            return getDirectoryOfFailedLookupWatch(failedLookupComponents, failedLookupPathComponents, Math.max(rootPathComponents.length + 1, perceivedOsRootLength + 1));
         }
         else {
             // Always watch root directory non recursively
@@ -304,36 +308,23 @@ export function getDirectoryToWatchFailedLookupLocation(
     return getDirectoryToWatchFromFailedLookupLocationDirectory(
         failedLookupComponents,
         failedLookupPathComponents,
+        perceivedOsRootLength,
+        nodeModulesIndex,
         rootPathComponents,
     );
-}
-
-function getDirectoryToWatchFailedLookupLocationNodeModules(
-    dirPathComponents: Readonly<PathPathComponents>,
-) {
-    // If directory path contains node module, get the most parent node_modules directory for watching
-    const indexOfNodeModules = dirPathComponents.indexOf("node_modules" as Path);
-    if (indexOfNodeModules !== -1) {
-        // If the directory is node_modules use it to watch, always watch it recursively
-        return canWatchDirectoryOrFile(dirPathComponents, indexOfNodeModules + 1) ?
-            indexOfNodeModules + 1 :
-            false;
-    }
-    return undefined;
 }
 
 function getDirectoryToWatchFromFailedLookupLocationDirectory(
     dirComponents: readonly string[],
     dirPathComponents: Readonly<PathPathComponents>,
+    perceivedOsRootLength: number,
+    nodeModulesIndex: number,
     rootPathComponents: Readonly<PathPathComponents>,
 ): DirectoryOfFailedLookupWatch | undefined {
     // If directory path contains node module, get the most parent node_modules directory for watching
-    const nodeModulesWatchLength = getDirectoryToWatchFailedLookupLocationNodeModules(dirPathComponents);
-    if (nodeModulesWatchLength !== undefined) {
+    if (nodeModulesIndex !== -1) {
         // If the directory is node_modules use it to watch, always watch it recursively
-        return nodeModulesWatchLength ?
-            getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, nodeModulesWatchLength) :
-            undefined;
+        return getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, nodeModulesIndex + 1);
     }
     // Use some ancestor of the root directory
     let nonRecursive = true;
@@ -341,13 +332,11 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
     for (let i = 0; i < dirPathComponents.length; i++) {
         if (dirPathComponents[i] !== rootPathComponents[i]) {
             nonRecursive = false;
-            length = i + 1;
+            length = Math.max(i + 1, perceivedOsRootLength + 1);
             break;
         }
     }
-    return canWatchDirectoryOrFile(dirPathComponents, length) ?
-        getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, length, nonRecursive) :
-        undefined;
+    return getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, length, nonRecursive);
 }
 
 function getDirectoryOfFailedLookupWatch(
@@ -378,7 +367,13 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
         return rootPath;
     }
     typeRoot = isRootedDiskPath(typeRoot) ? normalizePath(typeRoot) : getNormalizedAbsolutePath(typeRoot, getCurrentDirectory());
-    const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(getPathComponents(typeRoot), typeRootPathComponents, rootPathComponents);
+    const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(
+        getPathComponents(typeRoot),
+        typeRootPathComponents,
+        perceivedOsRootLengthForWatching(typeRootPathComponents, typeRootPathComponents.length),
+        typeRootPathComponents.indexOf("node_modules" as Path),
+        rootPathComponents,
+    );
     return toWatch && filterCustomPath(toWatch.dirPath) ? toWatch.dirPath : undefined;
 }
 

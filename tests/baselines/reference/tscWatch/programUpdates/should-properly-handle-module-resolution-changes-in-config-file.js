@@ -68,10 +68,6 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-FsWatchesRecursive::
-/a/b/node_modules: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js]
@@ -128,15 +124,9 @@ FsWatches::
   {}
 /a/module1.ts: *new*
   {}
-/a/b: *new*
-  {}
 
 FsWatches *deleted*::
 /a/b/node_modules/module1.ts:
-  {}
-
-FsWatchesRecursive *deleted*::
-/a/b/node_modules:
   {}
 
 exitCode:: ExitStatus.undefined
