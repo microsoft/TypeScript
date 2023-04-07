@@ -13821,8 +13821,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getBaseConstraint(getSubstitutionIntersection(t as SubstitutionType));
             }
             if (isGenericTupleType(t)) {
-                return createTupleType(map(getTypeArguments(t), (v, i) => t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v),
-                    t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
+                // We substitute constrains for variadic elements only when the constrains are array or tuple types
+                // as we want to avoid further (possibly unbounded) recursion.
+                const newElements = map(getTypeArguments(t), (v, i) => {
+                    const constraint = t.target.elementFlags[i] & ElementFlags.Variadic ? getBaseConstraint(v) : undefined;
+                    return constraint && everyType(constraint, isArrayOrTupleType) ? constraint : v;
+                });
+                return createTupleType(newElements, t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
             }
             return t;
         }
@@ -21758,6 +21763,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // By flags alone, we know that the `target` is a readonly array while the source is a normal array or tuple
                         // or `target` is an array and source is a tuple - in both cases the types cannot be identical, by construction
                         return Ternary.False;
+                    }
+                }
+                else if (isGenericTupleType(source) && isTupleType(target) && !isGenericTupleType(target)) {
+                    const constraint = getBaseConstraintOrType(source);
+                    if (constraint !== source) {
+                        return isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors);
                     }
                 }
                 // A fresh empty object type is never a subtype of a non-empty object type. This ensures fresh({}) <: { [x: string]: xxx }
