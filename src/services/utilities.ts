@@ -3145,6 +3145,7 @@ export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | u
     if (nodes) {
         const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
         setTextRange(cloned, nodes);
+        return cloned;
     }
     return nodes;
 }
