@@ -97,6 +97,7 @@ declare namespace ts {
         namespace protocol {
             enum CommandTypes {
                 JsxClosingTag = "jsxClosingTag",
+                LinkedEditingRange = "linkedEditingRange",
                 Brace = "brace",
                 BraceCompletion = "braceCompletion",
                 GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -884,6 +885,16 @@ declare namespace ts {
             }
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
+            }
+            interface LinkedEditingRangeRequest extends FileLocationRequest {
+                readonly command: CommandTypes.LinkedEditingRange;
+            }
+            interface LinkedEditingRangesBody {
+                ranges: TextSpan[];
+                wordPattern?: string;
+            }
+            interface LinkedEditingRangeResponse extends Response {
+                readonly body: LinkedEditingRangesBody;
             }
             /**
              * Get document highlights request; value of command field is
@@ -3903,6 +3914,7 @@ declare namespace ts {
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
             private getJsxClosingTag;
+            private getLinkedEditingRange;
             private getDocumentHighlights;
             private provideInlayHints;
             private setCompilerOptionsForInferredProjects;
@@ -10090,6 +10102,7 @@ declare namespace ts {
          * Editors should call this after `>` is typed.
          */
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
+        getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
@@ -10118,6 +10131,10 @@ declare namespace ts {
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
+    }
+    interface LinkedEditingInfo {
+        readonly ranges: TextSpan[];
+        wordPattern?: string;
     }
     interface CombinedCodeFixScope {
         type: "file";
