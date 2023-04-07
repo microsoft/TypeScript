@@ -9,6 +9,7 @@ import {
     createLoggerWithInMemoryLogs,
     createSession,
     Logger,
+    openExternalProjectForSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
     TestSession,
@@ -734,11 +735,12 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
 describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
     it("should respect line endings", () => {
-        const logger = test("\n");
+        const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); //special handling
+        test("\n", logger);
         test("\r\n", logger);
         baselineTsserverLogs("compileOnSave", "line endings", { logger });
 
-        function test(newLine: string, logger?: Logger) {
+        function test(newLine: string, logger: Logger) {
             const lines = ["var x = 1;", "var y = 2;"];
             const path = "/a/app";
             const f = {
@@ -746,8 +748,8 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
                 content: lines.join(newLine)
             };
             const host = createServerHost([f], { newLine });
-            if (logger) logger.host = host;
-            else logger = createLoggerWithInMemoryLogs(host);
+            logger.host = host;
+            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames} newLine: ${host.newLine}`);
             const session = createSession(host, { logger });
             openFilesForSession([f], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
@@ -800,18 +802,15 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         const externalProjectName = "/a/b/externalproject";
         const host = createServerHost([file1, file2, file3, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-        session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
-            command: ts.server.protocol.CommandTypes.OpenExternalProject,
-            arguments: {
-                rootFiles: toExternalFiles([file1.path, file2.path]),
-                options: {
-                    allowJs: true,
-                    outFile: "dist.js",
-                    compileOnSave: true
-                },
-                projectFileName: externalProjectName
-            }
-        });
+        openExternalProjectForSession({
+            rootFiles: toExternalFiles([file1.path, file2.path]),
+            options: {
+                allowJs: true,
+                outFile: "dist.js",
+                compileOnSave: true
+            },
+            projectFileName: externalProjectName
+        }, session);
 
         session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
             command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
@@ -830,18 +829,15 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
         const host = createServerHost([file1, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-        session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
-            command: ts.server.protocol.CommandTypes.OpenExternalProject,
-            arguments: {
-                rootFiles: toExternalFiles([file1.path]),
-                options: {
-                    outFile: "bar.js",
-                    sourceMap: true,
-                    compileOnSave: true
-                },
-                projectFileName: externalProjectName
-            }
-        });
+        openExternalProjectForSession({
+            rootFiles: toExternalFiles([file1.path]),
+            options: {
+                outFile: "bar.js",
+                sourceMap: true,
+                compileOnSave: true
+            },
+            projectFileName: externalProjectName
+        }, session);
         session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
             command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
             arguments: { file: file1.path }
@@ -851,13 +847,13 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
 
     describe("compile on save emit with and without richResponse", () => {
         it("without rich Response", () => {
-            verify(/*richRepsonse*/ undefined);
+            verify(/*richResponse*/ undefined);
         });
         it("with rich Response set to false", () => {
-            verify(/*richRepsonse*/ false);
+            verify(/*richResponse*/ false);
         });
         it("with rich Repsonse", () => {
-            verify(/*richRepsonse*/ true);
+            verify(/*richResponse*/ true);
         });
 
         function verify(richResponse: boolean | undefined) {

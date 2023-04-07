@@ -3,6 +3,8 @@ import {
     addToSeen,
     append,
     BinaryExpression,
+    BindingElement,
+    BindingPattern,
     BreakOrContinueStatement,
     CancellationToken,
     canUsePropertyAccess,
@@ -32,6 +34,7 @@ import {
     concatenate,
     ConstructorDeclaration,
     ContextFlags,
+    countWhere,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -44,6 +47,8 @@ import {
     Diagnostics,
     diagnosticToString,
     displayPart,
+    DotDotDotToken,
+    EmitFlags,
     EmitHint,
     EmitTextWriter,
     EntityName,
@@ -79,6 +84,7 @@ import {
     getEscapedTextOfIdentifierOrLiteral,
     getExportInfoMap,
     getFormatCodeSettingsForWriting,
+    getJSDocParameterTags,
     getLanguageVariant,
     getLeftmostAccessExpression,
     getLineAndCharacterOfPosition,
@@ -165,6 +171,7 @@ import {
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
     isInString,
+    isInterfaceDeclaration,
     isIntersectionTypeNode,
     isJSDoc,
     isJSDocAugmentsTag,
@@ -308,6 +315,7 @@ import {
     ScriptElementKindModifier,
     ScriptTarget,
     SemanticMeaning,
+    setEmitFlags,
     setSnippetElement,
     shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
@@ -343,6 +351,7 @@ import {
     tokenToString,
     tryCast,
     tryGetImportFromModuleSpecifier,
+    tryGetTextOfPropertyName,
     Type,
     TypeChecker,
     TypeElement,
@@ -668,9 +677,10 @@ export function getCompletionsAtPosition(
 
     }
 
+    const compilerOptions = program.getCompilerOptions();
+    const checker = program.getTypeChecker();
     // If the request is a continuation of an earlier `isIncomplete` response,
     // we can continue it from the cached previous response.
-    const compilerOptions = program.getCompilerOptions();
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
         const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
@@ -706,10 +716,26 @@ export function getCompletionsAtPosition(
             return response;
         case CompletionDataKind.JsDocTagName:
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
+            return jsdocCompletionInfo([
+                ...JsDoc.getJSDocTagNameCompletions(),
+                ...getJSDocParameterCompletions(
+                    sourceFile,
+                    position,
+                    checker,
+                    compilerOptions,
+                    preferences,
+                    /*tagNameOnly*/ true)]);
         case CompletionDataKind.JsDocTag:
             // If the current position is a jsDoc tag, only tags should be provided for completion
-            return jsdocCompletionInfo(JsDoc.getJSDocTagCompletions());
+            return jsdocCompletionInfo([
+                ...JsDoc.getJSDocTagCompletions(),
+                ...getJSDocParameterCompletions(
+                    sourceFile,
+                    position,
+                    checker,
+                    compilerOptions,
+                    preferences,
+                    /*tagNameOnly*/ false)]);
         case CompletionDataKind.JsDocParameterName:
             return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
         case CompletionDataKind.Keywords:
@@ -824,6 +850,301 @@ function continuePreviousIncompleteResponse(
 
 function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
     return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+}
+
+function getJSDocParameterCompletions(
+    sourceFile: SourceFile,
+    position: number,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences,
+    tagNameOnly: boolean): CompletionEntry[] {
+    const currentToken = getTokenAtPosition(sourceFile, position);
+    if (!isJSDocTag(currentToken) && !isJSDoc(currentToken)) {
+        return [];
+    }
+    const jsDoc = isJSDoc(currentToken) ? currentToken : currentToken.parent;
+    if (!isJSDoc(jsDoc)) {
+        return [];
+    }
+    const func = jsDoc.parent;
+    if (!isFunctionLike(func)) {
+        return [];
+    }
+
+    const isJs = isSourceFileJS(sourceFile);
+    const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
+    const paramTagCount = countWhere(jsDoc.tags, tag => isJSDocParameterTag(tag) && tag.getEnd() <= position);
+    return mapDefined(func.parameters, param => {
+        if (getJSDocParameterTags(param).length) {
+            return undefined; // Parameter is already annotated.
+        }
+        if (isIdentifier(param.name)) { // Named parameter
+            const tabstopCounter = { tabstop: 1 };
+            const paramName = param.name.text;
+            let displayText =
+                getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ false,
+                    checker,
+                    options,
+                    preferences);
+            let snippetText = isSnippet
+                ? getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,
+                    tabstopCounter)
+                : undefined;
+            if (tagNameOnly) { // Remove `@`
+                displayText = displayText.slice(1);
+                if (snippetText) snippetText = snippetText.slice(1);
+            }
+            return {
+                name: displayText,
+                kind: ScriptElementKind.parameterElement,
+                sortText: SortText.LocationPriority,
+                insertText: isSnippet ? snippetText : undefined,
+                isSnippet,
+            };
+        }
+        else if (param.parent.parameters.indexOf(param) === paramTagCount) { // Destructuring parameter; do it positionally
+            const paramPath = `param${paramTagCount}`;
+            const displayTextResult =
+                generateJSDocParamTagsForDestructuring(
+                    paramPath,
+                    param.name,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isSnippet*/ false,
+                    checker,
+                    options,
+                    preferences,);
+            const snippetTextResult = isSnippet
+                ? generateJSDocParamTagsForDestructuring(
+                    paramPath,
+                    param.name,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,)
+                : undefined;
+            let displayText = displayTextResult.join(getNewLineCharacter(options) + "* ");
+            let snippetText = snippetTextResult?.join(getNewLineCharacter(options) + "* ");
+            if (tagNameOnly) { // Remove `@`
+                displayText = displayText.slice(1);
+                if (snippetText) snippetText = snippetText.slice(1);
+            }
+            return {
+                name: displayText,
+                kind: ScriptElementKind.parameterElement,
+                sortText: SortText.LocationPriority,
+                insertText: isSnippet ? snippetText : undefined,
+                isSnippet,
+            };
+        }
+    });
+}
+
+function generateJSDocParamTagsForDestructuring(
+    path: string,
+    pattern: BindingPattern,
+    initializer: Expression | undefined,
+    dotDotDotToken: DotDotDotToken | undefined,
+    isJs: boolean,
+    isSnippet: boolean,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences): string[] {
+    if (!isJs) {
+        return [
+            getJSDocParamAnnotation(
+                path,
+                initializer,
+                dotDotDotToken,
+                isJs,
+                /*isObject*/ false,
+                isSnippet,
+                checker,
+                options,
+                preferences,
+                { tabstop: 1 })
+        ];
+    }
+    return patternWorker(path, pattern, initializer, dotDotDotToken, { tabstop: 1 });
+
+    function patternWorker(
+        path: string,
+        pattern: BindingPattern,
+        initializer: Expression | undefined,
+        dotDotDotToken: DotDotDotToken | undefined,
+        counter: TabStopCounter): string[] {
+        if (isObjectBindingPattern(pattern) && !dotDotDotToken) {
+            const oldTabstop = counter.tabstop;
+            const childCounter = { tabstop: oldTabstop };
+            const rootParam =
+                getJSDocParamAnnotation(
+                    path,
+                    initializer,
+                    dotDotDotToken,
+                    isJs,
+                    /*isObject*/ true,
+                    isSnippet,
+                    checker,
+                    options,
+                    preferences,
+                    childCounter);
+            let childTags: string[] | undefined = [];
+            for (const element of pattern.elements) {
+                const elementTags = elementWorker(path, element, childCounter);
+                if (!elementTags) {
+                    childTags = undefined;
+                    break;
+                }
+                else {
+                    childTags.push(...elementTags);
+                }
+            }
+            if (childTags) {
+                counter.tabstop = childCounter.tabstop;
+                return [rootParam, ...childTags];
+            }
+        }
+        return [
+            getJSDocParamAnnotation(
+                path,
+                initializer,
+                dotDotDotToken,
+                isJs,
+                /*isObject*/ false,
+                isSnippet,
+                checker,
+                options,
+                preferences,
+                counter)
+            ];
+    }
+
+    // Assumes binding element is inside object binding pattern.
+    // We can't really deeply annotate an array binding pattern.
+    function elementWorker(path: string, element: BindingElement, counter: TabStopCounter): string[] | undefined {
+        if ((!element.propertyName && isIdentifier(element.name)) || isIdentifier(element.name)) { // `{ b }` or `{ b: newB }`
+            const propertyName = element.propertyName ? tryGetTextOfPropertyName(element.propertyName) : element.name.text;
+            if (!propertyName) {
+                return undefined;
+            }
+            const paramName = `${path}.${propertyName}`;
+            return [
+                getJSDocParamAnnotation(
+                    paramName,
+                    element.initializer,
+                    element.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    isSnippet,
+                    checker,
+                    options,
+                    preferences,
+                    counter)];
+        }
+        else if (element.propertyName) { // `{ b: {...} }` or `{ b: [...] }`
+            const propertyName = tryGetTextOfPropertyName(element.propertyName);
+            return propertyName
+                && patternWorker(`${path}.${propertyName}`, element.name, element.initializer, element.dotDotDotToken, counter);
+        }
+        return undefined;
+    }
+}
+
+interface TabStopCounter {
+    tabstop: number;
+}
+
+function getJSDocParamAnnotation(
+    paramName: string,
+    initializer: Expression | undefined,
+    dotDotDotToken: DotDotDotToken | undefined,
+    isJs: boolean,
+    isObject: boolean,
+    isSnippet: boolean,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences,
+    tabstopCounter?: TabStopCounter) {
+    if (isSnippet) {
+        Debug.assertIsDefined(tabstopCounter);
+    }
+    if (initializer) {
+        paramName = getJSDocParamNameWithInitializer(paramName, initializer);
+    }
+    if (isSnippet) {
+        paramName = escapeSnippetText(paramName);
+    }
+    if (isJs) {
+        let type = "*";
+        if (isObject) {
+            Debug.assert(!dotDotDotToken, `Cannot annotate a rest parameter with type 'Object'.`);
+            type = "Object";
+        }
+        else {
+            if (initializer) {
+                const inferredType = checker.getTypeAtLocation(initializer.parent);
+                if (!(inferredType.flags & (TypeFlags.Any | TypeFlags.Void))) {
+                    const sourceFile = initializer.getSourceFile();
+                    const quotePreference = getQuotePreference(sourceFile, preferences);
+                    const builderFlags = (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
+                    const typeNode = checker.typeToTypeNode(inferredType, findAncestor(initializer, isFunctionLike), builderFlags);
+                    if (typeNode) {
+                        const printer = isSnippet
+                            ? createSnippetPrinter({
+                                removeComments: true,
+                                module: options.module,
+                                target: options.target,
+                            })
+                            : createPrinter({
+                                removeComments: true,
+                                module: options.module,
+                                target: options.target
+                            });
+                        setEmitFlags(typeNode, EmitFlags.SingleLine);
+                        type = printer.printNode(EmitHint.Unspecified, typeNode, sourceFile);
+                    }
+                }
+            }
+            if (isSnippet && type === "*") {
+                type = `\${${tabstopCounter!.tabstop++}:${type}}`;
+            }
+        }
+        const dotDotDot = !isObject && dotDotDotToken ? "..." : "";
+        const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
+        return `@param {${dotDotDot}${type}} ${paramName} ${description}`;
+    }
+    else {
+        const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
+        return `@param ${paramName} ${description}`;
+    }
+}
+
+function getJSDocParamNameWithInitializer(paramName: string, initializer: Expression): string {
+    const initializerText = initializer.getText().trim();
+    if (initializerText.includes("\n") || initializerText.length > 80) {
+        return `[${paramName}]`;
+    }
+    return `[${paramName}=${initializerText}]`;
 }
 
 function keywordToCompletionEntry(keyword: TokenSyntaxKind) {
@@ -1528,11 +1849,11 @@ function getEntryForMemberCompletion(
         // if it has one, so that the cursor ends up in the body once the completion is inserted.
         // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
         const emptyStmt = factory.createEmptyStatement();
-        body = factory.createBlock([emptyStmt], /* multiline */ true);
+        body = factory.createBlock([emptyStmt], /*multiLine*/ true);
         setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
     }
     else {
-        body = factory.createBlock([], /* multiline */ true);
+        body = factory.createBlock([], /*multiLine*/ true);
     }
 
     let modifiers = ModifierFlags.None;
@@ -1761,11 +2082,11 @@ function createObjectLiteralMethod(
             let body;
             if (preferences.includeCompletionsWithSnippetText) {
                 const emptyStmt = factory.createEmptyStatement();
-                body = factory.createBlock([emptyStmt], /* multiline */ true);
+                body = factory.createBlock([emptyStmt], /*multiLine*/ true);
                 setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
             }
             else {
-                body = factory.createBlock([], /* multiline */ true);
+                body = factory.createBlock([], /*multiLine*/ true);
             }
 
             const parameters = typeNode.parameters.map(typedParam =>
@@ -1990,7 +2311,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
 
 function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
-    const quotedModuleSpecifier = quote(sourceFile, preferences, escapeSnippetText(origin.moduleSpecifier));
+    const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind =
         origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
@@ -3005,8 +3326,7 @@ function getCompletionData(
 
         // Since this is qualified name check it's a type node location
         const isImportType = isLiteralImportTypeNode(node);
-        const isTypeLocation = insideJsDocTagTypeExpression
-            || (isImportType && !(node as ImportTypeNode).isTypeOf)
+        const isTypeLocation = (isImportType && !(node as ImportTypeNode).isTypeOf)
             || isPartOfTypeNode(node.parent)
             || isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
@@ -3029,7 +3349,7 @@ function getCompletionData(
                             : isRhsOfImportDeclaration ?
                                 // Any kind is allowed when dotting off namespace in internal import equals declaration
                                 symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
-                                isTypeLocation ? isValidTypeAccess : isValidValueAccess;
+                                isTypeLocation || insideJsDocTagTypeExpression ? isValidTypeAccess : isValidValueAccess;
                     for (const exportedSymbol of exportedSymbols) {
                         if (isValidAccess(exportedSymbol)) {
                             symbols.push(exportedSymbol);
@@ -3038,6 +3358,7 @@ function getCompletionData(
 
                     // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
                     if (!isTypeLocation &&
+                        !insideJsDocTagTypeExpression &&
                         symbol.declarations &&
                         symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                         let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
@@ -3098,7 +3419,7 @@ function getCompletionData(
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                    addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
+                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                 }
             }
         }
@@ -3116,7 +3437,7 @@ function getCompletionData(
             if (promiseType) {
                 for (const symbol of promiseType.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                        addPropertySymbol(symbol, /* insertAwait */ true, insertQuestionDot);
+                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot);
                     }
                 }
             }
@@ -3821,7 +4142,7 @@ function getCompletionData(
                 const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(propertySymbol => {
-                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*writing*/ false, typeForObject, propertySymbol);
+                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*isWrite*/ false, typeForObject, propertySymbol);
                 });
                 existingMembers = objectLikeContainer.elements;
             }
@@ -4263,9 +4584,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/`.
-            && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
@@ -4500,6 +4821,8 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+            case SyntaxKind.AsyncKeyword:
+                return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;

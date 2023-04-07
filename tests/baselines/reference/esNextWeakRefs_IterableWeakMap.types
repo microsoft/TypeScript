@@ -52,13 +52,10 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     constructor(iterable: Iterable<[key: K, value: V]> | null = null) {
 >iterable : Iterable<[key: K, value: V]> | null
->null : null
->null : null
 
         if (iterable !== null) {
 >iterable !== null : boolean
 >iterable : Iterable<[key: K, value: V]> | null
->null : null
 
             for (const { 0: key, 1: value } of iterable) {
 >key : K

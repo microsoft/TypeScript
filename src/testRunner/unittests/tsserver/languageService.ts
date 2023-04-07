@@ -1,7 +1,6 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import { createServerHost } from "../virtualFileSystemWithWatch";
-import { createProjectService } from "./helpers";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService, logDiagnostics } from "./helpers";
 
 describe("unittests:: tsserver:: languageService", () => {
     it("should work correctly on case-sensitive file systems", () => {
@@ -14,10 +13,10 @@ describe("unittests:: tsserver:: languageService", () => {
             content: "let x = 1;"
         };
         const host = createServerHost([lib, f], { executingFilePath: "/a/Lib/tsc.js", useCaseSensitiveFileNames: true });
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         projectService.openClientFile(f.path);
-        projectService.checkNumberOfProjects({ inferredProjects: 1 });
         projectService.inferredProjects[0].getLanguageService().getProgram();
+        baselineTsserverLogs("languageService", "should work correctly on case-sensitive file systems", projectService);
     });
 
     it("should support multiple projects with the same file under differing `paths` settings", () => {
@@ -59,13 +58,21 @@ describe("unittests:: tsserver:: languageService", () => {
         ];
 
         const host = createServerHost(files, { executingFilePath: "/project/tsc.js", useCaseSensitiveFileNames: true });
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         projectService.openClientFile(files[3].path);
         projectService.openClientFile(files[6].path);
-        projectService.checkNumberOfProjects({ configuredProjects: 2 });
-        const proj1Diags = projectService.configuredProjects.get(files[1].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics();
-        ts.Debug.assertEqual(proj1Diags.length, 0);
-        const proj2Diags = projectService.configuredProjects.get(files[4].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics();
-        ts.Debug.assertEqual(proj2Diags.length, 1);
+        logDiagnostics(
+            projectService,
+            `getSemanticDiagnostics:: ${files[1].path}`,
+            projectService.configuredProjects.get(files[1].path)!,
+            projectService.configuredProjects.get(files[1].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics(),
+        );
+        logDiagnostics(
+            projectService,
+            `getSemanticDiagnostics:: ${files[4].path}`,
+            projectService.configuredProjects.get(files[4].path)!,
+            projectService.configuredProjects.get(files[4].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics(),
+        );
+        baselineTsserverLogs("languageService", "should support multiple projects with the same file under differing paths settings", projectService);
     });
 });

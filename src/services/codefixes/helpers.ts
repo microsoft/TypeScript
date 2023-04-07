@@ -125,7 +125,7 @@ export function createMissingMemberNodes(
     const classMembers = classDeclaration.symbol.members!;
     for (const symbol of possiblyMissingSymbols) {
         if (!classMembers.has(symbol.escapedName)) {
-            addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined);
+            addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /*body*/ undefined);
         }
     }
 }
@@ -724,7 +724,7 @@ function createMethodImplementingSignatures(
     }
     const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
     const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
-    const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
+    const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /*types*/ undefined, minArgumentCount, /*inJs*/ false);
 
     if (someSigHasRestParameter) {
         const restParameter = factory.createParameterDeclaration(
@@ -789,7 +789,7 @@ export function createStubbedBody(text: string, quotePreference: QuotePreference
                 /*typeArguments*/ undefined,
                 // TODO Handle auto quote preference.
                 [factory.createStringLiteral(text, /*isSingleQuote*/ quotePreference === QuotePreference.Single)]))],
-        /*multiline*/ true);
+        /*multiLine*/ true);
 }
 
 /** @internal */

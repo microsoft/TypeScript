@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -142,5 +143,7 @@ __exportStar(require("../d/f3"), exports);
 
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 First program is not updated:: true
 Second program is not updated:: true

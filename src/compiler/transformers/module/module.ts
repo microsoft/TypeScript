@@ -899,7 +899,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
                 /*condition*/ factory.createIdentifier("__syncRequire"),
                 /*questionToken*/ undefined,
-                /*whenTrue*/ createImportCallExpressionCommonJS(temp, /* isInlineable */ true),
+                /*whenTrue*/ createImportCallExpressionCommonJS(temp, /*isInlineable*/ true),
                 /*colonToken*/ undefined,
                 /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
             ));
@@ -1319,7 +1319,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         setOriginalNode(
                             setTextRange(
                                 factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
+                                    createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true)
                                 ),
                                 specifier),
                             specifier
@@ -1701,7 +1701,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
                 case SyntaxKind.NamedImports:
                     for (const importBinding of namedBindings.elements) {
-                        statements = appendExportsOfDeclaration(statements, importBinding, /* liveBinding */ true);
+                        statements = appendExportsOfDeclaration(statements, importBinding, /*liveBinding*/ true);
                     }
 
                     break;
@@ -1816,7 +1816,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
-                statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /* allowComments */ undefined, liveBinding);
+                statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /*allowComments*/ undefined, liveBinding);
             }
         }
         return statements;
@@ -1877,7 +1877,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
     function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
-        const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
+        const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /*location*/ undefined, liveBinding)), location);
         startOnNewLine(statement);
         if (!allowComments) {
             setEmitFlags(statement, EmitFlags.NoComments);

@@ -12,7 +12,6 @@ delete 1;
 
 delete null;
 >delete null : boolean
->null : null
 
 delete "a";
 >delete "a" : boolean

@@ -9,6 +9,8 @@ import {
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
     TestSession,
 } from "./helpers";
@@ -25,7 +27,7 @@ describe("unittests:: tsserver:: inlayHints", () => {
 
     it("with updateOpen request does not corrupt documents", () => {
         const host = createServerHost([app, commonFile1, commonFile2, libFile, configFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path }
@@ -53,24 +55,17 @@ describe("unittests:: tsserver:: inlayHints", () => {
             }
         });
         verifyInlayHintResponse(session);
+        baselineTsserverLogs("inlayHints", "with updateOpen request does not corrupt documents", session);
 
         function verifyInlayHintResponse(session: TestSession) {
-            verifyParamInlayHint(session.executeCommandSeq<ts.server.protocol.InlayHintsRequest>({
+            session.executeCommandSeq<ts.server.protocol.InlayHintsRequest>({
                 command: ts.server.protocol.CommandTypes.ProvideInlayHints,
                 arguments: {
                     file: app.path,
                     start: 0,
                     length: app.content.length,
                 }
-            }).response as ts.server.protocol.InlayHintItem[] | undefined);
-        }
-
-        function verifyParamInlayHint(response: ts.server.protocol.InlayHintItem[] | undefined) {
-            ts.Debug.assert(response);
-            ts.Debug.assert(response[0]);
-            ts.Debug.assertEqual(response[0].text, "param:");
-            ts.Debug.assertEqual(response[0].position.line, 2);
-            ts.Debug.assertEqual(response[0].position.offset, 5);
+            });
         }
     });
 });

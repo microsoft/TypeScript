@@ -1,0 +1,41 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionTypePredicate.ts ===
+// class A {}
+// function f(<|[|parameter|]: any|>): /*GOTO DEF*/parameter is A {
+//     return typeof parameter === "string";
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "parameter",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionTypePredicate.ts ===
+// <|class [|A|] {}|>
+// function f(parameter: any): parameter is /*GOTO DEF*/A {
+//     return typeof parameter === "string";
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

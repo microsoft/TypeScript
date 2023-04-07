@@ -35,7 +35,7 @@ const parsed = minimist(process.argv.slice(2), {
         workers: +(process.env.workerCount ?? 0) || ((os.cpus().length - (ci ? 0 : 1)) || 1),
         failed: false,
         keepFailed: false,
-        lkg: true,
+        lkg: false,
         dirty: false,
         built: false,
         ci,
@@ -48,8 +48,8 @@ const parsed = minimist(process.argv.slice(2), {
 /** @type {CommandLineOptions} */
 const options = /** @type {any} */ (parsed);
 
-if (options.built) {
-    options.lkg = false;
+if (options.built && options.lkg) {
+    throw new Error("--built and --lkg are mutually exclusive");
 }
 
 if (!options.bundle && !options.typecheck) {

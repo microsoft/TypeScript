@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
@@ -73,6 +74,8 @@ Input::
 const y =10;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
