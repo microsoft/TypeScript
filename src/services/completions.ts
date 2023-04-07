@@ -2084,7 +2084,8 @@ export function getCompletionEntriesFromSymbols(
             continue;
         }
 
-        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !symbolHasNoTypeOnlyDeclaration(symbol)) {
+        // When in a value-time location in a JS file, ignore symbols that definitely seem to be type-only
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !symbolMayHaveValueDeclaration(symbol)) {
             continue;
         }
 
@@ -2184,7 +2185,12 @@ export function getCompletionEntriesFromSymbols(
     }
 }
 
-function symbolHasNoTypeOnlyDeclaration(symbol: Symbol): boolean {
+/**
+ * When filling completions for value-time locations in JS files, we'll want
+ * to only consider symbols that seem to have a value declaration. If a
+ * symbol no known declarations we cautiously include them just to be safe.
+ */
+function symbolMayHaveValueDeclaration(symbol: Symbol): boolean {
     return !symbol?.declarations?.length || symbol.declarations.some(declaration => {
         switch (declaration.kind) {
             case SyntaxKind.InterfaceDeclaration:
