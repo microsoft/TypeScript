@@ -206,16 +206,16 @@ export function removeIgnoredPath(path: Path): Path | undefined {
         path;
 }
 
-function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>) {
+function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>, length: number) {
     // Ignore "/", "c:/"
-    if (pathComponents.length <= 1) return 1;
+    if (length <= 1) return 1;
     let userCheckIndex = 1;
     let isDosStyle = pathComponents[0].search(/[a-zA-Z]:/) === 0;
     if (pathComponents[0] !== directorySeparator &&
         !isDosStyle && // Non dos style paths
         pathComponents[1].search(/[a-zA-Z]\$$/) === 0) { // Dos style nextPart
         // ignore "//vda1cs4850/c$/folderAtRoot"
-        if (pathComponents.length === 2) return 2;
+        if (length === 2) return 2;
         userCheckIndex = 2;
         isDosStyle = true;
     }
@@ -238,12 +238,13 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
  *
  * @internal
  */
-export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>) {
+export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>, length?: number) {
+    if (length === undefined) length = pathComponents.length;
     // Ignore "/", "c:/"
     // ignore "/user", "c:/users" or "c:/folderAtRoot"
-    if (pathComponents.length <= 2) return false;
-    const perceivedOsRootLength = perceivedOsRootLengthForWatching(pathComponents);
-    return pathComponents.length > perceivedOsRootLength + 1;
+    if (length <= 2) return false;
+    const perceivedOsRootLength = perceivedOsRootLengthForWatching(pathComponents, length);
+    return length > perceivedOsRootLength + 1;
 }
 
 /** @internal */
@@ -262,7 +263,7 @@ function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDi
 
 function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) {
     const fileOrDirPathComponents = getPathComponents(fileOrDirPath);
-    return fileOrDirPathComponents.length > perceivedOsRootLengthForWatching(fileOrDirPathComponents) + 1;
+    return fileOrDirPathComponents.length > perceivedOsRootLengthForWatching(fileOrDirPathComponents, fileOrDirPathComponents.length) + 1;
 }
 
 /** @internal */
@@ -286,10 +287,8 @@ export function getDirectoryToWatchFailedLookupLocation(
     if (isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
         Debug.assert(failedLookupComponents.length === failedLookupPathComponents.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
         if (failedLookupPathComponents.length > rootPathComponents.length + 1) {
-            failedLookupPathComponents.length = rootPathComponents.length + 1;
-            failedLookupComponents.length = rootPathComponents.length + 1;
             // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
-            return getDirectoryOfFailedLookupWatch(failedLookupComponents, failedLookupPathComponents);
+            return getDirectoryOfFailedLookupWatch(failedLookupComponents, failedLookupPathComponents, rootPathComponents.length + 1);
         }
         else {
             // Always watch root directory non recursively
@@ -311,39 +310,42 @@ export function getDirectoryToWatchFailedLookupLocation(
 }
 
 function getDirectoryToWatchFromFailedLookupLocationDirectory(
-    dirComponents: string[],
-    dirPathComponents: PathPathComponents,
+    dirComponents: readonly string[],
+    dirPathComponents: Readonly<PathPathComponents>,
     rootPathComponents: Readonly<PathPathComponents>,
 ): DirectoryOfFailedLookupWatch | undefined {
     // If directory path contains node module, get the most parent node_modules directory for watching
     const indexOfNodeModules = dirPathComponents.indexOf("node_modules" as Path);
     if (indexOfNodeModules !== -1) {
-        dirPathComponents.length = indexOfNodeModules + 1;
-        dirComponents.length = indexOfNodeModules + 1;
         // If the directory is node_modules use it to watch, always watch it recursively
-        return canWatchDirectoryOrFile(dirPathComponents) ?
-            getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents) :
+        return canWatchDirectoryOrFile(dirPathComponents, indexOfNodeModules + 1) ?
+            getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, indexOfNodeModules + 1) :
             undefined;
     }
     // Use some ancestor of the root directory
     let nonRecursive = true;
+    let length: number | undefined;
     for (let i = 0; i < dirPathComponents.length; i++) {
         if (dirPathComponents[i] !== rootPathComponents[i]) {
             nonRecursive = false;
-            dirComponents.length = i + 1;
-            dirPathComponents.length = i + 1;
+            length = i + 1;
             break;
         }
     }
-    return canWatchDirectoryOrFile(dirPathComponents) ?
-        getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, nonRecursive) :
+    return canWatchDirectoryOrFile(dirPathComponents, length) ?
+        getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, length, nonRecursive) :
         undefined;
 }
 
-function getDirectoryOfFailedLookupWatch(dirComponents: string[], dirPathComponents: Readonly<PathPathComponents>, nonRecursive?: boolean): DirectoryOfFailedLookupWatch {
+function getDirectoryOfFailedLookupWatch(
+    dirComponents: readonly string[],
+    dirPathComponents: Readonly<PathPathComponents>,
+    length: number | undefined,
+    nonRecursive?: boolean
+): DirectoryOfFailedLookupWatch {
     return {
-        dir: getPathFromPathComponents(dirComponents),
-        dirPath: getPathFromPathComponents(dirPathComponents),
+        dir: getPathFromPathComponents(dirComponents, length),
+        dirPath: getPathFromPathComponents(dirPathComponents, length),
         nonRecursive,
     };
 }

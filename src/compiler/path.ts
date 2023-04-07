@@ -507,11 +507,11 @@ export function getPathComponents(path: string, currentDirectory = "") {
  *
  * @internal
  */
-export function getPathFromPathComponents<T extends string>(pathComponents: readonly T[]) {
+export function getPathFromPathComponents<T extends string>(pathComponents: readonly T[], length?: number) {
     if (pathComponents.length === 0) return "" as T;
 
     const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
-    return root + pathComponents.slice(1).join(directorySeparator) as T;
+    return root + pathComponents.slice(1, length).join(directorySeparator) as T;
 }
 
 //// Path Normalization
