@@ -1605,6 +1605,10 @@
         "category": "Error",
         "code": 1489
     },
+    "File appears to be binary.": {
+        "category": "Error",
+        "code": 1490
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

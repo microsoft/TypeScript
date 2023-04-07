@@ -779,7 +779,7 @@ export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagn
         output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
         output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
-        if (diagnostic.file) {
+        if (diagnostic.file && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
             output += host.getNewLine();
             output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
         }
