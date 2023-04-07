@@ -36030,7 +36030,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return getUnaryResultType(operandType);
             case SyntaxKind.ExclamationToken:
-                checkTruthinessExpression(node.operand);
+                checkTruthinessOfType(operandType, node.operand);
                 const facts = getTypeFacts(operandType) & (TypeFacts.Truthy | TypeFacts.Falsy);
                 return facts === TypeFacts.Truthy ? falseType :
                     facts === TypeFacts.Falsy ? trueType :

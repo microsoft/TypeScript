@@ -6,6 +6,7 @@ import {
     or,
 } from "./core";
 import {
+    extensionsNotSupportingExtensionlessResolution,
     hasJSFileExtension,
     hasTSFileExtension,
 } from "./extension";
@@ -14,7 +15,7 @@ import {
     nodeModulesPathPart,
     shouldAllowImportingTsExtension,
 } from "./moduleNameResolver";
-import { pathIsRelative } from "./path";
+import { fileExtensionIsOneOf, pathIsRelative } from "./path";
 import {
     CompilerOptions,
     ModuleKind,
@@ -135,6 +136,10 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
             emptyArray;
         for (const specifier of specifiers) {
             if (pathIsRelative(specifier)) {
+                if (fileExtensionIsOneOf(specifier, extensionsNotSupportingExtensionlessResolution)) {
+                    // These extensions are not optional, so do not indicate a preference.
+                    continue;
+                }
                 if (hasTSFileExtension(specifier)) {
                     return ModuleSpecifierEnding.TsExtension;
                 }
@@ -168,5 +173,7 @@ function getRequiresAtTopOfFile(sourceFile: SourceFile): readonly RequireOrImpor
 }
 
 function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (text: string) => boolean = or(hasJSFileExtension, hasTSFileExtension)): boolean {
-    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasExtension(text) : undefined) || false;
+    return firstDefined(imports, ({ text }) => pathIsRelative(text) && !fileExtensionIsOneOf(text, extensionsNotSupportingExtensionlessResolution)
+        ? hasExtension(text)
+        : undefined) || false;
 }

@@ -74,7 +74,6 @@ export function createHasErrorMessageLogger(): Logger {
 function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Logger {
     let inGroup = false;
     let firstInGroup = false;
-    let seq = 0;
     logger.startGroup = () => {
         inGroup = true;
         firstInGroup = true;
@@ -88,10 +87,9 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
         s = `[${nowString(logger.host!)}] ${s}`;
-        if (!inGroup || firstInGroup) s = padStringRight(type + " " + seq.toString(), "          ") + s;
+        if (!inGroup || firstInGroup) s = padStringRight(type + " seq", "          ") + s;
         if (ts.Debug.isDebugging) console.log(s);
         write(s);
-        if (!inGroup) seq++;
     }
 
     function padStringRight(str: string, padding: string) {
@@ -101,8 +99,8 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
 
 function nowString(host: TestServerHost) {
     // E.g. "12:34:56.789"
-    const d = host.now();
-    return `${ts.padLeft(d.getUTCHours().toString(), 2, "0")}:${ts.padLeft(d.getUTCMinutes().toString(), 2, "0")}:${ts.padLeft(d.getUTCSeconds().toString(), 2, "0")}.${ts.padLeft(d.getUTCMilliseconds().toString(), 3, "0")}`;
+    host.now(); // To increment the time but not print it to avoid the baseline updates
+    return `hh:mm:ss:mss`;
 }
 
 export function createLoggerWritingToConsole(host: TestServerHost): Logger {
@@ -401,14 +399,21 @@ function patchHostTimeouts(
 
     const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
     const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
+    const originalSetTime = host.setTime;
     let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
     host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
     host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
     host.logTimeoutQueueLength = logTimeoutQueueLength;
+    host.setTime = setTime;
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
+
+    function setTime(time: number) {
+        logger.log(`Host is moving to new time`);
+        return originalSetTime.call(host, time);
+    }
 
     function logTimeoutQueueLength() {
         logger.log(host.timeoutCallbacks.log());
