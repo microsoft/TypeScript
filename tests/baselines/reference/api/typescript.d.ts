@@ -5847,6 +5847,14 @@ declare namespace ts {
         emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
     }
     type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+    namespace JsTyping {
+        interface TypingResolutionHost {
+            directoryExists(path: string): boolean;
+            fileExists(fileName: string): boolean;
+            readFile(path: string, encoding?: string): string | undefined;
+            readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
+        }
+    }
     namespace server {
         type ActionSet = "action::set";
         type ActionInvalidate = "action::invalidate";
@@ -5911,6 +5919,14 @@ declare namespace ts {
         interface EndInstallTypes extends InstallTypes {
             readonly kind: EventEndInstallTypes;
             readonly installSuccess: boolean;
+        }
+        interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+            useCaseSensitiveFileNames: boolean;
+            writeFile(path: string, content: string): void;
+            createDirectory(path: string): void;
+            getCurrentDirectory?(): string;
+            watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
+            watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
         }
         interface SetTypings extends ProjectResponse {
             readonly typeAcquisition: TypeAcquisition;
