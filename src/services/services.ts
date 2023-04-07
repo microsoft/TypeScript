@@ -2501,30 +2501,30 @@ export function createLanguageService(
         }
         else {
             // determines if the cursor is in an element tag
-            const element = findAncestor(token.parent,
+            const tag = findAncestor(token.parent,
                 n => {
-                    if (!n.parent) return "quit";
-                    else if (isJsxElement(n.parent)) {
-                        if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
-                            return true;
-                        }
-                        return "quit";
+                    if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
+                        return true;
                     }
                     return false;
                 });
-            if (!element || !(isJsxOpeningElement(element) || isJsxClosingElement(element))) return undefined;
+            if (!tag) return undefined;
+            Debug.assert(isJsxOpeningElement(tag) || isJsxClosingElement(tag), "tag should be opening or closing element");
 
-            const openTagStart = element.parent.openingElement.tagName.getStart(sourceFile);
-            const openTagEnd = element.parent.openingElement.tagName.end;
-            const closeTagStart = element.parent.closingElement.tagName.getStart(sourceFile);
-            const closeTagEnd = element.parent.closingElement.tagName.end;
+            const openTag = tag.parent.openingElement;
+            const closeTag = tag.parent.closingElement;
+
+            const openTagStart = openTag.tagName.getStart(sourceFile);
+            const openTagEnd = openTag.tagName.end;
+            const closeTagStart = closeTag.tagName.getStart(sourceFile);
+            const closeTagEnd = closeTag.tagName.end;
 
             // only return linked cursors if the cursor is within a tag name
             if (!(openTagStart <= position && position <= openTagEnd || closeTagStart <= position && position <= closeTagEnd)) return undefined;
 
             // only return linked cursors if text in both tags is identical
-            const openingTagText = element.parent.openingElement.tagName.getText(sourceFile);
-            if (openingTagText !== element.parent.closingElement.tagName.getText(sourceFile)) return undefined;
+            const openingTagText = openTag.tagName.getText(sourceFile);
+            if (openingTagText !== closeTag.tagName.getText(sourceFile)) return undefined;
 
             return {
                 ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],

@@ -1106,13 +1106,13 @@ export interface LinkedEditingRangeRequest extends FileLocationRequest {
     readonly command: CommandTypes.LinkedEditingRange;
 }
 
-export interface LinkedEditingRanges {
+export interface LinkedEditingRangesBody {
     ranges: TextSpan[];
     wordPattern?: string;
 }
 
 export interface LinkedEditingRangeResponse extends Response {
-    readonly body: LinkedEditingRanges;
+    readonly body: LinkedEditingRangesBody;
 }
 
 /**

@@ -1803,7 +1803,7 @@ export class Session<TMessage = string> implements EventSender {
         return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
     }
 
-    private getLinkedEditingRange(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRanges | undefined {
+    private getLinkedEditingRange(args: protocol.FileLocationRequestArgs): protocol.LinkedEditingRangesBody | undefined {
         const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
         const position = this.getPositionInFile(args, file);
         const linkedEditInfo = languageService.getLinkedEditingRangeAtPosition(file, position);
@@ -3657,7 +3657,7 @@ function positionToLineOffset(info: ScriptInfoOrConfig, position: number): proto
     return isConfigFile(info) ? locationFromLineAndCharacter(info.getLineAndCharacterOfPosition(position)) : info.positionToLineOffset(position);
 }
 
-function convertLinkedEditInfoToRanges(linkedEdit: LinkedEditingInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRanges {
+function convertLinkedEditInfoToRanges(linkedEdit: LinkedEditingInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRangesBody {
     const ranges = linkedEdit.ranges.map(
             r => {
                 return {

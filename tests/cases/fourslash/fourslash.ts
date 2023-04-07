@@ -761,8 +761,8 @@ declare namespace FourSlashInterface {
     }
 
     type LinkedEditingInfo = {
-        readonly ranges : { start: number, length: number }[];
-        wordPattern? : string;
+        readonly ranges: { start: number, length: number }[];
+        wordPattern?: string;
     }
 
     export type SignatureHelpTriggerReason =

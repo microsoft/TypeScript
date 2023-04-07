@@ -881,12 +881,12 @@ declare namespace ts {
             interface LinkedEditingRangeRequest extends FileLocationRequest {
                 readonly command: CommandTypes.LinkedEditingRange;
             }
-            interface LinkedEditingRanges {
+            interface LinkedEditingRangesBody {
                 ranges: TextSpan[];
                 wordPattern?: string;
             }
             interface LinkedEditingRangeResponse extends Response {
-                readonly body: LinkedEditingRanges;
+                readonly body: LinkedEditingRangesBody;
             }
             /**
              * Get document highlights request; value of command field is
