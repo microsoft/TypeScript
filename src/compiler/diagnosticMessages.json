@@ -1605,7 +1605,7 @@
         "category": "Error",
         "code": 1489
     },
-    "File appears to be binary": {
+    "File appears to be binary.": {
         "category": "Error",
         "code": 1490
     },
