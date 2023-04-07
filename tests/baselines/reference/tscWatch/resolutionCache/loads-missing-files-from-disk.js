@@ -82,6 +82,10 @@ import {y} from "bar"
 export const y = 1;
 
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+2: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...

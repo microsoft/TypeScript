@@ -146,6 +146,13 @@ Input::
 {"name":"app","version":"1.0.0","type":"module"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -249,6 +256,13 @@ Input::
 {"name":"app","version":"1.0.0"}
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -355,6 +369,13 @@ Change:: Delete package.json
 Input::
 //// [/user/username/projects/myproject/package.json] deleted
 
+Before running Timeout callback:: count: 1
+5: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+6: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -449,6 +470,13 @@ Input::
 {"name":"app","version":"1.0.0","type":"module"}
 
 
+Before running Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+8: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -553,6 +581,13 @@ Change:: Delete package.json
 Input::
 //// [/user/username/projects/myproject/package.json] deleted
 
+Before running Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+10: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup

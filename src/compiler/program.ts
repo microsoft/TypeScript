@@ -287,6 +287,7 @@ import {
     setParentRecursive,
     setResolvedModule,
     setResolvedTypeReferenceDirective,
+    shouldResolveJsRequire,
     skipTrivia,
     skipTypeChecking,
     some,
@@ -3211,8 +3212,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             collectModuleReferences(node, /*inAmbientModule*/ false);
         }
 
-        // `require` has no special meaning in `--moduleResolution bundler`
-        const shouldProcessRequires = isJavaScriptFile && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler;
+        const shouldProcessRequires = isJavaScriptFile && shouldResolveJsRequire(options);
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || shouldProcessRequires) {
             collectDynamicImportOrRequireCalls(file);
         }
@@ -4256,9 +4256,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.verbatimModuleSyntax) {
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
-            }
-            if (options.isolatedModules) {
-                createRedundantOptionDiagnostic("isolatedModules", "verbatimModuleSyntax");
             }
             if (options.preserveValueImports) {
                 createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");

@@ -10,7 +10,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkProjectActualFiles,
     createHostWithSolutionBuild,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -250,26 +249,23 @@ function foo() {
         };
         const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
         const host = createServerHost(files);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(aTs.path);
-        service.checkNumberOfProjects({ configuredProjects: 1 });
 
         // project A referencing b.d.ts without project reference
         const projectA = service.configuredProjects.get(configA.path)!;
         assert.isDefined(projectA);
-        checkProjectActualFiles(projectA, [aTs.path, a2Ts.path, bDts.path, libFile.path, configA.path]);
 
         // reuses b.d.ts but sets the path and resolved path since projectC has project references
         // as the real resolution was to b.ts
         service.openClientFile(cTs.path);
-        service.checkNumberOfProjects({ configuredProjects: 2 });
-        const projectC = service.configuredProjects.get(configC.path)!;
-        checkProjectActualFiles(projectC, [cTs.path, bTs.path, libFile.path, configC.path]);
 
         // Now new project for project A tries to reuse b but there is no filesByName mapping for b's source location
         host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
+        service.testhost.baselineHost("a2Ts modified");
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
+        baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", service);
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -313,7 +309,7 @@ function foo() {
             // Create symlink in node module
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([aTest], session);
-            verifyGetErrRequest({ session, host, files: [aTest] });
+            verifyGetErrRequest({ session, files: [aTest] });
             session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
                 command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
@@ -327,7 +323,7 @@ function foo() {
                     }]
                 }
             });
-            verifyGetErrRequest({ session, host, files: [aTest] });
+            verifyGetErrRequest({ session, files: [aTest] });
             baselineTsserverLogs("projectReferences", `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`, session);
         }
 
@@ -464,7 +460,7 @@ testCompositeFunction('why hello there', 42);`
         const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([consumerIndex], session);
-        verifyGetErrRequest({ host, session, files: [consumerIndex] });
+        verifyGetErrRequest({ session, files: [consumerIndex] });
         baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
     });
 
@@ -946,7 +942,7 @@ export function bar() {}`
         }
 
         function verifySolutionScenario(input: Setup) {
-            const { session, service, host } = setup(input);
+            const { session, service } = setup(input);
 
             const info = service.getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
@@ -955,7 +951,7 @@ export function bar() {}`
             session.logger.endGroup();
 
             // Verify errors
-            verifyGetErrRequest({ session, host, files: [main] });
+            verifyGetErrRequest({ session, files: [main] });
 
             // Verify collection of script infos
             service.openClientFile(dummyFilePath);
@@ -1227,16 +1223,16 @@ bar;`
             // Add new class to referenced project
             const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
 
             // Add excluded file to referenced project
             host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
 
             // Add output from new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
         });
 
@@ -1247,14 +1243,14 @@ bar;`
             // Add new class to referenced project
             const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(3);
+            host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
             host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             // Add output from new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
         });
 
@@ -1264,20 +1260,20 @@ bar;`
             // Add new class to referenced project
             const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             // Add output of new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
             host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
         });
 
@@ -1288,20 +1284,20 @@ bar;`
             // Add new class to referenced project
             const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(3);
+            host.runQueuedTimeoutCallbacks();
             // Add output of new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
             host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-            host.checkTimeoutQueueLengthAndRun(0);
+            host.runQueuedTimeoutCallbacks();
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
         });
     });

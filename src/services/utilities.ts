@@ -3457,7 +3457,7 @@ function nodeIsASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         return false;
     }
 
-    // See comment in parser’s `parseDoStatement`
+    // See comment in parser's `parseDoStatement`
     if (node.kind === SyntaxKind.DoStatement) {
         return true;
     }
@@ -3524,7 +3524,7 @@ export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
     });
 
     // One statement missing a semicolon isn't sufficient evidence to say the user
-    // doesn’t want semicolons, because they may not even be done writing that statement.
+    // doesn't want semicolons, because they may not even be done writing that statement.
     if (withSemicolon === 0 && withoutSemicolon <= 1) {
         return true;
     }
@@ -3677,7 +3677,7 @@ export interface PackageJsonImportFilter {
     /**
      * Use for a specific module specifier that has already been resolved.
      * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
-     * the best module specifier for a given module _and_ determine if it’s importable.
+     * the best module specifier for a given module _and_ determine if it's importable.
      */
     allowsImportingSpecifier: (moduleSpecifier: string) => boolean;
 }
@@ -3779,7 +3779,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 
     function isAllowedCoreNodeModulesImport(moduleSpecifier: string) {
-        // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
+        // If we're in JavaScript, it can be difficult to tell whether the user wants to import
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
@@ -3809,7 +3809,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
         if (!specifier) {
             return undefined;
         }
-        // Paths here are not node_modules, so we don’t care about them;
+        // Paths here are not node_modules, so we don't care about them;
         // returning anything will trigger a lookup in package.json.
         if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
             return getNodeModuleRootSpecifier(specifier);

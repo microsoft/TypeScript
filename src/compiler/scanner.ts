@@ -2802,7 +2802,7 @@ const codePointAt: (s: string, i: number) => number = (String.prototype as any).
     }
     // Get the first code unit
     const first = str.charCodeAt(i);
-    // check if it’s the start of a surrogate pair
+    // check if it's the start of a surrogate pair
     if (first >= 0xD800 && first <= 0xDBFF && size > i + 1) { // high surrogate and there is a next code unit
         const second = str.charCodeAt(i + 1);
         if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate

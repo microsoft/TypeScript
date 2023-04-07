@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/a.ts]
 ///<reference path="b.ts"/>
@@ -34,7 +34,7 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-Info 1    [00:00:32.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -43,10 +43,10 @@ Info 1    [00:00:32.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 5    [00:00:36.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/a.ts SVC-1-0 "///<reference path=\"b.ts\"/>\n///<reference path=\"/user/username/projects/myproject/node_modules/something/index.d.ts\"/>\nfunction fooA() { }"
 
@@ -56,15 +56,15 @@ Info 5    [00:00:36.000] 	Files (2)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
-Info 6    [00:00:37.000] -----------------------------------------------
-Info 7    [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:39.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 7    [00:00:40.000] -----------------------------------------------
-Info 7    [00:00:41.000] Open files: 
-Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
-Info 7    [00:00:44.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }

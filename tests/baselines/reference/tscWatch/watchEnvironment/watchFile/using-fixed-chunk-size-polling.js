@@ -73,6 +73,22 @@ Change:: The timeout is to check the status of all files
 
 Input::
 
+Before running Timeout callback:: count: 1
+1: pollQueue
+After running Timeout callback:: count: 1
+2: pollQueue
+Before running Timeout callback:: count: 1
+2: pollQueue
+After running Timeout callback:: count: 1
+3: pollQueue
+Before running Timeout callback:: count: 1
+3: pollQueue
+After running Timeout callback:: count: 1
+4: pollQueue
+Before running Timeout callback:: count: 1
+4: pollQueue
+After running Timeout callback:: count: 1
+5: pollQueue
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -85,6 +101,11 @@ Input::
 var zz30 = 100;
 
 
+Before running Timeout callback:: count: 1
+5: pollQueue
+After running Timeout callback:: count: 2
+6: timerToUpdateProgram
+7: pollQueue
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -94,6 +115,11 @@ Change:: Callbacks: queue and scheduled program update
 
 Input::
 
+Before running Timeout callback:: count: 2
+6: timerToUpdateProgram
+7: pollQueue
+After running Timeout callback:: count: 1
+8: pollQueue
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -131,6 +157,10 @@ Change:: The timeout is to check the status of all files
 
 Input::
 
+Before running Timeout callback:: count: 1
+8: pollQueue
+After running Timeout callback:: count: 1
+9: pollQueue
 Output::
 
 exitCode:: ExitStatus.undefined

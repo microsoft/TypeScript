@@ -803,7 +803,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
         const pending = clearInvalidateResolutionsOfFailedLookupLocations();
         writeLog(`Scheduling invalidateFailedLookup${pending ? ", Cancelled earlier one" : ""}`);
-        timerToInvalidateFailedLookupResolutions = host.setTimeout(invalidateResolutionsOfFailedLookup, 250);
+        timerToInvalidateFailedLookupResolutions = host.setTimeout(invalidateResolutionsOfFailedLookup, 250, "timerToInvalidateFailedLookupResolutions");
     }
 
     function invalidateResolutionsOfFailedLookup() {
@@ -825,7 +825,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             host.clearTimeout(timerToUpdateProgram);
         }
         writeLog("Scheduling update");
-        timerToUpdateProgram = host.setTimeout(updateProgramWithWatchStatus, 250);
+        timerToUpdateProgram = host.setTimeout(updateProgramWithWatchStatus, 250, "timerToUpdateProgram");
     }
 
     function scheduleProgramReload() {

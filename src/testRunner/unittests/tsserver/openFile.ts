@@ -153,7 +153,7 @@ bar();`
         const host = createServerHost([file, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file], session);
-        verifyGetErrRequest({ session, host, files: [file] });
+        verifyGetErrRequest({ session, files: [file] });
 
         // Remove first ts-ignore and check only first error is reported
         const tsIgnoreComment = `// @ts-ignore`;
@@ -170,7 +170,7 @@ bar();`
                 }]
             }
         });
-        verifyGetErrRequest({ session, host, files: [file] });
+        verifyGetErrRequest({ session, files: [file] });
         // Revert the change and no errors should be reported
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
@@ -184,7 +184,7 @@ bar();`
                 }]
             }
         });
-        verifyGetErrRequest({ session, host, files: [file] });
+        verifyGetErrRequest({ session, files: [file] });
         baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
     });
 

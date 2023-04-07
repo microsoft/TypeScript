@@ -2258,10 +2258,10 @@ function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: Soluti
     if (state.timerToBuildInvalidatedProject) {
         hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
     }
-    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state, changeDetected);
+    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, "timerToBuildInvalidatedProject", state, changeDetected);
 }
 
-function buildNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: string, state: SolutionBuilderState<T>, changeDetected: boolean) {
     performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
     performance.mark("SolutionBuilder::afterBuild");

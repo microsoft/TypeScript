@@ -1880,7 +1880,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -1971,10 +1971,6 @@
     "Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
         "category": "Error",
         "code": 2379
-    },
-    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
-        "category": "Error",
-        "code": 2380
     },
     "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
@@ -3618,10 +3614,6 @@
     "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
-    },
-    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
-        "category": "Error",
-        "code": 2847
     },
     "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
         "category": "Error",
@@ -7760,5 +7752,9 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
+    },
+    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
+        "category": "Error",
+        "code": 18052
     }
 }

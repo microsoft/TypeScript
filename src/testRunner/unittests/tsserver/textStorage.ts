@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost } from "../virtualFileSystemWithWatch";
-import { createProjectService } from "./helpers";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: Text storage", () => {
     const f = {
@@ -109,7 +109,7 @@ describe("unittests:: tsserver:: Text storage", () => {
         const host = createServerHost([largeFile]);
 
         // The large-file handling requires a ScriptInfo with a containing project
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         projectService.openClientFile(largeFile.path);
         const scriptInfo = projectService.getScriptInfo(largeFile.path);
 
@@ -119,6 +119,7 @@ describe("unittests:: tsserver:: Text storage", () => {
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
 
         assert.strictEqual(largeFile.content.length, ts1.getTelemetryFileSize());
+        baselineTsserverLogs("textStorage", "should be able to return the file size when a JS file is too large to load into text", projectService);
     });
 
     it("should return the file size without reloading the file", () => {

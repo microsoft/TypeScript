@@ -333,6 +333,14 @@ Input::
 export interface Import1 {}
 
 
+Before running Timeout callback:: count: 2
+3: timerToInvalidateFailedLookupResolutions
+4: timerToUpdateProgram
+After running Timeout callback:: count: 1
+5: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /src/project/node_modules/pkg1 :: WatchInfo: /src/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -569,6 +577,14 @@ Input::
 export interface Import3 {}
 
 
+Before running Timeout callback:: count: 2
+8: timerToInvalidateFailedLookupResolutions
+9: timerToUpdateProgram
+After running Timeout callback:: count: 1
+10: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /src/project/node_modules/pkg3 :: WatchInfo: /src/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup

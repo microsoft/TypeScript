@@ -1,6 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
     TestServerCancellationToken,
     TestSessionRequest,
@@ -24,42 +26,33 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             content: "let xyz = 1;"
         };
         const host = createServerHost([f1]);
-        let expectedRequestId: number;
         const cancellationToken: ts.server.ServerCancellationToken = {
             isCancellationRequested: () => false,
-            setRequest: requestId => {
-                if (expectedRequestId === undefined) {
-                    assert.fail("unexpected call");
-                }
-                assert.equal(requestId, expectedRequestId);
-            },
+            setRequest: requestId => session.logger.log(`ServerCancellationToken:: Cancellation Request id:: ${requestId}`),
             resetRequest: ts.noop
         };
 
-        const session = createSession(host, { cancellationToken });
+        const session = createSession(host, { cancellationToken, logger: createLoggerWithInMemoryLogs(host) });
 
-        expectedRequestId = session.getNextSeq();
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: f1.path }
         });
 
-        expectedRequestId = session.getNextSeq();
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
             arguments: { files: [f1.path], delay: 0 }
         });
 
-        expectedRequestId = session.getNextSeq();
         session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
             command: ts.server.protocol.CommandTypes.DocumentHighlights,
             arguments: { file: f1.path, line: 1, offset: 6, filesToSearch: [f1.path] }
         });
 
-        expectedRequestId = 2;
+        host.runQueuedTimeoutCallbacks();
         host.runQueuedImmediateCallbacks();
-        expectedRequestId = 2;
         host.runQueuedImmediateCallbacks();
+        baselineTsserverLogs("cancellationT", "is attached to request", session);
     });
 
     it("Geterr is cancellable", () => {
@@ -74,12 +67,14 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             })
         };
 
-        const cancellationToken = new TestServerCancellationToken();
         const host = createServerHost([f1, config]);
+        const logger = createLoggerWithInMemoryLogs(host);
+        const cancellationToken = new TestServerCancellationToken(logger);
         const session = createSession(host, {
             canUseEvents: true,
             eventHandler: ts.noop,
-            cancellationToken
+            cancellationToken,
+            logger,
         });
         {
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -92,11 +87,8 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 arguments: { files: ["/a/missing"], delay: 0 }
             });
             // Queued files
-            assert.equal(host.getOutput().length, 0, "expected 0 message");
-            host.checkTimeoutQueueLengthAndRun(1);
+            host.runQueuedTimeoutCallbacks();
             // Completed event since file is missing
-            assert.equal(host.getOutput().length, 1, "expect 1 message");
-            verifyRequestCompleted(session.getSeq(), 0);
         }
         {
             const getErrId = session.getNextSeq();
@@ -106,22 +98,15 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 arguments: { files: [f1.path], delay: 0 }
             });
 
-            assert.equal(host.getOutput().length, 0, "expect 0 messages");
-
             // run new request
             session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
                 command: ts.server.protocol.CommandTypes.ProjectInfo,
                 arguments: { file: f1.path, needFileNameList: false }
             });
-            session.clearMessages();
 
             // cancel previously issued Geterr
             cancellationToken.setRequestToCancel(getErrId);
             host.runQueuedTimeoutCallbacks();
-
-            assert.equal(host.getOutput().length, 1, "expect 1 message");
-            verifyRequestCompleted(getErrId, 0);
-
             cancellationToken.resetToken();
         }
         {
@@ -130,84 +115,41 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 command: ts.server.protocol.CommandTypes.Geterr,
                 arguments: { files: [f1.path], delay: 0 }
             });
-            assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
             // run first step
             host.runQueuedTimeoutCallbacks();
-            assert.equal(host.getOutput().length, 1, "expect 1 message");
-            const e1 = getMessage(0) as ts.server.protocol.Event;
-            assert.equal(e1.event, "syntaxDiag");
-            session.clearMessages();
 
             cancellationToken.setRequestToCancel(getErrId);
             host.runQueuedImmediateCallbacks();
-            assert.equal(host.getOutput().length, 1, "expect 1 message");
-            verifyRequestCompleted(getErrId, 0);
 
             cancellationToken.resetToken();
         }
         {
-            const getErrId = session.getNextSeq();
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
                 arguments: { files: [f1.path], delay: 0 }
             });
-            assert.equal(host.getOutput().length, 0, "expect 0 messages");
-
             // run first step
             host.runQueuedTimeoutCallbacks();
-            assert.equal(host.getOutput().length, 1, "expect 1 message");
-            const e1 = getMessage(0) as ts.server.protocol.Event;
-            assert.equal(e1.event, "syntaxDiag");
-            session.clearMessages();
-
             // the semanticDiag message
             host.runQueuedImmediateCallbacks();
-            assert.equal(host.getOutput().length, 1);
-            const e2 = getMessage(0) as ts.server.protocol.Event;
-            assert.equal(e2.event, "semanticDiag");
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-            assert.equal(host.getOutput().length, 2);
-            const e3 = getMessage(0) as ts.server.protocol.Event;
-            assert.equal(e3.event, "suggestionDiag");
-            verifyRequestCompleted(getErrId, 1);
-
+            host.runQueuedImmediateCallbacks();
             cancellationToken.resetToken();
         }
         {
-            const getErr1 = session.getNextSeq();
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
                 arguments: { files: [f1.path], delay: 0 }
             });
-            assert.equal(host.getOutput().length, 0, "expect 0 messages");
             // run first step
             host.runQueuedTimeoutCallbacks();
-            assert.equal(host.getOutput().length, 1, "expect 1 message");
-            const e1 = getMessage(0) as ts.server.protocol.Event;
-            assert.equal(e1.event, "syntaxDiag");
-            session.clearMessages();
-
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
                 arguments: { files: [f1.path], delay: 0 }
             });
             // make sure that getErr1 is completed
-            verifyRequestCompleted(getErr1, 0);
         }
-
-        function verifyRequestCompleted(expectedSeq: number, n: number) {
-            const event = getMessage(n) as ts.server.protocol.RequestCompletedEvent;
-            assert.equal(event.event, "requestCompleted");
-            assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
-            session.clearMessages();
-        }
-
-        function getMessage(n: number) {
-            return JSON.parse(ts.server.extractMessage(host.getOutput()[n]));
-        }
+        baselineTsserverLogs("cancellationT", "Geterr is cancellable", session);
     });
 
     it("Lower priority tasks are cancellable", () => {
@@ -221,13 +163,15 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 compilerOptions: {}
             })
         };
-        const cancellationToken = new TestServerCancellationToken(/*cancelAfterRequest*/ 3);
         const host = createServerHost([f1, config]);
+        const logger = createLoggerWithInMemoryLogs(host);
+        const cancellationToken = new TestServerCancellationToken(logger, /*cancelAfterRequest*/ 3);
         const session = createSession(host, {
             canUseEvents: true,
             eventHandler: ts.noop,
             cancellationToken,
-            throttleWaitMilliseconds: 0
+            throttleWaitMilliseconds: 0,
+            logger,
         });
         {
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -259,6 +203,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 arguments: { file: f1.path }
             });
         }
+        baselineTsserverLogs("cancellationT", "Lower priority tasks are cancellable", session);
 
         function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(request: TestSessionRequest<T>) {
             // Set the next request to be cancellable
@@ -271,10 +216,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 session.executeCommandSeq(request);
             }
             catch (e) {
-                assert(e instanceof ts.OperationCanceledException);
+                session.logger.log(`Exception is OperationCanceledException: ${e instanceof ts.OperationCanceledException}`);
                 operationCanceledExceptionThrown = true;
             }
-            assert(operationCanceledExceptionThrown, "Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
+            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
         }
     });
 });

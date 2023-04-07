@@ -100,6 +100,9 @@ Change:: Directory watch updates because of main.js creation
 
 Input::
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -112,6 +115,8 @@ Input::
 export function temp(): string;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
