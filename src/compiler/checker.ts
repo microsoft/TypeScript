@@ -22627,8 +22627,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             let i = 0;
             for (const type of target.types) {
-                const targetType = getTypeOfPropertyOfType(type, propertyName);
                 if (discriminable[i] === undefined) {
+                    const targetType = getTypeOfPropertyOfType(type, propertyName);
                     discriminable[i] = !!(targetType && related(getDiscriminatingType(), targetType));
                 }
                 i++;
