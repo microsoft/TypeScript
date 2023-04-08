@@ -258,6 +258,7 @@ declare namespace FourSlashInterface {
         quickInfoExists(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
+        linkedEditing(map: { [markerName: string]: LinkedEditingInfo | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
@@ -735,6 +736,11 @@ declare namespace FourSlashInterface {
 
     interface VerifyDocCommentTemplateOptions {
         generateReturnInDocTemplate?: boolean;
+    }
+
+    type LinkedEditingInfo = {
+        readonly ranges: { start: number, length: number }[];
+        wordPattern?: string;
     }
 
     export type SignatureHelpTriggerReason =

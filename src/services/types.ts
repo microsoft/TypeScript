@@ -639,6 +639,7 @@ export interface LanguageService {
      * Editors should call this after `>` is typed.
      */
     getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
+    getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
 
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
 
@@ -691,6 +692,11 @@ export interface LanguageService {
 
 export interface JsxClosingTagInfo {
     readonly newText: string;
+}
+
+export interface LinkedEditingInfo {
+    readonly ranges: TextSpan[];
+    wordPattern?: string;
 }
 
 export interface CombinedCodeFixScope { type: "file"; fileName: string; }

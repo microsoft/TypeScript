@@ -25,6 +25,7 @@ import type * as ts from "./_namespaces/ts";
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -1103,6 +1104,18 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
+}
+
+export interface LinkedEditingRangesBody {
+    ranges: TextSpan[];
+    wordPattern?: string;
+}
+
+export interface LinkedEditingRangeResponse extends Response {
+    readonly body: LinkedEditingRangesBody;
+}
 
 /**
  * Get document highlights request; value of command field is

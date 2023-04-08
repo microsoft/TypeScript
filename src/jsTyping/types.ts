@@ -101,7 +101,6 @@ export interface EndInstallTypes extends InstallTypes {
     readonly installSuccess: boolean;
 }
 
-/** @internal */
 export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
     useCaseSensitiveFileNames: boolean;
     writeFile(path: string, content: string): void;

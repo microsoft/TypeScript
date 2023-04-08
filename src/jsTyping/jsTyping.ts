@@ -39,7 +39,6 @@ import {
     TypeAcquisition,
 } from "../compiler/types";
 
-/** @internal */
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;
