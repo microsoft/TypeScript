@@ -35,7 +35,7 @@ function test1(x: MyUnion) {
 >x : MyUnion
 >true : true
 
-        x
+        x;
 >x : B | C
     }
 
@@ -46,7 +46,7 @@ function test1(x: MyUnion) {
 >x : MyUnion
 >false : false
 
-        x
+        x;
 >x : A
     }
 
@@ -57,7 +57,7 @@ function test1(x: MyUnion) {
 >x : MyUnion
 >false : false
 
-        x
+        x;
 >x : B | C
     }
 
@@ -68,7 +68,7 @@ function test1(x: MyUnion) {
 >x : MyUnion
 >true : true
 
-        x
+        x;
 >x : A
     }
 
@@ -79,7 +79,7 @@ function test1(x: MyUnion) {
 >x : MyUnion
 >true : true
 
-        x
+        x;
 >x : B | C
     }
 
@@ -90,7 +90,7 @@ function test1(x: MyUnion) {
 >x : MyUnion
 >true : true
 
-        x
+        x;
 >x : A
     }
 
@@ -101,7 +101,7 @@ function test1(x: MyUnion) {
 >isA : (x: MyUnion) => x is A
 >x : MyUnion
 
-        x
+        x;
 >x : B | C
     }
 
@@ -112,7 +112,54 @@ function test1(x: MyUnion) {
 >isA : (x: MyUnion) => x is A
 >x : MyUnion
 
-        x
+        x;
 >x : A
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/53093
+function test2(x: unknown) {
+>test2 : (x: unknown) => void
+>x : unknown
+
+    if (x instanceof Error === false) {
+>x instanceof Error === false : boolean
+>x instanceof Error : boolean
+>x : unknown
+>Error : ErrorConstructor
+>false : false
+
+        return;
+    }
+    x;
+>x : Error
+}
+
+// https://github.com/microsoft/TypeScript/issues/50712
+function test3(foo: unknown) {
+>test3 : (foo: unknown) => void
+>foo : unknown
+
+    if (typeof foo !== 'string' && Array.isArray(foo) === false) {
+>typeof foo !== 'string' && Array.isArray(foo) === false : boolean
+>typeof foo !== 'string' : boolean
+>typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>foo : unknown
+>'string' : "string"
+>Array.isArray(foo) === false : boolean
+>Array.isArray(foo) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>foo : unknown
+>false : false
+
+        throw new Error('Not a string or an array');
+>new Error('Not a string or an array') : Error
+>Error : ErrorConstructor
+>'Not a string or an array' : "Not a string or an array"
+    }
+    foo;
+>foo : string | any[]
+}
+

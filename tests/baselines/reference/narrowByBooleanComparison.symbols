@@ -36,7 +36,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -44,7 +44,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -52,7 +52,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -60,7 +60,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -68,7 +68,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -76,7 +76,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -84,7 +84,7 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 
@@ -92,7 +92,42 @@ function test1(x: MyUnion) {
 >isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
 
-        x
+        x;
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/53093
+function test2(x: unknown) {
+>test2 : Symbol(test2, Decl(narrowByBooleanComparison.ts, 39, 1))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 42, 15))
+
+    if (x instanceof Error === false) {
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 42, 15))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return;
+    }
+    x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 42, 15))
+}
+
+// https://github.com/microsoft/TypeScript/issues/50712
+function test3(foo: unknown) {
+>test3 : Symbol(test3, Decl(narrowByBooleanComparison.ts, 47, 1))
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+
+    if (typeof foo !== 'string' && Array.isArray(foo) === false) {
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+
+        throw new Error('Not a string or an array');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    foo;
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+}
+
