@@ -45,7 +45,7 @@ interface Array<T> {
      * @param items Elements to insert into the array in place of the deleted elements.
      * @returns The copied array.
      */
-    toSpliced<F>(start: number, deleteCount: number, ...items: F[]): (T | F)[];
+    toSpliced(start: number, deleteCount: number, ...items: T[]): T[];
 
     /**
      * Copies an array and removes elements while returning the remaining elements.
@@ -56,13 +56,15 @@ interface Array<T> {
     toSpliced(start: number, deleteCount?: number): T[];
 
     /**
-     * Copies an array, then overwrites the value at the provided index with the given value.
-     * @param index The index of the value to overwrite.
+     * Copies an array, then overwrites the value at the provided index with the
+     * given value. If the index is negative, then it replaces from the start
+     * of the array.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to write into the copied array.
      * @returns The copied array with the updated value.
-
      */
-    with<F>(index: number, value: F): (T | F)[];
+    with(index: number, value: T): T[];
 }
 
 interface ReadonlyArray<T> {
@@ -121,7 +123,7 @@ interface ReadonlyArray<T> {
      * @param items Elements to insert into the array in place of the deleted elements.
      * @returns A copy of the original array with the remaining elements.
      */
-    toSpliced<F>(start: number, deleteCount: number, ...items: F[]): (T | F)[];
+    toSpliced(start: number, deleteCount: number, ...items: T[]): T[];
 
     /**
      * Copies an array and removes elements while returning the remaining elements.
@@ -132,12 +134,15 @@ interface ReadonlyArray<T> {
     toSpliced(start: number, deleteCount?: number): T[];
 
     /**
-     * Copies the array and inserts the given value at the provided index.
-     * @param index The index of the value to overwrite.
+     * Copies an array, then overwrites the value at the provided index with the
+     * given value. If the index is negative, then it replaces from the start
+     * of the array
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with<F>(index: number, value: F): (T | F)[];
+    with(index: number, value: T): T[];
 }
 
 interface Int8Array {
@@ -196,7 +201,8 @@ interface Int8Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -259,7 +265,8 @@ interface Uint8Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -330,7 +337,8 @@ interface Uint8ClampedArray {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -393,7 +401,8 @@ interface Int16Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -464,7 +473,8 @@ interface Uint16Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -527,7 +537,8 @@ interface Int32Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -598,7 +609,8 @@ interface Uint32Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -669,7 +681,8 @@ interface Float32Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -740,7 +753,8 @@ interface Float64Array {
 
     /**
      * Copies the array and inserts the given number at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -811,7 +825,8 @@ interface BigInt64Array {
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
@@ -882,7 +897,8 @@ interface BigUint64Array {
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
-     * @param index The index of the value to overwrite.
+     * @param index The index of the value to overwrite. If the index is
+     * negative, then it replaces from the end of the array.
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
