@@ -42,7 +42,7 @@ interface Array<T> {
      * Copies an array and removes elements and, if necessary, inserts new elements in their place. Returns the copied array.
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
-     * @param items Elements to insert into the array in place of the deleted elements.
+     * @param items Elements to insert into the copied array in place of the deleted elements.
      * @returns The copied array.
      */
     toSpliced(start: number, deleteCount: number, ...items: T[]): T[];
@@ -120,7 +120,7 @@ interface ReadonlyArray<T> {
      * Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
-     * @param items Elements to insert into the array in place of the deleted elements.
+     * @param items Elements to insert into the copied array in place of the deleted elements.
      * @returns A copy of the original array with the remaining elements.
      */
     toSpliced(start: number, deleteCount: number, ...items: T[]): T[];
