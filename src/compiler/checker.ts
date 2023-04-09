@@ -22607,41 +22607,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
-        return findMatchingDiscriminantType(source, target, isRelatedTo, /*skipPartial*/ true) ||
+        return findMatchingDiscriminantType(source, target, isRelatedTo) ||
             findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
             findBestTypeForObjectLiteral(source, target) ||
             findBestTypeForInvokable(source, target) ||
             findMostOverlappyType(source, target);
     }
 
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: undefined, skipPartial?: boolean): Type | undefined;
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type, skipPartial?: boolean): Type;
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type, skipPartial?: boolean) {
-        // undefined=unknown, true=discriminated, false=not discriminated
-        // The state of each type progresses from left to right. Discriminated types stop at 'true'.
-        const discriminable = target.types.map(_ => undefined) as (boolean | undefined)[];
+    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary) {
+        const types = target.types;
+        const include = types.map(t => !(t.flags & TypeFlags.Primitive));
         for (const [getDiscriminatingType, propertyName] of discriminators) {
-            const targetProp = getUnionOrIntersectionProperty(target, propertyName);
-            if (skipPartial && targetProp && getCheckFlags(targetProp) & CheckFlags.ReadPartial) {
-                continue;
+            // If the remaining target types include at least one with a matching discriminant, eliminate those that
+            // have non-matching discriminants. This ensures that we ignore erroneous discriminators and gradually
+            // refine the target set without eliminating every constituent (which would lead to `never`).
+            let exclude: number[] | undefined;
+            let matched = false;
+            for (let i = 0; i < types.length; i++) {
+                if (include[i]) {
+                    const targetType = getTypeOfPropertyOfType(types[i], propertyName);
+                    if (targetType && related(getDiscriminatingType(), targetType)) {
+                        matched = true;
+                    }
+                    else {
+                        (exclude ??= []).push(i);
+                    }
+                }
             }
-            let i = 0;
-            for (const type of target.types) {
-                const targetType = getTypeOfPropertyOfType(type, propertyName);
-                if (targetType && related(getDiscriminatingType(), targetType)) {
-                    discriminable[i] = discriminable[i] === undefined ? true : discriminable[i];
-                }
-                else {
-                    discriminable[i] = false;
-                }
-                i++;
+            if (matched && exclude) {
+                for (const i of exclude) include[i] = false;
             }
         }
-        const match = discriminable.indexOf(/*searchElement*/ true);
-        if (match === -1) {
-            return defaultValue;
-        }
-        return getUnionType(target.types.filter((_, index) => discriminable[index]));
+        const filtered = contains(include, false) ? getUnionType(types.filter((_, i) => include[i])) : target;
+        return filtered.flags & TypeFlags.Never ? target : filtered;
     }
 
     /**
@@ -29276,8 +29274,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     s => [() => undefinedType, s.escapedName] as [() => Type, __String]
                 )
             ),
-            isTypeAssignableTo,
-            contextualType
+            isTypeAssignableTo
         );
     }
 
@@ -29293,8 +29290,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     s => [() => undefinedType, s.escapedName] as [() => Type, __String]
                 )
             ),
-            isTypeAssignableTo,
-            contextualType
+            isTypeAssignableTo
         );
     }
 
@@ -48739,7 +48735,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
-    function findMatchingDiscriminantType(source: Type, target: Type, isRelatedTo: (source: Type, target: Type) => Ternary, skipPartial?: boolean) {
+    function findMatchingDiscriminantType(source: Type, target: Type, isRelatedTo: (source: Type, target: Type) => Ternary) {
         if (target.flags & TypeFlags.Union && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
             const match = getMatchingUnionConstituentForType(target as UnionType, source);
             if (match) {
@@ -48749,7 +48745,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sourceProperties) {
                 const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
                 if (sourcePropertiesFiltered) {
-                    return discriminateTypeByDiscriminableItems(target as UnionType, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo, /*defaultValue*/ undefined, skipPartial);
+                    const discriminated = discriminateTypeByDiscriminableItems(target as UnionType, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
+                    if (discriminated !== target) {
+                        return discriminated;
+                    }
                 }
             }
         }
