@@ -10,8 +10,10 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(83,5): erro
   Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
 tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
   Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(130,5): error TS2322: Type '"string"' is not assignable to type '"number"'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): error TS2322: Type '"string"' is not assignable to type '"number"'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute'.
+  Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute2'.
+  Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
 
 
 ==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (8 errors) ====
@@ -163,17 +165,19 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(136,5): err
     // both should error due to excess properties
     const attributes: Attribute = {
         type: 'string',
-        ~~~~
-!!! error TS2322: Type '"string"' is not assignable to type '"number"'.
         autoIncrement: true,
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute'.
+!!! error TS2322:   Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
         required: true,
     };
     
     const attributes2: Attribute2 = {
         type: 'string',
-        ~~~~
-!!! error TS2322: Type '"string"' is not assignable to type '"number"'.
         autoIncrement: true,
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute2'.
+!!! error TS2322:   Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
         required: true,
     };
     
