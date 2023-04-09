@@ -3842,7 +3842,7 @@ namespace Parser {
         parseExpected(SyntaxKind.TypeOfKeyword);
         const entityName = parseEntityName(/*allowReservedWords*/ true);
         // Make sure we perform ASI to prevent parsing the next line's type arguments as part of an instantiation expression.
-        const typeArguments = !scanner.hasPrecedingLineBreak() ? tryParseTypeArguments() : undefined;
+        const typeArguments = !scanner.hasPrecedingLineBreak() ? tryParseTypeArguments(parseType) : undefined;
         return finishNode(factory.createTypeQueryNode(entityName, typeArguments), pos);
     }
 
@@ -6071,7 +6071,7 @@ namespace Parser {
             return finishNode(factory.createJsxOpeningFragment(), pos);
         }
         const tagName = parseJsxElementName();
-        const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments() : undefined;
+        const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments(parseType) : undefined;
         const attributes = parseJsxAttributes();
 
         let node: JsxOpeningLikeElement;
@@ -7957,13 +7957,13 @@ namespace Parser {
         if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
             return expression as ExpressionWithTypeArguments;
         }
-        const typeArguments = tryParseTypeArguments();
+        const typeArguments = tryParseTypeArguments(parseType);
         return finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
     }
 
-    function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
+    function tryParseTypeArguments(parseElement: () => TypeNode): NodeArray<TypeNode> | undefined {
         return token() === SyntaxKind.LessThanToken ?
-            parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
+            parseBracketedList(ParsingContext.TypeArguments, parseElement, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
     }
 
     function isHeritageClause(): boolean {
@@ -9217,7 +9217,7 @@ namespace Parser {
                 const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const pos = getNodePos();
                 const expression = parsePropertyAccessEntityNameExpression();
-                const typeArguments = tryParseTypeArguments();
+                const typeArguments = tryParseTypeArguments(parseJSDocType);
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
