@@ -1153,17 +1153,8 @@ export class ChangeTracker {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
         const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
-        // for (const { oldFile, fileName, statements } of this.newFileChanges ?? emptyArray) {
-        //     changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
-        // }
         if (this.newFileChanges) {
             this.newFileChanges.forEach((insertions, fileName) => {
-                // const textChanges: TextChange[] = [];
-                // for (const { oldFile, statements } of newFileInsertion) {
-                //     const fileTextChanges = changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext);
-                //     textChanges.push(...fileTextChanges.textChanges);
-                // }
-
                 changes.push(changesToText.newFileChanges(fileName, insertions, this.newLineCharacter, this.formatContext));
             });
         }

@@ -2,13 +2,15 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /bar.ts
-//// const q = 0;
+////import {} from "./somefile";
 
 // @Filename: /a.ts
 ////import { type A } from "./other";
-////[|function f(a: A) {}|]
+////import type { B } from "./other";
+////[|function f(a: B) {}|]
 
 // @Filename: /other.ts
+////export type B = {};
 ////export interface A {
 ////    x: number;
 ////}
@@ -16,14 +18,14 @@
 
 verify.moveToFile({
     newFileContents: {
-        "/a.ts":"",
+        "/a.ts":
+`import { type A } from "./other";
+`,
         "/bar.ts":
-`import { A } from "./other";
-
-const q = 0;
-function f(a: A) { }
+`import { B } from "./other";
+import {} from "./somefile";
+function f(a: B) { }
 `,
     },
     newFile: "/bar.ts",
-    preferences: {}
 });

@@ -3,7 +3,6 @@ import {
     append,
     ApplicableRefactorInfo,
     codefix,
-    createFutureSourceFile,
     Debug,
     Diagnostics,
     emptyArray,
@@ -29,7 +28,7 @@ import {
     TypeChecker,
     UserPreferences,
 } from "../_namespaces/ts";
-import { addExports, addExportToChanges, addNewFileToTsconfig, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, nameOfTopLevelDeclaration, ReadonlySymbolSet, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
+import { addExports, addExportToChanges, addNewFileToTsconfig, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration, ReadonlySymbolSet, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
 import { registerRefactor } from "../refactorProvider";
 
 const refactorNameForMoveToFile = "Move to file";
@@ -69,9 +68,8 @@ function doChange(context: RefactorContext, oldFile: SourceFile, newFile: string
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
     //creating a new file
-    if (!host.fileExists(newFile)) {
-        const importAdder = codefix.createImportAdder(createFutureSourceFile(newFile, program, host, usage.moduleSyntax), context.program, context.preferences, context.host);
-        changes.createNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ false, importAdder));
+    if (!host.fileExists(newFile) || host.fileExists(newFile) && program.getSourceFile(newFile)?.statements.length === 0) {
+        changes.createNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ false));
         addNewFileToTsconfig(program, changes, oldFile.fileName, newFile, hostGetCanonicalFileName(host));
     }
     else {
@@ -84,11 +82,11 @@ function doChange(context: RefactorContext, oldFile: SourceFile, newFile: string
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, newFile: string, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences, newFileExists: boolean, importAdder: codefix.ImportAdder
+    oldFile: SourceFile, newFile: string, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences, newFileExists: boolean, importAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size() === 0) {
+    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size() === 0 && !newFileExists) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -145,12 +143,21 @@ function getNewFileImportsAndAddExportInOldFile(
     host: LanguageServiceHost,
     useEsModuleSyntax: boolean,
     quotePreference: QuotePreference,
-    importAdder: codefix.ImportAdder,
+    importAdder?: codefix.ImportAdder,
 ): readonly AnyImportOrRequireStatement[] {
     const copiedOldImports: AnyImportOrRequireStatement[] = [];
-    importsToCopy.forEach(symbol => {
-        importAdder.addImportFromExportedSymbol(skipAlias(symbol, checker));
-    });
+    if (importAdder) {
+        importsToCopy.forEach(symbol => {
+            importAdder.addImportFromExportedSymbol(skipAlias(symbol, checker));
+        });
+    }
+    else {
+        for (const oldStatement of oldFile.statements) {
+            forEachImportInStatement(oldStatement, i => {
+                append(copiedOldImports, filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+            });
+        }
+    }
 
     //Also, import things used from the old file, and insert 'export' modifiers as necessary in the old file.
     const newFileSourceFile = program.getSourceFile(newFile);

@@ -9,6 +9,7 @@
 ////
 ////import { } from './other';
 ////import type { } from './other';
+////
 ////export const p = 0;
 ////export const b = 1;
 ////[|const y = p + b;|]
@@ -24,6 +25,7 @@ verify.moveToFile({
 
 import { } from './other';
 import type { } from './other';
+
 export const p = 0;
 export const b = 1;
 `,
