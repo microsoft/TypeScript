@@ -52,9 +52,9 @@ exports.outputExample = (0, exports.validatorFunc)({
 
 
 //// [reverseMappedTypeDeepDeclarationEmit.d.ts]
-export declare type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>;
-export declare type NativeTypeValidator<T> = (n: any) => T | undefined;
-export declare type ObjectValidator<O> = {
+export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>;
+export type NativeTypeValidator<T> = (n: any) => T | undefined;
+export type ObjectValidator<O> = {
     [K in keyof O]: Validator<O[K]>;
 };
 export declare const SimpleStringValidator: NativeTypeValidator<string>;

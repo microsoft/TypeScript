@@ -181,19 +181,82 @@
               "kind": "space"
             }
           ],
-          "parameters": [],
-          "documentation": [],
-          "tags": [
+          "parameters": [
             {
-              "name": "type",
-              "text": [
+              "name": "arg0",
+              "documentation": [],
+              "displayParts": [
                 {
-                  "text": "{function(module:xxxx, module:xxxx): module:xxxxx}",
-                  "kind": "text"
+                  "text": "arg0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
                 }
-              ]
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
             }
-          ]
+          ],
+          "documentation": [],
+          "tags": []
         }
       ],
       "applicableSpan": {

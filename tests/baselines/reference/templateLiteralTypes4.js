@@ -320,30 +320,30 @@ f4("**false**"); // false | "false"
 
 
 //// [templateLiteralTypes4.d.ts]
-declare type TNumber0 = "100" extends `${infer N extends number}` ? N : never;
-declare type TNumber1 = "-100" extends `${infer N extends number}` ? N : never;
-declare type TNumber2 = "1.1" extends `${infer N extends number}` ? N : never;
-declare type TNumber3 = "8e-11" extends `${infer N extends number}` ? N : never;
-declare type TNumber4 = "0x10" extends `${infer N extends number}` ? N : never;
-declare type TNumber5 = "0o10" extends `${infer N extends number}` ? N : never;
-declare type TNumber6 = "0b10" extends `${infer N extends number}` ? N : never;
-declare type TNumber7 = "10e2" extends `${infer N extends number}` ? N : never;
-declare type TNumber8 = "abcd" extends `${infer N extends number}` ? N : never;
-declare type TBigInt0 = "100" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt1 = "-100" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt2 = "0x10" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt3 = "0o10" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt4 = "0b10" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt5 = "1.1" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt6 = "10e2" extends `${infer N extends bigint}` ? N : never;
-declare type TBigInt7 = "abcd" extends `${infer N extends bigint}` ? N : never;
-declare type TBoolean0 = "true" extends `${infer T extends boolean}` ? T : never;
-declare type TBoolean1 = "false" extends `${infer T extends boolean}` ? T : never;
-declare type TBoolean2 = "abcd" extends `${infer T extends boolean}` ? T : never;
-declare type TNull0 = "null" extends `${infer T extends null}` ? T : never;
-declare type TNull1 = "abcd" extends `${infer T extends null}` ? T : never;
-declare type TUndefined0 = "undefined" extends `${infer T extends undefined}` ? T : never;
-declare type TUndefined1 = "abcd" extends `${infer T extends undefined}` ? T : never;
+type TNumber0 = "100" extends `${infer N extends number}` ? N : never;
+type TNumber1 = "-100" extends `${infer N extends number}` ? N : never;
+type TNumber2 = "1.1" extends `${infer N extends number}` ? N : never;
+type TNumber3 = "8e-11" extends `${infer N extends number}` ? N : never;
+type TNumber4 = "0x10" extends `${infer N extends number}` ? N : never;
+type TNumber5 = "0o10" extends `${infer N extends number}` ? N : never;
+type TNumber6 = "0b10" extends `${infer N extends number}` ? N : never;
+type TNumber7 = "10e2" extends `${infer N extends number}` ? N : never;
+type TNumber8 = "abcd" extends `${infer N extends number}` ? N : never;
+type TBigInt0 = "100" extends `${infer N extends bigint}` ? N : never;
+type TBigInt1 = "-100" extends `${infer N extends bigint}` ? N : never;
+type TBigInt2 = "0x10" extends `${infer N extends bigint}` ? N : never;
+type TBigInt3 = "0o10" extends `${infer N extends bigint}` ? N : never;
+type TBigInt4 = "0b10" extends `${infer N extends bigint}` ? N : never;
+type TBigInt5 = "1.1" extends `${infer N extends bigint}` ? N : never;
+type TBigInt6 = "10e2" extends `${infer N extends bigint}` ? N : never;
+type TBigInt7 = "abcd" extends `${infer N extends bigint}` ? N : never;
+type TBoolean0 = "true" extends `${infer T extends boolean}` ? T : never;
+type TBoolean1 = "false" extends `${infer T extends boolean}` ? T : never;
+type TBoolean2 = "abcd" extends `${infer T extends boolean}` ? T : never;
+type TNull0 = "null" extends `${infer T extends null}` ? T : never;
+type TNull1 = "abcd" extends `${infer T extends null}` ? T : never;
+type TUndefined0 = "undefined" extends `${infer T extends undefined}` ? T : never;
+type TUndefined1 = "abcd" extends `${infer T extends undefined}` ? T : never;
 declare const enum StringLiteralEnum {
     Zero = "0",
     True = "true",
@@ -351,102 +351,102 @@ declare const enum StringLiteralEnum {
     Undefined = "undefined",
     Null = "null"
 }
-declare type TStringLiteralEnum0 = "0" extends `${infer T extends StringLiteralEnum}` ? T : never;
+type TStringLiteralEnum0 = "0" extends `${infer T extends StringLiteralEnum}` ? T : never;
 declare const enum NumberLiteralEnum {
     Zero = 0,
     One = 1
 }
-declare type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never;
+type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never;
 declare const enum NonLiteralEnum {
     Zero = 0,
     One = 1
 }
-declare type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never;
-declare type PString00 = "0" extends `${infer T extends string | StringLiteralEnum}` ? T : never;
-declare type PString01 = "0" extends `${infer T extends string | number}` ? T : never;
-declare type PString02 = "0" extends `${infer T extends string | NonLiteralEnum}` ? T : never;
-declare type PString03 = "0" extends `${infer T extends string | 0}` ? T : never;
-declare type PString04 = "0" extends `${infer T extends string | NumberLiteralEnum}` ? T : never;
-declare type PString05 = "0" extends `${infer T extends string | bigint}` ? T : never;
-declare type PString06 = "0" extends `${infer T extends string | 0n}` ? T : never;
-declare type PString07 = "true" extends `${infer T extends string | boolean}` ? T : never;
-declare type PString08 = "false" extends `${infer T extends string | boolean}` ? T : never;
-declare type PString09 = "true" extends `${infer T extends string | true}` ? T : never;
-declare type PString10 = "false" extends `${infer T extends string | false}` ? T : never;
-declare type PString11 = "undefined" extends `${infer T extends string | undefined}` ? T : never;
-declare type PString12 = "null" extends `${infer T extends string | null}` ? T : never;
-declare type PTemplate00 = "10" extends `${infer T extends `1${string}` | number}` ? T : never;
-declare type PTemplate01 = "10" extends `${infer T extends `1${string}` | NonLiteralEnum}` ? T : never;
-declare type PTemplate02 = "10" extends `${infer T extends `1${string}` | 10}` ? T : never;
-declare type PTemplate03 = "10" extends `${infer T extends `1${string}` | NumberLiteralEnum}` ? T : never;
-declare type PTemplate04 = "10" extends `${infer T extends `1${string}` | bigint}` ? T : never;
-declare type PTemplate05 = "10" extends `${infer T extends `1${string}` | 10n}` ? T : never;
-declare type PTemplate06 = "true" extends `${infer T extends `${string}e` | boolean}` ? T : never;
-declare type PTemplate07 = "false" extends `${infer T extends `${string}e` | boolean}` ? T : never;
-declare type PTemplate08 = "true" extends `${infer T extends `${"t"}${string}` | true}` ? T : never;
-declare type PTemplate09 = "false" extends `${infer T extends `${"f"}${string}` | false}` ? T : never;
-declare type PTemplate10 = "undefined" extends `${infer T extends `${"u"}${string}` | undefined}` ? T : never;
-declare type PTemplate11 = "null" extends `${infer T extends `${"n"}${string}` | null}` ? T : never;
-declare type PStringLiteral00 = "0" extends `${infer T extends "0" | number}` ? T : never;
-declare type PStringLiteral01 = "0" extends `${infer T extends "0" | NonLiteralEnum}` ? T : never;
-declare type PStringLiteral02 = "0" extends `${infer T extends "0" | 0}` ? T : never;
-declare type PStringLiteral03 = "0" extends `${infer T extends "0" | NumberLiteralEnum}` ? T : never;
-declare type PStringLiteral04 = "0" extends `${infer T extends "0" | bigint}` ? T : never;
-declare type PStringLiteral05 = "0" extends `${infer T extends "0" | 0n}` ? T : never;
-declare type PStringLiteral06 = "true" extends `${infer T extends "true" | "false" | boolean}` ? T : never;
-declare type PStringLiteral07 = "false" extends `${infer T extends "true" | "false" | boolean}` ? T : never;
-declare type PStringLiteral08 = "true" extends `${infer T extends "true" | true}` ? T : never;
-declare type PStringLiteral09 = "false" extends `${infer T extends "false" | false}` ? T : never;
-declare type PStringLiteral10 = "undefined" extends `${infer T extends "undefined" | undefined}` ? T : never;
-declare type PStringLiteral11 = "null" extends `${infer T extends "null" | null}` ? T : never;
-declare type PStringLiteralEnum00 = "0" extends `${infer T extends StringLiteralEnum | number}` ? T : never;
-declare type PStringLiteralEnum01 = "0" extends `${infer T extends StringLiteralEnum | NonLiteralEnum}` ? T : never;
-declare type PStringLiteralEnum02 = "0" extends `${infer T extends StringLiteralEnum | 0}` ? T : never;
-declare type PStringLiteralEnum03 = "0" extends `${infer T extends StringLiteralEnum | NumberLiteralEnum}` ? T : never;
-declare type PStringLiteralEnum04 = "0" extends `${infer T extends StringLiteralEnum | bigint}` ? T : never;
-declare type PStringLiteralEnum05 = "0" extends `${infer T extends StringLiteralEnum | 0n}` ? T : never;
-declare type PStringLiteralEnum06 = "true" extends `${infer T extends StringLiteralEnum | boolean}` ? T : never;
-declare type PStringLiteralEnum07 = "false" extends `${infer T extends StringLiteralEnum | boolean}` ? T : never;
-declare type PStringLiteralEnum08 = "true" extends `${infer T extends StringLiteralEnum | true}` ? T : never;
-declare type PStringLiteralEnum09 = "false" extends `${infer T extends StringLiteralEnum | false}` ? T : never;
-declare type PStringLiteralEnum10 = "undefined" extends `${infer T extends StringLiteralEnum | undefined}` ? T : never;
-declare type PStringLiteralEnum11 = "null" extends `${infer T extends StringLiteralEnum | null}` ? T : never;
-declare type PNumber0 = "0" extends `${infer T extends number | NonLiteralEnum}` ? T : never;
-declare type PNumber1 = "0" extends `${infer T extends number | NumberLiteralEnum}` ? T : never;
-declare type PNumber2 = "0" extends `${infer T extends number | bigint}` ? T : never;
-declare type PNumber3 = "0" extends `${infer T extends number | 0n}` ? T : never;
-declare type PEnum0 = "0" extends `${infer T extends NonLiteralEnum | NumberLiteralEnum}` ? T : never;
-declare type PEnum1 = "0" extends `${infer T extends NonLiteralEnum | bigint}` ? T : never;
-declare type PEnum2 = "0" extends `${infer T extends NonLiteralEnum | 0n}` ? T : never;
-declare type PNumberLiteral0 = "0" extends `${infer T extends 0 | bigint}` ? T : never;
-declare type PNumberLiteral1 = "0" extends `${infer T extends 0 | 0n}` ? T : never;
-declare type PNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum | bigint}` ? T : never;
-declare type PNumberLiteralEnum1 = "0" extends `${infer T extends NumberLiteralEnum | 0n}` ? T : never;
-declare type PExclude0 = "0" extends `${infer T extends "1" | number}` ? T : never;
-declare type PExclude1 = "0" extends `${infer T extends `1${string}` | number}` ? T : never;
-declare type PExclude2 = "0" extends `${infer T extends 1 | bigint}` ? T : never;
-declare type PExclude3 = "0" extends `${infer T extends NumberLiteralEnum.One | bigint}` ? T : never;
-declare type PExclude4 = "100000000000000000000000" extends `${infer T extends number | bigint}` ? T : never;
-declare type TPrefix0 = "100" extends `${infer T extends number}${string}` ? T : never;
-declare type TPrefix1 = "trueabc" extends `${infer T extends boolean}${string}` ? T : never;
-declare type TPrefix2 = `100:${string}` extends `${infer T extends number}:${string}` ? T : never;
-declare type ExtractPrimitives<T extends string> = T | (T extends `${infer U extends number}` ? U : never) | (T extends `${infer U extends bigint}` ? U : never) | (T extends `${infer U extends boolean | null | undefined}` ? U : never);
-declare type TExtract0 = ExtractPrimitives<"100">;
-declare type TExtract1 = ExtractPrimitives<"1.1">;
-declare type TExtract2 = ExtractPrimitives<"true">;
-declare type IndexFor<S extends string> = S extends `${infer N extends number}` ? N : never;
-declare type IndicesOf<T> = IndexFor<Extract<keyof T, string>>;
+type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never;
+type PString00 = "0" extends `${infer T extends string | StringLiteralEnum}` ? T : never;
+type PString01 = "0" extends `${infer T extends string | number}` ? T : never;
+type PString02 = "0" extends `${infer T extends string | NonLiteralEnum}` ? T : never;
+type PString03 = "0" extends `${infer T extends string | 0}` ? T : never;
+type PString04 = "0" extends `${infer T extends string | NumberLiteralEnum}` ? T : never;
+type PString05 = "0" extends `${infer T extends string | bigint}` ? T : never;
+type PString06 = "0" extends `${infer T extends string | 0n}` ? T : never;
+type PString07 = "true" extends `${infer T extends string | boolean}` ? T : never;
+type PString08 = "false" extends `${infer T extends string | boolean}` ? T : never;
+type PString09 = "true" extends `${infer T extends string | true}` ? T : never;
+type PString10 = "false" extends `${infer T extends string | false}` ? T : never;
+type PString11 = "undefined" extends `${infer T extends string | undefined}` ? T : never;
+type PString12 = "null" extends `${infer T extends string | null}` ? T : never;
+type PTemplate00 = "10" extends `${infer T extends `1${string}` | number}` ? T : never;
+type PTemplate01 = "10" extends `${infer T extends `1${string}` | NonLiteralEnum}` ? T : never;
+type PTemplate02 = "10" extends `${infer T extends `1${string}` | 10}` ? T : never;
+type PTemplate03 = "10" extends `${infer T extends `1${string}` | NumberLiteralEnum}` ? T : never;
+type PTemplate04 = "10" extends `${infer T extends `1${string}` | bigint}` ? T : never;
+type PTemplate05 = "10" extends `${infer T extends `1${string}` | 10n}` ? T : never;
+type PTemplate06 = "true" extends `${infer T extends `${string}e` | boolean}` ? T : never;
+type PTemplate07 = "false" extends `${infer T extends `${string}e` | boolean}` ? T : never;
+type PTemplate08 = "true" extends `${infer T extends `${"t"}${string}` | true}` ? T : never;
+type PTemplate09 = "false" extends `${infer T extends `${"f"}${string}` | false}` ? T : never;
+type PTemplate10 = "undefined" extends `${infer T extends `${"u"}${string}` | undefined}` ? T : never;
+type PTemplate11 = "null" extends `${infer T extends `${"n"}${string}` | null}` ? T : never;
+type PStringLiteral00 = "0" extends `${infer T extends "0" | number}` ? T : never;
+type PStringLiteral01 = "0" extends `${infer T extends "0" | NonLiteralEnum}` ? T : never;
+type PStringLiteral02 = "0" extends `${infer T extends "0" | 0}` ? T : never;
+type PStringLiteral03 = "0" extends `${infer T extends "0" | NumberLiteralEnum}` ? T : never;
+type PStringLiteral04 = "0" extends `${infer T extends "0" | bigint}` ? T : never;
+type PStringLiteral05 = "0" extends `${infer T extends "0" | 0n}` ? T : never;
+type PStringLiteral06 = "true" extends `${infer T extends "true" | "false" | boolean}` ? T : never;
+type PStringLiteral07 = "false" extends `${infer T extends "true" | "false" | boolean}` ? T : never;
+type PStringLiteral08 = "true" extends `${infer T extends "true" | true}` ? T : never;
+type PStringLiteral09 = "false" extends `${infer T extends "false" | false}` ? T : never;
+type PStringLiteral10 = "undefined" extends `${infer T extends "undefined" | undefined}` ? T : never;
+type PStringLiteral11 = "null" extends `${infer T extends "null" | null}` ? T : never;
+type PStringLiteralEnum00 = "0" extends `${infer T extends StringLiteralEnum | number}` ? T : never;
+type PStringLiteralEnum01 = "0" extends `${infer T extends StringLiteralEnum | NonLiteralEnum}` ? T : never;
+type PStringLiteralEnum02 = "0" extends `${infer T extends StringLiteralEnum | 0}` ? T : never;
+type PStringLiteralEnum03 = "0" extends `${infer T extends StringLiteralEnum | NumberLiteralEnum}` ? T : never;
+type PStringLiteralEnum04 = "0" extends `${infer T extends StringLiteralEnum | bigint}` ? T : never;
+type PStringLiteralEnum05 = "0" extends `${infer T extends StringLiteralEnum | 0n}` ? T : never;
+type PStringLiteralEnum06 = "true" extends `${infer T extends StringLiteralEnum | boolean}` ? T : never;
+type PStringLiteralEnum07 = "false" extends `${infer T extends StringLiteralEnum | boolean}` ? T : never;
+type PStringLiteralEnum08 = "true" extends `${infer T extends StringLiteralEnum | true}` ? T : never;
+type PStringLiteralEnum09 = "false" extends `${infer T extends StringLiteralEnum | false}` ? T : never;
+type PStringLiteralEnum10 = "undefined" extends `${infer T extends StringLiteralEnum | undefined}` ? T : never;
+type PStringLiteralEnum11 = "null" extends `${infer T extends StringLiteralEnum | null}` ? T : never;
+type PNumber0 = "0" extends `${infer T extends number | NonLiteralEnum}` ? T : never;
+type PNumber1 = "0" extends `${infer T extends number | NumberLiteralEnum}` ? T : never;
+type PNumber2 = "0" extends `${infer T extends number | bigint}` ? T : never;
+type PNumber3 = "0" extends `${infer T extends number | 0n}` ? T : never;
+type PEnum0 = "0" extends `${infer T extends NonLiteralEnum | NumberLiteralEnum}` ? T : never;
+type PEnum1 = "0" extends `${infer T extends NonLiteralEnum | bigint}` ? T : never;
+type PEnum2 = "0" extends `${infer T extends NonLiteralEnum | 0n}` ? T : never;
+type PNumberLiteral0 = "0" extends `${infer T extends 0 | bigint}` ? T : never;
+type PNumberLiteral1 = "0" extends `${infer T extends 0 | 0n}` ? T : never;
+type PNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum | bigint}` ? T : never;
+type PNumberLiteralEnum1 = "0" extends `${infer T extends NumberLiteralEnum | 0n}` ? T : never;
+type PExclude0 = "0" extends `${infer T extends "1" | number}` ? T : never;
+type PExclude1 = "0" extends `${infer T extends `1${string}` | number}` ? T : never;
+type PExclude2 = "0" extends `${infer T extends 1 | bigint}` ? T : never;
+type PExclude3 = "0" extends `${infer T extends NumberLiteralEnum.One | bigint}` ? T : never;
+type PExclude4 = "100000000000000000000000" extends `${infer T extends number | bigint}` ? T : never;
+type TPrefix0 = "100" extends `${infer T extends number}${string}` ? T : never;
+type TPrefix1 = "trueabc" extends `${infer T extends boolean}${string}` ? T : never;
+type TPrefix2 = `100:${string}` extends `${infer T extends number}:${string}` ? T : never;
+type ExtractPrimitives<T extends string> = T | (T extends `${infer U extends number}` ? U : never) | (T extends `${infer U extends bigint}` ? U : never) | (T extends `${infer U extends boolean | null | undefined}` ? U : never);
+type TExtract0 = ExtractPrimitives<"100">;
+type TExtract1 = ExtractPrimitives<"1.1">;
+type TExtract2 = ExtractPrimitives<"true">;
+type IndexFor<S extends string> = S extends `${infer N extends number}` ? N : never;
+type IndicesOf<T> = IndexFor<Extract<keyof T, string>>;
 interface FieldDefinition {
     readonly name: string;
     readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";
 }
-declare type FieldType<T extends FieldDefinition["type"]> = T extends "i8" | "i16" | "i32" | "u8" | "u16" | "u32" | "f32" | "f64" ? number : T extends "f32" | "f64" ? bigint : never;
-declare type TypedObjectNamedMembers<TDef extends readonly FieldDefinition[]> = {
+type FieldType<T extends FieldDefinition["type"]> = T extends "i8" | "i16" | "i32" | "u8" | "u16" | "u32" | "f32" | "f64" ? number : T extends "f32" | "f64" ? bigint : never;
+type TypedObjectNamedMembers<TDef extends readonly FieldDefinition[]> = {
     [P in TDef[number]["name"]]: FieldType<Extract<TDef[number], {
         readonly name: P;
     }>["type"]>;
 };
-declare type TypedObjectOrdinalMembers<TDef extends readonly FieldDefinition[]> = {
+type TypedObjectOrdinalMembers<TDef extends readonly FieldDefinition[]> = {
     [I in Extract<keyof TDef, `${number}`>]: FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
 };
 interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
@@ -459,8 +459,8 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
 }
-declare type TypedObject<TDef extends readonly FieldDefinition[]> = TypedObjectMembers<TDef> & TypedObjectNamedMembers<TDef> & TypedObjectOrdinalMembers<TDef>;
-declare type Point = TypedObject<[
+type TypedObject<TDef extends readonly FieldDefinition[]> = TypedObjectMembers<TDef> & TypedObjectNamedMembers<TDef> & TypedObjectOrdinalMembers<TDef>;
+type Point = TypedObject<[
     {
         name: "x";
         type: "f64";

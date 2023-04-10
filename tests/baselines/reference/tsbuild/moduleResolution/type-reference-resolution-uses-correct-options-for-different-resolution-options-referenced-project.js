@@ -76,15 +76,27 @@ exitCode:: ExitStatus.Success
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "./pkg1_index.ts": {
+        "original": {
+          "version": "-9601687719-export const theNum: TheNum = \"type1\";",
+          "signature": "-5685633868-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum;\r\n"
+        },
         "version": "-9601687719-export const theNum: TheNum = \"type1\";",
         "signature": "-5685633868-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum;\r\n"
       },
       "./typeroot1/sometype/index.d.ts": {
+        "original": {
+          "version": "-4557394441-declare type TheNum = \"type1\";",
+          "affectsGlobalScope": true
+        },
         "version": "-4557394441-declare type TheNum = \"type1\";",
         "signature": "-4557394441-declare type TheNum = \"type1\";",
         "affectsGlobalScope": true
@@ -131,15 +143,27 @@ exports.theNum = "type1";
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "./pkg2_index.ts": {
+        "original": {
+          "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
+          "signature": "-7237564442-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum2;\r\n"
+        },
         "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
         "signature": "-7237564442-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum2;\r\n"
       },
       "./typeroot2/sometype/index.d.ts": {
+        "original": {
+          "version": "-980425686-declare type TheNum2 = \"type2\";",
+          "affectsGlobalScope": true
+        },
         "version": "-980425686-declare type TheNum2 = \"type2\";",
         "signature": "-980425686-declare type TheNum2 = \"type2\";",
         "affectsGlobalScope": true

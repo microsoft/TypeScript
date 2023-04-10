@@ -8,8 +8,9 @@ import { Position } from './utilities/positioning';
 
 export interface ISpinButton {}
 === tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning.d.ts ===
+
 export * from './positioning/index';
-No type information for this code.=== tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===
+=== tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===
 export declare enum Position {
 >Position : Position
 

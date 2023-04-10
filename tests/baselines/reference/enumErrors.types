@@ -40,13 +40,13 @@ enum E10 {
 >E10 : E10
 
     A = E9.A,
->A : E10
+>A : E10.A
 >E9.A : E9
 >E9 : typeof E9
 >A : E9
 
     B = E9.B
->B : E10
+>B : E10.A
 >E9.B : E9
 >E9 : typeof E9
 >B : E9
@@ -57,24 +57,24 @@ enum E11 {
 >E11 : E11
 
     A = true,
->A : E11
+>A : E11.A
 >true : true
 
     B = new Date(),
->B : E11
+>B : E11.B
 >new Date() : Date
 >Date : DateConstructor
 
     C = window,
->C : E11
+>C : E11.C
 >window : Window & typeof globalThis
 
     D = {},
->D : E11
+>D : E11.D
 >{} : {}
 
     E = (() => 'foo')(),
->E : E11
+>E : E11.E
 >(() => 'foo')() : string
 >(() => 'foo') : () => string
 >() => 'foo' : () => string
@@ -95,21 +95,21 @@ enum E12 {
 >Date : DateConstructor
 
     C = window,
->C : E12.B
+>C : E12.C
 >window : Window & typeof globalThis
 
     D = {},
->D : E12.B
+>D : E12.D
 >{} : {}
 
     E = 1 + 1,
->E : E12.B
+>E : E12.E
 >1 + 1 : number
 >1 : 1
 >1 : 1
 
     F = (() => 'foo')(),
->F : E12.B
+>F : E12.F
 >(() => 'foo')() : string
 >(() => 'foo') : () => string
 >() => 'foo' : () => string

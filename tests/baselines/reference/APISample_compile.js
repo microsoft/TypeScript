@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_compile.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_compile.ts]

@@ -48,15 +48,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

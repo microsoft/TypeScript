@@ -37,6 +37,6 @@ exports.works2 = (0, module_1.fn)(function (x) { return x; });
 export declare const fail1: import("module").Modifier<(<T>(x: T) => T)>;
 export declare const fail2: import("module").Modifier<(<T>(x: T) => T)>;
 export declare const works1: import("module").Modifier<(x: number) => number>;
-declare type MakeItWork = <T>(x: T) => T;
+type MakeItWork = <T>(x: T) => T;
 export declare const works2: import("module").Modifier<MakeItWork>;
 export {};

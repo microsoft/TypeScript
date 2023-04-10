@@ -1,0 +1,39 @@
+tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts(10,11): error TS2322: Type '0 | 9' is not assignable to type '9'.
+  Type '0' is not assignable to type '9'.
+tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts(25,11): error TS2322: Type '0 | 9 | 8' is not assignable to type '0 | 8'.
+  Type '9' is not assignable to type '0 | 8'.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
+    {
+        let a: 0 | 1 = 0;
+        const [{ [(a = 1)]: b } = [9, a] as const] = [];
+        const bb: 0 = b;
+    }
+    {
+        let a: 0 | 1 = 1;
+        const [{ [a]: b } = [9, a = 0] as const] = [];
+        const bb: 9 = b;
+              ~~
+!!! error TS2322: Type '0 | 9' is not assignable to type '9'.
+!!! error TS2322:   Type '0' is not assignable to type '9'.
+    }
+    {
+        let a: 0 | 1 | 2 = 1;
+        const [{ [a]: b } = [9, a = 0, 5] as const] = [];
+        const bb: 0 | 9 = b;
+    }
+    {
+        let a: 0 | 1 = 0;
+        const [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+        const bb: 0 | 8 = b;
+    }
+    {
+        let a: 0 | 1 = 1;
+        const [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+        const bb: 0 | 8 = b;
+              ~~
+!!! error TS2322: Type '0 | 9 | 8' is not assignable to type '0 | 8'.
+!!! error TS2322:   Type '9' is not assignable to type '0 | 8'.
+    }

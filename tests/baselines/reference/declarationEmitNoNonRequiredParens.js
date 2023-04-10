@@ -26,5 +26,5 @@ export declare enum Test {
     B = 1,
     C = 2
 }
-export declare type TestType = typeof Test;
+export type TestType = typeof Test;
 export declare const bar: Test[];

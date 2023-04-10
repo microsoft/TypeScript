@@ -61,29 +61,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/main.ts:
-  {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts:
+  {}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject/node_modules/bar:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar"}
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 FsWatchesRecursive::
 
@@ -103,29 +103,29 @@ Input::
 
 Output::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/main.ts:
-  {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts:
+  {}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject/node_modules/bar:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar"}
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 FsWatchesRecursive::
 
@@ -141,29 +141,29 @@ export function temp(): string;
 
 Output::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/main.ts:
-  {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts:
+  {}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject/node_modules/bar:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar"}
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 FsWatchesRecursive::
 

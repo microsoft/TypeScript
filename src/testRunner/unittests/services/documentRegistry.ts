@@ -1,3 +1,5 @@
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: services:: DocumentRegistry", () => {
     it("documents are shared between projects", () => {
         const documentRegistry = ts.createDocumentRegistry();

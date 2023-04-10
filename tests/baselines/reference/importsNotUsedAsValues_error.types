@@ -151,9 +151,10 @@ console.log(h);
 >h : H
 
 === /j.ts ===
+
 import H = require('./h'); // noUnusedLocals error only
-No type information for this code.
-No type information for this code.=== /k.ts ===
+
+=== /k.ts ===
 const enum K { One, Two }
 >K : K
 >One : K.One
@@ -172,5 +173,5 @@ K.One;
 >One : K.One
 
 === /j.ts ===
+
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
-No type information for this code.

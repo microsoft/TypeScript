@@ -17,4 +17,4 @@ exports.__esModule = true;
 
 
 //// [Helpers.d.ts]
-export declare type StringKeyOf<TObj> = Extract<string, keyof TObj>;
+export type StringKeyOf<TObj> = Extract<string, keyof TObj>;

@@ -1,7 +1,7 @@
 [
     "======== Resolving module 'shortid' from '/index.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module 'shortid' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module 'shortid' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "File '/node_modules/shortid/package.json' does not exist.",
     "File '/node_modules/shortid.ts' does not exist.",
     "File '/node_modules/shortid.tsx' does not exist.",
@@ -10,7 +10,7 @@
     "File '/node_modules/shortid/index.tsx' does not exist.",
     "File '/node_modules/shortid/index.d.ts' does not exist.",
     "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
-    "Loading module 'shortid' from 'node_modules' folder, target file type 'JavaScript'.",
+    "Loading module 'shortid' from 'node_modules' folder, target file types: JavaScript.",
     "File '/node_modules/shortid/package.json' does not exist according to earlier cached lookups.",
     "File '/node_modules/shortid.js' does not exist.",
     "File '/node_modules/shortid.jsx' does not exist.",

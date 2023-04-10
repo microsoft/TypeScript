@@ -84,15 +84,27 @@ exports.a = 1;
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../../shared/index.ts": {
+        "original": {
+          "version": "-22125360210-export const a: Unrestricted = 1;",
+          "signature": "-478734393-export declare const a: Unrestricted;\r\n"
+        },
         "version": "-22125360210-export const a: Unrestricted = 1;",
         "signature": "-478734393-export declare const a: Unrestricted;\r\n"
       },
       "../../shared/typings-base/globals.d.ts": {
+        "original": {
+          "version": "4725476611-type Unrestricted = any;",
+          "affectsGlobalScope": true
+        },
         "version": "4725476611-type Unrestricted = any;",
         "signature": "4725476611-type Unrestricted = any;",
         "affectsGlobalScope": true
@@ -140,15 +152,27 @@ exports.b = 1;
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../../webpack/index.ts": {
+        "original": {
+          "version": "-14405273073-export const b: Unrestricted = 1;",
+          "signature": "-5074241048-export declare const b: Unrestricted;\r\n"
+        },
         "version": "-14405273073-export const b: Unrestricted = 1;",
         "signature": "-5074241048-export declare const b: Unrestricted;\r\n"
       },
       "../../shared/typings-base/globals.d.ts": {
+        "original": {
+          "version": "4725476611-type Unrestricted = any;",
+          "affectsGlobalScope": true
+        },
         "version": "4725476611-type Unrestricted = any;",
         "signature": "4725476611-type Unrestricted = any;",
         "affectsGlobalScope": true

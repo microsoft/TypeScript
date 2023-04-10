@@ -59,11 +59,11 @@ function f4<T>(x: T & 1 | T & 2) {
 
         case 1: x; break;  // T & 1
 >1 : 1
->x : (T & 1) | (T & 2)
+>x : T & 1
 
         case 2: x; break;  // T & 2
 >2 : 2
->x : (T & 1) | (T & 2)
+>x : T & 2
 
         default: x;  // Should narrow to never
 >x : never

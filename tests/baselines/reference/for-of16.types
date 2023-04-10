@@ -21,3 +21,8 @@ for (v of new StringIterator) { } // Should fail
 >new StringIterator : StringIterator
 >StringIterator : typeof StringIterator
 
+for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
+>v : string
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+

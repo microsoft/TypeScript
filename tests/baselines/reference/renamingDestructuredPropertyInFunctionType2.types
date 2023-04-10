@@ -10,37 +10,37 @@ type F1 = (arg: number) => any;
 >arg : number
 
 type F2 = ({ a: string }: O) => any; 
->F2 : ({ a }: O) => any
+>F2 : ({ a: string }: O) => any
 >a : any
 >string : string
 
 type F3 = ({ a: string, b, c }: O) => any; 
->F3 : ({ a, b, c }: O) => any
+>F3 : ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type F4 = ({ a: string }: O) => any; 
->F4 : ({ a }: O) => any
+>F4 : ({ a: string }: O) => any
 >a : any
 >string : string
 
 type F5 = ({ a: string, b, c }: O) => any; 
->F5 : ({ a, b, c }: O) => any
+>F5 : ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type F6 = ({ a: string }) => typeof string; 
->F6 : ({ a }: { a: any; }) => any
+>F6 : ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 >string : any
 
 type F7 = ({ a: string, b: number }) => typeof number; 
->F7 : ({ a, b }: { a: any; b: any; }) => any
+>F7 : ({ a: string, b: number }: { a: any; b: any; }) => any
 >a : any
 >string : any
 >b : any
@@ -48,7 +48,7 @@ type F7 = ({ a: string, b: number }) => typeof number;
 >number : any
 
 type F8 = ({ a, b: number }) => typeof number; 
->F8 : ({ a, b }: { a: any; b: any; }) => any
+>F8 : ({ a, b: number }: { a: any; b: any; }) => any
 >a : any
 >b : any
 >number : any
@@ -65,37 +65,37 @@ type G1 = (arg: number) => any;
 >arg : number
 
 type G2 = ({ a: string }: O) => any; 
->G2 : ({ a }: O) => any
+>G2 : ({ a: string }: O) => any
 >a : any
 >string : string
 
 type G3 = ({ a: string, b, c }: O) => any; 
->G3 : ({ a, b, c }: O) => any
+>G3 : ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type G4 = ({ a: string }: O) => any; 
->G4 : ({ a }: O) => any
+>G4 : ({ a: string }: O) => any
 >a : any
 >string : string
 
 type G5 = ({ a: string, b, c }: O) => any; 
->G5 : ({ a, b, c }: O) => any
+>G5 : ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type G6 = ({ a: string }) => typeof string; 
->G6 : ({ a }: { a: any; }) => any
+>G6 : ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 >string : any
 
 type G7 = ({ a: string, b: number }) => typeof number; 
->G7 : ({ a, b }: { a: any; b: any; }) => any
+>G7 : ({ a: string, b: number }: { a: any; b: any; }) => any
 >a : any
 >string : any
 >b : any
@@ -103,7 +103,7 @@ type G7 = ({ a: string, b: number }) => typeof number;
 >number : any
 
 type G8 = ({ a, b: number }) => typeof number; 
->G8 : ({ a, b }: { a: any; b: any; }) => any
+>G8 : ({ a, b: number }: { a: any; b: any; }) => any
 >a : any
 >b : any
 >number : any
@@ -121,7 +121,7 @@ interface I {
 >arg : number
 
   method2({ a: string }): any; 
->method2 : ({ a }: { a: any; }) => any
+>method2 : ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 

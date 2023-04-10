@@ -84,16 +84,33 @@ No shapes updated in the builder::
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "signature": false,
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": false
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;",
+          "signature": false
+        },
         "version": "2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": false
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }"
       }
     },
@@ -224,19 +241,35 @@ console.log("hi");
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-6245214333-export interface A {\r\n    name: string;\r\n}\r\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-6245214333-export interface A {\r\n    name: string;\r\n}\r\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+          "signature": "-4882119183-export {};\r\n"
+        },
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
         "signature": "-4882119183-export {};\r\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-4882119183-export {};\r\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-4882119183-export {};\r\n"
       }

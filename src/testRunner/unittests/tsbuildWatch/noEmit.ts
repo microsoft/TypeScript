@@ -1,33 +1,44 @@
-namespace ts.tscWatch {
-    describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
-        verifyTscWatch({
-            scenario: "noEmit",
-            subScenario: "does not go in loop when watching when no files are emitted",
-            commandLineArgs: ["-b", "-w", "-verbose"],
-            sys: () => createWatchedSystem(
-                [
-                    { path: libFile.path, content: libContent },
-                    { path: `${projectRoot}/a.js`, content: "" },
-                    { path: `${projectRoot}/b.ts`, content: "" },
-                    { path: `${projectRoot}/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
-                ],
-                { currentDirectory: projectRoot }
-            ),
-            changes: [
-                {
-                    caption: "No change",
-                    change: sys => sys.writeFile(`${projectRoot}/a.js`, sys.readFile(`${projectRoot}/a.js`)!),
-                    // build project
-                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-                },
-                {
-                    caption: "change",
-                    change: sys => sys.writeFile(`${projectRoot}/a.js`, "const x = 10;"),
-                    // build project
-                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-                },
+import {
+    createWatchedSystem,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import { libContent } from "../tsc/helpers";
+import { verifyTscWatch } from "../tscWatch/helpers";
+
+describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
+    verifyTscWatch({
+        scenario: "noEmit",
+        subScenario: "does not go in loop when watching when no files are emitted",
+        commandLineArgs: ["-b", "-w", "-verbose"],
+        sys: () => createWatchedSystem(
+            [
+                { path: libFile.path, content: libContent },
+                { path: `/user/username/projects/myproject/a.js`, content: "" },
+                { path: `/user/username/projects/myproject/b.ts`, content: "" },
+                { path: `/user/username/projects/myproject/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
             ],
-            baselineIncremental: true
-        });
+            { currentDirectory: "/user/username/projects/myproject" }
+        ),
+        changes: [
+            {
+                caption: "No change",
+                change: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
+                // build project
+                timeouts: sys => {
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.checkTimeoutQueueLength(0);
+                },
+            },
+            {
+                caption: "change",
+                change: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, "const x = 10;"),
+                // build project
+                timeouts: sys => {
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.checkTimeoutQueueLength(0);
+                },
+            },
+        ],
+        baselineIncremental: true
     });
-}
+});

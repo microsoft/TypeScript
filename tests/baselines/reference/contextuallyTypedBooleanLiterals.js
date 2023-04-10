@@ -38,7 +38,7 @@ var x = observable(false);
 
 
 //// [contextuallyTypedBooleanLiterals.d.ts]
-declare type Box<T> = {
+type Box<T> = {
     get: () => T;
     set: (value: T) => void;
 };

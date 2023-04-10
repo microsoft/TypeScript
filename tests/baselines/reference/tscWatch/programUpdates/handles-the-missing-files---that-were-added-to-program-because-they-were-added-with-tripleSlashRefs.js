@@ -51,15 +51,15 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (used version)
 
-WatchedFiles::
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonfile2.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -103,15 +103,15 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
 
 FsWatchesRecursive::
 

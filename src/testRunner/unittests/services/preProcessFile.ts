@@ -1,3 +1,5 @@
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: services:: PreProcessFile:", () => {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
         const resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
@@ -192,6 +194,22 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 " * import * as c from \"c\";" + "\n" +
                 " * ```" + "\n" +
                 " */",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Ignores imports in template strings", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("a ? `&${a}` : `#${b}`;\n\n `import(\"${moduleSpecifier}\").${id}`;",
             /*readImportFile*/ true,
             /*detectJavaScriptImports*/ true,
             {

@@ -43,21 +43,21 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/src/file1.ts (used version)
 
-WatchedFiles::
-/a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
-/a/username/project/src/file1.ts:
-  {"fileName":"/a/username/project/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/username/project/node_modules/@types:
-  {"fileName":"/a/username/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/username/project/tsconfig.json:
+  {}
+/a/username/project/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /a/username/project:
-  {"directoryName":"/a/username/project"}
+  {}
 /a/username/project/src:
-  {"directoryName":"/a/username/project/src"}
+  {}
 
 FsWatchesRecursive::
 
@@ -96,21 +96,21 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/username/project/src/file2.ts (used version)
 
-WatchedFiles::
-/a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/username/project/node_modules/@types:
-  {"fileName":"/a/username/project/node_modules/@types","pollingInterval":500}
-/a/username/project/src/file2.ts:
-  {"fileName":"/a/username/project/src/file2.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/username/project/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /a/username/project:
-  {"directoryName":"/a/username/project"}
+  {}
 /a/username/project/src:
-  {"directoryName":"/a/username/project/src"}
+  {}
+/a/username/project/src/file2.ts:
+  {}
 
 FsWatchesRecursive::
 

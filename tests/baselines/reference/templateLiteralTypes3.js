@@ -288,52 +288,52 @@ function ft1(t, u, u1, u2) {
 
 
 //// [templateLiteralTypes3.d.ts]
-declare type Foo1<T> = T extends `*${infer U}*` ? U : never;
-declare type T01 = Foo1<'hello'>;
-declare type T02 = Foo1<'*hello*'>;
-declare type T03 = Foo1<'**hello**'>;
-declare type T04 = Foo1<`*${string}*`>;
-declare type T05 = Foo1<`*${number}*`>;
-declare type T06 = Foo1<`*${bigint}*`>;
-declare type T07 = Foo1<`*${any}*`>;
-declare type T08 = Foo1<`**${string}**`>;
-declare type T09 = Foo1<`**${string}**${string}**`>;
-declare type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
-declare type T11 = Foo1<`**${boolean}**${boolean}**`>;
+type Foo1<T> = T extends `*${infer U}*` ? U : never;
+type T01 = Foo1<'hello'>;
+type T02 = Foo1<'*hello*'>;
+type T03 = Foo1<'**hello**'>;
+type T04 = Foo1<`*${string}*`>;
+type T05 = Foo1<`*${number}*`>;
+type T06 = Foo1<`*${bigint}*`>;
+type T07 = Foo1<`*${any}*`>;
+type T08 = Foo1<`**${string}**`>;
+type T09 = Foo1<`**${string}**${string}**`>;
+type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
+type T11 = Foo1<`**${boolean}**${boolean}**`>;
 declare function foo1<V extends string>(arg: `*${V}*`): V;
 declare function f1<T extends string>(s: string, n: number, b: boolean, t: T): void;
-declare type Parts<T> = T extends '' ? [] : T extends `${infer Head}${infer Tail}` ? [Head, ...Parts<Tail>] : never;
-declare type T20 = Parts<`abc`>;
-declare type T21 = Parts<`*${string}*`>;
-declare type T22 = Parts<`*${number}*`>;
-declare type T23 = Parts<`*${number}*${string}*${bigint}*`>;
+type Parts<T> = T extends '' ? [] : T extends `${infer Head}${infer Tail}` ? [Head, ...Parts<Tail>] : never;
+type T20 = Parts<`abc`>;
+type T21 = Parts<`*${string}*`>;
+type T22 = Parts<`*${number}*`>;
+type T23 = Parts<`*${number}*${string}*${bigint}*`>;
 declare function f2(): void;
 declare function f3<T extends string>(s: string, n: number, b: boolean, t: T): void;
 declare function f4<T extends number>(s: string, n: number, b: boolean, t: T): void;
-declare type A<T> = T extends `${infer U}.${infer V}` ? U | V : never;
-declare type B = A<`test.1024`>;
-declare type C = A<`test.${number}`>;
-declare type D<T> = T extends `${infer U}.${number}` ? U : never;
-declare type E = D<`test.1024`>;
-declare type F = D<`test.${number}`>;
-declare type G<T> = T extends `${infer U}.${infer V}` ? U | V : never;
-declare type H = G<`test.hoge`>;
-declare type I = G<`test.${string}`>;
-declare type J<T> = T extends `${infer U}.${string}` ? U : never;
-declare type K = J<`test.hoge`>;
-declare type L = J<`test.${string}`>;
-declare type Templated = `${string} ${string}`;
+type A<T> = T extends `${infer U}.${infer V}` ? U | V : never;
+type B = A<`test.1024`>;
+type C = A<`test.${number}`>;
+type D<T> = T extends `${infer U}.${number}` ? U : never;
+type E = D<`test.1024`>;
+type F = D<`test.${number}`>;
+type G<T> = T extends `${infer U}.${infer V}` ? U | V : never;
+type H = G<`test.hoge`>;
+type I = G<`test.${string}`>;
+type J<T> = T extends `${infer U}.${string}` ? U : never;
+type K = J<`test.hoge`>;
+type L = J<`test.${string}`>;
+type Templated = `${string} ${string}`;
 declare const value1: string;
 declare const templated1: Templated;
 declare const value2 = "abc";
 declare const templated2: Templated;
-declare type Prefixes = "foo" | "bar";
-declare type AllPrefixData = "foo:baz" | "bar:baz";
-declare type PrefixData<P extends Prefixes> = `${P}:baz`;
+type Prefixes = "foo" | "bar";
+type AllPrefixData = "foo:baz" | "bar:baz";
+type PrefixData<P extends Prefixes> = `${P}:baz`;
 interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 }
-declare type Schema = {
+type Schema = {
     a: {
         b: {
             c: number;
@@ -345,14 +345,14 @@ declare function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`)
 declare function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`): void;
 declare function ff3(x: string, y: `foo-${string}` | 'bar'): void;
 declare function ff4(x: string, y: `foo-${string}`): void;
-declare type Action = {
+type Action = {
     type: `${string}_REQUEST`;
 } | {
     type: `${string}_SUCCESS`;
     response: string;
 };
 declare function reducer(action: Action): void;
-declare type DotString = `${string}.${string}.${string}`;
+type DotString = `${string}.${string}.${string}`;
 declare function noSpread<P extends DotString>(args: P[]): P;
 declare function spread<P extends DotString>(...args: P[]): P;
 declare function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>): void;

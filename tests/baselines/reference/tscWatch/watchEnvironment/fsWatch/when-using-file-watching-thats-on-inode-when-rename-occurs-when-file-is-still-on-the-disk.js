@@ -59,19 +59,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
+  {"inode":10}
 /user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":9}
+  {"inode":9}
 /user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
+  {"inode":8}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","inode":3}
+  {"inode":3}
 
 FsWatchesRecursive::
 
@@ -138,19 +138,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
+  {"inode":10}
 /user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
+  {"inode":8}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","inode":3}
+  {"inode":3}
 /user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":13}
+  {"inode":13}
 
 FsWatchesRecursive::
 
@@ -205,19 +205,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
+  {"inode":10}
 /user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
+  {"inode":8}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","inode":3}
+  {"inode":3}
 /user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":14}
+  {"inode":14}
 
 FsWatchesRecursive::
 

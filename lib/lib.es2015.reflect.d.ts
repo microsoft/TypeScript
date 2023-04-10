@@ -44,7 +44,7 @@ declare namespace Reflect {
      * @param propertyKey The property name.
      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
      */
-    function defineProperty(target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
+    function defineProperty(target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): boolean;
 
     /**
      * Removes a property from an object, equivalent to `delete target[propertyKey]`,

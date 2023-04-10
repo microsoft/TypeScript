@@ -20,10 +20,10 @@ function f(m) {
 
 
 //// [circularBaseTypes.d.ts]
-declare type M<T> = {
+type M<T> = {
     value: T;
 };
 interface M2 extends M<M3> {
 }
-declare type M3 = M2[keyof M2];
+type M3 = M2[keyof M2];
 declare function f(m: M3): any;

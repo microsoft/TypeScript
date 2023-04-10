@@ -41,13 +41,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/app.ts (used version)
 
-WatchedFiles::
-/a/app.ts:
-  {"fileName":"/a/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -90,13 +90,13 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/app.ts (computed .d.ts)
 
-WatchedFiles::
-/a/app.ts:
-  {"fileName":"/a/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 

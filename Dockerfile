@@ -3,5 +3,4 @@ FROM node:current
 COPY . /typescript
 WORKDIR /typescript
 RUN npm ci
-RUN npm i -g gulp-cli
-RUN gulp configure-insiders && gulp LKG && gulp clean && npm pack .
+RUN npx hereby configure-insiders && npx hereby LKG && npx hereby clean && npm pack .

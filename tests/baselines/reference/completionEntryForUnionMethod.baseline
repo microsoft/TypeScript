@@ -476,7 +476,7 @@
           ],
           "documentation": [
             {
-              "text": "Combines two or more arrays.\r\nThis method returns a new array without modifying any existing arrays.",
+              "text": "Combines two or more arrays.\nThis method returns a new array without modifying any existing arrays.",
               "kind": "text"
             }
           ],
@@ -1047,7 +1047,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A function that accepts up to three arguments. The every method calls\r\nthe predicate function for each element in the array until the predicate returns a value\r\nwhich is coercible to the Boolean value false, or until the end of the array.",
+                  "text": "A function that accepts up to three arguments. The every method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value false, or until the end of the array.",
                   "kind": "text"
                 }
               ]
@@ -1064,7 +1064,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function.\r\nIf thisArg is omitted, undefined is used as the this value.",
+                  "text": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ]
@@ -1081,7 +1081,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A function that accepts up to three arguments. The every method calls\r\nthe predicate function for each element in the array until the predicate returns a value\r\nwhich is coercible to the Boolean value false, or until the end of the array.",
+                  "text": "A function that accepts up to three arguments. The every method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value false, or until the end of the array.",
                   "kind": "text"
                 }
               ]
@@ -1098,7 +1098,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function.\r\nIf thisArg is omitted, undefined is used as the this value.",
+                  "text": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ]
@@ -3001,7 +3001,7 @@
           ],
           "documentation": [
             {
-              "text": "Removes the last element from an array and returns it.\r\nIf the array is empty, undefined is returned and the array is not modified.",
+              "text": "Removes the last element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
               "kind": "text"
             }
           ]
@@ -4696,7 +4696,7 @@
           ],
           "documentation": [
             {
-              "text": "Reverses the elements in an array in place.\r\nThis method mutates the array and returns a reference to the same array.",
+              "text": "Reverses the elements in an array in place.\nThis method mutates the array and returns a reference to the same array.",
               "kind": "text"
             }
           ]
@@ -4786,7 +4786,7 @@
           ],
           "documentation": [
             {
-              "text": "Removes the first element from an array and returns it.\r\nIf the array is empty, undefined is returned and the array is not modified.",
+              "text": "Removes the first element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
               "kind": "text"
             }
           ]
@@ -4940,7 +4940,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns a copy of a section of an array.\r\nFor both start and end, a negative index can be used to indicate an offset from the end of the array.\r\nFor example, -2 refers to the second to last element of the array.",
+              "text": "Returns a copy of a section of an array.\nFor both start and end, a negative index can be used to indicate an offset from the end of the array.\nFor example, -2 refers to the second to last element of the array.",
               "kind": "text"
             }
           ],
@@ -4957,7 +4957,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The beginning index of the specified portion of the array.\r\nIf start is undefined, then the slice begins at index 0.",
+                  "text": "The beginning index of the specified portion of the array.\nIf start is undefined, then the slice begins at index 0.",
                   "kind": "text"
                 }
               ]
@@ -4974,7 +4974,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.\r\nIf end is undefined, then the slice extends to the end of the array.",
+                  "text": "The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.\nIf end is undefined, then the slice extends to the end of the array.",
                   "kind": "text"
                 }
               ]
@@ -5323,7 +5323,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A function that accepts up to three arguments. The some method calls\r\nthe predicate function for each element in the array until the predicate returns a value\r\nwhich is coercible to the Boolean value true, or until the end of the array.",
+                  "text": "A function that accepts up to three arguments. The some method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value true, or until the end of the array.",
                   "kind": "text"
                 }
               ]
@@ -5340,7 +5340,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function.\r\nIf thisArg is omitted, undefined is used as the this value.",
+                  "text": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ]
@@ -5616,7 +5616,7 @@
           ],
           "documentation": [
             {
-              "text": "Sorts an array in place.\r\nThis method mutates the array and returns a reference to the same array.",
+              "text": "Sorts an array in place.\nThis method mutates the array and returns a reference to the same array.",
               "kind": "text"
             }
           ],
@@ -5633,7 +5633,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11,2,22,1].sort((a, b) => a - b)\r\n```",
+                  "text": "Function used to determine the order of the elements. It is expected to return\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```",
                   "kind": "text"
                 }
               ]

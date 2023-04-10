@@ -58,7 +58,7 @@ export { Hash, StringHash, StringHash2 };
 interface Hash<T> {
     [key: string]: T;
 }
-declare type StringHash = Hash<string>;
+type StringHash = Hash<string>;
 interface StringHash2 extends Hash<string> {
 }
 //// [a.d.ts]

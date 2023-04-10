@@ -28,16 +28,16 @@ exports.__esModule = true;
 
 
 //// [namedTupleMembersErrors.d.ts]
-export declare type Segment1 = [length: number, number];
-export declare type Segment2 = [number, size: number];
-export declare type List = [item: any, ...any];
-export declare type List2 = [any, ...remainder: any];
-export declare type Pair = [item: any, any?];
-export declare type Pair2 = [any, last?: any];
-export declare type Opt = [element: string?];
-export declare type Trailing = [first: string, rest: ...string[]];
-export declare type OptTrailing = [first: string, rest: ...?string[]];
-export declare type OptRest = [first: string, ...rest?: string[]];
-export declare type NonArrayRest = [first: string, ...rest: number];
-export declare type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
-export declare type RecusiveRest = [first: string, ...rest: RecusiveRest];
+export type Segment1 = [length: number, number];
+export type Segment2 = [number, size: number];
+export type List = [item: any, ...any];
+export type List2 = [any, ...remainder: any];
+export type Pair = [item: any, any?];
+export type Pair2 = [any, last?: any];
+export type Opt = [element: string?];
+export type Trailing = [first: string, rest: ...string[]];
+export type OptTrailing = [first: string, rest: ...?string[]];
+export type OptRest = [first: string, ...rest?: string[]];
+export type NonArrayRest = [first: string, ...rest: number];
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+export type RecusiveRest = [first: string, ...rest: RecusiveRest];

@@ -45,21 +45,21 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/foo.ts (used version)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /node_modules:
-  {"fileName":"/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /:
-  {"directoryName":""}
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -105,19 +105,19 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/bar.d.ts:
-  {"fileName":"/a/bar.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/bar.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

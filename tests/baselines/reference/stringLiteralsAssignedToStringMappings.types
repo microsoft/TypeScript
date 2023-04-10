@@ -15,22 +15,22 @@ x = "a";
 >"a" : "a"
 
 declare var y: Uppercase<Lowercase<`${number}`>>;
->y : Uppercase<`${Lowercase<`${number}`>}`>
+>y : Uppercase<Lowercase<`${number}`>>
 
 // good
 y = "1";
 >y = "1" : "1"
->y : Uppercase<`${Lowercase<`${number}`>}`>
+>y : Uppercase<Lowercase<`${number}`>>
 >"1" : "1"
 
 // bad
 y = "a";
 >y = "a" : "a"
->y : Uppercase<`${Lowercase<`${number}`>}`>
+>y : Uppercase<Lowercase<`${number}`>>
 >"a" : "a"
 
 y = "A";
 >y = "A" : "A"
->y : Uppercase<`${Lowercase<`${number}`>}`>
+>y : Uppercase<Lowercase<`${number}`>>
 >"A" : "A"
 

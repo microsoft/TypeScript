@@ -28,14 +28,14 @@ exports.a4 = null;
 
 
 //// [parenthesisDoesNotBlockAliasSymbolCreation.d.ts]
-export declare type InvalidKeys<K extends string | number | symbol> = {
+export type InvalidKeys<K extends string | number | symbol> = {
     [P in K]?: never;
 };
-export declare type InvalidKeys2<K extends string | number | symbol> = ({
+export type InvalidKeys2<K extends string | number | symbol> = ({
     [P in K]?: never;
 });
-export declare type A<T> = (T & InvalidKeys<"a">);
-export declare type A2<T> = (T & InvalidKeys2<"a">);
+export type A<T> = (T & InvalidKeys<"a">);
+export type A2<T> = (T & InvalidKeys2<"a">);
 export declare const a: A<{
     x: number;
 }>;

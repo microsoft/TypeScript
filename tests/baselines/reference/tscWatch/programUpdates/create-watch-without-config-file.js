@@ -59,19 +59,19 @@ Shape signatures in builder refreshed for::
 /a/b/c/module.d.ts (used version)
 /a/b/c/app.ts (used version)
 
-WatchedFiles::
-/a/b/c/app.ts:
-  {"fileName":"/a/b/c/app.ts","pollingInterval":250}
-/a/b/c/module.d.ts:
-  {"fileName":"/a/b/c/module.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/b/c/app.ts:
+  {}
+/a/b/c/module.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

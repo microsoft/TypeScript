@@ -38,8 +38,8 @@ interface Foo {
     b: number;
     c: boolean;
 }
-export declare type Bar = Omit<Foo, "c">;
-export declare type Baz = Omit<Foo, "b" | "c">;
+export type Bar = Omit<Foo, "c">;
+export type Baz = Omit<Foo, "b" | "c">;
 export declare function getBarC(bar: Bar): any;
 export declare function getBazB(baz: Baz): any;
 export {};

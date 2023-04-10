@@ -34,14 +34,17 @@ exports.zzz = 123;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.B = void 0;
 var B = require("./b");
+exports.B = B;
 var x = { x: "" };
 B.zzz;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+var a_1 = require("./a");
 var x = { x: "" };
-B.zzz;
+a_1.B.zzz;
 var OriginalB = require("./b");
 OriginalB.zzz;
 var y = x;

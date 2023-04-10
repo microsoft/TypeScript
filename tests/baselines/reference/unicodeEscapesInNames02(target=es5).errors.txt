@@ -1,0 +1,166 @@
+tests/cases/compiler/astralAsSurrogatePair.ts(1,11): error TS1127: Invalid character.
+tests/cases/compiler/astralAsSurrogatePair.ts(1,14): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'as'.
+tests/cases/compiler/astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
+tests/cases/compiler/astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
+tests/cases/compiler/astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
+tests/cases/compiler/astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(5,5): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(5,7): error TS1134: Variable declaration expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(6,5): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(6,7): error TS1005: ',' expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(6,11): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(9,5): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(9,8): error TS1128: Declaration or statement expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,5): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,6): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,11): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,15): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,5): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,6): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,7): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,11): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,14): error TS1128: Declaration or statement expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(17,5): error TS2304: Cannot find name 'constructor'.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(17,19): error TS1005: ';' expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,14): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,15): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,20): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,24): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(20,5): error TS2304: Cannot find name 'methodA'.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(20,15): error TS1005: ';' expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(21,21): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(23,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,13): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,16): error TS1134: Variable declaration expected.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,18): error TS1389: 'new' is not allowed as a variable declaration name.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,28): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,29): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,34): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(25,50): error TS2339: Property 'methodA' does not exist on type 'Foo'.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(27,2): error TS1127: Invalid character.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(27,3): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(27,8): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(27,12): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts (38 errors) ====
+    // Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
+    // Astral characters should be accepted in ES2015
+    
+    // U+102A7 CARIAN LETTER A2
+    var 𐊧: string;
+        ~~
+!!! error TS1127: Invalid character.
+          ~
+!!! error TS1134: Variable declaration expected.
+    var \u{102A7}: string;
+        
+!!! error TS1127: Invalid character.
+          ~
+!!! error TS1005: ',' expected.
+              ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+    
+    if (Math.random()) {
+        𐊧 = "hello";
+        ~~
+!!! error TS1127: Invalid character.
+           ~
+!!! error TS1128: Declaration or statement expected.
+    }
+    else {
+        \u{102A7} = "hallo";
+        
+!!! error TS1127: Invalid character.
+         ~
+!!! error TS1434: Unexpected keyword or identifier.
+              ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+                  ~
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+    }
+    
+    class Foo {
+        \u{102A7}: string;
+        
+!!! error TS1127: Invalid character.
+         ~
+!!! error TS1434: Unexpected keyword or identifier.
+          ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+              ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+                 ~
+!!! error TS1128: Declaration or statement expected.
+        constructor() {
+        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'constructor'.
+                      ~
+!!! error TS1005: ';' expected.
+            this.\u{102A7} = " world";
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                 
+!!! error TS1127: Invalid character.
+                  ~
+!!! error TS1434: Unexpected keyword or identifier.
+                       ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+                           ~
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+        }
+        methodA() {
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'methodA'.
+                  ~
+!!! error TS1005: ';' expected.
+            return this.𐊧;
+                        ~~
+!!! error TS1127: Invalid character.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
+                ~~
+!!! error TS1127: Invalid character.
+                   ~
+!!! error TS1134: Variable declaration expected.
+                     ~~~
+!!! error TS1389: 'new' is not allowed as a variable declaration name.
+                               
+!!! error TS1127: Invalid character.
+                                ~
+!!! error TS1434: Unexpected keyword or identifier.
+                                     ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+                                                     ~~~~~~~
+!!! error TS2339: Property 'methodA' does not exist on type 'Foo'.
+    
+    _\u{102A7} += "!";
+     
+!!! error TS1127: Invalid character.
+      ~
+!!! error TS1434: Unexpected keyword or identifier.
+           ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+               ~~
+!!! error TS1128: Declaration or statement expected.
+    
+==== tests/cases/compiler/astralAsSurrogatePair.ts (6 errors) ====
+    import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
+              ~~
+!!! error TS1127: Invalid character.
+                 ~~
+!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'as'.
+                    
+!!! error TS1127: Invalid character.
+                     ~~~~~
+!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
+                          
+!!! error TS1127: Invalid character.
+                           ~~~~~
+!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
+    

@@ -1,0 +1,15 @@
+tests/cases/compiler/firstMatchRegExpMatchArray.ts(5,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/firstMatchRegExpMatchArray.ts (1 errors) ====
+    const match = ''.match(/ /)
+    
+    if (match !== null) {
+        const foo: string = match[0]
+        const bar: string = match[1]
+              ~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    

@@ -2,10 +2,10 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(13,14): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(14,14): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(15,14): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
 
 
 ==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts (8 errors) ====
@@ -34,16 +34,16 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
         var r5 = t == u;
                  ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
         var r6 = t != u;
                  ~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
         var r7 = t === u;
                  ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
         var r8 = t !== u;
                  ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
     
         // operator <
         var r1a1 = t < a;

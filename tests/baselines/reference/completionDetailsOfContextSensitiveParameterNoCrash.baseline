@@ -1,0 +1,52 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionDetailsOfContextSensitiveParameterNoCrash.ts",
+      "position": 3101,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3101,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "args",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

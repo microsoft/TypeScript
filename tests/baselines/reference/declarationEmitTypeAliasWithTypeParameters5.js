@@ -18,8 +18,8 @@ function foo() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters5.d.ts]
-declare type Foo<T, Y> = {
+type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>;
 };
-export declare type SubFoo<R> = Foo<string, R>;
+export type SubFoo<R> = Foo<string, R>;
 export {};

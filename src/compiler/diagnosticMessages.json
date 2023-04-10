@@ -899,6 +899,14 @@
         "category": "Error",
         "code": 1274
     },
+    "'accessor' modifier can only appear on a property declaration.": {
+        "category": "Error",
+        "code": 1275
+    },
+    "An 'accessor' property cannot be declared optional.": {
+        "category": "Error",
+        "code": 1276
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1100,7 +1108,7 @@
         "category": "Error",
         "code": 1359
     },
-    "Class constructor may not be a generator.": {
+    "Type '{0}' does not satisfy the expected type '{1}'.": {
         "category": "Error",
         "code": 1360
     },
@@ -1131,6 +1139,10 @@
     "Split all invalid type-only imports": {
         "category": "Message",
         "code": 1367
+    },
+    "Class constructor may not be a generator.": {
+        "category": "Error",
+        "code": 1368
     },
     "Did you mean '{0}'?": {
         "category": "Message",
@@ -1464,12 +1476,28 @@
         "category": "Message",
         "code": 1457
     },
+    "File is ECMAScript module because '{0}' has field \"type\" with value \"module\"": {
+        "category": "Message",
+        "code": 1458
+    },
+    "File is CommonJS module because '{0}' has field \"type\" whose value is not \"module\"": {
+        "category": "Message",
+        "code": 1459
+    },
+    "File is CommonJS module because '{0}' does not have field \"type\"": {
+        "category": "Message",
+        "code": 1460
+    },
+    "File is CommonJS module because 'package.json' was not found": {
+        "category": "Message",
+        "code": 1461
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
         "code": 1470
     },
-    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.": {
         "category": "Error",
         "code": 1471
     },
@@ -1500,6 +1528,26 @@
     "Identifier or string literal expected.": {
         "category": "Error",
         "code": 1478
+    },
+    "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"{0}\")' call instead.": {
+        "category": "Error",
+        "code": 1479
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1480
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `\"type\": \"module\"` to '{1}'.": {
+        "category": "Message",
+        "code": 1481
+    },
+    "To convert this file to an ECMAScript module, add the field `\"type\": \"module\"` to '{0}'.": {
+        "category": "Message",
+        "code": 1482
+    },
+    "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1483
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1796,14 +1844,6 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
-        "category": "Error",
-        "code": 2360
-    },
-    "The right-hand side of an 'in' expression must not be a primitive.": {
-        "category": "Error",
-        "code": 2361
-    },
     "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
@@ -1824,7 +1864,7 @@
         "category": "Error",
         "code": 2366
     },
-    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+    "This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.": {
         "category": "Error",
         "code": 2367
     },
@@ -2216,7 +2256,7 @@
         "category": "Error",
         "code": 2473
     },
-    "const enum member initializers can only contain literal values and other computed enum values.": {
+    "const enum member initializers must be constant expressions.": {
         "category": "Error",
         "code": 2474
     },
@@ -2440,10 +2480,6 @@
         "category": "Error",
         "code": 2534
     },
-    "Enum type '{0}' has members with initializers that are not literals.": {
-        "category": "Error",
-        "code": 2535
-    },
     "Type '{0}' cannot be used to index type '{1}'.": {
         "category": "Error",
         "code": 2536
@@ -2641,7 +2677,7 @@
         "category": "Error",
         "code": 2593
     },
-    "This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.": {
+    "This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.": {
         "category": "Error",
         "code": 2594
     },
@@ -2796,6 +2832,10 @@
     "Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.": {
         "category": "Error",
         "code": 2637
+    },
+    "Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.": {
+        "category": "Error",
+        "code": 2638
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -3518,6 +3558,10 @@
     "Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
         "category": "Error",
         "code": 2844
+    },
+    "This condition will always return '{0}'.": {
+        "category": "Error",
+        "code": 2845
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4503,7 +4547,7 @@
         "category": "Message",
         "code": 6094
     },
-    "Loading module as file / folder, candidate module location '{0}', target file type '{1}'.": {
+    "Loading module as file / folder, candidate module location '{0}', target file types: {1}.": {
         "category": "Message",
         "code": 6095
     },
@@ -4515,7 +4559,7 @@
         "category": "Message",
         "code": 6097
     },
-    "Loading module '{0}' from 'node_modules' folder, target file type '{1}'.": {
+    "Loading module '{0}' from 'node_modules' folder, target file types: {1}.": {
         "category": "Message",
         "code": 6098
     },
@@ -5361,6 +5405,30 @@
     "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
         "category": "Message",
         "code": 6400
+    },
+    "Project '{0}' is out of date because there was error reading file '{1}'": {
+        "category": "Message",
+        "code": 6401
+    },
+    "Resolving in {0} mode with conditions {1}.": {
+        "category": "Message",
+        "code": 6402
+    },
+    "Matched '{0}' condition '{1}'.": {
+        "category": "Message",
+        "code": 6403
+    },
+    "Using '{0}' subpath '{1}' with target '{2}'.": {
+        "category": "Message",
+        "code": 6404
+    },
+    "Saw non-matching condition '{0}'.": {
+        "category": "Message",
+        "code": 6405
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates there is change in compilerOptions": {
+        "category": "Message",
+        "code": 6406
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6336,6 +6404,10 @@
         "category": "Error",
         "code": 8036
     },
+    "Type satisfaction expressions can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8037
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
@@ -6630,6 +6702,14 @@
     "Update import from \"{0}\"": {
         "category": "Message",
         "code": 90058
+    },
+    "Export '{0}' from module '{1}'": {
+        "category": "Message",
+        "code": 90059
+    },
+    "Export all referenced locals": {
+        "category": "Message",
+        "code": 90060
     },
 
     "Convert function to an ES2015 class": {
@@ -7024,6 +7104,10 @@
         "category": "Message",
         "code": 95101
     },
+    "Convert all 'const' to 'let'": {
+        "category": "Message",
+        "code": 95102
+    },
     "Convert function expression '{0}' to arrow function": {
         "category": "Message",
         "code": 95105
@@ -7300,7 +7384,14 @@
         "category": "Message",
         "code": 95173
     },
-
+    "Use `{0}`.": {
+        "category": "Message",
+        "code": 95174
+    },
+    "Use `Number.isNaN` in all conditions.": {
+        "category": "Message",
+        "code": 95175
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7390,7 +7481,7 @@
         "category": "Error",
         "code": 18032
     },
-    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+    "Type '{0}' is not assignable to type '{1}' as required for computed enum member values.": {
         "category": "Error",
         "code": 18033
     },
@@ -7433,5 +7524,29 @@
     "'{0}' is automatically exported here.": {
         "category": "Message",
         "code": 18044
+    },
+    "Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.": {
+        "category": "Error",
+        "code": 18045
+    },
+    "'{0}' is of type 'unknown'.": {
+        "category": "Error",
+        "code": 18046
+    },
+    "'{0}' is possibly 'null'.": {
+        "category": "Error",
+        "code": 18047
+    },
+    "'{0}' is possibly 'undefined'.": {
+        "category": "Error",
+        "code": 18048
+    },
+    "'{0}' is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 18049
+    },
+    "The value '{0}' cannot be used here.": {
+        "category": "Error",
+        "code": 18050
     }
 }

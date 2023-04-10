@@ -60,5 +60,5 @@ export declare class C2 implements I2 {
 }
 //// [client.d.ts]
 import { C, I } from "./server";
-export declare type cValInterface = I;
+export type cValInterface = I;
 export declare var cVal: C;

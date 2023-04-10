@@ -42,7 +42,7 @@ var b = a;
 //// [inferTypes2.d.ts]
 export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
 export declare function bar<T>(obj: T): T extends () => infer P ? P : never;
-export declare type BadNested<T> = {
+export type BadNested<T> = {
     x: T extends number ? T : string;
 };
 export declare function foo2<T>(obj: T): T extends {

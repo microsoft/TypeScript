@@ -230,6 +230,6 @@ mock(import('./ex'))
 >'./ex' : "./ex"
 
 === tests/cases/conformance/types/intersection/ex.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

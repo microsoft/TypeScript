@@ -1,3 +1,6 @@
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 // lots of tests use quoted code
 /* eslint-disable no-template-curly-in-string */
 

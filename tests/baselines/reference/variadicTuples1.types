@@ -409,7 +409,7 @@ type Arrayify<T> = { [P in keyof T]: T[P][] };
 >Arrayify : Arrayify<T>
 
 type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;  // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
->TM1 : readonly [string[], (number | undefined)[]?, ...Arrayify<U>, ...boolean[][]]
+>TM1 : readonly [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
 
 type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
 >TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]

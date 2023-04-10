@@ -10,7 +10,7 @@ exports.__esModule = true;
 
 
 //// [DeclarationErrorsNoEmitOnError.d.ts]
-declare type T = {
+type T = {
     x: number;
 };
 export interface I {

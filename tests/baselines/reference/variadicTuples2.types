@@ -297,6 +297,14 @@ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [nu
 >x : [number, ...T]
 }
 
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+>tt3 : [number, string, ...any[]]
+
+let tt4: [number, ...number[]] = tt3  // Error
+>tt4 : [number, ...number[]]
+>tt3 : [number, string, ...any[]]
+
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
@@ -497,7 +505,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >stringsAndNumber : readonly [...S, number]
-    
+
 const a1 = foo('blah1', 1);
 >a1 : ["blah1", number]
 >foo('blah1', 1) : ["blah1", number]

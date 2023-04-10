@@ -93,25 +93,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (used version)
 /user/username/projects/myproject/moduleb.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/modulea.ts:
-  {"fileName":"/user/username/projects/myproject/moduleA.ts","pollingInterval":250}
-/user/username/projects/myproject/modulec.ts:
-  {"fileName":"/user/username/projects/myproject/ModuleC.ts","pollingInterval":250}
-/user/username/projects/myproject/moduleb.ts:
-  {"fileName":"/user/username/projects/myproject/moduleB.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/modulea.ts:
+  {}
+/user/username/projects/myproject/modulec.ts:
+  {}
+/user/username/projects/myproject/moduleb.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -202,25 +202,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/modulea.ts:
-  {"fileName":"/user/username/projects/myproject/moduleA.ts","pollingInterval":250}
-/user/username/projects/myproject/modulec.ts:
-  {"fileName":"/user/username/projects/myproject/ModuleC.ts","pollingInterval":250}
-/user/username/projects/myproject/moduleb.ts:
-  {"fileName":"/user/username/projects/myproject/moduleB.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/modulea.ts:
+  {}
+/user/username/projects/myproject/modulec.ts:
+  {}
+/user/username/projects/myproject/moduleb.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

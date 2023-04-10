@@ -64,7 +64,7 @@ else {
 
 
 //// [stringLiteralTypesAsTags01.d.ts]
-declare type Kind = "A" | "B";
+type Kind = "A" | "B";
 interface Entity {
     kind: Kind;
 }

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/controlFlowInitializedDestructuringVariables.ts ===
+declare const obj: { a?: string, b?: number };
+>obj : { a?: string | undefined; b?: number | undefined; }
+>a : string | undefined
+>b : number | undefined
+
+const {
+    a = "0",
+>a : string
+>"0" : "0"
+
+    b = +a,
+>b : number
+>+a : number
+>a : string
+
+} = obj;
+>obj : { a?: string | undefined; b?: number | undefined; }
+

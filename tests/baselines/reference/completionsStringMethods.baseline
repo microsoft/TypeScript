@@ -1048,7 +1048,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to search for.",
+                  "text": "A string or regular expression to search for.",
                   "kind": "text"
                 }
               ]
@@ -1065,7 +1065,53 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string containing the text to replace for every successful match of searchValue in this string.",
+                  "text": "A string containing the text to replace. When the ",
+                  "kind": "text"
+                },
+                {
+                  "text": "{@linkcode ",
+                  "kind": "link"
+                },
+                {
+                  "text": "searchValue",
+                  "kind": "linkName",
+                  "target": {
+                    "fileName": "lib.d.ts",
+                    "textSpan": {
+                      "start": 18451,
+                      "length": 28
+                    }
+                  }
+                },
+                {
+                  "text": "}",
+                  "kind": "link"
+                },
+                {
+                  "text": " is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of ",
+                  "kind": "text"
+                },
+                {
+                  "text": "{@linkcode ",
+                  "kind": "link"
+                },
+                {
+                  "text": "searchValue",
+                  "kind": "linkName",
+                  "target": {
+                    "fileName": "lib.d.ts",
+                    "textSpan": {
+                      "start": 18451,
+                      "length": 28
+                    }
+                  }
+                },
+                {
+                  "text": "}",
+                  "kind": "link"
+                },
+                {
+                  "text": " is replaced.",
                   "kind": "text"
                 }
               ]
@@ -1324,7 +1370,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf this value is not specified, the substring continues to the end of stringObj.",
+                  "text": "The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\nIf this value is not specified, the substring continues to the end of stringObj.",
                   "kind": "text"
                 }
               ]
@@ -1632,7 +1678,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf end is omitted, the characters from start through the end of the original string are returned.",
+                  "text": "Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.",
                   "kind": "text"
                 }
               ]

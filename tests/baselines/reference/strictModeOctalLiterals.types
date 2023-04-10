@@ -3,7 +3,7 @@ export enum E {
 >E : E
 
     A = 12 + 01
->A : E
+>A : E.A
 >12 + 01 : number
 >12 : 12
 >01 : 1

@@ -1,8 +1,10 @@
 === /node_modules/pkg/import.d.ts ===
+
 export interface ImportInterface {}
-No type information for this code.=== /node_modules/pkg/require.d.ts ===
+=== /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
-No type information for this code.=== /index.ts ===
+=== /index.ts ===
 export type LocalInterface =
 >LocalInterface : import("/node_modules/pkg/require").RequireInterface & import("/node_modules/pkg/import").ImportInterface
 

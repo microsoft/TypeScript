@@ -65,23 +65,23 @@ c:/a/lib/lib.d.ts (used version)
 c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
-WatchedFiles::
-c:/project/tsconfig.json:
-  {"fileName":"c:/project/tsconfig.json","pollingInterval":250}
-c:/project/a.ts:
-  {"fileName":"c:/project/a.ts","pollingInterval":250}
-c:/project/b.ts:
-  {"fileName":"c:/project/b.ts","pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 c:/project/node_modules/@types:
-  {"fileName":"c:/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+c:/project/tsconfig.json:
+  {}
+c:/project/a.ts:
+  {}
+c:/project/b.ts:
+  {}
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 c:/project:
-  {"directoryName":"c:/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -146,23 +146,23 @@ Shape signatures in builder refreshed for::
 c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
 
-WatchedFiles::
-c:/project/tsconfig.json:
-  {"fileName":"c:/project/tsconfig.json","pollingInterval":250}
-c:/project/a.ts:
-  {"fileName":"c:/project/a.ts","pollingInterval":250}
-c:/project/b.ts:
-  {"fileName":"c:/project/b.ts","pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 c:/project/node_modules/@types:
-  {"fileName":"c:/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+c:/project/tsconfig.json:
+  {}
+c:/project/a.ts:
+  {}
+c:/project/b.ts:
+  {}
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 c:/project:
-  {"directoryName":"c:/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

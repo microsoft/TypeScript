@@ -14,7 +14,7 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
         # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
@@ -23,10 +23,10 @@ jobs:
       run: |
         npm whoami
         npm ci
-        gulp configure-nightly
-        gulp LKG
-        gulp runtests-parallel
-        gulp clean
+        npx hereby configure-nightly
+        npx hereby LKG
+        npx hereby runtests-parallel
+        npx hereby clean
         npm publish --tag next
       env:
         NODE_AUTH_TOKEN: ${{secrets.npm_token}}

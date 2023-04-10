@@ -52,21 +52,21 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es5.d.ts (used version)
 /src/app.ts (used version)
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
+PolledWatches::
 /src/node_modules/@types:
-  {"fileName":"/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/src/tsconfig.json:
+  {}
+/src/app.ts:
+  {}
+/compiler/lib.es5.d.ts:
+  {}
 
 FsWatchesRecursive::
 /src:
-  {"directoryName":"/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -107,23 +107,23 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts (used version)
 /src/app.ts (computed .d.ts)
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
+PolledWatches::
 /src/node_modules/@types:
-  {"fileName":"/src/node_modules/@types","pollingInterval":500}
-/compiler/lib.es2015.promise.d.ts:
-  {"fileName":"/compiler/lib.es2015.promise.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/src/tsconfig.json:
+  {}
+/src/app.ts:
+  {}
+/compiler/lib.es5.d.ts:
+  {}
+/compiler/lib.es2015.promise.d.ts:
+  {}
 
 FsWatchesRecursive::
 /src:
-  {"directoryName":"/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

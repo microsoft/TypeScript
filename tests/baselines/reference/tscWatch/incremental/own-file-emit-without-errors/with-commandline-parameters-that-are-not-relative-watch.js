@@ -49,23 +49,23 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (used version)
 /users/username/projects/project/file2.ts (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -90,16 +90,28 @@ var y = 20;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./file1.ts": {
+        "original": {
+          "version": "5029505981-const x = 10;",
+          "affectsGlobalScope": true
+        },
         "version": "5029505981-const x = 10;",
         "signature": "5029505981-const x = 10;",
         "affectsGlobalScope": true
       },
       "./file2.ts": {
+        "original": {
+          "version": "2026007743-const y = 20;",
+          "affectsGlobalScope": true
+        },
         "version": "2026007743-const y = 20;",
         "signature": "2026007743-const y = 20;",
         "affectsGlobalScope": true
@@ -150,23 +162,23 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file2.ts (computed .d.ts)
 /users/username/projects/project/file1.ts (computed .d.ts)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -188,16 +200,30 @@ var z = 10;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./file1.ts": {
+        "original": {
+          "version": "5029505981-const x = 10;",
+          "signature": "-4001438729-declare const x = 10;\n",
+          "affectsGlobalScope": true
+        },
         "version": "5029505981-const x = 10;",
         "signature": "-4001438729-declare const x = 10;\n",
         "affectsGlobalScope": true
       },
       "./file2.ts": {
+        "original": {
+          "version": "3317474623-const z = 10;",
+          "signature": "-368931399-declare const z = 10;\n",
+          "affectsGlobalScope": true
+        },
         "version": "3317474623-const z = 10;",
         "signature": "-368931399-declare const z = 10;\n",
         "affectsGlobalScope": true

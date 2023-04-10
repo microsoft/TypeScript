@@ -55,23 +55,23 @@ f([container1, container2], function (value1, value2) {
 
 
 //// [numericStringLiteralTypes.d.ts]
-declare type T0 = string & `${string}`;
-declare type T1 = string & `${number}`;
-declare type T2 = string & `${bigint}`;
-declare type T3<T extends string> = string & `${T}`;
-declare type T4<T extends string> = string & `${Capitalize<`${T}`>}`;
+type T0 = string & `${string}`;
+type T1 = string & `${number}`;
+type T2 = string & `${bigint}`;
+type T3<T extends string> = string & `${T}`;
+type T4<T extends string> = string & `${Capitalize<`${T}`>}`;
 declare function f1(a: boolean[], x: `${number}`): void;
 declare function f2(a: boolean[], x: number | `${number}`): void;
-declare type T10 = boolean[][`${number}`];
-declare type T11 = boolean[][number | `${number}`];
-declare type T20<T extends number | `${number}`> = T;
-declare type T21<T extends unknown[]> = {
+type T10 = boolean[][`${number}`];
+type T11 = boolean[][number | `${number}`];
+type T20<T extends number | `${number}`> = T;
+type T21<T extends unknown[]> = {
     [K in keyof T]: T20<K>;
 };
-declare type Container<T> = {
+type Container<T> = {
     value: T;
 };
-declare type UnwrapContainers<T extends Container<unknown>[]> = {
+type UnwrapContainers<T extends Container<unknown>[]> = {
     [K in keyof T]: T[K]['value'];
 };
 declare function createContainer<T extends unknown>(value: T): Container<T>;

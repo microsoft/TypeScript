@@ -3,16 +3,16 @@ enum A {
 >A : A
 
     X = "".length, 
->X : A
+>X : A.X
 >"".length : number
 >"" : ""
 >length : number
 
     Y = X,
->Y : A
->X : A
+>Y : A.Y
+>X : A.X
 
     Z
->Z : A
+>Z : A.Z
 }
 

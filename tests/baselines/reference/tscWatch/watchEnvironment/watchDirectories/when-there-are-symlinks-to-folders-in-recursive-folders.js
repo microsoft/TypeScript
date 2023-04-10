@@ -42,7 +42,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
@@ -85,33 +85,33 @@ Shape signatures in builder refreshed for::
 /home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
 /home/user/projects/myproject/src/file.ts (used version)
 
-WatchedFiles::
-/home/user/projects/myproject/tsconfig.json:
-  {"fileName":"/home/user/projects/myproject/tsconfig.json","pollingInterval":250}
-/home/user/projects/myproject/src/file.ts:
-  {"fileName":"/home/user/projects/myproject/src/file.ts","pollingInterval":250}
-/home/user/projects/myproject/node_modules/reala/index.d.ts:
-  {"fileName":"/home/user/projects/myproject/node_modules/reala/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /home/user/projects/myproject/node_modules/@types:
-  {"fileName":"/home/user/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/home/user/projects/myproject/tsconfig.json:
+  {}
+/home/user/projects/myproject/src/file.ts:
+  {}
+/home/user/projects/myproject/node_modules/reala/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /home/user/projects/myproject/src:
-  {"directoryName":"/home/user/projects/myproject/src"}
+  {}
 /home/user/projects/myproject/node_modules:
-  {"directoryName":"/home/user/projects/myproject/node_modules"}
+  {}
 /home/user/projects/myproject/node_modules/reala:
-  {"directoryName":"/home/user/projects/myproject/node_modules/reala"}
+  {}
 /home/user/projects/myproject/node_modules/reala/node_modules:
-  {"directoryName":"/home/user/projects/myproject/node_modules/reala/node_modules"}
+  {}
 /home/user/projects/myproject/node_modules/realb:
-  {"directoryName":"/home/user/projects/myproject/node_modules/realb"}
+  {}
 /home/user/projects/myproject/node_modules/realb/node_modules:
-  {"directoryName":"/home/user/projects/myproject/node_modules/realb/node_modules"}
+  {}
 /home/user/projects/myproject:
-  {"directoryName":"/home/user/projects/myproject"}
+  {}
 
 FsWatchesRecursive::
 

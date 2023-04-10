@@ -19,5 +19,4 @@ if (x) {
 
 === tests/cases/compiler/b.json ===
 {
-No type information for this code.}
-No type information for this code.
+}

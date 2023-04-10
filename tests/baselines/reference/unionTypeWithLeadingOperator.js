@@ -17,4 +17,4 @@ exports.__esModule = true;
 
 
 //// [unionTypeWithLeadingOperator.d.ts]
-export declare type D = /*leading1*/ 1 | /*leading2*/ 2;
+export type D = /*leading1*/ 1 | /*leading2*/ 2;

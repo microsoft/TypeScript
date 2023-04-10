@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/plainJSGrammarErrors3.js ===
 
-No type information for this code.=== /a.js ===
+=== /a.js ===
 function foo() {
 >foo : () => void
 

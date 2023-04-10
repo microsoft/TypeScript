@@ -62,16 +62,29 @@ var class2 = /** @class */ (function () {
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true
       },
       "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2390931783-declare class class2 {\r\n}\r\n",
+          "affectsGlobalScope": true
+        },
         "version": "777969115-class class2 {}",
         "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true
@@ -147,21 +160,38 @@ exitCode:: ExitStatus.Success
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true
       },
       "../project1/class3.d.ts": {
+        "original": {
+          "version": "-3469165364-declare class class3 {}",
+          "affectsGlobalScope": true
+        },
         "version": "-3469165364-declare class class3 {}",
         "signature": "-3469165364-declare class class3 {}",
         "affectsGlobalScope": true
       },
       "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2390931783-declare class class2 {\r\n}\r\n",
+          "affectsGlobalScope": true
+        },
         "version": "777969115-class class2 {}",
         "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true
@@ -235,16 +265,29 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true
       },
       "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2390931783-declare class class2 {\r\n}\r\n",
+          "affectsGlobalScope": true
+        },
         "version": "777969115-class class2 {}",
         "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true
@@ -292,21 +335,38 @@ exitCode:: ExitStatus.Success
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true
       },
       "../project1/class3.d.ts": {
+        "original": {
+          "version": "-3469165364-declare class class3 {}",
+          "affectsGlobalScope": true
+        },
         "version": "-3469165364-declare class class3 {}",
         "signature": "-3469165364-declare class class3 {}",
         "affectsGlobalScope": true
       },
       "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2390931783-declare class class2 {\r\n}\r\n",
+          "affectsGlobalScope": true
+        },
         "version": "777969115-class class2 {}",
         "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true

@@ -3,9 +3,10 @@ export class A {}
 >A : Symbol(A, Decl(a.ts, 0, 0))
 
 === tests/cases/conformance/externalModules/typeOnly/b.ts ===
+
 export type * from './a'; // Grammar error
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+
+=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
 export type * as ns from './a'; // Grammar error
 >ns : Symbol(ns, Decl(c.ts, 0, 11))
 

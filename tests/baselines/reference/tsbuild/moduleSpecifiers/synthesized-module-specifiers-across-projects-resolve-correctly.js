@@ -244,42 +244,80 @@ export class LassieDog extends Dog {
     ],
     "fileInfos": {
       "../../lib/lib.es2022.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "../src-types/dogconfig.d.ts": {
+        "original": {
+          "version": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
+          "impliedFormat": 99
+        },
         "version": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
         "signature": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
         "impliedFormat": "esnext"
       },
       "../src-types/index.d.ts": {
+        "original": {
+          "version": "-5608794531-export * from './dogconfig.js';\r\n",
+          "impliedFormat": 99
+        },
         "version": "-5608794531-export * from './dogconfig.js';\r\n",
         "signature": "-5608794531-export * from './dogconfig.js';\r\n",
         "impliedFormat": "esnext"
       },
       "./dogconfig.ts": {
+        "original": {
+          "version": "1966273863-import { DogConfig } from 'src-types';\n\nexport const DOG_CONFIG: DogConfig = {\n    name: 'Default dog',\n};\n",
+          "signature": "17588480778-import { DogConfig } from 'src-types';\r\nexport declare const DOG_CONFIG: DogConfig;\r\n",
+          "impliedFormat": 99
+        },
         "version": "1966273863-import { DogConfig } from 'src-types';\n\nexport const DOG_CONFIG: DogConfig = {\n    name: 'Default dog',\n};\n",
         "signature": "17588480778-import { DogConfig } from 'src-types';\r\nexport declare const DOG_CONFIG: DogConfig;\r\n",
         "impliedFormat": "esnext"
       },
       "./dog.ts": {
+        "original": {
+          "version": "6091345804-import { DogConfig } from 'src-types';\nimport { DOG_CONFIG } from './dogconfig.js';\n\nexport abstract class Dog {\n\n    public static getCapabilities(): DogConfig {\n        return DOG_CONFIG;\n    }\n}\n",
+          "signature": "22128633249-import { DogConfig } from 'src-types';\r\nexport declare abstract class Dog {\r\n    static getCapabilities(): DogConfig;\r\n}\r\n",
+          "impliedFormat": 99
+        },
         "version": "6091345804-import { DogConfig } from 'src-types';\nimport { DOG_CONFIG } from './dogconfig.js';\n\nexport abstract class Dog {\n\n    public static getCapabilities(): DogConfig {\n        return DOG_CONFIG;\n    }\n}\n",
         "signature": "22128633249-import { DogConfig } from 'src-types';\r\nexport declare abstract class Dog {\r\n    static getCapabilities(): DogConfig;\r\n}\r\n",
         "impliedFormat": "esnext"
       },
       "./lassie/lassieconfig.ts": {
+        "original": {
+          "version": "4440579024-import { DogConfig } from 'src-types';\n\nexport const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };\n",
+          "signature": "8131483665-import { DogConfig } from 'src-types';\r\nexport declare const LASSIE_CONFIG: DogConfig;\r\n",
+          "impliedFormat": 99
+        },
         "version": "4440579024-import { DogConfig } from 'src-types';\n\nexport const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };\n",
         "signature": "8131483665-import { DogConfig } from 'src-types';\r\nexport declare const LASSIE_CONFIG: DogConfig;\r\n",
         "impliedFormat": "esnext"
       },
       "./lassie/lassiedog.ts": {
+        "original": {
+          "version": "-32303727812-import { Dog } from '../dog.js';\nimport { LASSIE_CONFIG } from './lassieconfig.js';\n\nexport class LassieDog extends Dog {\n    protected static getDogConfig = () => LASSIE_CONFIG;\n}\n",
+          "signature": "-20244062422-import { Dog } from '../dog.js';\r\nexport declare class LassieDog extends Dog {\r\n    protected static getDogConfig: () => import(\"../index.js\").DogConfig;\r\n}\r\n",
+          "impliedFormat": 99
+        },
         "version": "-32303727812-import { Dog } from '../dog.js';\nimport { LASSIE_CONFIG } from './lassieconfig.js';\n\nexport class LassieDog extends Dog {\n    protected static getDogConfig = () => LASSIE_CONFIG;\n}\n",
         "signature": "-20244062422-import { Dog } from '../dog.js';\r\nexport declare class LassieDog extends Dog {\r\n    protected static getDogConfig: () => import(\"../index.js\").DogConfig;\r\n}\r\n",
         "impliedFormat": "esnext"
       },
       "./index.ts": {
+        "original": {
+          "version": "-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n",
+          "signature": "-16783836862-export * from 'src-types';\r\nexport * from './lassie/lassiedog.js';\r\n",
+          "impliedFormat": 99
+        },
         "version": "-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n",
         "signature": "-16783836862-export * from 'src-types';\r\nexport * from './lassie/lassiedog.js';\r\n",
         "impliedFormat": "esnext"
@@ -387,17 +425,32 @@ export * from './dogconfig.js';
     ],
     "fileInfos": {
       "../../lib/lib.es2022.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "./dogconfig.ts": {
+        "original": {
+          "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
+          "signature": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
+          "impliedFormat": 99
+        },
         "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
         "signature": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
         "impliedFormat": "esnext"
       },
       "./index.ts": {
+        "original": {
+          "version": "-6189272282-export * from './dogconfig.js';",
+          "signature": "-5608794531-export * from './dogconfig.js';\r\n",
+          "impliedFormat": 99
+        },
         "version": "-6189272282-export * from './dogconfig.js';",
         "signature": "-5608794531-export * from './dogconfig.js';\r\n",
         "impliedFormat": "esnext"

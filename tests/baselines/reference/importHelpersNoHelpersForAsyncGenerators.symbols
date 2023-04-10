@@ -8,6 +8,6 @@ export async function * f() {
 }
 
 === tests/cases/compiler/tslib.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

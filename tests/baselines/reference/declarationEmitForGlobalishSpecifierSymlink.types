@@ -9,8 +9,9 @@ export enum A {
 >Val : A
 }
 === /p1/node_modules/typescript-fsa/index.d.ts ===
+
 export * from "./src/impl";
-No type information for this code.=== /p2/node_modules/typescript-fsa/src/impl.d.ts ===
+=== /p2/node_modules/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : () => A
 
@@ -21,8 +22,9 @@ export enum A {
 >Val : A
 }
 === /p2/node_modules/typescript-fsa/index.d.ts ===
+
 export * from "./src/impl";
-No type information for this code.=== /p1/index.ts ===
+=== /p1/index.ts ===
 import * as _whatever from "p2";
 >_whatever : typeof _whatever
 

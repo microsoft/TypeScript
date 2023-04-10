@@ -7,8 +7,8 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2367: This condition will always return 'false' since the types '"ABC"' and '"XYZ"' have no overlap.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2367: This condition will always return 'true' since the types '"ABC"' and '"XYZ"' have no overlap.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (11 errors) ====
@@ -47,7 +47,7 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
     let j = abc < xyz;
     let k = abc === xyz;
             ~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"ABC"' and '"XYZ"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
     let l = abc != xyz;
             ~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"ABC"' and '"XYZ"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.

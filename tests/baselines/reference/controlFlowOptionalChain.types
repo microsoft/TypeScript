@@ -1243,9 +1243,9 @@ function f15(o: Thing | undefined, value: number) {
     }
     else {
         o.foo;
->o.foo : number
+>o.foo : string | number
 >o : Thing
->foo : number
+>foo : string | number
     }
 }
 

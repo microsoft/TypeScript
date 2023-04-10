@@ -79,11 +79,19 @@ export declare class A {
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./a.ts": {
+        "original": {
+          "version": "-8566332115-export class A {}\r\n",
+          "signature": "-8728835846-export declare class A {\n}\n"
+        },
         "version": "-8566332115-export class A {}\r\n",
         "signature": "-8728835846-export declare class A {\n}\n"
       }
@@ -134,6 +142,10 @@ export declare const b: A;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -143,6 +155,10 @@ export declare const b: A;
         "signature": "-8728835846-export declare class A {\n}\n"
       },
       "./b.ts": {
+        "original": {
+          "version": "-19869990292-import {A} from \"a\";export const b = new A();",
+          "signature": "1870369234-import { A } from \"a\";\nexport declare const b: A;\n"
+        },
         "version": "-19869990292-import {A} from \"a\";export const b = new A();",
         "signature": "1870369234-import { A } from \"a\";\nexport declare const b: A;\n"
       }
@@ -234,31 +250,31 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.c.json","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.a.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

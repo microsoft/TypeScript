@@ -101,3 +101,34 @@ type MyObject<T> = T extends ZodObject<infer U>
     ? U
     : never
   : never;
+
+// Repro from #50479
+
+type Cell<Value extends BaseValue = any, BaseValue = unknown> = {
+>Cell : Cell<Value, BaseValue>
+
+  id: string
+>id : string
+}
+
+type Items<Type extends Cell = Cell> = {
+>Items : Items<Type>
+
+  type: Type
+>type : Type
+
+  name: string
+>name : string
+}
+
+type InferIOItemToJSType<T extends Items> =
+>InferIOItemToJSType : InferIOItemToJSType<T>
+
+  T extends { type: infer U }
+>type : U
+
+    ? U extends Cell<infer V/**, infer _ or unknown, or any valid type **/>
+      ? V
+      : never
+    : never
+

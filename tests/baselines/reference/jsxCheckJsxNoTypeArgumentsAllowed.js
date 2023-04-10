@@ -23,5 +23,5 @@ let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
 exports.__esModule = true;
 var component_1 = require("./component");
 var React = require("react");
-var x = <component_1.MyComp />, <Prop> a={10} b="hi" />; // error, no type arguments in js
+var x = <component_1.MyComp />, <component_1.Prop> a={10} b="hi" />; // error, no type arguments in js
 </>;

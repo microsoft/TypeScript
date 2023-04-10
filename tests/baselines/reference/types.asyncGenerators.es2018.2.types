@@ -20,9 +20,9 @@ async function * inferReturnType3() {
     yield* Promise.resolve([1, 2]);
 >yield* Promise.resolve([1, 2]) : any
 >Promise.resolve([1, 2]) : Promise<number[]>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >[1, 2] : number[]
 >1 : 1
 >2 : 2

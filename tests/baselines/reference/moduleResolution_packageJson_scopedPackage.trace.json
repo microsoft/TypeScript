@@ -1,7 +1,7 @@
 [
     "======== Resolving module '@foo/bar' from '/a.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
-    "Loading module '@foo/bar' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module '@foo/bar' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Found 'package.json' at '/node_modules/@foo/bar/package.json'.",
     "'package.json' does not have a 'typesVersions' field.",
     "File '/node_modules/@foo/bar.ts' does not exist.",

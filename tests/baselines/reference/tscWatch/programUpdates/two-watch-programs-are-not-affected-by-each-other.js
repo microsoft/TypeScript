@@ -51,15 +51,15 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/d/f3.ts (used version)
 
-WatchedFiles::
-/a/c/f2.ts:
-  {"fileName":"/a/c/f2.ts","pollingInterval":250}
-/a/d/f3.ts:
-  {"fileName":"/a/d/f3.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/c/f2.ts:
+  {}
+/a/d/f3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -110,20 +110,17 @@ Shape signatures in builder refreshed for::
 /a/d/f3.ts (used version)
 /a/b/f1.ts (used version)
 
-WatchedFiles::
-/a/c/f2.ts:
-  {"fileName":"/a/c/f2.ts","pollingInterval":250}
-  {"fileName":"/a/c/f2.ts","pollingInterval":250}
-/a/d/f3.ts:
-  {"fileName":"/a/d/f3.ts","pollingInterval":250}
-  {"fileName":"/a/d/f3.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/c/f2.ts:
+  {}
+/a/d/f3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/f1.ts:
+  {}
 
 FsWatchesRecursive::
 

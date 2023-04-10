@@ -10,6 +10,6 @@ enum x {
 >x : x
 
   z = y
->z : x.z
+>z : x
 >y : any
 }
