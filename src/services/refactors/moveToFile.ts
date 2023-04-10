@@ -22,13 +22,14 @@ import {
     RefactorEditInfo,
     skipAlias,
     SourceFile,
+    Symbol,
     SyntaxKind,
     takeWhile,
     textChanges,
     TypeChecker,
     UserPreferences,
 } from "../_namespaces/ts";
-import { addExports, addExportToChanges, addNewFileToTsconfig, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration, ReadonlySymbolSet, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
+import { addExports, addExportToChanges, addNewFileToTsconfig, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
 import { registerRefactor } from "../refactorProvider";
 
 const refactorNameForMoveToFile = "Move to file";
@@ -86,7 +87,7 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size() === 0 && !newFileExists) {
+    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size === 0 && !newFileExists) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -135,8 +136,8 @@ function getNewStatementsAndRemoveFromOldFile(
 function getNewFileImportsAndAddExportInOldFile(
     oldFile: SourceFile,
     newFile: string,
-    importsToCopy: ReadonlySymbolSet,
-    newFileImportsFromOldFile: ReadonlySymbolSet,
+    importsToCopy: Map<Symbol, boolean>,
+    newFileImportsFromOldFile: Set<Symbol>,
     changes: textChanges.ChangeTracker,
     checker: TypeChecker,
     program: Program,
@@ -147,8 +148,8 @@ function getNewFileImportsAndAddExportInOldFile(
 ): readonly AnyImportOrRequireStatement[] {
     const copiedOldImports: AnyImportOrRequireStatement[] = [];
     if (importAdder) {
-        importsToCopy.forEach(symbol => {
-            importAdder.addImportFromExportedSymbol(skipAlias(symbol, checker));
+        importsToCopy.forEach((isValidTypeOnlyUseSite, symbol) => {
+            importAdder.addImportFromExportedSymbol(skipAlias(symbol, checker), isValidTypeOnlyUseSite);
         });
     }
     else {

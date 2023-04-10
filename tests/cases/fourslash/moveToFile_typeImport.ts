@@ -1,6 +1,10 @@
 
 /// <reference path='fourslash.ts' />
 
+// @verbatimModuleSyntax: true
+//@module: esnext
+//moduleResolution: bundler
+
 // @Filename: /bar.ts
 ////import {} from "./somefile";
 
@@ -22,7 +26,7 @@ verify.moveToFile({
 `import { type A } from "./other";
 `,
         "/bar.ts":
-`import { B } from "./other";
+`import type { B } from "./other";
 import {} from "./somefile";
 function f(a: B) { }
 `,

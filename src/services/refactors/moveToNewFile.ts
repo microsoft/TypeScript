@@ -20,6 +20,7 @@ import {
     RefactorContext,
     RefactorEditInfo,
     SourceFile,
+    Symbol,
     SyntaxKind,
     takeWhile,
     textChanges,
@@ -27,7 +28,7 @@ import {
     UserPreferences,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
-import { addExports, addExportToChanges, addNewFileToTsconfig, createNewFilename, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire,moduleSpecifierFromImport, nameOfTopLevelDeclaration, ReadonlySymbolSet, SupportedImportStatement, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
+import { addExports, addExportToChanges, addNewFileToTsconfig, createNewFilename, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire,moduleSpecifierFromImport, nameOfTopLevelDeclaration, SupportedImportStatement, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
@@ -76,7 +77,7 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size() === 0) {
+    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size === 0) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -112,8 +113,8 @@ function getNewStatementsAndRemoveFromOldFile(
 
 function getNewFileImportsAndAddExportInOldFile(
     oldFile: SourceFile,
-    importsToCopy: ReadonlySymbolSet,
-    newFileImportsFromOldFile: ReadonlySymbolSet,
+    importsToCopy: Map<Symbol, boolean>,
+    newFileImportsFromOldFile: Set<Symbol>,
     changes: textChanges.ChangeTracker,
     checker: TypeChecker,
     program: Program,

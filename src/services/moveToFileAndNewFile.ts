@@ -2,7 +2,7 @@ import { cast, concatenate, contains, emptyArray, find, findIndex, firstDefined,
 import { getModuleSpecifier } from "../compiler/moduleSpecifiers";
 import { combinePaths, getDirectoryPath, getRelativePathFromFile,normalizePath, resolvePath } from "../compiler/path";
 import { AnyImportOrRequireStatement, AssignmentDeclarationKind, BinaryExpression, BindingElement, BindingName, CallExpression, ClassDeclaration, Declaration, DeclarationStatement, EnumDeclaration, Expression, ExpressionStatement, ExternalModuleReference, FunctionDeclaration, Identifier, ImportDeclaration, ImportEqualsDeclaration, InterfaceDeclaration, InternalSymbolName, ModifierFlags, ModifierLike, ModuleDeclaration, ModuleKind, NamedImportBindings, Node, NodeFlags, Program, PropertyAccessExpression, PropertyAssignment, RequireOrImportCall, RequireVariableStatement, ScriptTarget, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind, TransformFlags, TypeAliasDeclaration, TypeChecker, TypeNode, VariableDeclaration, VariableDeclarationList, VariableStatement } from "../compiler/types";
-import { canHaveDecorators, canHaveModifiers, canHaveSymbol, codefix, copyEntries, createModuleSpecifierResolutionHost, createTextRangeFromSpan, Debug, escapeLeadingUnderscores, extensionFromPath, factory,FindAllReferences,forEachEntry,getAssignmentDeclarationKind,getDecorators,getModifiers,getPropertySymbolFromBindingElement,getRefactorContextSpan,getSymbolId,getSynthesizedDeepClone,getUniqueName,hasSyntacticModifier,isArrayLiteralExpression, isBinaryExpression, isBindingElement, isDeclarationName, isExpressionStatement, isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration, isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression, isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableDeclaration, isVariableDeclarationList, isVariableStatement, LanguageServiceHost, makeImportIfNecessary, makeStringLiteral, ObjectBindingElementWithoutPropertyName, QuotePreference, rangeContainsRange, RefactorContext, skipAlias, Symbol,symbolNameNoDefault, textChanges } from "./_namespaces/ts";
+import { canHaveDecorators, canHaveModifiers, canHaveSymbol, codefix, createModuleSpecifierResolutionHost, createTextRangeFromSpan, Debug, escapeLeadingUnderscores, extensionFromPath, factory,FindAllReferences,forEachKey,getAssignmentDeclarationKind,getDecorators,getModifiers,getPropertySymbolFromBindingElement,getRefactorContextSpan,getSynthesizedDeepClone,getUniqueName,hasSyntacticModifier,isArrayLiteralExpression, isBinaryExpression, isBindingElement, isDeclarationName, isExpressionStatement, isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration, isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression, isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isValidTypeOnlyAliasUseSite, isVariableDeclaration, isVariableDeclarationList, isVariableStatement, LanguageServiceHost, makeImportIfNecessary, makeStringLiteral, ObjectBindingElementWithoutPropertyName, QuotePreference, rangeContainsRange, RefactorContext, skipAlias, Symbol,symbolNameNoDefault, textChanges } from "./_namespaces/ts";
 
 /**@internal */
 export function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
@@ -28,7 +28,7 @@ export function deleteMovedStatements(sourceFile: SourceFile, moved: readonly St
 }
 
 /**@internal */
-export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: ReadonlySymbolSet, checker: TypeChecker) {
+export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: Set<Symbol>, checker: TypeChecker) {
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
         forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
@@ -37,7 +37,7 @@ export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Sta
 
 /**@internal */
 export function updateImportsInOtherFiles(
-    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newFilename: string, quotePreference: QuotePreference
+    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: Set<Symbol>, newFilename: string, quotePreference: QuotePreference
 ): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
@@ -86,7 +86,7 @@ export function updateNamespaceLikeImport(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
     checker: TypeChecker,
-    movedSymbols: ReadonlySymbolSet,
+    movedSymbols: Set<Symbol>,
     newModuleSpecifier: string,
     oldImportId: Identifier,
     oldImportNode: SupportedImport,
@@ -175,7 +175,7 @@ export type SupportedImportStatement =
 /**@internal */
 export function createOldFileImportsFromNewFile(
     sourceFile: SourceFile,
-    newFileNeedExport: ReadonlySymbolSet,
+    newFileNeedExport: Set<Symbol>,
     newFileNameWithExtension: string,
     program: Program,
     host: LanguageServiceHost,
@@ -227,7 +227,7 @@ function makeVariableStatement(name: BindingName, type: TypeNode | undefined, in
 }
 
 /**@internal */
-export function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: ReadonlySymbolSet, useEs6Exports: boolean): readonly Statement[] {
+export function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: Set<Symbol>, useEs6Exports: boolean): readonly Statement[] {
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
@@ -490,27 +490,27 @@ export interface StatementRange {
     readonly afterLast: Statement | undefined;
 }
 
-/**@internal */
-export interface ReadonlySymbolSet {
-    size(): number;
-    has(symbol: Symbol): boolean;
-    forEach(cb: (symbol: Symbol) => void): void;
-    forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
-}
+// /**@internal */
+// export interface Set<Symbol> {
+//     size(): number;
+//     has(symbol: Symbol): boolean;
+//     forEach(cb: (symbol: Symbol) => void): void;
+//     forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
+// }
 
 /**@internal */
 export interface UsageInfo {
     // Symbols whose declarations are moved from the old file to the new file.
-    readonly movedSymbols: ReadonlySymbolSet;
+    readonly movedSymbols: Set<Symbol>;
 
     // Symbols declared in the old file that must be imported by the new file. (May not already be exported.)
-    readonly newFileImportsFromOldFile: ReadonlySymbolSet;
+    readonly newFileImportsFromOldFile: Set<Symbol>;
     // Subset of movedSymbols that are still used elsewhere in the old file and must be imported back.
-    readonly oldFileImportsFromNewFile: ReadonlySymbolSet;
+    readonly oldFileImportsFromNewFile: Set<Symbol>;
 
-    readonly oldImportsNeededByNewFile: ReadonlySymbolSet;
+    readonly oldImportsNeededByNewFile: Map<Symbol, boolean>;
     // Subset of oldImportsNeededByNewFile that are will no longer be used in the old file.
-    readonly unusedImportsFromOldFile: ReadonlySymbolSet;
+    readonly unusedImportsFromOldFile: Set<Symbol>;
     readonly moduleSyntax: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
 }
 type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
@@ -621,16 +621,16 @@ function isPureImport(node: Node): boolean {
 
 /** @internal */
 export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
-    const movedSymbols = new SymbolSet();
-    const oldImportsNeededByNewFile = new SymbolSet();
-    const newFileImportsFromOldFile = new SymbolSet();
+    const movedSymbols = new Set<Symbol>();
+    const oldImportsNeededByNewFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
+    const newFileImportsFromOldFile = new Set<Symbol>();
     const moduleSyntax = (oldFile.commonJsModuleIndicator) ? ModuleKind.CommonJS : (oldFile.externalModuleIndicator) ? ModuleKind.ESNext : undefined;
 
     const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
     const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
 
     if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
-        oldImportsNeededByNewFile.add(jsxNamespaceSymbol);
+        oldImportsNeededByNewFile.set(jsxNamespaceSymbol, false);
     }
 
     for (const statement of toMove) {
@@ -639,11 +639,12 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
         });
     }
     for (const statement of toMove) {
-        forEachReference(statement, checker, symbol => {
+        forEachReference(statement, checker, (symbol, isValidTypeOnlyUseSite) => {
             if (!symbol.declarations) return;
             for (const decl of symbol.declarations) {
                 if (isInImport(decl)) {
-                    oldImportsNeededByNewFile.add(symbol);
+                    const prevIsTypeOnly = oldImportsNeededByNewFile.get(symbol);
+                    oldImportsNeededByNewFile.set(symbol, prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite);
                 }
                 else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
                     newFileImportsFromOldFile.add(symbol);
@@ -651,10 +652,9 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             }
         });
     }
+    const unusedImportsFromOldFile = new Set(oldImportsNeededByNewFile.keys());
 
-    const unusedImportsFromOldFile = oldImportsNeededByNewFile.clone();
-
-    const oldFileImportsFromNewFile = new SymbolSet();
+    const oldFileImportsFromNewFile = new Set<Symbol>();
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
 
@@ -698,15 +698,15 @@ function makeUniqueFilename(proposedFilename: string, extension: string, inDirec
     }
 }
 
-function inferNewFilename(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
-    return importsFromNewFile.forEachEntry(symbolNameNoDefault) || movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
+function inferNewFilename(importsFromNewFile: Set<Symbol>, movedSymbols: Set<Symbol>): string {
+    return forEachKey(importsFromNewFile, symbolNameNoDefault) || forEachKey(movedSymbols, symbolNameNoDefault) || "newFile";
 }
 
-function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol) => void) {
+function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
     node.forEachChild(function cb(node) {
         if (isIdentifier(node) && !isDeclarationName(node)) {
             const sym = checker.getSymbolAtLocation(node);
-            if (sym) onReference(sym);
+            if (sym) onReference(sym, isValidTypeOnlyAliasUseSite(node));
         }
         else {
             node.forEachChild(cb);
@@ -791,40 +791,5 @@ export function isNonVariableTopLevelDeclaration(node: Node): node is NonVariabl
             return true;
         default:
             return false;
-    }
-}
-
-/**@internal */
-export interface ReadonlySymbolSet {
-    size(): number;
-    has(symbol: Symbol): boolean;
-    forEach(cb: (symbol: Symbol) => void): void;
-    forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
-}
-
-class SymbolSet implements ReadonlySymbolSet {
-    private map = new Map<string, Symbol>();
-    add(symbol: Symbol): void {
-        this.map.set(String(getSymbolId(symbol)), symbol);
-    }
-    has(symbol: Symbol): boolean {
-        return this.map.has(String(getSymbolId(symbol)));
-    }
-    delete(symbol: Symbol): void {
-        this.map.delete(String(getSymbolId(symbol)));
-    }
-    forEach(cb: (symbol: Symbol) => void): void {
-        this.map.forEach(cb);
-    }
-    forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined {
-        return forEachEntry(this.map, cb);
-    }
-    clone(): SymbolSet {
-        const clone = new SymbolSet();
-        copyEntries(this.map, clone.map);
-        return clone;
-    }
-    size() {
-        return this.map.size;
     }
 }
