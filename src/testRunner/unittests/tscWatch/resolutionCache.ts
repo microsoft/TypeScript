@@ -227,17 +227,17 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
     verifyTscWatch({
         scenario,
         subScenario: "works when module resolution changes to ambient module",
-        commandLineArgs: ["-w", "/a/b/foo.ts"],
+        commandLineArgs: ["-w", "/users/username/projects/project/foo.ts"],
         sys: () => createWatchedSystem([{
-            path: "/a/b/foo.ts",
+            path: "/users/username/projects/project/foo.ts",
             content: `import * as fs from "fs";`
-        }, libFile], { currentDirectory: "/a/b" }),
+        }, libFile], { currentDirectory: "/users/username/projects/project" }),
         edits: [
             {
                 caption: "npm install node types",
                 edit: sys => {
                     sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/package.json",
+                        path: "/users/username/projects/project/node_modules/@types/node/package.json",
                         content: `
 {
   "main": ""
@@ -245,7 +245,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
 `
                     });
                     sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/index.d.ts",
+                        path: "/users/username/projects/project/node_modules/@types/node/index.d.ts",
                         content: `
 declare module "fs" {
     export interface Stats {
@@ -580,32 +580,32 @@ declare namespace NodeJS {
         scenario,
         subScenario: "reusing type ref resolution",
         sys: () => createWatchedSystem({
-            "/src/project/tsconfig.json": JSON.stringify({
+            "/users/username/projects/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     composite: true,
                     traceResolution: true,
                     outDir: "outDir",
                 },
             }),
-            "/src/project/fileWithImports.ts": Utils.dedent`
+            "/users/username/projects/project/fileWithImports.ts": Utils.dedent`
                 import type { Import0 } from "pkg0";
                 import type { Import1 } from "pkg1";
             `,
-            "/src/project/node_modules/pkg0/index.d.ts": `export interface Import0 {}`,
-            "/src/project/fileWithTypeRefs.ts": Utils.dedent`
+            "/users/username/projects/project/node_modules/pkg0/index.d.ts": `export interface Import0 {}`,
+            "/users/username/projects/project/fileWithTypeRefs.ts": Utils.dedent`
                 /// <reference types="pkg2"/>
                 /// <reference types="pkg3"/>
                 interface LocalInterface extends Import2, Import3 {}
                 export {}
             `,
-            "/src/project/node_modules/pkg2/index.d.ts": `interface Import2 {}`,
+            "/users/username/projects/project/node_modules/pkg2/index.d.ts": `interface Import2 {}`,
             [libFile.path]: libFile.content,
-        }, { currentDirectory: "/src/project" }),
+        }, { currentDirectory: "/users/username/projects/project" }),
         commandLineArgs: ["-w", "--explainFiles", "--extendedDiagnostics"],
         edits: [
             {
                 caption: "write file not resolved by import",
-                edit: sys => sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: `export interface Import1 {}` }),
+                edit: sys => sys.ensureFileOrFolder({ path: "/users/username/projects/project/node_modules/pkg1/index.d.ts", content: `export interface Import1 {}` }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // failed lookup
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -613,7 +613,7 @@ declare namespace NodeJS {
             },
             {
                 caption: "write file not resolved by typeRef",
-                edit: sys => sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg3/index.d.ts", content: `export interface Import3 {}` }),
+                edit: sys => sys.ensureFileOrFolder({ path: "/users/username/projects/project/node_modules/pkg3/index.d.ts", content: `export interface Import3 {}` }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // failed lookup
                     sys.runQueuedTimeoutCallbacks(); // actual update
