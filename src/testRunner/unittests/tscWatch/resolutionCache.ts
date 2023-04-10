@@ -17,11 +17,11 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
     const scenario = "resolutionCache";
     it("caching works", () => {
         const root = {
-            path: "/a/d/f0.ts",
+            path: "/users/username/projects/project/d/f0.ts",
             content: `import {x} from "f1"`
         };
         const imported = {
-            path: "/a/f1.ts",
+            path: "/users/username/projects/project/f1.ts",
             content: `foo()`
         };
 
@@ -99,12 +99,12 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
 
     it("loads missing files from disk", () => {
         const root = {
-            path: `/a/foo.ts`,
+            path: `/users/username/projects/project/foo.ts`,
             content: `import {x} from "bar"`
         };
 
         const imported = {
-            path: `/a/bar.d.ts`,
+            path: `/users/username/projects/project/bar.d.ts`,
             content: `export const y = 1;`
         };
 
@@ -157,12 +157,12 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
 
     it("should compile correctly when resolved module goes missing and then comes back (module is not part of the root)", () => {
         const root = {
-            path: `/a/foo.ts`,
+            path: `/users/username/projects/project/foo.ts`,
             content: `import {x} from "bar"`
         };
 
         const imported = {
-            path: `/a/bar.d.ts`,
+            path: `/users/username/projects/project/bar.d.ts`,
             content: `export const y = 1;export const x = 10;`
         };
 
@@ -262,10 +262,10 @@ declare module "fs" {
     verifyTscWatch({
         scenario,
         subScenario: "works when included file with ambient module changes",
-        commandLineArgs: ["--w", "/a/b/foo.ts", "/a/b/bar.d.ts"],
+        commandLineArgs: ["--w", "/users/username/projects/project/foo.ts", "/users/username/projects/project/bar.d.ts"],
         sys: () => {
             const root = {
-                path: "/a/b/foo.ts",
+                path: "/users/username/projects/project/foo.ts",
                 content: `
 import * as fs from "fs";
 import * as u from "url";
@@ -273,7 +273,7 @@ import * as u from "url";
             };
 
             const file = {
-                path: "/a/b/bar.d.ts",
+                path: "/users/username/projects/project/bar.d.ts",
                 content: `
 declare module "url" {
     export interface Url {
@@ -282,12 +282,12 @@ declare module "url" {
 }
 `
             };
-            return createWatchedSystem([root, file, libFile], { currentDirectory: "/a/b" });
+            return createWatchedSystem([root, file, libFile], { currentDirectory: "/users/username/projects/project" });
         },
         edits: [
             {
                 caption: "Add fs definition",
-                edit: sys => sys.appendFile("/a/b/bar.d.ts", `
+                edit: sys => sys.appendFile("/users/username/projects/project/bar.d.ts", `
 declare module "fs" {
     export interface Stats {
         isFile(): boolean;
