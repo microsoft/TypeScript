@@ -279,10 +279,10 @@ export function getDirectoryToWatchFailedLookupLocation(
     rootPathComponents: Readonly<PathPathComponents>,
     getCurrentDirectory: () => string | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
-    const failedLookupPathComponents = getPathComponents(failedLookupLocationPath);
+    const failedLookupPathComponents: Readonly<PathPathComponents> = getPathComponents(failedLookupLocationPath);
     // Ensure failed look up is normalized path
     failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
-    const failedLookupComponents = getPathComponents(failedLookupLocation);
+    const failedLookupComponents: readonly string[] = getPathComponents(failedLookupLocation);
     const perceivedOsRootLength = perceivedOsRootLengthForWatching(failedLookupPathComponents, failedLookupPathComponents.length);
     if (failedLookupPathComponents.length <= perceivedOsRootLength + 1) return undefined;
     // If directory path contains node module, get the most parent node_modules directory for watching
@@ -303,11 +303,10 @@ export function getDirectoryToWatchFailedLookupLocation(
         }
     }
 
-    failedLookupComponents.pop();
-    failedLookupPathComponents.pop();
     return getDirectoryToWatchFromFailedLookupLocationDirectory(
         failedLookupComponents,
         failedLookupPathComponents,
+        failedLookupPathComponents.length - 1,
         perceivedOsRootLength,
         nodeModulesIndex,
         rootPathComponents,
@@ -317,6 +316,7 @@ export function getDirectoryToWatchFailedLookupLocation(
 function getDirectoryToWatchFromFailedLookupLocationDirectory(
     dirComponents: readonly string[],
     dirPathComponents: Readonly<PathPathComponents>,
+    dirPathComponentsLength: number,
     perceivedOsRootLength: number,
     nodeModulesIndex: number,
     rootPathComponents: Readonly<PathPathComponents>,
@@ -328,8 +328,8 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
     }
     // Use some ancestor of the root directory
     let nonRecursive = true;
-    let length: number | undefined;
-    for (let i = 0; i < dirPathComponents.length; i++) {
+    let length = dirPathComponentsLength;
+    for (let i = 0; i < dirPathComponentsLength; i++) {
         if (dirPathComponents[i] !== rootPathComponents[i]) {
             nonRecursive = false;
             length = Math.max(i + 1, perceivedOsRootLength + 1);
@@ -342,7 +342,7 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
 function getDirectoryOfFailedLookupWatch(
     dirComponents: readonly string[],
     dirPathComponents: Readonly<PathPathComponents>,
-    length: number | undefined,
+    length: number,
     nonRecursive?: boolean
 ): DirectoryOfFailedLookupWatch {
     return {
@@ -370,6 +370,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(
         getPathComponents(typeRoot),
         typeRootPathComponents,
+        typeRootPathComponents.length,
         perceivedOsRootLengthForWatching(typeRootPathComponents, typeRootPathComponents.length),
         typeRootPathComponents.indexOf("node_modules" as Path),
         rootPathComponents,
