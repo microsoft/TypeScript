@@ -18,19 +18,19 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {
         it("when adding new file", () => {
             const commonFile1: File = {
-                path: "/a/b/file1.ts",
+                path: "/users/username/projects/project/file1.ts",
                 content: "export var x = 10;"
             };
             const commonFile2: File = {
-                path: "/a/b/file2.ts",
+                path: "/users/username/projects/project/file2.ts",
                 content: "export var y = 10;"
             };
             const commonFile3: File = {
-                path: "/a/b/file3.ts",
+                path: "/users/username/projects/project/file3.ts",
                 content: "export var z = 10;"
             };
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/users/username/projects/project/tsconfig.json",
                 content: `{}`
             };
             const host = createServerHost([commonFile1, libFile, configFile]);
@@ -49,18 +49,18 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             function verifyEventWithOutSettings(subScenario: string, compilerOptions: ts.CompilerOptions = {}) {
                 it(subScenario, () => {
                     const config: File = {
-                        path: "/a/tsconfig.json",
+                        path: "/users/username/projects/project/tsconfig.json",
                         content: JSON.stringify({
                             compilerOptions
                         })
                     };
 
                     const f1: File = {
-                        path: "/a/a.ts",
+                        path: "/users/username/projects/project/a.ts",
                         content: "export let x = 1"
                     };
                     const f2: File = {
-                        path: "/a/b.ts",
+                        path: "/users/username/projects/project/b.ts",
                         content: "export let y = 1"
                     };
 
@@ -83,9 +83,9 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         });
 
         describe("with modules and configured project", () => {
-            const file1Consumer1Path = "/a/b/file1Consumer1.ts";
-            const moduleFile1Path = "/a/b/moduleFile1.ts";
-            const configFilePath = "/a/b/tsconfig.json";
+            const file1Consumer1Path = "/users/username/projects/project/file1Consumer1.ts";
+            const moduleFile1Path = "/users/username/projects/project/moduleFile1.ts";
+            const configFilePath = "/users/username/projects/project/tsconfig.json";
             interface InitialStateParams {
                 /** custom config file options */
                 configObj?: any;
@@ -106,17 +106,17 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 };
 
                 const file1Consumer2: File = {
-                    path: "/a/b/file1Consumer2.ts",
+                    path: "/users/username/projects/project/file1Consumer2.ts",
                     content: `import {Foo} from "./moduleFile1"; let z = 10;`,
                 };
 
                 const moduleFile2: File = {
-                    path: "/a/b/moduleFile2.ts",
+                    path: "/users/username/projects/project/moduleFile2.ts",
                     content: `export var Foo4 = 10;`,
                 };
 
                 const globalFile3: File = {
-                    path: "/a/b/globalFile3.ts",
+                    path: "/users/username/projects/project/globalFile3.ts",
                     content: `interface GlobalFoo { age: number }`
                 };
 
@@ -219,7 +219,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 const { host, moduleFile1, session, } = getInitialState();
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                host.writeFile("/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
+                host.writeFile("/users/username/projects/project/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
                 host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with newly created files`, session);
             });
@@ -257,7 +257,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             });
 
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
-                const outFilePath = "/a/b/out.js";
+                const outFilePath = "/users/username/projects/project/out.js";
                 const { host, moduleFile1, session } = getInitialState({
                     configObj: { compilerOptions: { module: "system", outFile: outFilePath } }
                 });
@@ -269,7 +269,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
             it("should return cascaded affected file list", () => {
                 const file1Consumer1Consumer1: File = {
-                    path: "/a/b/file1Consumer1Consumer1.ts",
+                    path: "/users/username/projects/project/file1Consumer1Consumer1.ts",
                     content: `import {y} from "./file1Consumer1";`
                 };
                 const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, session } = getInitialState({
@@ -292,13 +292,13 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
             it("should work fine for files with circular references", () => {
                 const file1: File = {
-                    path: "/a/b/file1.ts",
+                    path: "/users/username/projects/project/file1.ts",
                     content: `
                     /// <reference path="./file2.ts" />
                     export var t1 = 10;`
                 };
                 const file2: File = {
-                    path: "/a/b/file2.ts",
+                    path: "/users/username/projects/project/file2.ts",
                     content: `
                     /// <reference path="./file1.ts" />
                     export var t2 = 10;`
@@ -315,7 +315,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
             it("should detect removed code file", () => {
                 const referenceFile1: File = {
-                    path: "/a/b/referenceFile1.ts",
+                    path: "/users/username/projects/project/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile1.ts" />
                     export var x = Foo();`
@@ -332,7 +332,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
             it("should detect non-existing code file", () => {
                 const referenceFile1: File = {
-                    path: "/a/b/referenceFile1.ts",
+                    path: "/users/username/projects/project/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile2.ts" />
                     export var x = Foo();`

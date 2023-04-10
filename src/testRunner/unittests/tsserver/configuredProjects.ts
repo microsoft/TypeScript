@@ -1054,19 +1054,19 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
 
     it("Changed module resolution reflected when specifying files list", () => {
         const file1: File = {
-            path: "/a/b/file1.ts",
+            path: "/users/username/projects/project/file1.ts",
             content: 'import classc from "file2"'
         };
         const file2a: File = {
-            path: "/a/file2.ts",
+            path: "/users/username/projects/file2.ts",
             content: "export classc { method2a() { return 10; } }"
         };
         const file2: File = {
-            path: "/a/b/file2.ts",
+            path: "/users/username/projects/project/file2.ts",
             content: "export classc { method2() { return 10; } }"
         };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/users/username/projects/project/tsconfig.json",
             content: JSON.stringify({ files: [file1.path], compilerOptions: { module: "amd" } })
         };
         const files = [file1, file2a, configFile, libFile];

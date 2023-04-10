@@ -88,11 +88,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watchin
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the missing module file for inferred project", () => {
     it("should remove the `module not found` error", () => {
         const moduleFile = {
-            path: "/a/b/moduleFile.ts",
+            path: "/users/username/projects/project/moduleFile.ts",
             content: "export function bar() { };"
         };
         const file1 = {
-            path: "/a/b/file1.ts",
+            path: "/users/username/projects/project/file1.ts",
             content: "import * as T from './moduleFile'; T.bar();"
         };
         const host = createServerHost([file1]);
@@ -235,11 +235,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename a module file and rename back", () => {
     it("should restore the states for inferred projects", () => {
         const moduleFile = {
-            path: "/a/b/moduleFile.ts",
+            path: "/users/username/projects/project/moduleFile.ts",
             content: "export function bar() { };"
         };
         const file1 = {
-            path: "/a/b/file1.ts",
+            path: "/users/username/projects/project/file1.ts",
             content: "import * as T from './moduleFile'; T.bar();"
         };
         const host = createServerHost([moduleFile, file1]);
@@ -251,7 +251,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             arguments: { file: file1.path }
         });
 
-        const moduleFileNewPath = "/a/b/moduleFile1.ts";
+        const moduleFileNewPath = "/users/username/projects/project/moduleFile1.ts";
         host.renameFile(moduleFile.path, moduleFileNewPath);
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -278,15 +278,15 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
 
     it("should restore the states for configured projects", () => {
         const moduleFile = {
-            path: "/a/b/moduleFile.ts",
+            path: "/users/username/projects/project/moduleFile.ts",
             content: "export function bar() { };"
         };
         const file1 = {
-            path: "/a/b/file1.ts",
+            path: "/users/username/projects/project/file1.ts",
             content: "import * as T from './moduleFile'; T.bar();"
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/users/username/projects/project/tsconfig.json",
             content: `{}`
         };
         const host = createServerHost([moduleFile, file1, configFile]);
@@ -298,7 +298,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             arguments: { file: file1.path }
         });
 
-        const moduleFileNewPath = "/a/b/moduleFile1.ts";
+        const moduleFileNewPath = "/users/username/projects/project/moduleFile1.ts";
         host.renameFile(moduleFile.path, moduleFileNewPath);
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -556,9 +556,9 @@ export const x = 10;`
 
                 const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-                service.openClientFile(srcFile.path, srcFile.content, ts.ScriptKind.TS, "/user/username/projects/myproject");
-                baselineTsserverLogs("resolutionCache", scenario, service);
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession([{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }], session);
+                baselineTsserverLogs("resolutionCache", scenario, session);
             });
         }
         verifyModuleResolution("when resolves to ambient module", /*useNodeFile*/ true);
