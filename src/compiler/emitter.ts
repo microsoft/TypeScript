@@ -4866,7 +4866,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEmbeddedStatement(parent: Node, node: Statement) {
-        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
+        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine || !preserveSourceNewlines) {
             writeSpace();
             emit(node);
         }
