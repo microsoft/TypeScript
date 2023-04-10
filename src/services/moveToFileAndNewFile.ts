@@ -1,7 +1,7 @@
 import { cast, concatenate, contains, emptyArray, find, findIndex, firstDefined, flatMap, GetCanonicalFileName, getRangesWhere, last,length,mapDefined,some,tryCast } from "../compiler/core";
 import { getModuleSpecifier } from "../compiler/moduleSpecifiers";
 import { combinePaths, getDirectoryPath, getRelativePathFromFile,normalizePath, resolvePath } from "../compiler/path";
-import { AnyImportOrRequireStatement, AssignmentDeclarationKind, BinaryExpression, BindingElement, BindingName, CallExpression, ClassDeclaration, Declaration, DeclarationStatement, EnumDeclaration, Expression, ExpressionStatement, ExternalModuleReference, FunctionDeclaration, Identifier, ImportDeclaration, ImportEqualsDeclaration, InterfaceDeclaration, InternalSymbolName, ModifierFlags, ModifierLike, ModuleDeclaration, ModuleKind, NamedImportBindings, Node, NodeFlags, Program, PropertyAccessExpression, PropertyAssignment, RequireOrImportCall, RequireVariableStatement, ScriptTarget, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind, TransformFlags, TypeAliasDeclaration, TypeChecker, TypeNode, VariableDeclaration, VariableDeclarationList, VariableStatement } from "../compiler/types";
+import { AnyImportOrRequireStatement, AssignmentDeclarationKind, BinaryExpression, BindingElement, BindingName, CallExpression, ClassDeclaration, Declaration, DeclarationStatement, EnumDeclaration, Expression, ExpressionStatement, ExternalModuleReference, FunctionDeclaration, Identifier, ImportDeclaration, ImportEqualsDeclaration, InterfaceDeclaration, InternalSymbolName, ModifierFlags, ModifierLike, ModuleDeclaration, NamedImportBindings, Node, NodeFlags, Program, PropertyAccessExpression, PropertyAssignment, RequireOrImportCall, RequireVariableStatement, ScriptTarget, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind, TransformFlags, TypeAliasDeclaration, TypeChecker, TypeNode, VariableDeclaration, VariableDeclarationList, VariableStatement } from "../compiler/types";
 import { canHaveDecorators, canHaveModifiers, canHaveSymbol, codefix, createModuleSpecifierResolutionHost, createTextRangeFromSpan, Debug, escapeLeadingUnderscores, extensionFromPath, factory,FindAllReferences,forEachKey,getAssignmentDeclarationKind,getDecorators,getModifiers,getPropertySymbolFromBindingElement,getRefactorContextSpan,getSynthesizedDeepClone,getUniqueName,hasSyntacticModifier,isArrayLiteralExpression, isBinaryExpression, isBindingElement, isDeclarationName, isExpressionStatement, isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration, isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression, isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isValidTypeOnlyAliasUseSite, isVariableDeclaration, isVariableDeclarationList, isVariableStatement, LanguageServiceHost, makeImportIfNecessary, makeStringLiteral, ObjectBindingElementWithoutPropertyName, QuotePreference, rangeContainsRange, RefactorContext, skipAlias, Symbol,symbolNameNoDefault, textChanges } from "./_namespaces/ts";
 
 /**@internal */
@@ -511,7 +511,6 @@ export interface UsageInfo {
     readonly oldImportsNeededByNewFile: Map<Symbol, boolean>;
     // Subset of oldImportsNeededByNewFile that are will no longer be used in the old file.
     readonly unusedImportsFromOldFile: Set<Symbol>;
-    readonly moduleSyntax: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
 }
 type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
 /**@internal */
@@ -624,7 +623,6 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByNewFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
     const newFileImportsFromOldFile = new Set<Symbol>();
-    const moduleSyntax = (oldFile.commonJsModuleIndicator) ? ModuleKind.CommonJS : (oldFile.externalModuleIndicator) ? ModuleKind.ESNext : undefined;
 
     const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
     const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
@@ -669,7 +667,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
         });
     }
 
-    return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile, moduleSyntax };
+    return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile };
 
     function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
         if (containsJsx === undefined) {
