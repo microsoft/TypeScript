@@ -85,13 +85,11 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
-    FutureSourceFile,
     getAssignmentDeclarationKind,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
-    getImpliedNodeFormatForFile,
     getIndentString,
     getJSDocEnumTag,
     getLastChild,
@@ -269,8 +267,6 @@ import {
     ModifierFlags,
     ModuleDeclaration,
     ModuleInstanceState,
-    ModuleKind,
-    ModuleResolutionHost,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
@@ -354,7 +350,6 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
-    toPath,
     tryCast,
     Type,
     TypeChecker,
@@ -2477,14 +2472,9 @@ export function quotePreferenceFromString(str: StringLiteral, sourceFile: Source
 }
 
 /** @internal */
-export function getQuotePreference(preferences: UserPreferences): QuotePreference {
-    return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
-}
-
-/** @internal */
-export function getQuotePreferenceFromFile(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
+export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
     if (preferences.quotePreference && preferences.quotePreference !== "auto") {
-        return getQuotePreference(preferences);
+        return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
     }
     else {
         // ignore synthetic import added when importHelpers: true
@@ -2571,18 +2561,17 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile | FutureSourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
+export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
-    const existingImportStatements = sourceFile.kind ? filter(sourceFile.statements, importKindPredicate) : undefined;
+    const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
     const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
-    if (!existingImportStatements?.length) {
+    if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
     else if (existingImportStatements && (sortKind = OrganizeImports.detectImportDeclarationSorting(existingImportStatements, preferences))) {
-        Debug.assert(sourceFile.kind, "Cannot have existing import statements in a non-existent source file.");
         const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
@@ -2601,7 +2590,6 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     else {
         const lastExistingImport = lastOrUndefined(existingImportStatements);
         if (lastExistingImport) {
-            Debug.assert(sourceFile.kind, "Cannot have existing import statements in a non-existent source file.");
             changes.insertNodesAfter(sourceFile, lastExistingImport, sortedNewImports);
         }
         else {
@@ -3339,7 +3327,7 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
 /** @internal */
 export function quote(sourceFile: SourceFile, preferences: UserPreferences, text: string): string {
     // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
-    const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
+    const quotePreference = getQuotePreference(sourceFile, preferences);
     const quoted = JSON.stringify(text);
     return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
 }
@@ -3700,7 +3688,7 @@ export interface PackageJsonImportFilter {
 }
 
 /** @internal */
-export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
+export function createPackageJsonImportFilter(fromFile: SourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
     const packageJsons = (
         (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) || getPackageJsonsVisibleToFile(fromFile.fileName, host)
       ).filter(p => p.parseable);
@@ -3800,7 +3788,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
-        if (fromFile.kind && isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+        if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
             if (usesNodeCoreModules === undefined) {
                 usesNodeCoreModules = consumesNodeCoreModules(fromFile);
             }
@@ -4058,8 +4046,8 @@ export function isDeprecatedDeclaration(decl: Declaration) {
 }
 
 /** @internal */
-export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean {
-    const decisionFromFile = file.kind && firstDefined(file.imports, node => {
+export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+    const decisionFromFile = firstDefined(file.imports, node => {
         if (JsTyping.nodeCoreModules.has(node.text)) {
             return startsWith(node.text, "node:");
         }
@@ -4079,27 +4067,6 @@ export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): st
     return isArray(diag)
         ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as DiagnosticArguments)
         : getLocaleSpecificMessage(diag);
-}
-
-/** @internal */
-export function createFutureSourceFile(
-    fileName: string,
-    program: Program,
-    host: ModuleResolutionHost,
-    moduleSyntax?: ModuleKind.CommonJS | ModuleKind.ESNext,
-): FutureSourceFile {
-    const path = toPath(fileName, /*basePath*/ undefined, program.getCanonicalFileName);
-    const impliedNodeFormat = getImpliedNodeFormatForFile(path, program.getPackageJsonInfoCache?.(), host, program.getCompilerOptions());
-    if (moduleSyntax === ModuleKind.CommonJS && impliedNodeFormat === ModuleKind.ESNext) {
-        Debug.fail("ES Modules cannot contain CommonJS syntax");
-    }
-    return {
-        fileName,
-        path,
-        commonJsModuleIndicator: moduleSyntax === ModuleKind.CommonJS,
-        externalModuleIndicator: moduleSyntax === ModuleKind.ESNext,
-        impliedNodeFormat,
-    };
 }
 
 /**

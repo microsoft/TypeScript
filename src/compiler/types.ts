@@ -4224,16 +4224,6 @@ export interface SourceFileLike {
 }
 
 /** @internal */
-export interface FutureSourceFile {
-    readonly kind?: undefined;
-    readonly fileName: string;
-    readonly path: Path;
-    readonly impliedNodeFormat?: ResolutionMode;
-    readonly commonJsModuleIndicator?: boolean;
-    readonly externalModuleIndicator?: boolean;
-}
-
-/** @internal */
 export interface RedirectInfo {
     /** Source file this redirects to. */
     readonly redirectTarget: SourceFile;

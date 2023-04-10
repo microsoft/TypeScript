@@ -1,4 +1,3 @@
-
 /// <reference path='fourslash.ts' />
 
 // @Filename: /bar.ts

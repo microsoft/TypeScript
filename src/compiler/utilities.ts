@@ -157,7 +157,6 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
-    FutureSourceFile,
     GetAccessorDeclaration,
     getBaseFileName,
     GetCanonicalFileName,
@@ -9165,7 +9164,7 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 }
 
 /** @internal */
-export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile | FutureSourceFile): ModuleSpecifierEnding {
+export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
     if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
@@ -9190,7 +9189,7 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
     // accurately, and more importantly, literally nobody wants `Index` and its existence is a mystery.
     if (!shouldAllowImportingTsExtension(compilerOptions)) {
         // If .ts imports are not valid, we only need to see one .js import to go with that.
-        return sourceFile.kind && usesExtensionsOnImports(sourceFile) ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
+        return usesExtensionsOnImports(sourceFile) ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
     }
 
     return inferPreference();

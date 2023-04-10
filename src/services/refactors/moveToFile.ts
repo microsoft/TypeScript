@@ -7,7 +7,7 @@ import {
     Diagnostics,
     emptyArray,
     getLocaleSpecificMessage,
-    getQuotePreferenceFromFile,
+    getQuotePreference,
     hasSyntacticModifier,
     hostGetCanonicalFileName,
     Identifier,
@@ -92,7 +92,7 @@ function getNewStatementsAndRemoveFromOldFile(
     }
 
     const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
-    const quotePreference = getQuotePreferenceFromFile(oldFile, preferences);
+    const quotePreference = getQuotePreference(oldFile, preferences);
     const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
         insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);

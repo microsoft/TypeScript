@@ -20,7 +20,7 @@
 verify.moveToFile({
     newFileContents: {
         "/src/dir1/a.cts":
-`import { y } from '../dir2/bar.mts';
+`import { y } from '../dir2/bar.mjs';
 export const p = 0;
 y;`,
 

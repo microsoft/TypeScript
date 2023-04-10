@@ -31,7 +31,6 @@ import {
     flatten,
     forEach,
     forEachAncestorDirectory,
-    FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getConditions,
@@ -127,7 +126,7 @@ interface Preferences {
 function getPreferences(
     { importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences,
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile | FutureSourceFile,
+    importingSourceFile: SourceFile,
     oldImportSpecifier?: string,
 ): Preferences {
     const preferredEnding = getPreferredEnding();
@@ -215,7 +214,7 @@ export function getModuleSpecifier(
 /** @internal */
 export function getNodeModulesPackageName(
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile | FutureSourceFile,
+    importingSourceFile: SourceFile,
     nodeModulesFileName: string,
     host: ModuleSpecifierResolutionHost,
     preferences: UserPreferences,
@@ -246,14 +245,14 @@ function getModuleSpecifierWorker(
 /** @internal */
 export function tryGetModuleSpecifiersFromCache(
     moduleSymbol: Symbol,
-    importingSourceFilePath: Path,
+    importingSourceFile: SourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
 ): readonly string[] | undefined {
     return tryGetModuleSpecifiersFromCacheWorker(
         moduleSymbol,
-        importingSourceFilePath,
+        importingSourceFile,
         host,
         userPreferences,
         options)[0];
@@ -261,7 +260,7 @@ export function tryGetModuleSpecifiersFromCache(
 
 function tryGetModuleSpecifiersFromCacheWorker(
     moduleSymbol: Symbol,
-    importingSourceFilePath: Path,
+    importingSourceFile: SourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
@@ -272,7 +271,7 @@ function tryGetModuleSpecifiersFromCacheWorker(
     }
 
     const cache = host.getModuleSpecifierCache?.();
-    const cached = cache?.get(importingSourceFilePath, moduleSourceFile.path, userPreferences, options);
+    const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences, options);
     return [cached?.moduleSpecifiers, moduleSourceFile, cached?.modulePaths, cache];
 }
 
@@ -306,7 +305,7 @@ export function getModuleSpecifiersWithCacheInfo(
     moduleSymbol: Symbol,
     checker: TypeChecker,
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile | FutureSourceFile,
+    importingSourceFile: SourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
@@ -318,7 +317,7 @@ export function getModuleSpecifiersWithCacheInfo(
     // eslint-disable-next-line prefer-const
     let [specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
         moduleSymbol,
-        importingSourceFile.path,
+        importingSourceFile,
         host,
         userPreferences,
         options
@@ -336,14 +335,14 @@ export function getModuleSpecifiersWithCacheInfo(
 function computeModuleSpecifiers(
     modulePaths: readonly ModulePath[],
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile | FutureSourceFile,
+    importingSourceFile: SourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
 ): readonly string[] {
     const info = getInfo(importingSourceFile.path, host);
     const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
-    const existingSpecifier = importingSourceFile.kind && forEach(modulePaths, modulePath => forEach(
+    const existingSpecifier = forEach(modulePaths, modulePath => forEach(
         host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
         reason => {
             if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
@@ -880,7 +879,7 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
     return processEnding(shortest, allowedEndings, compilerOptions);
 }
 
-function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile | FutureSourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
+function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
     if (!host.fileExists || !host.readFile) {
         return undefined;
     }

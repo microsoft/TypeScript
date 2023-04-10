@@ -33,7 +33,7 @@ import {
     getNodeId,
     getObjectFlags,
     getOrUpdate,
-    getQuotePreferenceFromFile,
+    getQuotePreference,
     getSourceFileOfNode,
     getTokenAtPosition,
     hasAbstractModifier,
@@ -597,7 +597,7 @@ function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: T
 }
 
 function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo | SignatureInfo) {
-    const quotePreference = getQuotePreferenceFromFile(context.sourceFile, context.preferences);
+    const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const functionDeclaration = info.kind === InfoKind.Function
         ? createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration)
@@ -614,7 +614,7 @@ function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: Cod
 
 function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: JsxAttributesInfo) {
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-    const quotePreference = getQuotePreferenceFromFile(context.sourceFile, context.preferences);
+    const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const checker = context.program.getTypeChecker();
     const jsxAttributesNode = info.parentDeclaration.attributes;
     const hasSpreadAttribute = some(jsxAttributesNode.properties, isJsxSpreadAttribute);
@@ -634,7 +634,7 @@ function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixCo
 
 function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-    const quotePreference = getQuotePreferenceFromFile(context.sourceFile, context.preferences);
+    const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const target = getEmitScriptTarget(context.program.getCompilerOptions());
     const checker = context.program.getTypeChecker();
     const props = map(info.properties, prop => {

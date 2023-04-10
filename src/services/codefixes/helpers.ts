@@ -27,7 +27,7 @@ import {
     getModuleSpecifierResolverHost,
     getNameForExportedSymbol,
     getNameOfDeclaration,
-    getQuotePreferenceFromFile,
+    getQuotePreference,
     getSetAccessorValueParameter,
     getSynthesizedDeepClone,
     getTokenAtPosition,
@@ -205,7 +205,7 @@ export function addNewNodeForMemberSymbol(
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const optional = !!(symbol.flags & SymbolFlags.Optional);
     const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
-    const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
+    const quotePreference = getQuotePreference(sourceFile, preferences);
 
     switch (kind) {
         case SyntaxKind.PropertySignature:
@@ -467,7 +467,7 @@ export function createSignatureDeclarationFromCallExpression(
     modifierFlags: ModifierFlags,
     contextNode: Node
 ): MethodDeclaration | FunctionDeclaration | MethodSignature {
-    const quotePreference = getQuotePreferenceFromFile(context.sourceFile, context.preferences);
+    const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
     const tracker = getNoopSymbolTrackerWithResolver(context);
     const checker = context.program.getTypeChecker();

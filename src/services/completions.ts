@@ -96,7 +96,7 @@ import {
     getNewLineKind,
     getNewLineOrDefaultFromHost,
     getPropertyNameForPropertyNameNode,
-    getQuotePreferenceFromFile,
+    getQuotePreference,
     getReplacementSpanForContextToken,
     getRootDeclaration,
     getSourceFileOfModule,
@@ -790,7 +790,7 @@ function continuePreviousIncompleteResponse(
 
     const touchNode = getTouchingPropertyName(file, position);
     const lowerCaseTokenText = location.text.toLowerCase();
-    const exportMap = getExportInfoMap(file.path, host, program, preferences, cancellationToken);
+    const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
     const newEntries = resolvingModuleSpecifiers(
         "continuePreviousIncompleteResponse",
         host,
@@ -1105,7 +1105,7 @@ function getJSDocParamAnnotation(
                 const inferredType = checker.getTypeAtLocation(initializer.parent);
                 if (!(inferredType.flags & (TypeFlags.Any | TypeFlags.Void))) {
                     const sourceFile = initializer.getSourceFile();
-                    const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
+                    const quotePreference = getQuotePreference(sourceFile, preferences);
                     const builderFlags = (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
                     const typeNode = checker.typeToTypeNode(inferredType, findAncestor(initializer, isFunctionLike), builderFlags);
                     if (typeNode) {
@@ -1353,7 +1353,7 @@ function getExhaustiveCaseSnippets(
         const tracker = newCaseClauseTracker(checker, clauses);
 
         const target = getEmitScriptTarget(options);
-        const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
+        const quotePreference = getQuotePreference(sourceFile, preferences);
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
         const elements: Expression[] = [];
         for (const type of switchType.types as LiteralType[]) {
@@ -2048,7 +2048,7 @@ function createObjectLiteralMethod(
     const declaration = declarations[0];
     const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
-    const quotePreference = getQuotePreferenceFromFile(sourceFile, preferences);
+    const quotePreference = getQuotePreference(sourceFile, preferences);
     const builderFlags = NodeBuilderFlags.OmitThisParameter | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
 
     switch (declaration.kind) {
@@ -3747,7 +3747,7 @@ function getCompletionData(
             "";
 
         const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-        const exportInfo = getExportInfoMap(sourceFile.path, host, program, preferences, cancellationToken);
+        const exportInfo = getExportInfoMap(sourceFile, host, program, preferences, cancellationToken);
         const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
         const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
         resolvingModuleSpecifiers(

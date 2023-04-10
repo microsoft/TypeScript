@@ -41,7 +41,6 @@ import {
     formatting,
     FunctionDeclaration,
     FunctionExpression,
-    FutureSourceFile,
     getAncestor,
     getFirstNonSpaceCharacterPosition,
     getFormatCodeSettingsForWriting,
@@ -608,35 +607,25 @@ export class ChangeTracker {
         this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
     }
 
-    public insertNodeAtTopOfFile(sourceFile: SourceFile | FutureSourceFile, newNode: Statement, blankLineBetween: boolean): void {
+    public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
         this.insertAtTopOfFile(sourceFile, newNode, blankLineBetween);
     }
 
-    public insertNodesAtTopOfFile(sourceFile: SourceFile | FutureSourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
+    public insertNodesAtTopOfFile(sourceFile: SourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
         this.insertAtTopOfFile(sourceFile, newNodes, blankLineBetween);
     }
 
-    private insertAtTopOfFile(sourceFile: SourceFile | FutureSourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
-        const pos = sourceFile.kind ? getInsertionPositionAtSourceFileTop(sourceFile) : 0;
+    private insertAtTopOfFile(sourceFile: SourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
+        const pos = getInsertionPositionAtSourceFileTop(sourceFile);
         const options = {
             prefix: pos === 0 ? undefined : this.newLineCharacter,
-            suffix: (sourceFile.kind && isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
+            suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
         };
         if (isArray(insert)) {
-            if (sourceFile.kind) {
-                this.insertNodesAt(sourceFile, pos, insert, options);
-            }
-            else {
-                this.insertStatementsInNewFile(sourceFile.fileName, insert);
-            }
+            this.insertNodesAt(sourceFile, pos, insert, options);
         }
         else {
-            if (sourceFile.kind) {
-                this.insertNodeAt(sourceFile, pos, insert, options);
-            }
-            else {
-                this.insertStatementsInNewFile(sourceFile.fileName, [insert]);
-            }
+            this.insertNodeAt(sourceFile, pos, insert, options);
         }
     }
 
