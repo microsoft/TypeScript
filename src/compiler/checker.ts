@@ -27025,12 +27025,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isMatchingReference(reference, right)) {
                         return narrowTypeByEquality(type, operator, left, assumeTrue);
                     }
-                    if (isBooleanLiteral(right)) {
-                        return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
-                    }
-                    if (isBooleanLiteral(left)) {
-                        return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
-                    }
                     if (strictNullChecks) {
                         if (optionalChainContainsReference(left, reference)) {
                             type = narrowTypeByOptionalChainContainment(type, operator, right, assumeTrue);
@@ -27052,6 +27046,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (isMatchingConstructorReference(right)) {
                         return narrowTypeByConstructor(type, operator, left, assumeTrue);
+                    }
+                    if (isBooleanLiteral(right)) {
+                        return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
+                    }
+                    if (isBooleanLiteral(left)) {
+                        return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
                     }
                     break;
                 case SyntaxKind.InstanceOfKeyword:
