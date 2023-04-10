@@ -9095,6 +9095,8 @@ const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedE
 export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
 /** @internal */
 export const supportedTSImplementationExtensions: readonly Extension[] = [Extension.Ts, Extension.Cts, Extension.Mts, Extension.Tsx];
+/** @internal */
+export const extensionsNotSupportingExtensionlessResolution: readonly Extension[] = [Extension.Mts, Extension.Dmts, Extension.Mjs, Extension.Cts, Extension.Dcts, Extension.Cjs];
 
 /** @internal */
 export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];
@@ -9157,7 +9159,9 @@ export const enum ModuleSpecifierEnding {
 
 /** @internal */
 export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (text: string) => boolean = or(hasJSFileExtension, hasTSFileExtension)): boolean {
-    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasExtension(text) : undefined) || false;
+    return firstDefined(imports, ({ text }) => pathIsRelative(text) && !fileExtensionIsOneOf(text, extensionsNotSupportingExtensionlessResolution)
+        ? hasExtension(text)
+        : undefined) || false;
 }
 
 /** @internal */
@@ -9192,24 +9196,25 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
     return inferPreference();
 
     function inferPreference() {
-        if (sourceFile.kind) {
-            let usesJsExtensions = false;
-            const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
-                isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
-                emptyArray;
-            for (const specifier of specifiers) {
-                if (pathIsRelative(specifier)) {
-                    if (hasTSFileExtension(specifier)) {
-                        return ModuleSpecifierEnding.TsExtension;
-                    }
-                    if (hasJSFileExtension(specifier)) {
-                        usesJsExtensions = true;
-                    }
+        let usesJsExtensions = false;
+        const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
+            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
+            emptyArray;
+        for (const specifier of specifiers) {
+            if (pathIsRelative(specifier)) {
+                if (fileExtensionIsOneOf(specifier, extensionsNotSupportingExtensionlessResolution)) {
+                    // These extensions are not optional, so do not indicate a preference.
+                    continue;
+                }
+                if (hasTSFileExtension(specifier)) {
+                    return ModuleSpecifierEnding.TsExtension;
+                }
+                if (hasJSFileExtension(specifier)) {
+                    usesJsExtensions = true;
                 }
             }
-            return usesJsExtensions ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
         }
-        return ModuleSpecifierEnding.Minimal;
+        return usesJsExtensions ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
     }
 }
 

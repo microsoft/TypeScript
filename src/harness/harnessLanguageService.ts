@@ -593,6 +593,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getJsxClosingTagAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
+    getLinkedEditingRangeAtPosition(): never {
+        throw new Error("Not supported on the shim.");
+    }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
     }

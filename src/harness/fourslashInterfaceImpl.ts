@@ -177,6 +177,10 @@ export class VerifyNegatable {
         this.state.verifyJsxClosingTag(map);
     }
 
+    public linkedEditing(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
+        this.state.verifyLinkedEditingRange(map);
+    }
+
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }

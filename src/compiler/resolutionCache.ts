@@ -302,7 +302,7 @@ export function getDirectoryToWatchFailedLookupLocation(
             return {
                 dir: rootDir!,
                 dirPath: rootPath!,
-                nonRecursive: false
+                nonRecursive: true
             };
         }
     }
@@ -870,7 +870,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                         customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
                     }
                     if (dirPath === rootPath) {
-                        Debug.assert(!nonRecursive);
+                        Debug.assert(nonRecursive);
                         setAtRoot = true;
                     }
                     else {

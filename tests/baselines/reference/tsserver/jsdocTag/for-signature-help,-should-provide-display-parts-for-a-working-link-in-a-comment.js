@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/someFile1.js]
 class C { }
@@ -18,7 +18,7 @@ x(1)
 
 
 
-Info 1    [00:00:10.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -29,9 +29,9 @@ Info 1    [00:00:10.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:11.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-Info 3    [00:00:12.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -39,7 +39,7 @@ After request
 
 Before request
 
-Info 4    [00:00:13.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -48,11 +48,11 @@ Info 4    [00:00:13.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 5    [00:00:14.000] Search path: /a
-Info 6    [00:00:15.000] For info: /a/someFile1.js :: Config file name: /a/tsconfig.json
-Info 7    [00:00:16.000] Creating configuration project /a/tsconfig.json
-Info 8    [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
-Info 9    [00:00:18.000] Config: /a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /a
+Info seq  [hh:mm:ss:mss] For info: /a/someFile1.js :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
  "rootNames": [
   "/a/someFile1.js"
  ],
@@ -62,28 +62,28 @@ Info 9    [00:00:18.000] Config: /a/tsconfig.json : {
   "configFilePath": "/a/tsconfig.json"
  }
 }
-Info 10   [00:00:19.000] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info 11   [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info 12   [00:00:21.000] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Info 13   [00:00:22.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Info 14   [00:00:23.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:24.000] Project '/a/tsconfig.json' (Configured)
-Info 16   [00:00:25.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/someFile1.js SVC-1-0 "class C { }\n/** @param y - {@link C} */\nfunction x(y) { }\nx(1)"
 
 
 	someFile1.js
 	  Part of 'files' list in tsconfig.json
 
-Info 17   [00:00:26.000] -----------------------------------------------
-Info 18   [00:00:27.000] Project '/a/tsconfig.json' (Configured)
-Info 18   [00:00:28.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 18   [00:00:29.000] -----------------------------------------------
-Info 18   [00:00:30.000] Open files: 
-Info 18   [00:00:31.000] 	FileName: /a/someFile1.js ProjectRootPath: undefined
-Info 18   [00:00:32.000] 		Projects: /a/tsconfig.json
-Info 18   [00:00:33.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/someFile1.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -101,7 +101,7 @@ FsWatches::
 
 Before request
 
-Info 19   [00:00:34.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "signatureHelp",
       "arguments": {
@@ -114,7 +114,7 @@ Info 19   [00:00:34.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 20   [00:00:35.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "items": [

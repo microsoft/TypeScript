@@ -1782,16 +1782,28 @@ export function createScanner(languageVersion: ScriptTarget,
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
-            const ch = codePointAt(text, pos);
 
-            // Special handling for shebang
-            if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
-                pos = scanShebangTrivia(text, pos);
-                if (skipTrivia) {
-                    continue;
+            const ch = codePointAt(text, pos);
+            if (pos === 0) {
+                // If a file wasn't valid text at all, it will usually be apparent at
+                // position 0 because UTF-8 decode will fail and produce U+FFFD.
+                // If that happens, just issue one error and refuse to try to scan further;
+                // this is likely a binary file that cannot be parsed
+                if (ch === CharacterCodes.replacementCharacter) {
+                    // Jump to the end of the file and fail.
+                    error(Diagnostics.File_appears_to_be_binary);
+                    pos = end;
+                    return token = SyntaxKind.NonTextFileMarkerTrivia;
                 }
-                else {
-                    return token = SyntaxKind.ShebangTrivia;
+                // Special handling for shebang
+                if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text, pos);
+                    if (skipTrivia) {
+                        continue;
+                    }
+                    else {
+                        return token = SyntaxKind.ShebangTrivia;
+                    }
                 }
             }
 

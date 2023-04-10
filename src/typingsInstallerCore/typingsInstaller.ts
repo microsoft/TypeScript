@@ -107,7 +107,8 @@ export function getNpmCommandForInstallation(npmPath: string, tsVersion: string,
 }
 
 export type RequestCompletedAction = (success: boolean) => void;
-interface PendingRequest {
+
+export interface PendingRequest {
     requestId: number;
     packageNames: string[];
     cwd: string;
@@ -146,6 +147,7 @@ export abstract class TypingsInstaller {
     private readonly knownCachesSet = new Set<string>();
     private readonly projectWatchers = new Map<string, ProjectWatchers>();
     private safeList: JsTyping.SafeList | undefined;
+    /** @internal */
     readonly pendingRunRequests: PendingRequest[] = [];
     private readonly toCanonicalFileName: GetCanonicalFileName;
     private readonly globalCachePackageJsonPath: string;

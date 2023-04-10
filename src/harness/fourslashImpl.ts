@@ -3530,6 +3530,14 @@ export class TestState {
         }
     }
 
+    public verifyLinkedEditingRange(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
+        for (const markerName in map) {
+            this.goToMarker(markerName);
+            const actual = this.languageService.getLinkedEditingRangeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            assert.deepEqual(actual, map[markerName], markerName);
+        }
+    }
+
     public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
         const actual = this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, bracePosition);
 
