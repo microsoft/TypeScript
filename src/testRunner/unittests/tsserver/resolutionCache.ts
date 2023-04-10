@@ -630,51 +630,51 @@ export const x = 10;`
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with project references", () => {
     it("sharing across references", () => {
         const host = createServerHost({
-            "/src/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
-            "/src/projects/common/tsconfig.json": JSON.stringify({
+            "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+            "/users/username/projects/common/tsconfig.json": JSON.stringify({
                 compilerOptions: compilerOptionsToConfigJson({
                     composite: true,
                     traceResolution: true,
                 }),
             }),
-            "/src/projects/common/moduleA.ts": "export const a = 10;",
-            "/src/projects/common/moduleB.ts": Utils.dedent`
+            "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+            "/users/username/projects/common/moduleB.ts": Utils.dedent`
                 import { x } from "moduleX";
                 export const b = x;
             `,
-            "/src/projects/app/tsconfig.json": JSON.stringify({
+            "/users/username/projects/app/tsconfig.json": JSON.stringify({
                 compilerOptions: compilerOptionsToConfigJson({
                     composite: true,
                     traceResolution: true,
                 }),
                 references: [{ path: "../common" }],
             }),
-            "/src/projects/app/appA.ts": Utils.dedent`
+            "/users/username/projects/app/appA.ts": Utils.dedent`
                 import { x } from "moduleX";
                 export const y = x;
             `,
-            "/src/projects/app/appB.ts": Utils.dedent`
+            "/users/username/projects/app/appB.ts": Utils.dedent`
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,
         });
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-        openFilesForSession(["/src/projects/app/appB.ts"], session);
+        openFilesForSession(["/users/username/projects/app/appB.ts"], session);
         baselineTsserverLogs("resolutionCache", "sharing across references", session);
     });
 
     it("not sharing across references", () => {
         const host = createServerHost({
-            "/src/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
-            "/src/projects/common/tsconfig.json": JSON.stringify({
+            "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+            "/users/username/projects/common/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true, traceResolution: true },
             }),
-            "/src/projects/common/moduleA.ts": "export const a = 10;",
-            "/src/projects/common/moduleB.ts": Utils.dedent`
+            "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+            "/users/username/projects/common/moduleB.ts": Utils.dedent`
                 import { x } from "moduleX";
                 export const b = x;
             `,
-            "/src/projects/app/tsconfig.json": JSON.stringify({
+            "/users/username/projects/app/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     composite: true,
                     traceResolution: true,
@@ -682,17 +682,17 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 },
                 references: [{ path: "../common" }],
             }),
-            "/src/projects/app/appA.ts": Utils.dedent`
+            "/users/username/projects/app/appA.ts": Utils.dedent`
                 import { x } from "moduleX";
                 export const y = x;
             `,
-            "/src/projects/app/appB.ts": Utils.dedent`
+            "/users/username/projects/app/appB.ts": Utils.dedent`
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,
         });
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-        openFilesForSession(["/src/projects/app/appB.ts"], session);
+        openFilesForSession(["/users/username/projects/app/appB.ts"], session);
         baselineTsserverLogs("resolutionCache", "not sharing across references", session);
     });
 });
