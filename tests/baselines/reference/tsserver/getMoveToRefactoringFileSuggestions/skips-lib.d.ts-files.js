@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/file1.d.ts]
 class C {}
@@ -17,7 +17,7 @@ class C {}
 {"files":["./file1.d.ts","./a/lib.d.ts","./a/file3.d.ts","/a/lib.es6.d.ts"]}
 
 
-Info 1    [00:00:16.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -26,11 +26,11 @@ Info 1    [00:00:16.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:17.000] Search path: /
-Info 3    [00:00:18.000] For info: /file1.d.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:19.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:21.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /file1.d.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/file1.d.ts",
   "/a/lib.d.ts",
@@ -41,14 +41,14 @@ Info 6    [00:00:21.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 8    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /a/file3.d.ts 500 undefined WatchType: Closed Script info
-Info 9    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /a/lib.es6.d.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:25.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 11   [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 12   [00:00:27.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 13   [00:00:28.000] Project '/tsconfig.json' (Configured)
-Info 14   [00:00:29.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file3.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib.es6.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/file1.d.ts SVC-1-0 "class C {}"
 	/a/lib.d.ts Text-1 ""
 	/a/file3.d.ts Text-1 ""
@@ -64,15 +64,15 @@ Info 14   [00:00:29.000] 	Files (4)
 	a/lib.es6.d.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 15   [00:00:30.000] -----------------------------------------------
-Info 16   [00:00:31.000] Project '/tsconfig.json' (Configured)
-Info 16   [00:00:32.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
-Info 16   [00:00:33.000] -----------------------------------------------
-Info 16   [00:00:34.000] Open files: 
-Info 16   [00:00:35.000] 	FileName: /file1.d.ts ProjectRootPath: undefined
-Info 16   [00:00:36.000] 		Projects: /tsconfig.json
-Info 16   [00:00:37.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /file1.d.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -94,7 +94,7 @@ FsWatches::
 
 Before request
 
-Info 17   [00:00:38.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "getMoveToRefactoringFileSuggestions",
       "arguments": {
@@ -105,7 +105,7 @@ Info 17   [00:00:38.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 18   [00:00:39.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "newFilename": "/C.d.ts",

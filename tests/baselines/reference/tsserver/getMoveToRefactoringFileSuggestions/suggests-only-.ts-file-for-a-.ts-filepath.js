@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/file1.ts]
 interface ka {
@@ -29,7 +29,7 @@ interface ka {
 {"files":["./file1.ts","./file2.tsx","./file3.mts","./file4.cts","./file5.js","./file6.d.ts","./file7.ts"]}
 
 
-Info 1    [00:00:20.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -38,11 +38,11 @@ Info 1    [00:00:20.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:21.000] Search path: /
-Info 3    [00:00:22.000] For info: /file1.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:23.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:25.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /file1.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/file1.ts",
   "/file2.tsx",
@@ -56,17 +56,17 @@ Info 6    [00:00:25.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /file2.tsx 500 undefined WatchType: Closed Script info
-Info 8    [00:00:27.000] FileWatcher:: Added:: WatchInfo: /file3.mts 500 undefined WatchType: Closed Script info
-Info 9    [00:00:28.000] FileWatcher:: Added:: WatchInfo: /file4.cts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:29.000] FileWatcher:: Added:: WatchInfo: /file5.js 500 undefined WatchType: Closed Script info
-Info 11   [00:00:30.000] FileWatcher:: Added:: WatchInfo: /file6.d.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:31.000] FileWatcher:: Added:: WatchInfo: /file7.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:00:32.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 14   [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 15   [00:00:34.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [00:00:35.000] Project '/tsconfig.json' (Configured)
-Info 17   [00:00:36.000] 	Files (7)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file2.tsx 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file3.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file4.cts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file5.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file6.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
 	/file1.ts SVC-1-0 "interface ka {\n                name: string;\n            }\n            "
 	/file2.tsx Text-1 ""
 	/file3.mts Text-1 ""
@@ -91,15 +91,15 @@ Info 17   [00:00:36.000] 	Files (7)
 	file7.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 18   [00:00:37.000] -----------------------------------------------
-Info 19   [00:00:38.000] Project '/tsconfig.json' (Configured)
-Info 19   [00:00:39.000] 	Files (7)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
 
-Info 19   [00:00:40.000] -----------------------------------------------
-Info 19   [00:00:41.000] Open files: 
-Info 19   [00:00:42.000] 	FileName: /file1.ts ProjectRootPath: undefined
-Info 19   [00:00:43.000] 		Projects: /tsconfig.json
-Info 19   [00:00:44.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -127,7 +127,7 @@ FsWatches::
 
 Before request
 
-Info 20   [00:00:45.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "getMoveToRefactoringFileSuggestions",
       "arguments": {
@@ -138,7 +138,7 @@ Info 20   [00:00:45.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 21   [00:00:46.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "newFilename": "/ka.ts",
