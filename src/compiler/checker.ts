@@ -27019,17 +27019,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (right.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(left)) {
                         return narrowTypeByTypeof(type, right as TypeOfExpression, operator, left, assumeTrue);
                     }
-                    if (isBooleanLiteral(right)) {
-                        return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
-                    }
-                    if (isBooleanLiteral(left)) {
-                        return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
-                    }
                     if (isMatchingReference(reference, left)) {
                         return narrowTypeByEquality(type, operator, right, assumeTrue);
                     }
                     if (isMatchingReference(reference, right)) {
                         return narrowTypeByEquality(type, operator, left, assumeTrue);
+                    }
+                    if (isBooleanLiteral(right)) {
+                        return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
+                    }
+                    if (isBooleanLiteral(left)) {
+                        return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
                     }
                     if (strictNullChecks) {
                         if (optionalChainContainsReference(left, reference)) {
