@@ -48,19 +48,19 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watching @types", () => {
     it("works correctly when typings are added or removed", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/users/username/projects/project/app.ts",
             content: "let x = 1;"
         };
         const t1 = {
-            path: "/a/b/node_modules/@types/lib1/index.d.ts",
+            path: "/users/username/projects/project/node_modules/@types/lib1/index.d.ts",
             content: "export let a: number"
         };
         const t2 = {
-            path: "/a/b/node_modules/@types/lib2/index.d.ts",
+            path: "/users/username/projects/project/node_modules/@types/lib2/index.d.ts",
             content: "export let b: number"
         };
         const tsconfig = {
-            path: "/a/b/tsconfig.json",
+            path: "/users/username/projects/project/tsconfig.json",
             content: JSON.stringify({
                 compilerOptions: {},
                 exclude: ["node_modules"]

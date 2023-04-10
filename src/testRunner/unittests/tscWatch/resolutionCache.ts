@@ -227,17 +227,17 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
     verifyTscWatch({
         scenario,
         subScenario: "works when module resolution changes to ambient module",
-        commandLineArgs: ["-w", "/a/b/foo.ts"],
+        commandLineArgs: ["-w", "/users/username/projects/project/foo.ts"],
         sys: () => createWatchedSystem([{
-            path: "/a/b/foo.ts",
+            path: "/users/username/projects/project/foo.ts",
             content: `import * as fs from "fs";`
-        }, libFile], { currentDirectory: "/a/b" }),
+        }, libFile], { currentDirectory: "/users/username/projects/project" }),
         edits: [
             {
                 caption: "npm install node types",
                 edit: sys => {
                     sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/package.json",
+                        path: "/users/username/projects/project/node_modules/@types/node/package.json",
                         content: `
 {
   "main": ""
@@ -245,7 +245,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
 `
                     });
                     sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/index.d.ts",
+                        path: "/users/username/projects/project/node_modules/@types/node/index.d.ts",
                         content: `
 declare module "fs" {
     export interface Stats {
