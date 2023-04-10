@@ -31,6 +31,7 @@ import {
     getModeForUsageLocation,
     getNameFromPropertyName,
     getNameOfDeclaration,
+    getObjectFlags,
     getPropertySymbolsFromContextualType,
     getTargetLabel,
     getTextOfPropertyName,
@@ -75,6 +76,7 @@ import {
     moveRangePastModifiers,
     Node,
     NodeFlags,
+    ObjectFlags,
     Program,
     resolvePath,
     ScriptElementKind,
@@ -95,6 +97,7 @@ import {
     Type,
     TypeChecker,
     TypeFlags,
+    TypeReference,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
 
@@ -355,16 +358,24 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
     if (isImportMeta(node.parent) && node.parent.name === node) {
         return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent, /*failedAliasResolution*/ false);
     }
-
     const { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
     if (!symbol) return undefined;
 
     const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
     const returnType = tryGetReturnTypeOfFunction(symbol, typeAtLocation, typeChecker);
     const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node, failedAliasResolution);
+
     // If a function returns 'void' or some other type with no definition, just return the function definition.
-    const typeDefinitions = fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution);
-    return typeDefinitions.length ? typeDefinitions
+    const [resolvedType, typeDefinitions] = fromReturnType && fromReturnType.length !== 0 ?
+        [returnType, fromReturnType] :
+        [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
+
+    const singleTypeArgumentDefinition = !!(getObjectFlags(resolvedType) & ObjectFlags.Reference) &&
+        (resolvedType as TypeReference).resolvedTypeArguments?.length === 1 ?
+        definitionFromType((resolvedType as TypeReference).resolvedTypeArguments![0], typeChecker, node, failedAliasResolution) :
+        [];
+
+    return typeDefinitions.length ? [...singleTypeArgumentDefinition, ...typeDefinitions]
         : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
         : undefined;
 }
