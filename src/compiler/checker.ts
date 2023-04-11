@@ -16827,36 +16827,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
                 else {
-                    if (typeSet.length > 2 && getCrossProductUnionSize(typeSet) >= UNION_CROSS_PRODUCT_SIZE_LIMIT && every(typeSet, t => !!(t.flags & TypeFlags.Union) || !!(t.flags & TypeFlags.Primitive))) {
-                        // This type set is going to trigger an "expression too complex" error below. Rather than resort to that, as a last, best effort, simplify the type.
-                        // When the intersection looks like (A | B | C) & (D | E | F) & (G | H | I) - in the general case, this can result in a massive resulting
-                        // union, hence the check on the cross product size below, _however_ in some cases we can also _simplify_ the resulting type massively.
-                        // If we can recognize that upfront, we can still allow the type to form without creating innumerable intermediate types.
-                        // Specifically, in cases where almost all combinations are known to reduce to `never` (so the result is essentially sparse)
-                        // and we can recognize that quickly, we can use a simplified result without checking the worst-case size.
-                        // So we start with the assumption that the result _is_ sparse when the input looks like the above, and we assume the result
-                        // will take the form (A & D & G) | (B & E & H) | (C & F & I). To validate this, we reduce left, first combining
-                        // (A | B | C) & (D | E | F); if that combines into `(A & D) | (B & E) | (C & F)` like we want, which we make 9 intermediate
-                        // types to check, we can then combine the reduced `(A & D) | (B & E) | (C & F)` with (G | H | I), which again takes 9 intermediate types
-                        // to check, finally producing `(A & D & G) | (B & E & H) | (C & F & I)`. This required 18 intermediate types, while the standard method
-                        // of expanding (A | B | C) & (D | E | F) & (G | H | I) would produce 27 types and then perform reduction on the result.
-                        // By going elemnt-wise, and bailing if the result fails to reduce, we can allow these sparse expansions without doing undue work.
-                        runningResult = typeSet[0];
-                        for (let i = 1; i < typeSet.length; i++) {
-                            // For intersection reduction, here we're considering `undefined & (A | B)` as `never`. (ie, we're disallowing branded primitives)
-                            // This is relevant for, eg, when looking at `(HTMLElement | null) & (SVGElement | null) & ... & undefined` where _usually_
-                            // we'd allow for tons of garbage intermediate types like `null & SVGElement` to exist; but nobody ever really actually _wants_
-                            // that, IMO. Those types can still exist in the type system; just... not when working with unions and intersections with massive
-                            // cross-product growth potential.
-                            runningResult = typeSet[i].flags & TypeFlags.Primitive && everyType(runningResult, t => !!(t.flags & TypeFlags.Object)) ? neverType : getReducedType(intersectTypes(runningResult, typeSet[i]));
-                            if (i === typeSet.length - 1 || isTypeAny(runningResult) || runningResult.flags & TypeFlags.Never) {
-                                return runningResult;
-                            }
-                            if (!(runningResult.flags & TypeFlags.Union) || (runningResult as UnionType).types.length > typeSet.length) {
-                                // Save work done by the accumulated result thus far, even if we're bailing on the heuristic.
-                                // It may have saved us enough work already that we're willing to work with the type now.
-                                typeSet = typeSet.slice(i + 1);
-                                break;
+                    if (getCrossProductUnionSize(typeSet) >= UNION_CROSS_PRODUCT_SIZE_LIMIT && every(typeSet, t => !!(t.flags & TypeFlags.Union) || !!(t.flags & TypeFlags.Primitive))) {
+                        if (typeSet.length > 2 || some(typeSet, t => getReducedType(t) !== t)) {
+                            // This type set is going to trigger an "expression too complex" error below. Rather than resort to that, as a last, best effort, simplify the type.
+                            // When the intersection looks like (A | B | C) & (D | E | F) & (G | H | I) - in the general case, this can result in a massive resulting
+                            // union, hence the check on the cross product size below, _however_ in some cases we can also _simplify_ the resulting type massively.
+                            // If we can recognize that upfront, we can still allow the type to form without creating innumerable intermediate types.
+                            // Specifically, in cases where almost all combinations are known to reduce to `never` (so the result is essentially sparse)
+                            // and we can recognize that quickly, we can use a simplified result without checking the worst-case size.
+                            // So we start with the assumption that the result _is_ sparse when the input looks like the above, and we assume the result
+                            // will take the form (A & D & G) | (B & E & H) | (C & F & I). To validate this, we reduce left, first combining
+                            // (A | B | C) & (D | E | F); if that combines into `(A & D) | (B & E) | (C & F)` like we want, which we make 9 intermediate
+                            // types to check, we can then combine the reduced `(A & D) | (B & E) | (C & F)` with (G | H | I), which again takes 9 intermediate types
+                            // to check, finally producing `(A & D & G) | (B & E & H) | (C & F & I)`. This required 18 intermediate types, while the standard method
+                            // of expanding (A | B | C) & (D | E | F) & (G | H | I) would produce 27 types and then perform reduction on the result.
+                            // By going elemnt-wise, and bailing if the result fails to reduce, we can allow these sparse expansions without doing undue work.
+                            runningResult = getReducedType(typeSet[0]);
+                            for (let i = 1; i < typeSet.length; i++) {
+                                // For intersection reduction, here we're considering `undefined & (A | B)` as `never`. (ie, we're disallowing branded primitives)
+                                // This is relevant for, eg, when looking at `(HTMLElement | null) & (SVGElement | null) & ... & undefined` where _usually_
+                                // we'd allow for tons of garbage intermediate types like `null & SVGElement` to exist; but nobody ever really actually _wants_
+                                // that, IMO. Those types can still exist in the type system; just... not when working with unions and intersections with massive
+                                // cross-product growth potential.
+                                const reducedElem = getReducedType(typeSet[i]);
+                                runningResult = reducedElem.flags & TypeFlags.Primitive && everyType(runningResult, t => !!(t.flags & TypeFlags.Object)) ? neverType : getReducedType(intersectTypes(runningResult, reducedElem));
+                                if (i === typeSet.length - 1 || isTypeAny(runningResult) || runningResult.flags & TypeFlags.Never) {
+                                    return runningResult;
+                                }
+                                if (!(runningResult.flags & TypeFlags.Union) || (runningResult as UnionType).types.length > typeSet.length) {
+                                    // Save work done by the accumulated result thus far, even if we're bailing on the heuristic.
+                                    // It may have saved us enough work already that we're willing to work with the type now.
+                                    typeSet = typeSet.slice(i + 1);
+                                    break;
+                                }
                             }
                         }
                     }
