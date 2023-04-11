@@ -5859,6 +5859,7 @@ export interface SymbolLinks {
     variances?: VarianceFlags[];                // Alias symbol type argument variance cache
     deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
     deferralWriteConstituents?: Type[];         // Constituents of a deferred `writeType`
+    deferredMismatchedParts?: Symbol[];         // If a `(A | (B & C))["ref"]` is deferred, the `B["ref"]` and `C["ref"]` symbols needed to un-defer the outer type
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
