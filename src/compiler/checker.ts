@@ -22616,12 +22616,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary) {
         const types = target.types;
-        const include = types.map(t => !(t.flags & TypeFlags.Primitive));
+        const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
         for (const [getDiscriminatingType, propertyName] of discriminators) {
             // If the remaining target types include at least one with a matching discriminant, eliminate those that
             // have non-matching discriminants. This ensures that we ignore erroneous discriminators and gradually
             // refine the target set without eliminating every constituent (which would lead to `never`).
-            let exclude: number[] | undefined;
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
@@ -22630,15 +22629,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         matched = true;
                     }
                     else {
-                        (exclude ??= []).push(i);
+                        include[i] = Ternary.Maybe;
                     }
                 }
             }
-            if (matched && exclude) {
-                for (const i of exclude) include[i] = false;
+            // Turn each Ternary.Maybe into Ternary.False if there was a match. Otherwise, revert to Ternary.True.
+            for (let i = 0; i < types.length; i++) {
+                if (include[i] === Ternary.Maybe) {
+                    include[i] = matched ? Ternary.False : Ternary.True;
+                }
             }
         }
-        const filtered = contains(include, false) ? getUnionType(types.filter((_, i) => include[i])) : target;
+        const filtered = contains(include, Ternary.False) ? getUnionType(types.filter((_, i) => include[i])) : target;
         return filtered.flags & TypeFlags.Never ? target : filtered;
     }
 
