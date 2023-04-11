@@ -55,9 +55,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
                 caption: "Fix error",
                 edit: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build core
-                    sys.checkTimeoutQueueLengthAndRun(1); // build animals, zoo and solution
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // build core
+                    sys.runQueuedTimeoutCallbacks(); // build animals, zoo and solution
                 },
             }
         ]
@@ -80,10 +79,7 @@ ${coreFiles[1].content}`);
 import * as A from '../animals';
 ${coreFiles[1].content}`),
                 // build core
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });

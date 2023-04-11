@@ -217,6 +217,7 @@ import {
     isExportAssignment,
     isExportSpecifier,
     isExpression,
+    isFileLevelUniqueName,
     isFunctionLike,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
@@ -419,6 +420,7 @@ import {
     TemplateSpan,
     TextRange,
     ThrowStatement,
+    TokenFlags,
     tokenToString,
     tracing,
     TransformationResult,
@@ -447,6 +449,7 @@ import {
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
+    version,
     VoidExpression,
     WhileStatement,
     WithStatement,
@@ -1111,7 +1114,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
 /** @internal */
 export function createBuildInfo(program: ProgramBuildInfo | undefined, bundle: BundleBuildInfo | undefined): BuildInfo {
-    const version = ts.version; // Extracted into a const so the form is stable between namespace and module
     return { bundle, program, version };
 }
 
@@ -1213,10 +1215,10 @@ export function emitUsingBuildInfo(
     customTransformers?: CustomTransformers
 ): EmitUsingBuildInfoResult {
     tracing?.push(tracing.Phase.Emit, "emitUsingBuildInfo", {}, /*separateBeginAndEnd*/ true);
-    ts.performance.mark("beforeEmit");
+    performance.mark("beforeEmit");
     const result = emitUsingBuildInfoWorker(config, host, getCommandLine, customTransformers);
-    ts.performance.mark("afterEmit");
-    ts.performance.measure("Emit", "beforeEmit", "afterEmit");
+    performance.mark("afterEmit");
+    performance.measure("Emit", "beforeEmit", "afterEmit");
     tracing?.pop();
     return result;
 }
@@ -1263,7 +1265,7 @@ function emitUsingBuildInfoWorker(
         declarationMapText,
         buildInfoPath,
         buildInfo,
-        /*onlyOwnText*/ true
+        /*oldFileOfCurrentEmit*/ true
     );
     const outputFiles: OutputFile[] = [];
     const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host);
@@ -1479,12 +1481,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function printBundle(bundle: Bundle): string {
-        writeBundle(bundle, beginPrint(), /*sourceMapEmitter*/ undefined);
+        writeBundle(bundle, beginPrint(), /*sourceMapGenerator*/ undefined);
         return endPrint();
     }
 
     function printFile(sourceFile: SourceFile): string {
-        writeFile(sourceFile, beginPrint(), /*sourceMapEmitter*/ undefined);
+        writeFile(sourceFile, beginPrint(), /*sourceMapGenerator*/ undefined);
         return endPrint();
     }
 
@@ -3051,9 +3053,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
             const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
-            // If he number will be printed verbatim and it doesn't already contain a dot, add one
+            // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
-            return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
+            return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
+                && !stringContains(text, tokenToString(SyntaxKind.DotToken)!)
+                && !stringContains(text, String.fromCharCode(CharacterCodes.E))
+                && !stringContains(text, String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
             // check if constant enum value is integer
@@ -3124,7 +3129,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitParenthesizedExpression(node: ParenthesizedExpression) {
         const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
         const indented = writeLineSeparatorsAndIndentBefore(node.expression, node);
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         writeLineSeparatorsAfter(node.expression, node);
         decreaseIndentIf(indented);
         emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
@@ -3356,7 +3361,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitAsExpression(node: AsExpression) {
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         if (node.type) {
             writeSpace();
             writeKeyword("as");
@@ -3371,7 +3376,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitSatisfiesExpression(node: SatisfiesExpression) {
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         if (node.type) {
             writeSpace();
             writeKeyword("satisfies");
@@ -5767,7 +5772,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * or within the NameGenerator.
      */
     function isUniqueName(name: string, privateName: boolean): boolean {
-        return isFileLevelUniqueName(name, privateName)
+        return isFileLevelUniqueNameInCurrentFile(name, privateName)
             && !isReservedName(name, privateName)
             && !generatedNames.has(name);
     }
@@ -5782,8 +5787,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * @param _isPrivate (unused) this parameter exists to avoid an unnecessary adaptor frame in v8
      * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
-    function isFileLevelUniqueName(name: string, _isPrivate: boolean) {
-        return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
+    function isFileLevelUniqueNameInCurrentFile(name: string, _isPrivate: boolean) {
+        return currentSourceFile ? isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
     }
 
     /**
@@ -5934,7 +5939,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function makeFileLevelOptimisticUniqueName(name: string) {
-        return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
+        return makeUniqueName(name, isFileLevelUniqueNameInCurrentFile, /*optimistic*/ true, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
     }
 
     /**
@@ -6021,9 +6026,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case SyntaxKind.SetAccessor:
                 return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration, privateName, prefix, suffix);
             case SyntaxKind.ComputedPropertyName:
-                return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ true, privateName, prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ true, privateName, prefix, suffix);
             default:
-                return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ false, privateName, prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ false, privateName, prefix, suffix);
         }
     }
 
@@ -6043,7 +6048,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case GeneratedIdentifierFlags.Unique:
                 return makeUniqueName(
                     idText(name),
-                    (autoGenerate.flags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                    (autoGenerate.flags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueNameInCurrentFile : isUniqueName,
                     !!(autoGenerate.flags & GeneratedIdentifierFlags.Optimistic),
                     !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
                     isPrivateIdentifier(name),

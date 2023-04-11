@@ -84,6 +84,20 @@ declare function inners2<const T extends readonly any[]>(args: readonly [unknown
 
 const test2 = inners2([1,2,3,4,5]);
 
+// Repro from #53307
+
+type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+
+const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
+
+const t = thing({ foo: '' });  // readonly { foo: "" }
+
+type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+
+const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
+
+const tMapped = thingMapped({ foo: '' });  // { foo: "" }
+
 
 //// [typeParameterConstModifiers.js]
 "use strict";
@@ -130,3 +144,7 @@ function set(obj, path, value) { }
 set(obj, ['a', 'b', 'c'], value);
 var test = inners(1, 2, 3, 4, 5);
 var test2 = inners2([1, 2, 3, 4, 5]);
+var thing = function (o) { return o; };
+var t = thing({ foo: '' }); // readonly { foo: "" }
+var thingMapped = function (o) { return o; };
+var tMapped = thingMapped({ foo: '' }); // { foo: "" }

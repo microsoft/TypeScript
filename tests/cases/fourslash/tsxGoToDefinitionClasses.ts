@@ -15,8 +15,8 @@
 //// var y = <MyClass [|f/*p*/oo|]= 'hello' />;
 //// var z = <[|MyCl/*w*/ass|] wrong= 'hello' />;
 
-verify.goToDefinition({
-    c: "ct",
-    p: "pt",
-    w: "ct"
-});
+verify.baselineGoToDefinition(
+    "c",
+    "p",
+    "w",
+);

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/rootFolder/project/tsconfig.json]
 {"compilerOptions":{"module":"none","allowJs":true,"outDir":"Static/scripts/"},"include":["Scripts/**/*"]}
@@ -85,6 +86,9 @@ Input::
 var zz30 = 100;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...

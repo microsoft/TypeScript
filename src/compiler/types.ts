@@ -49,6 +49,9 @@ export const enum SyntaxKind {
     // We detect and provide better error recovery when we encounter a git merge marker.  This
     // allows us to edit files with git-conflict markers in them in a much more pleasant manner.
     ConflictMarkerTrivia,
+    // If a file is actually binary, with any luck, we'll get U+FFFD REPLACEMENT CHARACTER
+    // in position zero and can just skip what is surely a doomed parse.
+    NonTextFileMarkerTrivia,
     // Literals
     NumericLiteral,
     BigIntLiteral,
@@ -579,6 +582,9 @@ export type PunctuationSyntaxKind =
     | SyntaxKind.BarEqualsToken
     | SyntaxKind.CaretEqualsToken
     ;
+
+/** @internal */
+export type PunctuationOrKeywordSyntaxKind = PunctuationSyntaxKind | KeywordSyntaxKind;
 
 export type KeywordSyntaxKind =
     | SyntaxKind.AbstractKeyword
@@ -2789,24 +2795,36 @@ export const enum TokenFlags {
     /** @internal */
     Unterminated = 1 << 2,
     /** @internal */
-    ExtendedUnicodeEscape = 1 << 3,
-    Scientific = 1 << 4,        // e.g. `10e2`
-    Octal = 1 << 5,             // e.g. `0777`
-    HexSpecifier = 1 << 6,      // e.g. `0x00000000`
-    BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
-    OctalSpecifier = 1 << 8,    // e.g. `0o777`
+    ExtendedUnicodeEscape = 1 << 3,     // e.g. `\u{10ffff}`
+    Scientific = 1 << 4,                // e.g. `10e2`
+    Octal = 1 << 5,                     // e.g. `0777`
+    HexSpecifier = 1 << 6,              // e.g. `0x00000000`
+    BinarySpecifier = 1 << 7,           // e.g. `0b0110010000000000`
+    OctalSpecifier = 1 << 8,            // e.g. `0o777`
     /** @internal */
-    ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
+    ContainsSeparator = 1 << 9,         // e.g. `0b1100_0101`
     /** @internal */
-    UnicodeEscape = 1 << 10,
+    UnicodeEscape = 1 << 10,            // e.g. `\u00a0`
     /** @internal */
     ContainsInvalidEscape = 1 << 11,    // e.g. `\uhello`
     /** @internal */
+    HexEscape = 1 << 12,                // e.g. `\xa0`
+    /** @internal */
+    ContainsLeadingZero = 1 << 13,      // e.g. `0888`
+    /** @internal */
+    ContainsInvalidSeparator = 1 << 14, // e.g. `0_1`
+    /** @internal */
     BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
     /** @internal */
-    NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator,
+    WithSpecifier = HexSpecifier | BinaryOrOctalSpecifier,
     /** @internal */
-    TemplateLiteralLikeFlags = ContainsInvalidEscape,
+    StringLiteralFlags = HexEscape | UnicodeEscape | ExtendedUnicodeEscape | ContainsInvalidEscape,
+    /** @internal */
+    NumericLiteralFlags = Scientific | Octal | ContainsLeadingZero | WithSpecifier | ContainsSeparator | ContainsInvalidSeparator,
+    /** @internal */
+    TemplateLiteralLikeFlags = HexEscape | UnicodeEscape | ExtendedUnicodeEscape | ContainsInvalidEscape,
+    /** @internal */
+    IsInvalid = Octal | ContainsLeadingZero | ContainsInvalidSeparator | ContainsInvalidEscape,
 }
 
 export interface NumericLiteral extends LiteralExpression, Declaration {
@@ -4681,7 +4699,7 @@ export interface FilePreprocessingReferencedDiagnostic {
     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
     reason: ReferencedFile;
     diagnostic: DiagnosticMessage;
-    args?: (string | number | undefined)[];
+    args?: DiagnosticArguments;
 }
 
 /** @internal */
@@ -4690,7 +4708,7 @@ export interface FilePreprocessingFileExplainingDiagnostic {
     file?: Path;
     fileProcessingReason: FileIncludeReason;
     diagnostic: DiagnosticMessage;
-    args?: (string | number | undefined)[];
+    args?: DiagnosticArguments;
 }
 
 /** @internal */
@@ -6044,7 +6062,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    firstSpreadIndex?: number;          // Index of first spread element in array literal (-1 for none)
+    spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
 }
@@ -6123,7 +6141,7 @@ export const enum TypeFlags {
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
-    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
+    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection | TemplateLiteral,
     /** @internal */
     Simplifiable = IndexedAccess | Conditional,
     /** @internal */
@@ -6146,7 +6164,7 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
-    NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
+    NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -6277,7 +6295,7 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-    // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
+    // Flags that require TypeFlags.UnionOrIntersection, TypeFlags.Substitution, or TypeFlags.TemplateLiteral
     /** @internal */
     IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
     /** @internal */
@@ -6304,7 +6322,7 @@ export const enum ObjectFlags {
 }
 
 /** @internal */
-export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
+export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
 
 // Object types (TypeFlags.ObjectType)
 export interface ObjectType extends Type {
@@ -6646,12 +6664,16 @@ export interface ConditionalType extends InstantiableType {
     /** @internal */
     resolvedDefaultConstraint?: Type;
     /** @internal */
+    resolvedConstraintOfDistributive?: Type | false;
+    /** @internal */
     mapper?: TypeMapper;
     /** @internal */
     combinedMapper?: TypeMapper;
 }
 
 export interface TemplateLiteralType extends InstantiableType {
+    /** @internal */
+    objectFlags: ObjectFlags;
     texts: readonly string[];  // Always one element longer than types
     types: readonly Type[];  // Always at least one element
 }
@@ -6931,6 +6953,12 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     relatedInformation?: DiagnosticRelatedInformation[];
     /** @internal */ skippedOn?: keyof CompilerOptions;
 }
+
+/** @internal */
+export type DiagnosticArguments = (string | number)[];
+
+/** @internal */
+export type DiagnosticAndArguments = [message: DiagnosticMessage, ...args: DiagnosticArguments];
 
 export interface DiagnosticRelatedInformation {
     category: DiagnosticCategory;
@@ -7370,6 +7398,7 @@ export interface CommandLineOptionBase {
     affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
+    disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
 }
 
 /** @internal */
@@ -7458,6 +7487,9 @@ export const enum CharacterCodes {
     ideographicSpace = 0x3000,
     mathematicalSpace = 0x205F,
     ogham = 0x1680,
+
+    // Unicode replacement character produced when a byte sequence is invalid
+    replacementCharacter = 0xFFFD,
 
     _ = 0x5F,
     $ = 0x24,

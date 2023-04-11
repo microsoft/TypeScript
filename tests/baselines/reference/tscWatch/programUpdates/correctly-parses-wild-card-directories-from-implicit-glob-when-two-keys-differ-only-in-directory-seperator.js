@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/f1.ts]
 export const x = 1
@@ -175,6 +176,9 @@ Input::
 export const z = 1;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
@@ -330,6 +334,9 @@ Input::
 import { z } from "./new-file";export const x = 1
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 Scheduling update

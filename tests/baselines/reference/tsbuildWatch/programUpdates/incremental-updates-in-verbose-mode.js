@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -549,6 +550,9 @@ export const m = mod;
 function someFn() { }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
@@ -698,6 +702,13 @@ export const m = mod;
 export function someFn() { }
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...

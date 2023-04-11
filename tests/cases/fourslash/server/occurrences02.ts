@@ -4,4 +4,4 @@
 ////    [|f|]([|f|]);
 ////}
 
-verify.rangesAreOccurrences();
+verify.baselineDocumentHighlights();

@@ -15,4 +15,4 @@
 ////}
 
 
-verify.goToDefinition("classAliasDefinition", "classDefinition");
+verify.baselineGoToDefinition("classAliasDefinition");

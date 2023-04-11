@@ -1,569 +1,429 @@
+// === findAllReferences ===
 // === /a.js ===
-// exports./*FIND ALL REFS*/[|A|] = class {};
+// <|exports./*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}A|] = class {};|>
 
 // === /b.js ===
-// import { [|A|] } from "./a";
-// [|A|];
+// <|import { [|{| defId: 1, isWriteAccess: true |}A|] } from "./a";|>
+// [|{| defId: 1 |}A|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
-      "textSpan": {
-        "start": 8,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 21
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /a.js ===
+  // <|exports./*FIND ALL REFS*/[|{| defId: 0 |}A|]|> = class {};
+
+  // === /b.js ===
+  // <|import { [|{| defId: 1 |}A|] } from "./a";|>
+  // A;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (local class) A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (local class) A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.js ===
+// <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}A|] } from "./a";|>
+// [|{| defId: 0 |}A|];
 
 // === /a.js ===
-// exports.[|A|] = class {};
+// <|exports.[|{| defId: 1, isWriteAccess: true |}A|] = class {};|>
 
+  // === Definitions ===
+  // === /b.js ===
+  // <|import { /*FIND ALL REFS*/[|{| defId: 0 |}A|] } from "./a";|>
+  // A;
+
+  // === /a.js ===
+  // <|exports.[|{| defId: 1 |}A|]|> = class {};
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (local class) A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (local class) A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.js ===
-// import { /*FIND ALL REFS*/[|A|] } from "./a";
-// [|A|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
-      "textSpan": {
-        "start": 8,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 21
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// <|import { [|{| defId: 0, isWriteAccess: true |}A|] } from "./a";|>
+// /*FIND ALL REFS*/[|{| defId: 0 |}A|];
 
 // === /a.js ===
-// exports.[|A|] = class {};
+// <|exports.[|{| defId: 1, isWriteAccess: true |}A|] = class {};|>
 
-// === /b.js ===
-// import { [|A|] } from "./a";
-// /*FIND ALL REFS*/[|A|];
+  // === Definitions ===
+  // === /b.js ===
+  // <|import { [|{| defId: 0 |}A|] } from "./a";|>
+  // /*FIND ALL REFS*/A;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 24
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false
-      }
+  // === /a.js ===
+  // <|exports.[|{| defId: 1 |}A|]|> = class {};
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (local class) A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
-      "textSpan": {
-        "start": 8,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 21
-        },
-        "isWriteAccess": true
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (local class) A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]

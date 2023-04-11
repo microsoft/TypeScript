@@ -248,7 +248,7 @@ function isPureImport(node: Node): boolean {
         case SyntaxKind.ImportEqualsDeclaration:
             return !hasSyntacticModifier(node, ModifierFlags.Export);
         case SyntaxKind.VariableStatement:
-            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
+            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true));
         default:
             return false;
     }
@@ -431,7 +431,7 @@ function forEachImportInStatement(statement: Statement, cb: (importNode: Support
     }
     else if (isVariableStatement(statement)) {
         for (const decl of statement.declarationList.declarations) {
-            if (decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
+            if (decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true)) {
                 cb(decl as SupportedImport);
             }
         }
@@ -753,7 +753,7 @@ function isInImport(decl: Declaration) {
 }
 function isVariableDeclarationInImport(decl: VariableDeclaration) {
     return isSourceFile(decl.parent.parent.parent) &&
-        !!decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
+        !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
 }
 
 function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {

@@ -1,0 +1,20 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|export function [|bar|]() { return "bar"; }|>
+// var x = import("./foo");
+// x.then(foo => {
+//     foo.b/*GOTO DEF*/ar(); 
+// })
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "bar",
+    "containerName": "\"/tests/cases/fourslash/foo\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

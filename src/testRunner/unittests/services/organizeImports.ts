@@ -1036,7 +1036,7 @@ export * from "lib";
 
         function makeLanguageService(...files: File[]) {
             const host = createServerHost(files);
-            const projectService = createProjectService(host, { useSingleInferredProject: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, allowNonBaseliningLogger: true });
             projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));
             return projectService.inferredProjects[0].getLanguageService();

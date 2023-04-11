@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/file1.ts]
 export const c = 30;
@@ -102,6 +103,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -114,6 +117,10 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 2
+1: timerToInvalidateFailedLookupResolutions
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
@@ -179,6 +186,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

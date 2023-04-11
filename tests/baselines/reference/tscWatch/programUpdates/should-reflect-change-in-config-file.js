@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -90,6 +91,9 @@ Input::
 let y = 1;let xy = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
@@ -140,6 +144,9 @@ Input::
                     }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
