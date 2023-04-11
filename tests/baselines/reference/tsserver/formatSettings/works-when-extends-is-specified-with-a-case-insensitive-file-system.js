@@ -76,7 +76,8 @@ Info seq  [hh:mm:ss:mss] request:
           "placeOpenBraceOnNewLineForFunctions": false,
           "placeOpenBraceOnNewLineForControlBlocks": true,
           "semicolons": "ignore",
-          "trimTrailingWhitespace": true
+          "trimTrailingWhitespace": true,
+          "indentSwitchCase": true
         }
       },
       "seq": 2,
@@ -112,7 +113,8 @@ FormatCodeOptions should be global:: /a/b/app.ts:: {
  "placeOpenBraceOnNewLineForFunctions": false,
  "placeOpenBraceOnNewLineForControlBlocks": true,
  "semicolons": "ignore",
- "trimTrailingWhitespace": true
+ "trimTrailingWhitespace": true,
+ "indentSwitchCase": true
 }
 Before request
 
@@ -141,7 +143,8 @@ Info seq  [hh:mm:ss:mss] request:
           "placeOpenBraceOnNewLineForFunctions": false,
           "placeOpenBraceOnNewLineForControlBlocks": false,
           "semicolons": "ignore",
-          "trimTrailingWhitespace": true
+          "trimTrailingWhitespace": true,
+          "indentSwitchCase": true
         },
         "file": "/a/b/app.ts"
       },
@@ -178,7 +181,8 @@ FormatCodeOptions should be per file:: /a/b/app.ts:: {
  "placeOpenBraceOnNewLineForFunctions": false,
  "placeOpenBraceOnNewLineForControlBlocks": false,
  "semicolons": "ignore",
- "trimTrailingWhitespace": true
+ "trimTrailingWhitespace": true,
+ "indentSwitchCase": true
 }
 Before request
 
@@ -207,7 +211,8 @@ Info seq  [hh:mm:ss:mss] request:
           "placeOpenBraceOnNewLineForFunctions": false,
           "placeOpenBraceOnNewLineForControlBlocks": false,
           "semicolons": "ignore",
-          "trimTrailingWhitespace": true
+          "trimTrailingWhitespace": true,
+          "indentSwitchCase": true
         }
       },
       "seq": 4,
@@ -243,5 +248,6 @@ FormatCodeOptions should be per file:: /a/b/app.ts:: {
  "placeOpenBraceOnNewLineForFunctions": false,
  "placeOpenBraceOnNewLineForControlBlocks": false,
  "semicolons": "ignore",
- "trimTrailingWhitespace": true
+ "trimTrailingWhitespace": true,
+ "indentSwitchCase": true
 }
