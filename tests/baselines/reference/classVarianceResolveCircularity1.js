@@ -1,15 +1,15 @@
-//// [classVarianceResolveCircularity.ts]
+//// [classVarianceResolveCircularity1.ts]
 // Issue #52813
 
 class Bar<T> {
-    num!: number;    // Swap to remove error
+    num!: number;
     Value = callme(this).num;
     Field: number = callme(this).num;
 }
 declare function callme(x: Bar<any>): Bar<any>;
 declare function callme(x: object): string;
 
-//// [classVarianceResolveCircularity.js]
+//// [classVarianceResolveCircularity1.js]
 "use strict";
 // Issue #52813
 var Bar = /** @class */ (function () {

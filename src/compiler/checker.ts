@@ -2157,6 +2157,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var resolutionTargets: TypeSystemEntity[] = [];
     var resolutionResults: boolean[] = [];
     var resolutionPropertyNames: TypeSystemPropertyName[] = [];
+    var resolutionStart = 0;
+    var inVarianceComputation = false;
 
     var suggestionCount = 0;
     var maximumSuggestionCount = 10;
@@ -10106,7 +10108,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
-        for (let i = resolutionTargets.length - 1; i >= 0; i--) {
+        for (let i = resolutionTargets.length - 1; i >= resolutionStart; i--) {
             if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
                 return -1;
             }
@@ -22689,6 +22691,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getSymbolLinks(symbol);
         if (!links.variances) {
             tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getTypeId(getDeclaredTypeOfSymbol(symbol)) });
+            const oldVarianceComputation = inVarianceComputation;
+            if (!inVarianceComputation) {
+                inVarianceComputation = true;
+                resolutionStart = resolutionTargets.length;
+            }
             links.variances = emptyArray;
             const variances = [];
             for (const tp of typeParameters) {
@@ -22726,6 +22733,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 variances.push(variance);
+            }
+            if (!oldVarianceComputation) {
+                inVarianceComputation = false;
+                resolutionStart = 0;
             }
             links.variances = variances;
             tracing?.pop({ variances: variances.map(Debug.formatVariance) });
