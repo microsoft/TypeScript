@@ -1,0 +1,73 @@
+=== tests/cases/conformance/preserveSpace.ts ===
+function f() {
+>f : () => any[]
+
+  return [].filter(x => {
+>[].filter(x => {        if (!x) return false; // testing comments        if (x)            return true; // testing comments        if (x) {            return false; // testing comments        } else {            console.log("here"); // testing comments        }        let i: number = 0;        while (i > 0) i = i - 1;        do console.log("here");        while (false);        try {            return true;        } catch (e) {            return false;        }  }) : any[]
+>[].filter : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
+>[] : undefined[]
+>filter : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
+>x => {        if (!x) return false; // testing comments        if (x)            return true; // testing comments        if (x) {            return false; // testing comments        } else {            console.log("here"); // testing comments        }        let i: number = 0;        while (i > 0) i = i - 1;        do console.log("here");        while (false);        try {            return true;        } catch (e) {            return false;        }  } : (x: any) => boolean
+>x : any
+
+        if (!x) return false; // testing comments
+>!x : boolean
+>x : any
+>false : false
+
+        if (x)
+>x : any
+
+            return true; // testing comments
+>true : true
+
+        if (x) {
+>x : any
+
+            return false; // testing comments
+>false : false
+
+        } else {
+            console.log("here"); // testing comments
+>console.log("here") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"here" : "here"
+        }
+        let i: number = 0;
+>i : number
+>0 : 0
+
+        while (i > 0) i = i - 1;
+>i > 0 : boolean
+>i : number
+>0 : 0
+>i = i - 1 : number
+>i : number
+>i - 1 : number
+>i : number
+>1 : 1
+
+        do console.log("here");
+>console.log("here") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"here" : "here"
+
+        while (false);
+>false : false
+
+        try {
+            return true;
+>true : true
+
+        } catch (e) {
+>e : any
+
+            return false;
+>false : false
+        }
+  });
+}
