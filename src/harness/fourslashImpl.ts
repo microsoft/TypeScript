@@ -4510,16 +4510,16 @@ const enum State {
     inObjectMarker
 }
 
-function reportError(fileName: string, line: number, col: number, message: string) {
+function reportError(fileName: string, line: number, col: number, message: string): never {
     const errorMessage = fileName + "(" + line + "," + col + "): " + message;
     throw new Error(errorMessage);
 }
 
 function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
-    let markerValue: any;
+    let markerValue;
     try {
         // Attempt to parse the marker value as JSON
-        markerValue = JSON.parse("{ " + text + " }");
+        markerValue = JSON.parse("{ " + text + " }") as { name?: unknown };
     }
     catch (e) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
@@ -4527,7 +4527,6 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
 
     if (markerValue === undefined) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty");
-        return undefined;
     }
 
     const marker: Marker = {
@@ -4537,7 +4536,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     };
 
     // Object markers can be anonymous
-    if (markerValue.name) {
+    if (typeof markerValue.name === "string") {
         markerMap.set(markerValue.name, marker);
     }
 
@@ -4556,7 +4555,6 @@ function recordMarker(fileName: string, location: LocationInformation, name: str
     if (markerMap.has(name)) {
         const message = "Marker '" + name + "' is duplicated in the source file contents.";
         reportError(marker.fileName, location.sourceLine, location.sourceColumn, message);
-        return undefined;
     }
     else {
         markerMap.set(name, marker);
@@ -4623,7 +4621,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                         // found a range end
                         const rangeStart = openRanges.pop();
                         if (!rangeStart) {
-                            throw reportError(fileName, line, column, "Found range end with no matching start.");
+                            reportError(fileName, line, column, "Found range end with no matching start.");
                         }
 
                         const range: Range = {
