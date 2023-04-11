@@ -862,6 +862,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             inlineSources: compilerOptions.inlineSources,
             extendedDiagnostics: compilerOptions.extendedDiagnostics,
             writeBundleFileInfo: !!bundleBuildInfo,
+            preserveSourceNewlines: true,
             relativeToBuildInfo
         };
 
@@ -4866,20 +4867,27 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEmbeddedStatement(parent: Node, node: Statement) {
-        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine || !preserveSourceNewlines) {
+        const lines = getLeadingLineTerminatorCount(parent, node, ListFormat.None);
+        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine || !lines) {
             writeSpace();
             emit(node);
         }
         else {
-            writeLine();
-            increaseIndent();
-            if (isEmptyStatement(node)) {
-                pipelineEmit(EmitHint.EmbeddedStatement, node);
+            if (lines) {
+                writeLine(lines);
+                increaseIndent();
+                if (isEmptyStatement(node)) {
+                    pipelineEmit(EmitHint.EmbeddedStatement, node);
+                }
+                else {
+                    emit(node);
+                }
+                decreaseIndent();
             }
             else {
+                writeSpace();
                 emit(node);
             }
-            decreaseIndent();
         }
     }
 
