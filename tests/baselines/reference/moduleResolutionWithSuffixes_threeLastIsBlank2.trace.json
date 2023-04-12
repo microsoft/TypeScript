@@ -3,6 +3,6 @@
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module as file / folder, candidate module location '/foo', target file types: TypeScript, Declaration.",
     "File '/foo-ios.ts' does not exist.",
-    "File '/foo__native.ts' exist - use it as a name resolution result.",
+    "File '/foo__native.ts' exists - use it as a name resolution result.",
     "======== Module name './foo' was successfully resolved to '/foo__native.ts'. ========"
 ]

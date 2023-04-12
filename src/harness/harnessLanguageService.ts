@@ -1,17 +1,17 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
-import * as vpath from "./_namespaces/vpath";
+import * as fakes from "./_namespaces/fakes";
 import {
     Compiler,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
 import { getNewLineCharacter } from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-    const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
+    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
     const langSvc: any = info.languageService;
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions
@@ -332,7 +332,7 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     getHost(): LanguageServiceAdapterHost { return this.host; }
     getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
     getClassifier(): ts.Classifier { return ts.createClassifier(); }
-    getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJSFileExtension(fileName)); }
+    getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /*readImportFiles*/ true, ts.hasJSFileExtension(fileName)); }
 }
 
 /// Shim adapter
@@ -551,9 +551,6 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getFileReferences(fileName: string): ts.ReferenceEntry[] {
         return unwrapJSONCallResult(this.shim.getFileReferences(fileName));
     }
-    getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
-        return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
-    }
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): ts.DocumentHighlights[] {
         return unwrapJSONCallResult(this.shim.getDocumentHighlights(fileName, position, JSON.stringify(filesToSearch)));
     }
@@ -587,13 +584,16 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
         return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
     }
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions): ts.TextInsertion {
-        return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options));
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions, formatOptions?: ts.FormatCodeSettings): ts.TextInsertion {
+        return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions));
     }
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
         return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
     }
     getJsxClosingTagAtPosition(): never {
+        throw new Error("Not supported on the shim.");
+    }
+    getLinkedEditingRangeAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
@@ -866,22 +866,18 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-        // eslint-disable-next-line no-restricted-globals
         return setTimeout(callback, ms, ...args);
     }
 
     clearTimeout(timeoutId: any): void {
-        // eslint-disable-next-line no-restricted-globals
         clearTimeout(timeoutId);
     }
 
     setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
-        // eslint-disable-next-line no-restricted-globals
         return setImmediate(callback, args);
     }
 
     clearImmediate(timeoutId: any): void {
-        // eslint-disable-next-line no-restricted-globals
         clearImmediate(timeoutId);
     }
 

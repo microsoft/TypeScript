@@ -1,13 +1,13 @@
-import {
-    createWatchedSystem,
-    getTsBuildProjectFile,
-    libFile,
-} from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "../tscWatch/helpers";
+import {
+    createWatchedSystem,
+    getTsBuildProjectFile,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {
@@ -15,10 +15,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
             caption,
             edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
             // build project
-            timeouts: sys => {
-                sys.checkTimeoutQueueLengthAndRun(1);
-                sys.checkTimeoutQueueLength(0);
-            },
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
 
@@ -26,10 +23,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
         caption: "No change",
         edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
         // build project
-        timeouts: sys => {
-            sys.checkTimeoutQueueLengthAndRun(1);
-            sys.checkTimeoutQueueLength(0);
-        },
+        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     };
     verifyTscWatch({
         scenario: "noEmitOnError",

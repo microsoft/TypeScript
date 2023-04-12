@@ -1,8 +1,8 @@
-import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
+import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as vpath from "../../_namespaces/vpath";
-import * as Harness from "../../_namespaces/Harness";
 import {
     libFile,
     TestServerHost,
@@ -493,13 +493,17 @@ type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impli
     impliedFormat: string | undefined;
     original: T | undefined;
 };
+type ReadableProgramBuildInfoRoot =
+    [original: ts.ProgramBuildInfoFileId, readable: string] |
+    [orginal: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
 type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo,
-    "fileIdsList" | "fileInfos" |
+    "fileIdsList" | "fileInfos" | "root" |
     "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
     "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
 > & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
+    root: readonly ReadableProgramBuildInfoRoot[];
     referencedMap: ts.MapLike<string[]> | undefined;
     exportedModulesMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
@@ -508,8 +512,9 @@ type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildIn
     emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
 };
 type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
-type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "pendingEmit"> & {
+type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit"> & {
     fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
+    root: readonly ReadableProgramBuildInfoRoot[];
     pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
 };
 
@@ -533,6 +538,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         program = {
             ...buildInfo.program,
             fileInfos,
+            root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             pendingEmit: pendingEmit === undefined ?
                 undefined :
                 [
@@ -550,6 +556,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             fileNames: buildInfo.program.fileNames,
             fileNamesList,
             fileInfos: buildInfo.program.fileInfos ? fileInfos : undefined!,
+            root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
@@ -610,6 +617,13 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         };
     }
 
+    function toReadableProgramBuildInfoRoot(original: ts.ProgramBuildInfoRoot): ReadableProgramBuildInfoRoot {
+        if (!ts.isArray(original)) return [original, toFileName(original)];
+        const readable: string[] = [];
+        for (let index = original[0]; index <= original[1]; index++) readable.push(toFileName(index));
+        return [original, readable];
+    }
+
     function toMapOfReferencedSet(referenceMap: ts.ProgramBuildInfoReferencedMap | undefined): ts.MapLike<string[]> | undefined {
         if (!referenceMap) return undefined;
         const result: ts.MapLike<string[]> = {};
@@ -660,7 +674,7 @@ export function baselineBuildInfo(
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 
     if (!ts.outFile(options)) return;
-    const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDts*/ false);
+    const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDtsPaths*/ false);
     const bundle = buildInfo.bundle;
     if (!bundle || (!ts.length(bundle.js && bundle.js.sections) && !ts.length(bundle.dts && bundle.dts.sections))) return;
 
@@ -953,7 +967,11 @@ export function verifyTsc({
                     texts.push(`Change:: ${incrementalScenario.caption}`);
                     texts.push(sys.baseLine().text);
                 });
-                return { file, text: texts.join("\r\n") };
+                return {
+                    file,
+                    text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
+                        texts.join("\r\n"),
+                };
             }
         }));
         if (edits?.length) {

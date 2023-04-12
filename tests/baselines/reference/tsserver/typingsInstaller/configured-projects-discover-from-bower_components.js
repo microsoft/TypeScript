@@ -1,4 +1,5 @@
-Info 0    [00:00:15.000] Provided types map file "/typesMap.json" doesn't exist
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/app.js]
 
@@ -13,17 +14,11 @@ Creating project service
 {"name":"jquery"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 1    [00:00:16.000] Search path: /
-Info 2    [00:00:17.000] For info: /app.js :: Config file name: /jsconfig.json
-Info 3    [00:00:18.000] Creating configuration project /jsconfig.json
-Info 4    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /jsconfig.json 2000 undefined Project: /jsconfig.json WatchType: Config file
-Info 5    [00:00:20.000] Config: /jsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /app.js :: Config file name: /jsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /jsconfig.json 2000 undefined Project: /jsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /jsconfig.json : {
  "rootNames": [
   "/app.js"
  ],
@@ -36,68 +31,138 @@ Info 5    [00:00:20.000] Config: /jsconfig.json : {
   "configFilePath": "/jsconfig.json"
  }
 }
-Info 6    [00:00:21.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 7    [00:00:22.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 8    [00:00:23.000] Starting updateGraphWorker: Project: /jsconfig.json
-Info 9    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
-Info 10   [00:00:25.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 11   [00:00:26.000] Project '/jsconfig.json' (Configured)
-Info 12   [00:00:27.000] 	Files (1)
-	/app.js
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/app.js SVC-1-0 ""
 
 
 	app.js
 	  Matched by default include pattern '**/*'
 
-Info 13   [00:00:28.000] -----------------------------------------------
-Info 14   [00:00:31.000] DirectoryWatcher:: Triggered with tmp :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 15   [00:00:32.000] Scheduled: /jsconfig.json
-Info 16   [00:00:33.000] Scheduled: *ensureProjectForOpenFiles*
-Info 17   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 18   [00:00:37.000] DirectoryWatcher:: Triggered with tmp/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 19   [00:00:38.000] Config: /jsconfig.json Detected new package.json: tmp/package.json
-Info 20   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /tmp/package.json 250 undefined WatchType: package.json file
-Info 21   [00:00:40.000] Project: /jsconfig.json Detected file add/remove of non supported extension: tmp/package.json
-Info 22   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 23   [00:00:42.000] Starting updateGraphWorker: Project: /jsconfig.json
-Info 24   [00:00:43.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 25   [00:00:44.000] Project '/jsconfig.json' (Configured)
-Info 25   [00:00:45.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: Creating typing installer
 
-Info 25   [00:00:46.000] -----------------------------------------------
-Info 25   [00:00:47.000] Open files: 
-Info 25   [00:00:48.000] 	FileName: /app.js ProjectRootPath: undefined
-Info 25   [00:00:49.000] 		Projects: /jsconfig.json
-Info 25   [00:00:55.000] DirectoryWatcher:: Triggered with tmp/node_modules :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 26   [00:00:56.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 27   [00:00:57.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 28   [00:00:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 29   [00:01:00.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 30   [00:01:01.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 31   [00:01:02.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 32   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 33   [00:01:05.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 34   [00:01:06.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 35   [00:01:07.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 36   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 37   [00:01:10.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 38   [00:01:11.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 39   [00:01:12.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 40   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 41   [00:01:14.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 42   [00:01:15.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Before checking timeout queue length (2) and running
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/jsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+TI:: [hh:mm:ss:mss] Global cache location '/tmp', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
+TI:: [hh:mm:ss:mss] Trying to find '/tmp/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/tmp'
+TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/tmp/package.json' is missing, creating new one...
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Config: /jsconfig.json Detected new package.json: tmp/package.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Project: /jsconfig.json Detected file add/remove of non supported extension: tmp/package.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/types-registry :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/types-registry :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /jsconfig.json Detected file add/remove of non supported extension: tmp/node_modules/types-registry/index.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
 //// [/tmp/package.json]
 { "private": true }
 
-//// [/tmp/node_modules/@types/jquery/index.d.ts]
-
+//// [/tmp/node_modules/types-registry/index.json]
+{
+ "entries": {
+  "jquery": {
+   "latest": "1.3.0",
+   "ts2.0": "1.0.0",
+   "ts2.1": "1.0.0",
+   "ts2.2": "1.2.0",
+   "ts2.3": "1.3.0",
+   "ts2.4": "1.3.0",
+   "ts2.5": "1.3.0",
+   "ts2.6": "1.3.0",
+   "ts2.7": "1.3.0"
+  }
+ }
+}
 
 
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/node_modules:
+
+FsWatches::
+/jsconfig.json:
+  {}
+/tmp/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
+
+TI:: [hh:mm:ss:mss] Got install request {"projectName":"/jsconfig.json","fileNames":["/app.js"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/tmp","kind":"discover"}
+TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
+TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Searching for typing names in /bower_components; all files: ["/bower_components/jquery/bower.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["jquery"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /jsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /jsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
+TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/jsconfig.json"}
+TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
+Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /jsconfig.json
+TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
+TI:: Before installWorker
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -109,16 +174,45 @@ FsWatches::
 FsWatchesRecursive::
 /:
   {}
-/bower_components:
+/bower_components: *new*
   {}
 
-Info 43   [00:01:16.000] Running: /jsconfig.json
-Info 44   [00:01:17.000] Starting updateGraphWorker: Project: /jsconfig.json
-Info 45   [00:01:18.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 46   [00:01:19.000] Project '/jsconfig.json' (Configured)
-Info 47   [00:01:20.000] 	Files (2)
-	/app.js
-	/tmp/node_modules/@types/jquery/index.d.ts
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+TI:: After installWorker
+//// [/tmp/node_modules/@types/jquery/index.d.ts]
+
+
+
+TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/jquery/index.d.ts"]
+TI:: [hh:mm:ss:mss] Sending response:
+    {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":["/tmp/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/jsconfig.json","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+Before running Timeout callback:: count: 2
+13: /jsconfig.json
+14: *ensureProjectForOpenFiles*
+
+Info seq  [hh:mm:ss:mss] Running: /jsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/app.js SVC-1-0 ""
+	/tmp/node_modules/@types/jquery/index.d.ts Text-1 ""
 
 
 	app.js
@@ -126,40 +220,35 @@ Info 47   [00:01:20.000] 	Files (2)
 	tmp/node_modules/@types/jquery/index.d.ts
 	  Matched by default include pattern '**/*'
 
-Info 48   [00:01:21.000] -----------------------------------------------
-Info 49   [00:01:22.000] Running: *ensureProjectForOpenFiles*
-Info 50   [00:01:23.000] Before ensureProjectForOpenFiles:
-Info 51   [00:01:24.000] Project '/jsconfig.json' (Configured)
-Info 51   [00:01:25.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Got install request {"projectName":"/jsconfig.json","fileNames":["/app.js","/tmp/node_modules/@types/jquery/index.d.ts"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/tmp","kind":"discover"}
+TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
+TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Searching for typing names in /bower_components; all files: ["/bower_components/jquery/bower.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["jquery"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/tmp/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/tmp/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Sending response:
+    {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":["/tmp/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 51   [00:01:26.000] -----------------------------------------------
-Info 51   [00:01:27.000] Open files: 
-Info 51   [00:01:28.000] 	FileName: /app.js ProjectRootPath: undefined
-Info 51   [00:01:29.000] 		Projects: /jsconfig.json
-Info 51   [00:01:30.000] After ensureProjectForOpenFiles:
-Info 52   [00:01:31.000] Project '/jsconfig.json' (Configured)
-Info 52   [00:01:32.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /jsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 52   [00:01:33.000] -----------------------------------------------
-Info 52   [00:01:34.000] Open files: 
-Info 52   [00:01:35.000] 	FileName: /app.js ProjectRootPath: undefined
-Info 52   [00:01:36.000] 		Projects: /jsconfig.json
-After checking timeout queue length (2) and running
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/jsconfig.json:
-  {}
-/tmp/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/bower_components:
-  {}
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /jsconfig.json
+After running Timeout callback:: count: 0

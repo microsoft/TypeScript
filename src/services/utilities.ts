@@ -30,7 +30,7 @@ import {
     ConditionalExpression,
     contains,
     ContextFlags,
-    createPrinter,
+    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
     createTextSpan,
@@ -38,9 +38,12 @@ import {
     Debug,
     Declaration,
     Decorator,
+    DefaultClause,
     defaultMaximumTruncationLength,
     DeleteExpression,
     Diagnostic,
+    DiagnosticAndArguments,
+    DiagnosticArguments,
     DiagnosticMessage,
     DiagnosticWithLocation,
     directoryProbablyExists,
@@ -53,6 +56,7 @@ import {
     EmitHint,
     emptyArray,
     EndOfFileToken,
+    endsWith,
     ensureScriptKind,
     EqualityOperator,
     escapeString,
@@ -138,10 +142,12 @@ import {
     isDeclaration,
     isDeclarationName,
     isDecorator,
+    isDefaultClause,
     isDeleteExpression,
     isElementAccessExpression,
     isEntityName,
     isEnumDeclaration,
+    isEnumMember,
     isExportAssignment,
     isExportDeclaration,
     isExportSpecifier,
@@ -188,6 +194,7 @@ import {
     isKeyword,
     isLabeledStatement,
     isLet,
+    isLiteralExpression,
     isLiteralTypeNode,
     isMappedTypeNode,
     isModifier,
@@ -281,6 +288,7 @@ import {
     or,
     OrganizeImports,
     PackageJsonDependencyGroup,
+    parseBigInt,
     pathIsRelative,
     PrefixUnaryExpression,
     Program,
@@ -288,6 +296,8 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyName,
+    PseudoBigInt,
+    pseudoBigIntToString,
     QualifiedName,
     RefactorContext,
     Scanner,
@@ -304,6 +314,7 @@ import {
     singleOrUndefined,
     skipAlias,
     skipOuterExpressions,
+    skipParentheses,
     some,
     SortKind,
     SourceFile,
@@ -342,6 +353,7 @@ import {
     tryCast,
     Type,
     TypeChecker,
+    TypeFlags,
     TypeFormatFlags,
     TypeNode,
     TypeOfExpression,
@@ -351,6 +363,7 @@ import {
     VariableDeclaration,
     visitEachChild,
     VoidExpression,
+    walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
 
@@ -1559,7 +1572,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
                 return Comparison.LessThan;
             }
 
-            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
+            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
             if (start > position) {
                 return Comparison.GreaterThan;
             }
@@ -1598,7 +1611,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
         if (end < position) {
             return false;
         }
-        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDocComment*/ true);
         if (start > position) {
             // If this child begins after position, then all subsequent children will as well.
             return false;
@@ -2154,9 +2167,19 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
     return false;
 }
 
+function areIntersectedTypesAvoidingStringReduction(checker: TypeChecker, t1: Type, t2: Type) {
+    return !!(t1.flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(t2);
+}
+
 /** @internal */
-export function isPunctuation(kind: SyntaxKind): boolean {
-    return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
+export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
+    if (!type.isIntersection()) {
+        return false;
+    }
+
+    const { types, checker } = type;
+    return types.length === 2 &&
+        (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) || areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
 }
 
 /** @internal */
@@ -2295,6 +2318,7 @@ export const typeKeywords: readonly SyntaxKind[] = [
     SyntaxKind.ReadonlyKeyword,
     SyntaxKind.StringKeyword,
     SyntaxKind.SymbolKeyword,
+    SyntaxKind.TypeOfKeyword,
     SyntaxKind.TrueKeyword,
     SyntaxKind.VoidKeyword,
     SyntaxKind.UndefinedKeyword,
@@ -2413,7 +2437,9 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 
 /** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.Node10 || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10
+        || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
+        || moduleResolution === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -2976,7 +3002,7 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
     });
 }
 
@@ -2984,7 +3010,7 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
 export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
     const file = enclosingDeclaration.getSourceFile();
     return mapToDisplayParts(writer => {
-        const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
         printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }
@@ -3276,7 +3302,7 @@ export function needsParentheses(expression: Expression): boolean {
 
 /** @internal */
 export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
-    const { parent } = node;
+    const parent = walkUpParenthesizedExpressions(node.parent);
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
             return checker.getContextualType(parent as NewExpression, contextFlags);
@@ -3287,7 +3313,7 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
                 : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
-            return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
+            return getSwitchedType(parent as CaseClause, checker);
         default:
             return checker.getContextualType(node, contextFlags);
     }
@@ -3431,7 +3457,7 @@ function nodeIsASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         return false;
     }
 
-    // See comment in parser’s `parseDoStatement`
+    // See comment in parser's `parseDoStatement`
     if (node.kind === SyntaxKind.DoStatement) {
         return true;
     }
@@ -3498,7 +3524,7 @@ export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
     });
 
     // One statement missing a semicolon isn't sufficient evidence to say the user
-    // doesn’t want semicolons, because they may not even be done writing that statement.
+    // doesn't want semicolons, because they may not even be done writing that statement.
     if (withSemicolon === 0 && withoutSemicolon <= 1) {
         return true;
     }
@@ -3651,7 +3677,7 @@ export interface PackageJsonImportFilter {
     /**
      * Use for a specific module specifier that has already been resolved.
      * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
-     * the best module specifier for a given module _and_ determine if it’s importable.
+     * the best module specifier for a given module _and_ determine if it's importable.
      */
     allowsImportingSpecifier: (moduleSpecifier: string) => boolean;
 }
@@ -3663,7 +3689,13 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
       ).filter(p => p.parseable);
 
     let usesNodeCoreModules: boolean | undefined;
-    return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
+    let ambientModuleCache: Map<Symbol, boolean> | undefined;
+    let sourceFileCache: Map<SourceFile, boolean> | undefined;
+    return {
+        allowsImportingAmbientModule,
+        allowsImportingSourceFile,
+        allowsImportingSpecifier,
+    };
 
     function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
         const packageName = getNodeModuleRootSpecifier(specifier);
@@ -3680,19 +3712,34 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return true;
         }
 
-        const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
-        const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, moduleSpecifierResolutionHost);
-        if (typeof declaringNodeModuleName === "undefined") {
-            return true;
+        if (!ambientModuleCache) {
+            ambientModuleCache = new Map();
+        }
+        else {
+            const cached = ambientModuleCache.get(moduleSymbol);
+            if (cached !== undefined) {
+                return cached;
+            }
         }
 
         const declaredModuleSpecifier = stripQuotes(moduleSymbol.getName());
         if (isAllowedCoreNodeModulesImport(declaredModuleSpecifier)) {
+            ambientModuleCache.set(moduleSymbol, true);
             return true;
         }
 
-        return moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName)
-            || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
+        const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, moduleSpecifierResolutionHost);
+        if (typeof declaringNodeModuleName === "undefined") {
+            ambientModuleCache.set(moduleSymbol, true);
+            return true;
+        }
+
+        const result =
+            moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName) ||
+            moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        ambientModuleCache.set(moduleSymbol, result);
+        return result;
     }
 
     function allowsImportingSourceFile(sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): boolean {
@@ -3700,12 +3747,25 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return true;
         }
 
+        if (!sourceFileCache) {
+            sourceFileCache = new Map();
+        }
+        else {
+            const cached = sourceFileCache.get(sourceFile);
+            if (cached !== undefined) {
+                return cached;
+            }
+        }
+
         const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
         if (!moduleSpecifier) {
+            sourceFileCache.set(sourceFile, true);
             return true;
         }
 
-        return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        const result = moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        sourceFileCache.set(sourceFile, result);
+        return result;
     }
 
     function allowsImportingSpecifier(moduleSpecifier: string) {
@@ -3719,7 +3779,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 
     function isAllowedCoreNodeModulesImport(moduleSpecifier: string) {
-        // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
+        // If we're in JavaScript, it can be difficult to tell whether the user wants to import
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
@@ -3749,7 +3809,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
         if (!specifier) {
             return undefined;
         }
-        // Paths here are not node_modules, so we don’t care about them;
+        // Paths here are not node_modules, so we don't care about them;
         // returning anything will trigger a lookup in package.json.
         if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
             return getNodeModuleRootSpecifier(specifier);
@@ -3880,8 +3940,8 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
     if (needsNameFromDeclaration(symbol)) {
         const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
         if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
-        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
+        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
+        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
         if (fileNameCase === capitalized) return fileNameCase;
         return [fileNameCase, capitalized];
     }
@@ -3903,8 +3963,12 @@ function needsNameFromDeclaration(symbol: Symbol) {
     return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
 }
 
-function getDefaultLikeExportNameFromDeclaration(symbol: Symbol) {
-    return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined);
+function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
+    return firstDefined(symbol.declarations, d =>
+        isExportAssignment(d)
+            ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text
+            : tryCast(getNameOfDeclaration(d), isIdentifier)?.text
+    );
 }
 
 function getSymbolParentOrFail(symbol: Symbol) {
@@ -3992,11 +4056,11 @@ export function getNewLineKind(newLineCharacter: string): NewLineKind {
 }
 
 /** @internal */
-export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+export type DiagnosticOrDiagnosticAndArguments = DiagnosticMessage | DiagnosticAndArguments;
 /** @internal */
-export function diagnosticToString(diag: DiagnosticAndArguments): string {
+export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): string {
     return isArray(diag)
-        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+        ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as DiagnosticArguments)
         : getLocaleSpecificMessage(diag);
 }
 
@@ -4022,4 +4086,75 @@ export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
 /** @internal */
 export function isSourceFileFromLibrary(program: Program, node: SourceFile) {
     return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
+}
+
+/** @internal */
+export interface CaseClauseTracker {
+    addValue(value: string | number): void;
+    hasValue(value: string | number | PseudoBigInt): boolean;
+}
+
+/** @internal */
+export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (CaseClause | DefaultClause)[]): CaseClauseTracker {
+    const existingStrings = new Set<string>();
+    const existingNumbers = new Set<number>();
+    const existingBigInts = new Set<string>();
+
+    for (const clause of clauses) {
+        if (!isDefaultClause(clause)) {
+            const expression = skipParentheses(clause.expression);
+            if (isLiteralExpression(expression)) {
+                switch (expression.kind) {
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.StringLiteral:
+                        existingStrings.add(expression.text);
+                        break;
+                    case SyntaxKind.NumericLiteral:
+                        existingNumbers.add(parseInt(expression.text));
+                        break;
+                    case SyntaxKind.BigIntLiteral:
+                        const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
+                        if (parsedBigInt) {
+                            existingBigInts.add(pseudoBigIntToString(parsedBigInt));
+                        }
+                        break;
+                }
+            }
+            else {
+                const symbol = checker.getSymbolAtLocation(clause.expression);
+                if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
+                    const enumValue = checker.getConstantValue(symbol.valueDeclaration);
+                    if (enumValue !== undefined) {
+                        addValue(enumValue);
+                    }
+                }
+            }
+        }
+    }
+
+    return {
+        addValue,
+        hasValue,
+    };
+
+    function addValue(value: string | number) {
+        switch (typeof value) {
+            case "string":
+                existingStrings.add(value);
+                break;
+            case "number":
+                existingNumbers.add(value);
+        }
+    }
+
+    function hasValue(value: string | number | PseudoBigInt): boolean {
+        switch (typeof value) {
+            case "string":
+                return existingStrings.has(value);
+            case "number":
+                return existingNumbers.has(value);
+            case "object":
+                return existingBigInts.has(pseudoBigIntToString(value));
+        }
+    }
 }

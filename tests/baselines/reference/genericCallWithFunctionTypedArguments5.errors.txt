@@ -1,5 +1,7 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts(10,16): error TS2322: Type '<T>(x: T, y: T) => string' is not assignable to type '(t: unknown) => string'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts(11,16): error TS2322: Type '(x: string, y: number) => string' is not assignable to type '(t: string) => string'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts (2 errors) ====
@@ -15,10 +17,12 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
     var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
                    ~~
 !!! error TS2322: Type '<T>(x: T, y: T) => string' is not assignable to type '(t: unknown) => string'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
 !!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:3:27: The expected type comes from property 'cb' which is declared here on type '{ cb: (t: unknown) => string; }'
     var r3 = foo({ cb: (x: string, y: number) => '' }); // error
                    ~~
 !!! error TS2322: Type '(x: string, y: number) => string' is not assignable to type '(t: string) => string'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
 !!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:3:27: The expected type comes from property 'cb' which is declared here on type '{ cb: (t: string) => string; }'
     
     function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {

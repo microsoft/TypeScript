@@ -41,7 +41,6 @@ function foo10<T extends (1)> (test: T) { }
 
 function foo11<T extends null> (test: T) { }
 >foo11 : <T extends null>(test: T) => void
->null : null
 >test : T
 
 function foo12<T extends undefined>(test: T) { }

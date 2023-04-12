@@ -1,10 +1,10 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { createProjectService } from "../tsserver/helpers";
 import {
     createServerHost,
     File,
 } from "../virtualFileSystemWithWatch";
-import { createProjectService } from "../tsserver/helpers";
 import {
     extractTest,
     newLineCharacter,
@@ -414,7 +414,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             files.push(moduleFile);
         }
         const host = createServerHost(files);
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();
     }

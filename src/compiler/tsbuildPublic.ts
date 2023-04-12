@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     AffectedFileResult,
     arrayToMap,
@@ -33,6 +32,7 @@ import {
     CustomTransformers,
     Debug,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticReporter,
@@ -52,6 +52,7 @@ import {
     ForegroundColorEscapeSequences,
     formatColorAndReset,
     getAllProjectOutputs,
+    getBuildInfo as ts_getBuildInfo,
     getBuildInfoFileVersionMap,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
@@ -60,6 +61,7 @@ import {
     getFilesInErrorForSummary,
     getFirstProjectOutput,
     getLocaleTimeString,
+    getModifiedTime as ts_getModifiedTime,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
     getPendingEmitKind,
@@ -108,6 +110,7 @@ import {
     Status,
     sys,
     System,
+    toPath as ts_toPath,
     TypeReferenceDirectiveResolutionCache,
     unorderedRemoveItem,
     updateErrorForNoInputFiles,
@@ -525,7 +528,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
 }
 
 function toPath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: string) {
-    return ts.toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
+    return ts_toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
 function toResolvedConfigFilePath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: ResolvedConfigFileName): ResolvedConfigFilePath {
@@ -1116,7 +1119,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             /*reportSummary*/ undefined,
             (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => outputFiles.push({ name, text, writeByteOrderMark, data }),
             cancellationToken,
-            /*emitOnlyDts*/ false,
+            /*emitOnlyDtsFiles*/ false,
             customTransformers || state.host.getCustomTransformers?.(project)
         );
         // Don't emit .d.ts if there are decl file errors
@@ -1150,7 +1153,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             const path = toPath(state, name);
             emittedOutputs.set(toPath(state, name), name);
             if (data?.buildInfo) setBuildInfo(state, data.buildInfo, projectPath, options, resultFlags);
-            const modifiedTime = data?.differsOnlyInMap ? ts.getModifiedTime(state.host, name) : undefined;
+            const modifiedTime = data?.differsOnlyInMap ? ts_getModifiedTime(state.host, name) : undefined;
             writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             // Revert the timestamp for the d.ts that is same
             if (data?.differsOnlyInMap) state.host.setModifiedTime(name, modifiedTime!);
@@ -1565,7 +1568,7 @@ function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T
     // In watch mode we store the modified times in the cache
     // This is either Date | FileWatcherWithModifiedTime because we query modified times first and
     // then after complete compilation of the project, watch the files so we dont want to loose these modified times.
-    const result = ts.getModifiedTime(state.host, fileName);
+    const result = ts_getModifiedTime(state.host, fileName);
     if (state.watch) {
         if (existing) (existing as FileWatcherWithModifiedTime).modifiedTime = result;
         else state.filesWatched.set(path, result);
@@ -1657,7 +1660,7 @@ function getBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, 
         return existing.buildInfo || undefined;
     }
     const value = state.readFileWithCache(buildInfoPath);
-    const buildInfo = value ? ts.getBuildInfo(buildInfoPath, value) : undefined;
+    const buildInfo = value ? ts_getBuildInfo(buildInfoPath, value) : undefined;
     state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
     return buildInfo;
 }
@@ -1729,10 +1732,10 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let oldestOutputFileTime = maximumDate;
     let buildInfoTime: Date | undefined;
     let buildInfoProgram: ProgramBuildInfo | undefined;
-    let buildInfoVersionMap: Map<Path, string> | undefined;
+    let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
     if (buildInfoPath) {
         const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
-        buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
+        buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts_getModifiedTime(host, buildInfoPath);
         if (buildInfoTime === missingFileModifiedTime) {
             if (!buildInfoCacheEntry) {
                 state.buildInfoCache.set(resolvedPath, {
@@ -1798,6 +1801,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let newestInputFileTime = minimumDate;
     /** True if input file has changed timestamp but text is not changed, we can then do only timestamp updates on output to make it look up-to-date later */
     let pseudoInputUpToDate = false;
+    const seenRoots = new Set<Path>();
     // Get timestamps of input files
     for (const inputFile of project.fileNames) {
         const inputTime = getModifiedTime(state, inputFile);
@@ -1815,7 +1819,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (buildInfoProgram) {
                 // Read files and see if they are same, read is anyways cached
                 if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
-                version = buildInfoVersionMap.get(toPath(state, inputFile));
+                version = buildInfoVersionMap.fileInfos.get(toPath(state, inputFile));
                 const text = version ? state.readFileWithCache(inputFile) : undefined;
                 currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
                 if (version && version === currentVersion) pseudoInputUpToDate = true;
@@ -1834,6 +1838,22 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             newestInputFileName = inputFile;
             newestInputFileTime = inputTime;
         }
+
+        if (buildInfoProgram) seenRoots.add(toPath(state, inputFile));
+    }
+
+    if (buildInfoProgram) {
+        if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
+        for (const existingRoot of buildInfoVersionMap.roots) {
+            if (!seenRoots.has(existingRoot)) {
+                // File was root file when project was built but its not any more
+                return {
+                    type: UpToDateStatusType.OutOfDateRoots,
+                    buildInfoFile: buildInfoPath!,
+                    inputFile: existingRoot,
+                };
+            }
+        }
     }
 
     // Now see if all outputs are newer than the newest input
@@ -1847,7 +1867,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // Output is missing; can stop checking
             let outputTime = outputTimeStampMap?.get(path);
             if (!outputTime) {
-                outputTime = ts.getModifiedTime(state.host, output);
+                outputTime = ts_getModifiedTime(state.host, output);
                 outputTimeStampMap?.set(path, outputTime);
             }
 
@@ -2238,10 +2258,10 @@ function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: Soluti
     if (state.timerToBuildInvalidatedProject) {
         hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
     }
-    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state, changeDetected);
+    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, "timerToBuildInvalidatedProject", state, changeDetected);
 }
 
-function buildNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: string, state: SolutionBuilderState<T>, changeDetected: boolean) {
     performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
     performance.mark("SolutionBuilder::afterBuild");
@@ -2449,11 +2469,11 @@ function relName<T extends BuilderProgram>(state: SolutionBuilderState<T>, path:
     return convertToRelativePath(path, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
-function reportStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: string[]) {
+function reportStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: DiagnosticArguments) {
     state.host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
 }
 
-function reportWatchStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+function reportWatchStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: DiagnosticArguments) {
     state.hostWithWatch.onWatchStatusChange?.(createCompilerDiagnostic(message, ...args), state.host.getNewLine(), state.baseCompilerOptions);
 }
 
@@ -2560,6 +2580,14 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
                 Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_there_is_change_in_compilerOptions,
                 relName(state, configFileName),
                 relName(state, status.buildInfoFile)
+            );
+        case UpToDateStatusType.OutOfDateRoots:
+            return reportStatus(
+                state,
+                Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_file_2_was_root_file_of_compilation_but_not_any_more,
+                relName(state, configFileName),
+                relName(state, status.buildInfoFile),
+                relName(state, status.inputFile),
             );
         case UpToDateStatusType.UpToDate:
             if (status.newestInputFileTime !== undefined) {

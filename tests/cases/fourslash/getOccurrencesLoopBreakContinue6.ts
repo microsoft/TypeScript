@@ -63,4 +63,4 @@
 ////
 ////label7: while (true) co/*10*/ntinue label5;
 
-goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));
+verify.baselineDocumentHighlights(test.markers());

@@ -4,9 +4,10 @@ import {
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    checkNumberOfProjects,
-    checkProjectActualFiles,
-    createProjectService,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
@@ -57,13 +58,11 @@ declare class TestLib {
 
         const files = [typeLib, appLib, testFile, testConfig, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
-        service.openClientFile(testFile.path);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = service.configuredProjects.get(testConfig.path)!;
-        checkProjectActualFiles(project, files.map(f => f.path));
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective contains UpperCasePackage", session);
     });
 
     it("when typeReferenceDirective is relative path and in a sibling folder", () => {
@@ -88,7 +87,8 @@ declare class TestLib {
         };
         const files = [file, tsconfig, filesystem, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
-        service.openClientFile(file.path);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([file], session);
+        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
     });
 });

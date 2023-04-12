@@ -1,4 +1,5 @@
 import * as ts from "../../_namespaces/ts";
+import { libContent } from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -7,7 +8,6 @@ import {
     libFile,
     SymLink,
 } from "../virtualFileSystemWithWatch";
-import { libContent } from "../tsc/helpers";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,

@@ -9,9 +9,15 @@ on:
         description: 'Target Branch Name'
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/setup-node@v3

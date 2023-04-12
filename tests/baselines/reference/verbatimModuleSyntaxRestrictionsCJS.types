@@ -8,6 +8,17 @@ export default esmy;
 export declare function funciton(): void;
 >funciton : () => void
 
+=== /ambient.d.ts ===
+declare module "ambient" {
+>"ambient" : typeof import("ambient")
+
+    const _default: number;
+>_default : number
+
+    export default _default;
+>_default : number
+}
+
 === /main.ts ===
 import esmy from "./decl"; // error
 >esmy : () => void

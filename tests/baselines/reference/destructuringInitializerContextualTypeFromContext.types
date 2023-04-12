@@ -3,7 +3,6 @@ interface SFC<P = {}> {
     (props: P & { children?: any }): any | null;
 >props : P & { children?: any; }
 >children : any
->null : null
 }
 
 interface Props {

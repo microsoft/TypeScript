@@ -117,7 +117,7 @@ module.exports.j = function j() { };
 export function a(): void;
 export function b(): void;
 export namespace b {
-    const cat: string;
+    let cat: string;
 }
 export function c(): void;
 export namespace c {

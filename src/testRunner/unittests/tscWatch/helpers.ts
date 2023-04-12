@@ -1,6 +1,14 @@
-import * as ts from "../../_namespaces/ts";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import { Baseline } from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    baselinePrograms,
+    CommandLineCallbacks,
+    commandLineCallbacks,
+    CommandLineProgram,
+    createSolutionBuilderHostForBaseline,
+    generateSourceMapBaselineFiles,
+} from "../tsc/helpers";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -11,14 +19,6 @@ import {
     TestServerHostCreationParameters,
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
-import {
-    baselinePrograms,
-    commandLineCallbacks,
-    CommandLineCallbacks,
-    CommandLineProgram,
-    createSolutionBuilderHostForBaseline,
-    generateSourceMapBaselineFiles,
-} from "../tsc/helpers";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -32,9 +32,9 @@ export const commonFile2: File = {
 export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
 export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     caption: string;
-    edit: (sys: TestServerHostTrackingWrittenFiles) => void;
+    edit: (sys: TscWatchSystem) => void;
     timeouts: (
-        sys: TestServerHostTrackingWrittenFiles,
+        sys: TscWatchSystem,
         programs: readonly CommandLineProgram[],
         watchOrSolution: WatchOrSolution<T>
     ) => void;
@@ -56,7 +56,7 @@ export interface TscWatchCompile extends TscWatchCompileBase {
 export const noopChange: TscWatchCompileChange = {
     caption: "No change",
     edit: ts.noop,
-    timeouts: sys => sys.checkTimeoutQueueLength(0),
+    timeouts: sys => sys.logTimeoutQueueLength(),
 };
 
 export type SystemSnap = ReturnType<TestServerHost["snap"]>;
@@ -92,9 +92,43 @@ function tscWatchCompile(input: TscWatchCompile) {
     });
 }
 
+export interface TestServerHostWithTimeoutLogging {
+    logTimeoutQueueLength(): void;
+}
+
+export type TscWatchSystem = TestServerHostTrackingWrittenFiles & TestServerHostWithTimeoutLogging;
+
+function changeToTestServerHostWithTimeoutLogging(inputHost: TestServerHostTrackingWrittenFiles, baseline: string[]): TscWatchSystem {
+    const host = inputHost as TscWatchSystem;
+    const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
+    const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
+    host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
+    host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
+    host.logTimeoutQueueLength = logTimeoutQueueLength;
+    return host;
+
+    function logTimeoutQueueLength() {
+        baseline.push(host.timeoutCallbacks.log());
+        baseline.push(host.immediateCallbacks.log());
+    }
+
+    function runQueuedTimeoutCallbacks(timeoutId?: number) {
+        baseline.push(`Before running ${host.timeoutCallbacks.log()}`);
+        if (timeoutId !== undefined) baseline.push(`Invoking ${host.timeoutCallbacks.callbackType} callback:: timeoutId:: ${timeoutId}:: ${host.timeoutCallbacks.map[timeoutId].args[0]}`);
+        originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
+        baseline.push(`After running ${host.timeoutCallbacks.log()}`);
+    }
+
+    function runQueuedImmediateCallbacks() {
+        baseline.push(`Before running ${host.immediateCallbacks.log()}`);
+        originalRunQueuedImmediateCallbacks.call(host);
+        baseline.push(`After running ${host.immediateCallbacks.log()}`);
+    }
+}
+
 export interface BaselineBase {
     baseline: string[];
-    sys: TestServerHostTrackingWrittenFiles;
+    sys: TscWatchSystem;
     oldSnap: SystemSnap;
 }
 
@@ -105,8 +139,9 @@ export function createBaseline(system: TestServerHost, modifySystem?: (sys: Test
     const originalRead = system.readFile;
     const initialSys = patchHostForBuildInfoReadWrite(system);
     modifySystem?.(initialSys, originalRead);
-    const sys = changeToHostTrackingWrittenFiles(initialSys);
     const baseline: string[] = [];
+    const sys = changeToTestServerHostWithTimeoutLogging(changeToHostTrackingWrittenFiles(initialSys), baseline);
+    baseline.push(`currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}`);
     baseline.push("Input::");
     sys.diff(baseline);
     const { cb, getPrograms } = commandLineCallbacks(sys);
@@ -173,11 +208,12 @@ export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["base
     edit(sys);
     baseline.push("Input::");
     sys.diff(baseline, oldSnap);
+    sys.serializeWatches(baseline);
     return sys.snap();
 }
 
 export interface RunWatchBaseline<T extends ts.BuilderProgram> extends BaselineBase, TscWatchCompileBase<T> {
-    sys: TestServerHostTrackingWrittenFiles;
+    sys: TscWatchSystem;
     getPrograms: () => readonly CommandLineProgram[];
     watchOrSolution: WatchOrSolution<T>;
 }
@@ -276,6 +312,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;
+    ts.Debug.assert(sys.writtenFiles === undefined);
     const solutionBuilder = createSolutionBuilder(changeToHostTrackingWrittenFiles(
         patchHostForBuildInfoReadWrite(sys)
     ), solutionRoots, originalRead);
@@ -283,6 +320,7 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     sys.readFile = originalReadFile;
     sys.write = originalWrite;
     sys.writeFile = originalWriteFile;
+    sys.writtenFiles = undefined;
     return sys;
 }
 
