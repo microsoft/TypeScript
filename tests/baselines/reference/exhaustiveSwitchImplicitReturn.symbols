@@ -1,10 +1,40 @@
 === tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts ===
+enum E1 {
+>E1 : Symbol(E1, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 0))
+
+    A = "a",
+>A : Symbol(E1.A, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 9))
+
+    B = "b"
+>B : Symbol(E1.B, Decl(exhaustiveSwitchImplicitReturn.ts, 1, 12))
+}
+
+enum E2 {
+>E2 : Symbol(E2, Decl(exhaustiveSwitchImplicitReturn.ts, 3, 1))
+
+    A = 0,
+>A : Symbol(E2.A, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 9))
+
+    B = 1
+>B : Symbol(E2.B, Decl(exhaustiveSwitchImplicitReturn.ts, 6, 10))
+}
+
+enum E3 {
+>E3 : Symbol(E3, Decl(exhaustiveSwitchImplicitReturn.ts, 8, 1))
+
+    A,
+>A : Symbol(E3.A, Decl(exhaustiveSwitchImplicitReturn.ts, 10, 9))
+
+    B
+>B : Symbol(E3.B, Decl(exhaustiveSwitchImplicitReturn.ts, 11, 6))
+}
+
 function foo1(bar: "a"): number {
->foo1 : Symbol(foo1, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 0))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 14))
+>foo1 : Symbol(foo1, Decl(exhaustiveSwitchImplicitReturn.ts, 13, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 15, 14))
 
     switch(bar) {
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 14))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 15, 14))
 
         case "a":
             return 1;
@@ -12,57 +42,57 @@ function foo1(bar: "a"): number {
 }
 
 function foo2(bar: "a"): number {
->foo2 : Symbol(foo2, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 1))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 7, 14))
+>foo2 : Symbol(foo2, Decl(exhaustiveSwitchImplicitReturn.ts, 20, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 22, 14))
 
     switch(bar) {
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 7, 14))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 22, 14))
 
         case "a":
             return 1;
     }
 
     let unusedVariable;
->unusedVariable : Symbol(unusedVariable, Decl(exhaustiveSwitchImplicitReturn.ts, 13, 7))
+>unusedVariable : Symbol(unusedVariable, Decl(exhaustiveSwitchImplicitReturn.ts, 28, 7))
 }
 
 function foo3(bar: "a"): number {
->foo3 : Symbol(foo3, Decl(exhaustiveSwitchImplicitReturn.ts, 14, 1))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 16, 14))
+>foo3 : Symbol(foo3, Decl(exhaustiveSwitchImplicitReturn.ts, 29, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 31, 14))
 
     switch(bar) {
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 16, 14))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 31, 14))
 
         case "a":
             return 1;
     }
 
     function neverCalled() {}
->neverCalled : Symbol(neverCalled, Decl(exhaustiveSwitchImplicitReturn.ts, 20, 5))
+>neverCalled : Symbol(neverCalled, Decl(exhaustiveSwitchImplicitReturn.ts, 35, 5))
 }
 
 function foo4(bar: "a"): number {
->foo4 : Symbol(foo4, Decl(exhaustiveSwitchImplicitReturn.ts, 23, 1))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 25, 14))
+>foo4 : Symbol(foo4, Decl(exhaustiveSwitchImplicitReturn.ts, 38, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 40, 14))
 
     switch(bar) {
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 25, 14))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 40, 14))
 
         case "a":
             return 1;
     }
 
     foo3(bar);
->foo3 : Symbol(foo3, Decl(exhaustiveSwitchImplicitReturn.ts, 14, 1))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 25, 14))
+>foo3 : Symbol(foo3, Decl(exhaustiveSwitchImplicitReturn.ts, 29, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 40, 14))
 }
 
 function foo5(bar: "a" | "b"): number {
->foo5 : Symbol(foo5, Decl(exhaustiveSwitchImplicitReturn.ts, 32, 1))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 34, 14))
+>foo5 : Symbol(foo5, Decl(exhaustiveSwitchImplicitReturn.ts, 47, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 49, 14))
 
     switch(bar) {
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 34, 14))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 49, 14))
 
         case "a":
             return 1;
@@ -70,27 +100,153 @@ function foo5(bar: "a" | "b"): number {
 }
 
 function foo6(bar: "a", a: boolean, b: boolean): number {
->foo6 : Symbol(foo6, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 14))
->a : Symbol(a, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 23))
->b : Symbol(b, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 35))
+>foo6 : Symbol(foo6, Decl(exhaustiveSwitchImplicitReturn.ts, 54, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 56, 14))
+>a : Symbol(a, Decl(exhaustiveSwitchImplicitReturn.ts, 56, 23))
+>b : Symbol(b, Decl(exhaustiveSwitchImplicitReturn.ts, 56, 35))
 
     if (a) {
->a : Symbol(a, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 23))
+>a : Symbol(a, Decl(exhaustiveSwitchImplicitReturn.ts, 56, 23))
 
         switch (bar) {
->bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 14))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 56, 14))
 
             case "a": return 1;
         }
     }
     else {
         switch (b) {
->b : Symbol(b, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 35))
+>b : Symbol(b, Decl(exhaustiveSwitchImplicitReturn.ts, 56, 35))
 
             case true: return -1;
             case false: return 0;
         }
+    }
+}
+
+function foo7(value: "a" | "b") {
+>foo7 : Symbol(foo7, Decl(exhaustiveSwitchImplicitReturn.ts, 68, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 70, 14))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 70, 14))
+
+        case E1.A:
+>E1.A : Symbol(E1.A, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 9))
+>E1 : Symbol(E1, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 0))
+>A : Symbol(E1.A, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 9))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 70, 14))
+
+        case E1.B:
+>E1.B : Symbol(E1.B, Decl(exhaustiveSwitchImplicitReturn.ts, 1, 12))
+>E1 : Symbol(E1, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 0))
+>B : Symbol(E1.B, Decl(exhaustiveSwitchImplicitReturn.ts, 1, 12))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 70, 14))
+    }
+}
+
+function foo8(value: "a" | "b") {
+>foo8 : Symbol(foo8, Decl(exhaustiveSwitchImplicitReturn.ts, 77, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 79, 14))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 79, 14))
+
+        case E1.A:
+>E1.A : Symbol(E1.A, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 9))
+>E1 : Symbol(E1, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 0))
+>A : Symbol(E1.A, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 9))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 79, 14))
+    }
+}
+
+function foo9(value: 0 | 1) {
+>foo9 : Symbol(foo9, Decl(exhaustiveSwitchImplicitReturn.ts, 84, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 86, 14))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 86, 14))
+
+        case E2.A:
+>E2.A : Symbol(E2.A, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 9))
+>E2 : Symbol(E2, Decl(exhaustiveSwitchImplicitReturn.ts, 3, 1))
+>A : Symbol(E2.A, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 9))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 86, 14))
+
+        case E2.B:
+>E2.B : Symbol(E2.B, Decl(exhaustiveSwitchImplicitReturn.ts, 6, 10))
+>E2 : Symbol(E2, Decl(exhaustiveSwitchImplicitReturn.ts, 3, 1))
+>B : Symbol(E2.B, Decl(exhaustiveSwitchImplicitReturn.ts, 6, 10))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 86, 14))
+    }
+}
+
+function foo10(value: 0 | 1) {
+>foo10 : Symbol(foo10, Decl(exhaustiveSwitchImplicitReturn.ts, 93, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 95, 15))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 95, 15))
+
+        case E2.A:
+>E2.A : Symbol(E2.A, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 9))
+>E2 : Symbol(E2, Decl(exhaustiveSwitchImplicitReturn.ts, 3, 1))
+>A : Symbol(E2.A, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 9))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 95, 15))
+    }
+}
+
+function foo11(value: 0 | 1) {
+>foo11 : Symbol(foo11, Decl(exhaustiveSwitchImplicitReturn.ts, 100, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 102, 15))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 102, 15))
+
+        case E3.A:
+>E3.A : Symbol(E3.A, Decl(exhaustiveSwitchImplicitReturn.ts, 10, 9))
+>E3 : Symbol(E3, Decl(exhaustiveSwitchImplicitReturn.ts, 8, 1))
+>A : Symbol(E3.A, Decl(exhaustiveSwitchImplicitReturn.ts, 10, 9))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 102, 15))
+
+        case E3.B:
+>E3.B : Symbol(E3.B, Decl(exhaustiveSwitchImplicitReturn.ts, 11, 6))
+>E3 : Symbol(E3, Decl(exhaustiveSwitchImplicitReturn.ts, 8, 1))
+>B : Symbol(E3.B, Decl(exhaustiveSwitchImplicitReturn.ts, 11, 6))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 102, 15))
+    }
+}
+
+function foo12(value: 0 | 1) {
+>foo12 : Symbol(foo12, Decl(exhaustiveSwitchImplicitReturn.ts, 109, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 111, 15))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 111, 15))
+
+        case E3.A:
+>E3.A : Symbol(E3.A, Decl(exhaustiveSwitchImplicitReturn.ts, 10, 9))
+>E3 : Symbol(E3, Decl(exhaustiveSwitchImplicitReturn.ts, 8, 1))
+>A : Symbol(E3.A, Decl(exhaustiveSwitchImplicitReturn.ts, 10, 9))
+
+            return value;
+>value : Symbol(value, Decl(exhaustiveSwitchImplicitReturn.ts, 111, 15))
     }
 }
 

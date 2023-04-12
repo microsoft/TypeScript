@@ -1,4 +1,38 @@
 === tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts ===
+enum E1 {
+>E1 : E1
+
+    A = "a",
+>A : E1.A
+>"a" : "a"
+
+    B = "b"
+>B : E1.B
+>"b" : "b"
+}
+
+enum E2 {
+>E2 : E2
+
+    A = 0,
+>A : E2.A
+>0 : 0
+
+    B = 1
+>B : E2.B
+>1 : 1
+}
+
+enum E3 {
+>E3 : E3
+
+    A,
+>A : E3.A
+
+    B
+>B : E3.B
+}
+
 function foo1(bar: "a"): number {
 >foo1 : (bar: "a") => number
 >bar : "a"
@@ -115,6 +149,132 @@ function foo6(bar: "a", a: boolean, b: boolean): number {
 >false : false
 >0 : 0
         }
+    }
+}
+
+function foo7(value: "a" | "b") {
+>foo7 : (value: "a" | "b") => "a" | "b"
+>value : "a" | "b"
+
+    switch (value) {
+>value : "a" | "b"
+
+        case E1.A:
+>E1.A : E1.A
+>E1 : typeof E1
+>A : E1.A
+
+            return value;
+>value : "a"
+
+        case E1.B:
+>E1.B : E1.B
+>E1 : typeof E1
+>B : E1.B
+
+            return value;
+>value : "b"
+    }
+}
+
+function foo8(value: "a" | "b") {
+>foo8 : (value: "a" | "b") => "a"
+>value : "a" | "b"
+
+    switch (value) {
+>value : "a" | "b"
+
+        case E1.A:
+>E1.A : E1.A
+>E1 : typeof E1
+>A : E1.A
+
+            return value;
+>value : "a"
+    }
+}
+
+function foo9(value: 0 | 1) {
+>foo9 : (value: 0 | 1) => 0 | 1
+>value : 0 | 1
+
+    switch (value) {
+>value : 0 | 1
+
+        case E2.A:
+>E2.A : E2.A
+>E2 : typeof E2
+>A : E2.A
+
+            return value;
+>value : 0
+
+        case E2.B:
+>E2.B : E2.B
+>E2 : typeof E2
+>B : E2.B
+
+            return value;
+>value : 1
+    }
+}
+
+function foo10(value: 0 | 1) {
+>foo10 : (value: 0 | 1) => 0
+>value : 0 | 1
+
+    switch (value) {
+>value : 0 | 1
+
+        case E2.A:
+>E2.A : E2.A
+>E2 : typeof E2
+>A : E2.A
+
+            return value;
+>value : 0
+    }
+}
+
+function foo11(value: 0 | 1) {
+>foo11 : (value: 0 | 1) => 0 | 1
+>value : 0 | 1
+
+    switch (value) {
+>value : 0 | 1
+
+        case E3.A:
+>E3.A : E3.A
+>E3 : typeof E3
+>A : E3.A
+
+            return value;
+>value : 0
+
+        case E3.B:
+>E3.B : E3.B
+>E3 : typeof E3
+>B : E3.B
+
+            return value;
+>value : 1
+    }
+}
+
+function foo12(value: 0 | 1) {
+>foo12 : (value: 0 | 1) => 0
+>value : 0 | 1
+
+    switch (value) {
+>value : 0 | 1
+
+        case E3.A:
+>E3.A : E3.A
+>E3 : typeof E3
+>A : E3.A
+
+            return value;
+>value : 0
     }
 }
 

@@ -25897,7 +25897,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function eachTypeContainedIn(source: Type, types: Type[]) {
-        return source.flags & TypeFlags.Union ? !forEach((source as UnionType).types, t => !contains(types, t)) : contains(types, source);
+        const equalityComparer = (sourceType: Type, targetType: Type) =>
+            sourceType === targetType || !!(sourceType.flags & TypeFlags.Literal && targetType.flags & TypeFlags.Literal && (sourceType as LiteralType).value === (targetType as LiteralType).value);
+        return source.flags & TypeFlags.Union ? !forEach((source as UnionType).types, t => !contains(types, t, equalityComparer)) : contains(types, source, equalityComparer);
     }
 
     function isTypeSubsetOf(source: Type, target: Type) {

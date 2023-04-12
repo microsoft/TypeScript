@@ -1,7 +1,25 @@
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
+tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(50,32): error TS7030: Not all code paths return a value.
+tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(80,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(96,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(112,10): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (1 errors) ====
+==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (4 errors) ====
+    enum E1 {
+        A = "a",
+        B = "b"
+    }
+    
+    enum E2 {
+        A = 0,
+        B = 1
+    }
+    
+    enum E3 {
+        A,
+        B
+    }
+    
     function foo1(bar: "a"): number {
         switch(bar) {
             case "a":
@@ -56,6 +74,60 @@ tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not
                 case true: return -1;
                 case false: return 0;
             }
+        }
+    }
+    
+    function foo7(value: "a" | "b") {
+        switch (value) {
+            case E1.A:
+                return value;
+            case E1.B:
+                return value;
+        }
+    }
+    
+    function foo8(value: "a" | "b") {
+             ~~~~
+!!! error TS7030: Not all code paths return a value.
+        switch (value) {
+            case E1.A:
+                return value;
+        }
+    }
+    
+    function foo9(value: 0 | 1) {
+        switch (value) {
+            case E2.A:
+                return value;
+            case E2.B:
+                return value;
+        }
+    }
+    
+    function foo10(value: 0 | 1) {
+             ~~~~~
+!!! error TS7030: Not all code paths return a value.
+        switch (value) {
+            case E2.A:
+                return value;
+        }
+    }
+    
+    function foo11(value: 0 | 1) {
+        switch (value) {
+            case E3.A:
+                return value;
+            case E3.B:
+                return value;
+        }
+    }
+    
+    function foo12(value: 0 | 1) {
+             ~~~~~
+!!! error TS7030: Not all code paths return a value.
+        switch (value) {
+            case E3.A:
+                return value;
         }
     }
     
