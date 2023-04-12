@@ -49,6 +49,9 @@ export const enum SyntaxKind {
     // We detect and provide better error recovery when we encounter a git merge marker.  This
     // allows us to edit files with git-conflict markers in them in a much more pleasant manner.
     ConflictMarkerTrivia,
+    // If a file is actually binary, with any luck, we'll get U+FFFD REPLACEMENT CHARACTER
+    // in position zero and can just skip what is surely a doomed parse.
+    NonTextFileMarkerTrivia,
     // Literals
     NumericLiteral,
     BigIntLiteral,
@@ -6645,6 +6648,8 @@ export interface ConditionalType extends InstantiableType {
     /** @internal */
     resolvedDefaultConstraint?: Type;
     /** @internal */
+    resolvedConstraintOfDistributive?: Type | false;
+    /** @internal */
     mapper?: TypeMapper;
     /** @internal */
     combinedMapper?: TypeMapper;
@@ -7466,6 +7471,9 @@ export const enum CharacterCodes {
     ideographicSpace = 0x3000,
     mathematicalSpace = 0x205F,
     ogham = 0x1680,
+
+    // Unicode replacement character produced when a byte sequence is invalid
+    replacementCharacter = 0xFFFD,
 
     _ = 0x5F,
     $ = 0x24,

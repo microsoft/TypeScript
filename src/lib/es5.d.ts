@@ -1814,7 +1814,7 @@ interface DataView {
 
 interface DataViewConstructor {
     readonly prototype: DataView;
-    new(buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
+    new(buffer: ArrayBufferLike & { BYTES_PER_ELEMENT?: never }, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
 

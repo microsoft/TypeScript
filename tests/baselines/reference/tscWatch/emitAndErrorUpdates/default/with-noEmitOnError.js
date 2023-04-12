@@ -103,6 +103,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -118,6 +121,9 @@ const a = {
 };
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -171,6 +177,9 @@ import { A } from "../shared/types/db";
 const a: string = 10;
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:00 AM[0m] File change detected. Starting incremental compilation...
@@ -207,6 +216,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -220,6 +232,9 @@ import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
@@ -257,6 +272,9 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

@@ -39,7 +39,7 @@ var f15 = { "100": 0, get 1e2() { return 0; } };
 var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
 var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
 
-// Get and set accessor with mismatched type annotations
+// Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
 var g1 = { get a(): number { return 4; }, set a(n: string) { } };
 var g2 = { get a() { return 4; }, set a(n: string) { } };
 var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
@@ -91,7 +91,7 @@ var f14 = { 0: 0, get 0o0() { return 0; } };
 var f15 = { "100": 0, get 1e2() { return 0; } };
 var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
 var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
-// Get and set accessor with mismatched type annotations
+// Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
 var g1 = { get a() { return 4; }, set a(n) { } };
 var g2 = { get a() { return 4; }, set a(n) { } };
 var g3 = { get a() { return undefined; }, set a(n) { } };

@@ -4,9 +4,9 @@ tests/cases/compiler/parseInvalidNonNullableTypes.ts(9,16): error TS17019: '!' a
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(10,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(12,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(13,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(15,16): error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/compiler/parseInvalidNonNullableTypes.ts(15,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(15,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(16,16): error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+tests/cases/compiler/parseInvalidNonNullableTypes.ts(16,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(16,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(18,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
 tests/cases/compiler/parseInvalidNonNullableTypes.ts(19,10): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
@@ -43,12 +43,12 @@ tests/cases/compiler/parseInvalidNonNullableTypes.ts(22,10): error TS17020: '!' 
     
     function f7(): string! {}
                    ~~~~~~~
-!!! error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
                    ~~~~~~~
 !!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
     function f8(): !string {}
                    ~~~~~~~
-!!! error TS2847: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
                    ~~~~~~~
 !!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
     

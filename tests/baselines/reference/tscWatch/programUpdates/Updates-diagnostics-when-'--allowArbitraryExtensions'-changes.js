@@ -80,6 +80,9 @@ Input::
 {"compilerOptions":{"allowArbitraryExtensions":false},"files":["/a.ts"]}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
@@ -129,6 +132,9 @@ Input::
 {"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...

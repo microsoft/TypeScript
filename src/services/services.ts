@@ -32,6 +32,7 @@ import {
     Completions,
     computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
+    containsParseError,
     createDocumentRegistry,
     createGetCanonicalFileName,
     createMultiMap,
@@ -69,6 +70,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findChildOfKind,
     findPrecedingToken,
     first,
@@ -196,6 +198,7 @@ import {
     length,
     LineAndCharacter,
     lineBreakPart,
+    LinkedEditingInfo,
     LiteralType,
     map,
     mapDefined,
@@ -2480,6 +2483,57 @@ export function createLanguageService(
         }
     }
 
+    function getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined {
+        const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+        const token = findPrecedingToken(position, sourceFile);
+        if (!token || token.parent.kind === SyntaxKind.SourceFile) return undefined;
+
+        if (isJsxFragment(token.parent.parent)) {
+            const openFragment = token.parent.parent.openingFragment;
+            const closeFragment = token.parent.parent.closingFragment;
+            if (containsParseError(openFragment) || containsParseError(closeFragment)) return undefined;
+
+            const openPos = openFragment.getStart(sourceFile) + 1; // "<".length
+            const closePos = closeFragment.getStart(sourceFile) + 2; // "</".length
+
+            // only allows linked editing right after opening bracket: <| ></| >
+            if ((position !== openPos) && (position !== closePos)) return undefined;
+
+            return { ranges: [{ start: openPos, length: 0 }, { start: closePos, length: 0 }] };
+        }
+        else {
+            // determines if the cursor is in an element tag
+            const tag = findAncestor(token.parent,
+                n => {
+                    if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
+                        return true;
+                    }
+                    return false;
+                });
+            if (!tag) return undefined;
+            Debug.assert(isJsxOpeningElement(tag) || isJsxClosingElement(tag), "tag should be opening or closing element");
+
+            const openTag = tag.parent.openingElement;
+            const closeTag = tag.parent.closingElement;
+
+            const openTagStart = openTag.tagName.getStart(sourceFile);
+            const openTagEnd = openTag.tagName.end;
+            const closeTagStart = closeTag.tagName.getStart(sourceFile);
+            const closeTagEnd = closeTag.tagName.end;
+
+            // only return linked cursors if the cursor is within a tag name
+            if (!(openTagStart <= position && position <= openTagEnd || closeTagStart <= position && position <= closeTagEnd)) return undefined;
+
+            // only return linked cursors if text in both tags is identical
+            const openingTagText = openTag.tagName.getText(sourceFile);
+            if (openingTagText !== closeTag.tagName.getText(sourceFile)) return undefined;
+
+            return {
+                ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
+            };
+        }
+    }
+
     function getLinesForRange(sourceFile: SourceFile, textRange: TextRange) {
         return {
             lineStarts: sourceFile.getLineStarts(),
@@ -3011,6 +3065,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
+        getLinkedEditingRangeAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,

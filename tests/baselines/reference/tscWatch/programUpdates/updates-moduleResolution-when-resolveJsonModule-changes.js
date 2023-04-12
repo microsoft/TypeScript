@@ -87,6 +87,9 @@ Input::
 {"compilerOptions":{"moduleResolution":"node","resolveJsonModule":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
