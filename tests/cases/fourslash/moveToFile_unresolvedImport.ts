@@ -13,7 +13,9 @@ verify.moveToFile({
 ``,
 
         "/bar.ts":
-`const a = 1;
+`import { a } from "doesnt-exist";
+
+const a = 1;
 a();
 `,
     },

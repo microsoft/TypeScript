@@ -188,7 +188,7 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size === 0 && !newFileExists) {
+    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size === 0 && usage.newFileImportsFromOldFile.size === 0 && !newFileExists) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -259,9 +259,11 @@ function getNewFileImportsAndAddExportInOldFile(
             try {
                 importAdder.addImportFromExportedSymbol(skipAlias(symbol, checker), isValidTypeOnlyUseSite);
             }
-            catch (e) {
-                if (checker.isUnknownSymbol(symbol)) {
-                    throw e;
+            catch {
+                for (const oldStatement of oldFile.statements) {
+                    forEachImportInStatement(oldStatement, i => {
+                        append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                    });
                 }
             }
         });
@@ -548,7 +550,7 @@ export function addExports(sourceFile: SourceFile, toMove: readonly Statement[],
 
 export function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
     if (useEs6Exports) {
-        return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol.exports?.has(name.escapedText));
+        return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
     }
     return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));

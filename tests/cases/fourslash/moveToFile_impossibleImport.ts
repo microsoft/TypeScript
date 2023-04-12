@@ -3,7 +3,6 @@
 // @module: nodenext
 
 // @Filename: /bar.cts
-////import './blah.ts';
 ////const a = 2;
 
 // @Filename: /node_modules/esm-only/package.json
@@ -30,8 +29,7 @@ verify.moveToFile({
         "/main.mts":``,
 
         "/bar.cts":
-`import './blah.ts';
-const a = 2;
+`const a = 2;
 esm.ohno;
 `,
     },
