@@ -115,7 +115,7 @@ const a = 1;`};
             endOffset: aTs.content.length,
             refactor: "Move to file",
             action: "Move to file",
-            filepath: "/Foo/b.ts",
+            targetFile: "/Foo/b.ts",
         }
     });
     baselineTsserverLogs("refactors", "handles moving statement to an existing file", session);

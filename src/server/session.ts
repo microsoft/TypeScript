@@ -2704,35 +2704,33 @@ export class Session<TMessage = string> implements EventSender {
                 const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
                 mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
             }
-            return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
+            return {
+                renameLocation: mappedRenameLocation,
+                renameFilename,
+                edits: this.mapTextChangesToCodeEdits(edits)
+            };
         }
-        else {
-            return result;
-        }
+        return result;
     }
 
     private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFilename: string | undefined, files: string[] | undefined }{
-        const { file } = this.getFileAndProject(args);
+        const { file, project } = this.getFileAndProject(args);
         const allFiles: string[] = [];
-        let filename: string | undefined;
-        this.projectService.forEachEnabledProject(project => {
-            updateProjectIfDirty(project);
-            if (project.containsFile(file)) {
-                const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-                if (scriptInfo) {
-                    const { newFilename, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
-                    if (files) {
-                        for (const file of files) {
-                            if (!allFiles.includes(file)) {
-                                allFiles.push(file);
-                            }
-                        }
+        let fileName: string | undefined;
+        updateProjectIfDirty(project);
+        const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+        if (scriptInfo) {
+            const { newFileName, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
+            if (files) {
+                for (const file of files) {
+                    if (!allFiles.includes(file)) {
+                        allFiles.push(file);
                     }
-                    filename = newFilename;
                 }
             }
-        });
-        return { newFilename: filename, files: allFiles };
+            fileName = newFileName;
+        }
+        return { newFilename: fileName, files: allFiles };
     }
 
     private getEditsForMoveToFileForRefactor(args: protocol.GetEditsForMoveToFileRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
@@ -2740,7 +2738,7 @@ export class Session<TMessage = string> implements EventSender {
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
         const result = project.getLanguageService().getEditsForMoveToFileRefactor(
             file,
-            args.filepath,
+            args.targetFile,
             this.getFormatOptions(file),
             this.extractPositionOrRange(args, scriptInfo),
             args.refactor,
@@ -2763,9 +2761,7 @@ export class Session<TMessage = string> implements EventSender {
             }
             return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
         }
-        else {
-            return result;
-        }
+        return result;
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {

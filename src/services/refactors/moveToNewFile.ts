@@ -27,8 +27,29 @@ import {
     TypeChecker,
     UserPreferences,
 } from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
-import { addExports, addExportToChanges, addNewFileToTsconfig, createNewFilename, createOldFileImportsFromNewFile, deleteMovedStatements, deleteUnusedOldImports, filterImport, forEachImportInStatement, getStatementsToMove, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire,moduleSpecifierFromImport, nameOfTopLevelDeclaration, SupportedImportStatement, ToMove, updateImportsInOtherFiles, UsageInfo } from "../moveToFileAndNewFile";
+import {
+    addExports,
+    addExportToChanges,
+    addNewFileToTsconfig,
+    createNewFilename,
+    createOldFileImportsFromNewFile,
+    deleteMovedStatements,
+    deleteUnusedOldImports,
+    filterImport,
+    forEachImportInStatement,
+    getStatementsToMove,
+    getTopLevelDeclarationStatement,
+    getUsageInfo,
+    isTopLevelDeclaration,
+    makeImportOrRequire,
+    moduleSpecifierFromImport,
+    nameOfTopLevelDeclaration,
+    registerRefactor,
+    SupportedImportStatement,
+    ToMove,
+    updateImportsInOtherFiles,
+    UsageInfo
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

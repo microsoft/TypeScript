@@ -614,11 +614,11 @@ export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRange
  * Response is a list of available files.
  * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
  */
-export interface GetMoveToRefactoringFileSuggestionsResponse extends Response {
-   body?: {
-       newFileName: string;
-      files: string[];
-   };
+export interface GetMoveToRefactoringFileSuggestions extends Response {
+    body?: {
+        newFileName: string;
+        files: string[];
+    };
 }
 
 /**
@@ -711,7 +711,7 @@ export type GetEditsForMoveToFileRefactorRequestArgs = FileLocationOrRangeReques
     /* The 'name' property from the refactoring action */
     action: string;
     /* Target file path that the user selected (may also be new file) */
-    filepath: string;
+    targetFile: string;
 };
 
 export interface RefactorEditInfo {

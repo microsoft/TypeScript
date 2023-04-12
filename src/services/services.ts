@@ -322,9 +322,9 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+import { createNewFilename } from "./_namespaces/ts.refactor";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
-import { createNewFilename } from "./moveToFileAndNewFile";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -2978,7 +2978,7 @@ export function createLanguageService(
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
     }
 
-    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFilename: string | undefined, files: string[] | undefined } {
+    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFileName: string | undefined, files: string[] | undefined } {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const program = getProgram();
@@ -2997,11 +2997,11 @@ export function createLanguageService(
             }
         }
         //creating new filename
-        let newFilename;
+        let newFileName;
         if (program) {
-            newFilename = createNewFilename(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
+            newFileName = createNewFilename(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
         }
-        return { newFilename, files };
+        return { newFileName, files };
     }
 
     function getEditsForRefactor(

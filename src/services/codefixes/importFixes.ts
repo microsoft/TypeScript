@@ -594,7 +594,7 @@ function getImportFixes(
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     preferences: UserPreferences,
-    importMap = sourceFile.kind && createExistingImportMap(program.getTypeChecker(), sourceFile, program.getCompilerOptions()),
+    importMap = createExistingImportMap(program.getTypeChecker(), sourceFile, program.getCompilerOptions()),
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number, fixes: readonly ImportFixWithModuleSpecifier[] } {
     const checker = program.getTypeChecker();
