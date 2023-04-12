@@ -88,4 +88,17 @@ declare namespace Intl {
          */
         supportedLocalesOf(locales: BCP47LanguageTag | BCP47LanguageTag[], options?: Pick<SegmenterOptions, "localeMatcher">): BCP47LanguageTag[];
     };
+
+    type EnumerationKeys = "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit";
+
+    /**
+     * Returns a list of the supported collation, calendar, currency, numbering system, timezones, and units by the implementation.
+     *
+     * @param key A string indicating the category of values to return.
+     *
+     * @returns {string[]} A list of the supported values.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/supportedValuesOf)
+     */
+    function supportedValuesOf(key: EnumerationKeys): string[];
 }
