@@ -1,0 +1,30 @@
+=== tests/cases/compiler/conditionalSubstitutionInferencesLowerPriority.ts ===
+type TestType<Keys extends string> = string extends Keys ? Record<Keys, string> : Record<Keys, string>
+>TestType : Symbol(TestType, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 0))
+>Keys : Symbol(Keys, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 14))
+>Keys : Symbol(Keys, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Keys : Symbol(Keys, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Keys : Symbol(Keys, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 14))
+
+function inferHelper<Keys extends string>(data: TestType<Keys>) {
+>inferHelper : Symbol(inferHelper, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 102))
+>Keys : Symbol(Keys, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 2, 21))
+>data : Symbol(data, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 2, 42))
+>TestType : Symbol(TestType, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 0))
+>Keys : Symbol(Keys, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 2, 21))
+
+    return data;
+>data : Symbol(data, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 2, 42))
+}
+
+export const a = inferHelper({
+>a : Symbol(a, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 6, 12))
+>inferHelper : Symbol(inferHelper, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 0, 102))
+
+    // key1 is inferred to be value1 here
+    key1: "value1"
+>key1 : Symbol(key1, Decl(conditionalSubstitutionInferencesLowerPriority.ts, 6, 30))
+
+})

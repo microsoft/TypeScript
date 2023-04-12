@@ -19053,7 +19053,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (newConstraint.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(newBaseType), getRestrictiveInstantiation(newConstraint))) {
                 return newBaseType;
             }
-            return newBaseType.flags & TypeFlags.TypeVariable ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
+            return (newBaseType.flags & TypeFlags.TypeVariable || newConstraint.flags & TypeFlags.TypeVariable) ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
         }
         return type;
     }

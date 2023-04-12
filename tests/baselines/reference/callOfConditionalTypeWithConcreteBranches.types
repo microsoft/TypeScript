@@ -64,11 +64,11 @@ function fn2<T>(arg: Q2<T>) {
   arg(arg => useT(arg));
 >arg(arg => useT(arg)) : void
 >arg : Q2<T>
->arg => useT(arg) : (arg: T & number) => void
->arg : T & number
+>arg => useT(arg) : (arg: number) => void
+>arg : number
 >useT(arg) : void
 >useT : (_arg: T) => void
->arg : T & number
+>arg : number
 }
 // Legal invocations are not problematic
 fn2<string | number>(m => m(42));
