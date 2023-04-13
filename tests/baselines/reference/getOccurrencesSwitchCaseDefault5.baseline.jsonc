@@ -124,9 +124,7 @@
 //         }
 //     case 0xBEEF:
 //     default:
-//         break;
-//     case 16:
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -146,9 +144,7 @@
 //         }
 //     case 0xBEEF:
 //     default:
-//         break;
-//     case 16:
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -168,9 +164,7 @@
 //         }
 //     case 0xBEEF:
 //     default:
-//         break;
-//     case 16:
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -190,9 +184,7 @@
 //         }
 //     case 0xBEEF:
 //     default:
-//         break;
-//     case 16:
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -212,9 +204,7 @@
 //         }
 //     case 0xBEEF:
 //     default:
-//         break;
-//     case 16:
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -286,18 +276,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
-// switch (10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//         foo: switch (20) {
-//             case 1:
-//             case 2:
-//                 break;
-//             default:
-//                 break foo;
-//         }
+// --- (line: 12) skipped ---
 //     case 0xBEEF:
 //     default:
 //         break;

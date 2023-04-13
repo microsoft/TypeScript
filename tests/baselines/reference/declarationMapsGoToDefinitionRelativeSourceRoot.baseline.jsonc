@@ -6,14 +6,7 @@
 //     otherMethod() {
 //         if (Math.random() > 0.5) {
 //             return {x: 42};
-//         }
-//         return {y: "yes"};
-//     }
-// }
-// 
-// export interface SomeType {
-//     member: number;
-// }
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/server/mymodule.ts ===
 // import * as mod from "./out/indexdef";

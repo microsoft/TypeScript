@@ -6,6 +6,4 @@
 //      * @returns {{}}
 //      */
 //     static foo() {
-//         return {}
-//     }
-// }
+// --- (line: 7) skipped ---

@@ -1,8 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_01.ts ===
-// interface Foo {
-//     hello(): void;
-//     okay?: number;
+// --- (line: 3) skipped ---
 // }
 // 
 // class Bar implements Foo {
@@ -87,11 +85,7 @@
 //     public sure() {}
 // }
 // 
-// function whatever(a: Foo) {
-//     a.hello();
-// }
-// 
-// whatever(new Bar());
+// --- (line: 11) skipped ---
 
   // === Details ===
   [
