@@ -88,6 +88,12 @@ function ReactNativeFlatList(
 }
 <ReactNativeFlatList />;
 
+// testing higher-order component compat
+function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+  return <Component />;
+}
+
+
 //// [jsxElementType.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -210,3 +216,7 @@ function ReactNativeFlatList(props, ref) {
     return null;
 }
 React.createElement(ReactNativeFlatList, null);
+// testing higher-order component compat
+function f1(Component) {
+    return React.createElement(Component, null);
+}

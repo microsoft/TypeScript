@@ -29,9 +29,10 @@ tests/cases/compiler/jsxElementType.tsx(88,2): error TS2786: 'ReactNativeFlatLis
   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
+tests/cases/compiler/jsxElementType.tsx(92,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (13 errors) ====
+==== tests/cases/compiler/jsxElementType.tsx (14 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -171,3 +172,11 @@ tests/cases/compiler/jsxElementType.tsx(88,2): error TS2786: 'ReactNativeFlatLis
 !!! error TS2786:   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
 !!! error TS2786:     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
 !!! error TS2786:       Target signature provides too few arguments. Expected 2 or more, but got 1.
+    
+    // testing higher-order component compat
+    function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+      return <Component />;
+              ~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+    }
+    

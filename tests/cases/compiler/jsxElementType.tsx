@@ -88,3 +88,8 @@ function ReactNativeFlatList(
   return null;
 }
 <ReactNativeFlatList />;
+
+// testing higher-order component compat
+function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+  return <Component />;
+}

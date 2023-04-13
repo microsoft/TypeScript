@@ -250,3 +250,17 @@ function ReactNativeFlatList(
 <ReactNativeFlatList />;
 >ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 80, 43))
 
+// testing higher-order component compat
+function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+>f1 : Symbol(f1, Decl(jsxElementType.tsx, 87, 24))
+>T : Symbol(T, Decl(jsxElementType.tsx, 90, 12))
+>props : Symbol(props, Decl(jsxElementType.tsx, 90, 23))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 90, 62))
+>T : Symbol(T, Decl(jsxElementType.tsx, 90, 12))
+
+  return <Component />;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 90, 62))
+}
+
