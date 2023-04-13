@@ -2759,7 +2759,10 @@ export class Session<TMessage = string> implements EventSender {
                 const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
                 mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
             }
-            return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
+            return {
+                renameLocation: mappedRenameLocation,
+                renameFilename,
+                edits: this.mapTextChangesToCodeEdits(edits) };
         }
         return result;
     }

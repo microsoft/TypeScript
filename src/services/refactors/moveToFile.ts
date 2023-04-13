@@ -387,8 +387,7 @@ export function updateImportsInOtherFiles(
     }
 }
 
-/** @internal */
-export function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
+function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
@@ -402,8 +401,7 @@ export function getNamespaceLikeImport(node: SupportedImport): Identifier | unde
     }
 }
 
-/** @internal */
-export function updateNamespaceLikeImport(
+function updateNamespaceLikeImport(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
     checker: TypeChecker,
@@ -561,8 +559,7 @@ export function addExports(sourceFile: SourceFile, toMove: readonly Statement[],
     });
 }
 
-/** @internal */
-export function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
+function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
     if (useEs6Exports) {
         return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
     }
@@ -827,6 +824,7 @@ export interface UsageInfo {
     // Subset of oldImportsNeededByNewFile that are will no longer be used in the old file.
     readonly unusedImportsFromOldFile: Set<Symbol>;
 }
+
 /** @internal */
 export type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
 
@@ -841,7 +839,7 @@ export type NonVariableTopLevelDeclaration =
     | TopLevelExpressionStatement
     | ImportEqualsDeclaration;
 
-/** @internal */
+    /** @internal */
 export interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
 
 /** @internal */
@@ -873,11 +871,9 @@ export function createNewFilename(oldFile: SourceFile, program: Program, context
     return "";
 }
 
-/** @internal */
-export interface RangeToMove { readonly toMove: readonly Statement[]; readonly afterLast: Statement | undefined; }
+interface RangeToMove { readonly toMove: readonly Statement[]; readonly afterLast: Statement | undefined; }
 
-/** @internal */
-export function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
+function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const { file } = context;
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const { statements } = file;
@@ -1030,8 +1026,7 @@ function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Sym
     });
 }
 
-/** @internal */
-export function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
+function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
     switch (statement.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.ClassDeclaration:
@@ -1054,8 +1049,7 @@ export function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: T
     }
 }
 
-/** @internal */
-export function isInImport(decl: Declaration) {
+function isInImport(decl: Declaration) {
     switch (decl.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
@@ -1070,6 +1064,7 @@ export function isInImport(decl: Declaration) {
             return false;
     }
 }
+
 function isVariableDeclarationInImport(decl: VariableDeclaration) {
     return isSourceFile(decl.parent.parent.parent) &&
         !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
@@ -1095,8 +1090,7 @@ function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node
     }
 }
 
-/** @internal */
-export function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLevelDeclaration {
+function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLevelDeclaration {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.ClassDeclaration:
