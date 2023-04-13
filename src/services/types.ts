@@ -671,10 +671,6 @@ export interface LinkedEditingInfo {
 
 export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
-export interface MoveToFileArgs {
-    newFileName: string;
-}
-
 export const enum OrganizeImportsMode {
     All = "All",
     SortAndCombine = "SortAndCombine",

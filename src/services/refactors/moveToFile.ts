@@ -325,6 +325,7 @@ function getNewFileImportsAndAddExportInOldFile(
         : append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
 }
 
+/** @internal */
 export function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
     const cfg = program.getCompilerOptions().configFile;
     if (!cfg) return;
@@ -340,12 +341,14 @@ export function addNewFileToTsconfig(program: Program, changes: textChanges.Chan
     }
 }
 
+/** @internal */
 export function deleteMovedStatements(sourceFile: SourceFile, moved: readonly StatementRange[], changes: textChanges.ChangeTracker) {
     for (const { first, afterLast } of moved) {
         changes.deleteNodeRangeExcludingEnd(sourceFile, first, afterLast);
     }
 }
 
+/** @internal */
 export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: Set<Symbol>, checker: TypeChecker) {
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
@@ -353,6 +356,7 @@ export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Sta
     }
 }
 
+/** @internal */
 export function updateImportsInOtherFiles(
     changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: Set<Symbol>, newFilename: string, quotePreference: QuotePreference
 ): void {
@@ -383,6 +387,7 @@ export function updateImportsInOtherFiles(
     }
 }
 
+/** @internal */
 export function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
@@ -397,6 +402,7 @@ export function getNamespaceLikeImport(node: SupportedImport): Identifier | unde
     }
 }
 
+/** @internal */
 export function updateNamespaceLikeImport(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
@@ -450,12 +456,14 @@ function createRequireCall(moduleSpecifier: StringLiteralLike): CallExpression {
     return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [moduleSpecifier]);
 }
 
+/** @internal */
 export function moduleSpecifierFromImport(i: SupportedImport): StringLiteralLike {
     return (i.kind === SyntaxKind.ImportDeclaration ? i.moduleSpecifier
         : i.kind === SyntaxKind.ImportEqualsDeclaration ? i.moduleReference.expression
         : i.initializer.arguments[0]);
 }
 
+/** @internal */
 export function forEachImportInStatement(statement: Statement, cb: (importNode: SupportedImport) => void): void {
     if (isImportDeclaration(statement)) {
         if (isStringLiteral(statement.moduleSpecifier)) cb(statement as SupportedImport);
@@ -474,16 +482,19 @@ export function forEachImportInStatement(statement: Statement, cb: (importNode: 
     }
 }
 
-type SupportedImport =
+/** @internal */
+export type SupportedImport =
     | ImportDeclaration & { moduleSpecifier: StringLiteralLike }
     | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteralLike } }
     | VariableDeclaration & { initializer: RequireOrImportCall };
 
+/** @internal */
 export type SupportedImportStatement =
     | ImportDeclaration
     | ImportEqualsDeclaration
     | VariableStatement;
 
+/** @internal */
 export function createOldFileImportsFromNewFile(
     sourceFile: SourceFile,
     newFileNeedExport: Set<Symbol>,
@@ -506,6 +517,7 @@ export function createOldFileImportsFromNewFile(
     return makeImportOrRequire(sourceFile, defaultImport, imports, newFileNameWithExtension, program, host, useEs6Imports, quotePreference);
 }
 
+/** @internal */
 export function makeImportOrRequire(
     sourceFile: SourceFile,
     defaultImport: Identifier | undefined,
@@ -536,6 +548,7 @@ function makeVariableStatement(name: BindingName, type: TypeNode | undefined, in
     return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)], flags));
 }
 
+/** @internal */
 export function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: Set<Symbol>, useEs6Exports: boolean): readonly Statement[] {
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
@@ -548,6 +561,7 @@ export function addExports(sourceFile: SourceFile, toMove: readonly Statement[],
     });
 }
 
+/** @internal */
 export function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
     if (useEs6Exports) {
         return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
@@ -556,6 +570,7 @@ export function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStat
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
 }
 
+/** @internal */
 export function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
     switch (importDecl.kind) {
         case SyntaxKind.ImportDeclaration:
@@ -636,7 +651,8 @@ function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDec
     }
 }
 
-type TopLevelDeclarationStatement = NonVariableTopLevelDeclaration | VariableStatement;
+/** @internal */
+export type TopLevelDeclarationStatement = NonVariableTopLevelDeclaration | VariableStatement;
 
 function isTopLevelDeclarationStatement(node: Node): node is TopLevelDeclarationStatement {
     Debug.assert(isSourceFile(node.parent), "Node parent should be a SourceFile");
@@ -708,6 +724,7 @@ function getNamesToExportInCommonJS(decl: TopLevelDeclarationStatement): readonl
     }
 }
 
+/** @internal */
 export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
     switch (i.kind) {
         case SyntaxKind.ImportDeclaration: {
@@ -754,10 +771,12 @@ function filterBindingName(name: BindingName, keep: (name: Identifier) => boolea
     }
 }
 
+/** @internal */
 export function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
     return isExpressionStatement(d) ? tryCast(d.expression.left.name, isIdentifier) : tryCast(d.name, isIdentifier);
 }
 
+/** @internal */
 export function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {
     switch (d.kind) {
         case SyntaxKind.VariableDeclaration:
@@ -770,6 +789,7 @@ export function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLeve
     }
 }
 
+/** @internal */
 export function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, name: Identifier, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {
     if (isExported(sourceFile, decl, useEs6Exports, name)) return;
     if (useEs6Exports) {
@@ -781,17 +801,19 @@ export function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclara
     }
 }
 
-//creating a new filename
+/** @internal */
 export interface ToMove {
     readonly all: readonly Statement[];
     readonly ranges: readonly StatementRange[];
 }
 
+/** @internal */
 export interface StatementRange {
     readonly first: Statement;
     readonly afterLast: Statement | undefined;
 }
 
+/** @internal */
 export interface UsageInfo {
     // Symbols whose declarations are moved from the old file to the new file.
     readonly movedSymbols: Set<Symbol>;
@@ -805,8 +827,10 @@ export interface UsageInfo {
     // Subset of oldImportsNeededByNewFile that are will no longer be used in the old file.
     readonly unusedImportsFromOldFile: Set<Symbol>;
 }
-type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
+/** @internal */
+export type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
 
+/** @internal */
 export type NonVariableTopLevelDeclaration =
     | FunctionDeclaration
     | ClassDeclaration
@@ -817,9 +841,13 @@ export type NonVariableTopLevelDeclaration =
     | TopLevelExpressionStatement
     | ImportEqualsDeclaration;
 
+/** @internal */
 export interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
+
+/** @internal */
 export type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
 
+/** @internal */
 export function createNewFilename(oldFile: SourceFile, program: Program, context: RefactorContext, host: LanguageServiceHost): string {
     const checker = program.getTypeChecker();
     const toMove = getStatementsToMove(context);
@@ -845,8 +873,10 @@ export function createNewFilename(oldFile: SourceFile, program: Program, context
     return "";
 }
 
+/** @internal */
 export interface RangeToMove { readonly toMove: readonly Statement[]; readonly afterLast: Statement | undefined; }
 
+/** @internal */
 export function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const { file } = context;
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
@@ -872,6 +902,7 @@ export function getRangeToMove(context: RefactorContext): RangeToMove | undefine
     };
 }
 
+/** @internal */
 export function getStatementsToMove(context: RefactorContext): ToMove | undefined {
     const rangeToMove = getRangeToMove(context);
     if (rangeToMove === undefined) return undefined;
@@ -905,6 +936,7 @@ function isPureImport(node: Node): boolean {
     }
 }
 
+/** @internal */
 export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByNewFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
@@ -998,6 +1030,7 @@ function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Sym
     });
 }
 
+/** @internal */
 export function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
     switch (statement.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -1021,6 +1054,7 @@ export function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: T
     }
 }
 
+/** @internal */
 export function isInImport(decl: Declaration) {
     switch (decl.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
@@ -1041,6 +1075,7 @@ function isVariableDeclarationInImport(decl: VariableDeclaration) {
         !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
 }
 
+/** @internal */
 export function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
     return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
 }
@@ -1060,6 +1095,7 @@ function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node
     }
 }
 
+/** @internal */
 export function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLevelDeclaration {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:

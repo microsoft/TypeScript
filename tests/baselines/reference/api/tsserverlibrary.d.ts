@@ -526,7 +526,7 @@ declare namespace ts {
              * Response is a list of available files.
              * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
              */
-            interface GetMoveToRefactoringFileSuggestionsResponse extends Response {
+            interface GetMoveToRefactoringFileSuggestions extends Response {
                 body?: {
                     newFileName: string;
                     files: string[];
@@ -605,7 +605,7 @@ declare namespace ts {
             type GetEditsForMoveToFileRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
                 refactor: string;
                 action: string;
-                filepath: string;
+                targetFile: string;
             };
             interface RefactorEditInfo {
                 edits: FileCodeEdits[];
@@ -10154,7 +10154,7 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
         getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): {
-            newFilename: string | undefined;
+            newFileName: string | undefined;
             files: string[] | undefined;
         };
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;

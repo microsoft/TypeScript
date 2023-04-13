@@ -98,7 +98,7 @@ Info seq  [hh:mm:ss:mss] request:
         "endOffset": 12,
         "refactor": "Move to file",
         "action": "Move to file",
-        "filepath": "/Foo/b.ts"
+        "targetFile": "/Foo/b.ts"
       },
       "seq": 2,
       "type": "request"
