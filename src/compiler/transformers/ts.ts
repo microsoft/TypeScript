@@ -102,6 +102,7 @@ import {
     isJsxTagNameExpression,
     isLeftHandSideExpression,
     isLocalName,
+    isMethodDeclaration,
     isModifier,
     isModifierLike,
     isModuleDeclaration,
@@ -1197,7 +1198,14 @@ export function transformTypeScript(context: TransformationContext) {
         // The names are used more than once when:
         //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
         //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        //   - the property is a method that has a parameter decorator
+        if (isComputedPropertyName(name) && (
+            !hasStaticModifier(member) && currentClassHasParameterProperties ||
+            legacyDecorators && (
+                hasDecorators(member) ||
+                isMethodDeclaration(member) && some(member.parameters, p => hasDecorators(p))
+            )
+        )) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
