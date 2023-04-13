@@ -101,7 +101,8 @@ import {
         const localReact: File = {
             path: `${localAtTypes}/react/index.d.ts`,
             content: `import * as PropTypes from 'prop-types';
-`
+export class Component {}
+`,
         };
         const localReactRouterDomPackage: File = {
             path: `${localNodeModules}/react-router-dom/package.json`,
@@ -127,7 +128,9 @@ import {
     | string
     | ((props: any, context?: any) => any)
     | (new (props: any, context?: any) => any);
-`
+
+export const PropTypes = {};
+`,
         };
 
         const globalCacheLocation = `c:/typescript`;

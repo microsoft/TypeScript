@@ -10,6 +10,7 @@ import {
 
 //// [e:/myproject/node_modules/@types/react/index.d.ts]
 import * as PropTypes from 'prop-types';
+export class Component {}
 
 
 //// [e:/myproject/node_modules/@types/prop-types/index.d.ts]
@@ -17,6 +18,8 @@ export type ReactComponentLike =
     | string
     | ((props: any, context?: any) => any)
     | (new (props: any, context?: any) => any);
+
+export const PropTypes = {};
 
 
 //// [c:/typescript/node_modules/@types/react-router-dom/index.d.ts]
@@ -30,6 +33,7 @@ export interface BrowserRouterProps {
 
 //// [c:/typescript/node_modules/@types/react/index.d.ts]
 import * as PropTypes from 'prop-types';
+export class Component {}
 
 
 //// [e:/myproject/package.json]
@@ -97,9 +101,9 @@ Info 19   [00:01:17.000] Finishing updateGraphWorker: Project: /dev/null/inferre
 Info 20   [00:01:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 21   [00:01:19.000] 	Files (6)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	e:/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n"
-	e:/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
-	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
+	e:/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n\nexport const PropTypes = {};\n"
+	e:/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\nexport class Component {}\n"
+	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\nexport class Component {}\n"
 	c:/typescript/node_modules/@types/react-router-dom/index.d.ts Text-1 "import * as React from 'react';\nexport interface BrowserRouterProps {\n    basename?: string;\n    getUserConfirmation?: ((message: string, callback: (ok: boolean) => void) => void);\n    forceRefresh?: boolean;\n    keyLength?: number;\n}"
 	e:/myproject/src/app.js SVC-1-0 "import React from 'react';\nimport {\n  BrowserRouter as Router,\n} from \"react-router-dom\";\n"
 
@@ -255,8 +259,8 @@ Info 28   [00:02:04.000] getCompletionData: Get previous token: *
 Info 29   [00:02:05.000] getCompletionsAtPosition: isCompletionListBlocker: *
 Info 30   [00:02:06.000] getExportInfoMap: cache miss or empty; calculating new results
 Info 31   [00:02:07.000] getExportInfoMap: done in * ms
-Info 32   [00:02:08.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
-Info 33   [00:02:09.000] collectAutoImports: response is complete
+Info 32   [00:02:08.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
+Info 33   [00:02:09.000] collectAutoImports: response is incomplete
 Info 34   [00:02:10.000] collectAutoImports: *
 Info 35   [00:02:11.000] getCompletionData: Semantic work: *
 Info 36   [00:02:12.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -549,6 +553,19 @@ Info 37   [00:02:13.000] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
+          },
+          {
+            "name": "Component",
+            "kind": "class",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "e:/myproject/node_modules/@types/react/index",
+            "data": {
+              "exportName": "Component",
+              "exportMapKey": "Component|*|",
+              "fileName": "e:/myproject/node_modules/@types/react/index.d.ts"
+            }
           },
           {
             "name": "BrowserRouter",

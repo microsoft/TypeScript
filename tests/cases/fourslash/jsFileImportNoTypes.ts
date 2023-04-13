@@ -8,7 +8,10 @@
 //// export enum TestEnum {}
 //// export function testFunction() {}
 //// export interface testInterface {}
-//// export namespace TestNamespace {}
+//// export namespace TestNamespaceTypeOnly {}
+//// export namespace TestNamespaceWithValue {
+////   export const testValueInner = true;   
+//// }
 //// export type testType = {};
 ////
 //// export interface TestInterfaceMerged {}

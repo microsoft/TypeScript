@@ -2085,7 +2085,7 @@ export function getCompletionEntriesFromSymbols(
         }
 
         // When in a value-time location in a JS file, ignore symbols that definitely seem to be type-only
-        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !symbolMayHaveValueDeclaration(symbol)) {
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !(symbol.flags & SymbolFlags.Value) && !isInJSFile(symbol.declarations?.[0]?.getSourceFile())) {
             continue;
         }
 
@@ -2137,7 +2137,7 @@ export function getCompletionEntriesFromSymbols(
         has: name => uniques.has(name),
         add: name => uniques.set(name, true),
     };
-
+    
     function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextMap: SymbolSortTextMap): boolean {
         let allFlags = symbol.flags;
         if (!isSourceFile(location)) {
@@ -2183,23 +2183,6 @@ export function getCompletionEntriesFromSymbols(
         // expressions are value space (which includes the value namespaces)
         return !!(allFlags & SymbolFlags.Value);
     }
-}
-
-/**
- * When filling completions for value-time locations in JS files, we'll want
- * to only consider symbols that seem to have a value declaration. If a
- * symbol no known declarations we cautiously include them just to be safe.
- */
-function symbolMayHaveValueDeclaration(symbol: Symbol): boolean {
-    return !symbol?.declarations?.length || symbol.declarations.some(declaration => {
-        switch (declaration.kind) {
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return false;
-            default:
-                return true;
-        }
-    });
 }
 
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
