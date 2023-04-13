@@ -2718,6 +2718,7 @@ declare namespace ts {
                 placeOpenBraceOnNewLineForControlBlocks?: boolean;
                 insertSpaceBeforeTypeAnnotation?: boolean;
                 semicolons?: SemicolonPreference;
+                indentSwitchCase?: boolean;
             }
             interface UserPreferences {
                 readonly disableSuggestions?: boolean;
