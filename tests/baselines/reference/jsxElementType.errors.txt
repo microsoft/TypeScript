@@ -25,14 +25,16 @@ tests/cases/compiler/jsxElementType.tsx(72,20): error TS2769: No overload matche
   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
-tests/cases/compiler/jsxElementType.tsx(88,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+tests/cases/compiler/jsxElementType.tsx(78,1): error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
+tests/cases/compiler/jsxElementType.tsx(79,1): error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
+tests/cases/compiler/jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/jsxElementType.tsx(92,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+tests/cases/compiler/jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (14 errors) ====
+==== tests/cases/compiler/jsxElementType.tsx (16 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -155,6 +157,13 @@ tests/cases/compiler/jsxElementType.tsx(92,11): error TS2322: Type '{}' is not a
     // Host element types still work
     <div />;
     <my-custom-element />;
+    // Undeclared host element types are still rejected
+    <boop />;
+    ~~~~~~~~
+!!! error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
+    <my-undeclared-custom-element />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
     
     // Highlighting various ecosystem compat issues
     // react-native-gesture-handler

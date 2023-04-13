@@ -76,6 +76,9 @@ Component = RenderStringClass;
 // Host element types still work
 <div />;
 <my-custom-element />;
+// Undeclared host element types are still rejected
+<boop />;
+<my-undeclared-custom-element />;
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler

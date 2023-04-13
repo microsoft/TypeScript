@@ -75,6 +75,9 @@ Component = RenderStringClass;
 // Host element types still work
 <div />;
 <my-custom-element />;
+// Undeclared host element types are still rejected
+<boop />;
+<my-undeclared-custom-element />;
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler
@@ -212,6 +215,9 @@ React.createElement(RenderStringClass, { excessProp: true });
 // Host element types still work
 React.createElement("div", null);
 React.createElement("my-custom-element", null);
+// Undeclared host element types are still rejected
+React.createElement("boop", null);
+React.createElement("my-undeclared-custom-element", null);
 function ReactNativeFlatList(props, ref) {
     return null;
 }
