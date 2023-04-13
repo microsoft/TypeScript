@@ -2404,7 +2404,7 @@ export function getCompletionEntriesFromSymbols(
             continue;
         }
 
-        // When in a value-time location in a JS file, ignore symbols that definitely seem to be type-only
+        // When in a value location in a JS file, ignore symbols that definitely seem to be type-only
         if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !(symbol.flags & SymbolFlags.Value) && !isInJSFile(symbol.declarations?.[0]?.getSourceFile())) {
             continue;
         }
