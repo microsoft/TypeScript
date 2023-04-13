@@ -52,6 +52,7 @@ import {
     rangeContainsStartEnd,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     setEmitFlags,
     setTextRange,
     skipTrivia,
@@ -70,7 +71,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Extract type";
+const refactorName = RefactorName.ExtractType;
 
 const extractToTypeAliasAction = {
     name: "Extract to type alias",

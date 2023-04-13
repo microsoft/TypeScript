@@ -27,6 +27,7 @@ import {
     ParenthesizedExpression,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     SourceFile,
     SyntaxKind,
     TemplateHead,
@@ -38,7 +39,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert to template string";
+const refactorName = RefactorName.ConvertStringOrTemplateLiteral;
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
 
 const convertStringAction = {

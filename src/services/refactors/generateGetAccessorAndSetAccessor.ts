@@ -8,13 +8,14 @@ import {
     isIdentifier,
     isParameter,
     RefactorContext,
+    RefactorName,
 } from "../_namespaces/ts";
 import {
     isRefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const actionName = "Generate 'get' and 'set' accessors";
+const actionName = RefactorName.GenerateGetAccessorAndSetAccessor;
 const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
 
 const generateGetSetAction = {

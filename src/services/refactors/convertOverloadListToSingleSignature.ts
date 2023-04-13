@@ -30,6 +30,7 @@ import {
     rangeContainsPosition,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     setEmitFlags,
     setSyntheticLeadingComments,
     setTextRange,
@@ -41,7 +42,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert overload list to single signature";
+const refactorName = RefactorName.ConvertOverloadListToSingleSignature;
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
 
 const functionOverloadAction = {

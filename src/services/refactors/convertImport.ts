@@ -35,6 +35,7 @@ import {
     QualifiedName,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     ScriptTarget,
     some,
     SourceFile,
@@ -50,7 +51,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert import";
+const refactorName = RefactorName.ConvertImport;
 
 const actions = {
     [ImportKind.Named]: {

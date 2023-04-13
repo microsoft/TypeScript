@@ -32,6 +32,7 @@ import {
     PropertyAccessExpression,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     ReturnStatement,
     skipParentheses,
     SourceFile,
@@ -47,7 +48,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert to optional chain expression";
+const refactorName = RefactorName.ConvertToOptionalChainExpression;
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
 
 const toOptionalChainAction = {

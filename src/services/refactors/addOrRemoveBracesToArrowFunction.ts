@@ -22,6 +22,7 @@ import {
     rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     ReturnStatement,
     SourceFile,
     SyntaxKind,
@@ -34,7 +35,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Add or remove braces in an arrow function";
+const refactorName = RefactorName.AddOrRemoveBracesToArrowFunction;
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
 
 const addBracesAction = {

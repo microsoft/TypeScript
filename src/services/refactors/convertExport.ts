@@ -43,6 +43,7 @@ import {
     quotePreferenceFromString,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     SourceFile,
     Symbol,
     SyntaxKind,
@@ -57,7 +58,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert export";
+const refactorName = RefactorName.ConvertExport;
 
 const defaultToNamedAction = {
     name: "Convert default export to named export",

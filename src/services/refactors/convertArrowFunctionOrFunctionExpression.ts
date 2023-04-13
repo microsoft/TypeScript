@@ -40,6 +40,7 @@ import {
     RefactorActionInfo,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     ReturnStatement,
     setTextRange,
     SourceFile,
@@ -58,7 +59,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert arrow function or function expression";
+const refactorName = RefactorName.ConvertArrowFunctionOrFunctionExpression;
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
 const toAnonymousFunctionAction = {

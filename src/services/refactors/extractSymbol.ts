@@ -129,6 +129,7 @@ import {
     RefactorActionInfo,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     setEmitFlags,
     ShorthandPropertyAssignment,
     SignatureKind,
@@ -165,7 +166,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = "Extract Symbol";
+const refactorName = RefactorName.ExtractSymbol;
 
 const extractConstantAction = {
     name: "Extract Constant",

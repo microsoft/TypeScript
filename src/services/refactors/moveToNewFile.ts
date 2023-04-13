@@ -104,6 +104,7 @@ import {
     rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     RequireOrImportCall,
     RequireVariableStatement,
     resolvePath,
@@ -131,7 +132,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = "Move to a new file";
+const refactorName = RefactorName.MoveToNewFile;
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
 
 const moveToNewFileAction = {

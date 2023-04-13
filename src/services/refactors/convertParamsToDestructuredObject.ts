@@ -90,6 +90,7 @@ import {
     rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     SemanticMeaning,
     ShorthandPropertyAssignment,
     sortAndDeduplicate,
@@ -106,7 +107,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = "Convert parameters to destructured object";
+const refactorName = RefactorName.ConvertParamsToDestructuredObject;
 const minimumParameterLength = 1;
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
 
