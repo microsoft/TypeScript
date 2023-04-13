@@ -8668,7 +8668,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 // Need to skip over export= symbols below - json source files get a single `Property` flagged
                 // symbol of name `export=` which needs to be handled like an alias. It's not great, but it is what it is.
-                if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property)
+                if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property | SymbolFlags.Accessor)
                     && symbol.escapedName !== InternalSymbolName.ExportEquals
                     && !(symbol.flags & SymbolFlags.Prototype)
                     && !(symbol.flags & SymbolFlags.Class)

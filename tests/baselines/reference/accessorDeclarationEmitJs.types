@@ -1,0 +1,18 @@
+=== /a.js ===
+export const object = {
+>object : { property: string; readonly getter: string; }
+>{    property: 'value',    get getter() {        return 'value';    },} : { property: string; readonly getter: string; }
+
+    property: 'value',
+>property : string
+>'value' : "value"
+
+    get getter() {
+>getter : string
+
+        return 'value';
+>'value' : "value"
+
+    },
+}
+

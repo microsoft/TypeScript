@@ -1,0 +1,14 @@
+=== /a.js ===
+export const object = {
+>object : Symbol(object, Decl(a.js, 0, 12))
+
+    property: 'value',
+>property : Symbol(property, Decl(a.js, 0, 23))
+
+    get getter() {
+>getter : Symbol(getter, Decl(a.js, 1, 22))
+
+        return 'value';
+    },
+}
+
