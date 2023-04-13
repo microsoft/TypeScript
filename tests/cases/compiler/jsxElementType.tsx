@@ -96,3 +96,6 @@ function ReactNativeFlatList(
 function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
   return <Component />;
 }
+
+<Unresolved />;
+<Unresolved foo="abc" />;

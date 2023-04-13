@@ -32,9 +32,11 @@ tests/cases/compiler/jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatLis
     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
 tests/cases/compiler/jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+tests/cases/compiler/jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
+tests/cases/compiler/jsxElementType.tsx(99,2): error TS2304: Cannot find name 'Unresolved'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (16 errors) ====
+==== tests/cases/compiler/jsxElementType.tsx (18 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -188,4 +190,11 @@ tests/cases/compiler/jsxElementType.tsx(95,11): error TS2322: Type '{}' is not a
               ~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
     }
+    
+    <Unresolved />;
+     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Unresolved'.
+    <Unresolved foo="abc" />;
+     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Unresolved'.
     

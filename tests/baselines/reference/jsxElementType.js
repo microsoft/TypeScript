@@ -96,6 +96,9 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
   return <Component />;
 }
 
+<Unresolved />;
+<Unresolved foo="abc" />;
+
 
 //// [jsxElementType.js]
 "use strict";
@@ -226,3 +229,5 @@ React.createElement(ReactNativeFlatList, null);
 function f1(Component) {
     return React.createElement(Component, null);
 }
+React.createElement(Unresolved, null);
+React.createElement(Unresolved, { foo: "abc" });

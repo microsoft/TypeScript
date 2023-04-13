@@ -268,3 +268,7 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 >Component : Symbol(Component, Decl(jsxElementType.tsx, 93, 62))
 }
 
+<Unresolved />;
+<Unresolved foo="abc" />;
+>foo : Symbol(foo, Decl(jsxElementType.tsx, 98, 11))
+

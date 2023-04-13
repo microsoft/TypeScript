@@ -281,3 +281,12 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 >Component : T
 }
 
+<Unresolved />;
+><Unresolved /> : JSX.Element
+>Unresolved : any
+
+<Unresolved foo="abc" />;
+><Unresolved foo="abc" /> : JSX.Element
+>Unresolved : any
+>foo : string
+
