@@ -9,9 +9,7 @@
 //     },
 //     c: function () {
 //         return super.a();
-//     }
-//     d: () => super.b();
-// }
+// --- (line: 10) skipped ---
 
 
 
@@ -26,19 +24,13 @@
 //     },
 //     c: function () {
 //         return super.a();
-//     }
-//     d: () => super.b();
-// }
+// --- (line: 10) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper3.ts ===
-// let x = {
-//     a() {
-//         return super.b();
-//     },
-//     b() {
+// --- (line: 5) skipped ---
 //         return super.a();
 //     },
 //     c: function () {
@@ -51,13 +43,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper3.ts ===
-// let x = {
-//     a() {
-//         return super.b();
-//     },
-//     b() {
-//         return super.a();
-//     },
+// --- (line: 7) skipped ---
 //     c: function () {
 //         return super.a();
 //     }

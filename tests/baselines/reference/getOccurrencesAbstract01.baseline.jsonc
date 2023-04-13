@@ -8,9 +8,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 9) skipped ---
 
 
 
@@ -24,9 +22,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 9) skipped ---
 
 
 
@@ -40,9 +36,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 9) skipped ---
 
 
 
@@ -56,9 +50,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 9) skipped ---
 
 
 
@@ -72,6 +64,4 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 9) skipped ---

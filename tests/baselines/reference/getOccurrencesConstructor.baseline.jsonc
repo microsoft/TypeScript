@@ -14,9 +14,7 @@
 // }
 // 
 // class D {
-//     constructor(public x: number, public y: number) {
-//     }
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -36,9 +34,7 @@
 // }
 // 
 // class D {
-//     constructor(public x: number, public y: number) {
-//     }
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -58,9 +54,7 @@
 // }
 // 
 // class D {
-//     constructor(public x: number, public y: number) {
-//     }
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -80,6 +74,4 @@
 // }
 // 
 // class D {
-//     constructor(public x: number, public y: number) {
-//     }
-// }
+// --- (line: 15) skipped ---

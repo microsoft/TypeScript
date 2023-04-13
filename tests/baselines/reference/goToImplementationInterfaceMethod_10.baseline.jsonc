@@ -1,16 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_10.ts ===
-// interface BaseFoo {
-// 	 hello(): void;
-// }
-// 
-// interface Foo extends BaseFoo {
-// 	 aloha(): void;
-// }
-// 
-// interface Bar {
-//  	 hello(): void;
-//  	 goodbye(): void;
+// --- (line: 11) skipped ---
 // }
 // 
 // class FooImpl implements Foo {
@@ -211,17 +201,7 @@
 
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_10.ts ===
-// interface BaseFoo {
-// 	 hello(): void;
-// }
-// 
-// interface Foo extends BaseFoo {
-// 	 aloha(): void;
-// }
-// 
-// interface Bar {
-//  	 hello(): void;
-//  	 goodbye(): void;
+// --- (line: 11) skipped ---
 // }
 // 
 // class FooImpl implements Foo {
