@@ -256,7 +256,7 @@ export interface LanguageServiceShim extends Shim {
      * Returns a JSON-encoded value of the type:
      * { fileName: string, textSpan: { start: number, length: number } }[]
      */
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): string;
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: UserPreferences | boolean): string;
 
     /**
      * Returns a JSON-encoded value of the type:

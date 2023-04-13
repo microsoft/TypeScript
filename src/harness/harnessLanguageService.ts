@@ -527,7 +527,7 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
         return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
     }
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: ts.UserPreferences): ts.RenameLocation[] {
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: ts.UserPreferences | boolean): ts.RenameLocation[] {
         return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, preferences));
     }
     getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
