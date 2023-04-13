@@ -30322,7 +30322,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
      */
-    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
+    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): tagName is Identifier {
         return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
     }
 
@@ -30864,12 +30864,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
             if (elementTypeConstraint !== undefined) {
-                const tagType = isJsxIntrinsicIdentifier(jsxOpeningLikeNode.tagName)
-                    ? // TODO: Should this be a literal that library authors could potentially check against?
-                        stringType
-                    : checkExpression(jsxOpeningLikeNode.tagName);
-                checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, jsxOpeningLikeNode.tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
-                    const componentName = getTextOfNode(jsxOpeningLikeNode.tagName);
+                const tagName = jsxOpeningLikeNode.tagName;
+                const tagType = isJsxIntrinsicIdentifier(tagName)
+                    ? getStringLiteralType(tagName.escapedText as string)
+                    : checkExpression(tagName);
+                checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
+                    const componentName = getTextOfNode(tagName);
                     return chainDiagnosticMessages(/*details*/ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
                 });
             }
