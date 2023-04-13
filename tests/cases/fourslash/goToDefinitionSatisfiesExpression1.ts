@@ -7,5 +7,4 @@
 //////somewhere in app
 ////STRINGS.[|/*usage*/title|]
 
-verify.goToDefinition("definition", "definition");
-verify.goToDefinition("usage", "definition");
+verify.baselineGoToDefinition("definition", "usage")
