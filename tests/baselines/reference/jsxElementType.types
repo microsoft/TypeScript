@@ -54,6 +54,35 @@ let Component: NewReactJSXElementConstructor<{ title: string }>;
 >Component : NewReactJSXElementConstructor<{ title: string; }>
 >title : string
 
+const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
+>RenderElement : ({ title }: { title: string; }) => JSX.Element
+>({ title }: { title: string }) => <div>{title}</div> : ({ title }: { title: string; }) => JSX.Element
+>title : string
+>title : string
+><div>{title}</div> : JSX.Element
+>div : any
+>title : string
+>div : any
+
+Component = RenderElement;
+>Component = RenderElement : ({ title }: { title: string; }) => JSX.Element
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderElement : ({ title }: { title: string; }) => JSX.Element
+
+<RenderElement />;
+><RenderElement /> : JSX.Element
+>RenderElement : ({ title }: { title: string; }) => JSX.Element
+
+<RenderElement title="react" />;
+><RenderElement title="react" /> : JSX.Element
+>RenderElement : ({ title }: { title: string; }) => JSX.Element
+>title : string
+
+<RenderElement excessProp />;
+><RenderElement excessProp /> : JSX.Element
+>RenderElement : ({ title }: { title: string; }) => JSX.Element
+>excessProp : true
+
 const RenderString = ({ title }: { title: string }) => title;
 >RenderString : ({ title }: { title: string; }) => string
 >({ title }: { title: string }) => title : ({ title }: { title: string; }) => string
@@ -160,6 +189,44 @@ Component = RenderPromise;
 <RenderPromise excessProp />;
 ><RenderPromise excessProp /> : JSX.Element
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
+>excessProp : true
+
+// Class components still work
+class RenderStringClass extends React.Component<{ title: string }> {
+>RenderStringClass : RenderStringClass
+>React.Component : React.Component<{ title: string; }, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+>title : string
+
+  render() {
+>render : () => string
+
+    return this.props.title;
+>this.props.title : string
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ title: string; }>
+>this : this
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ title: string; }>
+>title : string
+  }
+}
+Component = RenderStringClass;
+>Component = RenderStringClass : typeof RenderStringClass
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderStringClass : typeof RenderStringClass
+
+<RenderStringClass />;
+><RenderStringClass /> : JSX.Element
+>RenderStringClass : typeof RenderStringClass
+
+<RenderStringClass title="react" />;
+><RenderStringClass title="react" /> : JSX.Element
+>RenderStringClass : typeof RenderStringClass
+>title : string
+
+<RenderStringClass excessProp />;
+><RenderStringClass excessProp /> : JSX.Element
+>RenderStringClass : typeof RenderStringClass
 >excessProp : true
 
 // Host element types still work

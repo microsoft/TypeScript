@@ -30,6 +30,12 @@ declare global {
 
 let Component: NewReactJSXElementConstructor<{ title: string }>;
 
+const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
+Component = RenderElement;
+<RenderElement />;
+<RenderElement title="react" />;
+<RenderElement excessProp />;
+
 const RenderString = ({ title }: { title: string }) => title;
 Component = RenderString;
 <RenderString />;
@@ -55,6 +61,17 @@ Component = RenderPromise;
 <RenderPromise title="react" />;
 <RenderPromise excessProp />;
 
+// Class components still work
+class RenderStringClass extends React.Component<{ title: string }> {
+  render() {
+    return this.props.title;
+  }
+}
+Component = RenderStringClass;
+<RenderStringClass />;
+<RenderStringClass title="react" />;
+<RenderStringClass excessProp />;
+
 // Host element types still work
 <div />;
 <my-web-component />;
@@ -73,6 +90,21 @@ function ReactNativeFlatList(
 
 //// [jsxElementType.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -113,6 +145,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 var Component;
+var RenderElement = function (_a) {
+    var title = _a.title;
+    return React.createElement("div", null, title);
+};
+Component = RenderElement;
+React.createElement(RenderElement, null);
+React.createElement(RenderElement, { title: "react" });
+React.createElement(RenderElement, { excessProp: true });
 var RenderString = function (_a) {
     var title = _a.title;
     return title;
@@ -148,6 +188,21 @@ Component = RenderPromise;
 React.createElement(RenderPromise, null);
 React.createElement(RenderPromise, { title: "react" });
 React.createElement(RenderPromise, { excessProp: true });
+// Class components still work
+var RenderStringClass = /** @class */ (function (_super) {
+    __extends(RenderStringClass, _super);
+    function RenderStringClass() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RenderStringClass.prototype.render = function () {
+        return this.props.title;
+    };
+    return RenderStringClass;
+}(React.Component));
+Component = RenderStringClass;
+React.createElement(RenderStringClass, null);
+React.createElement(RenderStringClass, { title: "react" });
+React.createElement(RenderStringClass, { excessProp: true });
 // Host element types still work
 React.createElement("div", null);
 React.createElement("my-web-component", null);

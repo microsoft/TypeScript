@@ -31,6 +31,12 @@ declare global {
 
 let Component: NewReactJSXElementConstructor<{ title: string }>;
 
+const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
+Component = RenderElement;
+<RenderElement />;
+<RenderElement title="react" />;
+<RenderElement excessProp />;
+
 const RenderString = ({ title }: { title: string }) => title;
 Component = RenderString;
 <RenderString />;
@@ -55,6 +61,17 @@ Component = RenderPromise;
 <RenderPromise />;
 <RenderPromise title="react" />;
 <RenderPromise excessProp />;
+
+// Class components still work
+class RenderStringClass extends React.Component<{ title: string }> {
+  render() {
+    return this.props.title;
+  }
+}
+Component = RenderStringClass;
+<RenderStringClass />;
+<RenderStringClass title="react" />;
+<RenderStringClass excessProp />;
 
 // Host element types still work
 <div />;
